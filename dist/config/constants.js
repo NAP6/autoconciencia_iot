@@ -6,4 +6,5 @@ exports.default = {
     "db-user": "",
     "db-password": "",
     "db-schema": "",
+    "server-port": 3000,
 };

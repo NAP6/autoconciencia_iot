@@ -12,7 +12,8 @@ const morgan_1 = __importDefault(require("morgan"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const body_parser_1 = require("body-parser");
 const express_session_1 = __importDefault(require("express-session"));
-app.set('port', process.env.PORT || 3000);
+const constants_1 = __importDefault(require("./config/constants"));
+const routes_1 = __importDefault(require("./config/routes"));
 var upload = multer_1.default({
     dest: 'uploads/'
 });
@@ -39,12 +40,10 @@ app.use(express_session_1.default({
 app.use(express_session_1.default()); // persistent login sessions
 app.use(connect_flash_1.default()); // use connect-flash for flash messages stored in session
 // routes ======================================================================
-//require('./config/routes.js')
-const routes_js_1 = __importDefault(require("./config/routes.js"));
-routes_js_1.default(app, upload); // load our routes and pass in our app and Upload multer
+routes_1.default(app, upload); // load our routes and pass in our app and Upload multer
 //launch ======================================================================
-app.listen(app.get('port'), () => {
-    console.log('Server listen at port ' + app.get('port'));
+app.listen(constants_1.default["server-port"], () => {
+    console.log('Server listen at port ' + constants_1.default["server-port"]);
 });
 //catch 404 and forward to error handler
 app.use(function (req, res) {

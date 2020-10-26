@@ -11,7 +11,8 @@ import cookieParser from 'cookie-parser';
 import { json, urlencoded } from 'body-parser';
 import session from 'express-session';
 
-app.set('port', process.env.PORT || 3000);
+import constants from './config/constants';
+import routes from './config/routes';
 
 var upload = multer({
     dest: 'uploads/'
@@ -50,12 +51,11 @@ app.use(session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
-//require('./config/routes.js')
-import routes from './config/routes.js';
 routes(app, upload); // load our routes and pass in our app and Upload multer
+
 //launch ======================================================================
-app.listen(app.get('port'), () => {
-    console.log('Server listen at port ' + app.get('port'));
+app.listen(constants["server-port"], () => {
+    console.log('Server listen at port ' + constants["server-port"]);
 });
 
 //catch 404 and forward to error handler
