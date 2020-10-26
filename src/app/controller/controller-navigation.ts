@@ -1,12 +1,14 @@
-export function loggedIn(req, res, next) {
-  if (req.session.user) {
+import { Request, Response, NextFunction } from "express";
+
+export function loggedIn(req: Request, res: Response, next: NextFunction) {
+  if (req.session!.user) {
     next();
   } else {
     res.redirect("/login");
   }
 }
-export function login(req, res, next) {
-  if (req.session.user) {
+export function login(req: Request, res: Response) {
+  if (req.session!.user) {
     res.redirect("/home");
   } else {
     res.render("login", {
@@ -17,8 +19,8 @@ export function login(req, res, next) {
   }
 }
 
-export function singup(req, res) {
-  if (req.session.user) {
+export function singup(req: Request, res: Response) {
+  if (req.session!.user) {
     res.redirect("/home");
   } else {
     res.render("singup", {
@@ -29,15 +31,15 @@ export function singup(req, res) {
   }
 }
 
-export function singup_save(req, res) {
-  if (req.session.user) {
+export function singup_save(req: Request, res: Response, next: NextFunction) {
+  if (req.session!.user) {
     //Guardar
     next();
   } else {
     res.redirect("/login");
   }
 }
-export function home(req, res) {
+export function home(req: Request, res: Response) {
   res.render("home", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -45,7 +47,7 @@ export function home(req, res) {
   });
 }
 
-export function models(req, res) {
+export function models(req: Request, res: Response) {
   res.render("models", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -53,7 +55,7 @@ export function models(req, res) {
   });
 }
 
-export function subject(req, res) {
+export function subject(req: Request, res: Response) {
   res.render("subject", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -61,7 +63,7 @@ export function subject(req, res) {
   });
 }
 
-export function object(req, res) {
+export function object(req: Request, res: Response) {
   res.render("object", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -69,7 +71,7 @@ export function object(req, res) {
   });
 }
 
-export function measurement_units(req, res) {
+export function measurement_units(req: Request, res: Response) {
   res.render("measurement_units", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -77,7 +79,7 @@ export function measurement_units(req, res) {
   });
 }
 
-export function scales(req, res) {
+export function scales(req: Request, res: Response) {
   res.render("scales", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -85,7 +87,7 @@ export function scales(req, res) {
   });
 }
 
-export function decision(req, res) {
+export function decision(req: Request, res: Response) {
   res.render("decision", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -93,7 +95,7 @@ export function decision(req, res) {
   });
 }
 
-export function formulas(req, res) {
+export function formulas(req: Request, res: Response) {
   res.render("formulas", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -101,7 +103,7 @@ export function formulas(req, res) {
   });
 }
 
-export function functions(req, res) {
+export function functions(req: Request, res: Response) {
   res.render("functions", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -109,7 +111,7 @@ export function functions(req, res) {
   });
 }
 
-export function generate_model(req, res) {
+export function generate_model(req: Request, res: Response) {
   res.render("generate_model", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -117,8 +119,8 @@ export function generate_model(req, res) {
   });
 }
 
-export function save_new_model(req, res, next) {
-  if (req.session.user) {
+export function save_new_model(req: Request, res: Response, next: NextFunction) {
+  if (req.session!.user) {
     // Guardar
     next();
   } else {
