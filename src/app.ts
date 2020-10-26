@@ -13,6 +13,7 @@ import session from 'express-session';
 
 import constants from './config/constants';
 import routes from './config/routes';
+import api from './config/api';
 
 var upload = multer({
     dest: 'uploads/'
@@ -51,8 +52,8 @@ app.use(session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
+api(app);  // load our api routes and pass in our app
 routes(app, upload); // load our routes and pass in our app and Upload multer
-
 //launch ======================================================================
 app.listen(constants["server-port"], () => {
     console.log('Server listen at port ' + constants["server-port"]);
