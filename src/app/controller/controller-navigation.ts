@@ -72,7 +72,7 @@ export function object(req: Request, res: Response) {
 }
 
 export function measurement_units(req: Request, res: Response) {
-  res.render("measurement_units", {
+  res.render("units_of_measure", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
@@ -88,7 +88,7 @@ export function scales(req: Request, res: Response) {
 }
 
 export function decision(req: Request, res: Response) {
-  res.render("decision", {
+  res.render("decision_criteria", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
@@ -104,7 +104,7 @@ export function formulas(req: Request, res: Response) {
 }
 
 export function functions(req: Request, res: Response) {
-  res.render("functions", {
+  res.render("calcule_functions", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
