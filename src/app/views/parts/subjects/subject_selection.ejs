@@ -1,0 +1,17 @@
+<div class="modal-body container-fluid">
+    <div class="row px-3">
+        <div id="sujetos_para_seleccion_area" class="card col-12 col-lg-5">
+            <ul id="lista_sujetos_para_cargar"></ul>
+        </div>
+        <div class="col-12 col-lg-2 text-center">
+            <button class="btn btn-success my-1" onclick="agregar_sujeto_seleccionado();">Agregar</button>
+            <button class="btn btn-danger my-1" onclick="remover_sujeto_seleccionado();">Eliminar</button>
+        </div>
+        <div id="sujetos_seleccionados_area" class="card col-12 col-lg-5">
+            <ul id="lista_sujetos_seleccionados"></ul>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" onclick="actualizar_sujetos();">Save changes</button>
+</div>

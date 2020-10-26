@@ -1,0 +1,31 @@
+<section class="crear_modelo">
+    <div class="container">
+        <h2 class="text-center">Crear Modelo</h2>
+        <div class="form-group">
+            <label for="nombre_modelo">Nombre del modelo</label>
+            <input form="new_model" type="text" class="form-control" id="nombre_modelo" name="nombre_modelo">
+        </div>
+        <div class="form-group">
+            <label for="descripcion_ecenario">Descripcion del modelo</label>
+            <input form="new_model" type="text" class="form-control" id="descripcion_esenario"
+                name="descripcion_ecenario">
+        </div>
+        <div class="form-group">
+            <label for="autor_modelo">Autor</label>
+            <input form="new_model" type="text" class="form-control" id="autor_modelo" name="autor_modelo">
+        </div>
+        <div class="form-group">
+            <label for="arquitectura_seleccion">Seleccione modelo de arquitectura</label>
+            <select form="new_model" id="arquitectura_seleccion" class="form-control" name="arquitectura_seleccion">
+                <% modelos_fisicos.forEach(function (model) { %>
+                <option><%= model %></option>
+                <% }) %>
+            </select>
+        </div>
+        <div class="text-center">
+            <a href="#seleccion_sujetos_section" id="btn_crear_modelo" class="btn btn-primary"
+                onclick="comenzar_creacion();">Comenzar a
+                crear</a>
+        </div>
+    </div>
+</section>
