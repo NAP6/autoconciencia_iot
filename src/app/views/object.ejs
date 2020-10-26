@@ -1,0 +1,25 @@
+<%- include('parts/before_the_body'); %>
+    <%- include('parts/sidebar_menu'); %>
+
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="container-fluid">
+
+                    <h1 class="mt-4">Objetos de autoconsciencia</h1>
+                    <br>
+                    <%- include('parts/objetos/SelectSubject'); %>
+                        <br>
+                        <%- include('parts/objetos/CategoryEntities'); %>
+                            <br>
+                            <%- include('parts/objetos/Avaliable_Entities'); %>
+                </div>
+                <div class="container-fluid">
+                    <h1 class="mt-4">Aspectos de autoconsciencia</h1>
+                    <%- include('parts/objetos/Aspects_Self'); %>
+
+                </div>
+            </main>
+        </div>
+
+        <!-- Fin del contenido principal (main) -->
+        <%- include('parts/after_the_body'); %>
