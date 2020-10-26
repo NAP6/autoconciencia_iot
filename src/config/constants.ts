@@ -1,6 +1,6 @@
 export default {
 	"db-url": "",
-	"db-port": "",
+	"db-port": 0,
 	"db-user": "",
 	"db-password": "",
 	"db-schema": "",

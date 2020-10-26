@@ -4,6 +4,9 @@ import { parseString } from "xml2js";
 export class json {
   private json: object;
 
+  constructor() {
+    this.json = [];
+  }
   public setJSON(json: object): void {
     this.json = json;
   }

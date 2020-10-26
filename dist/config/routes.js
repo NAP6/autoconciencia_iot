@@ -23,7 +23,6 @@ const nv = __importStar(require("../app/controller/controller-navigation"));
 function default_1(app, upload) {
     app.get("/login", nv.login);
     app.get("/singup", nv.singup);
-    app.get("/", nv.loggedIn, nv.home);
     app.get("/models", nv.loggedIn, nv.models);
     app.get("/subject", nv.loggedIn, nv.subject);
     app.get("/object", nv.loggedIn, nv.object);
@@ -36,7 +35,8 @@ function default_1(app, upload) {
     //app.get("/service", nv.loggedIn, nv.service);
     app.get("/generate_model", nv.loggedIn, nv.generate_model);
     app.post("/save_new_model", nv.loggedIn, upload.single("model_file"), nv.save_new_model, nv.home);
-    app.post("/signup");
+    //app.post("/signup",);
+    app.get("/", nv.loggedIn, nv.home);
 }
 exports.default = default_1;
 ;
