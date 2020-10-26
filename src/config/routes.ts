@@ -5,7 +5,6 @@ import * as nv from '../app/controller/controller-navigation';
 export default function (app: Application, upload: Multer) {
   app.get("/login", nv.login);
   app.get("/singup", nv.singup);
-  app.get("/", nv.loggedIn, nv.home);
   app.get("/models", nv.loggedIn, nv.models);
   app.get("/subject", nv.loggedIn, nv.subject);
   app.get("/object", nv.loggedIn, nv.object);
@@ -26,7 +25,6 @@ export default function (app: Application, upload: Multer) {
     nv.home
   );
 
-  app.post(
-    "/signup",
-  );
+  //app.post("/signup",);
+  app.get("/", nv.loggedIn, nv.home);
 };
