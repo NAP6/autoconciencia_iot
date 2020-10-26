@@ -29,7 +29,7 @@ function default_1(app, upload) {
     //app.get("/self-awareness_processes", nv.loggedIn, nv.self-awareness_processes);
     app.get("/measurement_units", nv.loggedIn, nv.measurement_units);
     app.get("/scales", nv.loggedIn, nv.scales);
-    app.get("/decision", nv.loggedIn, nv.decision);
+    app.get("/decision_criteria", nv.loggedIn, nv.decision);
     app.get("/formulas", nv.loggedIn, nv.formulas);
     app.get("/functions", nv.loggedIn, nv.functions);
     //app.get("/service", nv.loggedIn, nv.service);
