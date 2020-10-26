@@ -14,6 +14,7 @@ const body_parser_1 = require("body-parser");
 const express_session_1 = __importDefault(require("express-session"));
 const constants_1 = __importDefault(require("./config/constants"));
 const routes_1 = __importDefault(require("./config/routes"));
+const api_1 = __importDefault(require("./config/api"));
 var upload = multer_1.default({
     dest: 'uploads/'
 });
@@ -40,6 +41,7 @@ app.use(express_session_1.default({
 app.use(express_session_1.default()); // persistent login sessions
 app.use(connect_flash_1.default()); // use connect-flash for flash messages stored in session
 // routes ======================================================================
+api_1.default(app); // load our api routes and pass in our app
 routes_1.default(app, upload); // load our routes and pass in our app and Upload multer
 //launch ======================================================================
 app.listen(constants_1.default["server-port"], () => {

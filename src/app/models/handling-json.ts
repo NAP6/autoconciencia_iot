@@ -7,6 +7,9 @@ export class json {
     this.json=[];
   }
 
+  constructor() {
+    this.json = [];
+  }
   public setJSON(json: object): void {
     this.json = json;
   }
