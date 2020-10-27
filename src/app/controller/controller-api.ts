@@ -1,6 +1,6 @@
 import { json } from '../models/handling-json';
 import { Request, Response} from "express";
-import { mysql_conector as database } from '../models/database';
+import { mysql_connector as database } from '../models/database';
 
 export function system(req: Request, res: Response) {
    if (req.session!.user) {

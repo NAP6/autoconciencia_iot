@@ -1,11 +1,11 @@
 import * as mysql from "mysql";
 import constants from "../../config/constants";
 
-export class mysql_conector {
-  private conector;
+export class mysql_connector {
+  private connector;
 
   constructor() {
-    this.conector = mysql.createConnection({
+    this.connector = mysql.createConnection({
       host: constants["db-url"],
       port: constants["db-port"],
       user: constants["db-user"],
@@ -21,7 +21,7 @@ export class mysql_conector {
     return {};
   }
   public validateUser(userName: string, passwoedUser: string): boolean {
-    if (userName == "Nicolas" && passwoedUser == "1234") return true;
+    if (userName == "nicolas@ejemplo.com" && passwoedUser == "1234") return true;
     return false;
   }
 }
