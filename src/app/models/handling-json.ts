@@ -2,9 +2,9 @@ import * as fs from "fs";
 import { parseString } from "xml2js";
 
 export class json {
-  private json: object;
-  constructor(){
-    this.json=[];
+  private json: { [key: string]: any };
+  constructor() {
+    this.json = [];
   }
 
   public setJSON(json: object): void {
@@ -30,9 +30,13 @@ export class json {
     return json;
   }
   public getSystem(): object {
-    return [];
+    var nameModel: string = Object.keys(this.json)[0];
+    const ob = this.json[nameModel]["represents"];
+    return ob;
   }
   public getEntity(): object {
-    return [];
+    var nameModel: string = Object.keys(this.json)[0];
+    const ob = this.json[nameModel]["containsEntity"];
+    return ob;
   }
 }
