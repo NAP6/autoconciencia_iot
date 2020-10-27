@@ -282,13 +282,22 @@ function crear_proceso() {
         document.getElementById("hora_ejecucion").readOnly = true;
         var select_model = document.getElementById('sujeto_seleccion');
         modelo_proceso_selecionado = select_model.value;
-        select_model.innerHTML = '<option>' + modelo_fisico_selecionado + '</option>';
+        select_model.innerHTML = '<option>' + modelo_proceso_selecionado + '</option>';
         consultar_api(protocolo + '://' + direccion + ':' +
             puerto + '/api/' + modelo_proceso_selecionado + '/system');
         document.getElementById('btn_crear_modelo').style.display = 'none';
         var section = document.getElementById('seleccion_objetos_section');
         section.style.display = "block";
     }
+}
+
+function seleccion_activo() {
+    var i
+    for (i = 0; i < document.activo.r_activo.length; i++) {
+        if (document.activo.r_activo[i].checked)
+            break;
+    }
+    document.value = document.activo.r_activo[i].value
 }
 
 function validar_formulario_proceso() {
@@ -322,4 +331,72 @@ function validar_formulario_proceso() {
     return datos_validos;
 }
 
+function cargar_posibles_objetos_modelo(json) {
+    var para_cargar = document.getElementById('lista_objetos_para_cargar');
+    var seleccionados = document.getElementById('lista_objetos_seleccionados');
+    var contenido_carga = '';
+    var contenido_seleccion = '';
+    json.forEach(element => {
+        contenido_carga += '<li id="visivilidad_obetos_para_seleccion_' +
+            element['$']['id'] + '"><div class="form-check"><input type="checkbox" class="form-check-input objeto_para_seleccion_padre" id="objetos_para_seleccion_' +
+            element['$']['id'] + '" onclick="verificar_seleccion_hijo_pagre(this);" data-puro_id="' +
+            element['$']['id'] + '" data-puro_name="' +
+            element['$']['name'] + '" data-oculto="false"><label class="form-check-label" for="objetos_para_seleccion_' +
+            element['$']['id'] + '">' +
+            element['$']['name'] + '</label></div>';
+        contenido_seleccion += '<li style="display: none;" id="visivilidad_objetos_seleccionado_' +
+            element['$']['id'] + '"><div class="form-check"><input type="checkbox" class="form-check-input objeto_seleccionado_padre" id="objetos_seleccionado_' +
+            element['$']['id'] + '" onclick="verificar_seleccion_hijo_pagre(this);" data-puro_id="' +
+            element['$']['id'] + '" data-puro_name="' +
+            element['$']['name'] + '" data-oculto="true"><label class="form-check-label" for="objetos_seleccionado_' +
+            element['$']['id'] + '">' +
+            element['$']['name'] + '</label></div>';
+        if (element['iotSubsystem']) {
+            contenido_carga += '<ul>';
+            contenido_seleccion += '<ul>';
+            element['iotSubsystem'].forEach(subSystem => {
+                contenido_carga += '<li id="visivilidad_objetos_para_seleccion_' +
+                    subSystem['$']['id'] + '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_para_seleccion_hijo" name="sujetos_para_seleccion_' +
+                    element['$']['id'] + '" id="sujetos_para_seleccion_' +
+                    subSystem['$']['id'] + '" onclick="verificar_seleccion_hijo_pagre(this);" data-puro_id="' +
+                    subSystem['$']['id'] + '" data-puro_name="' +
+                    subSystem['$']['name'] + '" data-oculto="false"><label class="form-check-label" for="sujetos_para_seleccion_' +
+                    subSystem['$']['id'] + '">' +
+                    subSystem['$']['name'] + '</label></div></li>';
+                contenido_seleccion += '<li style="display: none;" id="visivilidad_sujetos_seleccionado_' +
+                    subSystem['$']['id'] + '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_seleccionado_hijo" name="sujetos_seleccionado_' +
+                    element['$']['id'] + '" id="sujetos_seleccionado_' +
+                    subSystem['$']['id'] + '" onclick="verificar_seleccion_hijo_pagre(this);" data-puro_id="' +
+                    ubSystem['$']['id'] + '" data-puro_name="' +
+                    subSystem['$']['name'] + '" data-oculto="true"><label class="form-check-label" for="sujetos_seleccionado_' +
+                    subSystem['$']['id'] + '">' +
+                    subSystem['$']['name'] + '</label></div></li>';
+            });
+            contenido_carga += '</ul>';
+            contenido_seleccion += '</ul>';
+        }
+        contenido_carga += '</li>';
+        contenido_seleccion += '</li>';
+    });
+
+    para_cargar.innerHTML = contenido_carga;
+    seleccionados.innerHTML = contenido_seleccion;
+}
+
 // Fin "SECCION SELECCION PROCESOS"
+
+/* 
+    SECCION SELECCION OBJETOS
+
+        Descripcion:
+            Se encuentra las funciones que nos permitira la seleccion de objetos
+
+        Incluye:
+            seleccionar_objetos_modal
+*/
+
+function seleccionar_objetos_modal() {
+    $('#modal_crear_proceso').modal('show');
+}
+
+/*Intento para llenar la tabla  */
