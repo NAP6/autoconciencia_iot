@@ -35,7 +35,6 @@ export function singup(req: Request, res: Response) {
 }
 
 export function start_session(req:Request, res:Response, next:NextFunction){
-  console.log("Entra StartSession");
   var db=new mysql_connector();
   var email_user=req.body.email;
   var password_user=req.body.password;
@@ -44,7 +43,6 @@ export function start_session(req:Request, res:Response, next:NextFunction){
     req.session!.user ={email: email_user} ;
     req.flash("error", "");
     req.flash("succes", "Exito  ");
-   
     next();
   }else{
     req.flash("error", "El usuario no es valido");
@@ -64,6 +62,14 @@ export function singup_save(req: Request, res: Response, next: NextFunction) {
 }
 export function home(req: Request, res: Response) {
   res.render("principal", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+
+export function select_model(req: Request, res: Response) {
+  res.render("select_model", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
