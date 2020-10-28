@@ -33,7 +33,6 @@ export function singup(req: Request, res: Response) {
     });
   }
 }
-
 export function start_session(req:Request, res:Response, next:NextFunction){
   var db=new mysql_connector();
   var email_user=req.body.email;
@@ -50,6 +49,11 @@ export function start_session(req:Request, res:Response, next:NextFunction){
     res.redirect('/');
   }
 
+}
+export function active_model(req:Request, res:Response, next:NextFunction){
+  req.session!.active_model=req.body.select_model;
+  console.log(req.session!.active_model);
+  next();
 }
 
 export function singup_save(req: Request, res: Response, next: NextFunction) {
@@ -77,7 +81,7 @@ export function select_model(req: Request, res: Response) {
 }
 
 export function models(req: Request, res: Response) {
-  res.render("/modelsV/create_model", {
+  res.render("create_model", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
@@ -148,9 +152,8 @@ export function generate_model(req: Request, res: Response) {
   });
 }
 export function logout(req: Request, res: Response,next:NextFunction) {
-  req.session?.destroy((err) =>{if(err) throw err});
+ delete req.session?.user;
   next();
- 
 }
 
 export function save_new_model(req: Request, res: Response, next: NextFunction) {

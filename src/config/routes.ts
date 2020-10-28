@@ -8,7 +8,7 @@ export default function (app: Application, upload: Multer) {
   app.get("/select_model",nv.home);
   app.get('/logout',nv.logout,nv.login);
   app.get("/singup", nv.singup);
-  app.get("/modelsV/create_model", nv.loggedIn, nv.models);
+  app.get("/create_model", nv.loggedIn, nv.models);
   app.get("/subject", nv.loggedIn, nv.subject);
   app.get("/object", nv.loggedIn, nv.object);
   //app.get("/self-awareness_processes", nv.loggedIn, nv.self-awareness_processes);
@@ -29,5 +29,5 @@ export default function (app: Application, upload: Multer) {
   );
 
   //app.post("/signup",);
-  app.get("/", nv.loggedIn, nv.home);
+  app.route("/").get(nv.loggedIn, nv.home).post(nv.loggedIn,nv.active_model, nv.home);
 };

@@ -1,0 +1,33 @@
+<!-- Inicio de la seccion de cargar modelos -->
+<section id="cargar_modelo_fisico_section" class="cargar_modelo_fisico container mt-3">
+    <h1 class="text-center">Modelos de autoconsciencia</h1>
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crear_modelo_modal">Crear</button>
+
+
+            <a href="/modify" class="btn btn-secondary mx-3">Modificar</a>
+        </div>
+        <div class="col-12 py-5">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">JSON</th>
+                        <th scope="col">#</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>
+<!-- Fin de la seccion cargar datos -->
+
+<%- include('../modals/modal_model'); %>
