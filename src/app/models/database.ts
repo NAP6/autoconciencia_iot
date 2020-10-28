@@ -15,9 +15,14 @@ export class mysql_connector {
   }
 
   public save_fisicalModel(model: object): void {
-    //implementacion para guardar el modelo en la base de datos
+    console.log(
+      `############# Envio a la funcion 'save_fisicalModel' el id de usuario '${model}`
+    );
   }
   public getfisicalModel(modelID: string): object {
+    console.log(
+      `############# Envio a la funcion 'getfisicalModel' el id de usuario '${modelID}`
+    );
     return this.modelo;
   }
   public validateUser(userName: string, passwoedUser: string): boolean {
@@ -27,25 +32,49 @@ export class mysql_connector {
   }
 
   public getUserModels(userID: string): object {
-    return {
-      "modelo 1": { id: "modelo 1", nombre: "Nombre modelo 1" },
-      "modelo 2": { id: "modelo 2", nombre: "Nombre modelo 2" },
-    };
+    console.log(
+      `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}`
+    );
+    return [
+      {
+        id: "1",
+        nombre: "Modelo 1",
+        descripcion: "descripcion modelo 1",
+        json: [],
+      },
+      {
+        id: "2",
+        nombre: "Modelo 2",
+        descripcion: "descripcion modelo 2",
+        json: [],
+      },
+      {
+        id: "3",
+        nombre: "Modelo 3",
+        descripcion: "descripcion modelo 3",
+        json: [],
+      },
+    ];
   }
 
   public getUser_measurementUnit(userID: string): object {
+    console.log(
+      `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
+    );
     return [
       {
         id: "1",
         nombre: "Centimeros",
         descripcion: "Unidad de medida que representa 1/100 metros",
         acronimo: "cm",
+        activo: "true",
       },
       {
         id: "2",
         nombre: "Milimetros",
         descripcion: "Unidad de medida que representa 1/1000 metros",
         acronimo: "mm",
+        activo: "false",
       },
     ];
   }

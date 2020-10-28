@@ -318,7 +318,7 @@ function error_cargar_unidades_de_medida_select(err) {
 }
 
 /* 
-    SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
+    SECCION CARGAR LAS UNIDADES DE MEDIDA
 
         Descripcion:
 		Esta seccion contiene las funciones de que carga las unidades de medida
@@ -340,17 +340,87 @@ function cargar_unidades_de_medida_table(json) {
   res = "";
   json.forEach((um) => {
     res += "<tr>";
-    res += `<td></td>`;
+    res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}"></td>`;
     res += `<td>${um.id}</td>`;
     res += `<td>${um.nombre}</td>`;
     res += `<td>${um.descripcion}</td>`;
     res += `<td>${um.acronimo}</td>`;
-    res += `<td></td>`;
+    if (um.activo == "true")
+      res += `<td><input type="checkbox" disabled checked></td>`;
+    else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";
   });
   document.getElementById("tabla_unidades_de_medida").innerHTML = res;
 }
 
 function error_cargar_unidades_de_medida_table(err) {
+  alert("Error al cargar los datos del modelo: " + err);
+}
+
+/* 
+    SECCION LISTAR MODELOS
+
+        Descripcion:
+		En esta seccion se cargan los modelos de autoconciencia guardados
+		en una tabla para visualizar y seleccionar
+
+        Incluye:
+		cargar_modelos_table
+		error_cargar_models_table
+*/
+
+if (document.getElementById("tabla_modelos_autoconciencia"))
+  consultar_api(
+    "http://localhost:3000/api/user_models",
+    cargar_modelos_table,
+    error_cargar_models_table
+  );
+
+function cargar_modelos_table(json) {
+  res = "";
+  json.forEach((md) => {
+    res += "<tr>";
+    res += `<td>${md.id}</td>`;
+    res += `<td>${md.nombre}</td>`;
+    res += `<td>${md.descripcion}</td>`;
+    res += `<td><a href="\#">JSON</a></td>`;
+    res += `<td><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}"></td>`;
+    res += "</tr>";
+  });
+  document.getElementById("tabla_modelos_autoconciencia").innerHTML = res;
+}
+
+function error_cargar_models_table(err) {
+  alert("Error al cargar los datos del modelo: " + err);
+}
+
+/* 
+    SECCION LISTAR MODELOS PARA TRABAJO ACTUAL
+
+        Descripcion:
+		En esta seccion se encuentran las funciones que cargan el select 
+		de modelo de trabajo actual.
+
+        Incluye:
+		cargar_modelos_trabajo_actual
+		error_cargar_models_trabajo_actual
+*/
+
+if (document.getElementById("select_modelo_para_activar_trabajo"))
+  consultar_api(
+    "http://localhost:3000/api/user_models",
+    cargar_modelos_trabajo_actual,
+    error_cargar_models_trabajo_actual
+  );
+
+function cargar_modelos_trabajo_actual(json) {
+  res = "<option value=''>Seleccione un modelo para trabajar</option>";
+  json.forEach((md) => {
+    res += `<option value="${md.id}">${md.nombre}</option>`;
+  });
+  document.getElementById("select_modelo_para_activar_trabajo").innerHTML = res;
+}
+
+function error_cargar_models_trabajo_actual(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
