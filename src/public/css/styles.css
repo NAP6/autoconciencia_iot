@@ -102,6 +102,11 @@ h6 {
     margin-bottom: 0.5rem;
 }
 
+.vl {
+    border-left: 3px solid gray;
+    height: 500px;
+}
+
 p {
     margin-top: 0;
     margin-bottom: 1rem;

@@ -4,7 +4,8 @@ import * as nv from '../app/controller/controller-navigation';
 
 export default function (app: Application, upload: Multer) {
   app.get("/login", nv.login);
-  app.post("/start_session", nv.start_session, nv.home);
+  app.post("/start_session", nv.start_session, nv.select_model);
+  app.get("/select_model",nv.home);
   app.get('/logout',nv.logout,nv.login);
   app.get("/singup", nv.singup);
   app.get("/modelsV/create_model", nv.loggedIn, nv.models);
