@@ -38,7 +38,7 @@ app.use(urlencoded()); // get information from html forms
 
 //view engine setup
 app.use(express.static(join(__dirname, 'public')));
-app.set('views', join(__dirname, 'app/views'));
+app.set('views', join(__dirname, '/app/views'));
 app.set('view engine', 'ejs'); // set up ejs for templating
 
 
