@@ -29,10 +29,8 @@ export function entity(req: Request, res: Response) {
 export function measurement_units(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
-    var js = new json();
     var db = new database();
-    js.setJSON(db.getUser_measurementUnit(id));
-    res.json(js.getEntity());
+    res.json(db.getUser_measurementUnit(id));
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -40,11 +38,10 @@ export function measurement_units(req: Request, res: Response) {
 
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
+	console.log("Entra en unidades de medida");
     var id = req.session?.user.userID;
-    var js = new json();
     var db = new database();
-    js.setJSON(db.getUserModels(id));
-    res.json(js.getEntity());
+    res.json(db.getUserModels(id));
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

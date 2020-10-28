@@ -1,12 +1,19 @@
+function consultar_api(url = "", fun1, fun2) {
+  fetch(url)
+    .then((response) => response.json())
+    .then((json) => fun1(json))
+    .catch((error) => fun2(error));
+}
+
 /* 
-    SECCION SELECCION SUJETOS
+    SECCION SELECCION SUJETOS CUADROS DINAMICOS SE SELECCION
 
         Descripcion:
             En este fragmento se encuentran las funciones que hacen posible el dinamismo
-            de la seccion de seleccion de sujetos, haciendola mas interactiva.
+            de la seccion de seleccion de sujetos, haciendola mas interactiva. Ademas cuenta
+	    con las funciones que consultan la api para carhar los sujetos.
 
         Incluye:
-	    consultar_api
 	    cargar_posibles_sujetos_modelo
 	    error_cargar_posibles_sujetos_modelo
 	    verificar_seleccion_hijo_pagre
@@ -18,14 +25,11 @@
 */
 
 if (document.getElementById("lista_sujetos_para_cargar"))
-  consultar_api("http://localhost:3000/api/system");
-
-function consultar_api(url = "") {
-  fetch(url)
-    .then((response) => response.json())
-    .then((json) => cargar_posibles_sujetos_modelo(json))
-    .catch((error) => error_cargar_posibles_sujetos_modelo(error));
-}
+  consultar_api(
+    "http://localhost:3000/api/system",
+    cargar_posibles_sujetos_modelo,
+    error_cargar_posibles_sujetos_modelo
+  );
 
 function cargar_posibles_sujetos_modelo(json) {
   var para_cargar = document.getElementById("lista_sujetos_para_cargar");
@@ -281,4 +285,72 @@ function extraer_datos_sujeto() {
     "lista_sujetos_seleccionados_oficial"
   ).innerHTML = contenido;
   return new_obj;
+}
+/* 
+    SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
+
+        Descripcion:
+		Esta seccion contiene las funciones de que carga las unidades de medida
+		en la pagina de seleccionar sujetos.
+
+        Incluye:
+		cargar_unidades_de_medida_select
+		error_cargar_unidades_de_medida_select
+*/
+
+if (document.getElementById("unidades_medida_seccion_sujetos"))
+  consultar_api(
+    "http://localhost:3000/api/measurement_units",
+    cargar_unidades_de_medida_select,
+    error_cargar_unidades_de_medida_select
+  );
+
+function cargar_unidades_de_medida_select(json) {
+  res = "";
+  json.forEach((um) => {
+    res += `<option value='${um.id}'>${um.nombre}</option>`;
+  });
+  document.getElementById("unidades_medida_seccion_sujetos").innerHTML = res;
+}
+
+function error_cargar_unidades_de_medida_select(err) {
+  alert("Error al cargar los datos del modelo: " + err);
+}
+
+/* 
+    SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
+
+        Descripcion:
+		Esta seccion contiene las funciones de que carga las unidades de medida
+		en la pagina de seleccionar sujetos.
+
+        Incluye:
+		cargar_unidades_de_medida_table
+		error_cargar_unidades_de_medida_table
+*/
+
+if (document.getElementById("tabla_unidades_de_medida"))
+  consultar_api(
+    "http://localhost:3000/api/measurement_units",
+    cargar_unidades_de_medida_table,
+    error_cargar_unidades_de_medida_table
+  );
+
+function cargar_unidades_de_medida_table(json) {
+  res = "";
+  json.forEach((um) => {
+    res += "<tr>";
+    res += `<td></td>`;
+    res += `<td>${um.id}</td>`;
+    res += `<td>${um.nombre}</td>`;
+    res += `<td>${um.descripcion}</td>`;
+    res += `<td>${um.acronimo}</td>`;
+    res += `<td></td>`;
+    res += "</tr>";
+  });
+  document.getElementById("tabla_unidades_de_medida").innerHTML = res;
+}
+
+function error_cargar_unidades_de_medida_table(err) {
+  alert("Error al cargar los datos del modelo: " + err);
 }
