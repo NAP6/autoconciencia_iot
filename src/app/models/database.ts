@@ -3,7 +3,6 @@ import constants from "../../config/constants";
 
 export class mysql_connector {
   private connector;
-
   constructor() {
     this.connector = mysql.createConnection({
       host: constants["db-url"],
@@ -91,6 +90,60 @@ export class mysql_connector {
     ];
   }
 
+  public getUser_escales(userID: string): object {
+    console.log(
+      `############# Envio a la funcion 'getUser_escales' el id de usuario '${userID}`
+    );
+    return [
+      {
+        id: "1",
+        nombre: "Centimeros",
+        valor_valido: "Unidad de medida que representa 1/100 metros",
+        tipo: "cm",
+        activo: "true",
+      },
+      {
+        id: "2",
+        nombre: "Milimetros",
+        valor_valido: "Unidad de medida que representa 1/1000 metros",
+        tipo: "mm",
+        activo: "false",
+      },
+      {
+        id: "3",
+        nombre: "Milimetros",
+        valor_valido: "Unidad de medida que representa 1/1000 metros",
+        tipo: "mm",
+        activo: "true",
+      },
+    ];
+  }
+
+  public getUser_decision_criteria(userID: string): object {
+    console.log(
+      `############# Envio a la funcion 'getUser_escales' el id de usuario '${userID}`
+    );
+    return [
+      {
+        id: "1",
+        nombre: "Centimeros",
+        descripcion: "Unidad de medida que representa 1/100 metros",
+        activo: "true",
+      },
+      {
+        id: "2",
+        nombre: "Milimetros",
+        descripcion: "Unidad de medida que representa 1/1000 metros",
+        activo: "false",
+      },
+      {
+        id: "3",
+        nombre: "Milimetros",
+        descripcion: "Unidad de medida que representa 1/1000 metros",
+        activo: "true",
+      },
+    ];
+  }
   private modelo = {
     "MonitorIoT:DataMonitoringArchitectureModel": {
       $: {
