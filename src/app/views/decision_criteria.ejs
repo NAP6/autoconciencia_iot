@@ -1,15 +1,12 @@
 <%- include('parts/before_the_body'); %>
-    <%- include('parts/sidebar_menu'); %>
-        <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid">
-                    <h1 class="mt-4">Criterios Decisión</h1>
-                </div>
-                <br>
-                <div>
-                    <%- include('parts/decision_criteria/table'); %>
-                </div>
-            </main>
-        </div>
-        <!-- Fin del contenido principal (main) -->
-        <%- include('parts/after_the_body'); %>
+<%- include('parts/sidebar_menu'); %>
+
+<div id="layoutSidenav_content">
+    <main id="decision_criteria_page" class="container-fluid">
+        <h1 class="mt-4">Criterios Decisión</h1>
+        <br>
+        <%- include('parts/decision_criteria/table'); %>
+    </main>
+</div>
+
+<%- include('parts/after_the_body'); %>

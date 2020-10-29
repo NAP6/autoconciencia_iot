@@ -22,6 +22,11 @@ export function login(req: Request, res: Response) {
   }
 }
 
+export function logout(req: Request, res: Response, next: NextFunction) {
+  delete req.session?.user;
+  res.redirect("/login")
+}
+
 export function singup(req: Request, res: Response) {
   if (req.session?.user) {
     res.redirect("/home");
@@ -33,28 +38,6 @@ export function singup(req: Request, res: Response) {
     });
   }
 }
-export function start_session(req: Request, res: Response, next: NextFunction) {
-  var db = new mysql_connector();
-  var email_user = req.body.email;
-  var password_user = req.body.password;
-
-  if (db.validateUser(email_user, password_user)) {
-    req.session!.user = { email: email_user };
-    req.flash("error", "");
-    req.flash("succes", "Exito  ");
-    next();
-  } else {
-    req.flash("error", "El usuario no es valido");
-    req.flash("succes", "");
-    res.redirect("/");
-  }
-}
-export function active_model(req: Request, res: Response, next: NextFunction) {
-  var db = new mysql_connector();
-  req.session!.active_model = db.getModel(req.body.select_model);
-  console.log(req.session!.active_model.nombre);
-  next();
-}
 
 export function singup_save(req: Request, res: Response, next: NextFunction) {
   if (req.session!.user) {
@@ -64,12 +47,22 @@ export function singup_save(req: Request, res: Response, next: NextFunction) {
     res.redirect("/login");
   }
 }
-export function home(req: Request, res: Response) {
-  res.render("principal", {
-    error: req.flash("error"),
-    succes: req.flash("succes"),
-    session: req.session,
-  });
+
+export function start_session(req: Request, res: Response, next: NextFunction) {
+  var db = new mysql_connector();
+  var email_user = req.body.email;
+  var password_user = req.body.password;
+
+  if (db.validateUser(email_user, password_user)) {
+    req.session!.user = { email: email_user };
+    req.flash("error", "");
+    req.flash("succes", "Bienvenido de vuelta");
+    next();
+  } else {
+    req.flash("error", "El usuario no es valido");
+    req.flash("succes", "");
+    res.redirect("/");
+  }
 }
 
 export function select_model(req: Request, res: Response) {
@@ -81,7 +74,7 @@ export function select_model(req: Request, res: Response) {
 }
 
 export function models(req: Request, res: Response) {
-  res.render("create_model", {
+  res.render("models", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
@@ -104,8 +97,16 @@ export function object(req: Request, res: Response) {
   });
 }
 
+export function self_awareness_processes(req: Request, res: Response) {
+  res.render("self_awareness_processes", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+
 export function measurement_units(req: Request, res: Response) {
-  res.render("units_of_measure", {
+  res.render("measurement_units", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
@@ -120,7 +121,7 @@ export function scales(req: Request, res: Response) {
   });
 }
 
-export function decision(req: Request, res: Response) {
+export function decision_criteria(req: Request, res: Response) {
   res.render("decision_criteria", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -136,8 +137,16 @@ export function formulas(req: Request, res: Response) {
   });
 }
 
-export function functions(req: Request, res: Response) {
+export function calculation_functions(req: Request, res: Response) {
   res.render("calcule_functions", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+
+export function calculation_services(req: Request, res: Response) {
+  res.render("calculation_services", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
@@ -151,10 +160,6 @@ export function generate_model(req: Request, res: Response) {
     session: req.session,
   });
 }
-export function logout(req: Request, res: Response, next: NextFunction) {
-  delete req.session?.user;
-  next();
-}
 
 export function save_new_model(
   req: Request,
@@ -162,9 +167,39 @@ export function save_new_model(
   next: NextFunction
 ) {
   if (req.session!.user) {
-    // Guardar
+    // Guardar El modelo generado para poder trabajar y activarlo como modelo de trabajo actual
     next();
   } else {
     res.redirect("/login");
   }
 }
+
+export function active_model(req: Request, res: Response, next: NextFunction) {
+  var db = new mysql_connector();
+  req.session!.active_model = db.getModel(req.body.select_model);
+  next();
+}
+
+export function home(req: Request, res: Response) {
+  res.render("principal", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,15 +1,12 @@
 <%- include('parts/before_the_body'); %>
-    <%- include('parts/sidebar_menu'); %>
+<%- include('parts/sidebar_menu'); %>
 
-        <div id="layoutSidenav_content">
-            <main>
-                <div class="container-fluid">
-                    <h1 class="mt-4">Sujetos de autoconsciencia</h1>
-                    <%- include('parts/subjects/subject_selection'); %>
-                        <%- include('parts/subjects/subject_objectives'); %>
-                </div>
-            </main>
-        </div>
+<div id="layoutSidenav_content">
+    <main id="subject_page" class="container-fluid">
+        <h1 class="mt-4">Sujetos de autoconsciencia</h1>
+        <%- include('parts/subjects/subject_selection'); %>
+        <%- include('parts/subjects/subject_objectives'); %>
+    </main>
+</div>
 
-        <!-- Fin del contenido principal (main) -->
-        <%- include('parts/after_the_body'); %>
+<%- include('parts/after_the_body'); %>

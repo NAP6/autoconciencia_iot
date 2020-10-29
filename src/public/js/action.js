@@ -380,11 +380,11 @@ function cargar_modelos_table(json) {
   res = "";
   json.forEach((md) => {
     res += "<tr>";
+    res += `<td><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}"></td>`;
     res += `<td>${md.id}</td>`;
     res += `<td>${md.nombre}</td>`;
     res += `<td>${md.descripcion}</td>`;
     res += `<td><a href="\#">JSON</a></td>`;
-    res += `<td><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}"></td>`;
     res += "</tr>";
   });
   document.getElementById("tabla_modelos_autoconciencia").innerHTML = res;
