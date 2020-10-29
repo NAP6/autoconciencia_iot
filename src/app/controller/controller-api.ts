@@ -35,6 +35,24 @@ export function measurement_units(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function escales(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    res.json(db.getUser_escales(id));
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function decision_criteria(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    res.json(db.getUser_decision_criteria(id));
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {

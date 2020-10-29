@@ -1,62 +1,23 @@
 </br>
-
 <div>
     <h4>Entidades disponibles:</h4>
-    <div class="row">
-        <div class="col-sm">
-
-            <ul class="nav">
-                <li><a href="">Sujetos</a>
-                    <ul class="list-group">
-                        <li><a href="">Entidades Fisicas</a>
-                            <ul>
-                                <li><a href="">Casa</a></li>
-                                <li><a href="">Subsistema 2</a></li>
-                                <li><a href="">Subsistema 3</a></li>
-                                <li><a href="">Subssitema 4</a></li>
-                            </ul>
-                        </li>
-
-                        <li><a href="">Entidades Digitales</a>
-                            <ul>
-                                <li><a href="">Casa</a></li>
-                                <li><a href="">Subsistema 2</a></li>
-                                <li><a href="">Subsistema 3</a></li>
-                                <li><a href="">Subssitema 4</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-
-                </li>
-
-        </div>
-        <div class="col-sm">
-
-            <button class="btn btn-success my-1">Agregar</button>
-            <button class="btn btn-danger my-1" onclick="remover_sujeto_seleccionado();">Eliminar</button>
-        </div>
-        <div class="col-sm">
-
-            <ul class="nav">
-                <li><a href="">Sujetos</a>
-                    <ul class="list-group">
-                        <li><a href="">Sistema de Gestion de Emergencias</a>
-                            <ul>
-                                <li><a href="">Subsistema 1</a></li>
-                                <li><a href="">Subsistema 2</a></li>
-                                <li><a href="">Subsistema 3</a></li>
-                                <li><a href="">Subssitema 4</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-        </div>
-
-
-
-
-
-    </div>
-
-
 </div>
+<div class="modal-body container-fluid">
+    <div class="row px-3">
+        <div id="entidades_para_seleccion_area" class="card col-12 col-lg-5">
+            <ul id="lista_entidades_para_cargar"></ul>
+        </div>
+        <div class="col-12 col-lg-2 text-center">
+            <button class="btn btn-success my-1" onclick="agregar_entidad_seleccionado();">Agregar</button>
+            <button class="btn btn-danger my-1" onclick="remover_entidad_seleccionado();">Eliminar</button>
+        </div>
+        <div id="entidades_seleccionados_area" class="card col-12 col-lg-5">
+            <ul id="lista_entidades_seleccionados"></ul>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" onclick="actualizar_entidades();">Save changes</button>
+</div>
+<input id="entidades_seleccion" type="text" style="display: none;">
+<div id="lista_entidades_seleccionados_oficial" class="row"></div>
