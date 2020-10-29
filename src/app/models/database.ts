@@ -57,6 +57,18 @@ export class mysql_connector {
     ];
   }
 
+  public getModel(modelID: string): object {
+    console.log(
+      `############# Envio a la funcion 'getModel' el id de usuario '${modelID}`
+    );
+    return {
+      id: "2",
+      nombre: "Modelo 2",
+      descripcion: "descripcion modelo 2",
+      json: [],
+    };
+  }
+
   public getUser_measurementUnit(userID: string): object {
     console.log(
       `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
