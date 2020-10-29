@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {mysql_connector} from "../models/database";
+import { mysql_connector } from "../models/database";
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
   if (req.session!.user) {
@@ -11,8 +11,8 @@ export function loggedIn(req: Request, res: Response, next: NextFunction) {
 export function login(req: Request, res: Response) {
   if (req.session?.user) {
     res.redirect("/home");
-      req.flash("error");
-     req.flash("succes");
+    req.flash("error");
+    req.flash("succes");
   } else {
     res.render("login", {
       error: req.flash("error"),
@@ -33,26 +33,26 @@ export function singup(req: Request, res: Response) {
     });
   }
 }
-export function start_session(req:Request, res:Response, next:NextFunction){
-  var db=new mysql_connector();
-  var email_user=req.body.email;
-  var password_user=req.body.password;
-  
-  if(db.validateUser(email_user,password_user)){
-    req.session!.user ={email: email_user} ;
+export function start_session(req: Request, res: Response, next: NextFunction) {
+  var db = new mysql_connector();
+  var email_user = req.body.email;
+  var password_user = req.body.password;
+
+  if (db.validateUser(email_user, password_user)) {
+    req.session!.user = { email: email_user };
     req.flash("error", "");
     req.flash("succes", "Exito  ");
     next();
-  }else{
+  } else {
     req.flash("error", "El usuario no es valido");
     req.flash("succes", "");
-    res.redirect('/');
+    res.redirect("/");
   }
-
 }
-export function active_model(req:Request, res:Response, next:NextFunction){
-  req.session!.active_model=req.body.select_model;
-  console.log(req.session!.active_model);
+export function active_model(req: Request, res: Response, next: NextFunction) {
+  var db = new mysql_connector();
+  req.session!.active_model = db.getModel(req.body.select_model);
+  console.log(req.session!.active_model.nombre);
   next();
 }
 
@@ -151,12 +151,16 @@ export function generate_model(req: Request, res: Response) {
     session: req.session,
   });
 }
-export function logout(req: Request, res: Response,next:NextFunction) {
- delete req.session?.user;
+export function logout(req: Request, res: Response, next: NextFunction) {
+  delete req.session?.user;
   next();
 }
 
-export function save_new_model(req: Request, res: Response, next: NextFunction) {
+export function save_new_model(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   if (req.session!.user) {
     // Guardar
     next();
