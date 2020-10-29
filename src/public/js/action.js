@@ -306,14 +306,7 @@ function extraer_datos_sujeto() {
             actualizar_entidades
             extraer_datos_entidades
 */
-if (document.getElementById("lista_entidades_para_cargar"))
-    consultar_api(
-        "http://localhost:3000/api/entity",
-        cargar_posibles_entidades_modelo,
-        error_cargar_posibles_entidades_modelo
-    );
-
-
+//JAIMEEE
 
 /* 
     SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA

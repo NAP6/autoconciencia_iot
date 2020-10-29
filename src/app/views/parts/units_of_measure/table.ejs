@@ -1,125 +1,35 @@
-<div class="row justify-content-center" id="content">
-    <div class="col-4">
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-8"></div>
-    <div class="col-md-4"><button id="bt_add" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Agregar</button>
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Agregar Unidad de Medida</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm">
-                                <div class="form-group row">
-                                    <label for="" class="col-sm-2 col-form-label">ID</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="Id" value="">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-sm-2 col-form-label">Nombre</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="staticEmail" value="">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-sm-2 col-form-label">Descripción</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="Descripcion" value="">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-sm-2 col-form-label">Acronimo</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="Peso" value="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button id="bd_del" class="btn btn-primary">Eliminar</button>
-        <button id="bd_mod" class="btn btn-primary" data-toggle="modal" data-target="#ModalModificar">Modificar</button>
-        <div class="modal fade" id="ModalModificar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modificar Unidad de Medida</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-sm">
-                                <div class="form-group row">
-                                    <label for="" class="col-sm-2 col-form-label">ID</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="Id" placeholder="0105">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-sm-2 col-form-label">Nombre</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="staticEmail" value="" placeholder="fasd">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-sm-2 col-form-label">Descripción</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="Descripcion" value="" placeholder="fasd">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="" class="col-sm-2 col-form-label">Acronimo</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" id="Peso" value="" placeholder="asdsda">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-8"></div>
+        <div class="col-md-4">
+            <button id="bt_add" class="btn btn-primary" data-toggle="modal" data-target="#modal_units_add">Agregar</button>
+            <button id="bd_del" class="btn btn-primary">Eliminar</button>
+            <button id="bd_mod" class="btn btn-primary" data-toggle="modal" data-target="#modal_modificar">Modificar</button>
         </div>
     </div>
-</div>
-<br>
-<br>
-<div class="row container">
-    <div class="col-12">
-        <table class="table table-hover">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Check</th>
-                    <th scope="col">ID</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Descripcion</th>
-                    <th scope="col">Acronimo</th>
-                    <th scope="col">Activo</th>
-                </tr>
-            </thead>
-            <tbody id="tabla_unidades_de_medida">
+    <br>
+    <div class="row container">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Check</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Acronimo</th>
+                        <th scope="col">Activo</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla_unidades_de_medida">
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
+    <br>
 </div>
+
+
+<%- include('../units_of_measure/modal/modal_units_add'); %>
+    <%- include('../units_of_measure/modal/modal_units_mod'); %>
