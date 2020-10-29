@@ -27,6 +27,7 @@ export class json {
     } catch (error) {
       console.log("No se ha ingresado ningun valor");
     }
+    this.json = json;
     return json;
   }
   public getSystem(): object {

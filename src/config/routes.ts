@@ -22,7 +22,7 @@ export default function (app: Application, upload: Multer) {
   app.post(
     "/save_new_model",
     nv.loggedIn,
-    upload.single("model_file"),
+    upload.single("file_modelo_xmi"),
     nv.save_new_model,
     nv.home
   );

@@ -4,7 +4,7 @@ import { mysql_connector as database } from "../models/database";
 
 export function system(req: Request, res: Response) {
   if (req.session?.user) {
-    var id = req.body.modelID;
+    var id = req.session!.active_model.modelID;
     var js = new json();
     var db = new database();
     js.setJSON(db.getfisicalModel(id));
@@ -16,7 +16,7 @@ export function system(req: Request, res: Response) {
 
 export function entity(req: Request, res: Response) {
   if (req.session?.user) {
-    var id = req.body.modelID;
+    var id = req.session!.active_model.modelID;
     var js = new json();
     var db = new database();
     js.setJSON(db.getfisicalModel(id));
@@ -56,7 +56,6 @@ export function decision_criteria(req: Request, res: Response) {
 
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
-	console.log("Entra en unidades de medida");
     var id = req.session?.user.userID;
     var db = new database();
     res.json(db.getUserModels(id));

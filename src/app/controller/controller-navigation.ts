@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { mysql_connector } from "../models/database";
+import { json as jsModel } from "../models/handling-json";
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
   if (req.session!.user) {
@@ -24,7 +25,7 @@ export function login(req: Request, res: Response) {
 
 export function logout(req: Request, res: Response, next: NextFunction) {
   delete req.session?.user;
-  res.redirect("/login")
+  res.redirect("/login");
 }
 
 export function singup(req: Request, res: Response) {
@@ -54,7 +55,7 @@ export function start_session(req: Request, res: Response, next: NextFunction) {
   var password_user = req.body.password;
 
   if (db.validateUser(email_user, password_user)) {
-    req.session!.user = { email: email_user };
+    req.session!.user = db.getUser(email_user, password_user);
     req.flash("error", "");
     req.flash("succes", "Bienvenido de vuelta");
     next();
@@ -167,7 +168,14 @@ export function save_new_model(
   next: NextFunction
 ) {
   if (req.session!.user) {
-    // Guardar El modelo generado para poder trabajar y activarlo como modelo de trabajo actual
+    var js = new jsModel();
+    js.xml_file2json(req.file.path);
+    var nombre = req.body.nombre_modelo;
+    var descripcion = req.body.descripcion_ecenario;
+    var autor = req.body.autor_modelo;
+    var db = new mysql_connector();
+    db.save_newModel(nombre, descripcion, autor, js.getJSON());
+    req.session!.active_model = db.getModel("2");
     next();
   } else {
     res.redirect("/login");
@@ -187,19 +195,3 @@ export function home(req: Request, res: Response) {
     session: req.session,
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

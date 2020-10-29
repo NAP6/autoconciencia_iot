@@ -13,23 +13,31 @@ export class mysql_connector {
     });
   }
 
-  public save_fisicalModel(model: object): void {
+  public save_newModel(
+    nombre: string,
+    descripcion: string,
+    autor: string,
+    modelo: object
+  ): void {
     console.log(
-      `############# Envio a la funcion 'save_fisicalModel' el id de usuario '${model}`
+      `########## Envio a la funcion de crear modelo Nonbre: ${nombre}, descripcion: ${descripcion}, autor: ${autor}, modelo: ${modelo}`
     );
   }
+
   public getfisicalModel(modelID: string): object {
     console.log(
       `############# Envio a la funcion 'getfisicalModel' el id de usuario '${modelID}`
     );
     return this.modelo;
   }
-  public validateUser(userName: string, passwoedUser: string): boolean {
-    if (userName == "nicolas@ejemplo.com" && passwoedUser == "1234")
+  public validateUser(emailUser: string, passwoedUser: string): boolean {
+    if (emailUser == "nicolas@ejemplo.com" && passwoedUser == "1234")
       return true;
     return false;
   }
-
+  public getUser(userName: string, passwoedUser: string): object {
+    return { userID: "1", userName: "ejemplo", email: "ejemplo@cosa.com" };
+  }
   public getUserModels(userID: string): object {
     console.log(
       `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}`
@@ -64,7 +72,7 @@ export class mysql_connector {
       id: "2",
       nombre: "Modelo 2",
       descripcion: "descripcion modelo 2",
-      json: [],
+      modelID: "1"
     };
   }
 
