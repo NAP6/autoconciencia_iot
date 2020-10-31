@@ -72,7 +72,7 @@ export class mysql_connector {
       id: "2",
       nombre: "Modelo 2",
       descripcion: "descripcion modelo 2",
-      modelID: "1"
+      modelID: "1",
     };
   }
 
@@ -152,6 +152,12 @@ export class mysql_connector {
       },
     ];
   }
+
+
+
+
+
+  // La atributo variable no existe, solo le pusimos para probar
   private modelo = {
     "MonitorIoT:DataMonitoringArchitectureModel": {
       $: {
