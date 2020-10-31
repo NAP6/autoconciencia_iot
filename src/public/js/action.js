@@ -13,6 +13,9 @@ function consultar_api(url = "", fun1, fun2) {
             de la seccion de seleccion de sujetos, haciendola mas interactiva. Ademas cuenta
 	    con las funciones que consultan la api para cargar los sujetos.
 
+	Define:
+		objetosde_Sujetos
+
         Incluye:
 	    cargar_posibles_sujetos_modelo
 	    error_cargar_posibles_sujetos_modelo
@@ -24,6 +27,8 @@ function consultar_api(url = "", fun1, fun2) {
             extraer_datos_sujeto
 */
 
+var objetosde_Sujetos = {};
+
 if (document.getElementById("lista_sujetos_para_cargar"))
   consultar_api(
     "http://localhost:3000/api/system",
@@ -34,15 +39,14 @@ if (document.getElementById("lista_sujetos_para_cargar"))
 function cargar_posibles_sujetos_modelo(json) {
   var para_cargar = document.getElementById("lista_sujetos_para_cargar");
   var seleccionados = document.getElementById("lista_sujetos_seleccionados");
-  var oblejetosSujetos = [];
   var contenido_carga = "";
   var contenido_seleccion = "";
   json.forEach((element) => {
-    oblejetosSujetos.push({
+    objetosde_Sujetos[element["$"]["id"]] = {
       id: element["$"]["id"],
       name: element["$"]["name"],
-      objetos: [],
-    });
+      objetos: { raiz: [] },
+    };
     contenido_carga +=
       '<li id="visivilidad_sujetos_para_seleccion_' +
       element["$"]["id"] +
@@ -79,11 +83,11 @@ function cargar_posibles_sujetos_modelo(json) {
       contenido_carga += "<ul>";
       contenido_seleccion += "<ul>";
       element["iotSubsystem"].forEach((subSystem) => {
-        oblejetosSujetos.push({
+        objetosde_Sujetos[subSystem["$"]["id"]] = {
           id: subSystem["$"]["id"],
           name: subSystem["$"]["name"],
-          objetos: [],
-        });
+          objetos: { raiz: [] },
+        };
         contenido_carga +=
           '<li id="visivilidad_sujetos_para_seleccion_' +
           subSystem["$"]["id"] +
@@ -288,7 +292,10 @@ function extraer_datos_sujeto() {
 */
 
 function abrirModalObjetosSujetos(id) {
-  alert(id);
+  //console.log(JSON.stringify(objetosde_Sujetos));
+  //console.log(objetosde_Sujetos[id]);
+	$('#objetosde_sujetoModal').modal('show')
+	console.log("Entra")
 }
 
 /* 
