@@ -326,6 +326,7 @@ function activarFormularioAgregarObjeto() {
   document.getElementById("descripcionObjeto").disabled = false;
   document.getElementById("unidades_medida_seccion_sujetos").disabled = false;
   document.getElementById("activoObjeto").disabled = false;
+  document.getElementById("btn-agregarObjetoLista").disabled = false;
   var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
   arbol.forEach((elem) => {
     elem.disabled = true;
@@ -342,6 +343,7 @@ function desactivarFormularioAgregarObjeto() {
   document.getElementById("descripcionObjeto").disabled = true;
   document.getElementById("unidades_medida_seccion_sujetos").disabled = true;
   document.getElementById("activoObjeto").disabled = true;
+  document.getElementById("btn-agregarObjetoLista").disabled = true;
   document.getElementById("idObjeto").value = "";
   document.getElementById("nombreObjeto").value = "";
   document.getElementById("descripcionObjeto").value = "";
@@ -353,7 +355,24 @@ function desactivarFormularioAgregarObjeto() {
   });
 }
 
-function eliminarObjetoLista() {}
+function eliminarObjetoLista() {
+  var idSeleccionado = getSelectedItemArbolObjetosSelected();
+  if (idSeleccionado != "raiz_0") {
+    var objetos = objetosde_Sujetos[objetosde_Sujetos_activoID].objetos;
+    objetosde_Sujetos[
+      objetosde_Sujetos_activoID
+    ].objetos = remover_objetode_sujeto_objID(idSeleccionado, objetos);
+    var arbol = document.getElementById("arbol_objetivos_del_sujeto");
+    arbol.innerHTML = generar_arbol_obejetosde_sujeto(
+      objetosde_Sujetos[objetosde_Sujetos_activoID]["objetos"]
+    );
+    var elemRaiz = document.getElementById("raiz_0");
+    elemRaiz.checked = true;
+    desactivarFormularioAgregarObjeto();
+  } else {
+    alert("No se puede eliminar el nodo raiz");
+  }
+}
 
 function agregarObjetoLista() {
   var id = document.getElementById("idObjeto").value;
@@ -363,15 +382,8 @@ function agregarObjetoLista() {
     .value;
   var activo = document.getElementById("activoObjeto").checked;
   if (!!id && !!nombre && !!descripcion && !!unidadMedida) {
-    var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
     var objetos = objetosde_Sujetos[objetosde_Sujetos_activoID].objetos;
-    var idSeleccionado = "raiz_0";
-    arbol.forEach((elem) => {
-      if (elem.checked) {
-        idSeleccionado = elem.value;
-        return;
-      }
-    });
+    var idSeleccionado = getSelectedItemArbolObjetosSelected();
     var obj_aux = {
       id: id.toString(),
       nombre: nombre,
@@ -395,17 +407,39 @@ function agregarObjetoLista() {
   }
 }
 
+function getSelectedItemArbolObjetosSelected() {
+  var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+  var idSeleccionado = "raiz_0";
+  arbol.forEach((elem) => {
+    if (elem.checked) {
+      idSeleccionado = elem.value;
+      return;
+    }
+  });
+  return idSeleccionado;
+}
+
 function agregar_objetode_sujeto_objID(id, objA, objList) {
   Object.entries(objList).forEach(([key, value]) => {
     if (value.id == id) {
       value.objetos[objA.id] = objA;
-      console.log("Agrega: ", id, value.id);
       return;
     }
-    console.log("No agrega: ", id, value);
     if (Object.keys(value.objetos).length > 0) {
-      console.log("Busca en hijos");
       value.objetos = agregar_objetode_sujeto_objID(id, objA, value.objetos);
+    }
+  });
+  return objList;
+}
+
+function remover_objetode_sujeto_objID(id, objList) {
+  Object.entries(objList).forEach(([key, value]) => {
+    if (value.id == id) {
+      delete objList[key];
+      return;
+    }
+    if (Object.keys(value.objetos).length > 0) {
+      value.objetos = remover_objetode_sujeto_objID(id, value.objetos);
     }
   });
   return objList;
