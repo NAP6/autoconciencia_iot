@@ -25,6 +25,11 @@ export class mysql_connector {
     );
   }
 
+  public save_subjectsObjects(json: object): void {
+    console.log(
+      `########## Envio a la funcion de guardar objetos del sujeto \n ${JSON.stringify(json)}`
+    );
+  }
   public getfisicalModel(modelID: string): object {
     console.log(
       `############# Envio a la funcion 'getfisicalModel' el id de usuario '${modelID}`

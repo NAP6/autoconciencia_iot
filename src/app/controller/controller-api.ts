@@ -1,6 +1,6 @@
 import { json } from "../models/handling-json";
 import { Request, Response } from "express";
-import { mysql_connector as database } from "../models/database";
+import { mysql_connector as database, mysql_connector } from "../models/database";
 
 export function system(req: Request, res: Response) {
   if (req.session?.user) {
@@ -14,6 +14,15 @@ export function system(req: Request, res: Response) {
   }
 }
 
+export function save_subjects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new mysql_connector();
+    db.save_subjectsObjects(req.body);
+    res.json({ Mensaje: "Los datos se han enviado con exito" });
+  } else {
+    res.json({ Mensaje: "Debe iniciar session para poder usar la api" });
+  }
+}
 export function entity(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session!.active_model.modelID;
@@ -77,7 +86,7 @@ export function last_ObjectSubjectID(req: Request, res: Response) {
     var id = req.session!.active_model.modelID;
     var db = new database();
     var index = db.getLastObjectSubjectID(id);
-    res.json({id: index });
+    res.json({ id: index });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

@@ -5,6 +5,17 @@ function consultar_api(url = "", fun1, fun2) {
     .catch((error) => fun2(error));
 }
 
+function post_api(url = "", data, fun1, fun2) {
+  fetch(url, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-type": "application/json; charset=UTF-8" },
+  })
+    .then((response) => response.json())
+    .then((json) => fun1(json))
+    .catch((error) => fun2(error));
+}
+
 /* 
     SECCION SELECCION SUJETOS CUADROS DINAMICOS SE SELECCION
 
@@ -231,11 +242,19 @@ function extraer_datos_sujeto_e_hijos_lista_check(principal, contraria) {
 
 function actualizar_sujetos() {
   var seleccion = extraer_datos_sujeto();
-  modelo_sujetos_seleccionados_EXTRA = seleccion;
   document.getElementById("sujetos_seleccion").value = JSON.stringify(
     seleccion
   );
-  $("#modal_seleccion_sujeto").modal("hide");
+  post_api(
+    "http://localhost:3000/api/save_subjects/",
+    seleccion,
+    (json) => {
+      alert("Actualizacion exitosa", json);
+    },
+    (err) => {
+      alert(err);
+    }
+  );
 }
 
 function extraer_datos_sujeto() {
@@ -257,6 +276,7 @@ function extraer_datos_sujeto() {
           var obj_hijos = {
             id: id_h,
             name: name_h,
+            objects: objetosde_Sujetos[id_h].objetos,
           };
           list_obj_h.push(obj_hijos);
         }
@@ -266,6 +286,7 @@ function extraer_datos_sujeto() {
           id: id,
           name: name,
           tiene_subsistemas: true,
+          objects: objetosde_Sujetos[id].objetos,
           subSystem: list_obj_h,
         };
       } else {
@@ -273,6 +294,7 @@ function extraer_datos_sujeto() {
           id: id,
           name: name,
           tiene_subsistemas: false,
+          objects: objetosde_Sujetos[id].objetos,
         };
       }
       new_obj.push(aux_obj);
