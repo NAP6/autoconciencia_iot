@@ -8,5 +8,6 @@ export default function (app: Application) {
   app.get("/api/escales/", api.escales);
   app.get("/api/decision_criteria/", api.decision_criteria);
   app.get("/api/user_models/", api.user_models);
+  app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
   app.get("/api/", api.home);
 };

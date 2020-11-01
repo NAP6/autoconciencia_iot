@@ -1,3 +1,4 @@
+import { randomInt } from "crypto";
 import * as mysql from "mysql";
 import constants from "../../config/constants";
 
@@ -153,9 +154,10 @@ export class mysql_connector {
     ];
   }
 
-
-
-
+  public getLastObjectSubjectID(modelID: string): number {
+    console.log(`############# Entra en getLastObjectID y envia ${modelID}`);
+    return Math.floor(Math.random() * 600000);
+  }
 
   // La atributo variable no existe, solo le pusimos para probar
   private modelo = {

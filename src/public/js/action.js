@@ -14,7 +14,7 @@ function consultar_api(url = "", fun1, fun2) {
 	    con las funciones que consultan la api para cargar los sujetos.
 
 	Define:
-		objetosde_Sujetos
+		bjetosde_Sujetos
 
         Incluye:
 	    cargar_posibles_sujetos_modelo
@@ -45,7 +45,7 @@ function cargar_posibles_sujetos_modelo(json) {
     objetosde_Sujetos[element["$"]["id"]] = {
       id: element["$"]["id"],
       name: element["$"]["name"],
-      objetos: { raiz: [] },
+      objetos: { raiz_0: { nombre: "raiz", objetos: {} } },
     };
     contenido_carga +=
       '<li id="visivilidad_sujetos_para_seleccion_' +
@@ -86,7 +86,7 @@ function cargar_posibles_sujetos_modelo(json) {
         objetosde_Sujetos[subSystem["$"]["id"]] = {
           id: subSystem["$"]["id"],
           name: subSystem["$"]["name"],
-          objetos: { raiz: [] },
+          objetos: { raiz_0: { nombre: "raiz", objetos: {} } },
         };
         contenido_carga +=
           '<li id="visivilidad_sujetos_para_seleccion_' +
@@ -292,10 +292,80 @@ function extraer_datos_sujeto() {
 */
 
 function abrirModalObjetosSujetos(id) {
-  //console.log(JSON.stringify(objetosde_Sujetos));
-  //console.log(objetosde_Sujetos[id]);
-	$('#objetosde_sujetoModal').modal('show')
-	console.log("Entra")
+  $("#objetosde_sujetoModal").modal("show");
+  var nombre = document.getElementById("nombreSujetoObjetoActivo");
+  nombre.innerHTML = objetosde_Sujetos[id]["name"];
+  var arbol = document.getElementById("arbol_objetivos_del_sujeto");
+  arbol.innerHTML = generar_arbol_obejetosde_sujeto(
+    objetosde_Sujetos[id]["objetos"]
+  );
+  var elemRaiz = document.getElementById("raiz_0");
+  elemRaiz.checked = true;
+  desactivarFormularioAgregarObjeto();
+  consultar_api(
+    "http://localhost:3000/api/last_ObjectSubjectID/",
+    cargar_idNuevoObjeto,
+    error_cargar_idNuevoObjeto
+  );
+}
+
+function generar_arbol_obejetosde_sujeto(lista) {
+  var strlista = "<ul>";
+  Object.entries(lista).forEach(([key, value]) => {
+    strlista += `<li><input class="form-check-input" type='radio' name='objetosde_Sujetos_imputSelect' id='${key}'/><label class="form-check-label" for='${key}'>${value.nombre}</label>`;
+    if (value.length > 0) {
+      strlista += generar_arbol_obejetosde_sujeto(value);
+    }
+    strlista += "</li>";
+  });
+  strlista += "</ul>";
+  return strlista;
+}
+
+function activarFormularioAgregarObjeto() {
+  document.getElementById("nombreObjeto").disabled = false;
+  document.getElementById("descripcionObjeto").disabled = false;
+  document.getElementById("unidades_medida_seccion_sujetos").disabled = false;
+  document.getElementById("activoObjeto").disabled = false;
+  var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+  arbol.forEach((elem) => {
+    elem.disabled = true;
+  });
+}
+
+function desactivarFormularioAgregarObjeto() {
+  document.getElementById("nombreObjeto").disabled = true;
+  document.getElementById("descripcionObjeto").disabled = true;
+  document.getElementById("unidades_medida_seccion_sujetos").disabled = true;
+  document.getElementById("activoObjeto").disabled = true;
+  var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+  arbol.forEach((elem) => {
+    elem.disabled = false;
+  });
+}
+
+function eliminarObjetoLista() {}
+
+function agregarObjetoLista() {
+  var id = document.getElementById("idObjeto").value;
+  var nombre = document.getElementById("nombreObjeto").value;
+  var descripcion = document.getElementById("descripcionObjeto").value;
+  var unidadMedida = document.getElementById("unidades_medida_seccion_sujetos")
+    .value;
+  var activo = document.getElementById("activoObjeto").checked;
+  console.log(id);
+  console.log(nombre);
+  console.log(descripcion);
+  console.log(unidadMedida);
+  console.log(activo);
+}
+
+function cargar_idNuevoObjeto(json) {
+  document.getElementById("idObjeto").value = json.id + 1;
+}
+
+function error_cargar_idNuevoObjeto(err) {
+  alert(`Error al cargar el ultimo ID ${err}`);
 }
 
 /* 
@@ -533,4 +603,3 @@ function cargar_modelos_trabajo_actual(json) {
 function error_cargar_models_trabajo_actual(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
-

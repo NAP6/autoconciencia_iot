@@ -71,3 +71,14 @@ export function home(req: Request, res: Response) {
     res.send("Home Api");
   }
 }
+
+export function last_ObjectSubjectID(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session!.active_model.modelID;
+    var db = new database();
+    var index = db.getLastObjectSubjectID(id);
+    res.json({id: index });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
