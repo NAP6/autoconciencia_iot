@@ -45,7 +45,7 @@ function cargar_posibles_sujetos_modelo(json) {
     objetosde_Sujetos[element["$"]["id"]] = {
       id: element["$"]["id"],
       name: element["$"]["name"],
-      objetos: { raiz_0: { nombre: "raiz", objetos: {} } },
+      objetos: { raiz_0: { id: "raiz_0", nombre: "raiz", objetos: {} } },
     };
     contenido_carga +=
       '<li id="visivilidad_sujetos_para_seleccion_' +
@@ -86,7 +86,7 @@ function cargar_posibles_sujetos_modelo(json) {
         objetosde_Sujetos[subSystem["$"]["id"]] = {
           id: subSystem["$"]["id"],
           name: subSystem["$"]["name"],
-          objetos: { raiz_0: { nombre: "raiz", objetos: {} } },
+          objetos: { raiz_0: { id: "raiz_0", nombre: "raiz", objetos: {} } },
         };
         contenido_carga +=
           '<li id="visivilidad_sujetos_para_seleccion_' +
@@ -291,8 +291,12 @@ function extraer_datos_sujeto() {
         Incluye:
 */
 
+var objetosde_Sujetos_activoID;
+var id_objetoPadre_agregar;
+
 function abrirModalObjetosSujetos(id) {
   $("#objetosde_sujetoModal").modal("show");
+  objetosde_Sujetos_activoID = id;
   var nombre = document.getElementById("nombreSujetoObjetoActivo");
   nombre.innerHTML = objetosde_Sujetos[id]["name"];
   var arbol = document.getElementById("arbol_objetivos_del_sujeto");
@@ -302,19 +306,14 @@ function abrirModalObjetosSujetos(id) {
   var elemRaiz = document.getElementById("raiz_0");
   elemRaiz.checked = true;
   desactivarFormularioAgregarObjeto();
-  consultar_api(
-    "http://localhost:3000/api/last_ObjectSubjectID/",
-    cargar_idNuevoObjeto,
-    error_cargar_idNuevoObjeto
-  );
 }
 
 function generar_arbol_obejetosde_sujeto(lista) {
   var strlista = "<ul>";
   Object.entries(lista).forEach(([key, value]) => {
-    strlista += `<li><input class="form-check-input" type='radio' name='objetosde_Sujetos_imputSelect' id='${key}'/><label class="form-check-label" for='${key}'>${value.nombre}</label>`;
-    if (value.length > 0) {
-      strlista += generar_arbol_obejetosde_sujeto(value);
+    strlista += `<li><input class="form-check-input" type='radio' value='${key}' name='objetosde_Sujetos_imputSelect' id='${key}'/><label class="form-check-label" for='${key}'>${value.nombre}</label>`;
+    if (Object.keys(value.objetos).length > 0) {
+      strlista += generar_arbol_obejetosde_sujeto(value.objetos);
     }
     strlista += "</li>";
   });
@@ -331,6 +330,11 @@ function activarFormularioAgregarObjeto() {
   arbol.forEach((elem) => {
     elem.disabled = true;
   });
+  consultar_api(
+    "http://localhost:3000/api/last_ObjectSubjectID/",
+    cargar_idNuevoObjeto,
+    error_cargar_idNuevoObjeto
+  );
 }
 
 function desactivarFormularioAgregarObjeto() {
@@ -338,6 +342,11 @@ function desactivarFormularioAgregarObjeto() {
   document.getElementById("descripcionObjeto").disabled = true;
   document.getElementById("unidades_medida_seccion_sujetos").disabled = true;
   document.getElementById("activoObjeto").disabled = true;
+  document.getElementById("idObjeto").value = "";
+  document.getElementById("nombreObjeto").value = "";
+  document.getElementById("descripcionObjeto").value = "";
+  document.getElementById("unidades_medida_seccion_sujetos").value = "";
+  document.getElementById("activoObjeto").value = "";
   var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
   arbol.forEach((elem) => {
     elem.disabled = false;
@@ -353,11 +362,53 @@ function agregarObjetoLista() {
   var unidadMedida = document.getElementById("unidades_medida_seccion_sujetos")
     .value;
   var activo = document.getElementById("activoObjeto").checked;
-  console.log(id);
-  console.log(nombre);
-  console.log(descripcion);
-  console.log(unidadMedida);
-  console.log(activo);
+  if (!!id && !!nombre && !!descripcion && !!unidadMedida) {
+    var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+    var objetos = objetosde_Sujetos[objetosde_Sujetos_activoID].objetos;
+    var idSeleccionado = "raiz_0";
+    arbol.forEach((elem) => {
+      if (elem.checked) {
+        idSeleccionado = elem.value;
+        return;
+      }
+    });
+    var obj_aux = {
+      id: id.toString(),
+      nombre: nombre,
+      descripcion: descripcion,
+      unidadMedida: unidadMedida,
+      activo: activo,
+      objetos: {},
+    };
+    objetosde_Sujetos[
+      objetosde_Sujetos_activoID
+    ].objetos = agregar_objetode_sujeto_objID(idSeleccionado, obj_aux, objetos);
+    var arbol = document.getElementById("arbol_objetivos_del_sujeto");
+    arbol.innerHTML = generar_arbol_obejetosde_sujeto(
+      objetosde_Sujetos[objetosde_Sujetos_activoID]["objetos"]
+    );
+    var elemRaiz = document.getElementById("raiz_0");
+    elemRaiz.checked = true;
+    desactivarFormularioAgregarObjeto();
+  } else {
+    alert("Ingrese valores en todos los campos para poder agregar el Objeto");
+  }
+}
+
+function agregar_objetode_sujeto_objID(id, objA, objList) {
+  Object.entries(objList).forEach(([key, value]) => {
+    if (value.id == id) {
+      value.objetos[objA.id] = objA;
+      console.log("Agrega: ", id, value.id);
+      return;
+    }
+    console.log("No agrega: ", id, value);
+    if (Object.keys(value.objetos).length > 0) {
+      console.log("Busca en hijos");
+      value.objetos = agregar_objetode_sujeto_objID(id, objA, value.objetos);
+    }
+  });
+  return objList;
 }
 
 function cargar_idNuevoObjeto(json) {
