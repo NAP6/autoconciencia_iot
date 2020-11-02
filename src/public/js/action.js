@@ -7,10 +7,12 @@ function consultar_api(url = "", fun1, fun2) {
 
 function post_api(url = "", data, fun1, fun2) {
   fetch(url, {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: { "Content-type": "application/json; charset=UTF-8" },
-  })
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8"
+      },
+    })
     .then((response) => response.json())
     .then((json) => fun1(json))
     .catch((error) => fun2(error));
@@ -38,11 +40,12 @@ function post_api(url = "", data, fun1, fun2) {
             extraer_datos_sujeto
 */
 
-var objetosde_Sujetos = {};
+var objetosde_Sujetos = [];
+var objetosde_Sujetos_aux = {};
 
 if (document.getElementById("lista_sujetos_para_cargar"))
   consultar_api(
-    "http://localhost:3000/api/system",
+    "http://localhost:3000/api/subjects",
     cargar_posibles_sujetos_modelo,
     error_cargar_posibles_sujetos_modelo
   );
@@ -52,87 +55,88 @@ function cargar_posibles_sujetos_modelo(json) {
   var seleccionados = document.getElementById("lista_sujetos_seleccionados");
   var contenido_carga = "";
   var contenido_seleccion = "";
+  objetosde_Sujetos = json;
   json.forEach((element) => {
-    objetosde_Sujetos[element["$"]["id"]] = {
-      id: element["$"]["id"],
-      name: element["$"]["name"],
-      objetos: { raiz_0: { id: "raiz_0", nombre: "raiz", objetos: {} } },
+    objetosde_Sujetos_aux[element["id"]] = {
+      id: element["id"],
+      name: element["name"],
+      objetos: element["objects"],
     };
     contenido_carga +=
-      '<li id="visivilidad_sujetos_para_seleccion_' +
-      element["$"]["id"] +
+      '<li ' + (!element['inactivo'] ? 'style="display: none;"' : '') + ' id="visivilidad_sujetos_para_seleccion_' +
+      element["id"] +
       '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_para_seleccion_padre" id="sujetos_para_seleccion_' +
-      element["$"]["id"] +
+      element["id"] +
       '" onclick="verificar_seleccion_hijo_pagre(this);" data-puro_id="' +
-      element["$"]["id"] +
+      element["id"] +
       '" data-puro_name="' +
-      element["$"]["name"] +
-      '" data-oculto="false"><label class="form-check-label" for="sujetos_para_seleccion_' +
-      element["$"]["id"] +
+      element["name"] +
+      '" data-oculto="' + !element['inactivo'] + '"><label class="form-check-label" for="sujetos_para_seleccion_' +
+      element["id"] +
       '">' +
-      element["$"]["name"] +
+      element["name"] +
       "</label></div>";
     contenido_seleccion +=
-      '<li style="display: none;" id="visivilidad_sujetos_seleccionado_' +
-      element["$"]["id"] +
+      '<li ' + (!element['activo'] ? 'style="display: none;"' : '') + ' id="visivilidad_sujetos_seleccionado_' +
+      element["id"] +
       '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_seleccionado_padre" id="sujetos_seleccionado_' +
-      element["$"]["id"] +
+      element["id"] +
       '" onclick="verificar_seleccion_hijo_pagre(this);" data-puro_id="' +
-      element["$"]["id"] +
+      element["id"] +
       '" data-puro_name="' +
-      element["$"]["name"] +
-      '" data-oculto="true"><label class="form-check-label" for="sujetos_seleccionado_' +
-      element["$"]["id"] +
+      element["name"] +
+      '" data-oculto="' + !element['activo'] + '"><label class="form-check-label" for="sujetos_seleccionado_' +
+      element["id"] +
       '">' +
       "<button class='btn-sujetoLinkObjetivos' onclick='abrirModalObjetosSujetos(\"" +
-      element["$"]["id"] +
+      element["id"] +
       "\")'>" +
-      element["$"]["name"] +
+      element["name"] +
       "</button>" +
       "</label></div>";
-    if (element["iotSubsystem"]) {
+    if (element["subSystem"]) {
       contenido_carga += "<ul>";
       contenido_seleccion += "<ul>";
-      element["iotSubsystem"].forEach((subSystem) => {
-        objetosde_Sujetos[subSystem["$"]["id"]] = {
-          id: subSystem["$"]["id"],
-          name: subSystem["$"]["name"],
-          objetos: { raiz_0: { id: "raiz_0", nombre: "raiz", objetos: {} } },
+      element["subSystem"].forEach((subSystem) => {
+        objetosde_Sujetos_aux[subSystem["id"]] = {
+          id: subSystem["id"],
+          name: subSystem["name"],
+          objetos: subSystem["objects"],
         };
         contenido_carga +=
-          '<li id="visivilidad_sujetos_para_seleccion_' +
-          subSystem["$"]["id"] +
+          '<li ' + (subSystem['activo'] ? 'style="display: none;"' : '') + ' id="visivilidad_sujetos_para_seleccion_' +
+          subSystem["id"] +
           '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_para_seleccion_hijo" name="sujetos_para_seleccion_' +
-          element["$"]["id"] +
+          element["id"] +
           '" id="sujetos_para_seleccion_' +
-          subSystem["$"]["id"] +
+          subSystem["id"] +
           '" onclick="verificar_seleccion_hijo_pagre(this);" data-puro_id="' +
-          subSystem["$"]["id"] +
+          subSystem["id"] +
           '" data-puro_name="' +
-          subSystem["$"]["name"] +
-          '" data-oculto="false"><label class="form-check-label" for="sujetos_para_seleccion_' +
-          subSystem["$"]["id"] +
+          subSystem["name"] +
+          '" data-oculto="' + subSystem['activo'] + '"><label class="form-check-label" for="sujetos_para_seleccion_' +
+          subSystem["id"] +
           '">' +
-          subSystem["$"]["name"] +
+          subSystem["name"] +
           "</label></div></li>";
         contenido_seleccion +=
-          '<li style="display: none;" id="visivilidad_sujetos_seleccionado_' +
-          subSystem["$"]["id"] +
+          '<li ' + (!subSystem['activo'] ? 'style="display: none;"' : '') + ' id="visivilidad_sujetos_seleccionado_' +
+          subSystem["id"] +
           '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_seleccionado_hijo" name="sujetos_seleccionado_' +
-          element["$"]["id"] +
+          element["id"] +
           '" id="sujetos_seleccionado_' +
-          subSystem["$"]["id"] +
+          subSystem["id"] +
           '" onclick="verificar_seleccion_hijo_pagre(this);" data-puro_id="' +
-          subSystem["$"]["id"] +
+          subSystem["id"] +
           '" data-puro_name="' +
-          subSystem["$"]["name"] +
-          '" data-oculto="true"><label class="form-check-label" for="sujetos_seleccionado_' +
-          subSystem["$"]["id"] +
+          subSystem["name"] +
+          '" data-oculto="' + !subSystem['activo'] + '"><label class="form-check-label" for="sujetos_seleccionado_' +
+          subSystem["id"] +
           '">' +
           "<button class='btn-sujetoLinkObjetivos' onclick='abrirModalObjetosSujetos(\"" +
-          subSystem["$"]["id"] +
+          subSystem["id"] +
           "\")'>" +
-          subSystem["$"]["name"] +
+          subSystem["name"] +
           "</button>" +
           "</label></div></li>";
       });
@@ -263,42 +267,49 @@ function extraer_datos_sujeto() {
   );
   var new_obj = [];
   Array.from(padres).forEach((pad) => {
-    if (pad.dataset.oculto == "false") {
-      var id = pad.dataset.puro_id;
-      var name = pad.dataset.puro_name;
-      var aux_obj;
-      var list_obj_h = [];
-      var hijos = document.getElementsByName(pad.id);
-      Array.from(hijos).forEach((hj) => {
-        if (hj.dataset.oculto == "false") {
-          var id_h = hj.dataset.puro_id;
-          var name_h = hj.dataset.puro_name;
-          var obj_hijos = {
-            id: id_h,
-            name: name_h,
-            objects: objetosde_Sujetos[id_h].objetos,
-          };
-          list_obj_h.push(obj_hijos);
-        }
-      });
-      if (list_obj_h.length > 0) {
-        aux_obj = {
-          id: id,
-          name: name,
-          tiene_subsistemas: true,
-          objects: objetosde_Sujetos[id].objetos,
-          subSystem: list_obj_h,
-        };
-      } else {
-        aux_obj = {
-          id: id,
-          name: name,
-          tiene_subsistemas: false,
-          objects: objetosde_Sujetos[id].objetos,
-        };
-      }
-      new_obj.push(aux_obj);
+    var id = pad.dataset.puro_id;
+    var name = pad.dataset.puro_name;
+    var aux_obj;
+    var list_obj_h = [];
+    var activo = pad.dataset.oculto == "false"
+    var inactivo = false;
+    var hijos = document.getElementsByName(pad.id);
+    Array.from(hijos).forEach((hj) => {
+      var id_h = hj.dataset.puro_id;
+      var name_h = hj.dataset.puro_name;
+      var activo_h = hj.dataset.oculto == "false";
+      inactivo = inactivo || !activo_h;
+      var obj_hijos = {
+        id: id_h,
+        name: name_h,
+        activo: activo_h,
+        objects: objetosde_Sujetos_aux[id_h].objetos,
+      };
+      list_obj_h.push(obj_hijos);
+    });
+
+
+    if (list_obj_h.length > 0) {
+      aux_obj = {
+        id: id,
+        name: name,
+        activo: activo,
+        inactivo: inactivo,
+        tiene_subsistemas: true,
+        objects: objetosde_Sujetos_aux[id].objetos,
+        subSystem: list_obj_h,
+      };
+    } else {
+      aux_obj = {
+        id: id,
+        name: name,
+        activo: activo,
+        inactivo: inactivo,
+        tiene_subsistemas: false,
+        objects: objetosde_Sujetos_aux[id].objetos,
+      };
     }
+    new_obj.push(aux_obj);
   });
   return new_obj;
 }
@@ -320,10 +331,10 @@ function abrirModalObjetosSujetos(id) {
   $("#objetosde_sujetoModal").modal("show");
   objetosde_Sujetos_activoID = id;
   var nombre = document.getElementById("nombreSujetoObjetoActivo");
-  nombre.innerHTML = objetosde_Sujetos[id]["name"];
+  nombre.innerHTML = objetosde_Sujetos_aux[id]["name"];
   var arbol = document.getElementById("arbol_objetivos_del_sujeto");
   arbol.innerHTML = generar_arbol_obejetosde_sujeto(
-    objetosde_Sujetos[id]["objetos"]
+    objetosde_Sujetos_aux[id]["objetos"]
   );
   var elemRaiz = document.getElementById("raiz_0");
   elemRaiz.checked = true;
@@ -380,13 +391,13 @@ function desactivarFormularioAgregarObjeto() {
 function eliminarObjetoLista() {
   var idSeleccionado = getSelectedItemArbolObjetosSelected();
   if (idSeleccionado != "raiz_0") {
-    var objetos = objetosde_Sujetos[objetosde_Sujetos_activoID].objetos;
-    objetosde_Sujetos[
+    var objetos = objetosde_Sujetos_aux[objetosde_Sujetos_activoID].objetos;
+    objetosde_Sujetos_aux[
       objetosde_Sujetos_activoID
     ].objetos = remover_objetode_sujeto_objID(idSeleccionado, objetos);
     var arbol = document.getElementById("arbol_objetivos_del_sujeto");
     arbol.innerHTML = generar_arbol_obejetosde_sujeto(
-      objetosde_Sujetos[objetosde_Sujetos_activoID]["objetos"]
+      objetosde_Sujetos_aux[objetosde_Sujetos_activoID]["objetos"]
     );
     var elemRaiz = document.getElementById("raiz_0");
     elemRaiz.checked = true;
@@ -404,7 +415,7 @@ function agregarObjetoLista() {
     .value;
   var activo = document.getElementById("activoObjeto").checked;
   if (!!id && !!nombre && !!descripcion && !!unidadMedida) {
-    var objetos = objetosde_Sujetos[objetosde_Sujetos_activoID].objetos;
+    var objetos = objetosde_Sujetos_aux[objetosde_Sujetos_activoID].objetos;
     var idSeleccionado = getSelectedItemArbolObjetosSelected();
     var obj_aux = {
       id: id.toString(),
@@ -414,12 +425,12 @@ function agregarObjetoLista() {
       activo: activo,
       objetos: {},
     };
-    objetosde_Sujetos[
+    objetosde_Sujetos_aux[
       objetosde_Sujetos_activoID
     ].objetos = agregar_objetode_sujeto_objID(idSeleccionado, obj_aux, objetos);
     var arbol = document.getElementById("arbol_objetivos_del_sujeto");
     arbol.innerHTML = generar_arbol_obejetosde_sujeto(
-      objetosde_Sujetos[objetosde_Sujetos_activoID]["objetos"]
+      objetosde_Sujetos_aux[objetosde_Sujetos_activoID]["objetos"]
     );
     var elemRaiz = document.getElementById("raiz_0");
     elemRaiz.checked = true;

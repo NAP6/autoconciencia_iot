@@ -25,9 +25,68 @@ export class mysql_connector {
     );
   }
 
-  public save_subjectsObjects(json: object): void {
+  public get_subjectsObjects(modelID: string): object {
+    return [
+      {
+        id: "EmergencySystem",
+        name: "EmergencySystem",
+        tiene_subsistemas: true,
+        activo: true,
+        inactivo: true,
+        objects: { raiz_0: { id: "raiz_0", nombre: "raiz", objetos: {} } },
+        subSystem: [
+          {
+            id: "EnvironmentalControlSubsystem",
+            name: "EnvironmentalControlSubsystem",
+            activo: false,
+            objects: {
+              raiz_0: {
+                id: "raiz_0",
+                nombre: "raiz",
+                objetos: {
+                  "1": {
+                    id: "1",
+                    nombre: "Objeto EnvironmentalControlSubsystem",
+                    descripcion: "descripcion de EnvironmentalControlSubsystem",
+                    unidadMedida: "1",
+                    activo: false,
+                    objetos: {},
+                  },
+                },
+              },
+            },
+          },
+          {
+            id: "HealthSubsystem",
+            name: "HealthSubsystem",
+            activo: true,
+            objects: {
+              raiz_0: {
+                id: "raiz_0",
+                nombre: "raiz",
+                objetos: {
+                  "2": {
+                    id: "2",
+                    nombre: "Objeto HealthSubsystem",
+                    descripcion: "Descripcion del objeto de HealthSubsystem",
+                    unidadMedida: "1",
+                    activo: true,
+                    objetos: {},
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+    ];
+  }
+
+  public save_subjectsObjects(modelID: string, json: object): void {
     console.log(
-      `########## Envio a la funcion de guardar objetos del sujeto \n ${JSON.stringify(json)}`
+      `########## Envio a la funcion de guardar objetos del sujeto, modelo: ${modelID} \n ${JSON.stringify(
+        json
+      )}`
     );
   }
   public getfisicalModel(modelID: string): object {

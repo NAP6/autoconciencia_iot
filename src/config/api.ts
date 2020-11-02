@@ -2,7 +2,7 @@ import { Application } from 'express';
 import * as api from '../app/controller/controller-api';
 
 export default function (app: Application) {
-  app.get("/api/system/", api.system);
+  app.get("/api/subjects/", api.subjects);
   app.post("/api/save_subjects/", api.save_subjects);
   app.get("/api/entity/", api.entity);
   app.get("/api/measurement_units/", api.measurement_units);

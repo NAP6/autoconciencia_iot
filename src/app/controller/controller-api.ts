@@ -2,13 +2,11 @@ import { json } from "../models/handling-json";
 import { Request, Response } from "express";
 import { mysql_connector as database, mysql_connector } from "../models/database";
 
-export function system(req: Request, res: Response) {
+export function subjects(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session!.active_model.modelID;
-    var js = new json();
     var db = new database();
-    js.setJSON(db.getfisicalModel(id));
-    res.json(js.getSystem());
+    res.json(db.get_subjectsObjects(id));
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -16,13 +14,15 @@ export function system(req: Request, res: Response) {
 
 export function save_subjects(req: Request, res: Response) {
   if (req.session?.user) {
+    var id = req.session!.active_model.modelID;
     var db = new mysql_connector();
-    db.save_subjectsObjects(req.body);
+    db.save_subjectsObjects(id, req.body);
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ Mensaje: "Debe iniciar session para poder usar la api" });
   }
 }
+
 export function entity(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session!.active_model.modelID;
