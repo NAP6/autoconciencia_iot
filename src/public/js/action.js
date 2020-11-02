@@ -553,6 +553,125 @@ function error_cargar_unidades_de_medida_select(err) {
 }
 
 /* 
+    SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
+
+        Descripcion:
+		Esta seccion incluye el envio de datos para las unidades de medida
+
+        Incluye:
+*/
+
+function agregarUnidadMedida() {
+  $("#modal_units_add").modal("show");
+}
+
+function guardarNuevaUnidadMedida() {
+  var data = {
+    nombre: document.getElementById("input-name-add").value,
+    descripcion: document.getElementById("input-descripton-add").value,
+    acronym: document.getElementById("input-weight-add").value,
+  };
+  console.log(data);
+  if (!!data.nombre && !!data.descripcion && !!data.acronym) {
+    post_api(
+      "http://localhost:3000/api/add_measurement_units/",
+      data,
+      mensaje_exitoEnvioUnidadesMedida,
+      mensaje_errorEnvioUnidadesMedida
+    );
+    consultar_api(
+      "http://localhost:3000/api/measurement_units",
+      cargar_unidades_de_medida_table,
+      error_cargar_unidades_de_medida_table
+    );
+    $("#modal_units_add").modal("hide");
+  } else alert("Ingrese todos los campos del formulario");
+}
+
+function eliminarUnidadMedida() {
+  var radio = document.getElementsByName("unidad_seleccionada");
+  var id;
+  radio.forEach((elem) => {
+    if (elem.checked) {
+      id = elem.value;
+      return;
+    }
+  });
+  if (!!id) {
+    data = {
+      id: id,
+    };
+    console.log(data);
+    post_api(
+      "http://localhost:3000/api/del_measurement_units/",
+      data,
+      mensaje_exitoEnvioUnidadesMedida,
+      mensaje_errorEnvioUnidadesMedida
+    );
+    consultar_api(
+      "http://localhost:3000/api/measurement_units",
+      cargar_unidades_de_medida_table, error_cargar_unidades_de_medida_table
+    );
+  } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificarUnidadMedida() {
+  var radio = document.getElementsByName("unidad_seleccionada");
+  var id;
+  var name;
+  var descripcion;
+  var acronym;
+  radio.forEach((elem) => {
+    if (elem.checked) {
+      id = elem.value;
+      name = elem.dataset.name;
+      descripcion = elem.dataset.descripcion;
+      acronym = elem.dataset.acronym;
+      return;
+    }
+  });
+
+  if (!!id && !!name && !!descripcion && !!acronym) {
+    document.getElementById("input-id-update").value = id;
+    document.getElementById("input-name-update").value = name;
+    document.getElementById("input-descripton-update").value = descripcion;
+    document.getElementById("input-acronym-update").value = acronym;
+    $("#modal_modificar_unidadMedida").modal("show");
+  } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function guardarModificacionMedida() {
+  var data = {
+    id: document.getElementById("input-id-update").value,
+    nombre: document.getElementById("input-name-update").value,
+    descripcion: document.getElementById("input-descripton-update").value,
+    acronym: document.getElementById("input-acronym-update").value,
+  };
+  if (!!data.id && !!data.nombre && !!data.descripcion && !!data.acronym) {
+    post_api(
+      "http://localhost:3000/api/upd_measurement_units/",
+      data,
+      mensaje_exitoEnvioUnidadesMedida,
+      mensaje_errorEnvioUnidadesMedida
+    );
+    consultar_api(
+      "http://localhost:3000/api/measurement_units",
+      cargar_unidades_de_medida_table,
+      error_cargar_unidades_de_medida_table
+    );
+
+    $("#modal_modificar_unidadMedida").modal("hide");
+  } else alert("Debe debe completar todos los campos");
+}
+
+function mensaje_exitoEnvioUnidadesMedida(json) {
+  alert(json.mensaje);
+}
+
+function mensaje_errorEnvioUnidadesMedida(err) {
+  alert(err);
+}
+/* 
     SECCION CARGAR LAS UNIDADES DE MEDIDA
 
         Descripcion:
@@ -575,7 +694,7 @@ function cargar_unidades_de_medida_table(json) {
   res = "";
   json.forEach((um) => {
     res += "<tr>";
-    res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}"></td>`;
+    res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}" data-name="${um.nombre}" data-descripcion="${um.descripcion}" data-acronym="${um.acronimo}"></td>`;
     res += `<td>${um.id}</td>`;
     res += `<td>${um.nombre}</td>`;
     res += `<td>${um.descripcion}</td>`;

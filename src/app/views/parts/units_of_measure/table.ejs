@@ -1,37 +1,51 @@
 <div class="container">
-    <div class="row">
-        <div class="col-md-8"></div>
-        <div class="col-md-4">
-            <button id="bt_add" class="btn btn-primary" data-toggle="modal"
-                data-target="#modal_units_add">Agregar</button>
-            <button id="bd_del" class="btn btn-primary">Eliminar</button>
-            <button id="bd_mod" class="btn btn-primary" data-toggle="modal"
-                data-target="#modal_modificar">Modificar</button>
-        </div>
+  <div class="row">
+    <div class="col-md-8"></div>
+    <div class="col-md-4">
+      <button
+        id="bt_add_measurement_units"
+        class="btn btn-primary"
+        onclick="agregarUnidadMedida()"
+      >
+        Agregar
+      </button>
+      <button
+        id="bd_del_measurement_units"
+        class="btn btn-primary"
+        onclick="eliminarUnidadMedida()"
+      >
+        Eliminar
+      </button>
+      <button
+        id="bd_mod_measurement_units"
+        class="btn btn-primary"
+        onclick="modificarUnidadMedida()"
+      >
+        Modificar
+      </button>
     </div>
-    <br>
-    <div class="row container">
-        <div class="col-12">
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Descripcion</th>
-                        <th scope="col">Acronimo</th>
-                        <th scope="col">Activo</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla_unidades_de_medida">
-
-                </tbody>
-            </table>
-        </div>
+  </div>
+  <br />
+  <div class="row container">
+    <div class="col-12">
+      <table class="table table-hover">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Descripcion</th>
+            <th scope="col">Acronimo</th>
+            <th scope="col">Activo</th>
+          </tr>
+        </thead>
+        <tbody id="tabla_unidades_de_medida"></tbody>
+      </table>
     </div>
-    <br>
+  </div>
+  <br />
 </div>
 
+<%- include('../units_of_measure/modal/modal_units_add'); %> <%-
+include('../units_of_measure/modal/modal_units_mod'); %>
 
-<%- include('../units_of_measure/modal/modal_units_add'); %>
-<%- include('../units_of_measure/modal/modal_units_mod'); %>

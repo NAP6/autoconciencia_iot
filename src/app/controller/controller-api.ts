@@ -1,6 +1,9 @@
 import { json } from "../models/handling-json";
 import { Request, Response } from "express";
-import { mysql_connector as database, mysql_connector } from "../models/database";
+import {
+  mysql_connector as database,
+  mysql_connector,
+} from "../models/database";
 
 export function subjects(req: Request, res: Response) {
   if (req.session?.user) {
@@ -44,6 +47,48 @@ export function measurement_units(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+
+export function add_measurement_units(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var acronym = req.body.acronym;
+    var db = new database();
+    db.addUser_measurementUnit(idUser, name, descripcion, acronym);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_measurement_units(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var idMeasure = req.body.id;
+    var db = new database();
+    db.delUser_measurementUnit(idUser, idMeasure);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function upd_measurement_units(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id = req.body.id;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var acronym = req.body.acronym;
+    var db = new database();
+    db.updUser_measurementUnit(idUser, id, name, descripcion, acronym);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
 export function escales(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
