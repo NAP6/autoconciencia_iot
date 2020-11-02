@@ -25,6 +25,12 @@ export class mysql_connector {
     );
   }
 
+  public update_modal(id: string, nombre: string, descripcion: string) {
+    console.log(
+      `########## Envio a la funcion de actualizar modelo ID: ${id}, Nonbre: ${nombre}, descripcion: ${descripcion}`
+    );
+  }
+
   public get_subjectsObjects(modelID: string): object {
     return [
       {

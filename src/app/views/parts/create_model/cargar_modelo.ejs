@@ -4,9 +4,7 @@
     <div class="row justify-content-center">
         <div class="col-12">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crear_modelo_modal">Crear</button>
-
-
-            <a href="/modify" class="btn btn-secondary mx-3">Modificar</a>
+            <button type="button" class="btn btn-secondary" onclick="modal_modificar_modelo()">Modificar</button>
         </div>
         <div class="col-12 py-5">
             <table class="table">
@@ -28,4 +26,5 @@
 </section>
 <!-- Fin de la seccion cargar datos -->
 
-<%- include('../create_model/modal/modal_model'); %>
+<%- include('modal/modal_model'); %>
+<%- include('modal/modify_modelModal'); %>

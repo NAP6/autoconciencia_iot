@@ -82,6 +82,20 @@ export function models(req: Request, res: Response) {
   });
 }
 
+export function update_model(req: Request, res: Response) {
+  var db = new mysql_connector();
+	console.log(req.body);
+  var idModel = req.body.id_modelo_update;
+  var nameModel = req.body.nombre_modelo_update;
+  var descripcionModel = req.body.descripcion_ecenario_update;
+  db.update_modal(idModel, nameModel, descripcionModel);
+  res.render("models", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+
 export function subject(req: Request, res: Response) {
   res.render("subject", {
     error: req.flash("error"),

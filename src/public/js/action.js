@@ -7,12 +7,12 @@ function consultar_api(url = "", fun1, fun2) {
 
 function post_api(url = "", data, fun1, fun2) {
   fetch(url, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-type": "application/json; charset=UTF-8"
-      },
-    })
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  })
     .then((response) => response.json())
     .then((json) => fun1(json))
     .catch((error) => fun2(error));
@@ -63,7 +63,9 @@ function cargar_posibles_sujetos_modelo(json) {
       objetos: element["objects"],
     };
     contenido_carga +=
-      '<li ' + (!element['inactivo'] ? 'style="display: none;"' : '') + ' id="visivilidad_sujetos_para_seleccion_' +
+      "<li " +
+      (!element["inactivo"] ? 'style="display: none;"' : "") +
+      ' id="visivilidad_sujetos_para_seleccion_' +
       element["id"] +
       '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_para_seleccion_padre" id="sujetos_para_seleccion_' +
       element["id"] +
@@ -71,13 +73,17 @@ function cargar_posibles_sujetos_modelo(json) {
       element["id"] +
       '" data-puro_name="' +
       element["name"] +
-      '" data-oculto="' + !element['inactivo'] + '"><label class="form-check-label" for="sujetos_para_seleccion_' +
+      '" data-oculto="' +
+      !element["inactivo"] +
+      '"><label class="form-check-label" for="sujetos_para_seleccion_' +
       element["id"] +
       '">' +
       element["name"] +
       "</label></div>";
     contenido_seleccion +=
-      '<li ' + (!element['activo'] ? 'style="display: none;"' : '') + ' id="visivilidad_sujetos_seleccionado_' +
+      "<li " +
+      (!element["activo"] ? 'style="display: none;"' : "") +
+      ' id="visivilidad_sujetos_seleccionado_' +
       element["id"] +
       '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_seleccionado_padre" id="sujetos_seleccionado_' +
       element["id"] +
@@ -85,7 +91,9 @@ function cargar_posibles_sujetos_modelo(json) {
       element["id"] +
       '" data-puro_name="' +
       element["name"] +
-      '" data-oculto="' + !element['activo'] + '"><label class="form-check-label" for="sujetos_seleccionado_' +
+      '" data-oculto="' +
+      !element["activo"] +
+      '"><label class="form-check-label" for="sujetos_seleccionado_' +
       element["id"] +
       '">' +
       "<button class='btn-sujetoLinkObjetivos' onclick='abrirModalObjetosSujetos(\"" +
@@ -104,7 +112,9 @@ function cargar_posibles_sujetos_modelo(json) {
           objetos: subSystem["objects"],
         };
         contenido_carga +=
-          '<li ' + (subSystem['activo'] ? 'style="display: none;"' : '') + ' id="visivilidad_sujetos_para_seleccion_' +
+          "<li " +
+          (subSystem["activo"] ? 'style="display: none;"' : "") +
+          ' id="visivilidad_sujetos_para_seleccion_' +
           subSystem["id"] +
           '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_para_seleccion_hijo" name="sujetos_para_seleccion_' +
           element["id"] +
@@ -114,13 +124,17 @@ function cargar_posibles_sujetos_modelo(json) {
           subSystem["id"] +
           '" data-puro_name="' +
           subSystem["name"] +
-          '" data-oculto="' + subSystem['activo'] + '"><label class="form-check-label" for="sujetos_para_seleccion_' +
+          '" data-oculto="' +
+          subSystem["activo"] +
+          '"><label class="form-check-label" for="sujetos_para_seleccion_' +
           subSystem["id"] +
           '">' +
           subSystem["name"] +
           "</label></div></li>";
         contenido_seleccion +=
-          '<li ' + (!subSystem['activo'] ? 'style="display: none;"' : '') + ' id="visivilidad_sujetos_seleccionado_' +
+          "<li " +
+          (!subSystem["activo"] ? 'style="display: none;"' : "") +
+          ' id="visivilidad_sujetos_seleccionado_' +
           subSystem["id"] +
           '"><div class="form-check"><input type="checkbox" class="form-check-input sujeto_seleccionado_hijo" name="sujetos_seleccionado_' +
           element["id"] +
@@ -130,7 +144,9 @@ function cargar_posibles_sujetos_modelo(json) {
           subSystem["id"] +
           '" data-puro_name="' +
           subSystem["name"] +
-          '" data-oculto="' + !subSystem['activo'] + '"><label class="form-check-label" for="sujetos_seleccionado_' +
+          '" data-oculto="' +
+          !subSystem["activo"] +
+          '"><label class="form-check-label" for="sujetos_seleccionado_' +
           subSystem["id"] +
           '">' +
           "<button class='btn-sujetoLinkObjetivos' onclick='abrirModalObjetosSujetos(\"" +
@@ -271,7 +287,7 @@ function extraer_datos_sujeto() {
     var name = pad.dataset.puro_name;
     var aux_obj;
     var list_obj_h = [];
-    var activo = pad.dataset.oculto == "false"
+    var activo = pad.dataset.oculto == "false";
     var inactivo = false;
     var hijos = document.getElementsByName(pad.id);
     Array.from(hijos).forEach((hj) => {
@@ -287,7 +303,6 @@ function extraer_datos_sujeto() {
       };
       list_obj_h.push(obj_hijos);
     });
-
 
     if (list_obj_h.length > 0) {
       aux_obj = {
@@ -676,12 +691,12 @@ if (document.getElementById("tabla_modelos_autoconciencia"))
 function cargar_modelos_table(json) {
   res = "";
   json.forEach((md) => {
-    res += "<tr>";
-    res += `<td><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}"></td>`;
-    res += `<td>${md.id}</td>`;
-    res += `<td>${md.nombre}</td>`;
-    res += `<td>${md.descripcion}</td>`;
-    res += `<td><a href="\#">JSON</a></td>`;
+    res += `<tr id='modelo-${md.id}-tabla'>`;
+    res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-descripcion="${md.descripcion}"></td>`;
+    res += `<td name="modelo-${md.id}">${md.id}</td>`;
+    res += `<td name="modelo-${md.id}">${md.nombre}</td>`;
+    res += `<td name="modelo-${md.id}">${md.descripcion}</td>`;
+    res += `<td name="modelo-${md.id}"><a href="\#">JSON</a></td>`;
     res += "</tr>";
   });
   document.getElementById("tabla_modelos_autoconciencia").innerHTML = res;
@@ -689,6 +704,40 @@ function cargar_modelos_table(json) {
 
 function error_cargar_models_table(err) {
   alert("Error al cargar los datos del modelo: " + err);
+}
+
+/* 
+    SECCION LISTAR MODELOS
+
+        Descripcion:
+		En esta seccion se incluyen las funciones que permiten cargar los
+		datos del modelo seleccionado al formularionde actualizacion.
+
+        Incluye:
+*/
+
+function modal_modificar_modelo() {
+  console.log("Entra en la funciono de modificar modelo");
+  var radios = document.getElementsByName("modelo_seleccionado_tabla");
+  var id;
+  var name;
+  var descripcion;
+  var select = false;
+  radios.forEach((elem) => {
+    console.log(elem);
+    if (elem.checked) {
+      id = elem.value;
+      name = elem.dataset.name;
+      descripcion = elem.dataset.descripcion;
+      select = true;
+      return;
+    }
+  });
+  document.getElementById("id_modelo_update").value = id;
+  document.getElementById("nombre_modelo_update").value = name;
+  document.getElementById("descripcion_esenario_update").value = descripcion;
+  if (select) $("#modificar_modelo_modal").modal("show");
+  else alert("Seleccione un modelo para modificar");
 }
 
 /* 

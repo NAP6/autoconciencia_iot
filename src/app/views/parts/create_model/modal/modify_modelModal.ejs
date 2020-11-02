@@ -1,0 +1,67 @@
+<!--<div class="modal fade" id="modificar_modelo_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modificar_modelo_modal_label" aria-hidden="true"> -->
+<div
+  class="modal fade"
+  id="modificar_modelo_modal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modificar_modelo_modal_label"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modificar_modelo_modal_label">Modificar modelo</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form
+          action="/update_model"
+          method="POST"
+        >
+          <input
+            type="text"
+            style="display: none"
+            id="id_modelo_update"
+            name="id_modelo_update"
+          />
+          <div class="container">
+            <div class="form-group">
+              <label for="nombre_modelo">Nombre del modelo</label>
+              <input
+                type="text"
+                class="form-control"
+                id="nombre_modelo_update"
+                name="nombre_modelo_update"
+              />
+            </div>
+            <div class="form-group">
+              <label for="descripcion_ecenario">Descripcion del modelo</label>
+              <input
+                type="text"
+                class="form-control"
+                id="descripcion_esenario_update"
+                name="descripcion_ecenario_update"
+              />
+            </div>
+            <div class="text-center">
+              <button
+                id="btn_actualizar_modelo"
+                class="btn btn-primary"
+                type="submit"
+              >
+                Modificar
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
