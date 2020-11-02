@@ -88,7 +88,206 @@ export class mysql_connector {
     ];
   }
 
+  public get_entitys(modelID: string): object {
+    return [
+      {
+        id: "Entidades Fisicas",
+        name: "Entidades Fisicas",
+        tiene_entidades: true,
+        activo: true,
+        inactivo: true,
+        objects: { raiz_0: { id: "raiz_0", nombre: "raiz", objetos: {} } },
+        entity: [
+          {
+            id: "Casa",
+            name: "Casa",
+            activo: false,
+            objects: {
+              raiz_0: {
+                id: "raiz_0",
+                nombre: "raiz",
+                objetos: {
+                  "1": {
+                    id: "1",
+                    nombre: "Entidad Casa",
+                    descripcion: "descripcion de Casa",
+                    peso: "1",
+                    activo: false,
+                    objetos: {},
+                  },
+                },
+              },
+            },
+          },
+          {
+            id: "Hospital",
+            name: "Hospital",
+            activo: true,
+            objects: {
+              raiz_0: {
+                id: "raiz_0",
+                nombre: "raiz",
+                objetos: {
+                  "2": {
+                    id: "2",
+                    nombre: "Entidad Hospital",
+                    descripcion: "Descripcion del objeto del Hospital",
+                    peso: "1",
+                    activo: true,
+                    objetos: {},
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+      {
+      id: "Entidades Digitales",
+        name: "Entidades Digitales",
+        tiene_entidades: true,
+        activo: true,
+        inactivo: true,
+        objects: { raiz_0: { id: "raiz_1", nombre: "raiz", objetos: {} } },
+        entity: [
+          {
+            id: "Nodos Computacion",
+            name: "Nodos Computacion",
+            activo: false,
+            objects: {
+              raiz_0: {
+                id: "raiz_1",
+                nombre: "raiz",
+                objetos: {
+                  "1": {
+                    id: "1",
+                    nombre: "Entidad Nodo Computacion",
+                    descripcion: "descripcion de la entidad Nodo de Computacion",
+                    peso: "1",
+                    activo: false,
+                    objetos: {},
+                  },
+                },
+              },
+            },
+          },
+          {
+            id: "Nodos Edge",
+            name: "Nodos Edge",
+            activo: true,
+            objects: {
+              raiz_0: {
+                id: "raiz_1",
+                nombre: "raiz",
+                objetos: {
+                  "2": {
+                    id: "2",
+                    nombre: "Entidad Nodos Edge",
+                    descripcion: "Descripcion del la entidad Nodos Edge",
+                    peso: "1",
+                    activo: true,
+                    objetos: {},
+                  },
+                },
+              },
+            },
+          },
+        ],
+      },
+      {
+        id: "Dispositivos Iot",
+          name: "Dispositivos Iot",
+          tiene_entidades: true,
+          activo: true,
+          inactivo: true,
+          objects: { raiz_0: { id: "raiz_2", nombre: "raiz", objetos: {} } },
+          entity: [
+            {
+              id: "Sensor",
+              name: "Sensor",
+              activo: false,
+              objects: {
+                raiz_0: {
+                  id: "raiz_2",
+                  nombre: "raiz",
+                  objetos: {
+                    "1": {
+                      id: "1",
+                      nombre: "Entidad Sensor",
+                      descripcion: "descripcion de la entidad Sensor",
+                      peso: "1",
+                      activo: false,
+                      objetos: {},
+                    },
+                  },
+                },
+              },
+            },
+            {
+              id: "Actuador",
+              name: "Actuador",
+              activo: true,
+              objects: {
+                raiz_0: {
+                  id: "raiz_2",
+                  nombre: "raiz",
+                  objetos: {
+                    "2": {
+                      id: "2",
+                      nombre: "Entidad Actuador",
+                      descripcion: "Descripcion del la entidad Actuador",
+                      peso: "1",
+                      activo: true,
+                      objetos: {},
+                    },
+                  },
+                },
+              },
+            },
+            {
+              id: "Tag",
+              name: "Tag",
+              activo: true,
+              objects: {
+                raiz_0: {
+                  id: "raiz_2",
+                  nombre: "raiz",
+                  objetos: {
+                    "2": {
+                      id: "2",
+                      nombre: "Entidad Tag",
+                      descripcion: "Descripcion del la entidad Tag",
+                      peso: "1",
+                      activo: true,
+                      objetos: {},
+                    },
+                  },
+                },
+              },
+            },
+
+          ],
+        },
+      {
+        id: "Redes",
+          name: "Redes",
+          tiene_entidades: true,
+          activo: true,
+          inactivo: true,
+          objects: { raiz_0: { id: "raiz_3", nombre: "raiz", objetos: {} } },
+        },
+       
+    ];
+  }
+
   public save_subjectsObjects(modelID: string, json: object): void {
+    console.log(
+      `########## Envio a la funcion de guardar objetos del sujeto, modelo: ${modelID} \n ${JSON.stringify(
+        json
+      )}`
+    );
+  }
+  public save_entity(modelID: string, json: object): void {
     console.log(
       `########## Envio a la funcion de guardar objetos del sujeto, modelo: ${modelID} \n ${JSON.stringify(
         json
