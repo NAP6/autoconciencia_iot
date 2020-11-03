@@ -452,6 +452,34 @@ public updUser_measurementUnit(
       },
     ];
   }
+  public addUser_criteriaDecision(
+    idUser: string,
+    name: string,
+    descripcion: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'addUser_criteriaDecision' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}`
+    );
+  }
+
+public delUser_criteriaDecision(
+    idUser: string,
+    id: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'delUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}`
+    );
+  }
+public updUser_criteriaDecision(
+    idUser: string,
+    id: string,
+    name: string,
+    descripcion: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}`
+    );
+  }
 
   public getLastObjectSubjectID(modelID: string): number {
     console.log(`############# Entra en getLastObjectID y envia ${modelID}`);

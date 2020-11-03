@@ -115,6 +115,45 @@ export function decision_criteria(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function add_decision_criteria(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var db = new database();
+    db.addUser_criteriaDecision(idUser, name, descripcion);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_decision_criteria(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var idDecision = req.body.id;
+    var db = new database();
+    db.delUser_criteriaDecision(idUser, idDecision);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function upd_decision_criteria(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id = req.body.id;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    
+    var db = new database();
+    db.updUser_criteriaDecision(idUser, id, name, descripcion);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {

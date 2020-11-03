@@ -1,45 +1,38 @@
-<div class="modal fade" id="modal_criteria_add" tabindex="-1" role="dialog" aria-labelledby="exam_modal_criteria_add" aria-hidden="true">
+<div class="modal fade" id="modal_criteria_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exam_modal_criteria_add">Agregar Criterios de Decision</h5>
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Agregar Criterio Decision
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <span aria-hidden="true">&times;</span>
+        </button>
             </div>
+
             <div class="modal-body">
                 <div class="row">
                     <div class="col-sm">
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">ID</label>
-                            <div class="col-sm-10">
-                                <input type="text" id="IdEscalas" value="">
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Nombre</label>
                             <div class="col-sm-10">
-                                <input type="text" id="NombreEscalas" value="">
+                                <input type="text" class="form-control" id="input-name-criteria-add" />
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Descripción</label>
                             <div class="col-sm-10">
-                                <input type="text" id="DescripcionEscalas" value="">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Activo</label>
-                            <div class="col-sm-10">
-                                <input type="text" id="TipoEscala" value="">
+                                <input type="text" class="form-control" id="input-descripton-criteria-add" />
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cerrar
+        </button>
+                <button type="button" class="btn btn-primary" onclick="guardarNuevoCriterio()">Agregar</button>
             </div>
         </div>
     </div>

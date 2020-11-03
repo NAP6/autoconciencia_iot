@@ -96,7 +96,7 @@ function cargar_posibles_sujetos_modelo(json) {
             '"><label class="form-check-label" for="sujetos_seleccionado_' +
             element["id"] +
             '">' +
-            "<button class='btn-sujetoLinkObjetivos' onclick='abrirModalObjetosSujetos(\"" +
+            "<button class='btn-sujetoLinkObjetivos btn btn-link' onclick='abrirModalObjetosSujetos(\"" +
             element["id"] +
             "\")'>" +
             element["name"] +
@@ -149,7 +149,7 @@ function cargar_posibles_sujetos_modelo(json) {
                     '"><label class="form-check-label" for="sujetos_seleccionado_' +
                     subSystem["id"] +
                     '">' +
-                    "<button class='btn-sujetoLinkObjetivos' onclick='abrirModalObjetosSujetos(\"" +
+                    "<button class='btn-sujetoLinkObjetivos btn btn-link' onclick='abrirModalObjetosSujetos(\"" +
                     subSystem["id"] +
                     "\")'>" +
                     subSystem["name"] +
@@ -670,22 +670,7 @@ if (document.getElementById("tabla_unidades_de_medida"))
     );
 
 function cargar_unidades_de_medida_table(json) {
-    HEAD
-    res = "";
-    json.forEach((um) => {
-        res += "<tr>";
-        res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}"></td>`;
-        res += `<td>${um.id}</td>`;
-        res += `<td>${um.nombre}</td>`;
-        res += `<td>${um.descripcion}</td>`;
-        res += `<td>${um.acronimo}</td>`;
-        if (um.activo == "true")
-            res += `<td><input type="checkbox" disabled checked></td>`;
-        else res += `<td><input type="checkbox" disabled></td>`;
-        res += "</tr>";
-    });
-    document.getElementById("tabla_unidades_de_medida").innerHTML = res;
-    res = "";
+    var res = "";
     json.forEach((um) => {
         res += "<tr>";
         res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}" data-name="${um.nombre}" data-descripcion="${um.descripcion}" data-acronym="${um.acronimo}"></td>`;
@@ -743,6 +728,241 @@ function cargar_escales_table(json) {
 function error_cargar_escales_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
+/* 
+    SECCION SELECCION SUJETOS CARGAR LAS ESCALAS
+
+        Descripcion:
+		Esta seccion incluye el envio de datos para las Escalas
+
+        Incluye:
+*/
+
+function agregar_escala() {
+    $("#modal_escales_add").modal("show");
+}
+
+function guardarNuevaEscala() {
+    var data = {
+        nombre: document.getElementById("input-name-scale-add").value,
+        descripcion: document.getElementById("input-valor-valido-add").value,
+        tipo: document.getElementById("input-tipo-add").value,
+    };
+    console.log(data);
+    if (!!data.nombre && !!data.descripcion && !!data.tipo) {
+        post_api(
+            "http://localhost:3000/api/add_scales/",
+            data,
+            mensaje_exitoEnvioEscalas,
+            mensaje_errorEnvioEscalas
+        );
+        consultar_api(
+            "http://localhost:3000/api/escales",
+            cargar_escales_table,
+            error_cargar_escales_table
+        );
+        $("#modal_scales_add").modal("hide");
+    } else alert("Ingrese todos los campos del formulario");
+}
+
+function eliminarEscala() {
+    var radio = document.getElementsByName("escala_seleccionada");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        console.log(data);
+        post_api(
+            "http://localhost:3000/api/del_escales/",
+            data,
+            mensaje_exitoEnvioEscalas,
+            mensaje_errorEnvioEscalas
+        );
+        consultar_api(
+            "http://localhost:3000/api/escales",
+            cargar_escales_table, error_cargar_escales_table
+        );
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificarEscalas() {
+    var radio = document.getElementsByName("unidad_seleccionada");
+    var id;
+    var name;
+    var descripcion;
+    var acronym;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            descripcion = elem.dataset.descripcion;
+            acronym = elem.dataset.acronym;
+            return;
+        }
+    });
+
+    if (!!id && !!name && !!descripcion && !!acronym) {
+        document.getElementById("input-id-update").value = id;
+        document.getElementById("input-name-update").value = name;
+        document.getElementById("input-descripton-update").value = descripcion;
+        document.getElementById("input-acronym-update").value = acronym;
+        $("#modal_modificar_unidadMedida").modal("show");
+    } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function guardarModificacionMedida() {
+    var data = {
+        id: document.getElementById("input-id-update").value,
+        nombre: document.getElementById("input-name-update").value,
+        descripcion: document.getElementById("input-descripton-update").value,
+        acronym: document.getElementById("input-acronym-update").value,
+    };
+    if (!!data.id && !!data.nombre && !!data.descripcion && !!data.acronym) {
+        post_api(
+            "http://localhost:3000/api/upd_measurement_units/",
+            data,
+            mensaje_exitoEnvioUnidadesMedida,
+            mensaje_errorEnvioUnidadesMedida
+        );
+        consultar_api(
+            "http://localhost:3000/api/measurement_units",
+            cargar_unidades_de_medida_table,
+            error_cargar_unidades_de_medida_table
+        );
+
+        $("#modal_modificar_unidadMedida").modal("hide");
+    } else alert("Debe debe completar todos los campos");
+}
+
+function mensaje_exitoEnvioUnidadesMedida(json) {
+    alert(json.mensaje);
+}
+
+function mensaje_errorEnvioUnidadesMedida(err) {
+    alert(err);
+}
+
+/* 
+    SECCION SELECCION SUJETOS CARGAR LOS CRITERIOS DE DECISION
+
+        Descripcion:
+		Esta seccion incluye el envio de datos para los criterios de decision
+
+        Incluye:
+*/
+
+function agregar_criterio_decision() {
+    $("#modal_criteria_add").modal("show");
+}
+
+function guardarNuevoCriterio() {
+    var data = {
+        nombre: document.getElementById("input-name-criteria-add").value,
+        descripcion: document.getElementById("input-descripton-criteria-add").value,
+    };
+    console.log(data);
+    if (!!data.nombre && !!data.descripcion) {
+        post_api(
+            "http://localhost:3000/api/add_decision_criteria/",
+            data,
+            mensaje_exitoEnvioDecisionCriteria,
+            mensaje_errorEnvioDecisionCriteria
+        );
+        consultar_api(
+            "http://localhost:3000/api/decision_criteria",
+            cargar_criterios_table,
+            error_cargar_criterios_table
+        );
+        $("#modal_criteria_add").modal("hide");
+    } else alert("Ingrese todos los campos del formulario");
+}
+
+function eliminar_criterio_decision() {
+    var radio = document.getElementsByName("criterio_seleccionado");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        console.log(data);
+        post_api(
+            "http://localhost:3000/api/del_decision_criteria/",
+            data,
+            mensaje_exitoEnvioDecisionCriteria,
+            mensaje_errorEnvioDecisionCriteria
+        );
+        consultar_api(
+            "http://localhost:3000/api/decision_criteria",
+            cargar_criterios_table, error_cargar_criterios_table
+        );
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificar_criterio_decision() {
+    var radio = document.getElementsByName("criterio_seleccionado");
+    var id;
+    var name;
+    var descripcion;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            descripcion = elem.dataset.descripcion
+            return;
+        }
+    });
+    if (!!id && !!name && !!descripcion) {
+        document.getElementById("input-id-criteria-update").value = id;
+        document.getElementById("input-name-criteria-update").value = name;
+        document.getElementById("input-descripton-criteria-update").value = descripcion;
+        $("#modal_modificar_criterios").modal("show");
+
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function guardarModificacionCriterios() {
+    var data = {
+        id: document.getElementById("input-id-criteria-update").value,
+        nombre: document.getElementById("input-name-criteria-update").value,
+        descripcion: document.getElementById("input-descripton-criteria-update").value,
+    };
+    if (!!data.id && !!data.nombre && !!data.descripcion) {
+        post_api(
+            "http://localhost:3000/api/upd_decision_criteria/",
+            data,
+            mensaje_exitoEnvioDecisionCriteria,
+            mensaje_errorEnvioDecisionCriteria
+
+        );
+        consultar_api(
+            "http://localhost:3000/api/decision_criteria",
+            cargar_criterios_table,
+            error_cargar_criterios_table
+        );
+
+        $("#modal_modificar_criterios").modal("hide");
+    } else alert("Debe debe completar todos los campos");
+}
+
+function mensaje_exitoEnvioDecisionCriteria(json) {
+    alert(json.mensaje);
+}
+
+function mensaje_errorEnvioDecisionCriteria(err) {
+    alert(err);
+}
 
 /* 
     SECCION CARGAR CRITERIOS DECISION
@@ -766,7 +986,7 @@ function cargar_criterios_table(json) {
     res = "";
     json.forEach((cd) => {
         res += "<tr>";
-        res += `<td><input type="radio" name="unidad_seleccionada" value="${cd.id}"></td>`;
+        res += `<td><input type="radio" name="criterio_seleccionado" value="${cd.id}"></td>`;
         res += `<td>${cd.id}</td>`;
         res += `<td>${cd.nombre}</td>`;
         res += `<td>${cd.descripcion}</td>`;
