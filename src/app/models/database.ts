@@ -368,6 +368,36 @@ export class mysql_connector {
     ];
   }
 
+  public addUser_measurementUnit(
+    idUser: string,
+    name: string,
+    descripcion: string,
+    acronym: string
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'addUser_measurementUnit' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym}`
+    );
+  }
+
+public delUser_measurementUnit(
+    idUser: string,
+    id: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'delUser_measurementUnit' el id de usuario '${idUser}, id: ${id}`
+    );
+  }
+public updUser_measurementUnit(
+    idUser: string,
+    id: string,
+    name: string,
+    descripcion: string,
+    acronym: string
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym}`
+    );
+  }
   public getUser_escales(userID: string): object {
     console.log(
       `############# Envio a la funcion 'getUser_escales' el id de usuario '${userID}`

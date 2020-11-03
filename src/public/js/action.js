@@ -500,27 +500,6 @@ function cargar_idNuevoObjeto(json) {
 function error_cargar_idNuevoObjeto(err) {
     alert(`Error al cargar el ultimo ID ${err}`);
 }
-
-/* 
-    SECCION SELECCION ENTIDADES CUADROS DINAMICOS SE SELECCION
-
-        Descripcion:
-            En este fragmento se encuentran las funciones que hacen posible el dinamismo
-            de la seccion de seleccion de enntidadess, haciendola mas interactiva. Ademas cuenta
-	    con las funciones que consultan la api para cargar las entidades disponibles.
-
-        Incluye:
-	    cargar_posibles_entidades_modelo
-	    error_cargar_posibles_entidades_modelo
-	    verificar_seleccion_hijo_pagre
-            agregar_entidades_seleccionado
-            remover_entidades_seleccionado
-            extraer_datos_entidades_e_hijos_lista_check
-            actualizar_entidades
-            extraer_datos_entidades
-*/
-//JAIMEEE
-
 /* 
     SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
 
@@ -553,6 +532,125 @@ function error_cargar_unidades_de_medida_select(err) {
 }
 
 /* 
+    SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
+
+        Descripcion:
+		Esta seccion incluye el envio de datos para las unidades de medida
+
+        Incluye:
+*/
+
+function agregarUnidadMedida() {
+    $("#modal_units_add").modal("show");
+}
+
+function guardarNuevaUnidadMedida() {
+    var data = {
+        nombre: document.getElementById("input-name-add").value,
+        descripcion: document.getElementById("input-descripton-add").value,
+        acronym: document.getElementById("input-weight-add").value,
+    };
+    console.log(data);
+    if (!!data.nombre && !!data.descripcion && !!data.acronym) {
+        post_api(
+            "http://localhost:3000/api/add_measurement_units/",
+            data,
+            mensaje_exitoEnvioUnidadesMedida,
+            mensaje_errorEnvioUnidadesMedida
+        );
+        consultar_api(
+            "http://localhost:3000/api/measurement_units",
+            cargar_unidades_de_medida_table,
+            error_cargar_unidades_de_medida_table
+        );
+        $("#modal_units_add").modal("hide");
+    } else alert("Ingrese todos los campos del formulario");
+}
+
+function eliminarUnidadMedida() {
+    var radio = document.getElementsByName("unidad_seleccionada");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        console.log(data);
+        post_api(
+            "http://localhost:3000/api/del_measurement_units/",
+            data,
+            mensaje_exitoEnvioUnidadesMedida,
+            mensaje_errorEnvioUnidadesMedida
+        );
+        consultar_api(
+            "http://localhost:3000/api/measurement_units",
+            cargar_unidades_de_medida_table, error_cargar_unidades_de_medida_table
+        );
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificarUnidadMedida() {
+    var radio = document.getElementsByName("unidad_seleccionada");
+    var id;
+    var name;
+    var descripcion;
+    var acronym;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            descripcion = elem.dataset.descripcion;
+            acronym = elem.dataset.acronym;
+            return;
+        }
+    });
+
+    if (!!id && !!name && !!descripcion && !!acronym) {
+        document.getElementById("input-id-update").value = id;
+        document.getElementById("input-name-update").value = name;
+        document.getElementById("input-descripton-update").value = descripcion;
+        document.getElementById("input-acronym-update").value = acronym;
+        $("#modal_modificar_unidadMedida").modal("show");
+    } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function guardarModificacionMedida() {
+    var data = {
+        id: document.getElementById("input-id-update").value,
+        nombre: document.getElementById("input-name-update").value,
+        descripcion: document.getElementById("input-descripton-update").value,
+        acronym: document.getElementById("input-acronym-update").value,
+    };
+    if (!!data.id && !!data.nombre && !!data.descripcion && !!data.acronym) {
+        post_api(
+            "http://localhost:3000/api/upd_measurement_units/",
+            data,
+            mensaje_exitoEnvioUnidadesMedida,
+            mensaje_errorEnvioUnidadesMedida
+        );
+        consultar_api(
+            "http://localhost:3000/api/measurement_units",
+            cargar_unidades_de_medida_table,
+            error_cargar_unidades_de_medida_table
+        );
+
+        $("#modal_modificar_unidadMedida").modal("hide");
+    } else alert("Debe debe completar todos los campos");
+}
+
+function mensaje_exitoEnvioUnidadesMedida(json) {
+    alert(json.mensaje);
+}
+
+function mensaje_errorEnvioUnidadesMedida(err) {
+    alert(err);
+}
+/* 
     SECCION CARGAR LAS UNIDADES DE MEDIDA
 
         Descripcion:
@@ -572,10 +670,25 @@ if (document.getElementById("tabla_unidades_de_medida"))
     );
 
 function cargar_unidades_de_medida_table(json) {
+    HEAD
     res = "";
     json.forEach((um) => {
         res += "<tr>";
         res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}"></td>`;
+        res += `<td>${um.id}</td>`;
+        res += `<td>${um.nombre}</td>`;
+        res += `<td>${um.descripcion}</td>`;
+        res += `<td>${um.acronimo}</td>`;
+        if (um.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_unidades_de_medida").innerHTML = res;
+    res = "";
+    json.forEach((um) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}" data-name="${um.nombre}" data-descripcion="${um.descripcion}" data-acronym="${um.acronimo}"></td>`;
         res += `<td>${um.id}</td>`;
         res += `<td>${um.nombre}</td>`;
         res += `<td>${um.descripcion}</td>`;
@@ -1059,4 +1172,173 @@ function extraer_datos_entidad() {
         new_ent.push(aux_ent);
     });
     return new_ent;
+}
+/* 
+    SECCION CREACION DE ENTIDADES ARBOL Y FORMULARIO
+        Descripcion:
+		En este fragmeto se pretende crear las funciones que llamen a la ventana modal
+		y todas las funciones que impliquen la creacion de las entidades que tienen los sujetos
+    
+*/
+
+var Entidad_activoID;
+var id_EntidadPadre_agregar;
+
+function abrirModalEntidad(id) {
+    $("#objetosde_sujetoModal").modal("show");
+    objetosde_Sujetos_activoID = id;
+    var nombre = document.getElementById("nombreSujetoObjetoActivo");
+    nombre.innerHTML = objetosde_Sujetos_aux[id]["name"];
+    var arbol = document.getElementById("arbol_objetivos_del_sujeto");
+    arbol.innerHTML = generar_arbol_obejetosde_sujeto(
+        objetosde_Sujetos_aux[id]["objetos"]
+    );
+    var elemRaiz = document.getElementById("raiz_0");
+    elemRaiz.checked = true;
+    desactivarFormularioAgregarObjeto();
+}
+
+function generar_arbol_obejetosde_sujeto(lista) {
+    var strlista = "<ul>";
+    Object.entries(lista).forEach(([key, value]) => {
+        strlista += `<li><input class="form-check-input" type='radio' value='${key}' name='objetosde_Sujetos_imputSelect' id='${key}'/><label class="form-check-label" for='${key}'>${value.nombre}</label>`;
+        if (Object.keys(value.objetos).length > 0) {
+            strlista += generar_arbol_obejetosde_sujeto(value.objetos);
+        }
+        strlista += "</li>";
+    });
+    strlista += "</ul>";
+    return strlista;
+}
+
+function activarFormularioAgregarObjeto() {
+    document.getElementById("nombreObjeto").disabled = false;
+    document.getElementById("descripcionObjeto").disabled = false;
+    document.getElementById("unidades_medida_seccion_sujetos").disabled = false;
+    document.getElementById("activoObjeto").disabled = false;
+    document.getElementById("btn-agregarObjetoLista").disabled = false;
+    var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+    arbol.forEach((elem) => {
+        elem.disabled = true;
+    });
+    consultar_api(
+        "http://localhost:3000/api/last_ObjectSubjectID/",
+        cargar_idNuevoObjeto,
+        error_cargar_idNuevoObjeto
+    );
+}
+
+function desactivarFormularioAgregarObjeto() {
+    document.getElementById("nombreObjeto").disabled = true;
+    document.getElementById("descripcionObjeto").disabled = true;
+    document.getElementById("unidades_medida_seccion_sujetos").disabled = true;
+    document.getElementById("activoObjeto").disabled = true;
+    document.getElementById("btn-agregarObjetoLista").disabled = true;
+    document.getElementById("idObjeto").value = "";
+    document.getElementById("nombreObjeto").value = "";
+    document.getElementById("descripcionObjeto").value = "";
+    document.getElementById("unidades_medida_seccion_sujetos").value = "";
+    document.getElementById("activoObjeto").value = "";
+    var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+    arbol.forEach((elem) => {
+        elem.disabled = false;
+    });
+}
+
+function eliminarObjetoLista() {
+    var idSeleccionado = getSelectedItemArbolObjetosSelected();
+    if (idSeleccionado != "raiz_0") {
+        var objetos = objetosde_Sujetos_aux[objetosde_Sujetos_activoID].objetos;
+        objetosde_Sujetos_aux[
+            objetosde_Sujetos_activoID
+        ].objetos = remover_objetode_sujeto_objID(idSeleccionado, objetos);
+        var arbol = document.getElementById("arbol_objetivos_del_sujeto");
+        arbol.innerHTML = generar_arbol_obejetosde_sujeto(
+            objetosde_Sujetos_aux[objetosde_Sujetos_activoID]["objetos"]
+        );
+        var elemRaiz = document.getElementById("raiz_0");
+        elemRaiz.checked = true;
+        desactivarFormularioAgregarObjeto();
+    } else {
+        alert("No se puede eliminar el nodo raiz");
+    }
+}
+
+function agregarObjetoLista() {
+    var id = document.getElementById("idObjeto").value;
+    var nombre = document.getElementById("nombreObjeto").value;
+    var descripcion = document.getElementById("descripcionObjeto").value;
+    var unidadMedida = document.getElementById("unidades_medida_seccion_sujetos")
+        .value;
+    var activo = document.getElementById("activoObjeto").checked;
+    if (!!id && !!nombre && !!descripcion && !!unidadMedida) {
+        var objetos = objetosde_Sujetos_aux[objetosde_Sujetos_activoID].objetos;
+        var idSeleccionado = getSelectedItemArbolObjetosSelected();
+        var obj_aux = {
+            id: id.toString(),
+            nombre: nombre,
+            descripcion: descripcion,
+            unidadMedida: unidadMedida,
+            activo: activo,
+            objetos: {},
+        };
+        objetosde_Sujetos_aux[
+            objetosde_Sujetos_activoID
+        ].objetos = agregar_objetode_sujeto_objID(idSeleccionado, obj_aux, objetos);
+        var arbol = document.getElementById("arbol_objetivos_del_sujeto");
+        arbol.innerHTML = generar_arbol_obejetosde_sujeto(
+            objetosde_Sujetos_aux[objetosde_Sujetos_activoID]["objetos"]
+        );
+        var elemRaiz = document.getElementById("raiz_0");
+        elemRaiz.checked = true;
+        desactivarFormularioAgregarObjeto();
+    } else {
+        alert("Ingrese valores en todos los campos para poder agregar el Objeto");
+    }
+}
+
+function getSelectedItemArbolObjetosSelected() {
+    var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+    var idSeleccionado = "raiz_0";
+    arbol.forEach((elem) => {
+        if (elem.checked) {
+            idSeleccionado = elem.value;
+            return;
+        }
+    });
+    return idSeleccionado;
+}
+
+function agregar_objetode_sujeto_objID(id, objA, objList) {
+    Object.entries(objList).forEach(([key, value]) => {
+        if (value.id == id) {
+            value.objetos[objA.id] = objA;
+            return;
+        }
+        if (Object.keys(value.objetos).length > 0) {
+            value.objetos = agregar_objetode_sujeto_objID(id, objA, value.objetos);
+        }
+    });
+    return objList;
+}
+
+function remover_objetode_sujeto_objID(id, objList) {
+    Object.entries(objList).forEach(([key, value]) => {
+        if (value.id == id) {
+            delete objList[key];
+            return;
+        }
+        if (Object.keys(value.objetos).length > 0) {
+            value.objetos = remover_objetode_sujeto_objID(id, value.objetos);
+        }
+    });
+    return objList;
+}
+
+function cargar_idNuevoObjeto(json) {
+    document.getElementById("idObjeto").value = json.id + 1;
+}
+
+function error_cargar_idNuevoObjeto(err) {
+    alert(`Error al cargar el ultimo ID ${err}`);
 }
