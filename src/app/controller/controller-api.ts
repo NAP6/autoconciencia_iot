@@ -106,6 +106,50 @@ export function escales(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function add_escales(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
+    var valor_valido = req.body.valor_valido;
+    var tipo = req.body.tipo;
+    var db = new database();
+    db.addUser_escales(idUser, name, valor_valido,tipo);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_escales(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var idDecision = req.body.id;
+    var db = new database();
+    db.delUser_escales(idUser, idDecision);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function upd_escales(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id = req.body.id;
+    var name = req.body.nombre;
+    var valor_valido = req.body.valor_valido;
+    var tipo = req.body.tipo;
+    var db = new database();
+    db.updUser_escales(idUser, id, name, valor_valido,tipo);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+
+
+
 export function decision_criteria(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;

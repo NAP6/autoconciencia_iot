@@ -712,7 +712,7 @@ function cargar_escales_table(json) {
     res = "";
     json.forEach((es) => {
         res += "<tr>";
-        res += `<td><input type="radio" name="unidad_seleccionada" value="${es.id}"></td>`;
+        res += `<td><input type="radio" name="escala_seleccionada" value="${es.id}" data-name="${es.nombre}" data-valor_valido="${es.valor_valido}" data-tipo="${es.tipo}"></td>`;
         res += `<td>${es.id}</td>`;
         res += `<td>${es.nombre}</td>`;
         res += `<td>${es.valor_valido}</td>`;
@@ -738,19 +738,19 @@ function error_cargar_escales_table(err) {
 */
 
 function agregar_escala() {
-    $("#modal_escales_add").modal("show");
+    $("#modal_scales_add").modal("show");
 }
 
 function guardarNuevaEscala() {
     var data = {
         nombre: document.getElementById("input-name-scale-add").value,
-        descripcion: document.getElementById("input-valor-valido-add").value,
-        tipo: document.getElementById("input-tipo-add").value,
+        valor_valido: document.getElementById("input-valor-add").value,
+        tipo: document.getElementById("input-tipe-add").value,
     };
     console.log(data);
-    if (!!data.nombre && !!data.descripcion && !!data.tipo) {
+    if (!!data.nombre && !!data.valor_valido && !!data.tipo) {
         post_api(
-            "http://localhost:3000/api/add_scales/",
+            "http://localhost:3000/api/add_escales/",
             data,
             mensaje_exitoEnvioEscalas,
             mensaje_errorEnvioEscalas
@@ -792,59 +792,63 @@ function eliminarEscala() {
 }
 
 function modificarEscalas() {
-    var radio = document.getElementsByName("unidad_seleccionada");
+    var radio = document.getElementsByName("escala_seleccionada");
     var id;
     var name;
-    var descripcion;
-    var acronym;
+    var valor_valido;
+    var tipo;
     radio.forEach((elem) => {
         if (elem.checked) {
             id = elem.value;
             name = elem.dataset.name;
-            descripcion = elem.dataset.descripcion;
-            acronym = elem.dataset.acronym;
+            valor_valido = elem.dataset.valor_valido;
+            tipo = elem.dataset.tipo;
             return;
         }
     });
 
-    if (!!id && !!name && !!descripcion && !!acronym) {
-        document.getElementById("input-id-update").value = id;
-        document.getElementById("input-name-update").value = name;
-        document.getElementById("input-descripton-update").value = descripcion;
-        document.getElementById("input-acronym-update").value = acronym;
-        $("#modal_modificar_unidadMedida").modal("show");
+    if (!!id && !!name && !!valor_valido && !!tipo) {
+        document.getElementById("input-escale-id-update").value = id;
+        document.getElementById("input-escale-name-update").value = name;
+        document.getElementById("input-escale-valor-update").value = valor_valido;
+        document.getElementById("input-tipe-update").value = tipo;
+        $("#modal_escalas_mod").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
 
-function guardarModificacionMedida() {
+function guardarModificacionEscala() {
     var data = {
-        id: document.getElementById("input-id-update").value,
-        nombre: document.getElementById("input-name-update").value,
-        descripcion: document.getElementById("input-descripton-update").value,
-        acronym: document.getElementById("input-acronym-update").value,
+        id: document.getElementById("input-escale-id-update").value,
+        nombre: document.getElementById("input-escale-name-update").value,
+        valor_valido: document.getElementById("input-escale-valor-update").value,
+        tipo: document.getElementById("input-tipe-update").value,
+
     };
-    if (!!data.id && !!data.nombre && !!data.descripcion && !!data.acronym) {
+
+    if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
+
         post_api(
-            "http://localhost:3000/api/upd_measurement_units/",
+            "http://localhost:3000/api/upd_escales/",
             data,
-            mensaje_exitoEnvioUnidadesMedida,
-            mensaje_errorEnvioUnidadesMedida
+            mensaje_exitoEnvioEscalas,
+            mensaje_errorEnvioEscalas
+
         );
         consultar_api(
-            "http://localhost:3000/api/measurement_units",
-            cargar_unidades_de_medida_table,
-            error_cargar_unidades_de_medida_table
+            "http://localhost:3000/api/escales",
+            cargar_escales_table,
+            error_cargar_escales_table
         );
 
-        $("#modal_modificar_unidadMedida").modal("hide");
+        $("#modal_escalas_mod").modal("hide");
     } else alert("Debe debe completar todos los campos");
 }
 
-function mensaje_exitoEnvioUnidadesMedida(json) {
+function mensaje_exitoEnvioEscalas(json) {
     alert(json.mensaje);
 }
 
-function mensaje_errorEnvioUnidadesMedida(err) {
+function mensaje_errorEnvioEscalas(err) {
     alert(err);
 }
 
@@ -919,7 +923,7 @@ function modificar_criterio_decision() {
         if (elem.checked) {
             id = elem.value;
             name = elem.dataset.name;
-            descripcion = elem.dataset.descripcion
+            descripcion = elem.dataset.descripcion;
             return;
         }
     });
@@ -928,8 +932,7 @@ function modificar_criterio_decision() {
         document.getElementById("input-name-criteria-update").value = name;
         document.getElementById("input-descripton-criteria-update").value = descripcion;
         $("#modal_modificar_criterios").modal("show");
-
-    } else alert("Debe seleccionar un elemento para eliminar");
+    } else alert("Seleccione el Elemento");
 }
 
 function guardarModificacionCriterios() {
@@ -986,10 +989,11 @@ function cargar_criterios_table(json) {
     res = "";
     json.forEach((cd) => {
         res += "<tr>";
-        res += `<td><input type="radio" name="criterio_seleccionado" value="${cd.id}"></td>`;
+        res += `<td><input type="radio" name="criterio_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-descripcion="${cd.descripcion}"></td>`;
         res += `<td>${cd.id}</td>`;
         res += `<td>${cd.nombre}</td>`;
         res += `<td>${cd.descripcion}</td>`;
+
         if (cd.activo == "true")
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;

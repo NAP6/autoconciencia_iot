@@ -426,6 +426,36 @@ public updUser_measurementUnit(
       },
     ];
   }
+  public addUser_escales(
+    idUser: string,
+    name: string,
+    valor_valido: string,
+    tipo:string
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'addUser_escales' el id de usuario '${idUser}, nombre: ${name}, valor_valido: ${valor_valido}, tipo: ${tipo}`
+    );
+  }
+
+public delUser_escales(
+    idUser: string,
+    id: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'delUser_escales' el id de usuario '${idUser}, id: ${id}`
+    );
+  }
+public updUser_escales(
+    idUser: string,
+    id: string,
+    name: string,
+    valor_valido: string,
+    tipo: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},tipo: ${tipo}`
+    );
+  }
 
   public getUser_decision_criteria(userID: string): object {
     console.log(
@@ -434,14 +464,14 @@ public updUser_measurementUnit(
     return [
       {
         id: "1",
-        nombre: "Centimeros",
-        descripcion: "Unidad de medida que representa 1/100 metros",
+        nombre: "Diseño",
+        descripcion: "Unidad de medida",
         activo: "true",
       },
       {
         id: "2",
-        nombre: "Milimetros",
-        descripcion: "Unidad de medida que representa 1/1000 metros",
+        nombre: "Tamaño",
+        descripcion: "Unidad de medida ",
         activo: "false",
       },
       {
