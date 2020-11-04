@@ -824,7 +824,6 @@ function guardarModificacionEscala() {
         tipo: document.getElementById("input-tipe-update").value,
 
     };
-
     if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
 
         post_api(
