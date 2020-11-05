@@ -96,24 +96,24 @@ export class mysql_connector {
         tiene_entidades: true,
         activo: true,
         inactivo: true,
-        objects: { raiz_0: { id: "raiz_0", nombre: "raiz", objetos: {} } },
+        entitys: { raiz_0: { id: "raiz_0", nombre: "raiz", entidades: {} } },
         entity: [
           {
             id: "Casa",
             name: "Casa",
             activo: false,
-            objects: {
+            entitys: {
               raiz_0: {
                 id: "raiz_0",
                 nombre: "raiz",
-                objetos: {
+                entidades: {
                   "1": {
                     id: "1",
                     nombre: "Entidad Casa",
                     descripcion: "descripcion de Casa",
                     peso: "1",
                     activo: false,
-                    objetos: {},
+                    entidades: {},
                   },
                 },
               },
@@ -123,18 +123,18 @@ export class mysql_connector {
             id: "Hospital",
             name: "Hospital",
             activo: true,
-            objects: {
+            entitys: {
               raiz_0: {
                 id: "raiz_0",
                 nombre: "raiz",
-                objetos: {
+                entidades: {
                   "2": {
                     id: "2",
                     nombre: "Entidad Hospital",
                     descripcion: "Descripcion del objeto del Hospital",
                     peso: "1",
                     activo: true,
-                    objetos: {},
+                    entidades: {},
                   },
                 },
               },
@@ -148,13 +148,13 @@ export class mysql_connector {
         tiene_entidades: true,
         activo: true,
         inactivo: true,
-        objects: { raiz_0: { id: "raiz_1", nombre: "raiz", objetos: {} } },
+        entitys: { raiz_0: { id: "raiz_1", nombre: "raiz", entidades: {} } },
         entity: [
           {
             id: "Nodos Computacion",
             name: "Nodos Computacion",
             activo: false,
-            objects: {
+            entitys: {
               raiz_0: {
                 id: "raiz_1",
                 nombre: "raiz",
@@ -175,18 +175,18 @@ export class mysql_connector {
             id: "Nodos Edge",
             name: "Nodos Edge",
             activo: true,
-            objects: {
+            entitys: {
               raiz_0: {
                 id: "raiz_1",
                 nombre: "raiz",
-                objetos: {
+                entidades: {
                   "2": {
                     id: "2",
                     nombre: "Entidad Nodos Edge",
                     descripcion: "Descripcion del la entidad Nodos Edge",
                     peso: "1",
                     activo: true,
-                    objetos: {},
+                    entidades: {},
                   },
                 },
               },
@@ -200,24 +200,24 @@ export class mysql_connector {
           tiene_entidades: true,
           activo: true,
           inactivo: true,
-          objects: { raiz_0: { id: "raiz_2", nombre: "raiz", objetos: {} } },
+          entitys: { raiz_0: { id: "raiz_2", nombre: "raiz", entidades: {} } },
           entity: [
             {
               id: "Sensor",
               name: "Sensor",
               activo: false,
-              objects: {
+              entitys: {
                 raiz_0: {
                   id: "raiz_2",
                   nombre: "raiz",
-                  objetos: {
+                  entidades: {
                     "1": {
                       id: "1",
                       nombre: "Entidad Sensor",
                       descripcion: "descripcion de la entidad Sensor",
                       peso: "1",
                       activo: false,
-                      objetos: {},
+                      entidades: {},
                     },
                   },
                 },
@@ -227,18 +227,18 @@ export class mysql_connector {
               id: "Actuador",
               name: "Actuador",
               activo: true,
-              objects: {
+              entitys: {
                 raiz_0: {
                   id: "raiz_2",
                   nombre: "raiz",
-                  objetos: {
+                  entidades: {
                     "2": {
                       id: "2",
                       nombre: "Entidad Actuador",
                       descripcion: "Descripcion del la entidad Actuador",
                       peso: "1",
                       activo: true,
-                      objetos: {},
+                      entidades: {},
                     },
                   },
                 },
@@ -248,18 +248,18 @@ export class mysql_connector {
               id: "Tag",
               name: "Tag",
               activo: true,
-              objects: {
+              entitys: {
                 raiz_0: {
                   id: "raiz_2",
                   nombre: "raiz",
-                  objetos: {
+                  entidades: {
                     "2": {
                       id: "2",
                       nombre: "Entidad Tag",
                       descripcion: "Descripcion del la entidad Tag",
                       peso: "1",
                       activo: true,
-                      objetos: {},
+                      entidades: {},
                     },
                   },
                 },
@@ -274,7 +274,7 @@ export class mysql_connector {
           tiene_entidades: true,
           activo: true,
           inactivo: true,
-          objects: { raiz_0: { id: "raiz_3", nombre: "raiz", objetos: {} } },
+          entitys: { raiz_0: { id: "raiz_3", nombre: "raiz", entidades: {} } },
         },
        
     ];
