@@ -227,3 +227,13 @@ export function last_ObjectSubjectID(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function last_EntityID(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session!.active_model.modelID;
+    var db = new database();
+    var index = db.getLastEntityID(id);
+    res.json({ id: index });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}

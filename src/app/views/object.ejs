@@ -1,19 +1,20 @@
 <%- include('parts/before_the_body'); %>
-<%- include('parts/sidebar_menu'); %>
+    <%- include('parts/sidebar_menu'); %>
 
-<div id="layoutSidenav_content">
-    <main id="object_page" class="container-fluid">
-        <h1 class="mt-4">Objetos de autoconsciencia</h1>
-        <br>
-        <%- include('parts/objects/SelectSubject'); %>
-        <br>
-        <%- include('parts/objects/CategoryEntities'); %>
-        <br>
-        <%- include('parts/objects/Available_Entities'); %>
-        <h2 class="mt-4">Aspectos de autoconsciencia</h2>
-        <br><br>
-        <%- include('parts/objects/Aspects_Self'); %>
-    </main>
-</div>
+        <div id="layoutSidenav_content">
+            <main id="object_page" class="container-fluid">
+                <h1 class="mt-4">Objetos de autoconsciencia</h1>
+                <br>
+                <%- include('parts/objects/SelectSubject'); %>
+                    <br>
+                    <%- include('parts/objects/CategoryEntities'); %>
+                        <br>
+                        <%- include('parts/objects/Available_Entities'); %>
+                            <%- include('parts/objects/modal/modal_Entity'); %>
+                                <h2 class="mt-4">Aspectos de autoconsciencia</h2>
+                                <br><br>
+                                <%- include('parts/objects/Aspects_Self'); %>
+            </main>
+        </div>
 
-<%- include('parts/after_the_body'); %>
+        <%- include('parts/after_the_body'); %>

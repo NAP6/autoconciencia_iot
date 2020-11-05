@@ -515,6 +515,10 @@ public updUser_criteriaDecision(
     console.log(`############# Entra en getLastObjectID y envia ${modelID}`);
     return Math.floor(Math.random() * 600000);
   }
+  public getLastEntityID(modelID: string): number {
+    console.log(`############# Entra en getLastEntityID y envia ${modelID}`);
+    return Math.floor(Math.random() * 600000);
+  }
 
   // La atributo variable no existe, solo le pusimos para probar
   private modelo = {

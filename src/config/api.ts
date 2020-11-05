@@ -20,5 +20,6 @@ export default function (app: Application) {
   app.post("/api/upd_decision_criteria/", api.upd_decision_criteria);
   app.get("/api/user_models/", api.user_models);
   app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
+  app.get("/api/last_EntityID/", api.last_EntityID);
   app.get("/api/", api.home);
 };

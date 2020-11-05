@@ -47,7 +47,8 @@ if (document.getElementById("lista_sujetos_para_cargar"))
     consultar_api(
         "http://localhost:3000/api/subjects",
         cargar_posibles_sujetos_modelo,
-        error_cargar_posibles_sujetos_modelo
+        error_cargar_posibles_sujetos_modelo,
+
     );
 
 function cargar_posibles_sujetos_modelo(json) {
@@ -348,6 +349,7 @@ function abrirModalObjetosSujetos(id) {
     var nombre = document.getElementById("nombreSujetoObjetoActivo");
     nombre.innerHTML = objetosde_Sujetos_aux[id]["name"];
     var arbol = document.getElementById("arbol_objetivos_del_sujeto");
+    alert(objetosde_Sujetos_aux[id]["objetos"]);
     arbol.innerHTML = generar_arbol_obejetosde_sujeto(
         objetosde_Sujetos_aux[id]["objetos"]
     );
@@ -618,6 +620,7 @@ function modificarUnidadMedida() {
         $("#modal_modificar_unidadMedida").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
+
 
 function guardarModificacionMedida() {
     var data = {
@@ -1106,9 +1109,9 @@ function cargar_modelos_trabajo_actual(json) {
 function error_cargar_models_trabajo_actual(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
+var entidades_list = [];
+var entidades_aux = {};
 
-var entidades_aux = [];
-var entidades = {};
 if (document.getElementById("lista_entidades_para_cargar"))
     consultar_api(
         "http://localhost:3000/api/entity",
@@ -1121,12 +1124,12 @@ function cargar_posibles_entidades_modelo(json) {
     var seleccionados = document.getElementById("lista_entidades_seleccionados");
     var contenido_carga = "";
     var contenido_seleccion = "";
-    objetosde_Sujetos = json;
+    entidades_list = json;
     json.forEach((element) => {
         entidades_aux[element["id"]] = {
             id: element["id"],
             name: element["name"],
-            objetos: element["objects"],
+            entidades: element["entitys"],
         };
         contenido_carga +=
             "<li " +
@@ -1162,7 +1165,7 @@ function cargar_posibles_entidades_modelo(json) {
             '"><label class="form-check-label" for="entidad_seleccionado_' +
             element["id"] +
             '">' +
-            "<button class='btn-entidadLinkObjetivos' onclick='abrirModalObjetosEntidad(\"" +
+            "<button class='btn-entidadLinkObjetivos btn btn-link' onclick='abrirModalEntidad(\"" +
             element["id"] +
             "\")'>" +
             element["name"] +
@@ -1172,10 +1175,10 @@ function cargar_posibles_entidades_modelo(json) {
             contenido_carga += "<ul>";
             contenido_seleccion += "<ul>";
             element["entity"].forEach((entity) => {
-                objetosde_Sujetos_aux[entity["id"]] = {
+                entidades_aux[entity["id"]] = {
                     id: entity["id"],
                     name: entity["name"],
-                    objetos: entity["objects"],
+                    entidades: entity["entitys"],
                 };
                 contenido_carga +=
                     "<li " +
@@ -1215,7 +1218,7 @@ function cargar_posibles_entidades_modelo(json) {
                     '"><label class="form-check-label" for="entidad_seleccionado_' +
                     entity["id"] +
                     '">' +
-                    "<button class='btn-entidadLinkObjetivos' onclick='abrirModalEntidad(\"" +
+                    "<button class='btn-entidadLinkObjetivos btn btn-link' onclick='abrirModalEntidad(\"" +
                     entity["id"] +
                     "\")'>" +
                     entity["name"] +
@@ -1367,7 +1370,7 @@ function extraer_datos_entidad() {
                 id: id_h,
                 name: name_h,
                 activo: activo_h,
-                objects: entidades_aux[id_h].entidad,
+                entities: entidades_aux[id_h].entidades,
             };
             list_ent_h.push(obj_hijos);
         });
@@ -1379,8 +1382,8 @@ function extraer_datos_entidad() {
                 activo: activo,
                 inactivo: inactivo,
                 tiene_entidades: true,
-                objects: entidades_aux[id].entidad,
-                subSystem: list_ent_h,
+                entities: entidades_aux[id].entidades,
+                entity: list_ent_h,
             };
         } else {
             aux_ent = {
@@ -1388,8 +1391,8 @@ function extraer_datos_entidad() {
                 name: name,
                 activo: activo,
                 inactivo: inactivo,
-                tiene_subsistemas: false,
-                objects: entidades_aux[id].entidad,
+                tiene_entidades: false,
+                entities: entidades_aux[id].entidades,
             };
         }
         new_ent.push(aux_ent);
@@ -1403,30 +1406,40 @@ function extraer_datos_entidad() {
 		y todas las funciones que impliquen la creacion de las entidades que tienen los sujetos
     
 */
-
-var Entidad_activoID;
+var entidad_activoID;
 var id_EntidadPadre_agregar;
 
 function abrirModalEntidad(id) {
-    $("#objetosde_sujetoModal").modal("show");
-    objetosde_Sujetos_activoID = id;
-    var nombre = document.getElementById("nombreSujetoObjetoActivo");
-    nombre.innerHTML = objetosde_Sujetos_aux[id]["name"];
-    var arbol = document.getElementById("arbol_objetivos_del_sujeto");
-    arbol.innerHTML = generar_arbol_obejetosde_sujeto(
-        objetosde_Sujetos_aux[id]["objetos"]
-    );
-    var elemRaiz = document.getElementById("raiz_0");
-    elemRaiz.checked = true;
-    desactivarFormularioAgregarObjeto();
+    try {
+        $("#modal_agregar_entidad").modal("show");
+        entidad_activoID = id;
+        var nombre = document.getElementById("nombreEntidadActiva");
+        nombre.innerHTML = entidades_aux[id]["name"];
+        var arbol = document.getElementById("arbol_objetivos_de_entidad");
+        alert(entidades_aux[id]["entidades"]);
+        arbol.innerHTML = generar_arbol_entidades(
+            entidades_aux[id]["entidades"]
+
+        );
+        var elemRaiz = document.getElementById("raiz_0");
+        elemRaiz.checked = true;
+        desactivarFormularioAgregarEntidad();
+    } catch (error) {
+        alert(error);
+    }
 }
 
-function generar_arbol_obejetosde_sujeto(lista) {
+function generar_arbol_entidades(lista) {
+
     var strlista = "<ul>";
+
     Object.entries(lista).forEach(([key, value]) => {
-        strlista += `<li><input class="form-check-input" type='radio' value='${key}' name='objetosde_Sujetos_imputSelect' id='${key}'/><label class="form-check-label" for='${key}'>${value.nombre}</label>`;
-        if (Object.keys(value.objetos).length > 0) {
-            strlista += generar_arbol_obejetosde_sujeto(value.objetos);
+
+        strlista += `<li><input class="form-check-input" type='radio' value='${key}' name='Entidades_inputSelect' id='${key}'/><label class="form-check-label" for='${key}'>${value.nombre}</label>`;
+
+        if (Object.keys(value.entidades).length > 0) {
+            strlista += generar_arbol_entidades(value.entidades);
+
         }
         strlista += "</li>";
     });
@@ -1434,50 +1447,50 @@ function generar_arbol_obejetosde_sujeto(lista) {
     return strlista;
 }
 
-function activarFormularioAgregarObjeto() {
-    document.getElementById("nombreObjeto").disabled = false;
-    document.getElementById("descripcionObjeto").disabled = false;
-    document.getElementById("unidades_medida_seccion_sujetos").disabled = false;
-    document.getElementById("activoObjeto").disabled = false;
-    document.getElementById("btn-agregarObjetoLista").disabled = false;
-    var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+function activarFormularioAgregarEntidad() {
+    document.getElementById("nombreEntidad").disabled = false;
+    document.getElementById("descripcionEntidad").disabled = false;
+    document.getElementById("escalas_seccion_entidad").disabled = false;
+    document.getElementById("activoEntidad").disabled = false;
+    document.getElementById("btn-agregarEntidadLista").disabled = false;
+    var arbol = document.getElementsByName("Entidades_inputSelect");
     arbol.forEach((elem) => {
         elem.disabled = true;
     });
     consultar_api(
-        "http://localhost:3000/api/last_ObjectSubjectID/",
-        cargar_idNuevoObjeto,
-        error_cargar_idNuevoObjeto
+        "http://localhost:3000/api/last_EntityID/",
+        cargar_idNuevaEntidad,
+        error_cargar_idNuevaEntidad
     );
 }
 
-function desactivarFormularioAgregarObjeto() {
-    document.getElementById("nombreObjeto").disabled = true;
-    document.getElementById("descripcionObjeto").disabled = true;
-    document.getElementById("unidades_medida_seccion_sujetos").disabled = true;
-    document.getElementById("activoObjeto").disabled = true;
-    document.getElementById("btn-agregarObjetoLista").disabled = true;
-    document.getElementById("idObjeto").value = "";
-    document.getElementById("nombreObjeto").value = "";
-    document.getElementById("descripcionObjeto").value = "";
-    document.getElementById("unidades_medida_seccion_sujetos").value = "";
-    document.getElementById("activoObjeto").value = "";
-    var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+function desactivarFormularioAgregarEntidad() {
+    document.getElementById("nombreEntidad").disabled = true;
+    document.getElementById("descripcionEntidad").disabled = true;
+    document.getElementById("escalas_seccion_entidad").disabled = true;
+    document.getElementById("activoEntidad").disabled = true;
+    document.getElementById("btn-agregarEntidadLista").disabled = true;
+    document.getElementById("idEntidad").value = "";
+    document.getElementById("nombreEntidad").value = "";
+    document.getElementById("descripcionEntidad").value = "";
+    document.getElementById("escalas_seccion_entidad").value = "";
+    document.getElementById("activoEntidad").value = "";
+    var arbol = document.getElementsByName("Entidades_inputSelect");
     arbol.forEach((elem) => {
         elem.disabled = false;
     });
 }
 
-function eliminarObjetoLista() {
-    var idSeleccionado = getSelectedItemArbolObjetosSelected();
+function eliminarEntidadLista() {
+    var idSeleccionado = getSelectedItemArbolEntidadesSelected();
     if (idSeleccionado != "raiz_0") {
-        var objetos = objetosde_Sujetos_aux[objetosde_Sujetos_activoID].objetos;
-        objetosde_Sujetos_aux[
-            objetosde_Sujetos_activoID
-        ].objetos = remover_objetode_sujeto_objID(idSeleccionado, objetos);
-        var arbol = document.getElementById("arbol_objetivos_del_sujeto");
-        arbol.innerHTML = generar_arbol_obejetosde_sujeto(
-            objetosde_Sujetos_aux[objetosde_Sujetos_activoID]["objetos"]
+        var entidades = entidades_aux[entidad_activoID].entidades;
+        entidades_aux[
+            entidad_activoID
+        ].entidades = remover_entidad_entID(idSeleccionado, entidades);
+        var arbol = document.getElementById("arbol_objetivos_de_entidad");
+        arbol.innerHTML = generar_arbol_entidades(
+            entidades_aux[entidad_activoID]["entidades"]
         );
         var elemRaiz = document.getElementById("raiz_0");
         elemRaiz.checked = true;
@@ -1487,41 +1500,41 @@ function eliminarObjetoLista() {
     }
 }
 
-function agregarObjetoLista() {
-    var id = document.getElementById("idObjeto").value;
-    var nombre = document.getElementById("nombreObjeto").value;
-    var descripcion = document.getElementById("descripcionObjeto").value;
-    var unidadMedida = document.getElementById("unidades_medida_seccion_sujetos")
+function agregarEntidadLista() {
+    var id = document.getElementById("idEntidad").value;
+    var nombre = document.getElementById("nombreEntidad").value;
+    var descripcion = document.getElementById("descripcionEntidad").value;
+    var tipo = document.getElementById("escalas_seccion_entidad")
         .value;
-    var activo = document.getElementById("activoObjeto").checked;
-    if (!!id && !!nombre && !!descripcion && !!unidadMedida) {
-        var objetos = objetosde_Sujetos_aux[objetosde_Sujetos_activoID].objetos;
-        var idSeleccionado = getSelectedItemArbolObjetosSelected();
-        var obj_aux = {
+    var activo = document.getElementById("activoEntidad").checked;
+    if (!!id && !!nombre && !!descripcion && !!tipo) {
+        var entidades = entidades_aux[entidad_activoID].entidades;
+        var idSeleccionado = getSelectedItemArbolEntidadesSelected();
+        var ent_aux = {
             id: id.toString(),
             nombre: nombre,
             descripcion: descripcion,
-            unidadMedida: unidadMedida,
+            tipo: tipo,
             activo: activo,
-            objetos: {},
+            entidades: {},
         };
-        objetosde_Sujetos_aux[
-            objetosde_Sujetos_activoID
-        ].objetos = agregar_objetode_sujeto_objID(idSeleccionado, obj_aux, objetos);
-        var arbol = document.getElementById("arbol_objetivos_del_sujeto");
-        arbol.innerHTML = generar_arbol_obejetosde_sujeto(
-            objetosde_Sujetos_aux[objetosde_Sujetos_activoID]["objetos"]
+        entidades_aux[
+            entidad_activoID
+        ].entidades = agregar_objetode_sujeto_objID(idSeleccionado, ent_aux, entidades);
+        var arbol = document.getElementById("arbol_objetivos_de_entidad");
+        arbol.innerHTML = generar_arbol_entidades(
+            entidades_aux[objetosde_Sujetos_activoID]["entidades"]
         );
         var elemRaiz = document.getElementById("raiz_0");
         elemRaiz.checked = true;
-        desactivarFormularioAgregarObjeto();
+        desactivarFormularioAgregarEntidad();
     } else {
         alert("Ingrese valores en todos los campos para poder agregar el Objeto");
     }
 }
 
-function getSelectedItemArbolObjetosSelected() {
-    var arbol = document.getElementsByName("objetosde_Sujetos_imputSelect");
+function getSelectedItemArbolEntidadesSelected() {
+    var arbol = document.getElementsByName("Entidades_inputSelect");
     var idSeleccionado = "raiz_0";
     arbol.forEach((elem) => {
         if (elem.checked) {
@@ -1535,33 +1548,154 @@ function getSelectedItemArbolObjetosSelected() {
 function agregar_objetode_sujeto_objID(id, objA, objList) {
     Object.entries(objList).forEach(([key, value]) => {
         if (value.id == id) {
-            value.objetos[objA.id] = objA;
+            value.entidades[objA.id] = objA;
             return;
         }
-        if (Object.keys(value.objetos).length > 0) {
-            value.objetos = agregar_objetode_sujeto_objID(id, objA, value.objetos);
+        if (Object.keys(value.entidades).length > 0) {
+            value.entidades = agregar_objetode_sujeto_objID(id, objA, value.entidades);
         }
     });
     return objList;
 }
 
-function remover_objetode_sujeto_objID(id, objList) {
-    Object.entries(objList).forEach(([key, value]) => {
+function remover_entidad_entID(id, entList) {
+    Object.entries(entList).forEach(([key, value]) => {
         if (value.id == id) {
-            delete objList[key];
+            delete entList[key];
             return;
         }
-        if (Object.keys(value.objetos).length > 0) {
-            value.objetos = remover_objetode_sujeto_objID(id, value.objetos);
+        if (Object.keys(value.entidades).length > 0) {
+            value.entidades = remover_entidad_entID(id, value.entidades);
         }
     });
-    return objList;
+    return entList;
 }
 
-function cargar_idNuevoObjeto(json) {
-    document.getElementById("idObjeto").value = json.id + 1;
+function cargar_idNuevaEntidad(json) {
+    document.getElementById("idEntidad").value = json.id + 1;
 }
 
-function error_cargar_idNuevoObjeto(err) {
+function error_cargar_idNuevaEntidad(err) {
     alert(`Error al cargar el ultimo ID ${err}`);
+}
+if (document.getElementById("lista_sujetosObjetos"))
+    consultar_api(
+        "http://localhost:3000/api/subjects",
+        cargar_posibles_sujetos,
+        error_cargar_posibles_sujetos,
+    );
+
+function cargar_posibles_sujetos(json) {
+    var seleccionados = document.getElementById("lista_sujetosObjetos");
+    var contenido_seleccion = "";
+    objetosde_Sujetos = json;
+    json.forEach((element) => {
+        objetosde_Sujetos_aux[element["id"]] = {
+            id: element["id"],
+            name: element["name"],
+            objetos: element["objects"],
+        };
+        contenido_seleccion +=
+            "<li " +
+            ' id=""><div><id="' +
+            element["id"] +
+            '" onclick="" data-puro_id="' +
+            element["id"] +
+            '" data-puro_name="' +
+            element["name"] +
+            '" data-oculto="' +
+            !element["activo"] +
+            '"><label class="form-check-label" for="">' +
+            "<button class='btn-sujetoLinkObjetivos btn btn-light' onclick=''>" +
+            element["name"] +
+            "</button>" +
+            "</label></div>";
+        if (element["subSystem"]) {
+            contenido_seleccion += "<ul>";
+            element["subSystem"].forEach((subSystem) => {
+                objetosde_Sujetos_aux[subSystem["id"]] = {
+                    id: subSystem["id"],
+                    name: subSystem["name"],
+                    objetos: subSystem["objects"],
+                };
+                contenido_seleccion +=
+                    "<li " +
+                    ' id="visivilidad_sujetos_seleccionado_' +
+                    subSystem["id"] +
+                    '"><div class=""><' +
+                    element["id"] +
+                    '" id="sujetos_seleccionado_' +
+                    subSystem["id"] +
+                    '" onclick="" data-puro_id="' +
+                    subSystem["id"] +
+                    '" data-puro_name="' +
+                    subSystem["name"] +
+                    '" data-oculto="' +
+                    !subSystem["activo"] +
+                    '"><label class="" for="' +
+                    subSystem["id"] +
+                    '">' +
+                    "<button class='btn-sujetoLinkObjetivos btn btn-light' onclick=''>" +
+                    subSystem["name"] +
+                    "</button>" +
+                    "</label></div></li>";
+            });
+
+            contenido_seleccion += "</ul>";
+        }
+        contenido_seleccion += "</li>";
+    });
+
+    seleccionados.innerHTML = contenido_seleccion;
+}
+
+
+function error_cargar_posibles_sujetos(json) {
+    alert("Error al cargar los datos del modelo: " + error);
+}
+
+if (document.getElementById("Cargar_Lista_Entidades"))
+    consultar_api(
+        "http://localhost:3000/api/entity",
+        cargar_posibles_entidades_seleccion,
+        error_cargar_posibles_entidades_seleccion,
+    );
+
+function cargar_posibles_entidades_seleccion(json) {
+    var seleccionados = document.getElementById("Cargar_Lista_Entidades");
+    var contenido_seleccion = "";
+    entidades_list = json;
+    json.forEach((element) => {
+        entidades_aux[element["id"]] = {
+            id: element["id"],
+            name: element["name"],
+            entidades: element["entitys"],
+        };
+        contenido_seleccion +=
+            "<li " +
+            ' id="' +
+            element["id"] +
+            '"><div ' +
+            element["id"] +
+            '" onclick="" data-puro_id="' +
+            element["id"] +
+            '" data-puro_name="' +
+            element["name"] +
+            '" data-oculto="' +
+            !element["activo"] +
+            '"><label class="form-check-label" for="entidad_seleccionado_' +
+            element["id"] +
+            '">' +
+            "<button class='btn-EntidadSeleccionado btn btn-light' onclick=''>" +
+            element["name"] +
+            "</button>" +
+            "</label></div>";
+        contenido_seleccion += "</li>";
+    });
+    seleccionados.innerHTML = contenido_seleccion;
+}
+
+
+function error_cargar_posibles_entidades_seleccion(json) {
+    alert("Error al cargar los datos del modelo: " + error);
 }
