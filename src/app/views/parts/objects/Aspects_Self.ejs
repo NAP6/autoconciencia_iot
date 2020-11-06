@@ -1,20 +1,38 @@
 <h5></h5>
 Objeto:</h5>
-
+<br>
 <h5>Listado de aspectos de autoconsciencia:</h5>
 <br>
-<div class="row">
-    <div class="col-sm">
-        <button id="bt_add" class="btn btn-primary" data-toggle="modal" data-target="#modal_aspecto_add">Agregar</button>
-        <button id="bd_del" class="btn btn-primary">Eliminar</button>
-        <br><br>
-        <div class="list-group">
-            <button type="button" class="list-group-item list-group-item-action">Carga actual de la bateria del sensor DHT11</button>
-            <button type="button" class="list-group-item list-group-item-action">Eficencia en el consumo de energia de la bateria del sensor DHT11</button>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <button id="bt_add_aspecto" class="btn btn-primary" onclick="agregar_aspecto()">
+    Agregar
+  </button>
+            <button id="bd_mod_aspecto" class="btn btn-primary" onclick="modificar_aspecto()">
+    Modificar
+  </button>
+            <button id="bd_del_aspecto" class="btn btn-primary" onclick="eliminar_aspecto()">
+    Eliminar
+  </button>
         </div>
     </div>
-    <div class="col-sm">
-
+    <br />
+    <div class="row container">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla_aspectos"></tbody>
+            </table>
+        </div>
     </div>
+    <br />
 </div>
 <%- include('../objects/modal/modal_objects_add'); %>
+    <%- include('../objects/modal/modal_objects_mod'); %>

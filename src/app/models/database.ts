@@ -518,7 +518,48 @@ public updUser_criteriaDecision(
       `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}`
     );
   }
+  public getUser_Aspects(userID: string): object {
+    console.log(
+      `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
+    );
+    return [
+      {
+        id: "1",
+        descripcion: "Carga actual de la bateria del sensor DHT11",
+      },
+      {
+        id: "2",
+        descripcion: "Eficencia en el consumo de energia de la bateria del sensor DHT11",
+      },
+    ];
+  }
 
+  public addUser_aspects(
+    idUser: string,
+    descripcion: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'addUser_aspects' el id de usuario '${idUser},descripcion: ${descripcion}`
+    );
+  }
+
+public delUser_aspects(
+    idUser: string,
+    id: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'delUser_aspects' el id de usuario '${idUser}, id: ${id}`
+    );
+  }
+public updUser_aspects(
+    idUser: string,
+    id: string,
+    descripcion: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'updUser_aspects' el id de usuario '${idUser}, id: ${id}, descripcion: ${descripcion}`
+    );
+  }
   public getLastObjectSubjectID(modelID: string): number {
     console.log(`############# Entra en getLastObjectID y envia ${modelID}`);
     return Math.floor(Math.random() * 600000);

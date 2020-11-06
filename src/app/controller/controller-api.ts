@@ -198,6 +198,52 @@ export function upd_decision_criteria(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function aspects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    res.json(db.getUser_Aspects(id));
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function add_aspects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var descripcion = req.body.descripcion;
+    var db = new database();
+    db.addUser_aspects(idUser,descripcion);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_aspects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var idDecision = req.body.id;
+    var db = new database();
+    db.delUser_aspects(idUser, idDecision);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function upd_aspects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id = req.body.id;
+    var descripcion = req.body.descripcion;
+    
+    var db = new database();
+    db.updUser_aspects(idUser, id, descripcion);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {

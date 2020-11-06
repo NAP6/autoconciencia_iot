@@ -349,7 +349,6 @@ function abrirModalObjetosSujetos(id) {
     var nombre = document.getElementById("nombreSujetoObjetoActivo");
     nombre.innerHTML = objetosde_Sujetos_aux[id]["name"];
     var arbol = document.getElementById("arbol_objetivos_del_sujeto");
-    alert(objetosde_Sujetos_aux[id]["objetos"]);
     arbol.innerHTML = generar_arbol_obejetosde_sujeto(
         objetosde_Sujetos_aux[id]["objetos"]
     );
@@ -1002,6 +1001,117 @@ function mensaje_errorEnvioDecisionCriteria(err) {
 		error_cargar_criterios_table
 */
 
+
+/*Botones para los aspectos Ingresar Modificar y Eliminar*/
+function agregar_aspecto() {
+    $("#modal_aspecto_add").modal("show");
+}
+
+function guardarNuevoAspecto() {
+    var data = {
+        descripcion: document.getElementById("input-descripton-aspect-add").value,
+    };
+    console.log(data);
+    if (!!data.descripcion) {
+        post_api(
+            "http://localhost:3000/api/add_aspects/",
+            data,
+            mensaje_exitoEnvioAspects,
+            mensaje_errorEnvioAspects
+        );
+        consultar_api(
+            "http://localhost:3000/api/aspects",
+            cargar_aspectos_table,
+            error_cargar_aspectos_table
+        );
+        $("#modal_aspecto_add").modal("hide");
+    } else alert("Ingrese todos los campos del formulario");
+}
+
+function eliminar_aspecto() {
+    var radio = document.getElementsByName("aspecto_seleccionado");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        console.log(data);
+        post_api(
+            "http://localhost:3000/api/del_aspects/",
+            data,
+            mensaje_exitoEnvioAspects,
+            mensaje_errorEnvioAspects
+        );
+        consultar_api(
+            "http://localhost:3000/api/aspects",
+            cargar_aspectos_table, error_cargar_aspectos_table
+        );
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificar_aspecto() {
+    try {
+        var radio = document.getElementsByName("aspecto_seleccionado");
+        var id;
+        var descripcion;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.value;
+                descripcion = elem.dataset.descripcion;
+                return;
+            }
+        });
+
+        if (!!id && !!descripcion) {
+            document.getElementById("input-id-aspecto-mod").value = id;
+            document.getElementById("input-descripton-aspect-mod").value = descripcion;
+
+            $("#modal_modificar_aspecto").modal("show");
+        } else alert("Seleccione el Elemento");
+
+    } catch (error) {
+        alert(error);
+    }
+
+}
+
+function guardarModificacionAspecto() {
+    var data = {
+        id: document.getElementById("input-id-aspecto-mod").value,
+        descripcion: document.getElementById("input-descripton-aspect-mod").value,
+    };
+    if (!!data.id && !!data.descripcion) {
+        post_api(
+            "http://localhost:3000/api/upd_aspects/",
+            data,
+            mensaje_exitoEnvioAspects,
+            mensaje_errorEnvioAspects
+
+        );
+        consultar_api(
+            "http://localhost:3000/api/aspects",
+            cargar_aspectos_table,
+            error_cargar_aspectos_table
+        );
+
+        $("#modal_modificar_aspecto").modal("hide");
+    } else alert("Debe debe completar todos los campos");
+}
+
+function mensaje_exitoEnvioAspects(json) {
+    alert(json.mensaje);
+}
+
+function mensaje_errorEnvioAspects(err) {
+    alert(err);
+}
+
 if (document.getElementById("tabla_criterios_decision"))
     consultar_api(
         "http://localhost:3000/api/decision_criteria",
@@ -1027,6 +1137,43 @@ function cargar_criterios_table(json) {
 }
 
 function error_cargar_criterios_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+/* 
+    SECCION CARGAR ASPECTOS AUTOCONSCIENCIA
+
+        Descripcion:
+		Esta seccion contiene las funciones de que carga los criterios de decision
+
+        Incluye:
+		cargar_criterios_table
+		error_cargar_criterios_table
+*/
+
+if (document.getElementById("tabla_aspectos"))
+    consultar_api(
+        "http://localhost:3000/api/aspects",
+        cargar_aspectos_table,
+        error_cargar_aspectos_table
+    );
+
+function cargar_aspectos_table(json) {
+    res = "";
+    json.forEach((as) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="aspecto_seleccionado" value="${as.id}" data-descripcion="${as.descripcion}"></td>`;
+        res += `<td>${as.id}</td>`;
+        res += `<td>${as.descripcion}</td>`;
+
+        if (as.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_aspectos").innerHTML = res;
+}
+
+function error_cargar_aspectos_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
 
@@ -1435,7 +1582,7 @@ function abrirModalEntidad(id) {
     try {
         $("#modal_agregar_entidad").modal("show");
         entidad_activoID = id;
-        alert(id);
+
         var nombre = document.getElementById("nombreEntidadActiva");
         nombre.innerHTML = entidades_aux[id]["name"];
         var arbol = document.getElementById("arbol_objetivos_de_entidad");
