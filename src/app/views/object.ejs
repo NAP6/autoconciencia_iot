@@ -3,7 +3,19 @@
 
         <div id="layoutSidenav_content">
             <main id="object_page" class="container-fluid">
-                <h1 class="mt-4">Objetos de autoconsciencia</h1>
+                <div class="row justify-content-between">
+                    <div class="col-5">
+                        <h1 class="mt-3">Objetos de autoconsciencia</h1>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="mt-4">Modelo:
+                            <%- session.active_model.nombre %>
+                        </h3>
+                    </div>
+                </div>
+
+
+
                 <br>
                 <%- include('parts/objects/SelectSubject'); %>
                     <br>

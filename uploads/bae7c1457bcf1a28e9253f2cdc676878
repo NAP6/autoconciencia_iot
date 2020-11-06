@@ -1,0 +1,486 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.5
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Nov 06, 2020 at 02:24 AM
+-- Server version: 5.7.26
+-- PHP Version: 7.2.18
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+Database: `db_autocosciencia`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accion`
+--
+CREATE TABLE IF NOT EXISTS `accion` (
+  `acc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `acc_descripcion` varchar(100) DEFAULT NULL,
+  `umb_id` int(11) DEFAULT NULL,
+  `acc_nombre` varchar(30) DEFAULT NULL,
+  `acc_activo` int(11) DEFAULT NULL,
+  `mea_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`acc_id`),
+  KEY `R_57` (`umb_id`),
+  KEY `R_39` (`mea_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `aspectoautoconsciencia`
+--
+CREATE TABLE IF NOT EXISTS `aspectoautoconsciencia` (
+  `aa_id` int(11) NOT NULL AUTO_INCREMENT,
+  `aa_nombre` varchar(30) DEFAULT NULL,
+  `aa_descripcion` varchar(100) DEFAULT NULL,
+  `aa_alcance` blob,
+  `aa_tipo` int(11) DEFAULT NULL,
+  `obj_id` int(11) DEFAULT NULL,
+  `aa_activo` int(11) DEFAULT NULL,
+  `obj_tipo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`aa_id`),
+  KEY `R_41` (`obj_id`,`obj_tipo`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `criteriodecision`
+--
+
+CREATE TABLE IF NOT EXISTS `criteriodecision` (
+  `cd_id` int(11) NOT NULL AUTO_INCREMENT,
+  `cd_nombre` varchar(30) DEFAULT NULL,
+  `cd_descripcion` varchar(100) DEFAULT NULL,
+  `cd_activo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`cd_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `enumeracion`
+--
+
+CREATE TABLE IF NOT EXISTS `enumeracion` (
+  `enu_id` int(11) NOT NULL AUTO_INCREMENT,
+  `enu_nombre_enumeracion` varchar(30) DEFAULT NULL,
+  `enu_nombre_valor` varchar(30) DEFAULT NULL,
+  `enu_valor` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`enu_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `enumeracion`
+--
+
+INSERT INTO `enumeracion` (`enu_id`, `enu_nombre_enumeracion`, `enu_nombre_valor`, `enu_valor`) VALUES
+(1, 'Tipo escala', 'Ordinal', '1'),
+(2, 'Tipo escala', 'Nominal', '2'),
+(3, 'Tipo escala', 'Rango', '3'),
+(4, 'Tipo escala', 'Ratio', '4'),
+(5, 'Tipo metrica', 'Directa', '1'),
+(6, 'Tipo metrica', 'Indirecta', '2'),
+(7, 'Tipo metrica', 'Indicador', '3'),
+(8, 'Tipo activo', 'Activo', '1'),
+(9, 'Tipo activo', 'Inactivo', '2');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `escala`
+
+CREATE TABLE IF NOT EXISTS `escala` (
+  `esc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `esc_nombre` varchar(30) DEFAULT NULL,
+  `esc_valor_valido` varchar(20) DEFAULT NULL,
+  `esc_tipo` int(11) DEFAULT NULL,
+  `esc_activo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`esc_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `formula`
+
+CREATE TABLE IF NOT EXISTS `formula` (
+  `for_expresion` varchar(100) DEFAULT NULL,
+  `ri_id` int(11) NOT NULL,
+  PRIMARY KEY (`ri_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `funcion`
+--
+
+CREATE TABLE IF NOT EXISTS `funcion` (
+  `fun_path` varchar(100) DEFAULT NULL,
+  `fun_instrucciones` varchar(100) DEFAULT NULL,
+  `ri_id` int(11) NOT NULL,
+  PRIMARY KEY (`ri_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ma_metricatoparametro`
+--
+
+
+CREATE TABLE IF NOT EXISTS `ma_metricatoparametro` (
+  `met_id` int(11) NOT NULL,
+  `par_ordinal` int(11) NOT NULL,
+  `ri_id` int(11) NOT NULL,
+  `mea_id` int(11) NOT NULL,
+  PRIMARY KEY (`ri_id`,`par_ordinal`,`mea_id`),
+  KEY `R_93` (`met_id`),
+  KEY `R_95` (`par_ordinal`,`ri_id`),
+  KEY `R_98` (`mea_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `mc_valorsimulaciontoparametro`
+--
+
+CREATE TABLE IF NOT EXISTS `mc_valorsimulaciontoparametro` (
+  `par_ordinal` int(11) NOT NULL,
+  `ri_id` int(11) NOT NULL,
+  `sv_id` int(11) DEFAULT NULL,
+  `mea_id` int(11) NOT NULL,
+  PRIMARY KEY (`ri_id`,`par_ordinal`,`mea_id`),
+  KEY `R_81` (`par_ordinal`,`ri_id`),
+  KEY `R_86` (`sv_id`),
+  KEY `R_99` (`mea_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `metodoaprendizajerazonamiento`
+--
+
+
+CREATE TABLE IF NOT EXISTS `metodoaprendizajerazonamiento` (
+  `mea_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pa_id` int(11) DEFAULT NULL,
+  `mea_nombre` varchar(30) DEFAULT NULL,
+  `mea_descripcion` varchar(100) DEFAULT NULL,
+  `mea_tipo` int(11) DEFAULT NULL,
+  `mea_activo` int(11) DEFAULT NULL,
+  `met_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`mea_id`),
+  KEY `R_88` (`pa_id`),
+  KEY `R_92` (`met_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `metodocalculo`
+
+CREATE TABLE IF NOT EXISTS `metodocalculo` (
+  `mc_tipo` int(11) DEFAULT NULL,
+  `mea_id` int(11) NOT NULL,
+  `mc_inicio_periodo` char(18) DEFAULT NULL,
+  `mc_fin_periodo` char(18) DEFAULT NULL,
+  PRIMARY KEY (`mea_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `metodorecoleccion`
+--
+
+
+CREATE TABLE IF NOT EXISTS `metodorecoleccion` (
+  `mr_tipo` int(11) DEFAULT NULL,
+  `pro_id` int(11) DEFAULT NULL,
+  `pro_tipo` int(11) DEFAULT NULL,
+  `mea_id` int(11) NOT NULL,
+  PRIMARY KEY (`mea_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `metrica`
+--
+
+CREATE TABLE IF NOT EXISTS `metrica` (
+  `met_id` int(11) NOT NULL AUTO_INCREMENT,
+  `met_nombre` varchar(30) DEFAULT NULL,
+  `met_descripcion` varchar(100) DEFAULT NULL,
+  `met_abreviacion` varchar(20) DEFAULT NULL,
+  `aa_id` int(11) DEFAULT NULL,
+  `esc_id` int(11) DEFAULT NULL,
+  `um_id` int(11) DEFAULT NULL,
+  `met_activo` int(11) DEFAULT NULL,
+  `met_tipo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`met_id`),
+  KEY `R_21` (`aa_id`),
+  KEY `R_42` (`esc_id`),
+  KEY `R_43` (`um_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `modeloanalisis`
+--
+
+CREATE TABLE IF NOT EXISTS `modeloanalisis` (
+  `ma_tipo` int(11) DEFAULT NULL,
+  `cd_id` int(11) DEFAULT NULL,
+  `mea_id` int(11) NOT NULL,
+  PRIMARY KEY (`mea_id`),
+  KEY `R_52` (`cd_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `modeloautoconsciencia`
+--
+
+DROP TABLE IF EXISTS `modeloautoconsciencia`;
+CREATE TABLE IF NOT EXISTS `modeloautoconsciencia` (
+  `ma_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ma_nombre` varchar(30) DEFAULT NULL,
+  `ma_descripcion` varchar(100) DEFAULT NULL,
+  `ma_autor` varchar(30) DEFAULT NULL,
+  `ma_activo` int(11) DEFAULT NULL,
+  `ma_modelo_arquitectura` json DEFAULT NULL,
+  `usr_id` int(11) NOT NULL,
+  PRIMARY KEY (`ma_id`),
+  KEY `R_101` (`usr_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `objetivo`
+--
+
+
+CREATE TABLE IF NOT EXISTS `objetivo` (
+  `obj_id` int(11) NOT NULL AUTO_INCREMENT,
+  `obj_nombre` varchar(30) DEFAULT NULL,
+  `obj_descripcion` varchar(100) DEFAULT NULL,
+  `obj_peso` int(11) DEFAULT NULL,
+  `obj_operacion_agregacion` varchar(50) DEFAULT NULL,
+  `cd_id` int(11) DEFAULT NULL,
+  `suj_id` int(11) DEFAULT NULL,
+  `obj_activo` int(11) DEFAULT NULL,
+  `obj_id_padre` int(11) DEFAULT NULL,
+  PRIMARY KEY (`obj_id`),
+  KEY `R_53` (`cd_id`),
+  KEY `R_12` (`suj_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `objeto`
+
+CREATE TABLE IF NOT EXISTS `objeto` (
+  `ma_id` int(11) DEFAULT NULL,
+  `obj_id` int(11) NOT NULL AUTO_INCREMENT,
+  `obj_activo` int(11) DEFAULT NULL,
+  `obj_tipo` int(11) NOT NULL,
+  PRIMARY KEY (`obj_id`,`obj_tipo`),
+  KEY `R_25` (`ma_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `parametro`
+--
+
+
+CREATE TABLE IF NOT EXISTS `parametro` (
+  `par_ordinal` int(11) NOT NULL,
+  `par_opcional` blob,
+  `par_activo` int(11) DEFAULT NULL,
+  `par_tipo_dato` char(18) DEFAULT NULL,
+  `ri_id` int(11) NOT NULL,
+  PRIMARY KEY (`par_ordinal`,`ri_id`),
+  KEY `R_77` (`ri_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `procesoautoconsciencia`
+
+CREATE TABLE IF NOT EXISTS `procesoautoconsciencia` (
+  `pa_id` int(11) NOT NULL AUTO_INCREMENT,
+  `pa_inico_periodo` date DEFAULT NULL,
+  `pa_fin_periodo` date DEFAULT NULL,
+  `pa_activo` int(11) DEFAULT NULL,
+  `aa_id` int(11) DEFAULT NULL,
+  `suj_id` int(11) DEFAULT NULL,
+  `pa_tipo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`pa_id`),
+  KEY `R_40` (`aa_id`),
+  KEY `R_15` (`suj_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `recursoimplementacion`
+--
+
+
+CREATE TABLE IF NOT EXISTS `recursoimplementacion` (
+  `ri_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ri_nombre` varchar(30) DEFAULT NULL,
+  `ri_descripcion` varchar(100) DEFAULT NULL,
+  `ri_tipo_dato_salida` int(11) DEFAULT NULL,
+  `ri_activo` int(11) DEFAULT NULL,
+  `ri_tipo_recurso` int(11) DEFAULT NULL,
+  PRIMARY KEY (`ri_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `servicio`
+--
+
+CREATE TABLE IF NOT EXISTS `servicio` (
+  `ser_punto_final` varchar(30) DEFAULT NULL,
+  `ser_instrucciones` varchar(50) DEFAULT NULL,
+  `ser_tipo_formato_dato_salida` varchar(50) DEFAULT NULL,
+  `ri_id` int(11) NOT NULL,
+  PRIMARY KEY (`ri_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `simulacionescenario`
+--
+
+CREATE TABLE IF NOT EXISTS `simulacionescenario` (
+  `se_id` int(11) NOT NULL AUTO_INCREMENT,
+  `se_nombre` varchar(30) DEFAULT NULL,
+  `se_descripcion` varchar(100) DEFAULT NULL,
+  `se_activo` int(11) DEFAULT NULL,
+  `mea_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`se_id`),
+  KEY `R_63` (`mea_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `simulacionvalores`
+--
+
+
+CREATE TABLE IF NOT EXISTS `simulacionvalores` (
+  `sv_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sv_valor` int(11) DEFAULT NULL,
+  `sv_activo` int(11) DEFAULT NULL,
+  `se_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`sv_id`),
+  KEY `R_64` (`se_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sujeto`
+--
+
+CREATE TABLE IF NOT EXISTS `sujeto` (
+  `ma_id` int(11) DEFAULT NULL,
+  `suj_id` int(11) NOT NULL AUTO_INCREMENT,
+  `suj_activo` blob,
+  `suj_id_padre` int(11) DEFAULT NULL,
+  PRIMARY KEY (`suj_id`),
+  KEY `R_17` (`ma_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `umbral`
+--
+
+CREATE TABLE IF NOT EXISTS `umbral` (
+  `umb_id` int(11) NOT NULL AUTO_INCREMENT,
+  `umb_nombre` varchar(30) DEFAULT NULL,
+  `umb_interpretacion` varchar(100) DEFAULT NULL,
+  `umb_inferior` int(11) DEFAULT NULL,
+  `umb_superior` int(11) DEFAULT NULL,
+  `cd_id` int(11) DEFAULT NULL,
+  `umb_activo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`umb_id`),
+  KEY `R_51` (`cd_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `unidadmedicion`
+--
+
+CREATE TABLE IF NOT EXISTS `unidadmedicion` (
+  `um_id` int(11) NOT NULL AUTO_INCREMENT,
+  `um_nombre` varchar(30) DEFAULT NULL,
+  `um_descripcion` varchar(100) DEFAULT NULL,
+  `um_acronimo` varchar(30) DEFAULT NULL,
+  `um_activo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`um_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `usuario`
+--
+
+CREATE TABLE IF NOT EXISTS `usuario` (
+  `usr_id` int(11) NOT NULL AUTO_INCREMENT,
+  `usr_nombre` varchar(50) DEFAULT NULL,
+  `usr_descripcion` varchar(100) DEFAULT NULL,
+  `usr_correo` varchar(50) DEFAULT NULL,
+  `usr_password` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`usr_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `usuario`
+--
+
+INSERT INTO `usuario` (`usr_id`, `usr_nombre`, `usr_descripcion`, `usr_correo`, `usr_password`) VALUES
+(1, 'Diego Bonifaz', 'Administrador', 'diego.b1205@hotmail.com', 'mishijos.0828');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

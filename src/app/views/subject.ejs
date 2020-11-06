@@ -1,12 +1,22 @@
 <%- include('parts/before_the_body'); %>
-<%- include('parts/sidebar_menu'); %>
+    <%- include('parts/sidebar_menu'); %>
 
-<div id="layoutSidenav_content">
-    <main id="subject_page" class="container-fluid">
-        <h1 class="mt-4">Sujetos de autoconsciencia</h1>
-        <%- include('parts/subjects/subject_selection'); %>
-        <%- include('parts/subjects/modals/subject_objectives'); %>
-    </main>
-</div>
+        <div id="layoutSidenav_content">
+            <main id="subject_page" class="container-fluid">
+                <div class="row justify-content-between">
+                    <div class="col-5">
+                        <h1 class="mt-4">Sujetos de autoconsciencia</h1>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="mt-4">Modelo:
+                            <%- session.active_model.nombre %>
+                        </h3>
+                    </div>
+                </div>
+                <br>
+                <%- include('parts/subjects/subject_selection'); %>
+                    <%- include('parts/subjects/modals/subject_objectives'); %>
+            </main>
+        </div>
 
-<%- include('parts/after_the_body'); %>
+        <%- include('parts/after_the_body'); %>

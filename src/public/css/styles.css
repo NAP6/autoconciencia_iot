@@ -10300,7 +10300,7 @@ body {
 }
 
 .sb-sidenav-dark {
-    background-color: #212529;
+    background-color: #34495E;
     color: rgba(255, 255, 255, 0.5);
 }
 
@@ -10333,7 +10333,7 @@ body {
 }
 
 .sb-sidenav-dark .sb-sidenav-footer {
-    background-color: #343a40;
+    background-color: #34495E;
 }
 
 .sb-sidenav-light {

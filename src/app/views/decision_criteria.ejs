@@ -1,12 +1,23 @@
 <%- include('parts/before_the_body'); %>
-<%- include('parts/sidebar_menu'); %>
+    <%- include('parts/sidebar_menu'); %>
 
-<div id="layoutSidenav_content">
-    <main id="decision_criteria_page" class="container-fluid">
-        <h1 class="mt-4">Criterios Decisión</h1>
-        <br>
-        <%- include('parts/decision_criteria/table'); %>
-    </main>
-</div>
+        <div id="layoutSidenav_content">
+            <main id="decision_criteria_page" class="container-fluid">
 
-<%- include('parts/after_the_body'); %>
+                <div class="row justify-content-between">
+                    <div class="col-5">
+                        <h1 class="mt-4">Criterios Decisión</h1>
+                    </div>
+                    <div class="col-3">
+                        <h3 class="mt-4">Modelo:
+                            <%- session.active_model.nombre %>
+                        </h3>
+                    </div>
+                </div>
+
+                <br>
+                <%- include('parts/decision_criteria/table'); %>
+            </main>
+        </div>
+
+        <%- include('parts/after_the_body'); %>

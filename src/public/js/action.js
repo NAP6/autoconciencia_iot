@@ -1435,6 +1435,7 @@ function abrirModalEntidad(id) {
     try {
         $("#modal_agregar_entidad").modal("show");
         entidad_activoID = id;
+        alert(id);
         var nombre = document.getElementById("nombreEntidadActiva");
         nombre.innerHTML = entidades_aux[id]["name"];
         var arbol = document.getElementById("arbol_objetivos_de_entidad");
@@ -1471,9 +1472,11 @@ function generar_arbol_entidades(lista) {
 function activarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").disabled = false;
     document.getElementById("descripcionEntidad").disabled = false;
+    document.getElementById("AlcanceEntidad").disabled = false;
     document.getElementById("escalas_seccion_entidad").disabled = false;
     document.getElementById("activoEntidad").disabled = false;
     document.getElementById("btn-agregarEntidadLista").disabled = false;
+
     var arbol = document.getElementsByName("Entidades_inputSelect");
     arbol.forEach((elem) => {
         elem.disabled = true;
@@ -1488,12 +1491,14 @@ function activarFormularioAgregarEntidad() {
 function desactivarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").disabled = true;
     document.getElementById("descripcionEntidad").disabled = true;
+    document.getElementById("AlcanceEntidad").disabled = true;
     document.getElementById("escalas_seccion_entidad").disabled = true;
     document.getElementById("activoEntidad").disabled = true;
     document.getElementById("btn-agregarEntidadLista").disabled = true;
     document.getElementById("idEntidad").value = "";
     document.getElementById("nombreEntidad").value = "";
     document.getElementById("descripcionEntidad").value = "";
+    document.getElementById("AlcanceEntidad").value = "";
     document.getElementById("escalas_seccion_entidad").value = "";
     document.getElementById("activoEntidad").value = "";
     var arbol = document.getElementsByName("Entidades_inputSelect");
@@ -1525,15 +1530,17 @@ function agregarEntidadLista() {
     var id = document.getElementById("idEntidad").value;
     var nombre = document.getElementById("nombreEntidad").value;
     var descripcion = document.getElementById("descripcionEntidad").value;
+    var alcance = document.getElementById("AlcanceEntidad").value;
     var tipo = document.getElementById("escalas_seccion_entidad")
         .value;
     var activo = document.getElementById("activoEntidad").checked;
-    if (!!id && !!nombre && !!descripcion && !!tipo) {
+    if (!!id && !!nombre && !!descripcion && !!tipo && !!alcance) {
         var entidades = entidades_aux[entidad_activoID].entidades;
         var idSeleccionado = getSelectedItemArbolEntidadesSelected();
         var ent_aux = {
             id: id.toString(),
             nombre: nombre,
+            alcance: alcance,
             descripcion: descripcion,
             tipo: tipo,
             activo: activo,
@@ -1627,7 +1634,8 @@ function cargar_posibles_sujetos(json) {
             '" data-oculto="' +
             !element["activo"] +
             '"><label class="form-check-label" for="">' +
-            "<button class='btn-sujetoLinkObjetivos btn btn-light' onclick=''>" +
+            "<button class='btn-sujetoLinkObjetivos btn btn-light' onclick='seleccionar_entidad(\"" +
+            element["id"] + "\")'>" +
             element["name"] +
             "</button>" +
             "</label></div>";
@@ -1656,7 +1664,8 @@ function cargar_posibles_sujetos(json) {
                     '"><label class="" for="' +
                     subSystem["id"] +
                     '">' +
-                    "<button class='btn-sujetoLinkObjetivos btn btn-light' onclick=''>" +
+                    "<button class='btn-sujetoLinkObjetivos btn btn-light' onclick='seleccionar_entidad(\"" +
+                    subSystem["id"] + "\")'>" +
                     subSystem["name"] +
                     "</button>" +
                     "</label></div></li>";
@@ -1673,6 +1682,10 @@ function cargar_posibles_sujetos(json) {
 
 function error_cargar_posibles_sujetos(json) {
     alert("Error al cargar los datos del modelo: " + error);
+}
+
+function seleccionar_sujetos_Objetos(id) {
+    alert(id);
 }
 
 /*CARGAR ENTIDADES DISPONIBLES  PARA LA VISTA OBJETOS*/
@@ -1697,7 +1710,7 @@ function cargar_posibles_entidades_seleccion(json) {
             "<li " +
             ' id="' +
             element["id"] +
-            '"><div ' +
+            '"><div id="Entidad_Seleccionada" ' +
             element["id"] +
             '" onclick="" data-puro_id="' +
             element["id"] +
@@ -1708,7 +1721,9 @@ function cargar_posibles_entidades_seleccion(json) {
             '"><label class="form-check-label" for="entidad_seleccionado_' +
             element["id"] +
             '">' +
-            "<button class='btn-EntidadSeleccionado btn btn-light' onclick='selecccionar_entidad(\"" + "\")'>" +
+            "<button class='btn-EntidadSeleccionado btn btn-light' onclick='seleccionar_entidad(\"" +
+            element["id"] +
+            "\")'>" +
             element["name"] +
             "</button>" +
             "</label></div>";
@@ -1723,5 +1738,6 @@ function error_cargar_posibles_entidades_seleccion(json) {
 }
 
 function seleccionar_entidad(id) {
-    alert("Selecciono");
+    alert(id);
+
 }

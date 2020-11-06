@@ -12,23 +12,32 @@ export class mysql_connector {
       password: constants["db-password"],
       database: constants["db-schema"],
     });
+    this.connector.connect();
   }
-
+  
   public save_newModel(
     nombre: string,
     descripcion: string,
     autor: string,
-    activo:string,
-    modelo: object
+    modelo: object,
   ): void {
-    console.log(
-      `########## Envio a la funcion de crear modelo Nonbre: ${nombre}, descripcion: ${descripcion}, autor: ${autor},activo:${activo} modelo: ${modelo}`
+    //this.connector.connect();
+    var valor = this.connector.query(
+      `SELECT enu_valor FROM usuario WHERE enu_nombre_valor = 'activo' `,
+      (err, result) => {
+        if(err) err 
+      }
     );
+    this.connector.query(`INSERT INTO posts SET ma_nombre: '${nombre}', ma_descripcion: '${descripcion}', ma_autor: '${autor}', ma_activo: '${valor}', ma_modelo_arquitectura: '${modelo}'`, function (error, results, fields) {
+      if (error) throw error;
+      console.log('The solution is: ', results[0].solution);
+    });
+    //this.connector.end();
   }
 
   public update_modal(id: string, nombre: string, descripcion: string) {
     console.log(
-      `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion}`
+      `########## Envio a la funcion de actualizar modelo ID: ${id}, Nonbre: ${nombre}, descripcion: ${descripcion}`
     );
   }
 
@@ -97,25 +106,24 @@ export class mysql_connector {
         tiene_entidades: true,
         activo: true,
         inactivo: true,
-        entitys: { raiz_0: { id: "raiz_0", nombre: "raiz", entidades: {} } },
+        objects: { raiz_0: { id: "raiz_0", nombre: "raiz", objetos: {} } },
         entity: [
           {
             id: "Casa",
             name: "Casa",
-           
             activo: false,
-            entitys: {
+            objects: {
               raiz_0: {
                 id: "raiz_0",
                 nombre: "raiz",
-                entidades: {
+                objetos: {
                   "1": {
                     id: "1",
                     nombre: "Entidad Casa",
                     descripcion: "descripcion de Casa",
                     peso: "1",
                     activo: false,
-                    entidades: {},
+                    objetos: {},
                   },
                 },
               },
@@ -124,20 +132,19 @@ export class mysql_connector {
           {
             id: "Hospital",
             name: "Hospital",
-           
             activo: true,
-            entitys: {
+            objects: {
               raiz_0: {
                 id: "raiz_0",
                 nombre: "raiz",
-                entidades: {
+                objetos: {
                   "2": {
                     id: "2",
                     nombre: "Entidad Hospital",
                     descripcion: "Descripcion del objeto del Hospital",
                     peso: "1",
                     activo: true,
-                    entidades: {},
+                    objetos: {},
                   },
                 },
               },
@@ -149,16 +156,15 @@ export class mysql_connector {
       id: "Entidades Digitales",
         name: "Entidades Digitales",
         tiene_entidades: true,
-        activo: false,
+        activo: true,
         inactivo: true,
-        entitys: { raiz_0: { id: "raiz_1", nombre: "raiz", entidades: {} } },
+        objects: { raiz_0: { id: "raiz_1", nombre: "raiz", objetos: {} } },
         entity: [
           {
             id: "Nodos Computacion",
             name: "Nodos Computacion",
             activo: false,
-            
-            entitys: {
+            objects: {
               raiz_0: {
                 id: "raiz_1",
                 nombre: "raiz",
@@ -178,20 +184,19 @@ export class mysql_connector {
           {
             id: "Nodos Edge",
             name: "Nodos Edge",
-            activo: false,
-           
-            entitys: {
+            activo: true,
+            objects: {
               raiz_0: {
                 id: "raiz_1",
                 nombre: "raiz",
-                entidades: {
+                objetos: {
                   "2": {
                     id: "2",
                     nombre: "Entidad Nodos Edge",
                     descripcion: "Descripcion del la entidad Nodos Edge",
                     peso: "1",
                     activo: true,
-                    entidades: {},
+                    objetos: {},
                   },
                 },
               },
@@ -203,27 +208,26 @@ export class mysql_connector {
         id: "Dispositivos Iot",
           name: "Dispositivos Iot",
           tiene_entidades: true,
-          activo: false,
+          activo: true,
           inactivo: true,
-          entitys: { raiz_0: { id: "raiz_2", nombre: "raiz", entidades: {} } },
+          objects: { raiz_0: { id: "raiz_2", nombre: "raiz", objetos: {} } },
           entity: [
             {
               id: "Sensor",
               name: "Sensor",
               activo: false,
-              tiene_entidades: true,
-              entitys: {
+              objects: {
                 raiz_0: {
                   id: "raiz_2",
                   nombre: "raiz",
-                  entidades: {
+                  objetos: {
                     "1": {
                       id: "1",
                       nombre: "Entidad Sensor",
                       descripcion: "descripcion de la entidad Sensor",
                       peso: "1",
                       activo: false,
-                      entidades: {},
+                      objetos: {},
                     },
                   },
                 },
@@ -233,19 +237,18 @@ export class mysql_connector {
               id: "Actuador",
               name: "Actuador",
               activo: true,
-             
-              entitys: {
+              objects: {
                 raiz_0: {
                   id: "raiz_2",
                   nombre: "raiz",
-                  entidades: {
+                  objetos: {
                     "2": {
                       id: "2",
                       nombre: "Entidad Actuador",
                       descripcion: "Descripcion del la entidad Actuador",
                       peso: "1",
                       activo: true,
-                      entidades: {},
+                      objetos: {},
                     },
                   },
                 },
@@ -254,20 +257,19 @@ export class mysql_connector {
             {
               id: "Tag",
               name: "Tag",
-              activo: false,
-             
-              entitys: {
+              activo: true,
+              objects: {
                 raiz_0: {
                   id: "raiz_2",
                   nombre: "raiz",
-                  entidades: {
+                  objetos: {
                     "2": {
                       id: "2",
                       nombre: "Entidad Tag",
                       descripcion: "Descripcion del la entidad Tag",
                       peso: "1",
                       activo: true,
-                      entidades: {},
+                      objetos: {},
                     },
                   },
                 },
@@ -279,10 +281,10 @@ export class mysql_connector {
       {
         id: "Redes",
           name: "Redes",
-       
-          activo: false,
+          tiene_entidades: true,
+          activo: true,
           inactivo: true,
-          entitys: { raiz_0: { id: "raiz_3", nombre: "raiz", entidades: {} } },
+          objects: { raiz_0: { id: "raiz_3", nombre: "raiz", objetos: {} } },
         },
        
     ];
@@ -308,13 +310,23 @@ export class mysql_connector {
     );
     return this.modelo;
   }
-  public validateUser(emailUser: string, passwoedUser: string): boolean {
-    if (emailUser == "nicolas@ejemplo.com" && passwoedUser == "1234")
-      return true;
-    return false;
+  public  validateUser(emailUser: string, passwoedUser: string, func: Function): void {  
+    this.connector.query(
+      `SELECT count(usr_id) as count FROM usuario WHERE usr_correo = '${emailUser}' and usr_password = '${passwoedUser}' `,
+      (err, result) => {
+        if(err) err 
+        func(result[0].count);
+      }
+    );
   }
-  public getUser(userName: string, passwoedUser: string): object {
-    return { userID: "1", userName: "ejemplo", email: "ejemplo@cosa.com" };
+
+
+  public getUser(userEmail: string, passwoedUser: string, func: Function): void {
+    this.connector.query(`SELECT usr_id, usr_nombre, usr_correo FROM usuario WHERE usr_correo = '${userEmail}' `, function (error, results, fields) {
+      if (error) throw error;
+      func({ userID: results[0].usr_id, userName: results[0]!.usr_nombre, email: results[0]!.usr_correo });
+      console.log('The solution is: ', results[0]);
+    });
   }
   public getUserModels(userID: string): object {
     console.log(
@@ -434,36 +446,6 @@ public updUser_measurementUnit(
       },
     ];
   }
-  public addUser_escales(
-    idUser: string,
-    name: string,
-    valor_valido: string,
-    tipo:string
-  ): void {
-    console.log(
-      `############# Envio a la funcion 'addUser_escales' el id de usuario '${idUser}, nombre: ${name}, valor_valido: ${valor_valido}, tipo: ${tipo}`
-    );
-  }
-
-public delUser_escales(
-    idUser: string,
-    id: string,
-  ): void {
-    console.log(
-      `############# Envio a la funcion 'delUser_escales' el id de usuario '${idUser}, id: ${id}`
-    );
-  }
-public updUser_escales(
-    idUser: string,
-    id: string,
-    name: string,
-    valor_valido: string,
-    tipo: string,
-  ): void {
-    console.log(
-      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},tipo: ${tipo}`
-    );
-  }
 
   public getUser_decision_criteria(userID: string): object {
     console.log(
@@ -472,14 +454,14 @@ public updUser_escales(
     return [
       {
         id: "1",
-        nombre: "Diseño",
-        descripcion: "Unidad de medida",
+        nombre: "Centimeros",
+        descripcion: "Unidad de medida que representa 1/100 metros",
         activo: "true",
       },
       {
         id: "2",
-        nombre: "Tamaño",
-        descripcion: "Unidad de medida ",
+        nombre: "Milimetros",
+        descripcion: "Unidad de medida que representa 1/1000 metros",
         activo: "false",
       },
       {
@@ -521,10 +503,6 @@ public updUser_criteriaDecision(
 
   public getLastObjectSubjectID(modelID: string): number {
     console.log(`############# Entra en getLastObjectID y envia ${modelID}`);
-    return Math.floor(Math.random() * 600000);
-  }
-  public getLastEntityID(modelID: string): number {
-    console.log(`############# Entra en getLastEntityID y envia ${modelID}`);
     return Math.floor(Math.random() * 600000);
   }
 
