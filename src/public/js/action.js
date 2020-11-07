@@ -618,28 +618,34 @@ function eliminarUnidadMedida() {
 }
 
 function modificarUnidadMedida() {
-    var radio = document.getElementsByName("unidad_seleccionada");
-    var id;
-    var name;
-    var descripcion;
-    var acronym;
-    radio.forEach((elem) => {
-        if (elem.checked) {
-            id = elem.value;
-            name = elem.dataset.name;
-            descripcion = elem.dataset.descripcion;
-            acronym = elem.dataset.acronym;
-            return;
-        }
-    });
+    try {
+        var radio = document.getElementsByName("unidad_seleccionada");
+        var id;
+        var name;
+        var descripcion;
+        var acronym;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.value;
+                name = elem.dataset.name;
+                descripcion = elem.dataset.descripcion;
+                acronym = elem.dataset.acronym;
+                return;
+            }
+        });
 
-    if (!!id && !!name && !!descripcion && !!acronym) {
-        document.getElementById("input-id-update").value = id;
-        document.getElementById("input-name-update").value = name;
-        document.getElementById("input-descripton-update").value = descripcion;
-        document.getElementById("input-acronym-update").value = acronym;
-        $("#modal_modificar_unidadMedida").modal("show");
-    } else alert("Debe seleccionar un elemento para modificar");
+        if (!!id && !!name && !!descripcion && !!acronym) {
+            document.getElementById("input-id-update").value = id;
+            document.getElementById("input-name-update").value = name;
+            document.getElementById("input-descripton-update").value = descripcion;
+            document.getElementById("input-acronym-update").value = acronym;
+            $("#modal_modificar_unidadMedida").modal("show");
+        } else alert("Debe seleccionar un elemento para modificar");
+
+    } catch (error) {
+        alert(error);
+    }
+
 }
 
 
@@ -1230,6 +1236,7 @@ function modal_modificar_modelo() {
     var id;
     var name;
     var descripcion;
+    var autor;
     var select = false;
     radios.forEach((elem) => {
         console.log(elem);
@@ -1237,6 +1244,7 @@ function modal_modificar_modelo() {
             id = elem.value;
             name = elem.dataset.name;
             descripcion = elem.dataset.descripcion;
+            autor = elem.dataset.autor;
             select = true;
             return;
         }
@@ -1244,6 +1252,7 @@ function modal_modificar_modelo() {
     document.getElementById("id_modelo_update").value = id;
     document.getElementById("nombre_modelo_update").value = name;
     document.getElementById("descripcion_esenario_update").value = descripcion;
+    document.getElementById("autor_esenario_update").value = autor;
     if (select) $("#modificar_modelo_modal").modal("show");
     else alert("Seleccione un modelo para modificar");
 }
