@@ -1,9 +1,9 @@
 <!-- Inicio de la seccion de cargar modelos -->
 <section id="cargar_modelo_fisico_section" class="cargar_modelo_fisico container mt-3">
-    <h1 class="text-center">Modelos de autoconsciencia</h1>
+    <h2 class="text-center">Modelos de autoconsciencia</h2>
     <div class="row justify-content-center">
         <div class="col-12">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crear_modelo_modal">Crear</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#crear_modelo_modal">Agregar</button>
             <button type="button" class="btn btn-secondary" onclick="modal_modificar_modelo()">Modificar</button>
         </div>
         <div class="col-12 py-5">
@@ -13,7 +13,7 @@
                         <th scope="col">#</th>
                         <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
-                        <th scope="col">Descripcion</th>
+                        <th scope="col">Descripción</th>
                         <th scope="col">JSON</th>
                     </tr>
                 </thead>
@@ -27,4 +27,4 @@
 <!-- Fin de la seccion cargar datos -->
 
 <%- include('modal/modal_model'); %>
-<%- include('modal/modify_modelModal'); %>
+    <%- include('modal/modify_modelModal'); %>
