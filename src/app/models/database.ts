@@ -13,17 +13,17 @@ export class mysql_connector {
       database: constants["db-schema"],
     });
   }
-
+//Guarda un nuevo modelo
   public save_newModel(
     nombre: string,
     descripcion: string,
     autor: string,
-    activo:string,
     modelo: object
   ): void {
-    console.log(
-      `########## Envio a la funcion de crear modelo Nonbre: ${nombre}, descripcion: ${descripcion}, autor: ${autor},activo:${activo} modelo: ${modelo}`
-    );
+    this.connector.query(`INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) Values ('${nombre}', '${descripcion}', '${autor}', '1', '${modelo}', '1')`, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
+    });
   }
 
   public update_modal(id: string, nombre: string, descripcion: string) {
@@ -308,14 +308,25 @@ export class mysql_connector {
     );
     return this.modelo;
   }
-  public validateUser(emailUser: string, passwoedUser: string): boolean {
-    if (emailUser == "nicolas@ejemplo.com" && passwoedUser == "1234")
-      return true;
-    return false;
+//Valida el usuario ingresado
+  public  validateUser(emailUser: string, passwoedUser: string, func: Function): void {  
+    this.connector.query(
+      `SELECT count(usr_id) as count FROM usuario WHERE usr_correo = '${emailUser}' and usr_password = '${passwoedUser}' `,
+      (err, result) => {
+        if(err) err 
+        func(result[0].count);
+      }
+    );
   }
-  public getUser(userName: string, passwoedUser: string): object {
-    return { userID: "1", userName: "ejemplo", email: "ejemplo@cosa.com" };
+//Obtiene el usuario para validarlo
+  public getUser(userEmail: string, passwoedUser: string, func: Function): void {
+    this.connector.query(`SELECT usr_id, usr_nombre, usr_correo FROM usuario WHERE usr_correo = '${userEmail}' `, function (error, results, fields) {
+      if (error) throw error;
+      func({ userID: results[0].usr_id, userName: results[0]!.usr_nombre, email: results[0]!.usr_correo });
+      console.log('The solution is: ', results[0]);
+    });
   }
+
   public getUserModels(userID: string): object {
     console.log(
       `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}`
