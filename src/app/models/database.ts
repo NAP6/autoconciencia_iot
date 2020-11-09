@@ -25,10 +25,29 @@ export class mysql_connector {
       //console.log('The solution is: ', results[0].solution);
     });
   }
-
+//Actualizar Modelo
   public update_modal(id: string, nombre: string, descripcion: string) {
     console.log(
       `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion}`
+    );
+    this.connector.query(`UPDATE modeloautoconsciencia 
+      SET ma_activo = '${id}'
+      WHERE ma_id = '${id}'`, function (err, result) {
+        if (err) throw err;
+        
+      }
+    );
+  }
+//Eliminar modelo
+  public delete_modal(id: string) {
+    console.log(
+      `########## Envio a la funcion de eliminar modelo ID: ${id}`
+    );
+    this.connector.query(`DELETE FROM modeloautoconsciencia 
+      WHERE ma_id = '${id}'`, function (err, result) {
+        if (err) throw err;
+        
+      }
     );
   }
 
@@ -335,7 +354,7 @@ export class mysql_connector {
     this.connector.query(`SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura
       FROM modeloautoconsciencia
       WHERE usr_id = '1'`,
-      (err, result) => {
+      (err, result,  fields) => {
         if(err) err;
           for(const i in result){
             console.log(result[i]);
