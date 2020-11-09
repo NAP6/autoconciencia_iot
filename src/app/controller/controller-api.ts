@@ -249,7 +249,10 @@ export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    res.json(db.getUserModels(id));
+    db.getUserModels(id,(jsonModel: object) => {
+      res.json(jsonModel);
+    });
+    
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

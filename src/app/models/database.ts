@@ -20,7 +20,9 @@ export class mysql_connector {
     autor: string,
     modelo: object
   ): void {
-    this.connector.query(`INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) Values ('${nombre}', '${descripcion}', '${autor}', '1', '${modelo}', '1')`, function (error, results) {
+    var sql = `INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) 
+    VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'",'"')}', '1')`;
+    this.connector.query(sql, function (error, results) {
       if (error) throw error;
       //console.log('The solution is: ', results[0].solution);
     });
@@ -346,7 +348,7 @@ export class mysql_connector {
     });
   }
 
-  public getUserModels(userID: string): object {
+  public getUserModels(userID: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}`
     );
@@ -356,32 +358,21 @@ export class mysql_connector {
       WHERE usr_id = '1'`,
       (err, result,  fields) => {
         if(err) err;
+          var listaModelo: Array<object> = [];
           for(const i in result){
-            console.log(result[i]);
+            //console.log(result[i]);
+            var auxmodel = {
+              id: result[i]["ma_id"],
+              nombre: result[i]["ma_nombre"],
+              descripcion: result[i]["ma_descripcion"],
+              autor: result[i]["ma_autor"],
+              json: result[i]["ma_modelo_arquitectura"],
+            }
+            listaModelo.push(auxmodel);
           }
+          func(listaModelo);
       }
     );
-
-    return [
-      {
-        id: "1",
-        nombre: "Modelo 1",
-        descripcion: "descripcion modelo 1",
-        json: [],
-      },
-      {
-        id: "2",
-        nombre: "Modelo 2",
-        descripcion: "descripcion modelo 2",
-        json: [],
-      },
-      {
-        id: "3",
-        nombre: "Modelo 3",
-        descripcion: "descripcion modelo 3",
-        json: [],
-      }
-    ];
   }
 
   public getModel(modelID: string): object {
@@ -482,9 +473,11 @@ public updUser_measurementUnit(
     valor_valido: string,
     tipo:string
   ): void {
-    console.log(
-      `############# Envio a la funcion 'addUser_escales' el id de usuario '${idUser}, nombre: ${name}, valor_valido: ${valor_valido}, tipo: ${tipo}`
-    );
+    /* this.connector.query(`INSERT INTO escala (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) 
+      VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${modelo}', '1')`, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
+    }); */
   }
 
 public delUser_escales(

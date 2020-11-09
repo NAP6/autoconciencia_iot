@@ -1206,9 +1206,10 @@ function cargar_modelos_table(json) {
     res = "";
     json.forEach((md) => {
         res += `<tr id='modelo-${md.id}-tabla'>`;
-        res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-descripcion="${md.descripcion}"></td>`;
+        res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-autor="${md.autor}" data-descripcion="${md.descripcion}"></td>`;
         res += `<td name="modelo-${md.id}">${md.id}</td>`;
         res += `<td name="modelo-${md.id}">${md.nombre}</td>`;
+        res += `<td name="modelo-${md.id}">${md.autor}</td>`;
         res += `<td name="modelo-${md.id}">${md.descripcion}</td>`;
         res += `<td name="modelo-${md.id}"><a href="\#">JSON</a></td>`;
         res += "</tr>";
