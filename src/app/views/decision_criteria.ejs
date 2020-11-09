@@ -6,14 +6,16 @@
 
                 <div class="row justify-content-between">
                     <div class="col-5">
-                        <h2 class="mt-4">Criterios Decisión</h2>
+
                     </div>
                     <div class="col-3">
-                        <h4 class="mt-4">Modelo:
+                        <h4 class="mt-4">Area de Trabajo:
                             <%- session.active_model.nombre %>
                         </h4>
                     </div>
                 </div>
+                <hr style="border-color:#3498DB;">
+                <h2 class="text-center">Criterios Decisión</h2>
 
                 <br>
                 <%- include('parts/decision_criteria/table'); %>
