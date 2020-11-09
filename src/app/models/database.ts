@@ -331,6 +331,18 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}`
     );
+
+    this.connector.query(`SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura
+      FROM modeloautoconsciencia
+      WHERE usr_id = '1'`,
+      (err, result) => {
+        if(err) err;
+          for(const i in result){
+            console.log(result[i]);
+          }
+      }
+    );
+
     return [
       {
         id: "1",
@@ -349,7 +361,7 @@ export class mysql_connector {
         nombre: "Modelo 3",
         descripcion: "descripcion modelo 3",
         json: [],
-      },
+      }
     ];
   }
 

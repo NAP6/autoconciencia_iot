@@ -69,7 +69,6 @@ export function start_session(req: Request, res: Response, next: NextFunction) {
       res.redirect("/");
     }
   });
-
 }
 
 export function select_model(req: Request, res: Response) {
@@ -193,7 +192,6 @@ export function save_new_model(
     var nombre = req.body.nombre_modelo;
     var descripcion = req.body.descripcion_ecenario;
     var autor = req.body.autor_modelo;
-    var activo=req.body.ModeloActivo;
     var db = new mysql_connector();
     db.save_newModel(nombre, descripcion, autor,js.getJSON());
     req.session!.active_model = db.getModel("2");
