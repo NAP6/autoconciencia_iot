@@ -1,8 +1,8 @@
 export default {
-	"db-url": "",
-	"db-port": 0,
-	"db-user": "",
+	"db-url": "localhost",
+	"db-port": 3306,
+	"db-user": "root",
 	"db-password": "",
-	"db-schema": "",
+	"db-schema": "db_autocosciencia",
 	"server-port": 3000,
 }
