@@ -32,11 +32,15 @@ export class mysql_connector {
     console.log(
       `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion}`
     );
+    /* if (activo = 'on'){
+      var activ = '1';
+    }else{
+      activ = '2';
+    } */
     this.connector.query(`UPDATE modeloautoconsciencia 
-      SET ma_activo = '${id}'
+      SET ma_nombre = '${nombre}', ma_descripcion = '${descripcion}', ma_activo = '1'
       WHERE ma_id = '${id}'`, function (err, result) {
         if (err) throw err;
-        
       }
     );
   }
