@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
-    "db-url": "",
-    "db-port": "",
-    "db-user": "",
+    "db-url": "localhost",
+    "db-port": 3306,
+    "db-user": "root",
     "db-password": "",
-    "db-schema": "",
+    "db-schema": "db_autocosciencia",
     "server-port": 3000,
 };

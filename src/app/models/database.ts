@@ -13,22 +13,47 @@ export class mysql_connector {
       database: constants["db-schema"],
     });
   }
-
+//Guarda un nuevo modelo
   public save_newModel(
     nombre: string,
     descripcion: string,
     autor: string,
-    activo:string,
     modelo: object
   ): void {
-    console.log(
-      `########## Envio a la funcion de crear modelo Nonbre: ${nombre}, descripcion: ${descripcion}, autor: ${autor},activo:${activo} modelo: ${modelo}`
-    );
+    var sql = `INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) 
+    VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'",'"')}', '1')`;
+    this.connector.query(sql, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
+    });
   }
-
+//Actualizar Modelo
   public update_modal(id: string, nombre: string, descripcion: string) {
     console.log(
       `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion}`
+    );
+    /* if (activo = 'on'){
+      var activ = '1';
+    }else{
+      activ = '2';
+    } */
+    this.connector.query(`UPDATE modeloautoconsciencia 
+      SET ma_nombre = '${nombre}', ma_descripcion = '${descripcion}', ma_activo = '1'
+      WHERE ma_id = '${id}'`, function (err, result) {
+        if (err) throw err;
+      }
+    );
+  }
+//Eliminar modelo
+  public delete_modal(id: string) {
+    console.log(
+      `########## Envio a la funcion de eliminar modelo ID: ${id}`
+    );
+    this.connector.query(`DELETE FROM modeloautoconsciencia 
+      WHERE ma_id = '${id}'`, function (err, result) {
+        if (err) throw err;
+        
+      }
     );
   }
 
@@ -308,38 +333,50 @@ export class mysql_connector {
     );
     return this.modelo;
   }
-  public validateUser(emailUser: string, passwoedUser: string): boolean {
-    if (emailUser == "nicolas@ejemplo.com" && passwoedUser == "1234")
-      return true;
-    return false;
+//Valida el usuario ingresado
+  public  validateUser(emailUser: string, passwoedUser: string, func: Function): void {  
+    this.connector.query(
+      `SELECT count(usr_id) as count FROM usuario WHERE usr_correo = '${emailUser}' and usr_password = '${passwoedUser}' `,
+      (err, result) => {
+        if(err) err 
+        func(result[0].count);
+      }
+    );
   }
-  public getUser(userName: string, passwoedUser: string): object {
-    return { userID: "1", userName: "ejemplo", email: "ejemplo@cosa.com" };
+//Obtiene el usuario para validarlo
+  public getUser(userEmail: string, passwoedUser: string, func: Function): void {
+    this.connector.query(`SELECT usr_id, usr_nombre, usr_correo FROM usuario WHERE usr_correo = '${userEmail}' `, function (error, results, fields) {
+      if (error) throw error;
+      func({ userID: results[0].usr_id, userName: results[0]!.usr_nombre, email: results[0]!.usr_correo });
+      console.log('The solution is: ', results[0]);
+    });
   }
-  public getUserModels(userID: string): object {
+
+  public getUserModels(userID: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}`
     );
-    return [
-      {
-        id: "1",
-        nombre: "Modelo 1",
-        descripcion: "descripcion modelo 1",
-        json: [],
-      },
-      {
-        id: "2",
-        nombre: "Modelo 2",
-        descripcion: "descripcion modelo 2",
-        json: [],
-      },
-      {
-        id: "3",
-        nombre: "Modelo 3",
-        descripcion: "descripcion modelo 3",
-        json: [],
-      },
-    ];
+
+    this.connector.query(`SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura
+      FROM modeloautoconsciencia
+      WHERE usr_id = '1'`,
+      (err, result,  fields) => {
+        if(err) err;
+          var listaModelo: Array<object> = [];
+          for(const i in result){
+            //console.log(result[i]);
+            var auxmodel = {
+              id: result[i]["ma_id"],
+              nombre: result[i]["ma_nombre"],
+              descripcion: result[i]["ma_descripcion"],
+              autor: result[i]["ma_autor"],
+              json: result[i]["ma_modelo_arquitectura"],
+            }
+            listaModelo.push(auxmodel);
+          }
+          func(listaModelo);
+      }
+    );
   }
 
   public getModel(modelID: string): object {
@@ -441,9 +478,11 @@ public updUser_measurementUnit(
     valor_valido: string,
     tipo:string
   ): void {
-    console.log(
-      `############# Envio a la funcion 'addUser_escales' el id de usuario '${idUser}, nombre: ${name}, valor_valido: ${valor_valido}, tipo: ${tipo}`
-    );
+    this.connector.query(`INSERT INTO escala (esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
+      VALUES ('${idUser}', '${name}', '${valor_valido}','${tipo}', '1')`, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
+    });
   }
 
 public delUser_escales(
