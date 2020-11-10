@@ -379,16 +379,35 @@ export class mysql_connector {
     );
   }
 
-  public getModel(modelID: string): object {
+  public getModel(modelID: string, func : Function): void {
     console.log(
       `############# Envio a la funcion 'getModel' el id de usuario '${modelID}`
     );
-    return {
+
+    this.connector.query(`SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura
+      FROM modeloautoconsciencia
+      WHERE ma_id = '${modelID}'`,
+      (err, result,  fields) => {
+        if(err) err;
+          var listaModelo: Array<object> = [];
+          for(const i in result){
+            //console.log(result[i]);
+            var auxmodel = {
+              id: result[i]["ma_id"],
+              nombre: result[i]["ma_nombre"],
+              descripcion: result[i]["ma_descripcion"],
+            }
+            listaModelo.push(auxmodel);
+          }
+          func(listaModelo);
+      }
+    );
+    /* return {
       id: "2",
       nombre: "Modelo 2",
       descripcion: "descripcion modelo 2",
       modelID: "1",
-    };
+    }; */
   }
 
   public getUser_measurementUnit(userID: string): object {
@@ -477,11 +496,11 @@ public updUser_measurementUnit(
     valor_valido: string,
     tipo:string
   ): void {
-    /* this.connector.query(`INSERT INTO escala (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) 
-      VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${modelo}', '1')`, function (error, results) {
+    this.connector.query(`INSERT INTO escala (esc_id, esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
+      VALUES ('${idUser}', '${name}', '${valor_valido}','${tipo}', '1')`, function (error, results) {
       if (error) throw error;
       //console.log('The solution is: ', results[0].solution);
-    }); */
+    });
   }
 
 public delUser_escales(

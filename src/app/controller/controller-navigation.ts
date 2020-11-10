@@ -195,7 +195,11 @@ export function save_new_model(
     var activo=req.body.ModeloActivo;
     var db = new mysql_connector();
     db.save_newModel(nombre, descripcion, autor,js.getJSON());
-    req.session!.active_model = db.getModel("2");
+    req.session!.active_model = db.getModel("2",(mod: object) => {
+      req.session!.mod = mod;
+      req.flash("error", "");
+      next();
+    });
     next();
   } else {
     res.redirect("/login");
@@ -204,7 +208,11 @@ export function save_new_model(
 
 export function active_model(req: Request, res: Response, next: NextFunction) {
   var db = new mysql_connector();
-  req.session!.active_model = db.getModel(req.body.select_model);
+  req.session!.active_model = db.getModel(req.body.select_model, (mod: object) => {
+    req.session!.mod = mod;
+    req.flash("error", "");
+    next();
+  });
   next();
 }
 
