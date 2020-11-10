@@ -572,6 +572,7 @@ function guardarNuevaUnidadMedida() {
         nombre: document.getElementById("input-name-add").value,
         descripcion: document.getElementById("input-descripton-add").value,
         acronym: document.getElementById("input-weight-add").value,
+
     };
     console.log(data);
     if (!!data.nombre && !!data.descripcion && !!data.acronym) {
@@ -624,12 +625,14 @@ function modificarUnidadMedida() {
         var name;
         var descripcion;
         var acronym;
+        var activo;
         radio.forEach((elem) => {
             if (elem.checked) {
                 id = elem.value;
                 name = elem.dataset.name;
                 descripcion = elem.dataset.descripcion;
                 acronym = elem.dataset.acronym;
+                activo = elem.dataset.activo;
                 return;
             }
         });
@@ -639,6 +642,7 @@ function modificarUnidadMedida() {
             document.getElementById("input-name-update").value = name;
             document.getElementById("input-descripton-update").value = descripcion;
             document.getElementById("input-acronym-update").value = acronym;
+            document.getElementById("activoUnits").value = activo;
             $("#modal_modificar_unidadMedida").modal("show");
         } else alert("Debe seleccionar un elemento para modificar");
 
@@ -655,6 +659,7 @@ function guardarModificacionMedida() {
         nombre: document.getElementById("input-name-update").value,
         descripcion: document.getElementById("input-descripton-update").value,
         acronym: document.getElementById("input-acronym-update").value,
+        activo: document.getElementById("activoUnits").value
     };
     if (!!data.id && !!data.nombre && !!data.descripcion && !!data.acronym) {
         post_api(
@@ -776,6 +781,7 @@ function guardarNuevaEscala() {
         nombre: document.getElementById("input-name-scale-add").value,
         valor_valido: document.getElementById("input-valor-add").value,
         tipo: document.getElementById("input-tipe-add").value,
+        activo: document.getElementById("activoEscalas").value
     };
     console.log(data);
     if (!!data.nombre && !!data.valor_valido && !!data.tipo) {
@@ -826,6 +832,7 @@ function modificarEscalas() {
     var id;
     var name;
     var valor_valido;
+    var activo;
     var tipo;
     radio.forEach((elem) => {
         if (elem.checked) {
@@ -833,6 +840,7 @@ function modificarEscalas() {
             name = elem.dataset.name;
             valor_valido = elem.dataset.valor_valido;
             tipo = elem.dataset.tipo;
+            activo = elem.dataset.activo;
             return;
         }
     });
@@ -842,6 +850,7 @@ function modificarEscalas() {
         document.getElementById("input-escale-name-update").value = name;
         document.getElementById("input-escale-valor-update").value = valor_valido;
         document.getElementById("input-tipe-update").value = tipo;
+        document.getElementById("activoEscalas").value = activo;
         $("#modal_escalas_mod").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
@@ -852,6 +861,7 @@ function guardarModificacionEscala() {
         nombre: document.getElementById("input-escale-name-update").value,
         valor_valido: document.getElementById("input-escale-valor-update").value,
         tipo: document.getElementById("input-tipe-update").value,
+        activo: document.getElementById("activoEscalas").value,
 
     };
     if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
@@ -1206,9 +1216,10 @@ function cargar_modelos_table(json) {
     res = "";
     json.forEach((md) => {
         res += `<tr id='modelo-${md.id}-tabla'>`;
-        res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-descripcion="${md.descripcion}"></td>`;
+        res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-autor="${md.autor}" data-descripcion="${md.descripcion}"></td>`;
         res += `<td name="modelo-${md.id}">${md.id}</td>`;
         res += `<td name="modelo-${md.id}">${md.nombre}</td>`;
+        res += `<td name="modelo-${md.id}">${md.autor}</td>`;
         res += `<td name="modelo-${md.id}">${md.descripcion}</td>`;
         res += `<td name="modelo-${md.id}"><a href="\#">JSON</a></td>`;
         res += "</tr>";

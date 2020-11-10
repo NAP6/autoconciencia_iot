@@ -400,10 +400,11 @@ public updUser_measurementUnit(
     id: string,
     name: string,
     descripcion: string,
-    acronym: string
+    acronym: string,
+    activo:string
   ): void {
     console.log(
-      `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym}`
+      `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym},activo:${activo}`
     );
   }
   public getUser_escales(userID: string): object {
@@ -458,10 +459,11 @@ public updUser_escales(
     id: string,
     name: string,
     valor_valido: string,
+    activo:string,
     tipo: string,
   ): void {
     console.log(
-      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},tipo: ${tipo}`
+      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},activo: ${activo},tipo: ${tipo}`
     );
   }
 

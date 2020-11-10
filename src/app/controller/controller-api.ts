@@ -89,8 +89,9 @@ export function upd_measurement_units(req: Request, res: Response) {
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
     var acronym = req.body.acronym;
+    var activo=req.body.activo;
     var db = new database();
-    db.updUser_measurementUnit(idUser, id, name, descripcion, acronym);
+    db.updUser_measurementUnit(idUser, id, name, descripcion, acronym,activo);
     res.json({mensaje: "La accion fue realizada con exito"});
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -139,8 +140,9 @@ export function upd_escales(req: Request, res: Response) {
     var name = req.body.nombre;
     var valor_valido = req.body.valor_valido;
     var tipo = req.body.tipo;
+    var activo=req.body.activo;
     var db = new database();
-    db.updUser_escales(idUser, id, name, valor_valido,tipo);
+    db.updUser_escales(idUser, id, name, valor_valido,tipo,activo);
     res.json({mensaje: "La accion fue realizada con exito"});
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
