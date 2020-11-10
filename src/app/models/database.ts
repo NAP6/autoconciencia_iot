@@ -477,7 +477,7 @@ public updUser_measurementUnit(
     valor_valido: string,
     tipo:string
   ): void {
-    this.connector.query(`INSERT INTO escala (esc_id, esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
+    this.connector.query(`INSERT INTO escala (esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
       VALUES ('${idUser}', '${name}', '${valor_valido}','${tipo}', '1')`, function (error, results) {
       if (error) throw error;
       //console.log('The solution is: ', results[0].solution);
