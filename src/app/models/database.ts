@@ -379,35 +379,16 @@ export class mysql_connector {
     );
   }
 
-  public getModel(modelID: string, func : Function): void {
+  public getModel(modelID: string): object {
     console.log(
       `############# Envio a la funcion 'getModel' el id de usuario '${modelID}`
     );
-
-    this.connector.query(`SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura
-      FROM modeloautoconsciencia
-      WHERE ma_id = '${modelID}'`,
-      (err, result,  fields) => {
-        if(err) err;
-          var listaModelo: Array<object> = [];
-          for(const i in result){
-            //console.log(result[i]);
-            var auxmodel = {
-              id: result[i]["ma_id"],
-              nombre: result[i]["ma_nombre"],
-              descripcion: result[i]["ma_descripcion"],
-            }
-            listaModelo.push(auxmodel);
-          }
-          func(listaModelo);
-      }
-    );
-    /* return {
+    return {
       id: "2",
       nombre: "Modelo 2",
       descripcion: "descripcion modelo 2",
       modelID: "1",
-    }; */
+    };
   }
 
   public getUser_measurementUnit(userID: string): object {
