@@ -26,9 +26,9 @@ export class mysql_connector {
     );
   }
 
-  public update_modal(id: string, nombre: string, descripcion: string) {
+  public update_modal(id: string, nombre: string, descripcion: string,activo:string) {
     console.log(
-      `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion}`
+      `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion},activo:${activo}`
     );
   }
 
@@ -515,9 +515,10 @@ public updUser_criteriaDecision(
     id: string,
     name: string,
     descripcion: string,
+    activo:string
   ): void {
     console.log(
-      `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}`
+      `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion},activo:${activo}`
     );
   }
   public getUser_Aspects(userID: string): object {

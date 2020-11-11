@@ -192,9 +192,10 @@ export function upd_decision_criteria(req: Request, res: Response) {
     var id = req.body.id;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
+    var activo=req.body.activo;
     
     var db = new database();
-    db.updUser_criteriaDecision(idUser, id, name, descripcion);
+    db.updUser_criteriaDecision(idUser, id, name, descripcion,activo);
     res.json({mensaje: "La accion fue realizada con exito"});
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

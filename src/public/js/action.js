@@ -636,11 +636,10 @@ function modificarUnidadMedida() {
                 return;
             }
         });
-
         if (!!id && !!name && !!descripcion && !!acronym) {
             document.getElementById("input-id-update").value = id;
             document.getElementById("input-name-update").value = name;
-            document.getElementById("input-descripton-update").value = descripcion;
+            document.getElementById("input-descripton-update").value = "descripcion";
             document.getElementById("input-acronym-update").value = acronym;
             document.getElementById("activoUnits").value = activo;
             $("#modal_modificar_unidadMedida").modal("show");
@@ -708,7 +707,7 @@ function cargar_unidades_de_medida_table(json) {
     var res = "";
     json.forEach((um) => {
         res += "<tr>";
-        res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}" data-name="${um.nombre}" data-descripcion="${um.descripcion}" data-acronym="${um.acronimo}"></td>`;
+        res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}" data-name="${um.nombre}" data-descripcion="${um.descripcion}" data-acronym="${um.acronimo}" data-activo="${um.activo}"></td>`;
         res += `<td>${um.id}</td>`;
         res += `<td>${um.nombre}</td>`;
         res += `<td>${um.descripcion}</td>`;
@@ -716,6 +715,7 @@ function cargar_unidades_de_medida_table(json) {
         if (um.activo == "true")
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
+
         res += "</tr>";
     });
     document.getElementById("tabla_unidades_de_medida").innerHTML = res;
@@ -747,7 +747,7 @@ function cargar_escales_table(json) {
     res = "";
     json.forEach((es) => {
         res += "<tr>";
-        res += `<td><input type="radio" name="escala_seleccionada" value="${es.id}" data-name="${es.nombre}" data-valor_valido="${es.valor_valido}" data-tipo="${es.tipo}"></td>`;
+        res += `<td><input type="radio" name="escala_seleccionada" value="${es.id}" data-name="${es.nombre}" data-valor_valido="${es.valor_valido}" data-tipo="${es.tipo}" data-activo="${es.activo}"></td>`;
         res += `<td>${es.id}</td>`;
         res += `<td>${es.nombre}</td>`;
         res += `<td>${es.valor_valido}</td>`;
@@ -899,6 +899,26 @@ function mensaje_errorEnvioEscalas(err) {
 
         Incluye:
 */
+function cargar_criterios_table(json) {
+    res = "";
+    json.forEach((cd) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="criterio_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-descripcion="${cd.descripcion}" data-activo="${cd.activo}"></td>`;
+        res += `<td>${cd.id}</td>`;
+        res += `<td>${cd.nombre}</td>`;
+        res += `<td>${cd.descripcion}</td>`;
+
+        if (cd.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_criterios_decision").innerHTML = res;
+}
+
+function error_cargar_criterios_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
 
 function agregar_criterio_decision() {
     $("#modal_criteria_add").modal("show");
@@ -954,24 +974,33 @@ function eliminar_criterio_decision() {
 }
 
 function modificar_criterio_decision() {
-    var radio = document.getElementsByName("criterio_seleccionado");
-    var id;
-    var name;
-    var descripcion;
-    radio.forEach((elem) => {
-        if (elem.checked) {
-            id = elem.value;
-            name = elem.dataset.name;
-            descripcion = elem.dataset.descripcion;
-            return;
-        }
-    });
-    if (!!id && !!name && !!descripcion) {
-        document.getElementById("input-id-criteria-update").value = id;
-        document.getElementById("input-name-criteria-update").value = name;
-        document.getElementById("input-descripton-criteria-update").value = descripcion;
-        $("#modal_modificar_criterios").modal("show");
-    } else alert("Seleccione el Elemento");
+    try {
+        var radio = document.getElementsByName("criterio_seleccionado");
+        var id;
+        var name;
+        var descripcion;
+        var activo;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.value;
+                name = elem.dataset.name;
+                descripcion = elem.dataset.descripcion;
+                activo = elem.dataset.activo;
+                return;
+            }
+        });
+        if (!!id && !!name && !!descripcion) {
+            document.getElementById("input-id-criteria-update").value = id;
+            document.getElementById("input-name-criteria-update").value = name;
+            document.getElementById("input-descripton-criteria-update").value = descripcion;
+            document.getElementById("acitvoCriterios").value = activo;
+            $("#modal_modificar_criterios").modal("show");
+        } else alert("Seleccione el Elemento");
+
+    } catch (error) {
+        alert(error);
+    }
+
 }
 
 function guardarModificacionCriterios() {
@@ -979,6 +1008,7 @@ function guardarModificacionCriterios() {
         id: document.getElementById("input-id-criteria-update").value,
         nombre: document.getElementById("input-name-criteria-update").value,
         descripcion: document.getElementById("input-descripton-criteria-update").value,
+        activo: document.getElementById("acitvoCriterios").value
     };
     if (!!data.id && !!data.nombre && !!data.descripcion) {
         post_api(
@@ -1135,26 +1165,7 @@ if (document.getElementById("tabla_criterios_decision"))
         error_cargar_criterios_table
     );
 
-function cargar_criterios_table(json) {
-    res = "";
-    json.forEach((cd) => {
-        res += "<tr>";
-        res += `<td><input type="radio" name="criterio_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-descripcion="${cd.descripcion}"></td>`;
-        res += `<td>${cd.id}</td>`;
-        res += `<td>${cd.nombre}</td>`;
-        res += `<td>${cd.descripcion}</td>`;
 
-        if (cd.activo == "true")
-            res += `<td><input type="checkbox" disabled checked></td>`;
-        else res += `<td><input type="checkbox" disabled></td>`;
-        res += "</tr>";
-    });
-    document.getElementById("tabla_criterios_decision").innerHTML = res;
-}
-
-function error_cargar_criterios_table(err) {
-    alert("Error al cargar los datos del modelo: " + err);
-}
 /* 
     SECCION CARGAR ASPECTOS AUTOCONSCIENCIA
 
@@ -1216,7 +1227,7 @@ function cargar_modelos_table(json) {
     res = "";
     json.forEach((md) => {
         res += `<tr id='modelo-${md.id}-tabla'>`;
-        res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-autor="${md.autor}" data-descripcion="${md.descripcion}"></td>`;
+        res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-autor="${md.autor}" data-descripcion="${md.descripcion}" data-activo="${true}"></td>`;
         res += `<td name="modelo-${md.id}">${md.id}</td>`;
         res += `<td name="modelo-${md.id}">${md.nombre}</td>`;
         res += `<td name="modelo-${md.id}">${md.autor}</td>`;
@@ -1242,12 +1253,12 @@ function error_cargar_models_table(err) {
 */
 
 function modal_modificar_modelo() {
-    console.log("Entra en la funciono de modificar modelo");
     var radios = document.getElementsByName("modelo_seleccionado_tabla");
     var id;
     var name;
     var descripcion;
     var autor;
+    var activo;
     var select = false;
     radios.forEach((elem) => {
         console.log(elem);
@@ -1256,14 +1267,17 @@ function modal_modificar_modelo() {
             name = elem.dataset.name;
             descripcion = elem.dataset.descripcion;
             autor = elem.dataset.autor;
+            activo = elem.dataset.activo;
             select = true;
             return;
         }
     });
+
     document.getElementById("id_modelo_update").value = id;
     document.getElementById("nombre_modelo_update").value = name;
     document.getElementById("descripcion_esenario_update").value = descripcion;
     document.getElementById("autor_esenario_update").value = autor;
+    document.getElementById("activoModelo").value = activo;
     if (select) $("#modificar_modelo_modal").modal("show");
     else alert("Seleccione un modelo para modificar");
 }

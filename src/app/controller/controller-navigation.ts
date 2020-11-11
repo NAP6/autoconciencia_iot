@@ -88,7 +88,8 @@ export function update_model(req: Request, res: Response) {
   var idModel = req.body.id_modelo_update;
   var nameModel = req.body.nombre_modelo_update;
   var descripcionModel = req.body.descripcion_ecenario_update;
-  db.update_modal(idModel, nameModel, descripcionModel);
+  var activo=req.body.activoModelo ;
+  db.update_modal(idModel, nameModel, descripcionModel,activo);
   res.render("models", {
     error: req.flash("error"),
     succes: req.flash("succes"),
