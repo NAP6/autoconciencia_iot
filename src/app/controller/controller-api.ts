@@ -93,7 +93,7 @@ export function upd_measurement_units(req: Request, res: Response) {
     var acronym = req.body.acronym;
     var activo=req.body.activo;
     var db = new database();
-    db.updUser_measurementUnit(idUser, id, name, descripcion, acronym,activo);
+    db.updUser_measurementUnit(idUser, id, name, descripcion, acronym, activo);
     res.json({mensaje: "La accion fue realizada con exito"});
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
