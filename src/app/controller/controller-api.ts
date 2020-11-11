@@ -50,7 +50,9 @@ export function measurement_units(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    res.json(db.getUser_measurementUnit(id));
+    db.getUser_measurementUnit(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -91,7 +93,7 @@ export function upd_measurement_units(req: Request, res: Response) {
     var acronym = req.body.acronym;
     var activo=req.body.activo;
     var db = new database();
-    db.updUser_measurementUnit(idUser, id, name, descripcion, acronym,activo);
+    db.updUser_measurementUnit(idUser, id, name, descripcion, acronym, activo);
     res.json({mensaje: "La accion fue realizada con exito"});
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -102,7 +104,9 @@ export function escales(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    res.json(db.getUser_escales(id));
+    db.getUser_escales(id,(jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -252,7 +256,10 @@ export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    res.json(db.getUserModels(id));
+    db.getUserModels(id,(jsonModel: object) => {
+      res.json(jsonModel);
+    });
+    
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

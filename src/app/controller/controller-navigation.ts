@@ -49,21 +49,27 @@ export function singup_save(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+//Inicia sesion de usuario
 export function start_session(req: Request, res: Response, next: NextFunction) {
   var db = new mysql_connector();
   var email_user = req.body.email;
   var password_user = req.body.password;
 
-  if (db.validateUser(email_user, password_user)) {
-    req.session!.user = db.getUser(email_user, password_user);
-    req.flash("error", "");
-    req.flash("succes", "Bienvenido de vuelta");
-    next();
-  } else {
-    req.flash("error", "El usuario no es valido");
-    req.flash("succes", "");
-    res.redirect("/");
-  }
+  db.validateUser(email_user, password_user, (cont: number) => {
+    if (cont == 1) {
+      db.getUser(email_user, password_user, (user: object) => {
+        req.session!.user = user;
+        req.flash("error", "");
+        req.flash("succes", "Bienvenido de vuelta");
+        next();
+      });
+    } else {
+      req.flash("error", "El usuario no es valido");
+      req.flash("succes", "");
+      res.redirect("/");
+    }
+  });
+
 }
 
 export function select_model(req: Request, res: Response) {
@@ -190,7 +196,7 @@ export function save_new_model(
     var autor = req.body.autor_modelo;
     var activo=req.body.ModeloActivo;
     var db = new mysql_connector();
-    db.save_newModel(nombre, descripcion, autor,activo,js.getJSON());
+    db.save_newModel(nombre, descripcion, autor,js.getJSON());
     req.session!.active_model = db.getModel("2");
     next();
   } else {
