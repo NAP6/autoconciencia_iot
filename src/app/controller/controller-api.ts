@@ -50,7 +50,9 @@ export function measurement_units(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    res.json(db.getUser_measurementUnit(id));
+    db.getUser_measurementUnit(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -102,7 +104,9 @@ export function escales(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    res.json(db.getUser_escales(id));
+    db.getUser_escales(id,(jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

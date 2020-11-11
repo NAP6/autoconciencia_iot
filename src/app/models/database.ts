@@ -391,26 +391,36 @@ export class mysql_connector {
     };
   }
 
-  public getUser_measurementUnit(userID: string): object {
+  public getUser_measurementUnit(userID: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
     );
-    return [
-      {
-        id: "1",
-        nombre: "Centimeros",
-        descripcion: "Unidad de medida que representa 1/100 metros",
-        acronimo: "cm",
-        activo: "true",
-      },
-      {
-        id: "2",
-        nombre: "Milimetros",
-        descripcion: "Unidad de medida que representa 1/1000 metros",
-        acronimo: "mm",
-        activo: "false",
-      },
-    ];
+
+    this.connector.query(`SELECT um_id, um_nombre, um_descripcion, um_acronimo, um_activo
+      FROM unidadmedicion`,
+      (err, result,  fields) => {
+        if(err) err;
+          var listaUmedicion: Array<object> = [];
+          var act;
+          for(const i in result){
+            //console.log(result[i]);
+
+            if(result[i]["esc_activo"] == 1){
+              act = 'true'
+            }else if(result[i]["esc_activo"] == 2){
+              act = 'false'
+            }
+            var auxmedicion = {
+              id: result[i]["um_id"],
+              nombre: result[i]["um_nombre"],
+              descripcion: result[i]["um_descripcion"],
+              acronimo: result[i]["um_acronimo"],
+              activo: act,
+            }
+            listaUmedicion.push(auxmedicion);
+          }
+          func(listaUmedicion);
+      });
   }
 
   public addUser_measurementUnit(
@@ -422,14 +432,24 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'addUser_measurementUnit' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym}`
     );
+    this.connector.query(`INSERT INTO unidadmedicion (um_nombre, um_descripcion, um_acronimo, um_activo) 
+      VALUES ('${name}', '${descripcion}','${acronym}', '1')`, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
+    });
   }
 
 public delUser_measurementUnit(
     idUser: string,
     id: string,
   ): void {
-    console.log(
+    /* console.log(
       `############# Envio a la funcion 'delUser_measurementUnit' el id de usuario '${idUser}, id: ${id}`
+    ); */
+    this.connector.query(`DELETE  FROM unidadmedicion 
+      WHERE um_id = '${id}'`, function (err, result) {
+        if (err) throw err;
+      }
     );
   }
 public updUser_measurementUnit(
@@ -440,37 +460,61 @@ public updUser_measurementUnit(
     acronym: string,
     activo:string
   ): void {
-    console.log(
+    /* console.log(
       `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym},activo:${activo}`
+    ); */
+    var act;
+    if(activo == 'true'){
+      act = 1;
+    }else if(activo == 'false'){
+      act = 2;
+    }
+    this.connector.query(`UPDATE unidadmedicion 
+      SET um_nombre = '${name}', um_descripcion = '${descripcion}', um_acronimo = '${acronym}', um_activo = '${act}'
+      WHERE um_id = '${id}'`, function (err, result) {
+        if (err) throw err;
+      }
     );
   }
-  public getUser_escales(userID: string): object {
+  public getUser_escales(userID: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_escales' el id de usuario '${userID}`
     );
-    return [
-      {
-        id: "1",
-        nombre: "Centimeros",
-        valor_valido: "Unidad de medida que representa 1/100 metros",
-        tipo: "cm",
-        activo: "true",
-      },
-      {
-        id: "2",
-        nombre: "Milimetros",
-        valor_valido: "Unidad de medida que representa 1/1000 metros",
-        tipo: "mm",
-        activo: "false",
-      },
-      {
-        id: "3",
-        nombre: "Milimetros",
-        valor_valido: "Unidad de medida que representa 1/1000 metros",
-        tipo: "mm",
-        activo: "true",
-      },
-    ];
+    this.connector.query(`SELECT esc_id, esc_nombre, esc_valor_valido, esc_tipo, esc_activo
+      FROM escala`,
+      (err, result,  fields) => {
+        if(err) err;
+          var listaEscala: Array<object> = [];
+          var tip;
+          var act;
+          for(const i in result){
+            //console.log(result[i]);
+            if(result[i]["esc_tipo"] == 1){
+                tip = 'Ordinal'; 
+            }else if(result[i]["esc_tipo"] == 2){
+              tip = 'Nominal'; 
+            }else if(result[i]["esc_tipo"] == 3){
+              tip = 'Rango'; 
+            }else if(result[i]["esc_tipo"] == 4){
+              tip = 'Ratio'; 
+            }
+
+            if(result[i]["esc_activo"] == 1){
+              act = 'true'
+            }else if(result[i]["esc_activo"] == 2){
+              act = 'false'
+            }
+            var auxescala = {
+              id: result[i]["esc_id"],
+              nombre: result[i]["esc_nombre"],
+              valor_valido: result[i]["esc_valor_valido"],
+              tipo: tip,
+              activo: act,
+            }
+            listaEscala.push(auxescala);
+          }
+          func(listaEscala);
+      });
   }
   public addUser_escales(
     idUser: string,
@@ -478,8 +522,18 @@ public updUser_measurementUnit(
     valor_valido: string,
     tipo:string
   ): void {
+    var tip;
+    if(tipo == 'ordinal'){
+       tip = 1;
+    }else if(tipo == 'nominal'){
+       tip = 2;
+    }else if(tipo == 'rango'){
+       tip = 3;
+    }else if(tipo == 'ratio'){
+       tip = 4;
+    }
     this.connector.query(`INSERT INTO escala (esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
-      VALUES ('${idUser}', '${name}', '${valor_valido}','${tipo}', '1')`, function (error, results) {
+      VALUES ('${name}', '${valor_valido}','${tip}', '1')`, function (error, results) {
       if (error) throw error;
       //console.log('The solution is: ', results[0].solution);
     });
@@ -492,6 +546,11 @@ public delUser_escales(
     console.log(
       `############# Envio a la funcion 'delUser_escales' el id de usuario '${idUser}, id: ${id}`
     );
+    this.connector.query(`DELETE  FROM escala 
+      WHERE esc_id = '${id}'`, function (err, result) {
+        if (err) throw err;
+      }
+    );
   }
 public updUser_escales(
     idUser: string,
@@ -501,8 +560,31 @@ public updUser_escales(
     activo:string,
     tipo: string,
   ): void {
-    console.log(
+    /* console.log(
       `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},activo: ${activo},tipo: ${tipo}`
+    ); */
+    var tip;
+    var act;
+    if(tipo == 'Ordinal'){
+      tip = 1;
+    }else if(tipo == 'Nominal'){
+      tip = 2;
+    }else if(tipo == 'Rango'){
+      tip = 3;
+    }else if(tipo == 'Ratio'){
+      tip = 4;
+    }
+
+    if(activo == 'true'){
+      act = 1;
+    }else if(activo == 'false'){
+      act = 2;
+    }
+    this.connector.query(`UPDATE escala 
+      SET esc_nombre = '${name}', esc_valor_valido = '${valor_valido}', esc_tipo = '${tip}', esc_activo = '${act}'
+      WHERE esc_id = '${id}'`, function (err, result) {
+        if (err) throw err;
+      }
     );
   }
 
