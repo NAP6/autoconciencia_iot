@@ -989,11 +989,12 @@ function modificar_criterio_decision() {
                 return;
             }
         });
+
         if (!!id && !!name && !!descripcion) {
             document.getElementById("input-id-criteria-update").value = id;
             document.getElementById("input-name-criteria-update").value = name;
             document.getElementById("input-descripton-criteria-update").value = descripcion;
-            document.getElementById("acitvoCriterios").value = activo;
+            document.getElementById("activoCriteria").value = activo;
             $("#modal_modificar_criterios").modal("show");
         } else alert("Seleccione el Elemento");
 
@@ -1004,28 +1005,34 @@ function modificar_criterio_decision() {
 }
 
 function guardarModificacionCriterios() {
-    var data = {
-        id: document.getElementById("input-id-criteria-update").value,
-        nombre: document.getElementById("input-name-criteria-update").value,
-        descripcion: document.getElementById("input-descripton-criteria-update").value,
-        activo: document.getElementById("acitvoCriterios").value
-    };
-    if (!!data.id && !!data.nombre && !!data.descripcion) {
-        post_api(
-            "http://localhost:3000/api/upd_decision_criteria/",
-            data,
-            mensaje_exitoEnvioDecisionCriteria,
-            mensaje_errorEnvioDecisionCriteria
+    try {
+        var data = {
+            id: document.getElementById("input-id-criteria-update").value,
+            nombre: document.getElementById("input-name-criteria-update").value,
+            descripcion: document.getElementById("input-descripton-criteria-update").value,
+            activo: document.getElementById("activoCriteria").value
+        };
 
-        );
-        consultar_api(
-            "http://localhost:3000/api/decision_criteria",
-            cargar_criterios_table,
-            error_cargar_criterios_table
-        );
+        if (!!data.id && !!data.nombre && !!data.descripcion) {
+            post_api(
+                "http://localhost:3000/api/upd_decision_criteria/",
+                data,
+                mensaje_exitoEnvioDecisionCriteria,
+                mensaje_errorEnvioDecisionCriteria
 
-        $("#modal_modificar_criterios").modal("hide");
-    } else alert("Debe debe completar todos los campos");
+            );
+            consultar_api(
+                "http://localhost:3000/api/decision_criteria",
+                cargar_criterios_table,
+                error_cargar_criterios_table
+            );
+
+            $("#modal_modificar_criterios").modal("hide");
+        } else alert("Debe debe completar todos los campos");
+    } catch (error) {
+        alert(error);
+    }
+
 }
 
 function mensaje_exitoEnvioDecisionCriteria(json) {
@@ -1215,7 +1222,7 @@ function error_cargar_aspectos_table(err) {
 		cargar_modelos_table
 		error_cargar_models_table
 */
-
+var modelo_fisico_json;
 if (document.getElementById("tabla_modelos_autoconciencia"))
     consultar_api(
         "http://localhost:3000/api/user_models",
@@ -1226,20 +1233,29 @@ if (document.getElementById("tabla_modelos_autoconciencia"))
 function cargar_modelos_table(json) {
     res = "";
     json.forEach((md) => {
+        modelo_fisico_json = JSON.parse(md.json);
         res += `<tr id='modelo-${md.id}-tabla'>`;
         res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-autor="${md.autor}" data-descripcion="${md.descripcion}" data-activo="${true}"></td>`;
         res += `<td name="modelo-${md.id}">${md.id}</td>`;
         res += `<td name="modelo-${md.id}">${md.nombre}</td>`;
         res += `<td name="modelo-${md.id}">${md.autor}</td>`;
         res += `<td name="modelo-${md.id}">${md.descripcion}</td>`;
-        res += `<td name="modelo-${md.id}"><a href="\#">JSON</a></td>`;
+        res += `<td name="modelo-${md.id}"><buttom class="btn btn-link" onclick="mostrar_modal_json()">${Object.keys(JSON.parse(md.json))[0]}</buttom></td>`;
         res += "</tr>";
+
     });
+
     document.getElementById("tabla_modelos_autoconciencia").innerHTML = res;
 }
 
 function error_cargar_models_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
+}
+
+function mostrar_modal_json() {
+    $('#modal_json').modal('show');
+    document.getElementById('modal_json_title').innerHTML = Object.keys(modelo_fisico_json)[0];
+    document.getElementById('contenido_json').innerHTML = JSON.stringify(modelo_fisico_json, null, 2);
 }
 
 /* 

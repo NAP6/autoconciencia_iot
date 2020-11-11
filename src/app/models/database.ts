@@ -5,6 +5,7 @@ import constants from "../../config/constants";
 export class mysql_connector {
   private connector;
   constructor() {
+    console.log(constants);
     this.connector = mysql.createConnection({
       host: constants["db-url"],
       port: constants["db-port"],
@@ -13,7 +14,7 @@ export class mysql_connector {
       database: constants["db-schema"],
     });
   }
-//Guarda un nuevo modelo
+  //Guarda un nuevo modelo
   public save_newModel(
     nombre: string,
     descripcion: string,
@@ -21,14 +22,14 @@ export class mysql_connector {
     modelo: object
   ): void {
     var sql = `INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) 
-    VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'",'"')}', '1')`;
+    VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'", '$/COMILLA_SIMPLE/')}', '1')`;
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
       //console.log('The solution is: ', results[0].solution);
     });
   }
 
-  public update_modal(id: string, nombre: string, descripcion: string,activo:string) {
+  public update_modal(id: string, nombre: string, descripcion: string, activo: string) {
     console.log(
       `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion},activo:${activo}`
     );
@@ -40,20 +41,20 @@ export class mysql_connector {
     this.connector.query(`UPDATE modeloautoconsciencia 
       SET ma_nombre = '${nombre}', ma_descripcion = '${descripcion}', ma_activo = '1'
       WHERE ma_id = '${id}'`, function (err, result) {
-        if (err) throw err;
-      }
+      if (err) throw err;
+    }
     );
   }
-//Eliminar modelo
+  //Eliminar modelo
   public delete_modal(id: string) {
     console.log(
       `########## Envio a la funcion de eliminar modelo ID: ${id}`
     );
     this.connector.query(`DELETE FROM modeloautoconsciencia 
       WHERE ma_id = '${id}'`, function (err, result) {
-        if (err) throw err;
-        
-      }
+      if (err) throw err;
+
+    }
     );
   }
 
@@ -127,7 +128,7 @@ export class mysql_connector {
           {
             id: "Casa",
             name: "Casa",
-           
+
             activo: false,
             entitys: {
               raiz_0: {
@@ -149,7 +150,7 @@ export class mysql_connector {
           {
             id: "Hospital",
             name: "Hospital",
-           
+
             activo: true,
             entitys: {
               raiz_0: {
@@ -171,7 +172,7 @@ export class mysql_connector {
         ],
       },
       {
-      id: "Entidades Digitales",
+        id: "Entidades Digitales",
         name: "Entidades Digitales",
         tiene_entidades: true,
         activo: false,
@@ -182,7 +183,7 @@ export class mysql_connector {
             id: "Nodos Computacion",
             name: "Nodos Computacion",
             activo: false,
-            
+
             entitys: {
               raiz_0: {
                 id: "raiz_1",
@@ -204,7 +205,7 @@ export class mysql_connector {
             id: "Nodos Edge",
             name: "Nodos Edge",
             activo: false,
-           
+
             entitys: {
               raiz_0: {
                 id: "raiz_1",
@@ -226,90 +227,90 @@ export class mysql_connector {
       },
       {
         id: "Dispositivos Iot",
-          name: "Dispositivos Iot",
-          tiene_entidades: true,
-          activo: false,
-          inactivo: true,
-          entitys: { raiz_0: { id: "raiz_2", nombre: "raiz", entidades: {} } },
-          entity: [
-            {
-              id: "Sensor",
-              name: "Sensor",
-              activo: false,
-              tiene_entidades: true,
-              entitys: {
-                raiz_0: {
-                  id: "raiz_2",
-                  nombre: "raiz",
-                  entidades: {
-                    "1": {
-                      id: "1",
-                      nombre: "Entidad Sensor",
-                      descripcion: "descripcion de la entidad Sensor",
-                      peso: "1",
-                      activo: false,
-                      entidades: {},
-                    },
+        name: "Dispositivos Iot",
+        tiene_entidades: true,
+        activo: false,
+        inactivo: true,
+        entitys: { raiz_0: { id: "raiz_2", nombre: "raiz", entidades: {} } },
+        entity: [
+          {
+            id: "Sensor",
+            name: "Sensor",
+            activo: false,
+            tiene_entidades: true,
+            entitys: {
+              raiz_0: {
+                id: "raiz_2",
+                nombre: "raiz",
+                entidades: {
+                  "1": {
+                    id: "1",
+                    nombre: "Entidad Sensor",
+                    descripcion: "descripcion de la entidad Sensor",
+                    peso: "1",
+                    activo: false,
+                    entidades: {},
                   },
                 },
               },
             },
-            {
-              id: "Actuador",
-              name: "Actuador",
-              activo: true,
-             
-              entitys: {
-                raiz_0: {
-                  id: "raiz_2",
-                  nombre: "raiz",
-                  entidades: {
-                    "2": {
-                      id: "2",
-                      nombre: "Entidad Actuador",
-                      descripcion: "Descripcion del la entidad Actuador",
-                      peso: "1",
-                      activo: true,
-                      entidades: {},
-                    },
-                  },
-                },
-              },
-            },
-            {
-              id: "Tag",
-              name: "Tag",
-              activo: false,
-             
-              entitys: {
-                raiz_0: {
-                  id: "raiz_2",
-                  nombre: "raiz",
-                  entidades: {
-                    "2": {
-                      id: "2",
-                      nombre: "Entidad Tag",
-                      descripcion: "Descripcion del la entidad Tag",
-                      peso: "1",
-                      activo: true,
-                      entidades: {},
-                    },
-                  },
-                },
-              },
-            },
+          },
+          {
+            id: "Actuador",
+            name: "Actuador",
+            activo: true,
 
-          ],
-        },
+            entitys: {
+              raiz_0: {
+                id: "raiz_2",
+                nombre: "raiz",
+                entidades: {
+                  "2": {
+                    id: "2",
+                    nombre: "Entidad Actuador",
+                    descripcion: "Descripcion del la entidad Actuador",
+                    peso: "1",
+                    activo: true,
+                    entidades: {},
+                  },
+                },
+              },
+            },
+          },
+          {
+            id: "Tag",
+            name: "Tag",
+            activo: false,
+
+            entitys: {
+              raiz_0: {
+                id: "raiz_2",
+                nombre: "raiz",
+                entidades: {
+                  "2": {
+                    id: "2",
+                    nombre: "Entidad Tag",
+                    descripcion: "Descripcion del la entidad Tag",
+                    peso: "1",
+                    activo: true,
+                    entidades: {},
+                  },
+                },
+              },
+            },
+          },
+
+        ],
+      },
       {
         id: "Redes",
-          name: "Redes",
-       
-          activo: false,
-          inactivo: true,
-          entitys: { raiz_0: { id: "raiz_3", nombre: "raiz", entidades: {} } },
-        },
-       
+        name: "Redes",
+
+        activo: false,
+        inactivo: true,
+        entitys: { raiz_0: { id: "raiz_3", nombre: "raiz", entidades: {} } },
+      },
+
     ];
   }
 
@@ -333,17 +334,19 @@ export class mysql_connector {
     );
     return this.modelo;
   }
-//Valida el usuario ingresado
-  public  validateUser(emailUser: string, passwoedUser: string, func: Function): void {  
+  //Valida el usuario ingresado
+  public validateUser(emailUser: string, passwoedUser: string, func: Function): void {
+    var sql = `SELECT count(usr_id) as count FROM usuario WHERE usr_correo = '${emailUser}' and usr_password = '${passwoedUser}' `;
     this.connector.query(
-      `SELECT count(usr_id) as count FROM usuario WHERE usr_correo = '${emailUser}' and usr_password = '${passwoedUser}' `,
+      sql,
       (err, result) => {
-        if(err) err 
+        if (err) { err; }
+        console.log(sql);
         func(result[0].count);
       }
     );
   }
-//Obtiene el usuario para validarlo
+  //Obtiene el usuario para validarlo
   public getUser(userEmail: string, passwoedUser: string, func: Function): void {
     this.connector.query(`SELECT usr_id, usr_nombre, usr_correo FROM usuario WHERE usr_correo = '${userEmail}' `, function (error, results, fields) {
       if (error) throw error;
@@ -356,29 +359,27 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}`
     );
-
-    this.connector.query(`SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura
+      var sql=`SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, CONVERT(ma_modelo_arquitectura USING utf8) as ma_modelo_arquitectura
       FROM modeloautoconsciencia
-      WHERE usr_id = '1'`,
-      (err, result,  fields) => {
-        if(err) err;
-          var listaModelo: Array<object> = [];
-          for(const i in result){
-            //console.log(result[i]);
-            var auxmodel = {
-              id: result[i]["ma_id"],
-              nombre: result[i]["ma_nombre"],
-              descripcion: result[i]["ma_descripcion"],
-              autor: result[i]["ma_autor"],
-              json: result[i]["ma_modelo_arquitectura"],
-            }
-            listaModelo.push(auxmodel);
+      WHERE usr_id = ${userID}`;
+    this.connector.query(sql,
+      (err, result, fields) => {
+        if (err) err;
+        var listaModelo: Array<object> = [];
+        for (const i in result) {
+          var auxmodel = {
+            id: result[i]["ma_id"],
+            nombre: result[i]["ma_nombre"],
+            descripcion: result[i]["ma_descripcion"],
+            autor: result[i]["ma_autor"],
+            json: result[i]["ma_modelo_arquitectura"].replace('$/COMILLA_SIMPLE/',"'"),
           }
-          func(listaModelo);
+          listaModelo.push(auxmodel);
+        }
+        func(listaModelo);
       }
     );
   }
-
   public getModel(modelID: string): object {
     console.log(
       `############# Envio a la funcion 'getModel' el id de usuario '${modelID}`
@@ -398,28 +399,28 @@ export class mysql_connector {
 
     this.connector.query(`SELECT um_id, um_nombre, um_descripcion, um_acronimo, um_activo
       FROM unidadmedicion`,
-      (err, result,  fields) => {
-        if(err) err;
-          var listaUmedicion: Array<object> = [];
-          var act;
-          for(const i in result){
-            //console.log(result[i]);
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
 
-            if(result[i]["esc_activo"] == 1){
-              act = 'true'
-            }else if(result[i]["esc_activo"] == 2){
-              act = 'false'
-            }
-            var auxmedicion = {
-              id: result[i]["um_id"],
-              nombre: result[i]["um_nombre"],
-              descripcion: result[i]["um_descripcion"],
-              acronimo: result[i]["um_acronimo"],
-              activo: act,
-            }
-            listaUmedicion.push(auxmedicion);
+          if (result[i]["esc_activo"] == 1) {
+            act = 'true'
+          } else if (result[i]["esc_activo"] == 2) {
+            act = 'false'
           }
-          func(listaUmedicion);
+          var auxmedicion = {
+            id: result[i]["um_id"],
+            nombre: result[i]["um_nombre"],
+            descripcion: result[i]["um_descripcion"],
+            acronimo: result[i]["um_acronimo"],
+            activo: act,
+          }
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
       });
   }
 
@@ -439,7 +440,7 @@ export class mysql_connector {
     });
   }
 
-public delUser_measurementUnit(
+  public delUser_measurementUnit(
     idUser: string,
     id: string,
   ): void {
@@ -448,32 +449,32 @@ public delUser_measurementUnit(
     ); */
     this.connector.query(`DELETE  FROM unidadmedicion 
       WHERE um_id = '${id}'`, function (err, result) {
-        if (err) throw err;
-      }
+      if (err) throw err;
+    }
     );
   }
-public updUser_measurementUnit(
+  public updUser_measurementUnit(
     idUser: string,
     id: string,
     name: string,
     descripcion: string,
     acronym: string,
-    activo:string
+    activo: string
   ): void {
     /* console.log(
       `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym},activo:${activo}`
     ); */
     var act;
-    if(activo == 'true'){
+    if (activo == 'true') {
       act = 1;
-    }else if(activo == 'false'){
+    } else if (activo == 'false') {
       act = 2;
     }
     this.connector.query(`UPDATE unidadmedicion 
       SET um_nombre = '${name}', um_descripcion = '${descripcion}', um_acronimo = '${acronym}', um_activo = '${act}'
       WHERE um_id = '${id}'`, function (err, result) {
-        if (err) throw err;
-      }
+      if (err) throw err;
+    }
     );
   }
   public getUser_escales(userID: string, func: Function): void {
@@ -482,55 +483,55 @@ public updUser_measurementUnit(
     );
     this.connector.query(`SELECT esc_id, esc_nombre, esc_valor_valido, esc_tipo, esc_activo
       FROM escala`,
-      (err, result,  fields) => {
-        if(err) err;
-          var listaEscala: Array<object> = [];
-          var tip;
-          var act;
-          for(const i in result){
-            //console.log(result[i]);
-            if(result[i]["esc_tipo"] == 1){
-                tip = 'Ordinal'; 
-            }else if(result[i]["esc_tipo"] == 2){
-              tip = 'Nominal'; 
-            }else if(result[i]["esc_tipo"] == 3){
-              tip = 'Rango'; 
-            }else if(result[i]["esc_tipo"] == 4){
-              tip = 'Ratio'; 
-            }
-
-            if(result[i]["esc_activo"] == 1){
-              act = 'true'
-            }else if(result[i]["esc_activo"] == 2){
-              act = 'false'
-            }
-            var auxescala = {
-              id: result[i]["esc_id"],
-              nombre: result[i]["esc_nombre"],
-              valor_valido: result[i]["esc_valor_valido"],
-              tipo: tip,
-              activo: act,
-            }
-            listaEscala.push(auxescala);
+      (err, result, fields) => {
+        if (err) err;
+        var listaEscala: Array<object> = [];
+        var tip;
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
+          if (result[i]["esc_tipo"] == 1) {
+            tip = 'Ordinal';
+          } else if (result[i]["esc_tipo"] == 2) {
+            tip = 'Nominal';
+          } else if (result[i]["esc_tipo"] == 3) {
+            tip = 'Rango';
+          } else if (result[i]["esc_tipo"] == 4) {
+            tip = 'Ratio';
           }
-          func(listaEscala);
+
+          if (result[i]["esc_activo"] == 1) {
+            act = 'true'
+          } else if (result[i]["esc_activo"] == 2) {
+            act = 'false'
+          }
+          var auxescala = {
+            id: result[i]["esc_id"],
+            nombre: result[i]["esc_nombre"],
+            valor_valido: result[i]["esc_valor_valido"],
+            tipo: tip,
+            activo: act,
+          }
+          listaEscala.push(auxescala);
+        }
+        func(listaEscala);
       });
   }
   public addUser_escales(
     idUser: string,
     name: string,
     valor_valido: string,
-    tipo:string
+    tipo: string
   ): void {
     var tip;
-    if(tipo == 'ordinal'){
-       tip = 1;
-    }else if(tipo == 'nominal'){
-       tip = 2;
-    }else if(tipo == 'rango'){
-       tip = 3;
-    }else if(tipo == 'ratio'){
-       tip = 4;
+    if (tipo == 'ordinal') {
+      tip = 1;
+    } else if (tipo == 'nominal') {
+      tip = 2;
+    } else if (tipo == 'rango') {
+      tip = 3;
+    } else if (tipo == 'ratio') {
+      tip = 4;
     }
     this.connector.query(`INSERT INTO escala (esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
       VALUES ('${name}', '${valor_valido}','${tip}', '1')`, function (error, results) {
@@ -539,7 +540,7 @@ public updUser_measurementUnit(
     });
   }
 
-public delUser_escales(
+  public delUser_escales(
     idUser: string,
     id: string,
   ): void {
@@ -548,16 +549,16 @@ public delUser_escales(
     );
     this.connector.query(`DELETE  FROM escala 
       WHERE esc_id = '${id}'`, function (err, result) {
-        if (err) throw err;
-      }
+      if (err) throw err;
+    }
     );
   }
-public updUser_escales(
+  public updUser_escales(
     idUser: string,
     id: string,
     name: string,
     valor_valido: string,
-    activo:string,
+    activo: string,
     tipo: string,
   ): void {
     /* console.log(
@@ -565,26 +566,26 @@ public updUser_escales(
     ); */
     var tip;
     var act;
-    if(tipo == 'Ordinal'){
+    if (tipo == 'Ordinal') {
       tip = 1;
-    }else if(tipo == 'Nominal'){
+    } else if (tipo == 'Nominal') {
       tip = 2;
-    }else if(tipo == 'Rango'){
+    } else if (tipo == 'Rango') {
       tip = 3;
-    }else if(tipo == 'Ratio'){
+    } else if (tipo == 'Ratio') {
       tip = 4;
     }
 
-    if(activo == 'true'){
+    if (activo == 'true') {
       act = 1;
-    }else if(activo == 'false'){
+    } else if (activo == 'false') {
       act = 2;
     }
     this.connector.query(`UPDATE escala 
       SET esc_nombre = '${name}', esc_valor_valido = '${valor_valido}', esc_tipo = '${tip}', esc_activo = '${act}'
       WHERE esc_id = '${id}'`, function (err, result) {
-        if (err) throw err;
-      }
+      if (err) throw err;
+    }
     );
   }
 
@@ -623,7 +624,7 @@ public updUser_escales(
     );
   }
 
-public delUser_criteriaDecision(
+  public delUser_criteriaDecision(
     idUser: string,
     id: string,
   ): void {
@@ -631,12 +632,12 @@ public delUser_criteriaDecision(
       `############# Envio a la funcion 'delUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}`
     );
   }
-public updUser_criteriaDecision(
+  public updUser_criteriaDecision(
     idUser: string,
     id: string,
     name: string,
     descripcion: string,
-    activo:string
+    activo: string
   ): void {
     console.log(
       `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion},activo:${activo}`
@@ -667,7 +668,7 @@ public updUser_criteriaDecision(
     );
   }
 
-public delUser_aspects(
+  public delUser_aspects(
     idUser: string,
     id: string,
   ): void {
@@ -675,7 +676,7 @@ public delUser_aspects(
       `############# Envio a la funcion 'delUser_aspects' el id de usuario '${idUser}, id: ${id}`
     );
   }
-public updUser_aspects(
+  public updUser_aspects(
     idUser: string,
     id: string,
     descripcion: string,
