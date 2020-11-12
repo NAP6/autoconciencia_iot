@@ -357,11 +357,12 @@ export class mysql_connector {
 
   public getUserModels(userID: string, func: Function): void {
     console.log(
-      `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}`
+      `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}'`
     );
-      var sql=`SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, CONVERT(ma_modelo_arquitectura USING utf8) as ma_modelo_arquitectura
+      var sql = `SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, CONVERT(ma_modelo_arquitectura USING utf8) as ma_modelo_arquitectura
       FROM modeloautoconsciencia
-      WHERE usr_id = ${userID}`;
+      WHERE usr_id = '${userID}'`;
+      console.log(sql);
     this.connector.query(sql,
       (err, result, fields) => {
         if (err) err;
@@ -589,30 +590,34 @@ export class mysql_connector {
     );
   }
 
-  public getUser_decision_criteria(userID: string): object {
+  public getUser_decision_criteria(userID: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_escales' el id de usuario '${userID}`
     );
-    return [
-      {
-        id: "1",
-        nombre: "Diseño",
-        descripcion: "Unidad de medida",
-        activo: "true",
-      },
-      {
-        id: "2",
-        nombre: "Tamaño",
-        descripcion: "Unidad de medida ",
-        activo: "false",
-      },
-      {
-        id: "3",
-        nombre: "Milimetros",
-        descripcion: "Unidad de medida que representa 1/1000 metros",
-        activo: "true",
-      },
-    ];
+    this.connector.query(`SELECT cd_id, cd_nombre, cd_descripcion, cd_activo
+      FROM criteriodecision`,
+      (err, result, fields) => {
+        if (err) err;
+        var lista: Array<object> = [];
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
+
+          if (result[i]["cd_activo"] == 1) {
+            act = 'true'
+          } else if (result[i]["cd_activo"] == 2) {
+            act = 'false'
+          }
+          var aux = {
+            id: result[i]["cd_id"],
+            nombre: result[i]["cd_nombre"],
+            descripcion: result[i]["cd_descripcion"],
+            activo: act,
+          }
+          lista.push(aux);
+        }
+        func(lista);
+      });
   }
   public addUser_criteriaDecision(
     idUser: string,
@@ -622,6 +627,12 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'addUser_criteriaDecision' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}`
     );
+    var sql = `INSERT INTO criteriodecision (cd_nombre, cd_descripcion, cd_activo) 
+    VALUES ('${name}', '${descripcion}', '1')`;
+    this.connector.query(sql, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
+    });
   }
 
   public delUser_criteriaDecision(
@@ -630,6 +641,11 @@ export class mysql_connector {
   ): void {
     console.log(
       `############# Envio a la funcion 'delUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}`
+    );
+    this.connector.query(`DELETE  FROM criteriodecision 
+      WHERE cd_id = '${id}'`, function (err, result) {
+      if (err) throw err;
+    }
     );
   }
   public updUser_criteriaDecision(
@@ -641,6 +657,18 @@ export class mysql_connector {
   ): void {
     console.log(
       `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion},activo:${activo}`
+    );
+    var act;
+    if (activo == 'true') {
+      act = 1;
+    } else if (activo == 'false') {
+      act = 2;
+    }
+    this.connector.query(`UPDATE escala 
+      SET cd_nombre = '${name}', cd_descripcion = '${descripcion}', cd_activo = '${act}'
+      WHERE cd_id = '${id}'`, function (err, result) {
+      if (err) throw err;
+    }
     );
   }
   public getUser_Aspects(userID: string): object {
