@@ -1043,6 +1043,31 @@ function mensaje_errorEnvioDecisionCriteria(err) {
     alert(err);
 }
 
+/* Relizar mantenimeinto de la tabla Umbrales partiendo del ID de los criterios de decision*/
+function mantenimiento_umbrales() {
+    try {
+        var radio = document.getElementsByName("criterio_seleccionado");
+        var id;
+        var name;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.value;
+                name = elem.dataset.name;
+                return;
+            }
+        });
+        if (!!id && !!name) {
+            alert(id);
+            alert(name);
+
+
+        } else alert("Seleccione el Elemento");
+
+    } catch (error) {
+        alert(error);
+    }
+
+}
 /* 
     SECCION CARGAR CRITERIOS DECISION
 
