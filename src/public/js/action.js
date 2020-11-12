@@ -1057,9 +1057,13 @@ function mantenimiento_umbrales() {
             }
         });
         if (!!id && !!name) {
-            alert(id);
-            alert(name);
-
+            data = {
+                id: id,
+            };
+            post_api(
+                "http://localhost:3000/api/umbral", data,
+                cargar_umbrales_table, error_cargar_umbrales_table
+            );
 
         } else alert("Seleccione el Elemento");
 
@@ -1067,6 +1071,29 @@ function mantenimiento_umbrales() {
         alert(error);
     }
 
+}
+
+function cargar_umbrales_table(json) {
+    res = "";
+    json.forEach((cd) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="umbral_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-interpretacion="${cd.interpretacion}" data-inferior="${cd.inferior}" data-superior="${cd.superior}"  data-activo="${cd.activo}"></td>`;
+        res += `<td>${cd.id}</td>`;
+        res += `<td>${cd.nombre}</td>`;
+        res += `<td>${cd.interpretacion}</td>`;
+        res += `<td>${cd.inferior}</td>`;
+        res += `<td>${cd.superior}</td>`;
+
+        if (cd.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_umbral").innerHTML = res;
+}
+
+function error_cargar_umbrales_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
 }
 /* 
     SECCION CARGAR CRITERIOS DECISION

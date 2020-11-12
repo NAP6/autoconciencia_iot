@@ -18,6 +18,7 @@ export default function (app: Application) {
   app.post("/api/add_decision_criteria/", api.add_decision_criteria);
   app.post("/api/del_decision_criteria/", api.del_decision_criteria);
   app.post("/api/upd_decision_criteria/", api.upd_decision_criteria);
+  app.post("/api/umbral/", api.umbral);
   app.get("/api/aspects/", api.aspects);
   app.post("/api/add_aspects/", api.add_aspects);
   app.post("/api/upd_aspects/", api.upd_aspects);

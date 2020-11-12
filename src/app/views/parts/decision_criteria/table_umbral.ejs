@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-12">
+            <button id="bt_addEscalas" class="btn btn-primary" onclick="agregar_umbral()">Agregar</button>
+            <button id="bd_modEscalas" class="btn btn-primary" onclick="modificar_umbral()">Modificar</button>
+            <button id="bd_delEscalas" class="btn btn-primary" onclick="eliminar_umbral()">Eliminar</button>
+        </div>
+    </div>
+    <br>
+    <div class="row container">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Interpretacion</th>
+                        <th scope="col">Inferior</th>
+                        <th scope="col">Superior</th>
+                        <th scope="col">Activo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tbody id="tabla_umbral">
+                    </tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
