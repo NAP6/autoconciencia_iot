@@ -160,7 +160,9 @@ export function decision_criteria(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    res.json(db.getUser_decision_criteria(id));
+    db.getUser_decision_criteria(id, (jsonCriterio: object) => {
+      res.json(jsonCriterio);
+    });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
