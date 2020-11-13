@@ -219,6 +219,51 @@ export function umbral(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function add_umbral(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id=req.body.id_criterio;
+    var name = req.body.nombre;
+    var Interpretacion = req.body.interpretacion;
+    var inferior = req.body.inferior;
+    var superior = req.body.superiror;
+    var db = new database();
+    db.addUser_umbral(idUser,name, Interpretacion,inferior,superior,id);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_umbral(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id_umbral = req.body.id;
+    var db = new database();
+    db.delUser_umbral(idUser, id_umbral);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function upd_umbral(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id = req.body.id;
+    var name = req.body.nombre;
+    var interpretacion = req.body.interpretacion;
+    var inferior=req.body.inferior;
+    var superior=req.body.superior;
+    var activo=req.body.activo;
+    
+    var db = new database();
+    db.updUser_umbral(idUser, id, name, interpretacion,inferior,superior,activo);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;

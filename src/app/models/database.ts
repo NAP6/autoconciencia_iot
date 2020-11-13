@@ -5,7 +5,7 @@ import constants from "../../config/constants";
 export class mysql_connector {
   private connector;
   constructor() {
-    console.log(constants);
+
     this.connector = mysql.createConnection({
       host: constants["db-url"],
       port: constants["db-port"],
@@ -430,9 +430,9 @@ export class mysql_connector {
         for (const i in result) {
           //console.log(result[i]);
 
-          if (result[i]["esc_activo"] == 1) {
+          if (result[i]["um_activo"] == 1) {
             act = 'true'
-          } else if (result[i]["esc_activo"] == 2) {
+          } else if (result[i]["um_activo"] == 2) {
             act = 'false'
           }
           var auxmedicion = {
@@ -485,14 +485,15 @@ export class mysql_connector {
     acronym: string,
     activo: string
   ): void {
-    /* console.log(
+     console.log(
       `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym},activo:${activo}`
-    ); */
+    ); 
     var act;
     if (activo == 'true') {
       act = 1;
     } else if (activo == 'false') {
       act = 2;
+      console.log("Entra false");
     }
     this.connector.query(`UPDATE unidadmedicion 
       SET um_nombre = '${name}', um_descripcion = '${descripcion}', um_acronimo = '${acronym}', um_activo = '${act}'
@@ -695,22 +696,14 @@ export class mysql_connector {
     );
   }
   public getUser_umbral(userID: string,id_decicion:string, func: Function): void {
-    console.log(
-      `############# Envio a la funcion 'getUser_umbral' el id de usuario '${userID}`
-    );
-    console.log(
-      `############# Envio a la funcion 'getUser_umbral' el id de usuario '${id_decicion}`
-    );
-    var sql=`SELECT umb_id, umb_nombre, umb_interpretacion, umb_inferior,umb_superior, umb_activo
-    FROM umbral WHERE cd_id=${id_decicion}`;
-    this.connector.query(sql,
+    this.connector.query(`SELECT umb_id, umb_nombre, umb_interpretacion, umb_inferior, umb_superior,umb_activo
+    FROM umbral WHERE cd_id=${id_decicion}`,
       (err, result, fields) => {
         if (err) err;
-        var listaUmbrales: Array<object> = [];
+        var listaumb: Array<object> = [];
         var act;
         for (const i in result) {
           //console.log(result[i]);
-
           if (result[i]["umb_activo"] == 1) {
             act = 'true'
           } else if (result[i]["umb_activo"] == 2) {
@@ -724,10 +717,71 @@ export class mysql_connector {
             superior: result[i]["umb_superior"],
             activo: act,
           }
-          listaUmbrales.push(auxmedicion);
+          listaumb.push(auxmedicion);
         }
-        func(listaUmbrales);
+        func(listaumb);
       });
+    
+   
+
+  }
+  public addUser_umbral(
+    idUser: string,
+    name: string,
+    interpretacion: string,
+    inferior: string,
+    superior: string,
+    id_decision:string,
+  
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'addUser_umbral' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${interpretacion},inferior: ${inferior},superior: ${superior},criterio: ${id_decision}`
+    );
+    var sql = `INSERT INTO umbral (umb_nombre, umb_interpretacion,umb_inferior,umb_superior,cd_id, umb_activo) 
+    VALUES ('${name}', '${interpretacion}','${inferior}','${superior}','${id_decision}', '1')`;
+    this.connector.query(sql, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
+    });
+  }
+
+  public delUser_umbral(
+    idUser: string,
+    id: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'delUser_umb' el id de usuario '${idUser}, id: ${id}`
+    );
+    this.connector.query(`DELETE  FROM umbral 
+      WHERE umb_id = '${id}'`, function (err, result) {
+      if (err) throw err;
+    }
+    );
+  }
+  public updUser_umbral(
+    idUser: string,
+    id: string,
+    name: string,
+    interpretacion: string,
+    inferior:string,
+    superior:string,
+    activo: string
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, interpretacion: ${interpretacion},inferior:${inferior},superior:${superior},activo:${activo}`
+    );
+    var act;
+    if (activo == 'on') {
+      act = 1;
+    } else if (activo == 'off') {
+      act = 2;
+    }
+    this.connector.query(`UPDATE umbral 
+      SET umb_nombre = '${name}', umb_interpretacion = '${interpretacion}', umb_inferior = '${inferior}', umb_superior = '${superior}', umb_activo = '${act}'
+      WHERE umb_id = '${id}'`, function (err, result) {
+      if (err) throw err;
+    }
+    );
   }
 
   public getUser_Aspects(userID: string): object {
