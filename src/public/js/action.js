@@ -563,6 +563,28 @@ function error_cargar_tipo_select(err) {
         Incluye:
 */
 
+function cargar_unidades_de_medida_table(json) {
+    var res = "";
+    json.forEach((um) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}" data-name="${um.nombre}" data-descripcion="${um.descripcion}" data-acronym="${um.acronimo}" data-activo="${um.activo}"></td>`;
+        res += `<td>${um.id}</td>`;
+        res += `<td>${um.nombre}</td>`;
+        res += `<td>${um.descripcion}</td>`;
+        res += `<td>${um.acronimo}</td>`;
+        if (um.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+
+        res += "</tr>";
+    });
+    document.getElementById("tabla_unidades_de_medida").innerHTML = res;
+}
+
+function error_cargar_unidades_de_medida_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+
 function agregarUnidadMedida() {
     $("#modal_units_add").modal("show");
 }
@@ -636,6 +658,7 @@ function modificarUnidadMedida() {
                 return;
             }
         });
+
         if (!!id && !!name && !!descripcion && !!acronym) {
             document.getElementById("input-id-update").value = id;
             document.getElementById("input-name-update").value = name;
@@ -659,8 +682,11 @@ function guardarModificacionMedida() {
         descripcion: document.getElementById("input-descripton-update").value,
         acronym: document.getElementById("input-acronym-update").value,
         activo: document.getElementById("activoUnits").value
+
     };
+
     if (!!data.id && !!data.nombre && !!data.descripcion && !!data.acronym) {
+
         post_api(
             "http://localhost:3000/api/upd_measurement_units/",
             data,
@@ -703,27 +729,6 @@ if (document.getElementById("tabla_unidades_de_medida"))
         error_cargar_unidades_de_medida_table
     );
 
-function cargar_unidades_de_medida_table(json) {
-    var res = "";
-    json.forEach((um) => {
-        res += "<tr>";
-        res += `<td><input type="radio" name="unidad_seleccionada" value="${um.id}" data-name="${um.nombre}" data-descripcion="${um.descripcion}" data-acronym="${um.acronimo}" data-activo="${um.activo}"></td>`;
-        res += `<td>${um.id}</td>`;
-        res += `<td>${um.nombre}</td>`;
-        res += `<td>${um.descripcion}</td>`;
-        res += `<td>${um.acronimo}</td>`;
-        if (um.activo == "true")
-            res += `<td><input type="checkbox" disabled checked></td>`;
-        else res += `<td><input type="checkbox" disabled></td>`;
-
-        res += "</tr>";
-    });
-    document.getElementById("tabla_unidades_de_medida").innerHTML = res;
-}
-
-function error_cargar_unidades_de_medida_table(err) {
-    alert("Error al cargar los datos del modelo: " + err);
-}
 /* 
     SECCION CARGAR LAS ESCALAS
 
@@ -907,7 +912,6 @@ function cargar_criterios_table(json) {
         res += `<td>${cd.id}</td>`;
         res += `<td>${cd.nombre}</td>`;
         res += `<td>${cd.descripcion}</td>`;
-
         if (cd.activo == "true")
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
@@ -929,7 +933,6 @@ function guardarNuevoCriterio() {
         nombre: document.getElementById("input-name-criteria-add").value,
         descripcion: document.getElementById("input-descripton-criteria-add").value,
     };
-    console.log(data);
     if (!!data.nombre && !!data.descripcion) {
         post_api(
             "http://localhost:3000/api/add_decision_criteria/",
@@ -959,7 +962,6 @@ function eliminar_criterio_decision() {
         data = {
             id: id,
         };
-        console.log(data);
         post_api(
             "http://localhost:3000/api/del_decision_criteria/",
             data,
@@ -989,7 +991,6 @@ function modificar_criterio_decision() {
                 return;
             }
         });
-
         if (!!id && !!name && !!descripcion) {
             document.getElementById("input-id-criteria-update").value = id;
             document.getElementById("input-name-criteria-update").value = name;
@@ -1012,7 +1013,6 @@ function guardarModificacionCriterios() {
             descripcion: document.getElementById("input-descripton-criteria-update").value,
             activo: document.getElementById("activoCriteria").value
         };
-
         if (!!data.id && !!data.nombre && !!data.descripcion) {
             post_api(
                 "http://localhost:3000/api/upd_decision_criteria/",
@@ -1095,6 +1095,135 @@ function cargar_umbrales_table(json) {
 function error_cargar_umbrales_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
+
+function agregar_umbral() {
+    $("#modal_umbral_add").modal("show");
+}
+
+function guardarNuevoUmbral() {
+    var radio = document.getElementsByName("criterio_seleccionado");
+    var id_criterio;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id_criterio = elem.value;
+            return;
+        }
+    });
+    var data = {
+        nombre: document.getElementById("input-name-umbral-add").value,
+        interpretacion: document.getElementById("input-interpretacion-umbral-add").value,
+        inferior: document.getElementById("input-inferior-umbral-add").value,
+        superior: document.getElementById("input-superior-umbral-add").value,
+        id_criterio
+    };
+
+    if (!!data.nombre && !!data.interpretacion && !!inferior && !!superior) {
+        alert(data.nombre);
+        post_api(
+            "http://localhost:3000/api/add_umbral/",
+            data,
+            mensaje_exitoEnvioUmbral,
+            mensaje_errorEnvioUmbral
+        );
+        $("#modal_umbral_add").modal("hide");
+    } else alert("Ingrese todos los campos del formulario");
+}
+
+function eliminar_umbral() {
+    var radio = document.getElementsByName("umbral_seleccionado");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        console.log(data);
+        post_api(
+            "http://localhost:3000/api/del_umbral/",
+            data,
+            mensaje_exitoEnvioUmbral,
+            mensaje_errorEnvioUmbral
+        );
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificar_umbral() {
+    try {
+        var radio = document.getElementsByName("umbral_seleccionado");
+        var id;
+        var name;
+        var interpretacion;
+        var inferior;
+        var superior;
+        var activo;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.value;
+                name = elem.dataset.name;
+                interpretacion = elem.dataset.interpretacion;
+                inferior = elem.dataset.inferior;
+                superior = elem.dataset.superior;
+                activo = elem.dataset.activo;
+                return;
+            }
+        });
+        if (!!id && !!name && !!interpretacion && !!superior && !!inferior) {
+            document.getElementById("input-id-umbral-update").value = id;
+            document.getElementById("input-name-umbral-update").value = name;
+            document.getElementById("input-interpretacion-umbral-update").value = interpretacion;
+            document.getElementById("input-superior-umbral-update").value = superior;
+            document.getElementById("input-inferior-umbral-update").value = inferior;
+            $("#modal_modificar_umbral").modal("show");
+        } else alert("Seleccione el Elemento");
+
+    } catch (error) {
+        alert(error);
+    }
+
+}
+
+function guardarModificacionUmbral() {
+    try {
+        var data = {
+            id: document.getElementById("input-id-umbral-update").value,
+            nombre: document.getElementById("input-name-umbral-update").value,
+            interpretacion: document.getElementById("input-interpretacion-umbral-update").value,
+            inferior: document.getElementById("input-inferior-umbral-update").value,
+            superior: document.getElementById("input-superior-umbral-update").value,
+            activo: document.getElementById("activoUmbral").value,
+
+        };
+        if (!!data.id && !!data.nombre && !!data.interpretacion && !!data.inferior && !!data.superior) {
+            post_api(
+                "http://localhost:3000/api/upd_umbral/",
+                data,
+                mensaje_exitoEnvioUmbral,
+                mensaje_errorEnvioUmbral
+
+            );
+
+            $("#modal_modificar_umbral").modal("hide");
+        } else alert("Debe debe completar todos los campos");
+    } catch (error) {
+        alert("Qusa");
+    }
+
+}
+
+function mensaje_exitoEnvioUmbral(json) {
+    alert(json.mensaje);
+}
+
+function mensaje_errorEnvioUmbral(err) {
+    alert(err);
+}
+
+
 /* 
     SECCION CARGAR CRITERIOS DECISION
 
