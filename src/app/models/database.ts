@@ -14,6 +14,29 @@ export class mysql_connector {
       database: constants["db-schema"],
     });
   }
+
+  //seleccionar Enumeracion
+  public getEnumeracion(tipo: string, func: Function): void {
+    var sql = `SELECT enu_nombre_valor, enu_valor
+      FROM enumeracion
+      WHERE enu_nombre_enumeracion = '${tipo}'`;
+
+    this.connector.query(sql,
+      (err, result, fields) => {
+        if (err) err;
+        var listaEnumeracion: Array<object> = [];
+        for (const i in result) {
+          var aux = {
+            nombre: result[i]["ma_id"],
+            valor: result[i]["ma_nombre"],
+          }
+          listaEnumeracion.push(aux);
+        }
+        func(listaEnumeracion);
+      }
+    );
+  }
+
   //Guarda un nuevo modelo
   public save_newModel(
     nombre: string,
@@ -664,7 +687,7 @@ export class mysql_connector {
     } else if (activo == 'false') {
       act = 2;
     }
-    this.connector.query(`UPDATE escala 
+    this.connector.query(`UPDATE criteriodecision 
       SET cd_nombre = '${name}', cd_descripcion = '${descripcion}', cd_activo = '${act}'
       WHERE cd_id = '${id}'`, function (err, result) {
       if (err) throw err;
