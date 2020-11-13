@@ -694,6 +694,42 @@ export class mysql_connector {
     }
     );
   }
+  public getUser_umbral(userID: string,id_decicion:string, func: Function): void {
+    console.log(
+      `############# Envio a la funcion 'getUser_umbral' el id de usuario '${userID}`
+    );
+    console.log(
+      `############# Envio a la funcion 'getUser_umbral' el id de usuario '${id_decicion}`
+    );
+    var sql=`SELECT umb_id, umb_nombre, umb_interpretacion, umb_inferior,umb_superior, umb_activo
+    FROM umbral WHERE cd_id=${id_decicion}`;
+    this.connector.query(sql,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmbrales: Array<object> = [];
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
+
+          if (result[i]["umb_activo"] == 1) {
+            act = 'true'
+          } else if (result[i]["umb_activo"] == 2) {
+            act = 'false'
+          }
+          var auxmedicion = {
+            id: result[i]["umb_id"],
+            nombre: result[i]["umb_nombre"],
+            interpretacion: result[i]["umb_interpretacion"],
+            inferior: result[i]["umb_inferior"],
+            superior: result[i]["umb_superior"],
+            activo: act,
+          }
+          listaUmbrales.push(auxmedicion);
+        }
+        func(listaUmbrales);
+      });
+  }
+
   public getUser_Aspects(userID: string): object {
     console.log(
       `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`

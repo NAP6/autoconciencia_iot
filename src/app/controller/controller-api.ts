@@ -207,6 +207,18 @@ export function upd_decision_criteria(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function umbral(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var idDecision=req.body.id;
+    var db = new database();
+    db.getUser_umbral(id,idDecision, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
