@@ -1101,32 +1101,37 @@ function agregar_umbral() {
 }
 
 function guardarNuevoUmbral() {
-    var radio = document.getElementsByName("criterio_seleccionado");
-    var id_criterio;
-    radio.forEach((elem) => {
-        if (elem.checked) {
-            id_criterio = elem.value;
-            return;
-        }
-    });
-    var data = {
-        nombre: document.getElementById("input-name-umbral-add").value,
-        interpretacion: document.getElementById("input-interpretacion-umbral-add").value,
-        inferior: document.getElementById("input-inferior-umbral-add").value,
-        superior: document.getElementById("input-superior-umbral-add").value,
-        id_criterio
-    };
+    try {
+        var radio = document.getElementsByName("criterio_seleccionado");
+        var id_criterio;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id_criterio = elem.value;
+                return;
+            }
+        });
 
-    if (!!data.nombre && !!data.interpretacion && !!inferior && !!superior) {
-        alert(data.nombre);
-        post_api(
-            "http://localhost:3000/api/add_umbral/",
-            data,
-            mensaje_exitoEnvioUmbral,
-            mensaje_errorEnvioUmbral
-        );
-        $("#modal_umbral_add").modal("hide");
-    } else alert("Ingrese todos los campos del formulario");
+        var data = {
+            nombre: document.getElementById("input-name-umbral-add").value,
+            interpretacion: document.getElementById("input-interpretacion-umbral-add").value,
+            inferior: document.getElementById("input-inferior-umbral-add").value,
+            superior: document.getElementById("input-superior-umbral-add").value,
+            id_criterio
+        };
+        if (!!data.nombre && !!data.interpretacion && !!data.inferior && !!data.superior) {
+
+            post_api(
+                "http://localhost:3000/api/add_umbral/",
+                data,
+                mensaje_exitoEnvioUmbral,
+                mensaje_errorEnvioUmbral
+            );
+            $("#modal_umbral_add").modal("hide");
+        } else alert("Ingrese todos los campos del formulario");
+    } catch (error) {
+        alert(error);
+    }
+
 }
 
 function eliminar_umbral() {
