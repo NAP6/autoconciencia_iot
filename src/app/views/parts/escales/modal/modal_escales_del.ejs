@@ -1,8 +1,8 @@
-<div class="modal fade" id="modal_modificar_unidadMedida" tabindex="-1" role="dialog" aria-labelledby="modal_modificar_unidadMedidaLabel" aria-hidden="true">
+<div class="modal fade" id="modal_escalas_del" tabindex="-1" role="dialog" aria-labelledby="modal_modificar_unidadMedidaLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_modificar_unidadMedidaLabel">Modificar Unidad de Medida</h5>
+                <h5 class="modal-title" id="modal_escalas_del_unidadMedidaLabel">Eliminar Escalas</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -11,34 +11,35 @@
                 <div class="row">
                     <div class="col-sm">
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Id:</label>
+                            <label for="" class="col-sm-2 col-form-label">ID: </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-id-update" readonly placeholder="0105">
+                                <input type="text" class="form-control" readonly id="input-escale-id-del" />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Nombre:</label>
+                            <label for="" class="col-sm-2 col-form-label">Nombre: </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-name-update" value="" placeholder="fasd">
+                                <input type="text" class="form-control" readonly id="input-escale-name-del" />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Descripción:</label>
+                            <label for="" class="col-sm-2 col-form-label">Valor Valido: </label>
                             <div class="col-sm-10">
-                                <textarea type="text" class="form-control" id="input-descripton-update" value="" placeholder="fasd"></textarea>
+
+                                <input type="text" class="form-control" readonly id="input-escale-valor-del" />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Acrónimo:</label>
+                            <label for="" class="col-sm-2 col-form-label">Tipo: </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-acronym-update" value="" placeholder="asdsda">
+                                <input type="text" class="form-control" readonly id="input-tipe-del" placeholder="asdsda">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Activo: </label>
                             <div class="col-sm-10 ">
                                 <div class="form-check">
-                                    <input class="form-check-input align-content-center" type="checkbox" name="activoUnits" id="activoUnits" />
+                                    <input class="form-check-input align-content-center" type="checkbox" id="delactivoEscalas" disabled />
                                 </div>
                             </div>
                         </div>
@@ -46,9 +47,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="guardarModificacionMedida()">Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-
+                <button type="button" class="btn btn-primary" onclick="guardar_eliminar_criterio_decision()">Guardar</button>
             </div>
         </div>
     </div>

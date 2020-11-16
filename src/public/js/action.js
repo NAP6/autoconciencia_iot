@@ -614,6 +614,39 @@ function guardarNuevaUnidadMedida() {
 }
 
 function eliminarUnidadMedida() {
+    try {
+        var radio = document.getElementsByName("unidad_seleccionada");
+        var id;
+        var name;
+        var descripcion;
+        var acronym;
+        var activo;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.value;
+                name = elem.dataset.name;
+                descripcion = elem.dataset.descripcion;
+                acronym = elem.dataset.acronym;
+                activo = elem.dataset.activo;
+                return;
+            }
+        });
+
+        if (!!id && !!name && !!descripcion && !!acronym) {
+            document.getElementById("input-id-del").value = id;
+            document.getElementById("input-name-del").value = name;
+            document.getElementById("input-descripton-del").value = descripcion;
+            document.getElementById("input-acronym-del").value = acronym;
+            document.getElementById("delUnitsAct").value = activo;
+            $("#modal_eliminar_unidadMedida").modal("show");
+        } else alert("Debe seleccionar un elemento para modificar");
+    } catch (error) {
+        alert(error);
+    }
+
+}
+
+function GuardarEliminarUnidadMedida() {
     var radio = document.getElementsByName("unidad_seleccionada");
     var id;
     radio.forEach((elem) => {
@@ -637,6 +670,7 @@ function eliminarUnidadMedida() {
             "http://localhost:3000/api/measurement_units",
             cargar_unidades_de_medida_table, error_cargar_unidades_de_medida_table
         );
+        $("#modal_eliminar_unidadMedida").modal("hide");
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -808,6 +842,34 @@ function guardarNuevaEscala() {
 function eliminarEscala() {
     var radio = document.getElementsByName("escala_seleccionada");
     var id;
+    var name;
+    var valor_valido;
+    var activo;
+    var tipo;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            valor_valido = elem.dataset.valor_valido;
+            tipo = elem.dataset.tipo;
+            activo = elem.dataset.activo;
+            return;
+        }
+    });
+
+    if (!!id && !!name && !!valor_valido && !!tipo) {
+        document.getElementById("input-escale-id-del").value = id;
+        document.getElementById("input-escale-name-del").value = name;
+        document.getElementById("input-escale-valor-del").value = valor_valido;
+        document.getElementById("input-tipe-del").value = tipo;
+        document.getElementById("delactivoEscalas").value = activo;
+        $("#modal_escalas_del").modal("show");
+    } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function GuardareliminarEscala() {
+    var radio = document.getElementsByName("escala_seleccionada");
+    var id;
     radio.forEach((elem) => {
         if (elem.checked) {
             id = elem.value;
@@ -829,6 +891,7 @@ function eliminarEscala() {
             "http://localhost:3000/api/escales",
             cargar_escales_table, error_cargar_escales_table
         );
+        $("#modal_escalas_del").modal("hide");
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -950,6 +1013,36 @@ function guardarNuevoCriterio() {
 }
 
 function eliminar_criterio_decision() {
+    try {
+        var radio = document.getElementsByName("criterio_seleccionado");
+        var id;
+        var name;
+        var descripcion;
+        var activo;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.value;
+                name = elem.dataset.name;
+                descripcion = elem.dataset.descripcion;
+                activo = elem.dataset.activo;
+                return;
+            }
+        });
+        if (!!id && !!name && !!descripcion) {
+            document.getElementById("input-id-criteria-del").value = id;
+            document.getElementById("input-name-criteria-del").value = name;
+            document.getElementById("input-descripton-criteria-del").value = descripcion;
+            document.getElementById("DelCriteria").value = activo;
+            $("#modal_eliminar_criterios").modal("show");
+        } else alert("Seleccione el Elemento");
+
+    } catch (error) {
+        alert(error);
+    }
+
+}
+
+function guardar_eliminar_criterio_decision() {
     var radio = document.getElementsByName("criterio_seleccionado");
     var id;
     radio.forEach((elem) => {
@@ -972,6 +1065,7 @@ function eliminar_criterio_decision() {
             "http://localhost:3000/api/decision_criteria",
             cargar_criterios_table, error_cargar_criterios_table
         );
+        $("#modal_eliminar_criterios").modal("hide");
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -1427,6 +1521,9 @@ function cargar_modelos_table(json) {
         res += `<td name="modelo-${md.id}">${md.autor}</td>`;
         res += `<td name="modelo-${md.id}">${md.descripcion}</td>`;
         res += `<td name="modelo-${md.id}"><buttom class="btn btn-link" onclick="mostrar_modal_json()">${Object.keys(JSON.parse(md.json))[0]}</buttom></td>`;
+        if (md.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
 
     });

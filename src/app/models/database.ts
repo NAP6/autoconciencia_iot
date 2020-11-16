@@ -382,21 +382,29 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}'`
     );
-      var sql = `SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, CONVERT(ma_modelo_arquitectura USING utf8) as ma_modelo_arquitectura
+      var sql = `SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, CONVERT(ma_modelo_arquitectura USING utf8) as ma_modelo_arquitectura,ma_activo
       FROM modeloautoconsciencia
       WHERE usr_id = '${userID}'`;
-      console.log(sql);
+     
+      
     this.connector.query(sql,
       (err, result, fields) => {
         if (err) err;
         var listaModelo: Array<object> = [];
+        var act;
         for (const i in result) {
+          if (result[i]["ma_activo"] == 1) {
+            act = 'true'
+          } else if (result[i]["ma_activo"] == 2) {
+            act = 'false'
+          }
           var auxmodel = {
             id: result[i]["ma_id"],
             nombre: result[i]["ma_nombre"],
             descripcion: result[i]["ma_descripcion"],
             autor: result[i]["ma_autor"],
             json: result[i]["ma_modelo_arquitectura"].replace('$/COMILLA_SIMPLE/',"'"),
+            activo:act,
           }
           listaModelo.push(auxmodel);
         }
