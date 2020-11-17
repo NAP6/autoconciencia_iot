@@ -449,7 +449,6 @@ export class mysql_connector {
         var act;
         for (const i in result) {
           //console.log(result[i]);
-
           if (result[i]["um_activo"] == 1) {
             act = 'true'
           } else if (result[i]["um_activo"] == 2) {
@@ -477,14 +476,15 @@ export class mysql_connector {
       (err, result, fields) => {
         if (err) err;
         var listaUmedicion: Array<object> = [];
-        var act;
+       
         for (const i in result) {
-          //console.log(result[i]);
+          
           var auxmedicion = {
             id: result[i]["enu_id"],
             nombre: result[i]["enu_nombre_enumeracion"],
             
           }
+        
           listaUmedicion.push(auxmedicion);
         }
         func(listaUmedicion);
@@ -814,9 +814,9 @@ export class mysql_connector {
       `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, interpretacion: ${interpretacion},inferior:${inferior},superior:${superior},activo:${activo}`
     );
     var act;
-    if (activo == 'on') {
+    if (activo == 'true') {
       act = 1;
-    } else if (activo == 'off') {
+    } else if (activo == 'false') {
       act = 2;
     }
     this.connector.query(`UPDATE umbral 

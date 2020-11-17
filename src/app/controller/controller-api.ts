@@ -233,11 +233,12 @@ export function umbral(req: Request, res: Response) {
 export function add_umbral(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
-    var id=req.body.id_criterio;
+    var id=req.body.criterio_select;
     var name = req.body.nombre;
     var Interpretacion = req.body.interpretacion;
     var inferior = req.body.inferior;
-    var superior = req.body.superiror;
+    var superior = req.body.superior;
+    console.log(superior);
     var db = new database();
     db.addUser_umbral(idUser,name, Interpretacion,inferior,superior,id);
     res.json({mensaje: "La accion fue realizada con exito"});

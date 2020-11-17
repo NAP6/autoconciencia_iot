@@ -89,6 +89,7 @@ export function models(req: Request, res: Response) {
 }
 
 export function update_model(req: Request, res: Response) {
+  console.log("LEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
   var db = new mysql_connector();
   console.log(req.body);
   var idModel = req.body.id_modelo_update;
@@ -96,6 +97,7 @@ export function update_model(req: Request, res: Response) {
   var descripcionModel = req.body.descripcion_ecenario_update;
   var activo = req.body.activoModelo;
   db.update_modal(idModel, nameModel, descripcionModel, activo);
+  
   res.render("models", {
     error: req.flash("error"),
     succes: req.flash("succes"),
