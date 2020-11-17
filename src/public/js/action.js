@@ -532,6 +532,28 @@ function error_cargar_unidades_de_medida_select(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
 
+
+/*CARGAR TIPO PARA LA SECCION DE ESCALAS*/
+
+if (document.getElementById("tipo_escalas"))
+    consultar_api(
+        "http://localhost:3000/api/enumeracion",
+        cargar_enumeracion_select,
+        error_cargar_enumeracion_select
+    );
+
+function cargar_enumeracion_select(json) {
+    res = "";
+    json.forEach((enu) => {
+        res += `<option value='${enu.id}'>${enu.nombre_enumeracion}</option>`;
+    });
+    document.getElementById("tipo_escalas").innerHTML = res;
+}
+
+function error_cargar_enumeracion_select(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+
 /*
 CARGAR ESCALAS-TIPO A LA PAGINA OBJETOS
 */
@@ -970,7 +992,7 @@ function mensaje_errorEnvioEscalas(err) {
 function cargar_criterios_table(json) {
     res = "";
     json.forEach((cd) => {
-        res += "<tr>";
+        res += `<tr onClick="visibilidad_umbral('${cd.id}')">`;
         res += `<td><input type="radio" name="criterio_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-descripcion="${cd.descripcion}" data-activo="${cd.activo}"></td>`;
         res += `<td>${cd.id}</td>`;
         res += `<td>${cd.nombre}</td>`;
@@ -979,8 +1001,75 @@ function cargar_criterios_table(json) {
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
+        post_api(
+            "http://localhost:3000/api/umbral", { id: cd.id },
+            cargar_umbral_table,
+            () => { console.log("Error Al cargar el Umbral") }
+        );
+
     });
     document.getElementById("tabla_criterios_decision").innerHTML = res;
+}
+var criterio_select;
+
+function visibilidad_umbral(id) {
+    var dato = document.getElementById("umbral_" + id);
+    dato.style.display = "table";
+    if (criterio_select) {
+        dato = document.getElementById("umbral_" + criterio_select);
+        dato.style.display = "none";
+    }
+    criterio_select = id;
+
+}
+
+function cargar_umbral_table(json) {
+    console.log(json);
+    var seccion = document.getElementById("seccion_umbrales");
+    var templeate = document.getElementById("templeta_tabla_umbral").content.cloneNode(true);
+    var body = templeate.getElementById("tabla_umbral");
+    json.umbrales.forEach((um) => {
+        var fila = document.createElement("tr");
+        var dato = document.createElement("td");
+        var input = document.createElement("input");
+        input.type = "radio";
+        input.name = "umbral_seleccionado";
+        dato.appendChild(input);
+        fila.appendChild(dato);
+        dato = document.createElement("td");
+        dato.innerHTML = um.id;
+        fila.appendChild(dato);
+        dato = document.createElement("td");
+        dato.innerHTML = um.nombre;
+        fila.appendChild(dato);
+        dato = document.createElement("td");
+        dato.innerHTML = um.interpretacion;
+        fila.appendChild(dato);
+        body.appendChild(fila);
+        dato = document.createElement("td");
+        dato.innerHTML = um.inferior;
+        fila.appendChild(dato);
+        dato = document.createElement("td");
+        dato.innerHTML = um.superior;
+        fila.appendChild(dato);
+        input = document.createElement("input");
+        input.type = "checkbox";
+        input.readOnly = true;
+        input.checked = um.activo == "true";
+        dato = document.createElement("td");
+        dato.appendChild(input);
+        fila.appendChild(dato);
+        console.log(um);
+    });
+    var tabla = templeate.querySelector(".table");
+    tabla.id = "umbral_" + json.id_decicion;
+    tabla.style.display = "none";
+    console.log(templeate);
+    seccion.appendChild(templeate);
+
+
+
+
 }
 
 function error_cargar_criterios_table(err) {
@@ -1515,7 +1604,7 @@ function cargar_modelos_table(json) {
     json.forEach((md) => {
         modelo_fisico_json = JSON.parse(md.json);
         res += `<tr id='modelo-${md.id}-tabla'>`;
-        res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-autor="${md.autor}" data-descripcion="${md.descripcion}" data-activo="${true}"></td>`;
+        res += `<td name="modelo-${md.id}"><input type="radio" name="modelo_seleccionado_tabla" value="${md.id}" data-name="${md.nombre}" data-autor="${md.autor}" data-descripcion="${md.descripcion}" data-activo="${md.activo == "true"}"></td>`;
         res += `<td name="modelo-${md.id}">${md.id}</td>`;
         res += `<td name="modelo-${md.id}">${md.nombre}</td>`;
         res += `<td name="modelo-${md.id}">${md.autor}</td>`;
@@ -1566,7 +1655,7 @@ function modal_modificar_modelo() {
             name = elem.dataset.name;
             descripcion = elem.dataset.descripcion;
             autor = elem.dataset.autor;
-            activo = elem.dataset.activo;
+            activo = elem.dataset.activo == "true";
             select = true;
             return;
         }
@@ -1576,7 +1665,7 @@ function modal_modificar_modelo() {
     document.getElementById("nombre_modelo_update").value = name;
     document.getElementById("descripcion_esenario_update").value = descripcion;
     document.getElementById("autor_esenario_update").value = autor;
-    document.getElementById("activoModelo").value = activo;
+    document.getElementById("activoModelo").checked = activo;
     if (select) $("#modificar_modelo_modal").modal("show");
     else alert("Seleccione un modelo para modificar");
 }

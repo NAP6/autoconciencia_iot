@@ -6,6 +6,7 @@ export default function (app: Application) {
   app.post("/api/save_subjects/", api.save_subjects);
   app.post("/api/save_entity/", api.save_entity);
   app.get("/api/entity/", api.entity);
+  app.get("/api/enumeracion/", api.enumeracion);
   app.get("/api/measurement_units/", api.measurement_units);
   app.post("/api/add_measurement_units/", api.add_measurement_units);
   app.post("/api/del_measurement_units/", api.del_measurement_units);

@@ -45,6 +45,17 @@ export function save_entity(req: Request, res: Response) {
     res.json({ Mensaje: "Debe iniciar session para poder usar la api" });
   }
 }
+export function enumeracion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.getUser_enumeracion(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 
 export function measurement_units(req: Request, res: Response) {
   if (req.session?.user) {

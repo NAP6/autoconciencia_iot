@@ -17,10 +17,10 @@ export class mysql_connector {
 
   //seleccionar Enumeracion
   public getEnumeracion(tipo: string, func: Function): void {
+    
     var sql = `SELECT enu_nombre_valor, enu_valor
       FROM enumeracion
       WHERE enu_nombre_enumeracion = '${tipo}'`;
-
     this.connector.query(sql,
       (err, result, fields) => {
         if (err) err;
@@ -42,13 +42,17 @@ export class mysql_connector {
     nombre: string,
     descripcion: string,
     autor: string,
-    modelo: object
+    modelo: object,
+    user_id:string,
+    func:Function
   ): void {
     var sql = `INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) 
-    VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'", '$/COMILLA_SIMPLE/')}', '1')`;
+    VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'", '$/COMILLA_SIMPLE/')}','${user_id}')`;
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
-      //console.log('The solution is: ', results[0].solution);
+      console.log("Esto es en save new model")
+      console.log(results);
+      func(results.insertId);
     });
   }
 
@@ -412,16 +416,24 @@ export class mysql_connector {
       }
     );
   }
-  public getModel(modelID: string): object {
+  public async getModel(modelID: string, func: Function): Promise<void> {
     console.log(
       `############# Envio a la funcion 'getModel' el id de usuario '${modelID}`
     );
-    return {
-      id: "2",
-      nombre: "Modelo 2",
-      descripcion: "descripcion modelo 2",
-      modelID: "1",
-    };
+    var sql = `SELECT ma_id,ma_nombre,ma_descripcion,ma_autor,ma_activo
+    FROM modeloautoconsciencia
+    WHERE ma_id = '${modelID}'`;
+  await this.connector.query(sql,
+    (err, result) => {
+      if (err) err;
+      console.log('Esto es en get model')
+      console.log(result)
+      func({
+        nombre: result[0].ma_nombre,
+        descripcion: result[0].ma_descripcion,
+        modelID: result[0].ma_id,
+      })
+    });
   }
 
   public getUser_measurementUnit(userID: string, func: Function): void {
@@ -449,6 +461,29 @@ export class mysql_connector {
             descripcion: result[i]["um_descripcion"],
             acronimo: result[i]["um_acronimo"],
             activo: act,
+          }
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
+      });
+  }
+  public getUser_enumeracion(userID: string, func: Function): void {
+    console.log(
+      `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
+    );
+
+    this.connector.query(`SELECT enu_id, enu_nombre_enumeracion
+      FROM enumeracion`,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
+          var auxmedicion = {
+            id: result[i]["enu_id"],
+            nombre: result[i]["enu_nombre_enumeracion"],
+            
           }
           listaUmedicion.push(auxmedicion);
         }
@@ -557,13 +592,13 @@ export class mysql_connector {
     tipo: string
   ): void {
     var tip;
-    if (tipo == 'ordinal') {
+    if (tipo == 'Ordinal') {
       tip = 1;
-    } else if (tipo == 'nominal') {
+    } else if (tipo == 'Nominal') {
       tip = 2;
-    } else if (tipo == 'rango') {
+    } else if (tipo == 'Rango') {
       tip = 3;
-    } else if (tipo == 'ratio') {
+    } else if (tipo == 'Ratio') {
       tip = 4;
     }
     this.connector.query(`INSERT INTO escala (esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
@@ -708,7 +743,7 @@ export class mysql_connector {
     FROM umbral WHERE cd_id=${id_decicion}`,
       (err, result, fields) => {
         if (err) err;
-        var listaumb: Array<object> = [];
+        var listaumb: {id_decicion:string, umbrales:Array<object>} = {id_decicion:id_decicion,umbrales:[]};
         var act;
         for (const i in result) {
           //console.log(result[i]);
@@ -725,7 +760,7 @@ export class mysql_connector {
             superior: result[i]["umb_superior"],
             activo: act,
           }
-          listaumb.push(auxmedicion);
+          listaumb.umbrales.push(auxmedicion);
         }
         func(listaumb);
       });
