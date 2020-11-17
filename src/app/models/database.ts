@@ -60,9 +60,11 @@ export class mysql_connector {
     console.log(
       `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion},activo:${activo}`
     );
-    if (activo = 'true'){
+    if (activo == 'true'){
+      console.log("Entra true");
       var activ = '1';
     }else{
+      console.log("Entra False");
       activ = '2';
     }
     this.connector.query(`UPDATE modeloautoconsciencia 
@@ -532,6 +534,7 @@ export class mysql_connector {
       `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym},activo:${activo}`
     ); 
     var act;
+    console.log(activo);
     if (activo == 'true') {
       act = 1;
     } else if (activo == 'false') {

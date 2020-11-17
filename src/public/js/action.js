@@ -649,17 +649,18 @@ function eliminarUnidadMedida() {
                 name = elem.dataset.name;
                 descripcion = elem.dataset.descripcion;
                 acronym = elem.dataset.acronym;
-                activo = elem.dataset.activo;
+                activo = elem.dataset.activo == "true";
                 return;
             }
         });
 
         if (!!id && !!name && !!descripcion && !!acronym) {
+
             document.getElementById("input-id-del").value = id;
             document.getElementById("input-name-del").value = name;
             document.getElementById("input-descripton-del").value = descripcion;
             document.getElementById("input-acronym-del").value = acronym;
-            document.getElementById("delUnitsAct").value = activo;
+            document.getElementById("delUnitsAct").checked = activo;
             $("#modal_eliminar_unidadMedida").modal("show");
         } else alert("Debe seleccionar un elemento para modificar");
     } catch (error) {
@@ -681,7 +682,6 @@ function GuardarEliminarUnidadMedida() {
         data = {
             id: id,
         };
-        console.log(data);
         post_api(
             "http://localhost:3000/api/del_measurement_units/",
             data,
@@ -714,7 +714,6 @@ function modificarUnidadMedida() {
                 return;
             }
         });
-
         if (!!id && !!name && !!descripcion && !!acronym) {
             document.getElementById("input-id-update").value = id;
             document.getElementById("input-name-update").value = name;
@@ -727,9 +726,7 @@ function modificarUnidadMedida() {
     } catch (error) {
         alert(error);
     }
-
 }
-
 
 function guardarModificacionMedida() {
     var data = {
@@ -737,13 +734,10 @@ function guardarModificacionMedida() {
         nombre: document.getElementById("input-name-update").value,
         descripcion: document.getElementById("input-descripton-update").value,
         acronym: document.getElementById("input-acronym-update").value,
-        activo: document.getElementById("ActivoUnits").value
-
+        activo: document.getElementById("ActivoUnits").checked
 
     };
-
     if (!!data.id && !!data.nombre && !!data.descripcion && !!data.acronym) {
-        alert(data.activo);
         post_api(
             "http://localhost:3000/api/upd_measurement_units/",
             data,
@@ -1293,6 +1287,7 @@ function modificar_umbral() {
         var inferior;
         var superior;
         var activo;
+
         radio.forEach((elem) => {
             if (elem.checked) {
                 id = elem.value;
@@ -1304,6 +1299,7 @@ function modificar_umbral() {
                 return;
             }
         });
+        alert(id);
         if (!!id && !!name && !!interpretacion && !!superior && !!inferior) {
             document.getElementById("input-id-umbral-update").value = id;
             document.getElementById("input-name-umbral-update").value = name;

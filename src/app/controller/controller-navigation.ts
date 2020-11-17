@@ -89,15 +89,13 @@ export function models(req: Request, res: Response) {
 }
 
 export function update_model(req: Request, res: Response) {
-  console.log("LEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
   var db = new mysql_connector();
-  console.log(req.body);
   var idModel = req.body.id_modelo_update;
   var nameModel = req.body.nombre_modelo_update;
   var descripcionModel = req.body.descripcion_ecenario_update;
-  var activo = req.body.activoModelo;
+  var activo = (req.body.activoModelo != undefined).toString();
   db.update_modal(idModel, nameModel, descripcionModel, activo);
-  
+
   res.render("models", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -218,10 +216,6 @@ export function active_model(req: Request, res: Response, next: NextFunction) {
 }
 
 export function home(req: Request, res: Response) {
-  console.log('#####################################################')
-  console.log('#####################################################')
-  console.log('#####################################################')
-  console.log(req.session)
   res.render("principal", {
     error: req.flash("error"),
     succes: req.flash("succes"),

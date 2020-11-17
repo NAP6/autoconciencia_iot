@@ -102,7 +102,9 @@ export function upd_measurement_units(req: Request, res: Response) {
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
     var acronym = req.body.acronym;
-    var activo=req.body.activo;
+    var activo=(req.body.activo).toString();
+    
+    console.log(activo);
     var db = new database();
     db.updUser_measurementUnit(idUser, id, name, descripcion, acronym, activo);
     res.json({mensaje: "La accion fue realizada con exito"});
