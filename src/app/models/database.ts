@@ -629,12 +629,12 @@ export class mysql_connector {
     id: string,
     name: string,
     valor_valido: string,
-    activo: string,
     tipo: string,
+    activo: string,
   ): void {
-    /* console.log(
-      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},activo: ${activo},tipo: ${tipo}`
-    ); */
+     console.log(
+      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},tipo: ${tipo},activo: ${activo}`
+    ); 
     var tip;
     var act;
     if (tipo == 'Ordinal') {

@@ -157,7 +157,9 @@ export function upd_escales(req: Request, res: Response) {
     var name = req.body.nombre;
     var valor_valido = req.body.valor_valido;
     var tipo = req.body.tipo;
-    var activo=req.body.activo;
+    var activo=(req.body.activo).toString();
+   
+
     var db = new database();
     db.updUser_escales(idUser, id, name, valor_valido,tipo,activo);
     res.json({mensaje: "La accion fue realizada con exito"});
@@ -211,8 +213,8 @@ export function upd_decision_criteria(req: Request, res: Response) {
     var id = req.body.id;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var activo=req.body.activo;
-    
+    var activo=(req.body.activo).toString();
+    console.log(activo);
     var db = new database();
     db.updUser_criteriaDecision(idUser, id, name, descripcion,activo);
     res.json({mensaje: "La accion fue realizada con exito"});

@@ -803,7 +803,7 @@ function cargar_escales_table(json) {
     res = "";
     json.forEach((es) => {
         res += "<tr>";
-        res += `<td><input type="radio" name="escala_seleccionada" value="${es.id}" data-name="${es.nombre}" data-valor_valido="${es.valor_valido}" data-tipo="${es.tipo}" data-activo="${es.activo}"></td>`;
+        res += `<td><input type="radio" name="escala_seleccionada" value="${es.id}" data-name="${es.nombre}" data-valor_valido="${es.valor_valido}" data-tipo="${es.tipo}" data-activo="${es.activo=="true"}"></td>`;
         res += `<td>${es.id}</td>`;
         res += `<td>${es.nombre}</td>`;
         res += `<td>${es.valor_valido}</td>`;
@@ -876,7 +876,7 @@ function eliminarEscala() {
             name = elem.dataset.name;
             valor_valido = elem.dataset.valor_valido;
             tipo = elem.dataset.tipo;
-            activo = elem.dataset.activo;
+            activo = elem.dataset.activo == "true";
             return;
         }
     });
@@ -886,7 +886,7 @@ function eliminarEscala() {
         document.getElementById("input-escale-name-del").value = name;
         document.getElementById("input-escale-valor-del").value = valor_valido;
         document.getElementById("input-tipe-del").value = tipo;
-        document.getElementById("delactivoEscalas").value = activo;
+        document.getElementById("delactivoEscalas").checked = activo;
         $("#modal_escalas_del").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
@@ -932,7 +932,7 @@ function modificarEscalas() {
             name = elem.dataset.name;
             valor_valido = elem.dataset.valor_valido;
             tipo = elem.dataset.tipo;
-            activo = elem.dataset.activo;
+            activo = elem.dataset.activo == "true";
             return;
         }
     });
@@ -941,8 +941,7 @@ function modificarEscalas() {
         document.getElementById("input-escale-id-update").value = id;
         document.getElementById("input-escale-name-update").value = name;
         document.getElementById("input-escale-valor-update").value = valor_valido;
-        document.getElementById("input-tipe-update").value = tipo;
-        document.getElementById("activoEscalas").value = activo;
+        document.getElementById("activoEscalas").checked = activo;
         $("#modal_escalas_mod").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
@@ -952,8 +951,8 @@ function guardarModificacionEscala() {
         id: document.getElementById("input-escale-id-update").value,
         nombre: document.getElementById("input-escale-name-update").value,
         valor_valido: document.getElementById("input-escale-valor-update").value,
-        tipo: document.getElementById("input-tipe-update").value,
-        activo: document.getElementById("activoEscalas").value,
+        tipo: document.getElementById("tipo_escalas").value,
+        activo: document.getElementById("activoEscalas").checked,
 
     };
     if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
@@ -995,7 +994,7 @@ function cargar_criterios_table(json) {
     res = "";
     json.forEach((cd) => {
         res += `<tr onClick="visibilidad_umbral('${cd.id}')">`;
-        res += `<td><input type="checkbox" name="criterio_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-descripcion="${cd.descripcion}" data-activo="${cd.activo}"></td>`;
+        res += `<td><input type="checkbox" name="criterio_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-descripcion="${cd.descripcion}" data-activo="${cd.activo=="true"}"></td>`;
         res += `<td>${cd.id}</td>`;
         res += `<td>${cd.nombre}</td>`;
         res += `<td>${cd.descripcion}</td>`;
@@ -1055,7 +1054,7 @@ function eliminar_criterio_decision() {
                 id = elem.value;
                 name = elem.dataset.name;
                 descripcion = elem.dataset.descripcion;
-                activo = elem.dataset.activo;
+                activo = elem.dataset.activo == "true";
                 return;
             }
         });
@@ -1063,7 +1062,7 @@ function eliminar_criterio_decision() {
             document.getElementById("input-id-criteria-del").value = id;
             document.getElementById("input-name-criteria-del").value = name;
             document.getElementById("input-descripton-criteria-del").value = descripcion;
-            document.getElementById("DelCriteria").value = activo;
+            document.getElementById("DelCriteria").checked = activo;
             $("#modal_eliminar_criterios").modal("show");
         } else alert("Seleccione el Elemento");
 
@@ -1074,30 +1073,36 @@ function eliminar_criterio_decision() {
 }
 
 function guardar_eliminar_criterio_decision() {
-    var radio = document.getElementsByName("criterio_seleccionado");
-    var id;
-    radio.forEach((elem) => {
-        if (elem.checked) {
-            id = elem.value;
-            return;
-        }
-    });
-    if (!!id) {
-        data = {
-            id: id,
-        };
-        post_api(
-            "http://localhost:3000/api/del_decision_criteria/",
-            data,
-            mensaje_exitoEnvioDecisionCriteria,
-            mensaje_errorEnvioDecisionCriteria
-        );
-        consultar_api(
-            "http://localhost:3000/api/decision_criteria",
-            cargar_criterios_table, error_cargar_criterios_table
-        );
-        $("#modal_eliminar_criterios").modal("hide");
-    } else alert("Debe seleccionar un elemento para eliminar");
+    try {
+        var radio = document.getElementsByName("criterio_seleccionado");
+        var id;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.value;
+                return;
+            }
+        });
+        if (!!id) {
+            data = {
+                id: id,
+            };
+            post_api(
+                "http://localhost:3000/api/del_decision_criteria/",
+                data,
+                mensaje_exitoEnvioDecisionCriteria,
+                mensaje_errorEnvioDecisionCriteria
+            );
+            consultar_api(
+                "http://localhost:3000/api/decision_criteria",
+                cargar_criterios_table, error_cargar_criterios_table
+            );
+            $("#modal_eliminar_criterios").modal("hide");
+        } else alert("Debe seleccionar un elemento para eliminar");
+
+    } catch (error) {
+        alert(error);
+    }
+
 }
 
 function modificar_criterio_decision() {
@@ -1112,7 +1117,7 @@ function modificar_criterio_decision() {
                 id = elem.value;
                 name = elem.dataset.name;
                 descripcion = elem.dataset.descripcion;
-                activo = elem.dataset.activo;
+                activo = elem.dataset.activo == "true";
                 return;
             }
         });
@@ -1120,7 +1125,7 @@ function modificar_criterio_decision() {
             document.getElementById("input-id-criteria-update").value = id;
             document.getElementById("input-name-criteria-update").value = name;
             document.getElementById("input-descripton-criteria-update").value = descripcion;
-            document.getElementById("activoCriteria").value = activo;
+            document.getElementById("activoCriteria").checked = activo;
             $("#modal_modificar_criterios").modal("show");
         } else alert("Seleccione el Elemento");
 
@@ -1136,7 +1141,7 @@ function guardarModificacionCriterios() {
             id: document.getElementById("input-id-criteria-update").value,
             nombre: document.getElementById("input-name-criteria-update").value,
             descripcion: document.getElementById("input-descripton-criteria-update").value,
-            activo: document.getElementById("activoCriteria").value
+            activo: document.getElementById("activoCriteria").checked
         };
         if (!!data.id && !!data.nombre && !!data.descripcion) {
             post_api(
@@ -1181,7 +1186,6 @@ function visibilidad_umbral(id) {
 }
 
 function cargar_umbral_table(json) {
-    console.log(json);
     var seccion = document.getElementById("seccion_umbrales");
     var templeate = document.getElementById("templeta_tabla_umbral").content.cloneNode(true);
     var body = templeate.getElementById("tabla_umbral");
@@ -1287,7 +1291,6 @@ function modificar_umbral() {
         var inferior;
         var superior;
         var activo;
-
         radio.forEach((elem) => {
             if (elem.checked) {
                 id = elem.value;
@@ -1299,7 +1302,6 @@ function modificar_umbral() {
                 return;
             }
         });
-        alert(id);
         if (!!id && !!name && !!interpretacion && !!superior && !!inferior) {
             document.getElementById("input-id-umbral-update").value = id;
             document.getElementById("input-name-umbral-update").value = name;
