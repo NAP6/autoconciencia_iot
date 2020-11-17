@@ -90,12 +90,12 @@ export function models(req: Request, res: Response) {
 
 export function update_model(req: Request, res: Response) {
   var db = new mysql_connector();
-	console.log(req.body);
   var idModel = req.body.id_modelo_update;
   var nameModel = req.body.nombre_modelo_update;
   var descripcionModel = req.body.descripcion_ecenario_update;
-  var activo=req.body.activoModelo ;
-  db.update_modal(idModel, nameModel, descripcionModel,activo);
+  var activo = (req.body.activoModelo != undefined).toString();
+  db.update_modal(idModel, nameModel, descripcionModel, activo);
+
   res.render("models", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -194,11 +194,14 @@ export function save_new_model(
     var nombre = req.body.nombre_modelo;
     var descripcion = req.body.descripcion_ecenario;
     var autor = req.body.autor_modelo;
-    var activo=req.body.ModeloActivo;
+    var user_id=req.session?.user.userID;
     var db = new mysql_connector();
-    db.save_newModel(nombre, descripcion, autor,js.getJSON());
-    req.session!.active_model = db.getModel("2");
-    next();
+    db.save_newModel(nombre, descripcion, autor, js.getJSON(),user_id, (id: string) => {
+      db.getModel(id, (active_model: object) => {
+        req.session!.active_model = active_model;
+        next();
+      });
+    });
   } else {
     res.redirect("/login");
   }
@@ -206,8 +209,10 @@ export function save_new_model(
 
 export function active_model(req: Request, res: Response, next: NextFunction) {
   var db = new mysql_connector();
-  req.session!.active_model = db.getModel(req.body.select_model);
-  next();
+  db.getModel(req.body.select_model, (active_model: object) => {
+    req.session!.active_model = active_model;
+    next();
+  });
 }
 
 export function home(req: Request, res: Response) {

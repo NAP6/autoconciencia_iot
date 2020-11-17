@@ -45,6 +45,17 @@ export function save_entity(req: Request, res: Response) {
     res.json({ Mensaje: "Debe iniciar session para poder usar la api" });
   }
 }
+export function enumeracion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.getUser_enumeracion(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 
 export function measurement_units(req: Request, res: Response) {
   if (req.session?.user) {
@@ -91,7 +102,9 @@ export function upd_measurement_units(req: Request, res: Response) {
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
     var acronym = req.body.acronym;
-    var activo=req.body.activo;
+    var activo=(req.body.activo).toString();
+    
+    console.log(activo);
     var db = new database();
     db.updUser_measurementUnit(idUser, id, name, descripcion, acronym, activo);
     res.json({mensaje: "La accion fue realizada con exito"});
@@ -144,7 +157,9 @@ export function upd_escales(req: Request, res: Response) {
     var name = req.body.nombre;
     var valor_valido = req.body.valor_valido;
     var tipo = req.body.tipo;
-    var activo=req.body.activo;
+    var activo=(req.body.activo).toString();
+   
+
     var db = new database();
     db.updUser_escales(idUser, id, name, valor_valido,tipo,activo);
     res.json({mensaje: "La accion fue realizada con exito"});
@@ -198,8 +213,8 @@ export function upd_decision_criteria(req: Request, res: Response) {
     var id = req.body.id;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var activo=req.body.activo;
-    
+    var activo=(req.body.activo).toString();
+    console.log(activo);
     var db = new database();
     db.updUser_criteriaDecision(idUser, id, name, descripcion,activo);
     res.json({mensaje: "La accion fue realizada con exito"});
@@ -222,11 +237,12 @@ export function umbral(req: Request, res: Response) {
 export function add_umbral(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
-    var id=req.body.id_criterio;
+    var id=req.body.criterio_select;
     var name = req.body.nombre;
     var Interpretacion = req.body.interpretacion;
     var inferior = req.body.inferior;
-    var superior = req.body.superiror;
+    var superior = req.body.superior;
+    console.log(superior);
     var db = new database();
     db.addUser_umbral(idUser,name, Interpretacion,inferior,superior,id);
     res.json({mensaje: "La accion fue realizada con exito"});

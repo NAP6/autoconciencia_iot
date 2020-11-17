@@ -17,10 +17,10 @@ export class mysql_connector {
 
   //seleccionar Enumeracion
   public getEnumeracion(tipo: string, func: Function): void {
+    
     var sql = `SELECT enu_nombre_valor, enu_valor
       FROM enumeracion
       WHERE enu_nombre_enumeracion = '${tipo}'`;
-
     this.connector.query(sql,
       (err, result, fields) => {
         if (err) err;
@@ -42,13 +42,17 @@ export class mysql_connector {
     nombre: string,
     descripcion: string,
     autor: string,
-    modelo: object
+    modelo: object,
+    user_id:string,
+    func:Function
   ): void {
     var sql = `INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_activo, ma_modelo_arquitectura, usr_id) 
-    VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'", '$/COMILLA_SIMPLE/')}', '1')`;
+    VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'", '$/COMILLA_SIMPLE/')}','${user_id}')`;
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
-      //console.log('The solution is: ', results[0].solution);
+      console.log("Esto es en save new model")
+      console.log(results);
+      func(results.insertId);
     });
   }
 
@@ -56,9 +60,11 @@ export class mysql_connector {
     console.log(
       `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion},activo:${activo}`
     );
-    if (activo = 'true'){
+    if (activo == 'true'){
+      console.log("Entra true");
       var activ = '1';
     }else{
+      console.log("Entra False");
       activ = '2';
     }
     this.connector.query(`UPDATE modeloautoconsciencia 
@@ -382,21 +388,29 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'getUserModels' el id de usuario '${userID}'`
     );
-      var sql = `SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, CONVERT(ma_modelo_arquitectura USING utf8) as ma_modelo_arquitectura
+      var sql = `SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, CONVERT(ma_modelo_arquitectura USING utf8) as ma_modelo_arquitectura,ma_activo
       FROM modeloautoconsciencia
       WHERE usr_id = '${userID}'`;
-      console.log(sql);
+     
+      
     this.connector.query(sql,
       (err, result, fields) => {
         if (err) err;
         var listaModelo: Array<object> = [];
+        var act;
         for (const i in result) {
+          if (result[i]["ma_activo"] == 1) {
+            act = 'true'
+          } else if (result[i]["ma_activo"] == 2) {
+            act = 'false'
+          }
           var auxmodel = {
             id: result[i]["ma_id"],
             nombre: result[i]["ma_nombre"],
             descripcion: result[i]["ma_descripcion"],
             autor: result[i]["ma_autor"],
             json: result[i]["ma_modelo_arquitectura"].replace('$/COMILLA_SIMPLE/',"'"),
+            activo:act,
           }
           listaModelo.push(auxmodel);
         }
@@ -404,16 +418,24 @@ export class mysql_connector {
       }
     );
   }
-  public getModel(modelID: string): object {
+  public async getModel(modelID: string, func: Function): Promise<void> {
     console.log(
       `############# Envio a la funcion 'getModel' el id de usuario '${modelID}`
     );
-    return {
-      id: "2",
-      nombre: "Modelo 2",
-      descripcion: "descripcion modelo 2",
-      modelID: "1",
-    };
+    var sql = `SELECT ma_id,ma_nombre,ma_descripcion,ma_autor,ma_activo
+    FROM modeloautoconsciencia
+    WHERE ma_id = '${modelID}'`;
+  await this.connector.query(sql,
+    (err, result) => {
+      if (err) err;
+      console.log('Esto es en get model')
+      console.log(result)
+      func({
+        nombre: result[0].ma_nombre,
+        descripcion: result[0].ma_descripcion,
+        modelID: result[0].ma_id,
+      })
+    });
   }
 
   public getUser_measurementUnit(userID: string, func: Function): void {
@@ -429,7 +451,6 @@ export class mysql_connector {
         var act;
         for (const i in result) {
           //console.log(result[i]);
-
           if (result[i]["um_activo"] == 1) {
             act = 'true'
           } else if (result[i]["um_activo"] == 2) {
@@ -442,6 +463,30 @@ export class mysql_connector {
             acronimo: result[i]["um_acronimo"],
             activo: act,
           }
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
+      });
+  }
+  public getUser_enumeracion(userID: string, func: Function): void {
+    console.log(
+      `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
+    );
+
+    this.connector.query(`SELECT enu_id, enu_nombre_enumeracion
+      FROM enumeracion`,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+       
+        for (const i in result) {
+          
+          var auxmedicion = {
+            id: result[i]["enu_id"],
+            nombre: result[i]["enu_nombre_enumeracion"],
+            
+          }
+        
           listaUmedicion.push(auxmedicion);
         }
         func(listaUmedicion);
@@ -489,6 +534,7 @@ export class mysql_connector {
       `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym},activo:${activo}`
     ); 
     var act;
+    console.log(activo);
     if (activo == 'true') {
       act = 1;
     } else if (activo == 'false') {
@@ -583,12 +629,12 @@ export class mysql_connector {
     id: string,
     name: string,
     valor_valido: string,
-    activo: string,
     tipo: string,
+    activo: string,
   ): void {
-    /* console.log(
-      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},activo: ${activo},tipo: ${tipo}`
-    ); */
+     console.log(
+      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},tipo: ${tipo},activo: ${activo}`
+    ); 
     var tip;
     var act;
     if (tipo == 'Ordinal') {
@@ -796,7 +842,7 @@ export class mysql_connector {
     FROM umbral WHERE cd_id=${id_decicion}`,
       (err, result, fields) => {
         if (err) err;
-        var listaumb: Array<object> = [];
+        var listaumb: {id_decicion:string, umbrales:Array<object>} = {id_decicion:id_decicion,umbrales:[]};
         var act;
         for (const i in result) {
           //console.log(result[i]);
@@ -813,7 +859,7 @@ export class mysql_connector {
             superior: result[i]["umb_superior"],
             activo: act,
           }
-          listaumb.push(auxmedicion);
+          listaumb.umbrales.push(auxmedicion);
         }
         func(listaumb);
       });
@@ -867,9 +913,9 @@ export class mysql_connector {
       `############# Envio a la funcion 'updUser_criteriaDecision' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, interpretacion: ${interpretacion},inferior:${inferior},superior:${superior},activo:${activo}`
     );
     var act;
-    if (activo == 'on') {
+    if (activo == 'true') {
       act = 1;
-    } else if (activo == 'off') {
+    } else if (activo == 'false') {
       act = 2;
     }
     this.connector.query(`UPDATE umbral 

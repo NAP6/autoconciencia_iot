@@ -8,26 +8,28 @@
     </div>
     <br>
     <div class="row container">
-        <div class="col-12">
-            <table class="table table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">ID</th>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Interpretacion</th>
-                        <th scope="col">Inferior</th>
-                        <th scope="col">Superior</th>
-                        <th scope="col">Activo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tbody id="tabla_umbral">
-                    </tbody>
-                </tbody>
-            </table>
+        <div class="col-12" id="seccion_umbrales">
+
         </div>
     </div>
 </div>
+
+<template id="templeta_tabla_umbral">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Interpretacion</th>
+                <th scope="col">Inferior</th>
+                <th scope="col">Superior</th>
+                <th scope="col">Activo</th>
+            </tr>
+        </thead>
+        <tbody id="tabla_umbral">
+        </tbody>
+    </table>
+</template>
 <%- include('../decision_criteria/modal/modal_umbral_add'); %>
     <%- include('../decision_criteria/modal/modal_umbral_mod'); %>
