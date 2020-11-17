@@ -549,13 +549,13 @@ export class mysql_connector {
     tipo: string
   ): void {
     var tip;
-    if (tipo == 'ordinal') {
+    if (tipo == 'Ordinal') {
       tip = 1;
-    } else if (tipo == 'nominal') {
+    } else if (tipo == 'Nominal') {
       tip = 2;
-    } else if (tipo == 'rango') {
+    } else if (tipo == 'Rango') {
       tip = 3;
-    } else if (tipo == 'ratio') {
+    } else if (tipo == 'Ratio') {
       tip = 4;
     }
     this.connector.query(`INSERT INTO escala (esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
@@ -613,6 +613,102 @@ export class mysql_connector {
     }
     );
   }
+
+  //INICIO RECURSOS DE IMPLEMENTACION
+
+  public getUser_ri(userID: string, func: Function): void {
+    
+    this.connector.query(`SELECT ri_id, ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso, ri_activo
+      FROM recursoimplementacion`,
+      (err, result, fields) => {
+        if (err) err;
+        var lista: Array<object> = [];
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
+          if (result[i]["esc_activo"] == 1) {
+            act = 'true'
+          } else if (result[i]["esc_activo"] == 2) {
+            act = 'false'
+          }
+          var aux = {
+            id: result[i]["ri_id"],
+            nombre: result[i]["ri_nombre"],
+            descripcion: result[i]["ri_descripcion"],
+            tipo_dato_salida: result[i]["ri_tipo_dato_salida"],
+            tipo_recurso: result[i]["ri_tipo_recurso"],
+            activo: act,
+          }
+          lista.push(aux);
+        }
+        func(lista);
+      });
+  }
+  public addUser_ri(
+    idUser: string,
+    name: string,
+    descripcion: string,
+    tds: string, //tipo dato salida
+    tr: string   //tipo recurso
+  ): void {
+    var tip;
+    this.connector.query(`INSERT INTO recursoimplementacion (ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso, ri_activo) 
+      VALUES ('${name}', '${descripcion}', '${tds}', '${tr}', '1')`, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
+    });
+  }
+
+  public delUser_ri(
+    idUser: string,
+    id: string,
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'delUser_escales' el id de usuario '${idUser}, id: ${id}`
+    );
+    this.connector.query(`DELETE  FROM escala 
+      WHERE esc_id = '${id}'`, function (err, result) {
+      if (err) throw err;
+    }
+    );
+  }
+  public updUser_ri(
+    idUser: string,
+    id: string,
+    name: string,
+    valor_valido: string,
+    activo: string,
+    tipo: string,
+  ): void {
+    /* console.log(
+      `############# Envio a la funcion 'updUser_escales' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, valor_valido: ${valor_valido},activo: ${activo},tipo: ${tipo}`
+    ); */
+    var tip;
+    var act;
+    if (tipo == 'Ordinal') {
+      tip = 1;
+    } else if (tipo == 'Nominal') {
+      tip = 2;
+    } else if (tipo == 'Rango') {
+      tip = 3;
+    } else if (tipo == 'Ratio') {
+      tip = 4;
+    }
+
+    if (activo == 'true') {
+      act = 1;
+    } else if (activo == 'false') {
+      act = 2;
+    }
+    this.connector.query(`UPDATE escala 
+      SET esc_nombre = '${name}', esc_valor_valido = '${valor_valido}', esc_tipo = '${tip}', esc_activo = '${act}'
+      WHERE esc_id = '${id}'`, function (err, result) {
+      if (err) throw err;
+    }
+    );
+  }
+
+  //FIN RECURSOS DE IMPLEMENTACION
 
   public getUser_decision_criteria(userID: string, func: Function): void {
     console.log(

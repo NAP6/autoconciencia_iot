@@ -352,3 +352,58 @@ export function last_EntityID(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+
+// RECURSOS IMPLEMENTACION
+export function ri(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.getUser_ri(id,(jsonRI: object) => {
+      res.json(jsonRI);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function add_ri(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var tipo_dato_salida = req.body.tipo_dato_salida;
+    var tipo_recurso = req.body.tipo_recurso;
+    var db = new database();
+    db.addUser_ri(idUser, name, descripcion, tipo_dato_salida, tipo_recurso);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_ri(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var idDecision = req.body.id;
+    var db = new database();
+    db.delUser_ri(idUser, idDecision);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function upd_ri(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id = req.body.id;
+    var name = req.body.nombre;
+    var valor_valido = req.body.valor_valido;
+    var tipo = req.body.tipo;
+    var activo=req.body.activo;
+    var db = new database();
+    db.updUser_ri(idUser, id, name, valor_valido,tipo,activo);
+    res.json({mensaje: "La accion fue realizada con exito"});
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
