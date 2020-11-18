@@ -1186,15 +1186,22 @@ function visibilidad_umbral(id) {
 }
 
 function cargar_umbral_table(json) {
-    var seccion = document.getElementById("seccion_umbrales");
     var templeate = document.getElementById("templeta_tabla_umbral").content.cloneNode(true);
-    var body = templeate.getElementById("tabla_umbral");
+    var seccion = document.getElementById("seccion_umbrales");
+    var body = templeate.querySelector("tbody");
     json.umbrales.forEach((um) => {
         var fila = document.createElement("tr");
         var dato = document.createElement("td");
         var input = document.createElement("input");
         input.type = "radio";
         input.name = "umbral_seleccionado";
+        input.dataset.id = um.id;
+        input.dataset.nombre = um.nombre;
+        input.dataset.interpretacion = um.interpretacion;
+        input.dataset.inferior = um.inferior;
+        input.dataset.superior = um.superior;
+        input.dataset.activo = um.activo;
+        input.dataset.id_crite = json.id_decicion;
         dato.appendChild(input);
         fila.appendChild(dato);
         dato = document.createElement("td");
@@ -1206,7 +1213,6 @@ function cargar_umbral_table(json) {
         dato = document.createElement("td");
         dato.innerHTML = um.interpretacion;
         fila.appendChild(dato);
-        body.appendChild(fila);
         dato = document.createElement("td");
         dato.innerHTML = um.inferior;
         fila.appendChild(dato);
@@ -1220,8 +1226,9 @@ function cargar_umbral_table(json) {
         dato = document.createElement("td");
         dato.appendChild(input);
         fila.appendChild(dato);
-        console.log(um);
+        body.appendChild(fila);
     });
+    body.id += "_" + json.id_decicion;
     var tabla = templeate.querySelector(".table");
     tabla.id = "umbral_" + json.id_decicion;
     tabla.style.display = "none";
@@ -1291,24 +1298,25 @@ function modificar_umbral() {
     var activo;
     radio.forEach((elem) => {
         if (elem.checked) {
-            id = elem.value;
-            name = elem.dataset.name;
+            id = elem.dataset.id;
+            name = elem.dataset.nombre;
             interpretacion = elem.dataset.interpretacion;
             inferior = elem.dataset.inferior;
             superior = elem.dataset.superior;
-            activo = elem.dataset.activo;
+            activo = elem.dataset.activo == "true";
             return;
         }
-
-        if (!!id && !!name && !!interpretacion && !!superior && !!inferior) {
-            document.getElementById("input-id-umbral-update").value = id;
-            document.getElementById("input-name-umbral-update").value = name;
-            document.getElementById("input-interpretacion-umbral-update").value = interpretacion;
-            document.getElementById("input-superior-umbral-update").value = superior;
-            document.getElementById("input-inferior-umbral-update").value = inferior;
-            $("#modal_modificar_umbral").modal("show");
-        } else alert("Seleccione el Elemento");
     });
+    if (!!id && !!name && !!interpretacion && !!superior && !!inferior) {
+        document.getElementById("input-id-umbral-update").value = id;
+        document.getElementById("input-name-umbral-update").value = name;
+        document.getElementById("input-interpretacion-umbral-update").value = interpretacion;
+        document.getElementById("input-superior-umbral-update").value = superior;
+        document.getElementById("input-inferior-umbral-update").value = inferior;
+        document.getElementById("activoUmbral").checked;
+        $("#modal_modificar_umbral").modal("show");
+    } else alert("Seleccione el Elemento");
+
 
 
 }
@@ -1321,7 +1329,7 @@ function guardarModificacionUmbral() {
             interpretacion: document.getElementById("input-interpretacion-umbral-update").value,
             inferior: document.getElementById("input-inferior-umbral-update").value,
             superior: document.getElementById("input-superior-umbral-update").value,
-            activo: document.getElementById("activoUmbral").value,
+            activo: document.getElementById("activoUmbral").checked,
 
         };
         if (!!data.id && !!data.nombre && !!data.interpretacion && !!data.inferior && !!data.superior) {
@@ -1330,8 +1338,8 @@ function guardarModificacionUmbral() {
                 data,
                 mensaje_exitoEnvioUmbral,
                 mensaje_errorEnvioUmbral
-
             );
+
 
             $("#modal_modificar_umbral").modal("hide");
         } else alert("Debe debe completar todos los campos");
