@@ -1265,7 +1265,43 @@ function guardarNuevoUmbral() {
 
 }
 
+
 function eliminar_umbral() {
+    try {
+        var radio = document.getElementsByName("umbral_seleccionado");
+        var id;
+        var name;
+        var interpretacion;
+        var inferior;
+        var superior;
+        var activo;
+        radio.forEach((elem) => {
+            if (elem.checked) {
+                id = elem.dataset.id;
+                name = elem.dataset.nombre;
+                interpretacion = elem.dataset.interpretacion;
+                inferior = elem.dataset.inferior;
+                superior = elem.dataset.superior;
+                activo = elem.dataset.activo == "true";
+                return;
+            }
+        });
+        if (!!id && !!name && !!interpretacion && !!superior && !!inferior) {
+            document.getElementById("input-id-umbral-del").value = id;
+            document.getElementById("input-name-umbral-del").value = name;
+            document.getElementById("input-interpretacion-umbral-del").value = interpretacion;
+            document.getElementById("input-superior-umbral-del").value = superior;
+            document.getElementById("input-inferior-umbral-del").value = inferior;
+            document.getElementById("activoUmbralDel").checked = activo;
+            $("#modal_eliminar_umbral").modal("show");
+        } else alert("Seleccione el Elemento");
+    } catch (error) {
+        alert(error)
+    }
+
+}
+
+function guardar_eliminar_umbral() {
     var radio = document.getElementsByName("umbral_seleccionado");
     var id;
     radio.forEach((elem) => {
@@ -1313,7 +1349,7 @@ function modificar_umbral() {
         document.getElementById("input-interpretacion-umbral-update").value = interpretacion;
         document.getElementById("input-superior-umbral-update").value = superior;
         document.getElementById("input-inferior-umbral-update").value = inferior;
-        document.getElementById("activoUmbral").checked;
+        document.getElementById("activoUmbral").checked = activo;
         $("#modal_modificar_umbral").modal("show");
     } else alert("Seleccione el Elemento");
 
