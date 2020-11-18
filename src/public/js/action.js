@@ -1225,7 +1225,6 @@ function cargar_umbral_table(json) {
     var tabla = templeate.querySelector(".table");
     tabla.id = "umbral_" + json.id_decicion;
     tabla.style.display = "none";
-    console.log(templeate);
     seccion.appendChild(templeate);
 }
 
@@ -1283,25 +1282,24 @@ function eliminar_umbral() {
 }
 
 function modificar_umbral() {
-    try {
-        var radio = document.getElementsByName("umbral_seleccionado");
-        var id;
-        var name;
-        var interpretacion;
-        var inferior;
-        var superior;
-        var activo;
-        radio.forEach((elem) => {
-            if (elem.checked) {
-                id = elem.value;
-                name = elem.dataset.name;
-                interpretacion = elem.dataset.interpretacion;
-                inferior = elem.dataset.inferior;
-                superior = elem.dataset.superior;
-                activo = elem.dataset.activo;
-                return;
-            }
-        });
+    var radio = document.getElementsByName("umbral_seleccionado");
+    var id;
+    var name;
+    var interpretacion;
+    var inferior;
+    var superior;
+    var activo;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            interpretacion = elem.dataset.interpretacion;
+            inferior = elem.dataset.inferior;
+            superior = elem.dataset.superior;
+            activo = elem.dataset.activo;
+            return;
+        }
+
         if (!!id && !!name && !!interpretacion && !!superior && !!inferior) {
             document.getElementById("input-id-umbral-update").value = id;
             document.getElementById("input-name-umbral-update").value = name;
@@ -1310,10 +1308,8 @@ function modificar_umbral() {
             document.getElementById("input-inferior-umbral-update").value = inferior;
             $("#modal_modificar_umbral").modal("show");
         } else alert("Seleccione el Elemento");
+    });
 
-    } catch (error) {
-        alert(error);
-    }
 
 }
 
