@@ -31,4 +31,8 @@ export default function (app: Application) {
   app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
   app.get("/api/last_EntityID/", api.last_EntityID);
   app.get("/api/", api.home);
+  app.get("/api/recurso_implementacion/", api.ri);
+  app.post("/api/add_ri/", api.add_ri);
+  app.post("/api/del_ri/", api.del_ri);
+  app.post("/api/upd_ri/", api.upd_ri);
 };

@@ -2248,3 +2248,178 @@ function seleccionar_entidad(id) {
     alert(id);
 
 }
+
+/* 
+    SECCION SELECCION SUJETOS CARGAR LOS RECURSOS DE IMPLEMENTACION
+
+        Descripcion:
+		Esta seccion incluye el envio de datos para las Escalas
+
+        Incluye:
+*/
+
+function agregar_recurso_implementacion() {
+    $("#modal_recurso_implementacion_add").modal("show");
+}
+
+function guardarNuevaRecImpl() {
+    var data = {
+        nombre: document.getElementById("input-name-add").value,
+        descripcion: document.getElementById("input-descripcion-add").value,
+        tipo_dato_salida: document.getElementById("input-tipe-add").value,
+        tipo_recurso: document.getElementById("select_tipo_recurso").value
+    };
+    console.log(data);
+    if (!!data.nombre && !!data.descripcion && !!data.tipo_dato_salida && !!data.tipo_recurso) {
+        post_api(
+            "http://localhost:3000/api/add_ri/",
+            data,
+            mensaje_exitoEnvioRI,
+            mensaje_errorEnvioRI
+        );
+        consultar_api(
+            "http://localhost:3000/api/add_ri/",
+            cargar_ri_table,
+            error_cargar_ri_table
+        );
+        $("#modal_recurso_implementacion_add").modal("hide");
+    } else alert("Ingrese todos los campos del formulario");
+}
+
+function eliminar_recurso_implementacion() {
+    var radio = document.getElementsByName("escala_seleccionada");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        console.log(data);
+        post_api(
+            "http://localhost:3000/api/del_escales/",
+            data,
+            mensaje_exitoEnvioEscalas,
+            mensaje_errorEnvioEscalas
+        );
+        consultar_api(
+            "http://localhost:3000/api/escales",
+            cargar_escales_table, error_cargar_escales_table
+        );
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificar_recurso_implementacion() {
+    var radio = document.getElementsByName("escala_seleccionada");
+    var id;
+    var name;
+    var valor_valido;
+    var activo;
+    var tipo;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            valor_valido = elem.dataset.valor_valido;
+            tipo = elem.dataset.tipo;
+            activo = elem.dataset.activo;
+            return;
+        }
+    });
+
+    if (!!id && !!name && !!valor_valido && !!tipo) {
+        document.getElementById("input-escale-id-update").value = id;
+        document.getElementById("input-escale-name-update").value = name;
+        document.getElementById("input-escale-valor-update").value = valor_valido;
+        document.getElementById("input-tipe-update").value = tipo;
+        document.getElementById("activoEscalas").value = activo;
+        $("#modal_escalas_mod").modal("show");
+    } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function guardarModificacionRI() {
+    var data = {
+        id: document.getElementById("input-escale-id-update").value,
+        nombre: document.getElementById("input-escale-name-update").value,
+        valor_valido: document.getElementById("input-escale-valor-update").value,
+        tipo: document.getElementById("input-tipe-update").value,
+        activo: document.getElementById("activoEscalas").value,
+
+    };
+    if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
+
+        post_api(
+            "http://localhost:3000/api/upd_escales/",
+            data,
+            mensaje_exitoEnvioEscalas,
+            mensaje_errorEnvioEscalas
+
+        );
+        consultar_api(
+            "http://localhost:3000/api/escales",
+            cargar_escales_table,
+            error_cargar_escales_table
+        );
+
+        $("#modal_escalas_mod").modal("hide");
+    } else alert("Debe debe completar todos los campos");
+}
+
+function mensaje_exitoEnvioRI(json) {
+    alert(json.mensaje);
+}
+
+function mensaje_errorEnvioRI(err) {
+    alert(err);
+}
+
+/* 
+    SECCION CARGAR LAS RECURSOS IMPLEMENTACION
+
+        Descripcion:
+        Esta seccion contiene las funciones 
+        de que carga los recursos de implementacion
+		en la pagina
+
+        Incluye:
+		cargar_ri_table,
+        error_cargar_ri_table
+*/
+
+if (document.getElementById("tabla_recurso_implementacion"))
+    consultar_api(
+        "http://localhost:3000/api/recurso_implementacion",
+        cargar_ri_table,
+        error_cargar_ri_table
+    );
+
+function cargar_ri_table(json) {
+    res = "";
+    json.forEach((es) => {
+        res += "<tr>";
+        res += `<td><input type="checkbox" name="ri_seleccionada" 
+                value="${es.id}" data-name="${es.nombre}" 
+                data-descripcion="${es.descripcion}" 
+                data-tipo_dato_salida="${es.tipo_dato_salida}" 
+                data-tipo_recurso="${es.tipo_recurso}" 
+                data-activo="${es.activo}"></td>`;
+        res += `<td>${es.id}</td>`;
+        res += `<td>${es.nombre}</td>`;
+        res += `<td>${es.descripcion}</td>`;
+        res += `<td>${es.tipo_dato_salida}</td>`;
+        res += `<td>${es.tipo_recurso}</td>`;
+        if (es.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_recurso_implementacion").innerHTML = res;
+}
+
+function error_cargar_ri_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
