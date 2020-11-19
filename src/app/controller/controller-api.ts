@@ -271,7 +271,7 @@ export function upd_umbral(req: Request, res: Response) {
     var interpretacion = req.body.interpretacion;
     var inferior=req.body.inferior;
     var superior=req.body.superior;
-    var activo=req.body.activo;
+    var activo=(req.body.activo).toString();
     
     var db = new database();
     db.updUser_umbral(idUser, id, name, interpretacion,inferior,superior,activo);

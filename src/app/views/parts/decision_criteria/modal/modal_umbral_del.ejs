@@ -1,8 +1,8 @@
-<div class="modal fade" id="modal_modificar_umbral" tabindex="-1" role="dialog" aria-labelledby="modal_modificar_unidadMedidaLabel" aria-hidden="true">
+<div class="modal fade" id="modal_eliminar_umbral" tabindex="-1" role="dialog" aria-labelledby="modal_modificar_unidadMedidaLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_modificar_unidadMedidaLabel">Modificar Umbral</h5>
+                <h5 class="modal-title" id="modal_modificar_unidadMedidaLabel">Eliminar Umbral</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -13,38 +13,38 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">ID:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-id-umbral-update" readonly placeholder="0145">
+                                <input type="text" class="form-control" id="input-id-umbral-del" readonly placeholder="0145">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Nombre:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-name-umbral-update" value="" placeholder="fasd">
+                                <input type="text" class="form-control" id="input-name-umbral-del" readonly value="" placeholder="fasd">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Interpretacion: </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-interpretacion-umbral-update" value="" placeholder="fasd">
+                                <input type="text" class="form-control" id="input-interpretacion-umbral-del" readonly value="" placeholder="fasd">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Inferior: </label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-inferior-umbral-update" value="" placeholder="fasd">
+                                <input type="text" class="form-control" id="input-inferior-umbral-del" readonly value="" placeholder="fasd">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Superior:</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-superior-umbral-update" value="" placeholder="fasd">
+                                <input type="text" class="form-control" id="input-superior-umbral-del" readonly value="" placeholder="fasd">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Activo: </label>
                             <div class="col-sm-10 ">
                                 <div class="form-check">
-                                    <input class="form-check-input align-content-center" type="checkbox" id="activoUmbral" />
+                                    <input class="form-check-input align-content-center" type="checkbox" id="activoUmbralDel" disabled/>
                                 </div>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="guardarModificacionUmbral()">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="guardar_eliminar_umbral()">Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
 
             </div>
