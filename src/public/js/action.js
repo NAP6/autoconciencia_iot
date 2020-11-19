@@ -2318,12 +2318,14 @@ function eliminar_recurso_implementacion() {
 }
 
 function modificar_recurso_implementacion() {
-    var radio = document.getElementsByName("escala_seleccionada");
+    var radio = document.getElementsByName("ri_seleccionada");
     var id;
     var name;
-    var valor_valido;
+    var descripcion;
+    var tds; //tipo dato salida
+    var tipo; //tipo recurso
     var activo;
-    var tipo;
+    
     radio.forEach((elem) => {
         if (elem.checked) {
             id = elem.value;
@@ -2426,4 +2428,31 @@ function cargar_ri_table(json) {
 
 function error_cargar_ri_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
+}
+
+
+
+function add_Tipo_Recurso() {
+    var radio = document.getElementsByName("ri_seleccionada");
+    var id;
+    var tr; //tipo recurso                                                                                                                                                                                                                                                                                        
+    
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;;
+            tr = elem.dataset.tr;
+            return;
+        }
+    });
+
+    if (tr == 'Fórmula' ) {
+        document.getElementById("input-tr-id").value = id;
+        $("#modal_tipo_recurso_formula").modal("show");
+    } else if (tr == 'Función' ) {
+        document.getElementById("input-tr-id").value = id;
+        $("#modal_tipo_recurso_funcion").modal("show");
+    }else if (tr == 'Servicio' ) {
+        document.getElementById("input-escale-id-update").value = id;
+        $("#modal_tipo_recurso_servicio").modal("show");
+    }else alert("No hay tipo de recurso");
 }
