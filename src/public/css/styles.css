@@ -4181,7 +4181,8 @@ input[type=button].btn-block {
 }
 
 .custom-range::-ms-thumb:active {
-    background-color: #b3d7ff;/*#b3d7ff*/
+    background-color: #b3d7ff;
+    /*#b3d7ff*/
 }
 
 .custom-range::-ms-track {
@@ -4206,7 +4207,8 @@ input[type=button].btn-block {
 }
 
 .custom-range:disabled::-webkit-slider-thumb {
-    background-color: #adb5bd;/*#adb5bd*/
+    background-color: #adb5bd;
+    /*#adb5bd*/
 }
 
 .custom-range:disabled::-webkit-slider-runnable-track {
@@ -4214,7 +4216,8 @@ input[type=button].btn-block {
 }
 
 .custom-range:disabled::-moz-range-thumb {
-    background-color: #adb5bd;/*#adb5bd*/
+    background-color: #adb5bd;
+    /*#adb5bd*/
 }
 
 .custom-range:disabled::-moz-range-track {
@@ -4222,7 +4225,8 @@ input[type=button].btn-block {
 }
 
 .custom-range:disabled::-ms-thumb {
-    background-color: #adb5bd;/*#adb5bd*/
+    background-color: #adb5bd;
+    /*#adb5bd*/
 }
 
 .custom-control-label::before,
@@ -4258,7 +4262,8 @@ input[type=button].btn-block {
 }
 
 .nav-link.disabled {
-    color: #6c757d;/*!//#6c757d*/
+    color: #6c757d;
+    /*!//#6c757d*/
     pointer-events: none;
     cursor: default;
 }
@@ -4283,14 +4288,16 @@ input[type=button].btn-block {
 }
 
 .nav-tabs .nav-link.disabled {
-    color:#6c757d;/*#6c757d*/
+    color: #6c757d;
+    /*#6c757d*/
     background-color: transparent;
     border-color: transparent;
 }
 
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
-    color: #495057;/*!//#495057*/
+    color: #495057;
+    /*!//#495057*/
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff;
 }
@@ -6781,7 +6788,8 @@ button.bg-light:focus {
 }
 
 .bg-dark {
-    background-color: #343a40 !important;/*#343a40*/
+    background-color: #343a40 !important;
+    /*#343a40*/
 }
 
 a.bg-dark:hover,
@@ -9900,7 +9908,8 @@ a.text-primary:focus {
 }
 
 .text-secondary {
-    color: #6c757d !important;/*#6c757d*/
+    color: #6c757d !important;
+    /*#6c757d*/
 }
 
 a.text-secondary:hover,
@@ -9950,7 +9959,8 @@ a.text-danger:focus {
 
 a.text-light:hover,
 a.text-light:focus {
-    color: #cbd3da !important;/*#cbd3da*/
+    color: #cbd3da !important;
+    /*#cbd3da*/
 }
 
 .text-dark {
@@ -9967,7 +9977,8 @@ a.text-dark:focus {
 }
 
 .text-muted {
-    color: #6c757d !important;/*#6c757d*/
+    color: #6c757d !important;
+    /*#6c757d*/
 }
 
 .text-black-50 {
@@ -10025,7 +10036,8 @@ a.text-dark:focus {
     }
     pre,
     blockquote {
-        border: 1px solid #adb5bd;/*#adb5bd*/
+        border: 1px solid #adb5bd;
+        /*#adb5bd*/
         page-break-inside: avoid;
     }
     thead {
@@ -10300,16 +10312,19 @@ body {
 }
 
 .sb-sidenav-dark {
-    background-color: #2a455d;/*#34495E menu lateral*/
+    background-color: #2a455d;
+    /*#34495E menu lateral*/
     color: rgba(255, 255, 255, 0.603);
 }
 
 .sb-sidenav-dark .sb-sidenav-menu .sb-sidenav-menu-heading {
-    color: rgba(255, 255, 255, 0.774); /*255, 255, 255, 0.25*/
+    color: rgba(255, 255, 255, 0.774);
+    /*255, 255, 255, 0.25*/
 }
 
 .sb-sidenav-dark .sb-sidenav-menu .nav-link {
-    color: rgba(255, 255, 255, 0.774);/*255, 255, 255, 0.5*/
+    color: rgba(255, 255, 255, 0.774);
+    /*255, 255, 255, 0.5*/
 }
 
 .sb-sidenav-dark .sb-sidenav-menu .nav-link .sb-nav-link-icon {
@@ -10317,7 +10332,8 @@ body {
 }
 
 .sb-sidenav-dark .sb-sidenav-menu .nav-link .sb-sidenav-collapse-arrow {
-    color: rgba(255, 255, 255, 0.774);/*255, 255, 255, 0.25*/
+    color: rgba(255, 255, 255, 0.774);
+    /*255, 255, 255, 0.25*/
 }
 
 .sb-sidenav-dark .sb-sidenav-menu .nav-link:hover {
@@ -10333,7 +10349,8 @@ body {
 }
 
 .sb-sidenav-dark .sb-sidenav-footer {
-    background-color: #2E4053;/*#2E4053*/
+    background-color: #2E4053;
+    /*#2E4053*/
 }
 
 .sb-sidenav-light {
@@ -10342,7 +10359,8 @@ body {
 }
 
 .sb-sidenav-light .sb-sidenav-menu .sb-sidenav-menu-heading {
-    color: #adb5bd;/*#adb5bd*/
+    color: #adb5bd;
+    /*#adb5bd*/
 }
 
 .sb-sidenav-light .sb-sidenav-menu .nav-link {
@@ -10350,7 +10368,8 @@ body {
 }
 
 .sb-sidenav-light .sb-sidenav-menu .nav-link .sb-nav-link-icon {
-    color: #adb5bd;/*#adb5bd*/
+    color: #adb5bd;
+    /*#adb5bd*/
 }
 
 .sb-sidenav-light .sb-sidenav-menu .nav-link .sb-sidenav-collapse-arrow {

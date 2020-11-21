@@ -655,12 +655,6 @@ function eliminarUnidadMedida() {
         });
 
         if (!!id && !!name && !!descripcion && !!acronym) {
-
-            document.getElementById("input-id-del").value = id;
-            document.getElementById("input-name-del").value = name;
-            document.getElementById("input-descripton-del").value = descripcion;
-            document.getElementById("input-acronym-del").value = acronym;
-            document.getElementById("delUnitsAct").checked = activo;
             $("#modal_eliminar_unidadMedida").modal("show");
         } else alert("Debe seleccionar un elemento para modificar");
     } catch (error) {
@@ -882,11 +876,6 @@ function eliminarEscala() {
     });
 
     if (!!id && !!name && !!valor_valido && !!tipo) {
-        document.getElementById("input-escale-id-del").value = id;
-        document.getElementById("input-escale-name-del").value = name;
-        document.getElementById("input-escale-valor-del").value = valor_valido;
-        document.getElementById("input-tipe-del").value = tipo;
-        document.getElementById("delactivoEscalas").checked = activo;
         $("#modal_escalas_del").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
@@ -1059,10 +1048,6 @@ function eliminar_criterio_decision() {
             }
         });
         if (!!id && !!name && !!descripcion) {
-            document.getElementById("input-id-criteria-del").value = id;
-            document.getElementById("input-name-criteria-del").value = name;
-            document.getElementById("input-descripton-criteria-del").value = descripcion;
-            document.getElementById("DelCriteria").checked = activo;
             $("#modal_eliminar_criterios").modal("show");
         } else alert("Seleccione el Elemento");
 
@@ -1546,10 +1531,8 @@ function cargar_aspectos_table(json) {
     res = "";
     json.forEach((as) => {
         res += "<tr>";
-        res += `<td><input type="radio" name="aspecto_seleccionado" value="${as.id}" data-descripcion="${as.descripcion}"></td>`;
-        res += `<td>${as.id}</td>`;
+        res += `<td><input type="radio" name="aspecto_seleccionado" data-descripcion="${as.descripcion}"></td>`;
         res += `<td>${as.descripcion}</td>`;
-
         if (as.activo == "true")
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
@@ -2365,7 +2348,7 @@ function modificar_recurso_implementacion() {
     var tds; //tipo dato salida
     var tipo; //tipo recurso
     var activo;
-    
+
     radio.forEach((elem) => {
         if (elem.checked) {
             id = elem.value;
@@ -2476,7 +2459,7 @@ function add_Tipo_Recurso() {
     var radio = document.getElementsByName("ri_seleccionada");
     var id;
     var tr; //tipo recurso                                                                                                                                                                                                                                                                                        
-    
+
     radio.forEach((elem) => {
         if (elem.checked) {
             id = elem.value;;
@@ -2485,14 +2468,14 @@ function add_Tipo_Recurso() {
         }
     });
 
-    if (tr == 'Fórmula' ) {
+    if (tr == 'Fórmula') {
         document.getElementById("input-tr-id").value = id;
         $("#modal_tipo_recurso_formula").modal("show");
-    } else if (tr == 'Función' ) {
+    } else if (tr == 'Función') {
         document.getElementById("input-tr-id").value = id;
         $("#modal_tipo_recurso_funcion").modal("show");
-    }else if (tr == 'Servicio' ) {
+    } else if (tr == 'Servicio') {
         document.getElementById("input-escale-id-update").value = id;
         $("#modal_tipo_recurso_servicio").modal("show");
-    }else alert("No hay tipo de recurso");
+    } else alert("No hay tipo de recurso");
 }

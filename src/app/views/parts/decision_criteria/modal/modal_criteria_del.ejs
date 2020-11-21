@@ -2,47 +2,21 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal_eliminar">Eliminar Criterios de Decision</h5>
+                <h5 class="modal-title" id="modal_eliminar_unidadMedidaLabel">Eliminar Escala</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
             </div>
+
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">ID</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-id-criteria-del" readonly placeholder="0145">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Nombre</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-name-criteria-del" readonly placeholder="fasd">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Descripción</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="input-descripton-criteria-del" readonly placeholder="fasd">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-2 col-form-label">Activo: </label>
-                            <div class="col-sm-10 ">
-                                <div class="form-check">
-                                    <input class="form-check-input align-content-center" type="checkbox" id="DelCriteria" disabled />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="alert alert-danger" role="alert">
+                    Esta seguro de que desea Eliminar?
                 </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" onclick="guardar_eliminar_criterio_decision()">Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal_agregar_entidad" tabindex="-1" aria-labelledby="modal_agregar_entidadLabel" aria-hidden="true">
+<div class="modal fullscreen-modal fade" id="modal_agregar_entidad" tabindex="-1" aria-labelledby="modal_agregar_entidadLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
@@ -17,6 +17,21 @@
                         <div id="arbol_objetivos_de_entidad"></div>
                         <button class="btn btn-primary" onclick="activarFormularioAgregarEntidad()">Agregar</button>
                         <button class="btn btn-primary" onclick="eliminarEntidadLista()">Eliminar</button>
+                        <button id="bd_del_aspecto" class="btn btn-primary" onclick="eliminar_aspecto()">
+                  Administrar Métricas
+                </button>
+                        <br>
+                        <div class="col">
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_aspectos"></tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="col-6">
                         <div class="input-group mb-4">
