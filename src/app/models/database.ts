@@ -468,7 +468,7 @@ export class mysql_connector {
       `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
     );
 
-    this.connector.query(`SELECT enu_id, enu_nombre_enumeracion
+    this.connector.query(`SELECT enu_id, enu_nombre_valor
       FROM enumeracion`,
       (err, result, fields) => {
         if (err) err;
@@ -478,7 +478,7 @@ export class mysql_connector {
           
           var auxmedicion = {
             id: result[i]["enu_id"],
-            nombre: result[i]["enu_nombre_enumeracion"],
+            nombre: result[i]["enu_nombre_valor"],
             
           }
         

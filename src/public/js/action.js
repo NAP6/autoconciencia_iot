@@ -555,25 +555,24 @@ function error_cargar_enumeracion_select(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
 
-/*
-CARGAR ESCALAS-TIPO A LA PAGINA OBJETOS
-*/
-if (document.getElementById("escalas_seccion_entidad"))
+
+if (document.getElementById("tipo_escalas3"))
     consultar_api(
-        "http://localhost:3000/api/escales",
-        cargar_tipo__select,
-        error_cargar_tipo_select
+        "http://localhost:3000/api/enumeracion",
+        cargar_enumeracion_select_metrica,
+        error_cargar_enumeracion_select_metrica
     );
 
-function cargar_tipo__select(json) {
+function cargar_enumeracion_select_metrica(json) {
     res = "";
-    json.forEach((es) => {
-        res += `<option value='${es.id}'>${es.tipo}</option>`;
+    json.forEach((enu) => {
+        res += `<option value='${enu.id}'>${enu.nombre}</option>`;
     });
-    document.getElementById("escalas_seccion_entidad").innerHTML = res;
+    document.getElementById("tipo_escalas3").innerHTML = res;
+
 }
 
-function error_cargar_tipo_select(err) {
+function error_cargar_enumeracion_select_metrica(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
 
@@ -2016,7 +2015,9 @@ function abrirModalEntidad(id) {
         entidad_activoID = id;
 
         var nombre = document.getElementById("nombreEntidadActiva");
+        var nombre2 = document.getElementById("nombreEntidadActiva2");
         nombre.innerHTML = entidades_aux[id]["name"];
+        nombre2.innerHTML = entidades_aux[id]["name"];
         var arbol = document.getElementById("arbol_objetivos_de_entidad");
         arbol.innerHTML = generar_arbol_entidades(
             entidades_aux[id]["entidades"]
@@ -2052,7 +2053,7 @@ function activarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").disabled = false;
     document.getElementById("descripcionEntidad").disabled = false;
     document.getElementById("PesoEntidad").disabled = false;
-    document.getElementById("escalas_seccion_entidad").disabled = false;
+    document.getElementById("tipo_escalas3").disabled = false;
     document.getElementById("activoEntidad").disabled = false;
     document.getElementById("btn-agregarEntidadLista").disabled = false;
     document.getElementById("btn-agregarEntidadLista").disabled = false;
@@ -2073,7 +2074,7 @@ function desactivarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").disabled = true;
     document.getElementById("descripcionEntidad").disabled = true;
     document.getElementById("PesoEntidad").disabled = true;
-    document.getElementById("escalas_seccion_entidad").disabled = true;
+    document.getElementById("tipo_escalas3").disabled = true;
     document.getElementById("activoEntidad").disabled = true;
     document.getElementById("btn-agregarEntidadLista").disabled = true;
     document.getElementById("btn-CancelarEntidadLista").disabled = true;
@@ -2081,7 +2082,6 @@ function desactivarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").value = "";
     document.getElementById("descripcionEntidad").value = "";
     document.getElementById("PesoEntidad").value = "";
-    document.getElementById("escalas_seccion_entidad").value = "";
     document.getElementById("activoEntidad").value = "";
     var arbol = document.getElementsByName("Entidades_inputSelect");
     arbol.forEach((elem) => {
@@ -2500,8 +2500,6 @@ function cargar_ri_table(json) {
 function error_cargar_ri_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
-
-
 
 function add_Tipo_Recurso() {
     var radio = document.getElementsByName("ri_seleccionada");
