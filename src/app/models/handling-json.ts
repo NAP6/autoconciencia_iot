@@ -30,7 +30,8 @@ export class json {
     this.json = json;
     return json;
   }
-  public getSystem(): object {
+
+  public getSystem(): [systemObj] {
     var nameModel: string = Object.keys(this.json)[0];
     const ob = this.json[nameModel]["represents"];
     return ob;
@@ -40,4 +41,8 @@ export class json {
     const ob = this.json[nameModel]["containsEntity"];
     return ob;
   }
+}
+interface systemObj {
+  $: { id: string; name: string; descrption: string; domain: string };
+  iotSubsystem?: [systemObj];
 }
