@@ -535,7 +535,7 @@ function error_cargar_unidades_de_medida_select(err) {
 
 /*CARGAR TIPO PARA LA SECCION DE ESCALAS*/
 
-if (document.getElementById("tipo_escalas"))
+if (document.getElementById("tipo_escalas") || document.getElementById("tipo_escalas2"))
     consultar_api(
         "http://localhost:3000/api/enumeracion",
         cargar_enumeracion_select,
@@ -548,6 +548,7 @@ function cargar_enumeracion_select(json) {
         res += `<option value='${enu.id}'>${enu.nombre}</option>`;
     });
     document.getElementById("tipo_escalas").innerHTML = res;
+    document.getElementById("tipo_escalas2").innerHTML = res;
 }
 
 function error_cargar_enumeracion_select(err) {
@@ -979,6 +980,7 @@ function mensaje_errorEnvioEscalas(err) {
 
         Incluye:
 */
+//
 function cargar_criterios_table(json) {
     res = "";
     json.forEach((cd) => {
@@ -1417,6 +1419,27 @@ function guardarNuevoAspecto() {
     } else alert("Ingrese todos los campos del formulario");
 }
 
+function Administrar_aspecto() {
+
+    var radio = document.getElementsByName("aspecto_seleccionado");
+    var descripcion;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            descripcion = elem.dataset.descripcion;
+            return;
+        }
+    });
+
+    if (!!descripcion) {
+        data = {
+            descripcion: descripcion,
+        };;
+        $("#modal_agregar_metrica").modal("show");
+
+    } else alert("Debe seleccionar un Aspecto");
+
+}
+
 function eliminar_aspecto() {
     var radio = document.getElementsByName("aspecto_seleccionado");
     var id;
@@ -1533,15 +1556,31 @@ function cargar_aspectos_table(json) {
         res += "<tr>";
         res += `<td><input type="radio" name="aspecto_seleccionado" data-descripcion="${as.descripcion}"></td>`;
         res += `<td>${as.descripcion}</td>`;
-        if (as.activo == "true")
-            res += `<td><input type="checkbox" disabled checked></td>`;
-        else res += `<td><input type="checkbox" disabled></td>`;
-        res += "</tr>";
     });
     document.getElementById("tabla_aspectos").innerHTML = res;
 }
 
 function error_cargar_aspectos_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+if (document.getElementById("tabla_aspectos_Metrica"))
+    consultar_api(
+        "http://localhost:3000/api/aspects",
+        cargar_aspectos_metrica_table,
+        error_cargar_aspectos_metrica_table
+    );
+
+function cargar_aspectos_metrica_table(json) {
+    res = "";
+    json.forEach((as) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="aspecto_seleccionado" data-descripcion="${as.descripcion}"></td>`;
+        res += `<td>${as.descripcion}</td>`;
+    });
+    document.getElementById("tabla_aspectos_Metrica").innerHTML = res;
+}
+
+function error_cargar_aspectos_metrica_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
 
@@ -1840,6 +1879,7 @@ function agregar_entidad_seleccionado() {
     extraer_datos_entidad_e_hijos_lista_check("para_seleccion", "seleccionado");
 }
 
+
 function remover_entidad_seleccionado() {
     extraer_datos_entidad_e_hijos_lista_check("seleccionado", "para_seleccion");
 }
@@ -1955,6 +1995,11 @@ function extraer_datos_entidad() {
     });
     return new_ent;
 }
+/*Administrar Objetivos de Autoconsciencia*/
+function Administrar_Objetivos() {
+
+}
+
 /* 
     SECCION CREACION DE ENTIDADES ARBOL Y FORMULARIO
         Descripcion:
@@ -2006,10 +2051,12 @@ function generar_arbol_entidades(lista) {
 function activarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").disabled = false;
     document.getElementById("descripcionEntidad").disabled = false;
-    document.getElementById("AlcanceEntidad").disabled = false;
+    document.getElementById("PesoEntidad").disabled = false;
     document.getElementById("escalas_seccion_entidad").disabled = false;
     document.getElementById("activoEntidad").disabled = false;
     document.getElementById("btn-agregarEntidadLista").disabled = false;
+    document.getElementById("btn-agregarEntidadLista").disabled = false;
+    document.getElementById("btn-CancelarEntidadLista").disabled = false;
 
     var arbol = document.getElementsByName("Entidades_inputSelect");
     arbol.forEach((elem) => {
@@ -2025,14 +2072,15 @@ function activarFormularioAgregarEntidad() {
 function desactivarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").disabled = true;
     document.getElementById("descripcionEntidad").disabled = true;
-    document.getElementById("AlcanceEntidad").disabled = true;
+    document.getElementById("PesoEntidad").disabled = true;
     document.getElementById("escalas_seccion_entidad").disabled = true;
     document.getElementById("activoEntidad").disabled = true;
     document.getElementById("btn-agregarEntidadLista").disabled = true;
+    document.getElementById("btn-CancelarEntidadLista").disabled = true;
     document.getElementById("idEntidad").value = "";
     document.getElementById("nombreEntidad").value = "";
     document.getElementById("descripcionEntidad").value = "";
-    document.getElementById("AlcanceEntidad").value = "";
+    document.getElementById("PesoEntidad").value = "";
     document.getElementById("escalas_seccion_entidad").value = "";
     document.getElementById("activoEntidad").value = "";
     var arbol = document.getElementsByName("Entidades_inputSelect");
@@ -2064,17 +2112,17 @@ function agregarEntidadLista() {
     var id = document.getElementById("idEntidad").value;
     var nombre = document.getElementById("nombreEntidad").value;
     var descripcion = document.getElementById("descripcionEntidad").value;
-    var alcance = document.getElementById("AlcanceEntidad").value;
+    var peso = document.getElementById("PesoEntidad").value;
     var tipo = document.getElementById("escalas_seccion_entidad")
         .value;
     var activo = document.getElementById("activoEntidad").checked;
-    if (!!id && !!nombre && !!descripcion && !!tipo && !!alcance) {
+    if (!!id && !!nombre && !!descripcion && !!tipo && !!peso) {
         var entidades = entidades_aux[entidad_activoID].entidades;
         var idSeleccionado = getSelectedItemArbolEntidadesSelected();
         var ent_aux = {
             id: id.toString(),
             nombre: nombre,
-            alcance: alcance,
+            peso: peso,
             descripcion: descripcion,
             tipo: tipo,
             activo: activo,

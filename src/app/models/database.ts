@@ -50,8 +50,6 @@ export class mysql_connector {
     VALUES ('${nombre}', '${descripcion}', '${autor}', '1', '${JSON.stringify(modelo).replace("'", '$/COMILLA_SIMPLE/')}','${user_id}')`;
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
-      console.log("Esto es en save new model")
-      console.log(results);
       func(results.insertId);
     });
   }
@@ -427,9 +425,6 @@ export class mysql_connector {
     WHERE ma_id = '${modelID}'`;
   await this.connector.query(sql,
     (err, result) => {
-      if (err) err;
-      console.log('Esto es en get model')
-      console.log(result)
       func({
         nombre: result[0].ma_nombre,
         descripcion: result[0].ma_descripcion,
