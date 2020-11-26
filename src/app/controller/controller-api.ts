@@ -9,7 +9,21 @@ export function subjects(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session!.active_model.modelID;
     var db = new database();
-    res.json(db.get_subjectsObjects(id));
+    db.get_subjects(id, (json: object) => {
+      res.json(json);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function subjects_objects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database();
+    var subjectID = req.body.id;
+    db.get_subjectsObjects(subjectID, (json: object) => {
+      res.json(json);
+    });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -77,7 +91,7 @@ export function add_measurement_units(req: Request, res: Response) {
     var acronym = req.body.acronym;
     var db = new database();
     db.addUser_measurementUnit(idUser, name, descripcion, acronym);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -89,7 +103,7 @@ export function del_measurement_units(req: Request, res: Response) {
     var idMeasure = req.body.id;
     var db = new database();
     db.delUser_measurementUnit(idUser, idMeasure);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -102,12 +116,12 @@ export function upd_measurement_units(req: Request, res: Response) {
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
     var acronym = req.body.acronym;
-    var activo=(req.body.activo).toString();
-    
+    var activo = req.body.activo.toString();
+
     console.log(activo);
     var db = new database();
     db.updUser_measurementUnit(idUser, id, name, descripcion, acronym, activo);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -117,7 +131,7 @@ export function escales(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    db.getUser_escales(id,(jsonEscala: object) => {
+    db.getUser_escales(id, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -131,8 +145,8 @@ export function add_escales(req: Request, res: Response) {
     var valor_valido = req.body.valor_valido;
     var tipo = req.body.tipo;
     var db = new database();
-    db.addUser_escales(idUser, name, valor_valido,tipo);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    db.addUser_escales(idUser, name, valor_valido, tipo);
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -144,7 +158,7 @@ export function del_escales(req: Request, res: Response) {
     var idDecision = req.body.id;
     var db = new database();
     db.delUser_escales(idUser, idDecision);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -157,19 +171,15 @@ export function upd_escales(req: Request, res: Response) {
     var name = req.body.nombre;
     var valor_valido = req.body.valor_valido;
     var tipo = req.body.tipo;
-    var activo=(req.body.activo).toString();
-   
+    var activo = req.body.activo.toString();
 
     var db = new database();
-    db.updUser_escales(idUser, id, name, valor_valido,tipo,activo);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    db.updUser_escales(idUser, id, name, valor_valido, tipo, activo);
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-
-
-
 
 export function decision_criteria(req: Request, res: Response) {
   if (req.session?.user) {
@@ -189,7 +199,7 @@ export function add_decision_criteria(req: Request, res: Response) {
     var descripcion = req.body.descripcion;
     var db = new database();
     db.addUser_criteriaDecision(idUser, name, descripcion);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -201,7 +211,7 @@ export function del_decision_criteria(req: Request, res: Response) {
     var idDecision = req.body.id;
     var db = new database();
     db.delUser_criteriaDecision(idUser, idDecision);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -213,11 +223,11 @@ export function upd_decision_criteria(req: Request, res: Response) {
     var id = req.body.id;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var activo=(req.body.activo).toString();
+    var activo = req.body.activo.toString();
     console.log(activo);
     var db = new database();
-    db.updUser_criteriaDecision(idUser, id, name, descripcion,activo);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    db.updUser_criteriaDecision(idUser, id, name, descripcion, activo);
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -225,9 +235,9 @@ export function upd_decision_criteria(req: Request, res: Response) {
 export function umbral(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
-    var idDecision=req.body.id;
+    var idDecision = req.body.id;
     var db = new database();
-    db.getUser_umbral(id,idDecision, (jsonEscala: object) => {
+    db.getUser_umbral(id, idDecision, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -237,15 +247,15 @@ export function umbral(req: Request, res: Response) {
 export function add_umbral(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
-    var id=req.body.criterio_select;
+    var id = req.body.criterio_select;
     var name = req.body.nombre;
     var Interpretacion = req.body.interpretacion;
     var inferior = req.body.inferior;
     var superior = req.body.superior;
     console.log(superior);
     var db = new database();
-    db.addUser_umbral(idUser,name, Interpretacion,inferior,superior,id);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    db.addUser_umbral(idUser, name, Interpretacion, inferior, superior, id);
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -257,7 +267,7 @@ export function del_umbral(req: Request, res: Response) {
     var id_umbral = req.body.id;
     var db = new database();
     db.delUser_umbral(idUser, id_umbral);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -269,13 +279,21 @@ export function upd_umbral(req: Request, res: Response) {
     var id = req.body.id;
     var name = req.body.nombre;
     var interpretacion = req.body.interpretacion;
-    var inferior=req.body.inferior;
-    var superior=req.body.superior;
-    var activo=(req.body.activo).toString();
-    
+    var inferior = req.body.inferior;
+    var superior = req.body.superior;
+    var activo = req.body.activo.toString();
+
     var db = new database();
-    db.updUser_umbral(idUser, id, name, interpretacion,inferior,superior,activo);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    db.updUser_umbral(
+      idUser,
+      id,
+      name,
+      interpretacion,
+      inferior,
+      superior,
+      activo
+    );
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -294,8 +312,8 @@ export function add_aspects(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var descripcion = req.body.descripcion;
     var db = new database();
-    db.addUser_aspects(idUser,descripcion);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    db.addUser_aspects(idUser, descripcion);
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -307,7 +325,7 @@ export function del_aspects(req: Request, res: Response) {
     var idDecision = req.body.id;
     var db = new database();
     db.delUser_aspects(idUser, idDecision);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -318,10 +336,10 @@ export function upd_aspects(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var id = req.body.id;
     var descripcion = req.body.descripcion;
-    
+
     var db = new database();
     db.updUser_aspects(idUser, id, descripcion);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -331,10 +349,9 @@ export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    db.getUserModels(id,(jsonModel: object) => {
+    db.getUserModels(id, (jsonModel: object) => {
       res.json(jsonModel);
     });
-    
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -374,7 +391,7 @@ export function ri(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    db.getUser_ri(id,(jsonRI: object) => {
+    db.getUser_ri(id, (jsonRI: object) => {
       res.json(jsonRI);
     });
   } else {
@@ -390,7 +407,7 @@ export function add_ri(req: Request, res: Response) {
     var tipo_recurso = req.body.tipo_recurso;
     var db = new database();
     db.addUser_ri(idUser, name, descripcion, tipo_dato_salida, tipo_recurso);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -402,7 +419,7 @@ export function del_ri(req: Request, res: Response) {
     var idDecision = req.body.id;
     var db = new database();
     db.delUser_ri(idUser, idDecision);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -415,14 +432,15 @@ export function upd_ri(req: Request, res: Response) {
     var name = req.body.nombre;
     var valor_valido = req.body.valor_valido;
     var tipo = req.body.tipo;
-    var activo=req.body.activo;
+    var activo = req.body.activo;
     var db = new database();
-    db.updUser_ri(idUser, id, name, valor_valido,tipo,activo);
-    res.json({mensaje: "La accion fue realizada con exito"});
+    db.updUser_ri(idUser, id, name, valor_valido, tipo, activo);
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+<<<<<<< HEAD
 
 // Formulas
 export function formula(req: Request, res: Response) {
@@ -533,3 +551,5 @@ export function upd_funcion(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+=======
+>>>>>>> 4a6ceeac8030852165672aaeea93a2c0e0689173
