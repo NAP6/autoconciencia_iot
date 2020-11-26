@@ -133,6 +133,7 @@ function cargar_posibles_sujetos_modelo(json) {
     checkbox.id = `sujeto_seleccionado_${elemento.id}`;
     checkbox.dataset.padre_id = elemento.padre;
     checkbox.dataset.puro_id = elemento.id;
+    checkbox.dataset.nombre = elemento.nombre;
     checkbox.setAttribute(
       "onclick",
       "verificar_seleccion_hijo_padre(this, 'seleccionado');"
@@ -262,6 +263,27 @@ function actualizar_activos() {
       console.log(error);
     }
   );
+}
+
+function actualizar_sujetos() {
+  var check = document.getElementsByClassName(`checkbox_seleccionado`);
+  var actualizacion = [];
+  Array.from(check).forEach((e) => {
+    var elem = {
+      id: e.dataset.puro_id,
+      nombre: e.dataset.nombre,
+      activo: e.checked,
+    };
+    if (elem.activo) actualizacion.push(elem);
+  });
+  var selec = actualizacion.pop();
+  console.log(selec);
+  if (selec && actualizacion.length == 0)
+    abrirModalObjetosSujetos(selec.id, selec.nombre);
+  else if (selec) {
+    alert("Se seleccionara el ulimo elemento marcado de arriba hacia abajo");
+    abrirModalObjetosSujetos(selec.id, selec.nombre);
+  } else alert("No se a seleccionado un elemento");
 }
 
 /* 
@@ -2442,26 +2464,26 @@ function error_cargar_ri_table(err) {
 }
 
 function add_Tipo_Recurso() {
-    var seleccion = document.getElementsByName("ri_seleccionada").value;
-    var id;
-    var tr; //tipo recurso                                                                                                                                                                                                                                                                                        
+  var seleccion = document.getElementsByName("ri_seleccionada").value;
+  var id;
+  var tr; //tipo recurso
 
-    seleccion.forEach((elem) => {
-        if (elem.checked) {
-            id = elem.value;;
-            tr = elem.dataset.tr;
-            return;
-        }
-    });
+  seleccion.forEach((elem) => {
+    if (elem.checked) {
+      id = elem.value;
+      tr = elem.dataset.tr;
+      return;
+    }
+  });
 
-    if (tr == 'Fórmula') {
-        document.getElementById("input-tr-id").value = id;
-        $("#modal_tipo_recurso_formula").modal("show");
-    } else if (tr == 'Función') {
-        document.getElementById("input-tr-id").value = id;
-        $("#modal_tipo_recurso_funcion").modal("show");
-    } else if (tr == 'Servicio') {
-        document.getElementById("input-escale-id-update").value = id;
-        $("#modal_tipo_recurso_servicio").modal("show");
-    } else alert("No hay tipo de recurso");
+  if (tr == "Fórmula") {
+    document.getElementById("input-tr-id").value = id;
+    $("#modal_tipo_recurso_formula").modal("show");
+  } else if (tr == "Función") {
+    document.getElementById("input-tr-id").value = id;
+    $("#modal_tipo_recurso_funcion").modal("show");
+  } else if (tr == "Servicio") {
+    document.getElementById("input-escale-id-update").value = id;
+    $("#modal_tipo_recurso_servicio").modal("show");
+  } else alert("No hay tipo de recurso");
 }
