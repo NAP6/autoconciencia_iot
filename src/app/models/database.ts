@@ -48,8 +48,6 @@ export class mysql_connector {
     ).replace("'", "$/COMILLA_SIMPLE/")}','${user_id}')`;
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
-      console.log("Esto es en save new model");
-      console.log(results);
       func(results.insertId);
     });
   }
@@ -91,53 +89,21 @@ export class mysql_connector {
     );
   }
 
-  public get_subjectsObjects(modelID: string): object {
-    return [
-      {
-        id: 0,
-        activo: true,
-        objetos: [
-          {
-            id: 0,
-            nombre: "objeto 1",
-            descripcion: "descripcion objeto 1",
-            peso: 0,
-            operador_agregacion: "C",
-            activo: true,
-          },
-          {
-            id: 1,
-            nombre: "objeto 2",
-            descripcion: "descripcion objeto 2",
-            peso: 0,
-            operador_agregacion: "C",
-            activo: true,
-          },
-        ],
-      },
-      {
-        id: 1,
-        activo: true,
-        objetos: [
-          {
-            id: 2,
-            nombre: "objeto 3",
-            descripcion: "descripcion objeto 3",
-            peso: 0,
-            operador_agregacion: "C",
-            activo: true,
-          },
-          {
-            id: 3,
-            nombre: "objeto 4",
-            descripcion: "descripcion objeto 4",
-            peso: 0,
-            operador_agregacion: "C",
-            activo: true,
-          },
-        ],
-      },
-    ];
+  public get_subjects(modelID: string, func: Function) {
+    var sql = `SELECT suj_id as id, suj_nombre as nombre, suj_activo as activo, suj_id_padre as padre FROM sujeto WHERE ma_id = ${modelID}`;
+    this.connector.query(sql, (err, result) => {
+      if (err) throw err;
+      func(result);
+    });
+  }
+
+  public get_subjectsObjects(subjectID: string, func: Function) {
+    var sql = `SELECT obj_id as id, obj_nombre as nombre, obj_descripcion as descripcion, obj_peso as peso, obj_operacion_agregacion as asignacion, obj_activo as activo, obj_id_padre as padre  FROM objetivo WHERE suj_id = ${subjectID}`;
+    console.log(sql);
+    this.connector.query(sql, (err, result) => {
+      if (err) throw err;
+      func(result);
+    });
   }
 
   public get_entitys(modelID: string): object {
@@ -352,10 +318,11 @@ export class mysql_connector {
   ) {
     var sql = ``;
     if (subjectSup) {
-      sql = `INSERT INTO 'sujeto' ('ma_id', 'suj_nombre', 'suj_id_padre') VALUES ('${modelID}', '${subject.$.name}', ${subjectSup});`;
+      sql = `INSERT INTO sujeto (ma_id, suj_nombre, suj_id_padre) VALUES (${modelID}, '${subject.$.name}', ${subjectSup});`;
     } else {
-      sql = `INSERT INTO 'sujeto' ('ma_id', 'suj_nombre') VALUES ('${modelID}', '${subject.$.name}')`;
+      sql = `INSERT INTO sujeto (ma_id, suj_nombre) VALUES (${modelID}, '${subject.$.name}')`;
     }
+    console.log(sql);
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
       if (subject.iotSubsystem) {
@@ -466,8 +433,6 @@ export class mysql_connector {
     WHERE ma_id = '${modelID}'`;
     await this.connector.query(sql, (err, result) => {
       if (err) err;
-      console.log("Esto es en get model");
-      console.log(result);
       func({
         nombre: result[0].ma_nombre,
         descripcion: result[0].ma_descripcion,
@@ -514,8 +479,7 @@ export class mysql_connector {
     );
 
     this.connector.query(
-      `SELECT enu_id, enu_nombre_enumeracion
-      FROM enumeracion`,
+      `SELECT enu_id, enu_nombre_valor FROM enumeracion`,
       (err, result, fields) => {
         if (err) err;
         var listaUmedicion: Array<object> = [];
@@ -523,9 +487,8 @@ export class mysql_connector {
         for (const i in result) {
           var auxmedicion = {
             id: result[i]["enu_id"],
-            nombre: result[i]["enu_nombre_enumeracion"],
+            nombre: result[i]["enu_nombre_valor"],
           };
-
           listaUmedicion.push(auxmedicion);
         }
         func(listaUmedicion);

@@ -1,26 +1,20 @@
-<div class="modal fullscreen-modal fade" id="modal_agregar_entidad" tabindex="-1" aria-labelledby="modal_agregar_entidadLabel" aria-hidden="true">
+<div class="modal fullscreen-modal fade" id="modal_agregar_metrica" tabindex="-1" aria-labelledby="modal_agregar_entidadLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    Aspectos de Autoconsciencia
+                    Metricas para evaluar aspectos de autoconsciencia
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
             </div>
             <div class="modal-body">
-                <h5>Entidad: <span id="nombreEntidadActiva"></span></h5>
+                <h5>Entidad: <span id="nombreEntidadActiva2"></span></h5>
                 <div class="row">
                     <div class="col-6">
-                        <h4>Árbol de Entidades:</h4>
-                        <div id="arbol_objetivos_de_entidad"></div>
-                        <button class="btn btn-primary" onclick="activarFormularioAgregarEntidad()">Agregar</button>
-                        <button class="btn btn-primary" onclick="eliminarEntidadLista()">Eliminar</button>
-
-                        <button id="bd_del_aspecto" class="btn btn-primary" onclick="Administrar_aspecto()">
-                  Administrar Métricas
-                </button>
+                        <button class="btn btn-primary" onclick="activarFormularioAgregarMetrica()">Agregar</button>
+                        <button class="btn btn-primary" onclick="eliminar_metrica()">Eliminar</button>
                         <br>
                         <br>
                         <div class="col">
@@ -31,7 +25,7 @@
                                         <th scope="col">Descripción</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tabla_aspectos"></tbody>
+                                <tbody id="tabla_aspectos_Metrica"></tbody>
                             </table>
                         </div>
                     </div>
@@ -40,7 +34,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Id</span>
                             </div>
-                            <input type="text" name="form_entidad_new" id="idEntidad" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" readonly />
+                            <input type="text" name="form_entidad_new" id="idMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" readonly />
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
@@ -49,7 +43,7 @@
             </div>
             <input
               name="form_entidad_new"
-              id="nombreEntidad"
+              id="nombreMetrica"
               type="text"
               class="form-control"
               aria-label="Default"
@@ -66,43 +60,60 @@
             <input
               type="text"
               name="form_entidad_new"
-              id="descripcionEntidad"
+              id="descripcionMetrica"
               class="form-control"
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               disabled
             />
           </div>
+          <div class="input-group mb-4">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-default"
+                >Descripción</span
+              >
+            </div>
+            <input
+              type="text"
+              name="form_entidad_new"
+              id="descripcionMetrica"
+              class="form-control"
+              aria-label="Default"
+              aria-describedby="inputGroup-sizing-default"
+              disabled
+            />
+          </div>  
           <div class="input-group mb-4">
             <div class="input-group-prepend">
               <label class="input-group-text" for="inputGroupSelect01"
                 >Tipo: </label
               >
             </div>
-            <select class="custom-select" id="tipo_escalas3" name="tipo_escalas3" disabled></select>
+            <select
+              class="custom-select"
+              name="form_entidad_new"
+              id="escalas_seccion_entidad"
+  disabled
+            ></select>
           </div>
           <div class="input-group mb-4">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-default"
-                >Peso</span
+              <label class="input-group-text" for="inputGroupSelect01"
+                >TIPO: </label
               >
             </div>
-            <input
-              type="text"
+            <select
+              class="custom-select"
               name="form_entidad_new"
-              id="PesoEntidad"
-              class="form-control"
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-              disabled
-            />
+              id="escalas_seccion_entidad"
+  disabled
+            ></select>
           </div>
-  
-          <div class="form-group row">
+       <div class="form-group row">
             <div class="col-sm-2">Activo:</div>
             <div class="col-sm-10">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="activoEntidad" disabled>
+                <input class="form-check-input" type="checkbox" id="activoMetrica" disabled>
               </div>
             </div>
           </div>
