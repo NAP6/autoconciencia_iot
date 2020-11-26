@@ -2456,11 +2456,11 @@ function error_cargar_ri_table(err) {
 
 
 function add_Tipo_Recurso() {
-    var radio = document.getElementsByName("ri_seleccionada");
+    var seleccion = document.getElementsByName("ri_seleccionada").value;
     var id;
     var tr; //tipo recurso                                                                                                                                                                                                                                                                                        
 
-    radio.forEach((elem) => {
+    seleccion.forEach((elem) => {
         if (elem.checked) {
             id = elem.value;;
             tr = elem.dataset.tr;
