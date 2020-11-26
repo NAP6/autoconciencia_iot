@@ -163,15 +163,22 @@ function error_cargar_posibles_sujetos_modelo(error) {
 function verificar_seleccion_hijo_padre(elemento, lado) {
   var padre_id = elemento.dataset.padre_id;
   if (padre_id != "null" && elemento.checked) {
+    // Si es hijo y esta seleccionado
     document.getElementById(`sujeto_${lado}_${padre_id}`).checked = true;
   } else if (padre_id == "null") {
+    // Si es padre
     var hijos = document.getElementsByClassName(
       `hijo_de_${elemento.dataset.puro_id}_${lado}`
     );
     Array.from(hijos).forEach((e) => {
-      e.checked = elemento.checked;
+      if (
+        document.getElementById(`li_entidad_${lado}_${e.dataset.puro_id}`)
+          .style.display == "list-item"
+      )
+        e.checked = elemento.checked;
     });
   } else {
+    // De otra forma
     var deseleccion = true;
     var hijos = document.getElementsByClassName(`hijo_de_${padre_id}_${lado}`);
     Array.from(hijos).forEach((e) => {
@@ -272,7 +279,10 @@ function actualizar_sujetos() {
     var elem = {
       id: e.dataset.puro_id,
       nombre: e.dataset.nombre,
-      activo: e.checked,
+      activo:
+        e.checked &&
+        document.getElementById(`li_entidad_seleccionado_${e.dataset.puro_id}`)
+          .style.display == "list-item",
     };
     if (elem.activo) actualizacion.push(elem);
   });
