@@ -335,6 +335,13 @@ export class mysql_connector {
     });
   }
 
+  public update_subject(id: string, active: string) {
+    var sql = `UPDATE sujeto SET suj_activo = '${active ? 1 : 0}' WHERE sujeto.suj_id = ${id};`;
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+    });
+  }
+
   public save_subjectsObjects(modelID: string, json: object): void {
     console.log(
       `########## Envio a la funcion de guardar objetos del sujeto, modelo: ${modelID} \n ${JSON.stringify(

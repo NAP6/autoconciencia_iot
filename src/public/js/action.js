@@ -51,7 +51,17 @@ if (document.getElementById("lista_sujetos_para_cargar"))
   );
 
 function cargar_posibles_sujetos_modelo(json) {
-  console.log(json);
+  var aux_visible_activo = new Set();
+  var aux_visible_inactivo = new Set();
+  json.forEach((elemento) => {
+    if (!!elemento.padre && elemento.activo == 1) {
+      aux_visible_activo.add(elemento.padre);
+    } else if (!!elemento.padre && elemento.activo == 0) {
+      aux_visible_inactivo.add(elemento.padre);
+    }
+  });
+  console.log(aux_visible_inactivo);
+
   json.forEach((elemento) => {
     var insertar;
     if (!elemento.padre) {
@@ -59,33 +69,89 @@ function cargar_posibles_sujetos_modelo(json) {
     } else {
       insertar = document.createElement("ul");
       document
-        .getElementById(`visivilidad_entidad_para_seleccion_${elemento.padre}`)
+        .getElementById(`li_entidad_para_seleccion_${elemento.padre}`)
         .appendChild(insertar);
     }
-    var liPadre = document.createElement("li");
-    liPadre.id = `visivilidad_entidad_para_seleccion_${elemento.id}`;
+    var li = document.createElement("li");
+    li.id = `li_entidad_para_seleccion_${elemento.id}`;
+    if (elemento.activo == 0 || aux_visible_inactivo.has(elemento.id)) {
+      li.style.display = "list-item";
+    } else {
+      li.style.display = "none";
+    }
     var divFormCheck = document.createElement("div");
     divFormCheck.classList.add("form-check");
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.classList.add(
       "form-check-input",
-      `hijo_de_${elemento.padre}` /*, "sujeto_para_seleccion_padre"*/
+      `hijo_de_${elemento.padre}_para_seleccion` /*, "sujeto_para_seleccion_padre"*/,
+      "checkbox_para_seleccion"
     );
     checkbox.id = `sujeto_para_seleccion_${elemento.id}`;
     checkbox.dataset.padre_id = elemento.padre;
     checkbox.dataset.puro_id = elemento.id;
-    //checkbox.dataset.puro_name = elemento.nombre;
-    //checkbox.dataset.oculto = elemento.activo;
-    checkbox.setAttribute("onclick", "verificar_seleccion_hijo_padre(this);");
+    checkbox.setAttribute(
+      "onclick",
+      "verificar_seleccion_hijo_padre(this, 'para_seleccion');"
+    );
     var labelChek = document.createElement("label");
     labelChek.classList.add("form-check-label");
     labelChek.htmlFor = checkbox.id;
     labelChek.innerHTML = elemento.nombre;
-    liPadre.appendChild(divFormCheck);
+    li.appendChild(divFormCheck);
     divFormCheck.appendChild(checkbox);
     divFormCheck.appendChild(labelChek);
-    insertar.appendChild(liPadre);
+    insertar.appendChild(li);
+
+    // ===========================================================================================
+
+    if (!elemento.padre) {
+      insertar = document.getElementById("lista_sujetos_seleccionados");
+    } else {
+      insertar = document.createElement("ul");
+      document
+        .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+        .appendChild(insertar);
+    }
+    li = document.createElement("li");
+    li.id = `li_entidad_seleccionado_${elemento.id}`;
+    if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+      li.style.display = "list-item";
+    } else {
+      li.style.display = "none";
+    }
+    divFormCheck = document.createElement("div");
+    divFormCheck.classList.add("form-check");
+    checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.classList.add(
+      "form-check-input",
+      `hijo_de_${elemento.padre}_seleccionado`,
+      "checkbox_seleccionado"
+    );
+    checkbox.id = `sujeto_seleccionado_${elemento.id}`;
+    checkbox.dataset.padre_id = elemento.padre;
+    checkbox.dataset.puro_id = elemento.id;
+    checkbox.setAttribute(
+      "onclick",
+      "verificar_seleccion_hijo_padre(this, 'seleccionado');"
+    );
+    labelChek = document.createElement("label");
+    labelChek.classList.add("form-check-label");
+    labelChek.htmlFor = checkbox.id;
+    var button = document.createElement("button");
+    button.classList.add("btn", "btn-link", "py-0", "px-0");
+    button.setAttribute(
+      "onclick",
+      `abrirModalObjetosSujetos('${elemento.id}');`
+    );
+    button.innerHTML = elemento.nombre;
+    labelChek.appendChild(button);
+    li.appendChild(divFormCheck);
+    divFormCheck.appendChild(checkbox);
+    divFormCheck.appendChild(labelChek);
+    insertar.appendChild(li);
   });
 }
 
@@ -93,177 +159,109 @@ function error_cargar_posibles_sujetos_modelo(error) {
   alert("Error al cargar los datos del modelo: " + error);
 }
 
-function verificar_seleccion_hijo_padre(elemento) {
+function verificar_seleccion_hijo_padre(elemento, lado) {
   var padre_id = elemento.dataset.padre_id;
   if (padre_id != "null" && elemento.checked) {
-    document.getElementById(`sujeto_para_seleccion_${padre_id}`).checked = true;
-  } else if (padre_id == "null" && !elemento.checked) {
+    document.getElementById(`sujeto_${lado}_${padre_id}`).checked = true;
+  } else if (padre_id == "null") {
     var hijos = document.getElementsByClassName(
-      `hijo_de_${elemento.dataset.puro_id}`
+      `hijo_de_${elemento.dataset.puro_id}_${lado}`
     );
     Array.from(hijos).forEach((e) => {
-      e.checked = false;
+      e.checked = elemento.checked;
     });
+  } else {
+    var deseleccion = true;
+    var hijos = document.getElementsByClassName(`hijo_de_${padre_id}_${lado}`);
+    Array.from(hijos).forEach((e) => {
+      deseleccion = deseleccion && !e.checked;
+    });
+    document.getElementById(
+      `sujeto_${lado}_${padre_id}`
+    ).checked = !deseleccion;
   }
 }
-/*
-function verificar_seleccion_hijo_pagre(elemento) {
-  console.log("entra");
-  if (elemento.name) {
-    // Si es hijo
-    if (document.getElementById(elemento.id).checked) {
-      var x = document.getElementById(elemento.name);
-      if (x.type == "checkbox") {
-        x.checked = true;
-      }
-    } else {
-      var hijos = document.getElementsByName(elemento.name);
-      var padre = document.getElementById(elemento.name);
-      padre.checked = false;
-      Array.from(hijos).forEach((x) => {
-        if (x.type == "checkbox") {
-          padre.checked = padre.checked || x.checked;
-        }
-      });
-    }
-  } else {
-    // Si es padre
-    if (document.getElementById(elemento.id).checked) {
-      var hijos = document.getElementsByName(elemento.id);
-      Array.from(hijos).forEach((x) => {
-        if (x.type == "checkbox") {
-          x.checked = true;
-        }
-      });
-    } else {
-      var hijos = document.getElementsByName(elemento.id);
-      Array.from(hijos).forEach((x) => {
-        if (x.type == "checkbox") {
-          x.checked = false;
-        }
-      });
-    }
-  }
-}*/
 
 function agregar_sujeto_seleccionado() {
-  extraer_datos_sujeto_e_hijos_lista_check("para_seleccion", "seleccionado");
+  var checkbox = document.getElementsByClassName(`checkbox_para_seleccion`);
+  var padres_visibles = new Set();
+  Array.from(checkbox).forEach((e) => {
+    var para_seleccion = document.getElementById(
+      `li_entidad_para_seleccion_${e.dataset.puro_id}`
+    );
+    if (
+      e.dataset.padre_id != "null" &&
+      para_seleccion.style.display != "none" &&
+      !e.checked
+    ) {
+      padres_visibles.add(e.dataset.padre_id);
+    }
+    if (e.checked) {
+      para_seleccion.style.display = "none";
+      document.getElementById(
+        `li_entidad_seleccionado_${e.dataset.puro_id}`
+      ).style.display = "list-item";
+    }
+    e.checked = false;
+  });
+  padres_visibles.forEach((e) => {
+    document.getElementById(`li_entidad_para_seleccion_${e}`).style.display =
+      "list-item";
+  });
+  actualizar_activos();
 }
 
 function remover_sujeto_seleccionado() {
-  extraer_datos_sujeto_e_hijos_lista_check("seleccionado", "para_seleccion");
-}
-
-function extraer_datos_sujeto_e_hijos_lista_check(principal, contraria) {
-  var elementos = document.getElementsByClassName(
-    "sujeto_" + principal + "_padre"
-  );
-  Array.from(elementos).forEach((check) => {
-    if (check.type == "checkbox" && check.checked) {
-      var hijos = document.getElementsByName(check.id);
-      var id_puro_padre = check.dataset.puro_id;
-      var ocultar_padre_principal = true;
-      Array.from(hijos).forEach((x) => {
-        if (x.type == "checkbox" && x.checked) {
-          var id_puro_hijo = x.dataset.puro_id;
-          document.getElementById(
-            "visivilidad_sujetos_" + principal + "_" + id_puro_hijo
-          ).style.display = "none";
-          document.getElementById(
-            "visivilidad_sujetos_" + contraria + "_" + id_puro_hijo
-          ).style.display = "list-item";
-          x.checked = false;
-          x.dataset.oculto = true;
-          document.getElementById(
-            "sujetos_" + contraria + "_" + id_puro_hijo
-          ).dataset.oculto = false;
-        }
-        ocultar_padre_principal =
-          ocultar_padre_principal && x.dataset.oculto == "true";
-      });
-      if (ocultar_padre_principal) {
-        document.getElementById("visivilidad_" + check.id).style.display =
-          "none";
-        check.dataset.oculto = true;
-      }
-      check.checked = false;
+  var checkbox = document.getElementsByClassName(`checkbox_seleccionado`);
+  var padres_visibles = new Set();
+  Array.from(checkbox).forEach((e) => {
+    var para_seleccion = document.getElementById(
+      `li_entidad_seleccionado_${e.dataset.puro_id}`
+    );
+    if (
+      e.dataset.padre_id != "null" &&
+      para_seleccion.style.display != "none" &&
+      !e.checked
+    ) {
+      padres_visibles.add(e.dataset.padre_id);
+    }
+    if (e.checked) {
+      para_seleccion.style.display = "none";
       document.getElementById(
-        "sujetos_" + contraria + "_" + id_puro_padre
-      ).dataset.oculto = false;
-      document.getElementById(
-        "visivilidad_sujetos_" + contraria + "_" + id_puro_padre
+        `li_entidad_para_seleccion_${e.dataset.puro_id}`
       ).style.display = "list-item";
     }
+    e.checked = false;
   });
+  padres_visibles.forEach((e) => {
+    document.getElementById(`li_entidad_seleccionado_${e}`).style.display =
+      "list-item";
+  });
+  actualizar_activos();
 }
 
-function actualizar_sujetos() {
-  var seleccion = extraer_datos_sujeto();
-  document.getElementById("sujetos_seleccion").value = JSON.stringify(
-    seleccion
-  );
+function actualizar_activos() {
+  var check = document.getElementsByClassName(`checkbox_seleccionado`);
+  var actualizacion = [];
+  Array.from(check).forEach((e) => {
+    var elem = {
+      id: e.dataset.puro_id,
+      activo:
+        document.getElementById(`li_entidad_seleccionado_${e.dataset.puro_id}`)
+          .style.display == "list-item",
+    };
+    actualizacion.push(elem);
+  });
   post_api(
-    "http://localhost:3000/api/save_subjects/",
-    seleccion,
+    (url = "http://localhost:3000/api/update_subjects"),
+    actualizacion,
     (json) => {
-      alert("Actualizacion exitosa", json);
+      console.log(json);
     },
-    (err) => {
-      alert(err);
+    (error) => {
+      console.log(error);
     }
   );
-}
-
-function extraer_datos_sujeto() {
-  var padres = document.querySelectorAll(
-    "#lista_sujetos_seleccionados > li > div > input"
-  );
-  var new_obj = [];
-  Array.from(padres).forEach((pad) => {
-    var id = pad.dataset.puro_id;
-    var name = pad.dataset.puro_name;
-    var aux_obj;
-    var list_obj_h = [];
-    var activo = pad.dataset.oculto == "false";
-    var inactivo = false;
-    var hijos = document.getElementsByName(pad.id);
-    Array.from(hijos).forEach((hj) => {
-      var id_h = hj.dataset.puro_id;
-      var name_h = hj.dataset.puro_name;
-      var activo_h = hj.dataset.oculto == "false";
-      inactivo = inactivo || !activo_h;
-      var obj_hijos = {
-        id: id_h,
-        name: name_h,
-        activo: activo_h,
-        objects: objetosde_Sujetos_aux[id_h].objetos,
-      };
-      list_obj_h.push(obj_hijos);
-    });
-
-    if (list_obj_h.length > 0) {
-      aux_obj = {
-        id: id,
-        name: name,
-        activo: activo,
-        inactivo: inactivo,
-        tiene_subsistemas: true,
-        objects: objetosde_Sujetos_aux[id].objetos,
-        subSystem: list_obj_h,
-      };
-    } else {
-      aux_obj = {
-        id: id,
-        name: name,
-        activo: activo,
-        inactivo: inactivo,
-        tiene_subsistemas: false,
-        objects: objetosde_Sujetos_aux[id].objetos,
-      };
-    }
-    new_obj.push(aux_obj);
-  });
-  return new_obj;
 }
 
 /* 

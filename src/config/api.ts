@@ -5,6 +5,7 @@ export default function (app: Application) {
   app.get("/api/subjects/", api.subjects);
   app.get("/api/subjects_objects/", api.subjects_objects);
   app.post("/api/save_subjects/", api.save_subjects);
+  app.post("/api/update_subjects/", api.update_subjects);
   app.post("/api/save_entity/", api.save_entity);
   app.get("/api/entity/", api.entity);
   app.get("/api/enumeracion/", api.enumeracion);
