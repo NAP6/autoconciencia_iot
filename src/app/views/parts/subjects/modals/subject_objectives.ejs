@@ -1,53 +1,32 @@
-<div
-  class="modal fade"
-  id="objetosde_sujetoModal"
-  tabindex="-1"
-  aria-labelledby="objetosde_sujetoModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">
-          Objetivos del sujeto de autoconsciencia
-        </h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
+<div class="modal fade" id="objetosde_sujetoModal" tabindex="-1" aria-labelledby="objetosde_sujetoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Objetivos del sujeto de autoconsciencia
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-        <h5>Sujeto: <span id="nombreSujetoObjetoActivo"></span></h5>
-        <div class="row">
-          <div class="col-6">
-            <button
-              class="btn btn-primary"
-              onclick="activarFormularioAgregarObjeto()"
-            >
+            </div>
+            <div class="modal-body">
+                <h5>Sujeto: <span id="nombreSujetoObjetoActivo"></span></h5>
+                <div class="row">
+                    <div class="col-6">
+                        <button class="btn btn-primary" onclick="activarFormularioAgregarObjeto()">
               Agregar
             </button>
-            <button class="btn btn-primary" onclick="eliminarObjeto()">
+                        <button class="btn btn-primary" onclick="eliminarObjeto()">
               Eliminar
             </button>
-            <h4 class="mt-4">Árbol de objetivos:</h4>
-            <div id="arbol_objetivos_del_sujeto"></div>
-          </div>
-          <div class="col-6">
-            <input
-              type="text"
-              name="idPadreObjeto"
-              id="idPadreObjeto"
-              class="d-none"
-              readonly
-            />
-            <div class="input-group mb-4">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default1"
-                  >Nombre</span
+                        <h4 class="mt-4">Árbol de objetivos:</h4>
+                        <div id="arbol_objetivos_del_sujeto"></div>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" name="idPadreObjeto" id="idPadreObjeto" class="d-none" readonly />
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default1">Nombre</span
                 >
               </div>
               <input
@@ -104,10 +83,23 @@
                 id="operadorAsigObjetos"
                 disabled
               >
-                <option value="0">Op 1</option>
-                <option value="1">Op 2</option>
-                <option value="2">Op 3</option>
-                <option value="3">Op 4</option>
+                <option value="0">C</option>
+                <option value="1">C++</option>
+                <option value="2">C+</option>
+                <option value="4">C+-</option>
+                <option value="5">CA</option>
+                <option value="6">C-+</option>
+                <option value="7">C-</option>
+                <option value="8">C--</option>
+                <option value="9">A(MEDIA)</option>
+                <option value="10">D--</option>
+                <option value="11">C-</option>
+                <option value="12">D-+</option>
+                <option value="13">DA</option>
+                <option value="14">D+-</option>
+                <option value="15">D+</option>
+                <option value="16">D++</option>
+                <option value="17">D</option>
               </select>
             </div>
             <div class="form-group">
