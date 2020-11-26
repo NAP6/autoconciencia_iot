@@ -3,6 +3,7 @@ import * as api from '../app/controller/controller-api';
 
 export default function (app: Application) {
   app.get("/api/subjects/", api.subjects);
+  app.get("/api/subjects_objects/", api.subjects_objects);
   app.post("/api/save_subjects/", api.save_subjects);
   app.post("/api/save_entity/", api.save_entity);
   app.get("/api/entity/", api.entity);
@@ -35,4 +36,12 @@ export default function (app: Application) {
   app.post("/api/add_ri/", api.add_ri);
   app.post("/api/del_ri/", api.del_ri);
   app.post("/api/upd_ri/", api.upd_ri);
+
+  app.post("/api/add_formula/", api.add_formula);
+  app.post("/api/del_formula/", api.del_formula);
+  app.post("/api/upd_formula/", api.upd_formula);
+
+  app.post("/api/add_funcion/", api.add_funcion);
+  app.post("/api/del_funcion/", api.del_funcion);
+  app.post("/api/upd_funcion/", api.upd_funcion);
 };
