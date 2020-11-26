@@ -15,30 +15,35 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-4 col-form-label">Nombre:</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="input-name-add" />
+                                <input type="text" class="form-control" id="input-name-add" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-4 col-form-label">Descripción:</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="input-descripcion-add" />
+                                <input type="text" class="form-control" id="input-descripcion-add" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-4 col-form-label">Tipo Dato Salida</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="input-tipe-add" value="" />
+                                <input type="text" class="form-control" id="input-tipe-add" value="" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-sm-4 col-form-label">Tipo Recurso:</label>
                             <div class="col-sm-12">
-                                <select id="select_tipo_recurso" class="custom-select" required name="select_recurso">
+                                <select id="select_tipo_recurso" class="custom-select" required name="select_recurso" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();">
                                     <option value="Seleccione">Seleccione un Recurso</option> 
-                                    <option value="Fórmula">Fórmula</option> 
-                                    <option value="Función">Función</option>
-                                    <option value="Servicio">Servicio</option>
+                                    <option value="FÓRMULA">FÓRMULA</option> 
+                                    <option value="FUNCIÓN">FUNCIÓN</option>
+                                    <option value="SERVICIO">SERVICIO</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label"></label>
+                            <div class="col-sm-12" id="tipo_recurso">
                             </div>
                         </div>
                     </div>

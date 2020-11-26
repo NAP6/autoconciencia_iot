@@ -2442,26 +2442,26 @@ function error_cargar_ri_table(err) {
 }
 
 function add_Tipo_Recurso() {
-  var radio = document.getElementsByName("ri_seleccionada");
-  var id;
-  var tr; //tipo recurso
+    var seleccion = document.getElementsByName("ri_seleccionada").value;
+    var id;
+    var tr; //tipo recurso                                                                                                                                                                                                                                                                                        
 
-  radio.forEach((elem) => {
-    if (elem.checked) {
-      id = elem.value;
-      tr = elem.dataset.tr;
-      return;
-    }
-  });
+    seleccion.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;;
+            tr = elem.dataset.tr;
+            return;
+        }
+    });
 
-  if (tr == "Fórmula") {
-    document.getElementById("input-tr-id").value = id;
-    $("#modal_tipo_recurso_formula").modal("show");
-  } else if (tr == "Función") {
-    document.getElementById("input-tr-id").value = id;
-    $("#modal_tipo_recurso_funcion").modal("show");
-  } else if (tr == "Servicio") {
-    document.getElementById("input-escale-id-update").value = id;
-    $("#modal_tipo_recurso_servicio").modal("show");
-  } else alert("No hay tipo de recurso");
+    if (tr == 'Fórmula') {
+        document.getElementById("input-tr-id").value = id;
+        $("#modal_tipo_recurso_formula").modal("show");
+    } else if (tr == 'Función') {
+        document.getElementById("input-tr-id").value = id;
+        $("#modal_tipo_recurso_funcion").modal("show");
+    } else if (tr == 'Servicio') {
+        document.getElementById("input-escale-id-update").value = id;
+        $("#modal_tipo_recurso_servicio").modal("show");
+    } else alert("No hay tipo de recurso");
 }
