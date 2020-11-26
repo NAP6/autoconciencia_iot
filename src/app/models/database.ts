@@ -487,14 +487,9 @@ export class mysql_connector {
         for (const i in result) {
           var auxmedicion = {
             id: result[i]["enu_id"],
-<<<<<<< HEAD
             nombre: result[i]["enu_nombre_valor"], 
           }
         
-=======
-            nombre: result[i]["enu_nombre_valor"],
-          };
->>>>>>> 02e84dee571f426b87f3563f5956284b46ee3ddd
           listaUmedicion.push(auxmedicion);
         }
         func(listaUmedicion);
