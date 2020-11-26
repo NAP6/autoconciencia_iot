@@ -1,91 +1,121 @@
-<div class="modal fade" id="objetosde_sujetoModal" tabindex="-1" aria-labelledby="objetosde_sujetoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Objetivos del sujeto de autoconsciencia
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<div
+  class="modal fade"
+  id="objetosde_sujetoModal"
+  tabindex="-1"
+  aria-labelledby="objetosde_sujetoModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Objetivos del sujeto de autoconsciencia
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
-            </div>
-            <div class="modal-body">
-                <h5>Sujeto: <span id="nombreSujetoObjetoActivo"></span></h5>
-                <div class="row">
-                    <div class="col-6">
-                        <h4>Árbol de objetivos:</h4>
-                        <div id="arbol_objetivos_del_sujeto"></div>
-                        <button class="btn btn-primary" onclick="activarFormularioAgregarObjeto()">Agregar</button>
-                        <button class="btn btn-primary" onclick="eliminarObjetoLista()">Eliminar</button>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Id</span
-                >
-              </div>
-              <input
-                type="text"
-                name="form_objetosde_Sujeto_new"
-                id="idObjeto"
-                class="form-control"
-                aria-label="Default"
-                aria-describedby="inputGroup-sizing-default"
-                readonly
-              />
-            </div>
+      </div>
+      <div class="modal-body">
+        <h5>Sujeto: <span id="nombreSujetoObjetoActivo"></span></h5>
+        <div class="row">
+          <div class="col-6">
+            <button
+              class="btn btn-primary"
+              onclick="activarFormularioAgregarObjeto()"
+            >
+              Agregar
+            </button>
+            <button class="btn btn-primary" onclick="eliminarObjeto()">
+              Eliminar
+            </button>
+            <h4 class="mt-4">Árbol de objetivos:</h4>
+            <div id="arbol_objetivos_del_sujeto"></div>
+          </div>
+          <div class="col-6">
+            <input
+              type="text"
+              name="idPadreObjeto"
+              id="idPadreObjeto"
+              class="d-none"
+              readonly
+            />
             <div class="input-group mb-4">
               <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default"
+                <span class="input-group-text" id="inputGroup-sizing-default1"
                   >Nombre</span
                 >
               </div>
               <input
-                name="form_objetosde_Sujeto_new"
+                name="nombreObjeto"
                 id="nombreObjeto"
                 type="text"
                 class="form-control"
                 aria-label="Default"
-                aria-describedby="inputGroup-sizing-default"
+                aria-describedby="inputGroup-sizing-default1"
                 disabled
               />
             </div>
             <div class="input-group mb-4">
               <div class="input-group-prepend">
-                <span class="input-group-text" id="inputGroup-sizing-default"
+                <span class="input-group-text" id="inputGroup-sizing-default2"
                   >Descripción</span
                 >
               </div>
               <input
                 type="text"
-                name="form_objetosde_Sujeto_new"
+                name="descripcionObjeto"
                 id="descripcionObjeto"
                 class="form-control"
                 aria-label="Default"
-                aria-describedby="inputGroup-sizing-default"
+                aria-describedby="inputGroup-sizing-default3"
                 disabled
               />
             </div>
             <div class="input-group mb-4">
               <div class="input-group-prepend">
-                <label class="input-group-text" for="inputGroupSelect01"
-                  >Unidades de medida</label
+                <span class="input-group-text" id="inputGroup-sizing-default3"
+                  >Peso</span
+                >
+              </div>
+              <input
+                type="text"
+                name="pesoObjeto"
+                id="pesoObjeto"
+                class="form-control"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default3"
+                disabled
+              />
+            </div>
+            <div class="input-group mb-4">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="operadorAsigObjetos"
+                  >Operador de asignacion</label
                 >
               </div>
               <select
                 class="custom-select"
-                name="form_objetosde_Sujeto_new"
-                id="unidades_medida_seccion_sujetos"
-		disabled
-              ></select>
+                name="operadorAsigObjetos"
+                id="operadorAsigObjetos"
+                disabled
+              >
+                <option value="0">Op 1</option>
+                <option value="1">Op 2</option>
+                <option value="2">Op 3</option>
+                <option value="3">Op 4</option>
+              </select>
             </div>
-            <h5>Operador de Agregacion:</h5>
             <div class="form-group">
               <div class="form-check">
                 <input
                   class="form-check-input"
                   type="checkbox"
-                  name="form_objetosde_Sujeto_new"
+                  name="activoObjeto"
                   id="activoObjeto"
                   disabled
                 />
@@ -94,16 +124,22 @@
                 </label>
               </div>
             </div>
-            <button class="btn btn-primary" id="btn-agregarObjetoLista" onclick="agregarObjetoLista()">
-              Agregar Objeto
+            <button
+              class="btn btn-primary"
+              id="btn-agregarObjetoLista"
+              onclick="agregarObjeto()"
+            >
+              Guardar
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cancelar
             </button>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Cancelar
-        </button>
       </div>
     </div>
   </div>

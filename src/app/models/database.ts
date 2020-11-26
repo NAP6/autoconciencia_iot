@@ -90,19 +90,62 @@ export class mysql_connector {
   }
 
   public get_subjects(modelID: string, func: Function) {
-    var sql = `SELECT suj_id as id, suj_nombre as nombre, suj_activo as activo, suj_id_padre as padre FROM sujeto WHERE ma_id = ${modelID}`;
+    var sql = `SELECT suj_id as id, suj_nombre as nombre, suj_activo as activo, suj_id_padre as padre FROM sujeto WHERE ma_id = ${modelID} ORDER BY id`;
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       func(result);
     });
   }
 
+  public delete_subjects_objects(objectID: string, func: Function) {
+    var sql = `DELETE FROM objetivo WHERE objetivo.obj_id = ${objectID}`;
+    console.log(sql);
+    this.connector.query(sql, (err, result) => {
+      if (err) throw err;
+      func();
+    });
+  }
   public get_subjectsObjects(subjectID: string, func: Function) {
-    var sql = `SELECT obj_id as id, obj_nombre as nombre, obj_descripcion as descripcion, obj_peso as peso, obj_operacion_agregacion as asignacion, obj_activo as activo, obj_id_padre as padre  FROM objetivo WHERE suj_id = ${subjectID}`;
+    var sql = `SELECT obj_id as id, obj_nombre as nombre, obj_descripcion as descripcion, obj_peso as peso, obj_operacion_agregacion as asignacion, obj_activo as activo, obj_id_padre as padre  FROM objetivo WHERE suj_id = ${subjectID} ORDER BY id`;
     console.log(sql);
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       func(result);
+    });
+  }
+
+  public save_subjects_objects(
+    newObject: {
+      id_padre: string;
+      nombre: string;
+      descripcion: string;
+      peso: string;
+      operador: string;
+      activo: boolean;
+      sujeto_id: string;
+    },
+    func: Function
+  ) {
+    var sql = ``;
+    if (newObject.id_padre) {
+      sql = `INSERT INTO objetivo (obj_nombre, obj_descripcion, obj_peso, obj_operacion_agregacion, suj_id, obj_activo, obj_id_padre) VALUES ('${
+        newObject.nombre
+      }', '${newObject.descripcion}', '${newObject.peso}', '${
+        newObject.operador
+      }', '${newObject.sujeto_id}', '${newObject.activo ? 1 : 0}', '${
+        newObject.id_padre
+      }');`;
+    } else {
+      sql = `INSERT INTO objetivo (obj_nombre, obj_descripcion, obj_peso, obj_operacion_agregacion, suj_id, obj_activo) VALUES ('${
+        newObject.nombre
+      }', '${newObject.descripcion}', '${newObject.peso}', '${
+        newObject.operador
+      }', '${newObject.sujeto_id}', '${newObject.activo ? 1 : 0}');`;
+    }
+    console.log(sql);
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+      func();
     });
   }
 
@@ -332,6 +375,15 @@ export class mysql_connector {
         });
       }
       // results.insertId
+    });
+  }
+
+  public update_subject(id: string, active: string) {
+    var sql = `UPDATE sujeto SET suj_activo = '${
+      active ? 1 : 0
+    }' WHERE sujeto.suj_id = ${id};`;
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
     });
   }
 
