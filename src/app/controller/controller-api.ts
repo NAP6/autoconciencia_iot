@@ -29,11 +29,48 @@ export function subjects_objects(req: Request, res: Response) {
   }
 }
 
+export function delete_subjects_objects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database();
+    var objectID = req.body.id;
+    db.delete_subjects_objects(objectID, () => {
+      res.json({ Mensaje: "Los datos se han eliminado con exito" });
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function save_subjects_objects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database();
+    var newSubjectObject = req.body;
+    db.save_subjects_objects(newSubjectObject, () => {
+      res.json({ Mensaje: "Los datos se han enviado con exito" });
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
 export function save_subjects(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session!.active_model.modelID;
     var db = new mysql_connector();
     db.save_subjectsObjects(id, req.body);
+    res.json({ Mensaje: "Los datos se han enviado con exito" });
+  } else {
+    res.json({ Mensaje: "Debe iniciar session para poder usar la api" });
+  }
+}
+
+export function update_subjects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new mysql_connector();
+    var elementos = req.body;
+    elementos.forEach((e: { id: string; activo: string }) => {
+      db.update_subject(e.id, e.activo);
+    });
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ Mensaje: "Debe iniciar session para poder usar la api" });

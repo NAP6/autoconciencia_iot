@@ -10442,3 +10442,8 @@ ol {
     right: -140px;
     top: 0px;
 }
+
+#arbol_objetivos_del_sujeto {
+    overflow-y: auto;
+    max-height: 60vh;
+}
