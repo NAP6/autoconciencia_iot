@@ -440,7 +440,6 @@ export function upd_ri(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-<<<<<<< HEAD
 
 // Formulas
 export function formula(req: Request, res: Response) {
@@ -551,5 +550,3 @@ export function upd_funcion(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-=======
->>>>>>> 4a6ceeac8030852165672aaeea93a2c0e0689173

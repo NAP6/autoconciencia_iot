@@ -2431,7 +2431,7 @@ function cargar_ri_table(json) {
   res = "";
   json.forEach((es) => {
     res += "<tr>";
-    res += `<td><input type="checkbox" name="ri_seleccionada" 
+    res += `<td><input type="radio" name="ri_seleccionada" 
                 value="${es.id}" data-name="${es.nombre}" 
                 data-descripcion="${es.descripcion}" 
                 data-tipo_dato_salida="${es.tipo_dato_salida}" 
@@ -2454,27 +2454,68 @@ function error_cargar_ri_table(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
 
-function add_Tipo_Recurso() {
-    var seleccion = document.getElementsByName("ri_seleccionada").value;
-    var id;
-    var tr; //tipo recurso                                                                                                                                                                                                                                                                                        
 
-    seleccion.forEach((elem) => {
-        if (elem.checked) {
-            id = elem.value;;
-            tr = elem.dataset.tr;
-            return;
-        }
-    });
+//Cargar formulario Recursos de implementacion
 
-    if (tr == 'Fórmula') {
-        document.getElementById("input-tr-id").value = id;
-        $("#modal_tipo_recurso_formula").modal("show");
-    } else if (tr == 'Función') {
-        document.getElementById("input-tr-id").value = id;
-        $("#modal_tipo_recurso_funcion").modal("show");
-    } else if (tr == 'Servicio') {
-        document.getElementById("input-escale-id-update").value = id;
-        $("#modal_tipo_recurso_servicio").modal("show");
-    } else alert("No hay tipo de recurso");
+function cargar_recurso() {
+  var res;
+  if (document.getElementById("select_tipo_recurso").value == 'FÓRMULA'){
+    res = "";
+      res += `<label for="" class="col-sm-4 col-form-label">Fórmula</label>`;
+      res += `<div class="col-sm-12">`;
+        res += `<div class="form-group row" id="">`;
+          res += `<label for="" class="col-sm-4 col-form-label">Expresión:</label>`;
+          res += `<div class="col-sm-12">`;
+            res += `<input type="text" class="form-control" id="input_expresion_add" />`;
+          res += `</div>`;
+        res += `</div>`;
+      res += `</div>`;
+    document.getElementById("tipo_recurso").innerHTML = res ;
+  } else if (document.getElementById("select_tipo_recurso").value == 'FUNCIÓN'){
+    res = "";
+      res += `<label for="" class="col-sm-4 col-form-label">Función</label>`;
+      res += `<div class="col-sm-12">`;
+        res += `<div class="form-group row" `;
+          res += `<label for="" class="col-sm-4 col-form-label">Path:</label>`;
+          res += `<div class="col-sm-12">`;
+            res += `<input type="text" class="form-control" id="input_path_id" />`;
+          res += `</div>`;
+        res += `</div>`;
+        res += `<div class="form-group row" `;
+          res += `<label for="" class="col-sm-4 col-form-label">Instrucción:</label>`;
+          res += `<div class="col-sm-12">`;
+            res += `<input type="text" class="form-control" id="input-instruccion-id" />`;
+          res += `</div>`;
+        res += `</div>`;
+      res += `</div>`;
+    document.getElementById("tipo_recurso").innerHTML = res;
+  } else if (document.getElementById("select_tipo_recurso").value == 'SERVICIO'){
+    res = "";
+      res += `<label for="" class="col-sm-4 col-form-label">Servicio</label>`;
+      res += `<div class="col-sm-12">`;
+        res += `<div class="form-group row" `;
+          res += `<label for="" class="col-sm-4 col-form-label">Punto final:</label>`;
+          res += `<div class="col-sm-12">`;
+            res += `<input type="text" class="form-control" id="input_pf_id" />`;
+          res += `</div>`;
+        res += `</div>`;
+        res += `<div class="form-group row" `;
+          res += `<label for="" class="col-sm-4 col-form-label">Instrucción:</label>`;
+          res += `<div class="col-sm-12">`;
+            res += `<input type="text" class="form-control" id="input_instruccion_add" />`;
+          res += `</div>`;
+        res += `</div>`;
+        res += `<div class="form-group row" `;
+          res += `<label for="" class="col-sm-4 col-form-label">Tipo de salida:</label>`;
+          res += `<div class="col-sm-12">`;
+            res += `<input type="text" class="form-control" id="input_ts_add" />`;
+          res += `</div>`;
+        res += `</div>`;
+      res += `</div>`;
+    document.getElementById("tipo_recurso").innerHTML = res;
+  } else {alert('No selecciono un tipo de recurso')}
+};
+
+function error_cargar_formula(err) {
+  alert("Error al cargar el formula: " + err);
 }
