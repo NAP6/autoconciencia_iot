@@ -36,7 +36,7 @@ export class json {
     const ob = this.json[nameModel]["represents"];
     return ob;
   }
-  public getEntity(): object {
+  public getEntity(): [systemEnt] {
     var nameModel: string = Object.keys(this.json)[0];
     const ob = this.json[nameModel]["containsEntity"];
     return ob;
@@ -45,4 +45,8 @@ export class json {
 interface systemObj {
   $: { id: string; name: string; descrption: string; domain: string };
   iotSubsystem?: [systemObj];
+}
+interface systemEnt {
+  $: {'xsi:type':string; id: string; name: string;};
+  containsResource?: [systemEnt];
 }

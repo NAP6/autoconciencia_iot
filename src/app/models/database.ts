@@ -148,204 +148,13 @@ export class mysql_connector {
       func();
     });
   }
-
-  public get_entitys(modelID: string): object {
-    return [
-      {
-        id: "Entidades Fisicas",
-        name: "Entidades Fisicas",
-        tiene_entidades: true,
-        activo: true,
-        inactivo: true,
-        entitys: { raiz_0: { id: "raiz_0", nombre: "raiz", entidades: {} } },
-        entity: [
-          {
-            id: "Casa",
-            name: "Casa",
-
-            activo: false,
-            entitys: {
-              raiz_0: {
-                id: "raiz_0",
-                nombre: "raiz",
-                entidades: {
-                  "1": {
-                    id: "1",
-                    nombre: "Entidad Casa",
-                    descripcion: "descripcion de Casa",
-                    peso: "1",
-                    activo: false,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-          {
-            id: "Hospital",
-            name: "Hospital",
-
-            activo: true,
-            entitys: {
-              raiz_0: {
-                id: "raiz_0",
-                nombre: "raiz",
-                entidades: {
-                  "2": {
-                    id: "2",
-                    nombre: "Entidad Hospital",
-                    descripcion: "Descripcion del objeto del Hospital",
-                    peso: "1",
-                    activo: true,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-        ],
-      },
-      {
-        id: "Entidades Digitales",
-        name: "Entidades Digitales",
-        tiene_entidades: true,
-        activo: false,
-        inactivo: true,
-        entitys: { raiz_0: { id: "raiz_1", nombre: "raiz", entidades: {} } },
-        entity: [
-          {
-            id: "Nodos Computacion",
-            name: "Nodos Computacion",
-            activo: false,
-
-            entitys: {
-              raiz_0: {
-                id: "raiz_1",
-                nombre: "raiz",
-                objetos: {
-                  "1": {
-                    id: "1",
-                    nombre: "Entidad Nodo Computacion",
-                    descripcion:
-                      "descripcion de la entidad Nodo de Computacion",
-                    peso: "1",
-                    activo: false,
-                    objetos: {},
-                  },
-                },
-              },
-            },
-          },
-          {
-            id: "Nodos Edge",
-            name: "Nodos Edge",
-            activo: false,
-
-            entitys: {
-              raiz_0: {
-                id: "raiz_1",
-                nombre: "raiz",
-                entidades: {
-                  "2": {
-                    id: "2",
-                    nombre: "Entidad Nodos Edge",
-                    descripcion: "Descripcion del la entidad Nodos Edge",
-                    peso: "1",
-                    activo: true,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-        ],
-      },
-      {
-        id: "Dispositivos Iot",
-        name: "Dispositivos Iot",
-        tiene_entidades: true,
-        activo: false,
-        inactivo: true,
-        entitys: { raiz_0: { id: "raiz_2", nombre: "raiz", entidades: {} } },
-        entity: [
-          {
-            id: "Sensor",
-            name: "Sensor",
-            activo: false,
-            tiene_entidades: true,
-            entitys: {
-              raiz_0: {
-                id: "raiz_2",
-                nombre: "raiz",
-                entidades: {
-                  "1": {
-                    id: "1",
-                    nombre: "Entidad Sensor",
-                    descripcion: "descripcion de la entidad Sensor",
-                    peso: "1",
-                    activo: false,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-          {
-            id: "Actuador",
-            name: "Actuador",
-            activo: true,
-
-            entitys: {
-              raiz_0: {
-                id: "raiz_2",
-                nombre: "raiz",
-                entidades: {
-                  "2": {
-                    id: "2",
-                    nombre: "Entidad Actuador",
-                    descripcion: "Descripcion del la entidad Actuador",
-                    peso: "1",
-                    activo: true,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-          {
-            id: "Tag",
-            name: "Tag",
-            activo: false,
-
-            entitys: {
-              raiz_0: {
-                id: "raiz_2",
-                nombre: "raiz",
-                entidades: {
-                  "2": {
-                    id: "2",
-                    nombre: "Entidad Tag",
-                    descripcion: "Descripcion del la entidad Tag",
-                    peso: "1",
-                    activo: true,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-        ],
-      },
-      {
-        id: "Redes",
-        name: "Redes",
-
-        activo: false,
-        inactivo: true,
-        entitys: { raiz_0: { id: "raiz_3", nombre: "raiz", entidades: {} } },
-      },
-    ];
-  }
+    public get_entitys(modelID: string, func: Function) {
+      var sql = `SELECT obj_id as id, obj_tipo as tipo, obj_nombre as nombre, obj_activo as activo, obj_id_padre as padre FROM objeto WHERE ma_id = ${modelID} ORDER BY id`;
+      this.connector.query(sql, (err, result) => {
+        if (err) throw err;
+        func(result);
+      });
+    }
 
   public async save_subjects(modelID: string, subjects: [systemObj]) {
     console.log("Entra en guardar sujetos");
@@ -374,7 +183,6 @@ export class mysql_connector {
           db.save_oneSubject(modelID, sub, results.insertId);
         });
       }
-      // results.insertId
     });
   }
 
@@ -394,13 +202,44 @@ export class mysql_connector {
       )}`
     );
   }
-  public save_entity(modelID: string, json: object): void {
-    console.log(
-      `########## Envio a la funcion de guardar objetos del sujeto, modelo: ${modelID} \n ${JSON.stringify(
-        json
-      )}`
-    );
+
+  public async save_entity(modelID: string, subjects: [systemEnt]) {
+    console.log("Entra en guardar entidades");
+    subjects.forEach((elem) => {
+      this.save_oneEntity(modelID, elem);
+    });
   }
+  public async save_oneEntity(
+    modelID: string,
+    entity: systemEnt,
+    subjectSup?: number
+  ) {
+    var sql = ``;
+    if (subjectSup) {
+      sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre, obj_id_padre) VALUES (${modelID},'${entity.$["xsi:type"]}','${entity.$.name}', ${subjectSup});`;
+    } else {
+      sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre) VALUES (${modelID}, '${entity.$["xsi:type"]}', '${entity.$.name}')`;
+    }
+    console.log(sql);
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+      if (entity.containsResource) {
+        entity.containsResource.forEach((sub) => {
+          var db = new mysql_connector();
+          db.save_oneEntity(modelID, sub, results.insertId);
+        });
+      }
+    });
+  }
+  public update_entity(id: string, active: string) {
+    var sql = `UPDATE objeto SET obj_activo = '${
+      active ? 1 : 0
+    }' WHERE objeto.obj_id = ${id};`;
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+    });
+  }
+
   public getfisicalModel(modelID: string): object {
     console.log(
       `############# Envio a la funcion 'getfisicalModel' el id de usuario '${modelID}`
@@ -1006,21 +845,36 @@ export class mysql_connector {
     );
   }
 
-  public getUser_Aspects(userID: string): object {
+  public getUser_Aspects(userID: string, func: Function): void {
     console.log(
-      `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
+      `############# Envio a la funcion 'getUser_Aspectes' el id de usuario '${userID}`
     );
-    return [
-      {
-        id: "1",
-        descripcion: "Carga actual de la bateria del sensor DHT11",
-      },
-      {
-        id: "2",
-        descripcion:
-          "Eficencia en el consumo de energia de la bateria del sensor DHT11",
-      },
-    ];
+
+    this.connector.query(
+      `SELECT aa_id, aa_nombre, aa_tipo, aa_activo
+      FROM aspectoautoconsciencia`,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
+          if (result[i]["aa_activo"] == 1) {
+            act = "true";
+          } else if (result[i]["aa_activo"] == 2) {
+            act = "false";
+          }
+          var auxmedicion = {
+            id: result[i]["aa_id"],
+            nombre: result[i]["aa_nombre"],
+            tipo: result[i]["aa_tipo"],
+            activo: act,
+          };
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
+      }
+    );
   }
 
   public addUser_aspects(idUser: string, descripcion: string): void {
@@ -2902,4 +2756,8 @@ export class mysql_connector {
 interface systemObj {
   $: { id: string; name: string; descrption: string; domain: string };
   iotSubsystem?: [systemObj];
+}
+interface systemEnt {
+  $: {'xsi:type':string; id: string; name: string;};
+  containsResource?: [systemEnt];
 }

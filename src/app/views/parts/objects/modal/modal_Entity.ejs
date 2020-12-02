@@ -11,7 +11,7 @@
             </div>
             <div class="modal-body">
                 <h5>Objeto: <span id="nombreEntidadActiva"></span></h5>
-                <h5> : <span id="nombreEntidadActiva"></span></h5>
+                <h5> <span id="nombreEntidadActiva"></span></h5>
                 <div class="row">
                     <div class="col-6">
                         <h4>Árbol de Entidades:</h4>
@@ -29,7 +29,10 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Descripción</th>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Activo</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tabla_aspectos"></tbody>
@@ -37,12 +40,6 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="input-group mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Id</span>
-                            </div>
-                            <input type="text" name="form_entidad_new" id="idEntidad" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" readonly />
-                        </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span
@@ -64,7 +61,7 @@
                 >Descripción</span
               >
             </div>
-            <input
+            <textarea
               type="text"
               name="form_entidad_new"
               id="descripcionEntidad"
@@ -72,7 +69,7 @@
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               disabled
-            />
+            ></textarea>
           </div>
           <div class="input-group mb-4">
             <div class="input-group-prepend">
@@ -107,7 +104,7 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-primary" id="btn-agregarEntidadLista" onclick="agregarEntidadLista()">
+          <button class="btn btn-primary" id="btn-agregarEntidadLista" onclick="agregarAspecto()">
             Guardar
           </button>
           <button class="btn btn-primary" id="btn-CancelarEntidadLista" onclick="desactivarFormularioAgregarEntidad()">
