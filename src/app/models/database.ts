@@ -762,12 +762,125 @@ export class mysql_connector {
     name: string,
     descripcion: string,
     tds: string, //tipo dato salida
-    tr: string //tipo recurso
+    tr: string, //tipo recurso
+    exp: string, //expresion formula
+    path: string, //path funcion
+    inst: string, //instruccion funcion
+    pf: string, //punto final servicio
+    instS: string, //instruccion salida
+    ts: string //tipo formato salida servicio
   ): void {
-    var tip;
+    console.log('es de tipo recurso' + tr);
+    var aux;
+    if(tr == 'modal_tipo_recurso_formula_add'){
+      aux = 'FÓRMULA';
+    } else if(tr == 'modal_tipo_recurso_funcion_add'){
+      aux = 'FUNCIÓN';
+    }else if(tr == 'modal_tipo_recurso_servicio_add'){
+      aux = 'SERVICIO';
+    };
     this.connector.query(
       `INSERT INTO recursoimplementacion (ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso, ri_activo) 
-      VALUES ('${name}', '${descripcion}', '${tds}', '${tr}', '1')`,
+      VALUES ('${name}', '${descripcion}', '${tds}', '${aux}', '1')`,
+      
+      function (error, results) {
+        if (error) throw error;
+        //console.log('The solution is: ', results[0].solution);
+      }
+    );
+    if(tr == 'modal_tipo_recurso_formula_add'){
+      this.addUser_formula(name, tr , exp);
+    } else if(tr == 'modal_tipo_recurso_funcion_add'){
+      this.addUser_funcion(name, tr, path, inst);
+    }else if(tr == 'modal_tipo_recurso_servicio_add'){
+      this.addUser_servicio(name, tr, pf, instS, ts);
+    };
+  }
+
+  public addUser_formula(
+    name: string,
+    tr: string,
+    expresion: string
+  ): void {
+    console.log('es de tipo recurso' + tr);
+    var aux;
+    var ri_id;
+    if(tr == 'modal_tipo_recurso_formula_add'){
+      aux = 'FÓRMULA';
+      ri_id = ``;
+    } else if(tr == 'modal_tipo_recurso_funcion_add'){
+      aux = 'FUNCIÓN';
+    }else if(tr == 'modal_tipo_recurso_servicio_add'){
+      aux = 'SERVICIO';
+    };
+    this.connector.query(
+      ri_id = `SELECT ri_id FROM recursoimplementacion 
+      WHERE ri_tipo_recurso = '${aux}' and ri_nombre = '${name}'`,
+      
+      `INSERT INTO formula (for_expresion, ri_id) 
+      VALUES ('${expresion}', '${ri_id}')`,
+
+      function (error, results) {
+        if (error) throw error;
+        //console.log('The solution is: ', results[0].solution);
+      }
+    );
+  }
+
+  public addUser_funcion(
+    name: string,
+    tr: string,
+    path: string,
+    inst: string
+  ): void {
+    console.log('es de tipo recurso' + tr);
+    var aux;
+    var ri_id;
+    if(tr == 'modal_tipo_recurso_formula_add'){
+      aux = 'FÓRMULA';
+    } else if(tr == 'modal_tipo_recurso_funcion_add'){
+      aux = 'FUNCIÓN';
+    }else if(tr == 'modal_tipo_recurso_servicio_add'){
+      aux = 'SERVICIO';
+    };
+    this.connector.query(
+      ri_id = `SELECT ri_id FROM recursoimplementacion 
+      WHERE ri_tipo_recurso = '${aux}' and ri_nombre = '${name}'`,
+      
+      `INSERT INTO funcion (fun_path, fu_instrucciones, ri_id) 
+      VALUES ('${path}', '${inst}', '${ri_id}')`,
+
+      function (error, results) {
+        if (error) throw error;
+        //console.log('The solution is: ', results[0].solution);
+      }
+    );
+  }
+
+  public addUser_servicio(
+    name: string,
+    tr: string,
+    pf: string,
+    instS: string,
+    ts: string
+  ): void {
+    console.log('es de tipo recurso' + tr);
+    var aux;
+    var ri_id;
+    if(tr == 'modal_tipo_recurso_formula_add'){
+      aux = 'FÓRMULA';
+    } else if(tr == 'modal_tipo_recurso_funcion_add'){
+      aux = 'FUNCIÓN';
+    }else if(tr == 'modal_tipo_recurso_servicio_add'){
+      aux = 'SERVICIO';
+    };
+    this.connector.query(
+      ri_id = `SELECT ri_id FROM recursoimplementacion 
+      WHERE ri_tipo_recurso = '${aux}' and ri_nombre = '${name}'`,
+      
+      `INSERT INTO servicio (ser_punto_final, ser_instrucciones, ser_tipo_formato_dato_salida, ri_id) 
+      VALUES ('${pf}', '${instS}', '${ts}', '${ri_id}')`,
+
       function (error, results) {
         if (error) throw error;
         //console.log('The solution is: ', results[0].solution);

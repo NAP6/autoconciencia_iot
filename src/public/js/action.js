@@ -2297,7 +2297,7 @@ function seleccionar_entidad(id) {
     SECCION SELECCION SUJETOS CARGAR LOS RECURSOS DE IMPLEMENTACION
 
         Descripcion:
-		Esta seccion incluye el envio de datos para las Escalas
+		Esta seccion incluye el envio de datos para los recursos de implementacion
 
         Incluye:
 */
@@ -2307,32 +2307,56 @@ function agregar_recurso_implementacion() {
 }
 
 function guardarNuevaRecImpl() {
-  var data = {
-    nombre: document.getElementById("input-name-add").value,
-    descripcion: document.getElementById("input-descripcion-add").value,
-    tipo_dato_salida: document.getElementById("input-tipe-add").value,
-    tipo_recurso: document.getElementById("select_tipo_recurso").value,
-  };
-  console.log(data);
-  if (
-    !!data.nombre &&
-    !!data.descripcion &&
-    !!data.tipo_dato_salida &&
-    !!data.tipo_recurso
-  ) {
-    post_api(
-      "http://localhost:3000/api/add_ri/",
-      data,
-      mensaje_exitoEnvioRI,
-      mensaje_errorEnvioRI
-    );
-    consultar_api(
-      "http://localhost:3000/api/add_ri/",
-      cargar_ri_table,
-      error_cargar_ri_table
-    );
-    $("#modal_recurso_implementacion_add").modal("hide");
-  } else alert("Ingrese todos los campos del formulario");
+  try {
+    var escala = document.getElementById("tipo_escalas");
+    var escala_valor = escala.options[escala.selectedIndex].text;
+    var data = {
+      nombre: document.getElementById("input-name-add").value,
+      descripcion: document.getElementById("input-descripcion-add").value,
+      tipo_dato_salida: escala_valor,
+      tipo_recurso: document.getElementById("select_tipo_recurso").value,
+      //Formula
+      expresion: document.getElementById("input_expresion_add").value,
+      //Funcion
+      path: document.getElementById("input_path_id").value,
+      instruccion: document.getElementById("input_instruccion_add").value,
+      //Servicio
+      pf: document.getElementById("input_pf_id").value,
+      instruccionS: document.getElementById("input_instruccionS_add").value,
+      ts: document.getElementById("input_ts_add").value,
+    };
+    //alert(data);
+    if (
+      !!data.nombre &&
+      !!data.descripcion &&
+      !!data.tipo_dato_salida &&
+      !!data.tipo_recurso &&
+      !!data.expresion &&
+      !!data.path &&
+      !!data.instruccion &&
+      !!data.pf &&
+      !!data.instruccionS &&
+      !!data.ts
+    ) {
+      post_api(
+        "http://localhost:3000/api/add_ri/",
+        data,
+        mensaje_exitoEnvioRI,
+        mensaje_errorEnvioRI
+      );
+      consultar_api(
+        "http://localhost:3000/api/add_ri/",
+        cargar_ri_table,
+        error_cargar_ri_table
+      );
+      $("#modal_recurso_implementacion_add").modal("hide");
+      $("#modal_tipo_recurso_formula_add").modal("hide");
+      $("#modal_tipo_recurso_funcion_add").modal("hide");
+      $("#modal_tipo_recurso_servicio_add").modal("hide");
+    } else alert("Ingrese todos los campos del formulario");
+  } catch (error) {
+    alert(error);
+  }
 }
 
 function eliminar_recurso_implementacion() {
@@ -2476,65 +2500,159 @@ function error_cargar_ri_table(err) {
 
 //Cargar formulario Recursos de implementacion
 
-function cargar_recurso() {
-  var res;
-  if (document.getElementById("select_tipo_recurso").value == 'FÓRMULA'){
-    res = "";
-      res += `<label for="" class="col-sm-4 col-form-label">Fórmula</label>`;
-      res += `<div class="col-sm-12">`;
-        res += `<div class="form-group row" id="">`;
-          res += `<label for="" class="col-sm-4 col-form-label">Expresión:</label>`;
-          res += `<div class="col-sm-12">`;
-            res += `<input type="text" class="form-control" id="input_expresion_add" />`;
-          res += `</div>`;
-        res += `</div>`;
-      res += `</div>`;
-    document.getElementById("tipo_recurso").innerHTML = res ;
-  } else if (document.getElementById("select_tipo_recurso").value == 'FUNCIÓN'){
-    res = "";
-      res += `<label for="" class="col-sm-4 col-form-label">Función</label>`;
-      res += `<div class="col-sm-12">`;
-        res += `<div class="form-group row" `;
-          res += `<label for="" class="col-sm-4 col-form-label">Path:</label>`;
-          res += `<div class="col-sm-12">`;
-            res += `<input type="text" class="form-control" id="input_path_id" />`;
-          res += `</div>`;
-        res += `</div>`;
-        res += `<div class="form-group row" `;
-          res += `<label for="" class="col-sm-4 col-form-label">Instrucción:</label>`;
-          res += `<div class="col-sm-12">`;
-            res += `<input type="text" class="form-control" id="input-instruccion-id" />`;
-          res += `</div>`;
-        res += `</div>`;
-      res += `</div>`;
-    document.getElementById("tipo_recurso").innerHTML = res;
-  } else if (document.getElementById("select_tipo_recurso").value == 'SERVICIO'){
-    res = "";
-      res += `<label for="" class="col-sm-4 col-form-label">Servicio</label>`;
-      res += `<div class="col-sm-12">`;
-        res += `<div class="form-group row" `;
-          res += `<label for="" class="col-sm-4 col-form-label">Punto final:</label>`;
-          res += `<div class="col-sm-12">`;
-            res += `<input type="text" class="form-control" id="input_pf_id" />`;
-          res += `</div>`;
-        res += `</div>`;
-        res += `<div class="form-group row" `;
-          res += `<label for="" class="col-sm-4 col-form-label">Instrucción:</label>`;
-          res += `<div class="col-sm-12">`;
-            res += `<input type="text" class="form-control" id="input_instruccion_add" />`;
-          res += `</div>`;
-        res += `</div>`;
-        res += `<div class="form-group row" `;
-          res += `<label for="" class="col-sm-4 col-form-label">Tipo de salida:</label>`;
-          res += `<div class="col-sm-12">`;
-            res += `<input type="text" class="form-control" id="input_ts_add" />`;
-          res += `</div>`;
-        res += `</div>`;
-      res += `</div>`;
-    document.getElementById("tipo_recurso").innerHTML = res;
-  } else {alert('No selecciono un tipo de recurso')}
-};
+function cargar_recurso(valor) {
 
-function error_cargar_formula(err) {
-  alert("Error al cargar el formula: " + err);
+  var rec_formula = document.getElementById('modal_tipo_recurso_formula_add');
+  var rec_funcion = document.getElementById('modal_tipo_recurso_funcion_add');
+  var rec_servicio = document.getElementById('modal_tipo_recurso_servicio_add');
+
+  if(valor.value == 'modal_tipo_recurso_formula_add'){
+    rec_formula.classList.replace('d-none', 'modal-body');
+    rec_funcion.classList.replace('modal-body', 'd-none');
+    rec_servicio.classList.replace('modal-body', 'd-none');
+
+  }else if(valor.value == 'modal_tipo_recurso_funcion_add'){
+    rec_formula.classList.replace('modal-body', 'd-none');
+    rec_funcion.classList.replace('d-none', 'modal-body');
+    rec_servicio.classList.replace('modal-body', 'd-none');
+
+  }else if(valor.value == 'modal_tipo_recurso_servicio_add'){
+    rec_formula.classList.replace('modal-body', 'd-none');
+    rec_funcion.classList.replace('modal-body', 'd-none');
+    rec_servicio.classList.replace('d-none', 'modal-body');
+
+  }else{
+    alert("Error no a seleccionado un recurso");
+    rec_formula.classList.replace('modal-body', 'd-none');
+    rec_funcion.classList.replace('modal-body', 'd-none');
+    rec_servicio.classList.replace('modal-body', 'd-none');
+  };
+  
+}
+
+/* 
+    SECCION AGREGAR FORMULA
+
+        Descripcion:
+		Esta seccion incluye el envio de datos para FORMULA
+
+        Incluye:
+*/
+
+function agregar_recurso_implementacion() {
+  $("#modal_recurso_implementacion_add").modal("show");
+}
+
+function guardarNuevaFormula() {
+  var data = {
+    expresion: document.getElementById("input_expresion_add").value,
+  };
+  console.log(data);
+  if (
+    !!data.tipo_recurso 
+  ) {
+    post_api(
+      "http://localhost:3000//api/add_formula/",
+      data,
+      mensaje_exitoEnvioRI,
+      mensaje_errorEnvioRI
+    );
+    consultar_api(
+      "http://localhost:3000/api/add_ri/",
+      cargar_ri_table,
+      error_cargar_ri_table
+    );
+    $("#modal_recurso_implementacion_add").modal("hide");
+  } else alert("Ingrese todos los campos del formulario");
+}
+
+function eliminar_recurso_implementacion() {
+  var radio = document.getElementsByName("escala_seleccionada");
+  var id;
+  radio.forEach((elem) => {
+    if (elem.checked) {
+      id = elem.value;
+      return;
+    }
+  });
+  if (!!id) {
+    data = {
+      id: id,
+    };
+    console.log(data);
+    post_api(
+      "http://localhost:3000/api/del_escales/",
+      data,
+      mensaje_exitoEnvioEscalas,
+      mensaje_errorEnvioEscalas
+    );
+    consultar_api(
+      "http://localhost:3000/api/escales",
+      cargar_escales_table,
+      error_cargar_escales_table
+    );
+  } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificar_recurso_implementacion() {
+  var radio = document.getElementsByName("ri_seleccionada");
+  var id;
+  var name;
+  var descripcion;
+  var tds; //tipo dato salida
+  var tipo; //tipo recurso
+  var activo;
+
+  radio.forEach((elem) => {
+    if (elem.checked) {
+      id = elem.value;
+      name = elem.dataset.name;
+      valor_valido = elem.dataset.valor_valido;
+      tipo = elem.dataset.tipo;
+      activo = elem.dataset.activo;
+      return;
+    }
+  });
+
+  if (!!id && !!name && !!valor_valido && !!tipo) {
+    document.getElementById("input-escale-id-update").value = id;
+    document.getElementById("input-escale-name-update").value = name;
+    document.getElementById("input-escale-valor-update").value = valor_valido;
+    document.getElementById("input-tipe-update").value = tipo;
+    document.getElementById("activoEscalas").value = activo;
+    $("#modal_escalas_mod").modal("show");
+  } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function guardarModificacionRI() {
+  var data = {
+    id: document.getElementById("input-escale-id-update").value,
+    nombre: document.getElementById("input-escale-name-update").value,
+    valor_valido: document.getElementById("input-escale-valor-update").value,
+    tipo: document.getElementById("input-tipe-update").value,
+    activo: document.getElementById("activoEscalas").value,
+  };
+  if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
+    post_api(
+      "http://localhost:3000/api/upd_escales/",
+      data,
+      mensaje_exitoEnvioEscalas,
+      mensaje_errorEnvioEscalas
+    );
+    consultar_api(
+      "http://localhost:3000/api/escales",
+      cargar_escales_table,
+      error_cargar_escales_table
+    );
+
+    $("#modal_escalas_mod").modal("hide");
+  } else alert("Debe debe completar todos los campos");
+}
+
+function mensaje_exitoEnvioRI(json) {
+  alert(json.mensaje);
+}
+
+function mensaje_errorEnvioRI(err) {
+  alert(err);
 }

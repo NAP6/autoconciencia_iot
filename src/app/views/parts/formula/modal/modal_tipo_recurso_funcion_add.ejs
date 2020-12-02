@@ -1,38 +1,18 @@
-<div class="modal fade" id="modal_tipo_recurso_funcion_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
-                    Función
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="form-group row">
-                            <label for="" class="col-sm-4 col-form-label">Path:</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="input-tr-id" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-4 col-form-label">Instrucción:</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="input-expresion-add" />
-                            </div>
-                        </div>
-                    </div>
+
+<div class="d-none" id="modal_tipo_recurso_funcion_add">
+    <div class="row">
+        <div class="col-sm">
+            <div class="form-group row">
+                <label for="input_path_id" class="col-sm-4 col-form-label">Path:</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="input_path_id" />
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="guardarNuevaFormula()">Guardar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Cancelar
-        </button>
-
+            <div class="form-group row">
+                <label for="input_instruccion_add" class="col-sm-4 col-form-label">Instrucción:</label>
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="input_instruccion_add" />
+                </div>
             </div>
         </div>
     </div>
