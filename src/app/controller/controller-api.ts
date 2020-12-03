@@ -351,10 +351,10 @@ export function upd_umbral(req: Request, res: Response) {
 
 export function aspects(req: Request, res: Response) {
   if (req.session?.user) {
-    var idUser = req.session?.user.userID;
-    var idaspecto = req.body.id;
+    var id = req.session?.user.userID;
+    var idP=req.body.id;
     var db = new database();
-    db.getUser_Aspects(idUser, idaspecto,(jsonEscala:object)=>{
+    db.getUser_Aspects(id,idP,(jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -366,11 +366,11 @@ export function add_aspects(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var tipo=req.body.tipo;
+    var tipo=req.body.tipoS;
     var peso=req.body.peso;
     var idP=req.body.id;
-    var activo=req.body.activo;
-    console.log(idP)
+    var activo=req.body.activo.toString();
+    console.log(tipo)
     var db = new database();
     db.addUser_aspects(idUser, name, descripcion, tipo, peso,idP,activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
@@ -402,7 +402,7 @@ export function add_metrica(req: Request, res: Response) {
 export function del_aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
-    var idaspecto = req.body.id;
+    var idaspecto = req.body.idD;
     var db = new database();
     db.delUser_aspects(idUser, idaspecto);
     res.json({ mensaje: "La accion fue realizada con exito" });

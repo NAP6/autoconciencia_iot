@@ -1431,11 +1431,6 @@ if (document.getElementById("tabla_criterios_decision"))
 		error_cargar_criterios_table
 */
 
-if (document.getElementById("tabla_aspectos"))
-    post_api("http://localhost:3000/api/aspects"),
-    idSeleccion,
-    cargar_aspectos_table,
-    error_cargar_aspectos_table
 
 function cargar_aspectos_table(json) {
 
@@ -1457,12 +1452,6 @@ function cargar_aspectos_table(json) {
 function error_cargar_aspectos_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
-if (document.getElementById("tabla_aspectos_Metrica"))
-    consultar_api(
-        "http://localhost:3000/api/aspects",
-        cargar_aspectos_metrica_table,
-        error_cargar_aspectos_metrica_table
-    );
 
 function cargar_aspectos_metrica_table(json) {
     res = "";
@@ -1982,13 +1971,21 @@ var idSeleccion;
 
 function abrirModalEntidad(id, nombre) {
     try {
-
         $("#modal_agregar_entidad").modal("show");
         var nom2 = document.getElementById("nombreEntidadActiva2");
         var nom = document.getElementById("nombreEntidadActiva");
         idSeleccion = id;
         nom.innerHTML = nombre;
         nom2.innerHTML = nombre;
+        data = {
+            id: idSeleccion
+        }
+        post_api(
+            "http://localhost:3000/api/aspects",
+            data,
+            cargar_aspectos_table,
+            error_cargar_aspectos_table
+        );
     } catch (error) {
         alert(error);
     }
@@ -2001,7 +1998,7 @@ function activarFormularioAgregarEntidad() {
         document.getElementById("nombreEntidad").disabled = false;
         document.getElementById("descripcionEntidad").disabled = false;
         document.getElementById("PesoEntidad").disabled = false;
-        document.getElementById("tipo_escalas3").disabled = false;
+        document.getElementById("tipo_aspectos").disabled = false;
         document.getElementById("activoEntidad").disabled = false;
         document.getElementById("btn-agregarEntidadLista").disabled = false;
         document.getElementById("btn-agregarEntidadLista").disabled = false;
@@ -2016,7 +2013,7 @@ function desactivarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").disabled = true;
     document.getElementById("descripcionEntidad").disabled = true;
     document.getElementById("PesoEntidad").disabled = true;
-    document.getElementById("tipo_escalas3").disabled = true;
+    document.getElementById("tipo_aspectos").disabled = true;
     document.getElementById("activoEntidad").disabled = true;
     document.getElementById("btn-agregarEntidadLista").disabled = true;
     document.getElementById("btn-CancelarEntidadLista").disabled = true;
@@ -2027,8 +2024,9 @@ function desactivarFormularioAgregarEntidad() {
 }
 
 function agregarAspecto() {
-    var tipo = document.getElementById("tipo_escalas3");
+    var tipo = document.getElementById("tipo_aspectos");
     var tipo_valor = tipo.options[tipo.selectedIndex].text;
+    alert(tipo_valor);
     var data = {
         nombre: document.getElementById("nombreEntidad").value,
         descripcion: document.getElementById("descripcionEntidad").value,
@@ -2043,8 +2041,9 @@ function agregarAspecto() {
                 data,
                 mensaje_exitoEnvioAspects,
                 mensaje_errorEnvioAspects);
-        consultar_api(
+        post_api(
             "http://localhost:3000/api/aspects",
+            data,
             cargar_aspectos_table,
             error_cargar_aspectos_table
         );
@@ -2065,7 +2064,8 @@ function EliminarAspecto() {
     });
     if (!!id) {
         data = {
-            id: id,
+            idD: id,
+            id: idSeleccion
         };
         post_api(
             "http://localhost:3000/api/del_aspects/",
@@ -2073,8 +2073,9 @@ function EliminarAspecto() {
             mensaje_exitoEnvioAspects,
             mensaje_errorEnvioAspects
         );
-        consultar_api(
+        post_api(
             "http://localhost:3000/api/aspects",
+            data,
             cargar_aspectos_table,
             error_cargar_aspectos_table
         );

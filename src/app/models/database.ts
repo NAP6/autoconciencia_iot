@@ -845,14 +845,14 @@ export class mysql_connector {
     );
   }
 
-  public getUser_Aspects(userID: string,id:string, func: Function): void {
+  public getUser_Aspects(userID: string, id:string, func: Function): void {
     console.log(
-      `############# Envio a la funcion 'getUser_Aspectes' el id de usuario '${userID}`
+      `############# Envio a la funcion 'getUser_Aspectes' el id de usuario '${userID}' ${id}`
     );
-
+    var sql=`SELECT aa_id, aa_nombre, aa_tipo, aa_activo
+    FROM aspectoautoconsciencia WHERE obj_id=${id} Order BY aa_id`;
     this.connector.query(
-      `SELECT aa_id, aa_nombre, aa_tipo, aa_activo
-      FROM aspectoautoconsciencia Where obj_id=${id}`,
+      sql,
       (err, result, fields) => {
         if (err) err;
         var listaUmedicion: Array<object> = [];
@@ -877,16 +877,6 @@ export class mysql_connector {
     );
   }
   public addUser_aspects(idUser: string,name: string,descripcion: string,tipo: string,peso: string, id: string, activo: string): void {
-    var tip;
-    if (tipo == "Ordinal") {
-      tip = 1;
-    } else if (tipo == "Nominal") {
-      tip = 2;
-    } else if (tipo == "Rango") {
-      tip = 3;
-    } else if (tipo == "Ratio") {
-      tip = 4;
-    }
     var act;
     if(activo=="true"){
       act=1;
@@ -895,7 +885,7 @@ export class mysql_connector {
     }
     this.connector.query(
       `INSERT INTO aspectoautoconsciencia (aa_nombre, aa_descripcion, aa_alcance, aa_tipo, obj_id, aa_activo) 
-      VALUES ('${name}', '${descripcion}','${peso}','${tip}','${id}', '${act}')`,
+      VALUES ('${name}', '${descripcion}','${peso}','${tipo}','${id}', '${act}')`,
       function (error, results) {
         if (error) throw error;
         //console.log('The solution is: ', results[0].solution);
