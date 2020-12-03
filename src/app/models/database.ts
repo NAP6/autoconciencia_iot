@@ -845,14 +845,14 @@ export class mysql_connector {
     );
   }
 
-  public getUser_Aspects(userID: string, func: Function): void {
+  public getUser_Aspects(userID: string,id:string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_Aspectes' el id de usuario '${userID}`
     );
 
     this.connector.query(
       `SELECT aa_id, aa_nombre, aa_tipo, aa_activo
-      FROM aspectoautoconsciencia`,
+      FROM aspectoautoconsciencia Where obj_id=${id}`,
       (err, result, fields) => {
         if (err) err;
         var listaUmedicion: Array<object> = [];
@@ -876,10 +876,46 @@ export class mysql_connector {
       }
     );
   }
-
-  public addUser_aspects(idUser: string, descripcion: string): void {
-    console.log(
-      `############# Envio a la funcion 'addUser_aspects' el id de usuario '${idUser},descripcion: ${descripcion}`
+  public addUser_aspects(idUser: string,name: string,descripcion: string,tipo: string,peso: string, id: string, activo: string): void {
+    var tip;
+    if (tipo == "Ordinal") {
+      tip = 1;
+    } else if (tipo == "Nominal") {
+      tip = 2;
+    } else if (tipo == "Rango") {
+      tip = 3;
+    } else if (tipo == "Ratio") {
+      tip = 4;
+    }
+    var act;
+    if(activo=="true"){
+      act=1;
+    }else{
+      act=2;
+    }
+    this.connector.query(
+      `INSERT INTO aspectoautoconsciencia (aa_nombre, aa_descripcion, aa_alcance, aa_tipo, obj_id, aa_activo) 
+      VALUES ('${name}', '${descripcion}','${peso}','${tip}','${id}', '${act}')`,
+      function (error, results) {
+        if (error) throw error;
+        //console.log('The solution is: ', results[0].solution);
+      }
+    );
+  }
+  public addUser_metrica(idUser: string,name: string,descripcion: string,abreviatura: string,escala: string, unidad: string, tipo: string,idP:string,activo:string): void {
+    var act;
+    if(activo=="true"){
+      act=1;
+    }else{
+      act=2;
+    }
+    this.connector.query(
+      `INSERT INTO metrica (met_nombre, met_descripcion, met_abreviacion, aa_id, esc_id, um_id, met_activo, met_tipo) 
+      VALUES ('${name}', '${descripcion}','${abreviatura}','${idP}','${escala}', '${unidad}','${act}','${tipo}')`,
+      function (error, results) {
+        if (error) throw error;
+        //console.log('The solution is: ', results[0].solution);
+      }
     );
   }
 
@@ -887,14 +923,12 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'delUser_aspects' el id de usuario '${idUser}, id: ${id}`
     );
-  }
-  public updUser_aspects(
-    idUser: string,
-    id: string,
-    descripcion: string
-  ): void {
-    console.log(
-      `############# Envio a la funcion 'updUser_aspects' el id de usuario '${idUser}, id: ${id}, descripcion: ${descripcion}`
+    this.connector.query(
+      `DELETE  FROM aspectoautoconsciencia 
+      WHERE aa_id = '${id}'`,
+      function (err, result) {
+        if (err) throw err;
+      }
     );
   }
   public getLastObjectSubjectID(modelID: string): number {

@@ -11,13 +11,12 @@
             </div>
             <div class="modal-body">
                 <h5>Objeto: <span id="nombreEntidadActiva"></span></h5>
-                <h5> <span id="nombreEntidadActiva"></span></h5>
                 <div class="row">
                     <div class="col-6">
                         <h4>Árbol de Entidades:</h4>
                         <div id="arbol_objetivos_de_entidad"></div>
                         <button class="btn btn-primary" onclick="activarFormularioAgregarEntidad()">Agregar</button>
-                        <button class="btn btn-primary" onclick="eliminarEntidadLista()">Eliminar</button>
+                        <button class="btn btn-primary" onclick="EliminarAspecto()">Eliminar</button>
 
                         <button id="bd_del_aspecto" class="btn btn-primary" onclick="Administrar_aspecto()">
                   Administrar Métricas
@@ -40,6 +39,7 @@
                         </div>
                     </div>
                     <div class="col-6">
+                        <span id="idPadreEntidad"></span>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span
@@ -77,7 +77,14 @@
                 >Tipo: </label
               >
             </div>
-            <select class="custom-select" id="tipo_escalas3" name="tipo_escalas3" disabled></select>
+            <select
+            class="custom-select"
+            name="tipo_escalas3"
+            id="tipo_escalas3"
+            disabled>
+            <option value="0">Estado Actual</option>
+            <option value="1">Predicción</option>
+          </select>
           </div>
           <div class="input-group mb-4">
             <div class="input-group-prepend">

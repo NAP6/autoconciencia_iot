@@ -10,7 +10,10 @@
       </button>
             </div>
             <div class="modal-body">
-                <h5>Entidad: <span id="nombreEntidadActiva2"></span></h5>
+                <h5>Objeto: <span id="nombreEntidadActiva2"></span></h5>
+                <h5>Aspecto: <span id="nombreEntidadActiva2"></span></h5>
+                <br>
+                <h5>Listado de métricas</h5>
                 <div class="row">
                     <div class="col-6">
                         <button class="btn btn-primary" onclick="activarFormularioAgregarMetrica()">Agregar</button>
@@ -23,8 +26,9 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">ID</th>
-                                        <th scope="col">NOMBRE</th>
-                                        <th scope="col">TIPO</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Activo</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tabla_aspectos_Metrica"></tbody>
@@ -34,105 +38,66 @@
                     <div class="col-6">
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Id</span>
+                                <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
                             </div>
-                            <input type="text" name="form_entidad_new" id="idMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" readonly />
+                            <input name="form_entidad_new" id="nombreMetrica" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled />
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span
-              >
-            </div>
-            <input
-              name="form_entidad_new"
-              id="nombreMetrica"
-              type="text"
-              class="form-control"
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-              disabled
-            />
-          </div>
-          <div class="input-group mb-4">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-default"
-                >Descripción</span
-              >
-            </div>
-            <input
-              type="text"
-              name="form_entidad_new"
-              id="descripcionMetrica"
-              class="form-control"
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-              disabled
-            />
-          </div>
-          <div class="input-group mb-4">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-default"
-                >Descripción</span
-              >
-            </div>
-            <input
-              type="text"
-              name="form_entidad_new"
-              id="descripcionMetrica"
-              class="form-control"
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-              disabled
-            />
-          </div>  
-          <div class="input-group mb-4">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01"
-                >Tipo: </label
-              >
-            </div>
-            <select
-              class="custom-select"
-              name="form_entidad_new"
-              id="escalas_seccion_entidad"
-  disabled
-            ></select>
-          </div>
-          <div class="input-group mb-4">
-            <div class="input-group-prepend">
-              <label class="input-group-text" for="inputGroupSelect01"
-                >TIPO: </label
-              >
-            </div>
-            <select
-              class="custom-select"
-              name="form_entidad_new"
-              id="escalas_seccion_entidad"
-  disabled
-            ></select>
-          </div>
-       <div class="form-group row">
-            <div class="col-sm-2">Activo:</div>
-            <div class="col-sm-10">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="activoMetrica" disabled>
-              </div>
-            </div>
-          </div>
-          <button class="btn btn-primary" id="btn-agregarEntidadLista" onclick="agregarEntidadLista()">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Descripción</span>
+                            </div>
+                            <input type="text" name="form_entidad_new" id="descripcionMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled />
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">Abreviatura</span>
+                            </div>
+                            <input type="text" name="form_entidad_new" id="abreviaturaMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled />
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Escala: </label>
+                            </div>
+                            <select class="custom-select" name="form_entidad_new" id="escalas_seccion_entidad" disabled></select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Unidad de Medida: </label>
+                            </div>
+                            <select class="custom-select" name="form_entidad_new" id="unidad_medida_metrica" disabled></select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Tipo: </label>
+                            </div>
+                            <select class="custom-select" name="tipo_metrica" id="tipo_metrica" disabled>
+                            <option value="0">Directa</option>
+                            <option value="1">Indirecta</option>
+                            <option value="1">Indicador</option>
+                          </select>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2">Activo:</div>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="activoMetrica" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="btn-agregarEntidadLista" onclick="GuardarMetrica()">
             Guardar
           </button>
-          <button class="btn btn-primary" id="btn-CancelarEntidadLista" onclick="desactivarFormularioAgregarEntidad()">
+                        <button class="btn btn-primary" id="btn-CancelarEntidadLista" onclick="desactivarFormularioAgregarMetrica()">
             Cancelar
           </button>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
         Cancelar
       </button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 </div>

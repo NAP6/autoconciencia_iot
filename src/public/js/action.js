@@ -1405,82 +1405,6 @@ function Administrar_aspecto() {
 
 }
 
-function eliminar_aspecto() {
-    var radio = document.getElementsByName("aspecto_seleccionado");
-    var id;
-    radio.forEach((elem) => {
-        if (elem.checked) {
-            id = elem.value;
-            return;
-        }
-    });
-    if (!!id) {
-        data = {
-            id: id,
-        };
-        console.log(data);
-        post_api(
-            "http://localhost:3000/api/del_aspects/",
-            data,
-            mensaje_exitoEnvioAspects,
-            mensaje_errorEnvioAspects
-        );
-        consultar_api(
-            "http://localhost:3000/api/aspects",
-            cargar_aspectos_table,
-            error_cargar_aspectos_table
-        );
-    } else alert("Debe seleccionar un elemento para eliminar");
-}
-
-function modificar_aspecto() {
-    try {
-        var radio = document.getElementsByName("aspecto_seleccionado");
-        var id;
-        var descripcion;
-        radio.forEach((elem) => {
-            if (elem.checked) {
-                id = elem.value;
-                descripcion = elem.dataset.descripcion;
-                return;
-            }
-        });
-
-        if (!!id && !!descripcion) {
-            document.getElementById("input-id-aspecto-mod").value = id;
-            document.getElementById(
-                "input-descripton-aspect-mod"
-            ).value = descripcion;
-
-            $("#modal_modificar_aspecto").modal("show");
-        } else alert("Seleccione el Elemento");
-    } catch (error) {
-        alert(error);
-    }
-}
-
-function guardarModificacionAspecto() {
-    var data = {
-        id: document.getElementById("input-id-aspecto-mod").value,
-        descripcion: document.getElementById("input-descripton-aspect-mod").value,
-    };
-    if (!!data.id && !!data.descripcion) {
-        post_api(
-            "http://localhost:3000/api/upd_aspects/",
-            data,
-            mensaje_exitoEnvioAspects,
-            mensaje_errorEnvioAspects
-        );
-        consultar_api(
-            "http://localhost:3000/api/aspects",
-            cargar_aspectos_table,
-            error_cargar_aspectos_table
-        );
-
-        $("#modal_modificar_aspecto").modal("hide");
-    } else alert("Debe debe completar todos los campos");
-}
-
 function mensaje_exitoEnvioAspects(json) {
     alert(json.mensaje);
 }
@@ -1508,13 +1432,13 @@ if (document.getElementById("tabla_criterios_decision"))
 */
 
 if (document.getElementById("tabla_aspectos"))
-    consultar_api(
-        "http://localhost:3000/api/aspects",
-        cargar_aspectos_table,
-        error_cargar_aspectos_table
-    );
+    post_api("http://localhost:3000/api/aspects"),
+    idSeleccion,
+    cargar_aspectos_table,
+    error_cargar_aspectos_table
 
 function cargar_aspectos_table(json) {
+
     res = "";
     json.forEach((as) => {
         res += "<tr>";
@@ -2054,75 +1978,38 @@ function extraer_datos_entidad() {
 		y todas las funciones que impliquen la creacion de las entidades que tienen los sujetos
     
 */
-var idEntidadActual;
+var idSeleccion;
 
 function abrirModalEntidad(id, nombre) {
     try {
+
         $("#modal_agregar_entidad").modal("show");
         var nom2 = document.getElementById("nombreEntidadActiva2");
         var nom = document.getElementById("nombreEntidadActiva");
+        idSeleccion = id;
         nom.innerHTML = nombre;
         nom2.innerHTML = nombre;
-        idEntidadActual = id;
     } catch (error) {
         alert(error);
     }
-
 }
 
-/*function abrirModalEntidad(id) {
-    try {
-        $("#modal_agregar_entidad").modal("show");
-        entidad_activoID = id;
-
-        var nombre = document.getElementById("nombreEntidadActiva");
-        var nombre2 = document.getElementById("nombreEntidadActiva2");
-        nombre.innerHTML = entidades_aux[id]["name"];
-        nombre2.innerHTML = entidades_aux[id]["name"];
-        var arbol = document.getElementById("arbol_objetivos_de_entidad");
-        arbol.innerHTML = generar_arbol_entidades(entidades_aux[id]["entidades"]);
-        var elemRaiz = document.getElementById("raiz_0");
-        elemRaiz.checked = true;
-        desactivarFormularioAgregarEntidad();
-    } catch (error) {
-        alert(error);
-    }
-}*/
-
-function generar_arbol_entidades(lista) {
-    var strlista = "<ul>";
-
-    Object.entries(lista).forEach(([key, value]) => {
-        strlista += `<li><input class="form-check-input" type='radio' value='${key}' name='Entidades_inputSelect' id='${key}'/><label class="form-check-label" for='${key}'>${value.nombre}</label>`;
-
-        if (Object.keys(value.entidades).length > 0) {
-            strlista += generar_arbol_entidades(value.entidades);
-        }
-        strlista += "</li>";
-    });
-    strlista += "</ul>";
-    return strlista;
-}
 
 function activarFormularioAgregarEntidad() {
-    document.getElementById("nombreEntidad").disabled = false;
-    document.getElementById("descripcionEntidad").disabled = false;
-    document.getElementById("PesoEntidad").disabled = false;
-    document.getElementById("tipo_escalas3").disabled = false;
-    document.getElementById("activoEntidad").disabled = false;
-    document.getElementById("btn-agregarEntidadLista").disabled = false;
-    document.getElementById("btn-agregarEntidadLista").disabled = false;
-    document.getElementById("btn-CancelarEntidadLista").disabled = false;
 
-    var arbol = document.getElementsByName("Entidades_inputSelect");
-    arbol.forEach((elem) => {
-        elem.disabled = true;
-    });
-    consultar_api(
-        "http://localhost:3000/api/last_EntityID/",
-        cargar_idNuevaEntidad,
-        error_cargar_idNuevaEntidad
-    );
+    try {
+        document.getElementById("nombreEntidad").disabled = false;
+        document.getElementById("descripcionEntidad").disabled = false;
+        document.getElementById("PesoEntidad").disabled = false;
+        document.getElementById("tipo_escalas3").disabled = false;
+        document.getElementById("activoEntidad").disabled = false;
+        document.getElementById("btn-agregarEntidadLista").disabled = false;
+        document.getElementById("btn-agregarEntidadLista").disabled = false;
+        document.getElementById("btn-CancelarEntidadLista").disabled = false;
+    } catch (error) {
+        alert(error)
+    }
+
 }
 
 function desactivarFormularioAgregarEntidad() {
@@ -2137,129 +2024,63 @@ function desactivarFormularioAgregarEntidad() {
     document.getElementById("descripcionEntidad").value = "";
     document.getElementById("PesoEntidad").value = "";
     document.getElementById("activoEntidad").value = "";
-    var arbol = document.getElementsByName("Entidades_inputSelect");
-    arbol.forEach((elem) => {
-        elem.disabled = false;
-    });
-}
-
-function eliminarEntidadLista() {
-    var idSeleccionado = getSelectedItemArbolEntidadesSelected();
-    if (idSeleccionado != "raiz_0") {
-        var entidades = entidades_aux[entidad_activoID].entidades;
-        entidades_aux[entidad_activoID].entidades = remover_entidad_entID(
-            idSeleccionado,
-            entidades
-        );
-        var arbol = document.getElementById("arbol_objetivos_de_entidad");
-        arbol.innerHTML = generar_arbol_entidades(
-            entidades_aux[entidad_activoID]["entidades"]
-        );
-        var elemRaiz = document.getElementById("raiz_0");
-        elemRaiz.checked = true;
-        desactivarFormularioAgregarObjeto();
-    } else {
-        alert("No se puede eliminar el nodo raiz");
-    }
 }
 
 function agregarAspecto() {
-    /*  try {
-          var tipo = document.getElementById("escalas_seccion_entidad");
-          var tipo_valor = tipo.options[tipo.selectedIndex].text;
-          var data = {
-              nombre = document.getElementById("nombreEntidad").value,
-              descripcion = document.getElementById("descripcionEntidad").value,
-              peso = document.getElementById("PesoEntidad").value,
-              tipoS = tipo_valor,
-              activo = document.getElementById("activoEntidad").checked,
-          };
-
-      } catch (error) {
-          alert(error);
-      }*/
-
-}
-
-function agregarEntidadLista() {
-
-    var nombre = document.getElementById("nombreEntidad").value;
-    var descripcion = document.getElementById("descripcionEntidad").value;
-    var peso = document.getElementById("PesoEntidad").value;
-    var tipo = document.getElementById("escalas_seccion_entidad").value;
-    var activo = document.getElementById("activoEntidad").checked;
-    if (!!id && !!nombre && !!descripcion && !!tipo && !!peso) {
-        var entidades = entidades_aux[entidad_activoID].entidades;
-        var idSeleccionado = getSelectedItemArbolEntidadesSelected();
-        var ent_aux = {
-            id: id.toString(),
-            nombre: nombre,
-            peso: peso,
-            descripcion: descripcion,
-            tipo: tipo,
-            activo: activo,
-            entidades: {},
-        };
-        entidades_aux[entidad_activoID].entidades = agregar_entidad_entID(
-            idSeleccionado,
-            ent_aux,
-            entidades
+    var tipo = document.getElementById("tipo_escalas3");
+    var tipo_valor = tipo.options[tipo.selectedIndex].text;
+    var data = {
+        nombre: document.getElementById("nombreEntidad").value,
+        descripcion: document.getElementById("descripcionEntidad").value,
+        peso: document.getElementById("PesoEntidad").value,
+        tipoS: tipo_valor,
+        activo: document.getElementById("activoEntidad").checked,
+        id: idSeleccion,
+    };
+    if (!!data.nombre && !!data.descripcion && !!data.peso && !!data.tipoS) {
+        desactivarFormularioAgregarEntidad(),
+            post_api("http://localhost:3000/api/add_aspects/",
+                data,
+                mensaje_exitoEnvioAspects,
+                mensaje_errorEnvioAspects);
+        consultar_api(
+            "http://localhost:3000/api/aspects",
+            cargar_aspectos_table,
+            error_cargar_aspectos_table
         );
-        var arbol = document.getElementById("arbol_objetivos_de_entidad");
-        arbol.innerHTML = generar_arbol_entidades(
-            entidades_aux[entidad_activoID]["entidades"]
-        );
-        var elemRaiz = document.getElementById("raiz_0");
-        elemRaiz.checked = true;
-        desactivarFormularioAgregarEntidad();
+
     } else {
-        alert("Ingrese valores en todos los campos para poder agregar el Objeto");
+        alert("Debe llenar todos los campos")
     }
 }
 
-function getSelectedItemArbolEntidadesSelected() {
-    var arbol = document.getElementsByName("Entidades_inputSelect");
-    var idSeleccionado = "raiz_0";
-    arbol.forEach((elem) => {
+function EliminarAspecto() {
+    var radio = document.getElementsByName("aspecto_seleccionado");
+    var id;
+    radio.forEach((elem) => {
         if (elem.checked) {
-            idSeleccionado = elem.value;
+            id = elem.value;
             return;
         }
     });
-    return idSeleccionado;
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        post_api(
+            "http://localhost:3000/api/del_aspects/",
+            data,
+            mensaje_exitoEnvioAspects,
+            mensaje_errorEnvioAspects
+        );
+        consultar_api(
+            "http://localhost:3000/api/aspects",
+            cargar_aspectos_table,
+            error_cargar_aspectos_table
+        );
+        $("#modal_eliminar_unidadMedida").modal("hide");
+    } else alert("Debe seleccionar un elemento para eliminar");
 }
-
-function agregar_entidad_entID(id, objA, objList) {
-    Object.entries(objList).forEach(([key, value]) => {
-        if (value.id == id) {
-            value.entidades[objA.id] = objA;
-            return;
-        }
-        if (Object.keys(value.entidades).length > 0) {
-            value.entidades = agregar_entidad_entID(id, objA, value.entidades);
-        }
-    });
-    return objList;
-}
-
-function remover_entidad_entID(id, entList) {
-    Object.entries(entList).forEach(([key, value]) => {
-        if (value.id == id) {
-            delete entList[key];
-            return;
-        }
-        if (Object.keys(value.entidades).length > 0) {
-            value.entidades = remover_entidad_entID(id, value.entidades);
-        }
-    });
-    return entList;
-}
-
-function error_cargar_idNuevaEntidad(err) {
-    alert(`Error al cargar el ultimo ID ${err}`);
-}
-
-
 /* 
     SECCION SELECCION SUJETOS CARGAR LOS RECURSOS DE IMPLEMENTACION
 

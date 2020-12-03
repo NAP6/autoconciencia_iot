@@ -351,55 +351,65 @@ export function upd_umbral(req: Request, res: Response) {
 
 export function aspects(req: Request, res: Response) {
   if (req.session?.user) {
-    var id = req.session?.user.userID;
+    var idUser = req.session?.user.userID;
+    var idaspecto = req.body.id;
     var db = new database();
-    db.getUser_Aspects(id, (jsonEscala: object) => {
+    db.getUser_Aspects(idUser, idaspecto,(jsonEscala:object)=>{
       res.json(jsonEscala);
     });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-
-
 export function add_aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
     var descripcion = req.body.descripcion;
+    var tipo=req.body.tipo;
+    var peso=req.body.peso;
+    var idP=req.body.id;
+    var activo=req.body.activo;
+    console.log(idP)
     var db = new database();
-    db.addUser_aspects(idUser, descripcion);
+    db.addUser_aspects(idUser, name, descripcion, tipo, peso,idP,activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function add_metrica(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var abreviatura=req.body.abreviatura;
+    var escala=req.body.escala;
+    var unidad=req.body.unidadMedida;
+    var tipo=req.body.tipo;
+    var idP=req.body.id;
+    var activo=req.body.activo;
+    console.log(idP)
+    var db = new database();
+    db.addUser_metrica(idUser, name, descripcion, abreviatura, escala,unidad,tipo,idP,activo);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
 
 export function del_aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
-    var idDecision = req.body.id;
+    var idaspecto = req.body.id;
     var db = new database();
-    db.delUser_aspects(idUser, idDecision);
+    db.delUser_aspects(idUser, idaspecto);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-
-export function upd_aspects(req: Request, res: Response) {
-  if (req.session?.user) {
-    var idUser = req.session?.user.userID;
-    var id = req.body.id;
-    var descripcion = req.body.descripcion;
-
-    var db = new database();
-    db.updUser_aspects(idUser, id, descripcion);
-    res.json({ mensaje: "La accion fue realizada con exito" });
-  } else {
-    res.json({ error: "debe iniciar session para poder usar la api" });
-  }
-}
-
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
