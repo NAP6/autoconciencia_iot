@@ -11,7 +11,8 @@
             </div>
             <div class="modal-body">
                 <h5>Objeto: <span id="nombreEntidadActiva2"></span></h5>
-                <h5>Aspecto: <span id="nombreEntidadActiva2"></span></h5>
+                <br>
+                <h5>Aspecto: <span id="nombreAspecto"></span></h5>
                 <br>
                 <h5>Listado de métricas</h5>
                 <div class="row">
@@ -28,6 +29,7 @@
                                         <th scope="col">ID</th>
                                         <th scope="col">Nombre</th>
                                         <th scope="col">Tipo</th>
+                                        <th scope="col">Abreviatura</th>
                                         <th scope="col">Activo</th>
                                     </tr>
                                 </thead>
@@ -40,19 +42,19 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
                             </div>
-                            <input name="form_entidad_new" id="nombreMetrica" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled />
+                            <input name="form_entidad_new" id="nombreMetrica" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Descripción</span>
                             </div>
-                            <input type="text" name="form_entidad_new" id="descripcionMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled />
+                            <textarea type="text" name="form_entidad_new" id="descripcionMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Abreviatura</span>
                             </div>
-                            <input type="text" name="form_entidad_new" id="abreviaturaMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled />
+                            <input type="text" name="form_entidad_new" id="abreviaturaMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
@@ -84,10 +86,10 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="btn btn-primary" id="btn-agregarEntidadLista" onclick="GuardarMetrica()">
+                        <button class="btn btn-primary" id="btn-agregarMetrica" onclick="GuardarMetrica()" disabled>
             Guardar
           </button>
-                        <button class="btn btn-primary" id="btn-CancelarEntidadLista" onclick="desactivarFormularioAgregarMetrica()">
+                        <button class="btn btn-primary" id="btn-CancelarMetrica" onclick="desactivarFormularioAgregarMetrica()" disabled>
             Cancelar
           </button>
                     </div>

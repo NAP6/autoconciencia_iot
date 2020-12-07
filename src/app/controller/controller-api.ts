@@ -188,6 +188,17 @@ export function escales(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function get_escales_select(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.getUser_escales_select(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function add_escales(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
@@ -378,26 +389,6 @@ export function add_aspects(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export function add_metrica(req: Request, res: Response) {
-  if (req.session?.user) {
-    var idUser = req.session?.user.userID;
-    var name = req.body.nombre;
-    var descripcion = req.body.descripcion;
-    var abreviatura=req.body.abreviatura;
-    var escala=req.body.escala;
-    var unidad=req.body.unidadMedida;
-    var tipo=req.body.tipo;
-    var idP=req.body.id;
-    var activo=req.body.activo;
-    console.log(idP)
-    var db = new database();
-    db.addUser_metrica(idUser, name, descripcion, abreviatura, escala,unidad,tipo,idP,activo);
-    res.json({ mensaje: "La accion fue realizada con exito" });
-  } else {
-    res.json({ error: "debe iniciar session para poder usar la api" });
-  }
-}
-
 
 export function del_aspects(req: Request, res: Response) {
   if (req.session?.user) {
@@ -410,6 +401,50 @@ export function del_aspects(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function add_metrica(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var abreviatura=req.body.abreviatura;
+    var escala=req.body.escala;
+    var unidad=req.body.unidad;
+    var tipo=req.body.tipo;
+    var idP=req.body.id;
+    var activo=req.body.activo.toString();
+    var db = new database();
+    db.addUser_metrica(idUser, name, descripcion, abreviatura, escala,unidad,tipo,idP,activo);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function get_metrica(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var idP=req.body.id;
+    var db = new database();
+    db.getUser_Metrica(id,idP,(jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function del_metrica(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var idaspecto = req.body.idD;
+    var db = new database();
+    console.log
+    db.delUser_metrica(idUser, idaspecto);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;

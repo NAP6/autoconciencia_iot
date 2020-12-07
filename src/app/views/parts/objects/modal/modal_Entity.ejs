@@ -18,7 +18,7 @@
                         <button class="btn btn-primary" onclick="activarFormularioAgregarEntidad()">Agregar</button>
                         <button class="btn btn-primary" onclick="EliminarAspecto()">Eliminar</button>
 
-                        <button id="bd_del_aspecto" class="btn btn-primary" onclick="Administrar_aspecto()">
+                        <button id="bd_del_aspecto" class="btn btn-primary" onclick="Administrar_Metricas()">
                   Administrar Métricas
                 </button>
                         <br>
@@ -53,6 +53,7 @@
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               disabled
+              onkeyup="javascript:this.value=this.value.toUpperCase();"
             />
           </div>
           <div class="input-group mb-4">
@@ -69,6 +70,7 @@
               aria-label="Default"
               aria-describedby="inputGroup-sizing-default"
               disabled
+              onkeyup="javascript:this.value=this.value.toUpperCase();"
             ></textarea>
           </div>
           <div class="input-group mb-4">

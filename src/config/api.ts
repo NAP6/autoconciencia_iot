@@ -20,6 +20,7 @@ export default function (app: Application) {
   app.post("/api/add_escales/", api.add_escales);
   app.post("/api/del_escales/", api.del_escales);
   app.post("/api/upd_escales/", api.upd_escales);
+  app.get("/api/escalas_select"),api.get_escales_select;
   app.get("/api/decision_criteria/", api.decision_criteria);
   app.post("/api/add_decision_criteria/", api.add_decision_criteria);
   app.post("/api/del_decision_criteria/", api.del_decision_criteria);
@@ -32,6 +33,8 @@ export default function (app: Application) {
   app.post("/api/add_aspects/", api.add_aspects);
   app.post("/api/del_aspects/", api.del_aspects);
   app.post("/api/add_metrica/",api.add_metrica);
+  app.post("/api/get_metrica",api.get_metrica);
+  app.post("/api/del_metrica/",api.del_metrica);
   app.get("/api/user_models/", api.user_models);
   app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
   app.get("/api/last_EntityID/", api.last_EntityID);

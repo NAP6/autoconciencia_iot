@@ -459,7 +459,7 @@ function eliminarObjeto() {
 		error_cargar_unidades_de_medida_select
 */
 
-if (document.getElementById("unidades_medida_seccion_sujetos"))
+if (document.getElementById("unidad_medida_metrica"))
     consultar_api(
         "http://localhost:3000/api/measurement_units",
         cargar_unidades_de_medida_select,
@@ -471,7 +471,7 @@ function cargar_unidades_de_medida_select(json) {
     json.forEach((um) => {
         res += `<option value='${um.id}'>${um.nombre}</option>`;
     });
-    document.getElementById("unidades_medida_seccion_sujetos").innerHTML = res;
+    document.getElementById("unidad_medida_metrica").innerHTML = res;
 }
 
 function error_cargar_unidades_de_medida_select(err) {
@@ -503,24 +503,7 @@ function error_cargar_enumeracion_select(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
 
-if (document.getElementById("tipo_escalas3"))
-    consultar_api(
-        "http://localhost:3000/api/enumeracion",
-        cargar_enumeracion_select_metrica,
-        error_cargar_enumeracion_select_metrica
-    );
 
-function cargar_enumeracion_select_metrica(json) {
-    res = "";
-    json.forEach((enu) => {
-        res += `<option value='${enu.id}'>${enu.nombre}</option>`;
-    });
-    document.getElementById("tipo_escalas3").innerHTML = res;
-}
-
-function error_cargar_enumeracion_select_metrica(err) {
-    alert("Error al cargar los datos del modelo: " + err);
-}
 
 /* 
     SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
@@ -1373,36 +1356,38 @@ function guardarNuevoAspecto() {
         $("#modal_aspecto_add").modal("hide");
     } else alert("Ingrese todos los campos del formulario");
 }
+var AspectoId;
 
-function Administrar_aspecto() {
+function Administrar_Metricas() {
     try {
         var radio = document.getElementsByName("aspecto_seleccionado");
         var id;
         var name;
-        var tipo;
-        var activo;
         radio.forEach((elem) => {
             if (elem.checked) {
                 id = elem.value;
                 name = elem.dataset.name;
-                tipo = elem.dataset.tipo;
-                activo = elem.dataset.activo == "true";
                 return;
             }
         });
-        if (!!id && !!name && !!tipo) {
+        if (!!id && !!name) {
+            var nomA = document.getElementById("nombreAspecto");
+            nomA.innerHTML = name;
+            AspectoId = id;
             data = {
-                id: id,
-                nombre: nombre,
-                tipo: tipo,
-                activo: activo
-            };
+                id: AspectoId,
+            }
+            post_api(
+                "http://localhost:3000/api/get_metrica",
+                data,
+                cargar_aspectos_metrica_table,
+                error_cargar_aspectos_metrica_table
+            );
             $("#modal_agregar_metrica").modal("show");
         } else alert("Debe seleccionar un Aspecto");
     } catch (error) {
         alert(error);
     }
-
 }
 
 function mensaje_exitoEnvioAspects(json) {
@@ -1433,7 +1418,6 @@ if (document.getElementById("tabla_criterios_decision"))
 
 
 function cargar_aspectos_table(json) {
-
     res = "";
     json.forEach((as) => {
         res += "<tr>";
@@ -1455,13 +1439,14 @@ function error_cargar_aspectos_table(err) {
 
 function cargar_aspectos_metrica_table(json) {
     res = "";
-    json.forEach((as) => {
+    json.forEach((met) => {
         res += "<tr>";
-        res += `<td><input type="radio" name="aspecto_seleccionado" value="${as.id}" data-name="${as.nombre}" data-tipo="${as.tipo}" data-activo="${as.activo == "true"}"></td>`;
-        res += `<td>${as.id}</td>`;
-        res += `<td>${as.nombre}</td>`;
-        res += `<td>${as.tipo}</td>`;
-        if (as.activo == "true")
+        res += `<td><input type="radio" name="metrica_seleccionado" value="${met.id}" data-name="${met.nombre}" data-tipo="${met.tipo}" data-abreviatura="${met.abreviatura}" data-activo="${met.activo == "true"}"></td>`;
+        res += `<td>${met.id}</td>`;
+        res += `<td>${met.nombre}</td>`;
+        res += `<td>${met.tipo}</td>`;
+        res += `<td>${met.abreviatura}</td>`;
+        if (met.activo == "true")
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
@@ -1538,6 +1523,60 @@ function mostrar_modal_json() {
     );
 }
 
+function activarFormularioAgregarMetrica() {
+    try {
+        document.getElementById("nombreMetrica").disabled = false;
+        document.getElementById("descripcionMetrica").disabled = false;
+        document.getElementById("abreviaturaMetrica").disabled = false;
+        document.getElementById("escalas_seccion_entidad").disabled = false;
+        document.getElementById("unidad_medida_metrica").disabled = false;
+        document.getElementById("tipo_metrica").disabled = false;
+        document.getElementById("activoMetrica").disabled = false;
+        document.getElementById("btn-agregarMetrica").disabled = false;
+        document.getElementById("btn-CancelarMetrica").disabled = false;
+
+    } catch (error) {
+        alert(error);
+    }
+}
+
+function desactivarFormularioAgregarMetrica() {
+    try {
+        document.getElementById("nombreMetrica").disabled = true;
+        document.getElementById("descripcionMetrica").disabled = true;
+        document.getElementById("abreviaturaMetrica").disabled = true;
+        document.getElementById("escalas_seccion_entidad").disabled = true;
+        document.getElementById("unidad_medida_metrica").disabled = true;
+        document.getElementById("tipo_metrica").disabled = true;
+        document.getElementById("activoMetrica").disabled = true;
+        document.getElementById("btn-agregarMetrica").disabled = true;
+        document.getElementById("btn-CancelarMetrica").disabled = true;
+        document.getElementById("nombreMetrica").value = "";
+        document.getElementById("descripcionMetrica").value = "";
+        document.getElementById("abreviaturaMetrica").value = "";
+
+    } catch (error) {
+        alert(error);
+    }
+}
+if (document.getElementById("escalas_seccion_entidad"))
+    consultar_api(
+        "http://localhost:3000/api/escales",
+        cargar_escalas_select,
+        error_escalas_select
+    );
+
+function cargar_escalas_select(json) {
+    res = "";
+    json.forEach((es) => {
+        res += `<option value='${es.id}'>${es.nombre}</option>`;
+    });
+    document.getElementById("escalas_seccion_entidad").innerHTML = res;
+}
+
+function error_escalas_select(err) {
+    alert("Error al cargar las escalas select: " + err);
+}
 /* 
     SECCION LISTAR MODELOS
 
@@ -2081,6 +2120,83 @@ function EliminarAspecto() {
         );
         $("#modal_eliminar_unidadMedida").modal("hide");
     } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+/*Seccion de Metricas Botones Guardar Cancelar Agregar y Eliminar*/
+
+function GuardarMetrica() {
+    var escala = document.getElementById("escalas_seccion_entidad");
+    var escalaS = escala.options[escala.selectedIndex].text;
+    var unidad = document.getElementById("unidad_medida_metrica");
+    var unidadS = unidad.options[unidad.selectedIndex].text;
+    var tipo = document.getElementById("tipo_metrica");
+    var tipoS = tipo.options[tipo.selectedIndex].text;
+    var data = {
+        id: AspectoId,
+        nombre: document.getElementById("nombreMetrica").value,
+        descripcion: document.getElementById("descripcionMetrica").value,
+        abreviatura: document.getElementById("abreviaturaMetrica").value,
+        escala: escalaS,
+        unidad: unidadS,
+        tipo: tipoS,
+        activo: document.getElementById("activoMetrica").checked,
+    };
+    var data2 = {
+        id: AspectoId,
+    }
+    if (!!data.nombre && !!data.descripcion && !!data.abreviatura && !!data.escala && !!data.unidad && !!data.tipo) {
+
+        post_api("http://localhost:3000/api/add_metrica/",
+            data,
+            mensaje_exitoEnvioMetrica,
+            mensaje_errorEnvioMetrica);
+        desactivarFormularioAgregarMetrica();
+        post_api(
+            "http://localhost:3000/api/get_metrica",
+            data2,
+            cargar_aspectos_metrica_table,
+            error_cargar_aspectos_metrica_table
+        );
+    }
+
+}
+
+function eliminar_metrica() {
+    var radio = document.getElementsByName("metrica_seleccionado");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            idD: id,
+            id: AspectoId
+        };
+        post_api(
+            "http://localhost:3000/api/del_metrica/",
+            data,
+            mensaje_exitoEnvioMetrica,
+            mensaje_errorEnvioMetrica
+        );
+        post_api(
+            "http://localhost:3000/api/get_metrica",
+            data,
+            cargar_aspectos_metrica_table,
+            error_cargar_aspectos_metrica_table
+        );
+        $("#modal_eliminar_unidadMedida").modal("hide");
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function mensaje_exitoEnvioMetrica(json) {
+    alert(json.mensaje);
+}
+
+function mensaje_errorEnvioMetrica(err) {
+    alert(err);
 }
 /* 
     SECCION SELECCION SUJETOS CARGAR LOS RECURSOS DE IMPLEMENTACION
