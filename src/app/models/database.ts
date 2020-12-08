@@ -145,8 +145,29 @@ export class mysql_connector {
       func();
     });
   }
-    public get_entitys(modelID: string, func: Function) {
-      var sql = `SELECT obj_id as id, obj_tipo as tipo, obj_nombre as nombre, obj_activo as activo, obj_id_padre as padre FROM objeto WHERE ma_id = ${modelID} ORDER BY id`;
+    public get_entitys(modelID: string,seleccion:string, func: Function) {
+      var select;
+      if(seleccion  == "Entidades Físicas"){
+        select="PhysicalEntity";
+      }else if(seleccion=="Nodos Cloud"){
+        select="CloudNode";
+      }else if(seleccion=="Nodos Fog"){
+        select="FogNode";
+      }else if(seleccion=="Gateway IoT"){
+        select="IotGateway";
+      }else if(seleccion=="Sensores"){
+        select="PhysicalEntity";
+      }else if(seleccion=="Tags"){
+        select="Tag";
+      }else if(seleccion=="Actuadores"){
+        select="Actuador";
+      }else if(seleccion=="Red"){
+        select="Network";
+      }
+      else if(seleccion=="Sensores"){
+        select="Sensor";
+      }
+      var sql = `SELECT obj_id as id, obj_tipo as tipo, obj_nombre as nombre, obj_activo as activo, obj_id_padre as padre FROM objeto WHERE ma_id = ${modelID} AND obj_tipo = '${select}'  ORDER BY id`;
       this.connector.query(sql, (err, result) => {
         if (err) throw err;
         func(result);

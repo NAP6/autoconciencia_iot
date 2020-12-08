@@ -1650,12 +1650,28 @@ function error_cargar_models_trabajo_actual(err) {
 var entidades_list = [];
 var entidades_aux = {};
 
-if (document.getElementById("lista_entidades_para_cargar"))
-    consultar_api(
+$("#CategoriaEntidades").change(function() {
+    var limpiar = document.getElementById("lista_entidades_para_cargar");
+    limpiar.innerHTML = "";
+    var limpiar2 = document.getElementById("lista_entidades_seleccionados");
+    limpiar2.innerHTML = "";
+    var seleccion = document.getElementById("CategoriaEntidades");
+    var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
+    data = {
+        valorS: tipo_valor,
+    }
+    post_api(
         "http://localhost:3000/api/entity",
+        data,
         cargar_posibles_entidades_modelo,
         error_cargar_posibles_entidades_modelo
     );
+
+
+});
+
+
+
 
 function cargar_posibles_entidades_modelo(json) {
     var aux_visible_activo = new Set();

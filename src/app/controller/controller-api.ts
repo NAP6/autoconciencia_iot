@@ -76,11 +76,14 @@ export function update_subjects(req: Request, res: Response) {
     res.json({ Mensaje: "Debe iniciar session para poder usar la api" });
   }
 }
+
 export function entity(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session!.active_model.modelID;
+    var seleccion = req.body.valorS;
     var db = new database();
-    db.get_entitys(id, (json: object) => {
+
+    db.get_entitys(id,seleccion,(json:object)=>{
       res.json(json);
     });
   } else {
