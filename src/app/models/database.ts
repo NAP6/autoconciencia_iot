@@ -730,7 +730,8 @@ export class mysql_connector {
 
   public getUser_ri(userID: string, func: Function): void {
     this.connector.query(
-      `SELECT ri_id, ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso, ri_activo
+      `SELECT ri_id, ri_nombre, ri_descripcion, ri_tipo_dato_salida, 
+              ri_tipo_recurso, ri_activo
       FROM recursoimplementacion`,
       (err, result, fields) => {
         if (err) err;
@@ -738,9 +739,9 @@ export class mysql_connector {
         var act;
         for (const i in result) {
           //console.log(result[i]);
-          if (result[i]["esc_activo"] == 1) {
+          if (result[i]["ri_activo"] == 1) {
             act = "true";
-          } else if (result[i]["esc_activo"] == 2) {
+          } else if (result[i]["ri_activo"] == 2) {
             act = "false";
           }
           var aux = {
@@ -802,19 +803,24 @@ export class mysql_connector {
     tr: string,
     expresion: string
   ): void {
-    console.log('es de tipo recurso' + tr);
+    console.log('es de tipo recurso' + expresion);
     var aux;
     var ri_id;
     if(tr == 'modal_tipo_recurso_formula_add'){
       aux = 'FÓRMULA';
-      ri_id = ``;
     } else if(tr == 'modal_tipo_recurso_funcion_add'){
       aux = 'FUNCIÓN';
     }else if(tr == 'modal_tipo_recurso_servicio_add'){
       aux = 'SERVICIO';
     };
+
+    ri_id = this.connector.query(
+      `SELECT ri_id FROM recursoimplementacion 
+      WHERE ri_tipo_recurso = '${aux}' and ri_nombre = '${name}'`
+    ); 
+
     this.connector.query(
-      ri_id = `SELECT ri_id FROM recursoimplementacion 
+      `SELECT ri_id FROM recursoimplementacion 
       WHERE ri_tipo_recurso = '${aux}' and ri_nombre = '${name}'`,
       
       `INSERT INTO formula (for_expresion, ri_id) 

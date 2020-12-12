@@ -2318,25 +2318,19 @@ function guardarNuevaRecImpl() {
       //Formula
       expresion: document.getElementById("input_expresion_add").value,
       //Funcion
-      path: document.getElementById("input_path_id").value,
+      path: document.getElementById("input_path_add").value,
       instruccion: document.getElementById("input_instruccion_add").value,
       //Servicio
-      pf: document.getElementById("input_pf_id").value,
+      pf: document.getElementById("input_pf_add").value,
       instruccionS: document.getElementById("input_instruccionS_add").value,
       ts: document.getElementById("input_ts_add").value,
     };
-    //alert(data);
+    console.log(data);
     if (
       !!data.nombre &&
       !!data.descripcion &&
       !!data.tipo_dato_salida &&
-      !!data.tipo_recurso &&
-      !!data.expresion &&
-      !!data.path &&
-      !!data.instruccion &&
-      !!data.pf &&
-      !!data.instruccionS &&
-      !!data.ts
+      !!data.tipo_recurso
     ) {
       post_api(
         "http://localhost:3000/api/add_ri/",
@@ -2350,8 +2344,23 @@ function guardarNuevaRecImpl() {
         error_cargar_ri_table
       );
       $("#modal_recurso_implementacion_add").modal("hide");
+    } else alert("Ingrese todos los campos del formulario");
+
+    //Formula - Funcion - Servicio
+    if (
+      !!data.expresion 
+    ) {
       $("#modal_tipo_recurso_formula_add").modal("hide");
+    } else if (
+      !!data.path &&
+      !!data.instruccion 
+    ) {
       $("#modal_tipo_recurso_funcion_add").modal("hide");
+    } else if (
+      !!data.pf &&
+      !!data.instruccionS &&
+      !!data.ts
+    ) {
       $("#modal_tipo_recurso_servicio_add").modal("hide");
     } else alert("Ingrese todos los campos del formulario");
   } catch (error) {
@@ -2360,7 +2369,7 @@ function guardarNuevaRecImpl() {
 }
 
 function eliminar_recurso_implementacion() {
-  var radio = document.getElementsByName("escala_seleccionada");
+  var radio = document.getElementsByName("recurso_seleccionado");
   var id;
   radio.forEach((elem) => {
     if (elem.checked) {
@@ -2374,15 +2383,15 @@ function eliminar_recurso_implementacion() {
     };
     console.log(data);
     post_api(
-      "http://localhost:3000/api/del_escales/",
+      "http://localhost:3000/api/del_ri/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://localhost:3000/api/escales",
-      cargar_escales_table,
-      error_cargar_escales_table
+      "http://localhost:3000/api/ri",
+      cargar_ri_table,
+      error_cargar_ri_table
     );
   } else alert("Debe seleccionar un elemento para eliminar");
 }
@@ -2400,45 +2409,50 @@ function modificar_recurso_implementacion() {
     if (elem.checked) {
       id = elem.value;
       name = elem.dataset.name;
-      valor_valido = elem.dataset.valor_valido;
-      tipo = elem.dataset.tipo;
-      activo = elem.dataset.activo;
+      descripcion = elem.dataset.descripcion;
+      tipo_dato_salida = elem.dataset.tipo_dato_salida;
+      tipo_recurso = elem.dataset.tipo_recurso;
+      activo = elem.dataset.activo == "true";
       return;
     }
   });
 
-  if (!!id && !!name && !!valor_valido && !!tipo) {
-    document.getElementById("input-escale-id-update").value = id;
-    document.getElementById("input-escale-name-update").value = name;
-    document.getElementById("input-escale-valor-update").value = valor_valido;
-    document.getElementById("input-tipe-update").value = tipo;
-    document.getElementById("activoEscalas").value = activo;
-    $("#modal_escalas_mod").modal("show");
+  if (!!id && !!name && 
+    !!descripcion && !!tipo_dato_salida && 
+    !!tipo_recurso && !!activo) {
+    document.getElementById("input-id-update").value = id;
+    document.getElementById("input-name-update").value = name;
+    document.getElementById("input-descripcion-update").value = descripcion;
+    document.getElementById("tipo_escalas_update").value = tds;
+    document.getElementById("select_tipo_recurso").value = tipo;
+    document.getElementById("activoRi").value = activo;
+    $("#modal_recurso_implementacion_mod").modal("show");
   } else alert("Debe seleccionar un elemento para modificar");
 }
 
 function guardarModificacionRI() {
   var data = {
-    id: document.getElementById("input-escale-id-update").value,
-    nombre: document.getElementById("input-escale-name-update").value,
-    valor_valido: document.getElementById("input-escale-valor-update").value,
-    tipo: document.getElementById("input-tipe-update").value,
+    id: document.getElementById("input-id-update").value,
+    nombre: document.getElementById("input-name-update").value,
+    descripcion: document.getElementById("input-descripcion-update").value.value,
+    tds: document.getElementById("tipo_escalas_update").value,
+    tipo: document.getElementById("select_tipo_recurso").value ,
     activo: document.getElementById("activoEscalas").value,
   };
   if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
     post_api(
-      "http://localhost:3000/api/upd_escales/",
+      "http://localhost:3000/api/upd_ri/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://localhost:3000/api/escales",
-      cargar_escales_table,
-      error_cargar_escales_table
+      "http://localhost:3000/api/ri",
+      cargar_ri_table,
+      error_cargar_ri_table
     );
 
-    $("#modal_escalas_mod").modal("hide");
+    $("#modal_recurso_implementacion_mod").modal("hide");
   } else alert("Debe debe completar todos los campos");
 }
 
@@ -2528,131 +2542,4 @@ function cargar_recurso(valor) {
     rec_servicio.classList.replace('modal-body', 'd-none');
   };
   
-}
-
-/* 
-    SECCION AGREGAR FORMULA
-
-        Descripcion:
-		Esta seccion incluye el envio de datos para FORMULA
-
-        Incluye:
-*/
-
-function agregar_recurso_implementacion() {
-  $("#modal_recurso_implementacion_add").modal("show");
-}
-
-function guardarNuevaFormula() {
-  var data = {
-    expresion: document.getElementById("input_expresion_add").value,
-  };
-  console.log(data);
-  if (
-    !!data.tipo_recurso 
-  ) {
-    post_api(
-      "http://localhost:3000//api/add_formula/",
-      data,
-      mensaje_exitoEnvioRI,
-      mensaje_errorEnvioRI
-    );
-    consultar_api(
-      "http://localhost:3000/api/add_ri/",
-      cargar_ri_table,
-      error_cargar_ri_table
-    );
-    $("#modal_recurso_implementacion_add").modal("hide");
-  } else alert("Ingrese todos los campos del formulario");
-}
-
-function eliminar_recurso_implementacion() {
-  var radio = document.getElementsByName("escala_seleccionada");
-  var id;
-  radio.forEach((elem) => {
-    if (elem.checked) {
-      id = elem.value;
-      return;
-    }
-  });
-  if (!!id) {
-    data = {
-      id: id,
-    };
-    console.log(data);
-    post_api(
-      "http://localhost:3000/api/del_escales/",
-      data,
-      mensaje_exitoEnvioEscalas,
-      mensaje_errorEnvioEscalas
-    );
-    consultar_api(
-      "http://localhost:3000/api/escales",
-      cargar_escales_table,
-      error_cargar_escales_table
-    );
-  } else alert("Debe seleccionar un elemento para eliminar");
-}
-
-function modificar_recurso_implementacion() {
-  var radio = document.getElementsByName("ri_seleccionada");
-  var id;
-  var name;
-  var descripcion;
-  var tds; //tipo dato salida
-  var tipo; //tipo recurso
-  var activo;
-
-  radio.forEach((elem) => {
-    if (elem.checked) {
-      id = elem.value;
-      name = elem.dataset.name;
-      valor_valido = elem.dataset.valor_valido;
-      tipo = elem.dataset.tipo;
-      activo = elem.dataset.activo;
-      return;
-    }
-  });
-
-  if (!!id && !!name && !!valor_valido && !!tipo) {
-    document.getElementById("input-escale-id-update").value = id;
-    document.getElementById("input-escale-name-update").value = name;
-    document.getElementById("input-escale-valor-update").value = valor_valido;
-    document.getElementById("input-tipe-update").value = tipo;
-    document.getElementById("activoEscalas").value = activo;
-    $("#modal_escalas_mod").modal("show");
-  } else alert("Debe seleccionar un elemento para modificar");
-}
-
-function guardarModificacionRI() {
-  var data = {
-    id: document.getElementById("input-escale-id-update").value,
-    nombre: document.getElementById("input-escale-name-update").value,
-    valor_valido: document.getElementById("input-escale-valor-update").value,
-    tipo: document.getElementById("input-tipe-update").value,
-    activo: document.getElementById("activoEscalas").value,
-  };
-  if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
-    post_api(
-      "http://localhost:3000/api/upd_escales/",
-      data,
-      mensaje_exitoEnvioEscalas,
-      mensaje_errorEnvioEscalas
-    );
-    consultar_api(
-      "http://localhost:3000/api/escales",
-      cargar_escales_table,
-      error_cargar_escales_table
-    );
-
-    $("#modal_escalas_mod").modal("hide");
-  } else alert("Debe debe completar todos los campos");
-}
-
-function mensaje_exitoEnvioRI(json) {
-  alert(json.mensaje);
-}
-
-function mensaje_errorEnvioRI(err) {
-  alert(err);
 }
