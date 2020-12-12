@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { randomInt } from "crypto";
 import * as mysql from "mysql";
 import constants from "../../config/constants";
@@ -62,10 +63,8 @@ export class mysql_connector {
       `########## Envio a la funcion de actualizar modelo ID: ${id}, Nombre: ${nombre}, descripcion: ${descripcion},activo:${activo}`
     );
     if (activo == "true") {
-      console.log("Entra true");
       var activ = "1";
     } else {
-      console.log("Entra False");
       activ = "2";
     }
     this.connector.query(
@@ -99,7 +98,6 @@ export class mysql_connector {
 
   public delete_subjects_objects(objectID: string, func: Function) {
     var sql = `DELETE FROM objetivo WHERE objetivo.obj_id = ${objectID}`;
-    console.log(sql);
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       func();
@@ -107,7 +105,6 @@ export class mysql_connector {
   }
   public get_subjectsObjects(subjectID: string, func: Function) {
     var sql = `SELECT obj_id as id, obj_nombre as nombre, obj_descripcion as descripcion, obj_peso as peso, obj_operacion_agregacion as asignacion, obj_activo as activo, obj_id_padre as padre  FROM objetivo WHERE suj_id = ${subjectID} ORDER BY id`;
-    console.log(sql);
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       func(result);
@@ -148,207 +145,36 @@ export class mysql_connector {
       func();
     });
   }
-
-  public get_entitys(modelID: string): object {
-    return [
-      {
-        id: "Entidades Fisicas",
-        name: "Entidades Fisicas",
-        tiene_entidades: true,
-        activo: true,
-        inactivo: true,
-        entitys: { raiz_0: { id: "raiz_0", nombre: "raiz", entidades: {} } },
-        entity: [
-          {
-            id: "Casa",
-            name: "Casa",
-
-            activo: false,
-            entitys: {
-              raiz_0: {
-                id: "raiz_0",
-                nombre: "raiz",
-                entidades: {
-                  "1": {
-                    id: "1",
-                    nombre: "Entidad Casa",
-                    descripcion: "descripcion de Casa",
-                    peso: "1",
-                    activo: false,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-          {
-            id: "Hospital",
-            name: "Hospital",
-
-            activo: true,
-            entitys: {
-              raiz_0: {
-                id: "raiz_0",
-                nombre: "raiz",
-                entidades: {
-                  "2": {
-                    id: "2",
-                    nombre: "Entidad Hospital",
-                    descripcion: "Descripcion del objeto del Hospital",
-                    peso: "1",
-                    activo: true,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-        ],
-      },
-      {
-        id: "Entidades Digitales",
-        name: "Entidades Digitales",
-        tiene_entidades: true,
-        activo: false,
-        inactivo: true,
-        entitys: { raiz_0: { id: "raiz_1", nombre: "raiz", entidades: {} } },
-        entity: [
-          {
-            id: "Nodos Computacion",
-            name: "Nodos Computacion",
-            activo: false,
-
-            entitys: {
-              raiz_0: {
-                id: "raiz_1",
-                nombre: "raiz",
-                objetos: {
-                  "1": {
-                    id: "1",
-                    nombre: "Entidad Nodo Computacion",
-                    descripcion:
-                      "descripcion de la entidad Nodo de Computacion",
-                    peso: "1",
-                    activo: false,
-                    objetos: {},
-                  },
-                },
-              },
-            },
-          },
-          {
-            id: "Nodos Edge",
-            name: "Nodos Edge",
-            activo: false,
-
-            entitys: {
-              raiz_0: {
-                id: "raiz_1",
-                nombre: "raiz",
-                entidades: {
-                  "2": {
-                    id: "2",
-                    nombre: "Entidad Nodos Edge",
-                    descripcion: "Descripcion del la entidad Nodos Edge",
-                    peso: "1",
-                    activo: true,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-        ],
-      },
-      {
-        id: "Dispositivos Iot",
-        name: "Dispositivos Iot",
-        tiene_entidades: true,
-        activo: false,
-        inactivo: true,
-        entitys: { raiz_0: { id: "raiz_2", nombre: "raiz", entidades: {} } },
-        entity: [
-          {
-            id: "Sensor",
-            name: "Sensor",
-            activo: false,
-            tiene_entidades: true,
-            entitys: {
-              raiz_0: {
-                id: "raiz_2",
-                nombre: "raiz",
-                entidades: {
-                  "1": {
-                    id: "1",
-                    nombre: "Entidad Sensor",
-                    descripcion: "descripcion de la entidad Sensor",
-                    peso: "1",
-                    activo: false,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-          {
-            id: "Actuador",
-            name: "Actuador",
-            activo: true,
-
-            entitys: {
-              raiz_0: {
-                id: "raiz_2",
-                nombre: "raiz",
-                entidades: {
-                  "2": {
-                    id: "2",
-                    nombre: "Entidad Actuador",
-                    descripcion: "Descripcion del la entidad Actuador",
-                    peso: "1",
-                    activo: true,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-          {
-            id: "Tag",
-            name: "Tag",
-            activo: false,
-
-            entitys: {
-              raiz_0: {
-                id: "raiz_2",
-                nombre: "raiz",
-                entidades: {
-                  "2": {
-                    id: "2",
-                    nombre: "Entidad Tag",
-                    descripcion: "Descripcion del la entidad Tag",
-                    peso: "1",
-                    activo: true,
-                    entidades: {},
-                  },
-                },
-              },
-            },
-          },
-        ],
-      },
-      {
-        id: "Redes",
-        name: "Redes",
-
-        activo: false,
-        inactivo: true,
-        entitys: { raiz_0: { id: "raiz_3", nombre: "raiz", entidades: {} } },
-      },
-    ];
-  }
+    public get_entitys(modelID: string,seleccion:string, func: Function) {
+      var select;
+      if(seleccion  == "Entidades Físicas"){
+        select="PhysicalEntity";
+      }else if(seleccion=="Nodos Cloud"){
+        select="CloudNode";
+      }else if(seleccion=="Nodos Fog"){
+        select="FogNode";
+      }else if(seleccion=="Gateway IoT"){
+        select="IotGateway";
+      }else if(seleccion=="Sensores"){
+        select="PhysicalEntity";
+      }else if(seleccion=="Tags"){
+        select="Tag";
+      }else if(seleccion=="Actuadores"){
+        select="Actuador";
+      }else if(seleccion=="Red"){
+        select="Network";
+      }
+      else if(seleccion=="Sensores"){
+        select="Sensor";
+      }
+      var sql = `SELECT obj_id as id, obj_tipo as tipo, obj_nombre as nombre, obj_activo as activo, obj_id_padre as padre FROM objeto WHERE ma_id = ${modelID} AND obj_tipo = '${select}'  ORDER BY id`;
+      this.connector.query(sql, (err, result) => {
+        if (err) throw err;
+        func(result);
+      });
+    }
 
   public async save_subjects(modelID: string, subjects: [systemObj]) {
-    console.log("Entra en guardar sujetos");
     subjects.forEach((elem) => {
       this.save_oneSubject(modelID, elem);
     });
@@ -365,7 +191,6 @@ export class mysql_connector {
     } else {
       sql = `INSERT INTO sujeto (ma_id, suj_nombre) VALUES (${modelID}, '${subject.$.name}')`;
     }
-    console.log(sql);
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
       if (subject.iotSubsystem) {
@@ -374,7 +199,6 @@ export class mysql_connector {
           db.save_oneSubject(modelID, sub, results.insertId);
         });
       }
-      // results.insertId
     });
   }
 
@@ -394,17 +218,48 @@ export class mysql_connector {
       )}`
     );
   }
-  public save_entity(modelID: string, json: object): void {
-    console.log(
-      `########## Envio a la funcion de guardar objetos del sujeto, modelo: ${modelID} \n ${JSON.stringify(
-        json
-      )}`
-    );
+
+  public async save_entity(modelID: string, subjects: [systemEnt]) {
+
+    subjects.forEach((elem) => {
+      this.save_oneEntity(modelID, elem);
+    });
   }
+  public async save_oneEntity(
+    modelID: string,
+    entity: systemEnt,
+    subjectSup?: number
+  ) {
+    var sql = ``;
+    if (subjectSup) {
+      sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre, obj_id_padre) VALUES (${modelID},'${entity.$["xsi:type"]}','${entity.$.name}', ${subjectSup});`;
+    } else {
+      sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre) VALUES (${modelID}, '${entity.$["xsi:type"]}', '${entity.$.name}')`;
+    }
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+      if (entity.containsResource) {
+        entity.containsResource.forEach((sub) => {
+          var db = new mysql_connector();
+          db.save_oneEntity(modelID, sub, results.insertId);
+        });
+      }
+    });
+  }
+  public update_entity(id: string, active: string) {
+    var sql = `UPDATE objeto SET obj_activo = '${
+      active ? 1 : 0
+    }' WHERE objeto.obj_id = ${id};`;
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+    });
+  }
+
   public getfisicalModel(modelID: string): object {
     console.log(
       `############# Envio a la funcion 'getfisicalModel' el id de usuario '${modelID}`
     );
+    
     return this.modelo;
   }
   //Valida el usuario ingresado
@@ -418,7 +273,6 @@ export class mysql_connector {
       if (err) {
         err;
       }
-      console.log(sql);
       func(result[0].count);
     });
   }
@@ -437,7 +291,6 @@ export class mysql_connector {
           userName: results[0]!.usr_nombre,
           email: results[0]!.usr_correo,
         });
-        console.log("The solution is: ", results[0]);
       }
     );
   }
@@ -592,12 +445,10 @@ export class mysql_connector {
       `############# Envio a la funcion 'updUser_measurementUnit' el id de usuario '${idUser}, id: ${id}, nombre: ${name}, descripcion: ${descripcion}, acronym: ${acronym},activo:${activo}`
     );
     var act;
-    console.log(activo);
     if (activo == "true") {
       act = 1;
     } else if (activo == "false") {
       act = 2;
-      console.log("Entra false");
     }
     this.connector.query(
       `UPDATE unidadmedicion 
@@ -608,6 +459,30 @@ export class mysql_connector {
       }
     );
   }
+  public getUser_escales_select(userID: string, func: Function): void {
+    console.log(
+      `############# Envio a la funcion 'getUser_escales' el id de usuario '${userID}`
+    );
+    this.connector.query(
+      `SELECT esc_id, esc_nombre
+      FROM escala`,
+      (err, result, fields) => {
+        if (err) err;
+        var listaEscala: Array<object> = [];
+        for (const i in result) {
+          //console.log(result[i]);
+          var auxescala = {
+            id: result[i]["esc_id"],
+            nombre: result[i]["esc_nombre"],
+
+          };
+          listaEscala.push(auxescala);
+        }
+        func(listaEscala);
+      }
+    );
+  }
+
   public getUser_escales(userID: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_escales' el id de usuario '${userID}`
@@ -1125,41 +1000,111 @@ export class mysql_connector {
     );
   }
 
-  public getUser_Aspects(userID: string): object {
+  public getUser_Aspects(userID: string, id:string, func: Function): void {
     console.log(
-      `############# Envio a la funcion 'getUser_measurementUnit' el id de usuario '${userID}`
+      `############# Envio a la funcion 'getUser_Aspectes' el id de usuario '${userID}' ${id}`
     );
-    return [
-      {
-        id: "1",
-        descripcion: "Carga actual de la bateria del sensor DHT11",
-      },
-      {
-        id: "2",
-        descripcion:
-          "Eficencia en el consumo de energia de la bateria del sensor DHT11",
-      },
-    ];
+    var sql=`SELECT aa_id, aa_nombre, aa_tipo, aa_activo
+    FROM aspectoautoconsciencia WHERE obj_id=${id} Order BY aa_id`;
+    this.connector.query(
+      sql,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
+          if (result[i]["aa_activo"] == 1) {
+            act = "true";
+          } else if (result[i]["aa_activo"] == 2) {
+            act = "false";
+          }
+          var auxmedicion = {
+            id: result[i]["aa_id"],
+            nombre: result[i]["aa_nombre"],
+            tipo: result[i]["aa_tipo"],
+            activo: act,
+          };
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
+        console.log(listaUmedicion);
+      }
+    );
   }
-
-  public addUser_aspects(idUser: string, descripcion: string): void {
-    console.log(
-      `############# Envio a la funcion 'addUser_aspects' el id de usuario '${idUser},descripcion: ${descripcion}`
+  public addUser_aspects(idUser: string,name: string,descripcion: string,tipo: string,peso: string, id: string, activo: string): void {
+    var act;
+    if(activo=="true"){
+      act=1;
+    }else{
+      act=2;
+    }
+    this.connector.query(
+      `INSERT INTO aspectoautoconsciencia (aa_nombre, aa_descripcion, aa_alcance, aa_tipo, obj_id, aa_activo) 
+      VALUES ('${name}', '${descripcion}','${peso}','${tipo}','${id}', '${act}')`,
+      function (error, results) {
+        if (error) throw error;
+        //console.log('The solution is: ', results[0].solution);
+      }
     );
+  }
+  public addUser_metrica(idUser: string,name: string,descripcion: string,abreviatura: string,escala: string, unidad: string, tipo: string,idP:string,activo:string): void {
+    
+    var idMedida=unidad;
+    var sqlEscala=`SELECT esc_id FROM escala WHERE esc_nombre='${escala}'`;
+    this.connector.query(sqlEscala,(err,result,fields) => {
+      if(err)err;
+      var idEscala=escala;
+      for(const i in result){
+        idEscala=result[i]["esc_id"];
+      }
+    var sqlEscala=`SELECT um_id FROM unidadmedicion WHERE um_nombre='${unidad}'`;
+    this.connector.query(sqlEscala,(err,result,fields) => {
+      if(err)err;
+      for(const i in result){
+        idMedida=result[i]["um_id"];
+      }
+    var act;
+    if(activo=="true"){
+      act=1;
+    }else{
+      act=2;
+    }
+    this.connector.query(
+      `INSERT INTO metrica (met_nombre, met_descripcion, met_abreviacion, aa_id, esc_id, um_id, met_activo, met_tipo) 
+      VALUES ('${name}', '${descripcion}','${abreviatura}','${idP}','${idEscala}', '${idMedida}','${act}','${tipo}')`,
+      function (error, results) {
+        if (error) throw error;
+      }
+    );
+  }
+  );
+}
+);
   }
 
   public delUser_aspects(idUser: string, id: string): void {
     console.log(
       `############# Envio a la funcion 'delUser_aspects' el id de usuario '${idUser}, id: ${id}`
     );
+    this.connector.query(
+      `DELETE  FROM aspectoautoconsciencia 
+      WHERE aa_id = '${id}'`,
+      function (err, result) {
+        if (err) throw err;
+      }
+    );
   }
-  public updUser_aspects(
-    idUser: string,
-    id: string,
-    descripcion: string
-  ): void {
+  public delUser_metrica(idUser: string, id: string): void {
     console.log(
-      `############# Envio a la funcion 'updUser_aspects' el id de usuario '${idUser}, id: ${id}, descripcion: ${descripcion}`
+      `############# Envio a la funcion 'delUser_aspects' el id de usuario '${idUser}, id: ${id}`
+    );
+    this.connector.query(
+      `DELETE  FROM metrica 
+      WHERE met_id = '${id}'`,
+      function (err, result) {
+        if (err) throw err;
+      }
     );
   }
   public getLastObjectSubjectID(modelID: string): number {
@@ -1169,6 +1114,38 @@ export class mysql_connector {
   public getLastEntityID(modelID: string): number {
     console.log(`############# Entra en getLastEntityID y envia ${modelID}`);
     return Math.floor(Math.random() * 600000);
+  }
+  public getUser_Metrica(userID: string, id:string, func: Function): void {
+    console.log(
+      `############# Envio a la funcion 'getUser_Metrica' el id de usuario '${userID}' ${id}`
+    );
+    var sql=`SELECT met_id, met_nombre, met_tipo, met_abreviacion, met_activo
+    FROM metrica WHERE aa_id=${id} Order BY met_id`;
+    this.connector.query(
+      sql,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+        var act;
+        for (const i in result) {
+          //console.log(result[i]);
+          if (result[i]["met_activo"] == 1) {
+            act = "true";
+          } else if (result[i]["met_activo"] == 2) {
+            act = "false";
+          }
+          var auxmedicion = {
+            id: result[i]["met_id"],
+            nombre: result[i]["met_nombre"],
+            tipo: result[i]["met_tipo"],
+            abreviatura:result[i]["met_abreviacion"],
+            activo: act,
+          };
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
+      }
+    );
   }
 
   // La atributo variable no existe, solo le pusimos para probar
@@ -3021,4 +2998,8 @@ export class mysql_connector {
 interface systemObj {
   $: { id: string; name: string; descrption: string; domain: string };
   iotSubsystem?: [systemObj];
+}
+interface systemEnt {
+  $: {'xsi:type':string; id: string; name: string;};
+  containsResource?: [systemEnt];
 }

@@ -199,7 +199,8 @@ export function save_new_model(
     db.save_newModel(nombre, descripcion, autor, js.getJSON(),user_id, (id: string) => {
       db.getModel(id, (active_model: {nombre: string, descripcion: string, modelID: string}) => {
         req.session!.active_model = active_model;
-	db.save_subjects(active_model.modelID, js.getSystem());
+      db.save_subjects(active_model.modelID, js.getSystem());
+      db.save_entity(active_model.modelID,js.getEntity());
         next();
       });
     });

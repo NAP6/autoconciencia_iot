@@ -9,7 +9,8 @@ export default function (app: Application) {
   app.post("/api/save_subjects/", api.save_subjects);
   app.post("/api/update_subjects/", api.update_subjects);
   app.post("/api/save_entity/", api.save_entity);
-  app.get("/api/entity/", api.entity);
+  app.post("/api/update_entity/", api.update_entity);
+  app.post("/api/entity/", api.entity);
   app.get("/api/enumeracion/", api.enumeracion);
   app.get("/api/measurement_units/", api.measurement_units);
   app.post("/api/add_measurement_units/", api.add_measurement_units);
@@ -19,6 +20,7 @@ export default function (app: Application) {
   app.post("/api/add_escales/", api.add_escales);
   app.post("/api/del_escales/", api.del_escales);
   app.post("/api/upd_escales/", api.upd_escales);
+  app.get("/api/escalas_select"),api.get_escales_select;
   app.get("/api/decision_criteria/", api.decision_criteria);
   app.post("/api/add_decision_criteria/", api.add_decision_criteria);
   app.post("/api/del_decision_criteria/", api.del_decision_criteria);
@@ -27,10 +29,12 @@ export default function (app: Application) {
   app.post("/api/add_umbral/", api.add_umbral);
   app.post("/api/del_umbral/", api.del_umbral);
   app.post("/api/upd_umbral/", api.upd_umbral);
-  app.get("/api/aspects/", api.aspects);
+  app.post("/api/aspects/", api.aspects);
   app.post("/api/add_aspects/", api.add_aspects);
-  app.post("/api/upd_aspects/", api.upd_aspects);
   app.post("/api/del_aspects/", api.del_aspects);
+  app.post("/api/add_metrica/",api.add_metrica);
+  app.post("/api/get_metrica",api.get_metrica);
+  app.post("/api/del_metrica/",api.del_metrica);
   app.get("/api/user_models/", api.user_models);
   app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
   app.get("/api/last_EntityID/", api.last_EntityID);
