@@ -110,9 +110,22 @@ export function subject(req: Request, res: Response) {
     session: req.session,
   });
 }
-
 export function object(req: Request, res: Response) {
   res.render("object", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+export function pre_reflexivos(req: Request, res: Response) {
+  res.render("pre_reflexivos", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+export function reflexivos(req: Request, res: Response) {
+  res.render("reflexivos", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,

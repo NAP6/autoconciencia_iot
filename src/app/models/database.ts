@@ -33,6 +33,27 @@ export class mysql_connector {
       func(listaEnumeracion);
     });
   }
+  public getUser_get_enumeracion(userID: string,tipo:string, func: Function): void {
+    console.log(
+      `############# Envio a la funcion 'getUser_get_Enumeracion' el id de usuario '${tipo}`
+    );
+    this.connector.query(
+      `SELECT enu_id, enu_nombre_valor FROM enumeracion WHERE enu_nombre_enumeracion='${tipo}'`,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+        for (const i in result) {
+          var auxmedicion = {
+            id: result[i]["enu_id"],
+            nombre: result[i]["enu_nombre_valor"], 
+          }
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
+      }
+    );
+  }
+
 
   //Guarda un nuevo modelo
   public save_newModel(
@@ -65,7 +86,7 @@ export class mysql_connector {
     if (activo == "true") {
       var activ = "1";
     } else {
-      activ = "2";
+      activ = "0";
     }
     this.connector.query(
       `UPDATE modeloautoconsciencia 
@@ -139,7 +160,6 @@ export class mysql_connector {
         newObject.operador
       }', '${newObject.sujeto_id}', '${newObject.activo ? 1 : 0}');`;
     }
-    console.log(sql);
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
       func();
@@ -302,7 +322,6 @@ export class mysql_connector {
     var sql = `SELECT ma_id, ma_nombre, ma_descripcion, ma_autor, CONVERT(ma_modelo_arquitectura USING utf8) as ma_modelo_arquitectura,ma_activo
       FROM modeloautoconsciencia
       WHERE usr_id = '${userID}'`;
-
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaModelo: Array<object> = [];
@@ -310,7 +329,7 @@ export class mysql_connector {
       for (const i in result) {
         if (result[i]["ma_activo"] == 1) {
           act = "true";
-        } else if (result[i]["ma_activo"] == 2) {
+        } else if (result[i]["ma_activo"] == 0) {
           act = "false";
         }
         var auxmodel = {
@@ -362,7 +381,7 @@ export class mysql_connector {
           //console.log(result[i]);
           if (result[i]["um_activo"] == 1) {
             act = "true";
-          } else if (result[i]["um_activo"] == 2) {
+          } else if (result[i]["um_activo"] == 0) {
             act = "false";
           }
           var auxmedicion = {
@@ -401,7 +420,6 @@ export class mysql_connector {
       }
     );
   }
-
   public addUser_measurementUnit(
     idUser: string,
     name: string,
@@ -448,7 +466,7 @@ export class mysql_connector {
     if (activo == "true") {
       act = 1;
     } else if (activo == "false") {
-      act = 2;
+      act = 0;
     }
     this.connector.query(
       `UPDATE unidadmedicion 
@@ -509,7 +527,7 @@ export class mysql_connector {
 
           if (result[i]["esc_activo"] == 1) {
             act = "true";
-          } else if (result[i]["esc_activo"] == 2) {
+          } else if (result[i]["esc_activo"] == 0) {
             act = "false";
           }
           var auxescala = {
@@ -589,7 +607,7 @@ export class mysql_connector {
     if (activo == "true") {
       act = 1;
     } else if (activo == "false") {
-      act = 2;
+      act = 0;
     }
     this.connector.query(
       `UPDATE escala 
@@ -615,7 +633,7 @@ export class mysql_connector {
           //console.log(result[i]);
           if (result[i]["esc_activo"] == 1) {
             act = "true";
-          } else if (result[i]["esc_activo"] == 2) {
+          } else if (result[i]["esc_activo"] == 0) {
             act = "false";
           }
           var aux = {
@@ -688,7 +706,7 @@ export class mysql_connector {
     if (activo == "true") {
       act = 1;
     } else if (activo == "false") {
-      act = 2;
+      act = 0;
     }
     this.connector.query(
       `UPDATE escala 
@@ -718,7 +736,7 @@ export class mysql_connector {
 
           if (result[i]["cd_activo"] == 1) {
             act = "true";
-          } else if (result[i]["cd_activo"] == 2) {
+          } else if (result[i]["cd_activo"] == 0) {
             act = "false";
           }
           var aux = {
@@ -775,7 +793,7 @@ export class mysql_connector {
     if (activo == "true") {
       act = 1;
     } else if (activo == "false") {
-      act = 2;
+      act = 0;
     }
     this.connector.query(
       `UPDATE criteriodecision 
@@ -805,7 +823,7 @@ export class mysql_connector {
           //console.log(result[i]);
           if (result[i]["umb_activo"] == 1) {
             act = "true";
-          } else if (result[i]["umb_activo"] == 2) {
+          } else if (result[i]["umb_activo"] == 0) {
             act = "false";
           }
           var auxmedicion = {
@@ -869,7 +887,7 @@ export class mysql_connector {
     if (activo == "true") {
       act = 1;
     } else if (activo == "false") {
-      act = 2;
+      act = 0;
     }
     this.connector.query(
       `UPDATE umbral 
@@ -897,7 +915,7 @@ export class mysql_connector {
           //console.log(result[i]);
           if (result[i]["aa_activo"] == 1) {
             act = "true";
-          } else if (result[i]["aa_activo"] == 2) {
+          } else if (result[i]["aa_activo"] ==0) {
             act = "false";
           }
           var auxmedicion = {
@@ -918,7 +936,7 @@ export class mysql_connector {
     if(activo=="true"){
       act=1;
     }else{
-      act=2;
+      act=0;
     }
     this.connector.query(
       `INSERT INTO aspectoautoconsciencia (aa_nombre, aa_descripcion, aa_alcance, aa_tipo, obj_id, aa_activo) 
@@ -930,7 +948,6 @@ export class mysql_connector {
     );
   }
   public addUser_metrica(idUser: string,name: string,descripcion: string,abreviatura: string,escala: string, unidad: string, tipo: string,idP:string,activo:string): void {
-    
     var idMedida=unidad;
     var sqlEscala=`SELECT esc_id FROM escala WHERE esc_nombre='${escala}'`;
     this.connector.query(sqlEscala,(err,result,fields) => {
@@ -939,6 +956,15 @@ export class mysql_connector {
       for(const i in result){
         idEscala=result[i]["esc_id"];
       }
+      var idTipo=tipo;
+      var sqltipo=`SELECT enu_id FROM enumeracion WHERE enu_nombre_valor='${idTipo}'`;
+      this.connector.query(sqltipo,(err,result)=>{
+        if(err)err;
+        idTipo=tipo;
+        for(const i in result){
+          idTipo=result[i]["enu_id"];
+        }
+
     var sqlEscala=`SELECT um_id FROM unidadmedicion WHERE um_nombre='${unidad}'`;
     this.connector.query(sqlEscala,(err,result,fields) => {
       if(err)err;
@@ -949,16 +975,17 @@ export class mysql_connector {
     if(activo=="true"){
       act=1;
     }else{
-      act=2;
+      act=0;
     }
     this.connector.query(
       `INSERT INTO metrica (met_nombre, met_descripcion, met_abreviacion, aa_id, esc_id, um_id, met_activo, met_tipo) 
-      VALUES ('${name}', '${descripcion}','${abreviatura}','${idP}','${idEscala}', '${idMedida}','${act}','${tipo}')`,
+      VALUES ('${name}', '${descripcion}','${abreviatura}','${idP}','${idEscala}', '${idMedida}','${act}','${idTipo}')`,
       function (error, results) {
         if (error) throw error;
       }
     );
   }
+    );}
   );
 }
 );
@@ -996,10 +1023,12 @@ export class mysql_connector {
     console.log(`############# Entra en getLastEntityID y envia ${modelID}`);
     return Math.floor(Math.random() * 600000);
   }
+  //PENDIENTE
   public getUser_Metrica(userID: string, id:string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_Metrica' el id de usuario '${userID}' ${id}`
     );
+    var act;
     var sql=`SELECT met_id, met_nombre, met_tipo, met_abreviacion, met_activo
     FROM metrica WHERE aa_id=${id} Order BY met_id`;
     this.connector.query(
@@ -1007,26 +1036,37 @@ export class mysql_connector {
       (err, result, fields) => {
         if (err) err;
         var listaUmedicion: Array<object> = [];
-        var act;
         for (const i in result) {
-          //console.log(result[i]);
+          var nombreTipo="HOLA";
+          var sql2=`SELECT enu_nombre_valor
+          FROM enumeracion WHERE enu_id=${result[i]["met_tipo"]}`;
+          this.connector.query(sql2,(err,result)=>{
+            if(err)err;
+            for(const i in result){
+              nombreTipo=result[i]["enu_nombre_valor"];
+            }
+          });
+         console.log(nombreTipo);
           if (result[i]["met_activo"] == 1) {
             act = "true";
-          } else if (result[i]["met_activo"] == 2) {
+          } else if (result[i]["met_activo"] == 0) {
             act = "false";
-          }
+          } 
           var auxmedicion = {
             id: result[i]["met_id"],
             nombre: result[i]["met_nombre"],
-            tipo: result[i]["met_tipo"],
+            tipo: nombreTipo,
             abreviatura:result[i]["met_abreviacion"],
             activo: act,
           };
           listaUmedicion.push(auxmedicion);
+        
+    
         }
         func(listaUmedicion);
       }
     );
+    
   }
 
   // La atributo variable no existe, solo le pusimos para probar

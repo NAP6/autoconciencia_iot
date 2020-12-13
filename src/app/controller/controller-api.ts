@@ -123,7 +123,18 @@ export function enumeracion(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-
+export function get_enumeracion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var nombre=req.body.tipo; 
+    var db = new database();
+    db.getUser_get_enumeracion(id,nombre, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function measurement_units(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
@@ -439,7 +450,6 @@ export function del_metrica(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var idaspecto = req.body.idD;
     var db = new database();
-    console.log
     db.delUser_metrica(idUser, idaspecto);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {

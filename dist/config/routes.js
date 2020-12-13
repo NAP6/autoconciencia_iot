@@ -11,21 +11,26 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
+var __importStar = (this && this.__importStar) || function(mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null)
+        for (var k in mod)
+            if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const nv = __importStar(require("../app/controller/controller-navigation"));
+
 function default_1(app, upload) {
     app.get("/login", nv.login);
     app.get("/singup", nv.singup);
     app.get("/models", nv.loggedIn, nv.models);
     app.get("/subject", nv.loggedIn, nv.subject);
     app.get("/object", nv.loggedIn, nv.object);
+    app.get("/pre_reflexivos", nv.loggedIn, nv.pre_reflexivos);
+    app.get("/reflexivos", nv.loggedIn, nv.reflexivos);
     //app.get("/self-awareness_processes", nv.loggedIn, nv.self-awareness_processes);
     app.get("/measurement_units", nv.loggedIn, nv.measurement_units);
     app.get("/scales", nv.loggedIn, nv.scales);
@@ -38,5 +43,4 @@ function default_1(app, upload) {
     //app.post("/signup",);
     app.get("/", nv.loggedIn, nv.home);
 }
-exports.default = default_1;
-;
+exports.default = default_1;;

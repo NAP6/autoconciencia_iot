@@ -11,6 +11,8 @@ export default function (app: Application, upload: Multer) {
   app.post("/update_model", nv.loggedIn, nv.update_model);
   app.get("/subject", nv.loggedIn, nv.subject);
   app.get("/object", nv.loggedIn, nv.object);
+  app.get("/pre_reflexivos", nv.loggedIn, nv.pre_reflexivos);
+  app.get("/reflexivos", nv.loggedIn, nv.reflexivos);
   app.get("/self_awareness_processes", nv.loggedIn, nv.self_awareness_processes);
   app.get("/measurement_units", nv.loggedIn, nv.measurement_units);
   app.get("/scales", nv.loggedIn, nv.scales);

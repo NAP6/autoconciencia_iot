@@ -11,17 +11,23 @@
             </div>
             <div class="modal-body">
                 <h5>Objeto: <span id="nombreEntidadActiva"></span></h5>
+
+
+
+                <div class="row justify-content-start">
+                    <div class="col-4">
+                        <h5>Listado de aspectos de autoconsciencia</h5>
+                    </div>
+                    <div class="col-7">
+                        <div class="row">
+                            <button class="btn btn-primary" onclick="activarFormularioAgregarEntidad()">Agregar</button>
+                            <button class="btn btn-primary" onclick="EliminarAspecto()">Eliminar</button>
+                            <button id="bd_del_aspecto" class="btn btn-primary" onclick="Administrar_Metricas()"> Administrar Métricas</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-6">
-                        <h4>Árbol de Entidades:</h4>
-                        <div id="arbol_objetivos_de_entidad"></div>
-                        <button class="btn btn-primary" onclick="activarFormularioAgregarEntidad()">Agregar</button>
-                        <button class="btn btn-primary" onclick="EliminarAspecto()">Eliminar</button>
-
-                        <button id="bd_del_aspecto" class="btn btn-primary" onclick="Administrar_Metricas()">
-                  Administrar Métricas
-                </button>
-                        <br>
                         <br>
                         <div class="col">
                             <table class="table table-hover">

@@ -10,17 +10,28 @@
       </button>
             </div>
             <div class="modal-body">
-                <h5>Objeto: <span id="nombreEntidadActiva2"></span></h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Objeto: <span id="nombreEntidadActiva2"></span></h5>
+                    </div>
+                    <div class="col-md-4 offset-md-0">
+                        <h5>Aspecto: <span id="nombreAspecto"></span></h5>
+                    </div>
+                </div>
                 <br>
-                <h5>Aspecto: <span id="nombreAspecto"></span></h5>
-                <br>
-                <h5>Listado de métricas</h5>
+                <div class="row justify-content-around">
+                    <div class="col-3">
+                        <h5>Listado de métricas</h5>
+                    </div>
+                    <div class="col-8">
+                        <div class="row">
+                            <button class="btn btn-primary" onclick="activarFormularioAgregarMetrica()">Agregar</button>
+                            <button class="btn btn-primary" onclick="eliminar_metrica()">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-6">
-                        <button class="btn btn-primary" onclick="activarFormularioAgregarMetrica()">Agregar</button>
-                        <button class="btn btn-primary" onclick="eliminar_metrica()">Eliminar</button>
-                        <br>
-                        <br>
                         <div class="col">
                             <table class="table table-hover">
                                 <thead class="thead-dark">
@@ -72,11 +83,9 @@
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Tipo: </label>
                             </div>
-                            <select class="custom-select" name="tipo_metrica" id="tipo_metrica" disabled>
-                            <option value="0">Directa</option>
-                            <option value="1">Indirecta</option>
-                            <option value="1">Indicador</option>
-                          </select>
+                            <select class="custom-select" name="form_entidad_new" id="select_metrica" disabled></select>
+
+                            </select>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-2">Activo:</div>

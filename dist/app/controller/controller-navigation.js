@@ -84,6 +84,24 @@ function object(req, res) {
 }
 exports.object = object;
 
+function pre_reflexivos(req, res) {
+    res.render("pre_reflexivos", {
+        error: req.flash("error"),
+        succes: req.flash("succes"),
+        session: req.session,
+    });
+}
+exports.pre_reflexivos = pre_reflexivos;
+
+function reflexivos(req, res) {
+    res.render("reflexivos", {
+        error: req.flash("error"),
+        succes: req.flash("succes"),
+        session: req.session,
+    });
+}
+exports.reflexivos = reflexivos;
+
 function measurement_units(req, res) {
     res.render("measurement_units", {
         error: req.flash("error"),

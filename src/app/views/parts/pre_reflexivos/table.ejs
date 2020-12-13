@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <button id="bt_add_proceso_pre_reflexivo" class="btn btn-primary" onclick="agregarProcesoPreReflexivo()">
+        Agregar
+      </button>
+            <button id="bd_mod_proceso_pre_reflexivo" class="btn btn-primary" onclick="modificarProcesoPreReflexivo()">
+        Modificar
+      </button>
+            <button id="bd_del_proceso_pre_reflexivo" class="btn btn-primary" onclick="elminarProcesoPreReflexivo()">
+        Eliminar
+      </button>
+
+        </div>
+    </div>
+    <br />
+    <div class="row container">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Sujeto</th>
+                        <th scope="col">Objeto</th>
+                        <th scope="col">Aspecto</th>
+                        <th scope="col">Inicio Periodo</th>
+                        <th scope="col">Fin Periodo</th>
+                        <th scope="col">Activo</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla_proceso_pre_reflexivo"></tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+</div>
+<%- include('../pre_reflexivos/modal/proceso_pre_reflexivo'); %>
