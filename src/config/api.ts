@@ -35,6 +35,7 @@ export default function (app: Application) {
   app.post("/api/del_aspects/", api.del_aspects);
   app.post("/api/add_metrica/",api.add_metrica);
   app.post("/api/get_metrica",api.get_metrica);
+  app.post("/api/get_metrica_select",api.get_metrica_select);
   app.post("/api/del_metrica/",api.del_metrica);
   app.get("/api/user_models/", api.user_models);
   app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);

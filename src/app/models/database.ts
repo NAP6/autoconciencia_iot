@@ -14,7 +14,6 @@ export class mysql_connector {
       database: constants["db-schema"],
     });
   }
-
   //seleccionar Enumeracion
   public getEnumeracion(tipo: string, func: Function): void {
     var sql = `SELECT enu_nombre_valor, enu_valor
@@ -33,7 +32,7 @@ export class mysql_connector {
       func(listaEnumeracion);
     });
   }
-  public getUser_get_enumeracion(userID: string,tipo:string, func: Function): void {
+  public getUser_get_enumeracion(userID: string, tipo: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_get_Enumeracion' el id de usuario '${tipo}`
     );
@@ -45,16 +44,15 @@ export class mysql_connector {
         for (const i in result) {
           var auxmedicion = {
             id: result[i]["enu_id"],
-            nombre: result[i]["enu_nombre_valor"], 
+            nombre: result[i]["enu_nombre_valor"],
           }
           listaUmedicion.push(auxmedicion);
         }
         func(listaUmedicion);
+        console.log(listaUmedicion);
       }
     );
   }
-
-
   //Guarda un nuevo modelo
   public save_newModel(
     nombre: string,
@@ -146,53 +144,65 @@ export class mysql_connector {
   ) {
     var sql = ``;
     if (newObject.id_padre) {
-      sql = `INSERT INTO objetivo (obj_nombre, obj_descripcion, obj_peso, obj_operacion_agregacion, suj_id, obj_activo, obj_id_padre) VALUES ('${
-        newObject.nombre
-      }', '${newObject.descripcion}', '${newObject.peso}', '${
-        newObject.operador
-      }', '${newObject.sujeto_id}', '${newObject.activo ? 1 : 0}', '${
-        newObject.id_padre
-      }');`;
+      sql = `INSERT INTO objetivo (obj_nombre, obj_descripcion, obj_peso, obj_operacion_agregacion, suj_id, obj_activo, obj_id_padre) VALUES ('${newObject.nombre
+        }', '${newObject.descripcion}', '${newObject.peso}', '${newObject.operador
+        }', '${newObject.sujeto_id}', '${newObject.activo ? 1 : 0}', '${newObject.id_padre
+        }');`;
     } else {
-      sql = `INSERT INTO objetivo (obj_nombre, obj_descripcion, obj_peso, obj_operacion_agregacion, suj_id, obj_activo) VALUES ('${
-        newObject.nombre
-      }', '${newObject.descripcion}', '${newObject.peso}', '${
-        newObject.operador
-      }', '${newObject.sujeto_id}', '${newObject.activo ? 1 : 0}');`;
+      sql = `INSERT INTO objetivo (obj_nombre, obj_descripcion, obj_peso, obj_operacion_agregacion, suj_id, obj_activo) VALUES ('${newObject.nombre
+        }', '${newObject.descripcion}', '${newObject.peso}', '${newObject.operador
+        }', '${newObject.sujeto_id}', '${newObject.activo ? 1 : 0}');`;
     }
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
       func();
     });
   }
-    public get_entitys(modelID: string,seleccion:string, func: Function) {
-      var select;
-      if(seleccion  == "Entidades Físicas"){
-        select="PhysicalEntity";
-      }else if(seleccion=="Nodos Cloud"){
-        select="CloudNode";
-      }else if(seleccion=="Nodos Fog"){
-        select="FogNode";
-      }else if(seleccion=="Gateway IoT"){
-        select="IotGateway";
-      }else if(seleccion=="Sensores"){
-        select="PhysicalEntity";
-      }else if(seleccion=="Tags"){
-        select="Tag";
-      }else if(seleccion=="Actuadores"){
-        select="Actuador";
-      }else if(seleccion=="Red"){
-        select="Network";
-      }
-      else if(seleccion=="Sensores"){
-        select="Sensor";
-      }
-      var sql = `SELECT obj_id as id, obj_tipo as tipo, obj_nombre as nombre, obj_activo as activo, obj_id_padre as padre FROM objeto WHERE ma_id = ${modelID} AND obj_tipo = '${select}'  ORDER BY id`;
-      this.connector.query(sql, (err, result) => {
-        if (err) throw err;
-        func(result);
-      });
+  public get_entitys(modelID: string, seleccion: string, func: Function) {
+    var select;
+    var listaS=["PhysicalEntity","CloudNode","FogNode","IoTGateway","Sensor","Tag","Actuator","Network"];
+    var i=-1;
+    if (seleccion == "Entidades Físicas") {
+      i=listaS.indexOf("PhysicalEntity");
+      select = "PhysicalEntity";
+    } else if (seleccion == "Nodos Cloud") {
+      i=listaS.indexOf("CloudNode");
+      select = "CloudNode";
+    } else if (seleccion == "Nodos Fog") {
+      i=listaS.indexOf("FogNode");
+      select = "FogNode";
+    } else if (seleccion == "Gateway IoT") {
+      i=listaS.indexOf("IoTGateway");
+      select = "IoTGateway";
+    } else if (seleccion == "Sensores") {
+      i=listaS.indexOf("Sensor");
+      select = "Sensor";
+    } else if (seleccion == "Tags") {
+      i=listaS.indexOf("Tag");
+      select = "Tag";
+    } else if (seleccion == "Actuadores") {
+      i=listaS.indexOf("Actuator");
+      select = "Actuator";
+    } else if (seleccion == "Red") {
+      i=listaS.indexOf("Network");
+      select = "Network";
     }
+    if(i!=-1){
+      listaS.splice(i,1);
+    }
+    var sql = `SELECT obj_id as id, obj_tipo as tipo, obj_nombre as nombre, obj_activo as activo, obj_id_padre as padre FROM objeto WHERE ma_id = ${modelID} AND `;
+    select=listaS.pop();
+    listaS.forEach(element => {
+      sql+=`obj_tipo!='${element}' AND `;
+
+    });
+    sql+=`obj_tipo!='${select}' ORDER BY id`;
+    this.connector.query(sql, (err, result) => {
+      if (err) throw err;
+      func(result);
+
+    });
+  }
 
   public async save_subjects(modelID: string, subjects: [systemObj]) {
     subjects.forEach((elem) => {
@@ -223,9 +233,8 @@ export class mysql_connector {
   }
 
   public update_subject(id: string, active: string) {
-    var sql = `UPDATE sujeto SET suj_activo = '${
-      active ? 1 : 0
-    }' WHERE sujeto.suj_id = ${id};`;
+    var sql = `UPDATE sujeto SET suj_activo = '${active ? 1 : 0
+      }' WHERE sujeto.suj_id = ${id};`;
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
     });
@@ -239,11 +248,12 @@ export class mysql_connector {
     );
   }
 
-  public async save_entity(modelID: string, subjects: [systemEnt]) {
+  public async save_entity(modelID: string, subjects: ([systemEnt] | undefined)) {
 
-    subjects.forEach((elem) => {
-      this.save_oneEntity(modelID, elem);
-    });
+    if (subjects)
+      subjects.forEach((elem) => {
+        this.save_oneEntity(modelID, elem);
+      });
   }
   public async save_oneEntity(
     modelID: string,
@@ -251,7 +261,8 @@ export class mysql_connector {
     subjectSup?: number
   ) {
     var sql = ``;
-    if (subjectSup) {
+    if (subjectSup && !(entity.$["xsi:type"]=="Tag") && !(entity.$["xsi:type"]=="FogNode") && !(entity.$["xsi:type"]=="Sensor") && !(entity.$["xsi:type"]=="Actuator") && !(entity.$["xsi:type"]=="IoTGateway")) {
+     
       sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre, obj_id_padre) VALUES (${modelID},'${entity.$["xsi:type"]}','${entity.$.name}', ${subjectSup});`;
     } else {
       sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre) VALUES (${modelID}, '${entity.$["xsi:type"]}', '${entity.$.name}')`;
@@ -264,12 +275,23 @@ export class mysql_connector {
           db.save_oneEntity(modelID, sub, results.insertId);
         });
       }
+      if (entity.Entity) {
+        entity.Entity.forEach((sub) => {
+          var db = new mysql_connector();
+          db.save_oneEntity(modelID, sub, results.insertId);
+        });
+      }
+      if (entity.comput) {
+        entity.comput.forEach((sub) => {
+          var db = new mysql_connector();
+          db.save_oneEntity(modelID, sub, results.insertId);
+        });
+      }
     });
   }
   public update_entity(id: string, active: string) {
-    var sql = `UPDATE objeto SET obj_activo = '${
-      active ? 1 : 0
-    }' WHERE objeto.obj_id = ${id};`;
+    var sql = `UPDATE objeto SET obj_activo = '${active ? 1 : 0
+      }' WHERE objeto.obj_id = ${id};`;
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
     });
@@ -279,7 +301,7 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'getfisicalModel' el id de usuario '${modelID}`
     );
-    
+
     return this.modelo;
   }
   //Valida el usuario ingresado
@@ -411,9 +433,9 @@ export class mysql_connector {
         for (const i in result) {
           var auxmedicion = {
             id: result[i]["enu_id"],
-            nombre: result[i]["enu_nombre_valor"], 
+            nombre: result[i]["enu_nombre_valor"],
           }
-        
+
           listaUmedicion.push(auxmedicion);
         }
         func(listaUmedicion);
@@ -702,7 +724,6 @@ export class mysql_connector {
     } else if (tipo == "Ratio") {
       tip = 4;
     }
-
     if (activo == "true") {
       act = 1;
     } else if (activo == "false") {
@@ -899,12 +920,13 @@ export class mysql_connector {
     );
   }
 
-  public getUser_Aspects(userID: string, id:string, func: Function): void {
+  public getUser_Aspects(userID: string, id: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_Aspectes' el id de usuario '${userID}' ${id}`
     );
-    var sql=`SELECT aa_id, aa_nombre, aa_tipo, aa_activo
+    var sql = `SELECT aa_id, aa_nombre, aa_tipo, (SELECT enu_nombre_valor FROM enumeracion WHERE enu_id=aa_tipo) AS tipo, aa_activo
     FROM aspectoautoconsciencia WHERE obj_id=${id} Order BY aa_id`;
+    console.log(sql);
     this.connector.query(
       sql,
       (err, result, fields) => {
@@ -912,83 +934,91 @@ export class mysql_connector {
         var listaUmedicion: Array<object> = [];
         var act;
         for (const i in result) {
-          //console.log(result[i]);
           if (result[i]["aa_activo"] == 1) {
             act = "true";
-          } else if (result[i]["aa_activo"] ==0) {
+          } else if (result[i]["aa_activo"] == 0) {
             act = "false";
           }
           var auxmedicion = {
             id: result[i]["aa_id"],
             nombre: result[i]["aa_nombre"],
-            tipo: result[i]["aa_tipo"],
+            tipo: result[i]["tipo"],
             activo: act,
           };
           listaUmedicion.push(auxmedicion);
         }
         func(listaUmedicion);
-        console.log(listaUmedicion);
+       
       }
     );
   }
-  public addUser_aspects(idUser: string,name: string,descripcion: string,tipo: string,peso: string, id: string, activo: string): void {
-    var act;
-    if(activo=="true"){
-      act=1;
-    }else{
-      act=0;
-    }
-    this.connector.query(
-      `INSERT INTO aspectoautoconsciencia (aa_nombre, aa_descripcion, aa_alcance, aa_tipo, obj_id, aa_activo) 
-      VALUES ('${name}', '${descripcion}','${peso}','${tipo}','${id}', '${act}')`,
-      function (error, results) {
-        if (error) throw error;
-        //console.log('The solution is: ', results[0].solution);
+  public addUser_aspects(idUser: string, name: string, descripcion: string, tipo: string, peso: string, id: string, activo: string): void {
+
+      var idTipo = tipo;
+      var sqltipo = `SELECT enu_id FROM enumeracion WHERE enu_nombre_valor='${idTipo}'`;
+      this.connector.query(sqltipo, (err, result) => {
+        if (err) err;
+        idTipo = tipo;
+          idTipo = result[0]["enu_id"];
+          var act;
+          if (activo == "true") {
+            act = 1;
+          } else {
+            act = 0;
+          }
+          var sql=`INSERT INTO aspectoautoconsciencia (aa_nombre, aa_descripcion, aa_alcance, aa_tipo, obj_id, aa_activo) 
+    VALUES ('${name}', '${descripcion}','${peso}','${idTipo}','${id}', '${act}')`
+          this.connector.query(sql,
+            function (error, results) {
+              if (error) throw error;
+            }
+          );
       }
-    );
+      );
   }
-  public addUser_metrica(idUser: string,name: string,descripcion: string,abreviatura: string,escala: string, unidad: string, tipo: string,idP:string,activo:string): void {
-    var idMedida=unidad;
-    var sqlEscala=`SELECT esc_id FROM escala WHERE esc_nombre='${escala}'`;
-    this.connector.query(sqlEscala,(err,result,fields) => {
-      if(err)err;
-      var idEscala=escala;
-      for(const i in result){
-        idEscala=result[i]["esc_id"];
+  public addUser_metrica(idUser: string, name: string, descripcion: string, abreviatura: string, escala: string, unidad: string, tipo: string, idP: string, activo: string): void {
+    var idMedida = unidad;
+    var sqlEscala = `SELECT esc_id FROM escala WHERE esc_nombre='${escala}'`;
+    this.connector.query(sqlEscala, (err, result, fields) => {
+      if (err) err;
+      var idEscala = escala;
+      for (const i in result) {
+        idEscala = result[i]["esc_id"];
       }
-      var idTipo=tipo;
-      var sqltipo=`SELECT enu_id FROM enumeracion WHERE enu_nombre_valor='${idTipo}'`;
-      this.connector.query(sqltipo,(err,result)=>{
-        if(err)err;
-        idTipo=tipo;
-        for(const i in result){
-          idTipo=result[i]["enu_id"];
+      var idTipo = tipo;
+      var sqltipo = `SELECT enu_id FROM enumeracion WHERE enu_nombre_valor='${idTipo}'`;
+      this.connector.query(sqltipo, (err, result) => {
+        if (err) err;
+        idTipo = tipo;
+        for (const i in result) {
+          idTipo = result[i]["enu_id"];
         }
 
-    var sqlEscala=`SELECT um_id FROM unidadmedicion WHERE um_nombre='${unidad}'`;
-    this.connector.query(sqlEscala,(err,result,fields) => {
-      if(err)err;
-      for(const i in result){
-        idMedida=result[i]["um_id"];
-      }
-    var act;
-    if(activo=="true"){
-      act=1;
-    }else{
-      act=0;
-    }
-    this.connector.query(
-      `INSERT INTO metrica (met_nombre, met_descripcion, met_abreviacion, aa_id, esc_id, um_id, met_activo, met_tipo) 
+        var sqlEscala = `SELECT um_id FROM unidadmedicion WHERE um_nombre='${unidad}'`;
+        this.connector.query(sqlEscala, (err, result, fields) => {
+          if (err) err;
+          for (const i in result) {
+            idMedida = result[i]["um_id"];
+          }
+          var act;
+          if (activo == "true") {
+            act = 1;
+          } else {
+            act = 0;
+          }
+          this.connector.query(
+            `INSERT INTO metrica (met_nombre, met_descripcion, met_abreviacion, aa_id, esc_id, um_id, met_activo, met_tipo) 
       VALUES ('${name}', '${descripcion}','${abreviatura}','${idP}','${idEscala}', '${idMedida}','${act}','${idTipo}')`,
-      function (error, results) {
-        if (error) throw error;
+            function (error, results) {
+              if (error) throw error;
+            }
+          );
+        }
+        );
       }
+      );
+    }
     );
-  }
-    );}
-  );
-}
-);
   }
 
   public delUser_aspects(idUser: string, id: string): void {
@@ -1023,50 +1053,62 @@ export class mysql_connector {
     console.log(`############# Entra en getLastEntityID y envia ${modelID}`);
     return Math.floor(Math.random() * 600000);
   }
-  //PENDIENTE
-  public getUser_Metrica(userID: string, id:string, func: Function): void {
+  public getUser_Metrica(userID: string, id: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_Metrica' el id de usuario '${userID}' ${id}`
     );
     var act;
-    var sql=`SELECT met_id, met_nombre, met_tipo, met_abreviacion, met_activo
+    var sql = `SELECT met_id, met_nombre, (SELECT enu_nombre_valor FROM enumeracion WHERE enu_id=met_tipo) AS tipo, met_abreviacion, met_activo
     FROM metrica WHERE aa_id=${id} Order BY met_id`;
+
     this.connector.query(
       sql,
       (err, result, fields) => {
         if (err) err;
         var listaUmedicion: Array<object> = [];
         for (const i in result) {
-          var nombreTipo="HOLA";
-          var sql2=`SELECT enu_nombre_valor
-          FROM enumeracion WHERE enu_id=${result[i]["met_tipo"]}`;
-          this.connector.query(sql2,(err,result)=>{
-            if(err)err;
-            for(const i in result){
-              nombreTipo=result[i]["enu_nombre_valor"];
-            }
-          });
-         console.log(nombreTipo);
           if (result[i]["met_activo"] == 1) {
             act = "true";
           } else if (result[i]["met_activo"] == 0) {
             act = "false";
-          } 
+          }
           var auxmedicion = {
             id: result[i]["met_id"],
             nombre: result[i]["met_nombre"],
-            tipo: nombreTipo,
-            abreviatura:result[i]["met_abreviacion"],
+            tipo: result[i]["tipo"],
+            abreviatura: result[i]["met_abreviacion"],
             activo: act,
           };
           listaUmedicion.push(auxmedicion);
-        
-    
+
         }
         func(listaUmedicion);
       }
     );
-    
+  }
+  public getUser_Metrica_select(userID: string, id: string,tipo:string, func: Function): void {
+    console.log(
+      `############# Envio a la funcion 'getUser_Metrica' el id de usuario '${userID}' ${id}`
+    );
+    var act;
+    var sql = `SELECT met_id, met_nombre
+    FROM metrica WHERE (SELECT aa_id From aspectoautoconsciencia WHERE aa_nombre='${id}') = aa_id AND met_tipo = (SELECT enu_id FROM enumeracion WHERE enu_nombre_valor='${tipo}' ) Order BY met_id`;
+    console.log(sql);
+    this.connector.query(
+      sql,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+        for (const i in result) {
+          var auxmedicion = {
+            id: result[i]["met_id"],
+            nombre: result[i]["met_nombre"],
+          };
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
+      }
+    );
   }
 
   // La atributo variable no existe, solo le pusimos para probar
@@ -2921,6 +2963,8 @@ interface systemObj {
   iotSubsystem?: [systemObj];
 }
 interface systemEnt {
-  $: {'xsi:type':string; id: string; name: string;};
-  containsResource?: [systemEnt];
+  $: { 'xsi:type'?: string; id: string; name: string; };
+  comput?: ([systemEnt] | undefined);
+  Entity?: ([systemEnt] | undefined);
+  containsResource?: ([systemEnt] | undefined);
 }

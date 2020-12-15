@@ -445,6 +445,19 @@ export function get_metrica(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function get_metrica_select(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var nombreAs=req.body.nombre;
+    var tipoM=req.body.tipo;
+    var db = new database();
+    db.getUser_Metrica_select(id,nombreAs,tipoM,(jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function del_metrica(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;

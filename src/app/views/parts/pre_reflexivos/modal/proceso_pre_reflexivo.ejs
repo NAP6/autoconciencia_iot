@@ -26,7 +26,6 @@
                             <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia">
                             </select>
                         </div>
-
                     </div>
                     <div class="col">
                         <div class="form-group row">
@@ -55,18 +54,118 @@
                                 <ul id="lista_entidades_seleccionadas_procesos"></ul>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
-
-
-
-
+                <br>
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-secondary active">
+                              <input type="radio" name="options" id="option1" autocomplete="off"  onclick="mostrarMetodos()"> Método de recolección de datos
+                            </label>
+                            <label class="btn btn-secondary">
+                              <input type="radio" name="options" id="option2" autocomplete="off" onclick="mostrarModelo()"> Modelo de análisis
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="input-group mb-4" id="Nombre_metodos">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="spanNombreMetodos" style="display: none;">Nombre</span>
+                            </div>
+                            <input type="text" name="form_entidad_new" id="nombre_metodo_recoleccion" style="display: none;" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="spanDescripcionMetodos" style="display: none;">Descripción</span>
+                            </div>
+                            <textarea type="text" name="form_entidad_new" id="descripcion_metodo_recoleccion" style="display: none;" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" id="tipo_comunicacion_metodos" style="display: none;">Tipo de comunicación: </label>
+                            </div>
+                            <select class="custom-select" name="tipo_comunicacion" id="tipo_comunicacion" style="display: none;">
+                          </select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" id="alcance_recoleccion_metodos" style="display: none;">Alcance de la recolección: </label>
+                            </div>
+                            <select class="custom-select" name="alcance_recoleccion" id="alcance_recoleccion" style="display: none;">
+                                <option value="1">Unicamente el objeto seleccionado</option>
+                                <option value="2">Todos los objetos de la misma categoría</option>
+                          </select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" id="propiedad_recoleccion_metodos" style="display: none;">Propiedad: </label>
+                            </div>
+                            <select class="custom-select" name="proiedad_recoleccion" id="proiedad_recoleccion" style="display: none;">
+                          </select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" id="metrica_metodos" style="display: none;">Métrica directa: </label>
+                            </div>
+                            <select class="custom-select" name="metrica_directa" id="metrica_directa" style="display: none;">
+                          </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="nombreModelo" style="display: none;"> Nombre</span>
+                            </div>
+                            <input type="text" name="form_entidad_new" id="nombre_modelo_analisis" style="display: none;" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="descripcionModelo" style="display: none;">Descripción</span>
+                            </div>
+                            <textarea type="text" name="form_entidad_new" id="descripcion_modelo_analisis" style="display: none;" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" id="tiporecursoModelo" style="display: none;">Tipo de recurso: </label>
+                            </div>
+                            <select class="custom-select" name="tipo_recurso" id="tipo_recurso" style="display: none;">
+                                <option value="1">Fórmula</option>
+                                <option value="1">Función</option>
+                                <option value="1">Servicio</option>
+                          </select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" id="recursoModelo" style="display: none;">Recurso: </label>
+                            </div>
+                            <select class="custom-select" name="recurso" id="recurso" style="display: none;">
+                          </select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" id="indicadorModelo" style="display: none;">Indicador: </label>
+                            </div>
+                            <select class="custom-select" name="indicador_modelo" id="indicador_modelo" style="display: none;">
+                          </select>
+                        </div>
+                        <div class="input-group mb-4">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" id="criterioModelo" style="display: none;">Criterio de decisión: </label>
+                            </div>
+                            <select class="custom-select" name="criterio_de_decision" id="criterio_de_decision" style="display: none;">
+                          </select>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+
             </div>
         </div>
     </div>
