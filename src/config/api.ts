@@ -27,6 +27,7 @@ export default function (app: Application) {
   app.post("/api/del_decision_criteria/", api.del_decision_criteria);
   app.post("/api/upd_decision_criteria/", api.upd_decision_criteria);
   app.post("/api/umbral/", api.umbral);
+  app.post("/api/get_umbral/", api.get_umbral);
   app.post("/api/add_umbral/", api.add_umbral);
   app.post("/api/del_umbral/", api.del_umbral);
   app.post("/api/upd_umbral/", api.upd_umbral);
@@ -37,6 +38,9 @@ export default function (app: Application) {
   app.post("/api/get_metrica",api.get_metrica);
   app.post("/api/get_metrica_select",api.get_metrica_select);
   app.post("/api/del_metrica/",api.del_metrica);
+  app.post("/api/add_accion/",api.add_accion);
+  app.post("/api/get_accion",api.get_accion);
+  app.post("/api/del_accion/", api.del_accion);
   app.get("/api/user_models/", api.user_models);
   app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
   app.get("/api/last_EntityID/", api.last_EntityID);

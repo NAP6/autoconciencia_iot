@@ -1,19 +1,17 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <button id="bt_addEscalas" class="btn btn-primary" onclick="agregar_umbral()">Agregar</button>
-            <button id="bd_modEscalas" class="btn btn-primary" onclick="modificar_umbral()">Modificar</button>
-            <button id="bd_delEscalas" class="btn btn-primary" onclick="eliminar_umbral()">Eliminar</button>
+            <button id="bt_addUmbral" class="btn btn-primary" onclick="agregar_umbral()" style="display: none;">Agregar</button>
+            <button id="bd_modUmbral" class="btn btn-primary" onclick="modificar_umbral()" style="display: none;">Modificar</button>
+            <button id="bd_delUmbral" class="btn btn-primary" onclick="eliminar_umbral()" style="display: none;">Eliminar</button>
         </div>
     </div>
     <br>
     <div class="row container">
         <div class="col-12" id="seccion_umbrales">
-
         </div>
     </div>
 </div>
-
 <template id="templeta_tabla_umbral">
     <table class="table table-hover">
         <thead class="thead-dark">

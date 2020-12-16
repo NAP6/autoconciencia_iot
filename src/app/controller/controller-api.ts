@@ -319,6 +319,18 @@ export function umbral(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function get_umbral(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var nombre = req.body.nombre;
+    var db = new database();
+    db.getUser_get_umbral(id, nombre, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function add_umbral(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
@@ -464,6 +476,44 @@ export function del_metrica(req: Request, res: Response) {
     var idaspecto = req.body.idD;
     var db = new database();
     db.delUser_metrica(idUser, idaspecto);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function add_accion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var idP=req.body.id;
+    var activo=req.body.activo.toString();
+    var db = new database();
+    db.addUser_accion(idUser, name, descripcion,idP,activo);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function get_accion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var idP=req.body.id;
+    var db = new database();
+    db.getUser_accion(id,idP,(jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_accion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var idaccion = req.body.id;
+    var db = new database();
+    db.delUser_accion(idUser, idaccion);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

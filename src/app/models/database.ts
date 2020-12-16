@@ -861,6 +861,34 @@ export class mysql_connector {
       }
     );
   }
+  public getUser_get_umbral(
+    userID: string,
+    nombre: string,
+    func: Function
+  ): void {
+    var sql= `SELECT umb_id, umb_nombre, umb_inferior, umb_superior
+    FROM umbral WHERE cd_id= (SELECT cd_id FROM criteriodecision WHERE cd_nombre = '${nombre}')`;
+    this.connector.query(sql,
+      (err, result, fields) => {
+        if (err) err;
+        var listaumb: {umbrales: Array<object> } = {
+          umbrales: [],
+        };
+        var act;
+        for (const i in result) {
+          var auxmedicion = {
+            id: result[i]["umb_id"],
+            nombre: result[i]["umb_nombre"],
+            inferior: result[i]["umb_inferior"],
+            superior: result[i]["umb_superior"],
+          };
+          listaumb.umbrales.push(auxmedicion);
+        }
+        func(listaumb);
+        console.log(listaumb);
+      }
+    );
+  }
   public addUser_umbral(
     idUser: string,
     name: string,
@@ -879,7 +907,6 @@ export class mysql_connector {
       //console.log('The solution is: ', results[0].solution);
     });
   }
-
   public delUser_umbral(idUser: string, id: string): void {
     console.log(
       `############# Envio a la funcion 'delUser_umb' el id de usuario '${idUser}, id: ${id}`
@@ -919,7 +946,6 @@ export class mysql_connector {
       }
     );
   }
-
   public getUser_Aspects(userID: string, id: string, func: Function): void {
     console.log(
       `############# Envio a la funcion 'getUser_Aspectes' el id de usuario '${userID}' ${id}`
@@ -948,12 +974,10 @@ export class mysql_connector {
           listaUmedicion.push(auxmedicion);
         }
         func(listaUmedicion);
-       
       }
     );
   }
   public addUser_aspects(idUser: string, name: string, descripcion: string, tipo: string, peso: string, id: string, activo: string): void {
-
       var idTipo = tipo;
       var sqltipo = `SELECT enu_id FROM enumeracion WHERE enu_nombre_valor='${idTipo}'`;
       this.connector.query(sqltipo, (err, result) => {
@@ -993,7 +1017,6 @@ export class mysql_connector {
         for (const i in result) {
           idTipo = result[i]["enu_id"];
         }
-
         var sqlEscala = `SELECT um_id FROM unidadmedicion WHERE um_nombre='${unidad}'`;
         this.connector.query(sqlEscala, (err, result, fields) => {
           if (err) err;
@@ -1018,6 +1041,63 @@ export class mysql_connector {
       }
       );
     }
+    );
+  }
+  public addUser_accion(idUser: string, name: string, descripcion:string,idP: string, activo: string): void {
+          var act;
+          if (activo == "true") {
+            act = 1;
+          } else {
+            act = 0;
+          }
+          this.connector.query(
+            `INSERT INTO accion (acc_nombre, acc_descripcion, umb_id, acc_activo) 
+      VALUES ('${name}', '${descripcion}','${idP}','${act}')`,
+            function (error, results) {
+              if (error) throw error;
+            }
+        );
+  }
+  public getUser_accion(userID: string, id: string, func: Function): void {
+    console.log(
+      `############# Envio a la funcion 'getUser_Metrica' el id de usuario '${userID}' ${id}`
+    );
+    var act;
+    var sql = `SELECT acc_id, acc_nombre, acc_descripcion, acc_activo
+    FROM accion WHERE umb_id=${id} Order BY acc_id`;
+    this.connector.query(
+      sql,
+      (err, result, fields) => {
+        if (err) err;
+        var listaUmedicion: Array<object> = [];
+        for (const i in result) {
+          if (result[i]["acc_activo"] == 1) {
+            act = "true";
+          } else if (result[i]["acc_activo"] == 0) {
+            act = "false";
+          }
+          var auxmedicion = {
+            id: result[i]["acc_id"],
+            nombre: result[i]["acc_nombre"],
+            descripcion: result[i]["acc_descripcion"],
+            activo: act,
+          };
+          listaUmedicion.push(auxmedicion);
+        }
+        func(listaUmedicion);
+      }
+    );
+  }
+  public delUser_accion(idUser: string, id: string): void {
+    console.log(
+      `############# Envio a la funcion 'delUser_aspects' el id de usuario '${idUser}, id: ${id}`
+    );
+    this.connector.query(
+      `DELETE  FROM accion 
+      WHERE acc_id = '${id}'`,
+      function (err, result) {
+        if (err) throw err;
+      }
     );
   }
 

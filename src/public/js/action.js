@@ -17,7 +17,6 @@ function post_api(url = "", data, fun1, fun2) {
         .then((json) => fun1(json))
         .catch((error) => fun2(error));
 }
-
 /* 
     SECCION SELECCION SUJETOS CUADROS DINAMICOS SE SELECCION
 
@@ -290,7 +289,7 @@ function actualizar_sujetos() {
     if (sujeto_selecciona_seccion_sujeto_modal) {
         abrirModalObjetosSujetos(sujeto_selecciona_seccion_sujeto_modal.id, sujeto_selecciona_seccion_sujeto_modal.nombre);
     } else {
-        alert("No selecciono ningun elemento");
+        alert("No selecciono ningun sujeto de Autoconsciencia");
     }
     /*if (selec && actualizacion.length == 0)
         abrirModalObjetosSujetos(selec.id, selec.nombre);
@@ -1148,6 +1147,9 @@ function mensaje_errorEnvioDecisionCriteria(err) {
 /* Relizar mantenimeinto de la tabla Umbrales partiendo del ID de los criterios de decision*/
 
 function visibilidad_umbral(id) {
+    document.getElementById("bt_addUmbral").style = "block";
+    document.getElementById("bd_modUmbral").style = "block";
+    document.getElementById("bd_delUmbral").style = "block";
     var dato = document.getElementById("umbral_" + id);
     dato.style.display = "table";
     if (criterio_select) {
@@ -1215,6 +1217,9 @@ function agregar_umbral() {
 
 function guardarNuevoUmbral() {
     try {
+        var data2 = {
+            id: criterio_select,
+        };
         var data = {
             nombre: document.getElementById("input-name-umbral-add").value,
             interpretacion: document.getElementById("input-interpretacion-umbral-add")
@@ -1235,6 +1240,11 @@ function guardarNuevoUmbral() {
                 mensaje_errorEnvioUmbral
             );
             $("#modal_umbral_add").modal("hide");
+            post_api(
+                "http://localhost:3000/api/umbral/",
+                data2,
+                cargar_umbral_table
+            );
         } else alert("Ingrese todos los campos del formulario");
     } catch (error) {
         alert(error);
@@ -2600,30 +2610,7 @@ Procesos Pre Reflexivos
 */
 
 function agregarProcesoPreReflexivo() {
-    document.getElementById("spanNombreMetodos").style.display = "none";
-    document.getElementById("nombre_metodo_recoleccion").style.display = "none";
-    document.getElementById("spanDescripcionMetodos").style.display = "none";
-    document.getElementById("descripcion_metodo_recoleccion").style.display = "none";
-    document.getElementById("tipo_comunicacion_metodos").style.display = "none";
-    document.getElementById("tipo_comunicacion").style.display = "none";
-    document.getElementById("alcance_recoleccion_metodos").style.display = "none";
-    document.getElementById("alcance_recoleccion").style.display = "none";
-    document.getElementById("propiedad_recoleccion_metodos").style.display = "none";
-    document.getElementById("proiedad_recoleccion").style.display = "none";
-    document.getElementById("metrica_metodos").style.display = "none";
-    document.getElementById("metrica_directa").style.display = "none";
-    document.getElementById("nombreModelo").style.display = "none";
-    document.getElementById("nombre_modelo_analisis").style.display = "none";
-    document.getElementById("descripcionModelo").style.display = "none";
-    document.getElementById("descripcion_modelo_analisis").style.display = "none";
-    document.getElementById("tiporecursoModelo").style.display = "none";
-    document.getElementById("tipo_recurso").style.display = "none";
-    document.getElementById("recursoModelo").style.display = "none";
-    document.getElementById("recurso").style.display = "none";
-    document.getElementById("indicadorModelo").style.display = "none";
-    document.getElementById("indicador_modelo").style.display = "none";
-    document.getElementById("criterioModelo").style.display = "none";
-    document.getElementById("criterio_de_decision").style.display = "none";
+    mostrarMetodos();
     $("#modal_proceso_pre_reflexivo").modal("show");
 }
 if (document.getElementById("lista_sujetos_activos_proceso"))
@@ -2877,30 +2864,10 @@ function error_cargar_select_indicador_proceso() {
 }
 
 function mostrarMetodos() {
-    document.getElementById("spanNombreMetodos").style.display = "block";
-    document.getElementById("nombre_metodo_recoleccion").style.display = "block";
-    document.getElementById("spanDescripcionMetodos").style.display = "block";
-    document.getElementById("descripcion_metodo_recoleccion").style.display = "block";
-    document.getElementById("tipo_comunicacion_metodos").style.display = "block";
-    document.getElementById("tipo_comunicacion").style.display = "block";
-    document.getElementById("alcance_recoleccion_metodos").style.display = "block";
-    document.getElementById("alcance_recoleccion").style.display = "block";
-    document.getElementById("propiedad_recoleccion_metodos").style.display = "block";
-    document.getElementById("proiedad_recoleccion").style.display = "block";
-    document.getElementById("metrica_metodos").style.display = "block";
-    document.getElementById("metrica_directa").style.display = "block";
-    document.getElementById("nombreModelo").style.display = "none";
-    document.getElementById("nombre_modelo_analisis").style.display = "none";
-    document.getElementById("descripcionModelo").style.display = "none";
-    document.getElementById("descripcion_modelo_analisis").style.display = "none";
-    document.getElementById("tiporecursoModelo").style.display = "none";
-    document.getElementById("tipo_recurso").style.display = "none";
-    document.getElementById("recursoModelo").style.display = "none";
-    document.getElementById("recurso").style.display = "none";
-    document.getElementById("indicadorModelo").style.display = "none";
-    document.getElementById("indicador_modelo").style.display = "none";
-    document.getElementById("criterioModelo").style.display = "none";
-    document.getElementById("criterio_de_decision").style.display = "none";
+    var formulario1 = document.getElementById("formularios_divididos");
+    var formulario2 = document.getElementById("formularios_divididos2");
+    formulario1.classList.replace("d-none", "d-flex");
+    formulario2.classList.replace("d-flex", "d-none");
     var tipoComunicacion = "TIPO_COMUNICACION";
     data = {
         tipo: tipoComunicacion,
@@ -2915,30 +2882,11 @@ function mostrarMetodos() {
 }
 
 function mostrarModelo() {
-    document.getElementById("spanNombreMetodos").style.display = "none";
-    document.getElementById("nombre_metodo_recoleccion").style.display = "none";
-    document.getElementById("spanDescripcionMetodos").style.display = "none";
-    document.getElementById("descripcion_metodo_recoleccion").style.display = "none";
-    document.getElementById("tipo_comunicacion_metodos").style.display = "none";
-    document.getElementById("tipo_comunicacion").style.display = "none";
-    document.getElementById("alcance_recoleccion_metodos").style.display = "none";
-    document.getElementById("alcance_recoleccion").style.display = "none";
-    document.getElementById("propiedad_recoleccion_metodos").style.display = "none";
-    document.getElementById("proiedad_recoleccion").style.display = "none";
-    document.getElementById("metrica_metodos").style.display = "none";
-    document.getElementById("metrica_directa").style.display = "none";
-    document.getElementById("nombreModelo").style.display = "block";
-    document.getElementById("nombre_modelo_analisis").style.display = "block";
-    document.getElementById("descripcionModelo").style.display = "block";
-    document.getElementById("descripcion_modelo_analisis").style.display = "block";
-    document.getElementById("tiporecursoModelo").style.display = "block";
-    document.getElementById("tipo_recurso").style.display = "block";
-    document.getElementById("recursoModelo").style.display = "block";
-    document.getElementById("recurso").style.display = "block";
-    document.getElementById("indicadorModelo").style.display = "block";
-    document.getElementById("indicador_modelo").style.display = "block";
-    document.getElementById("criterioModelo").style.display = "block";
-    document.getElementById("criterio_de_decision").style.display = "block";
+    var formulario1 = document.getElementById("formularios_divididos");
+    var formulario2 = document.getElementById("formularios_divididos2");
+    formulario2.classList.replace("d-none", "d-flex");
+    formulario1.classList.replace("d-flex", "d-none");
+
     consultar_api(
         "http://localhost:3000/api/decision_criteria",
         cargar_select_criterios_proceso,
@@ -2949,6 +2897,7 @@ function mostrarModelo() {
 function cargar_select_criterios_proceso(json) {
     var ope = document.getElementById("criterio_de_decision");
     ope.innerHTML = "";
+    ope.appendChild(document.createElement("option"));
     json.forEach(element => {
         var option = document.createElement("option");
         option.value = element.id;
@@ -2976,4 +2925,173 @@ function cargar_select_tipo_comunicacion(json) {
 
 function error_cargar_select_tipo_comunicacion() {
     alert("No se cargo el select tipo comunicacion");
+}
+
+$("#criterio_de_decision").change(function() {
+    var seleccionCriterio = document.getElementById("criterio_de_decision");
+    var tipo_criterio = seleccionCriterio.options[seleccionCriterio.selectedIndex].text;
+
+    data = {
+        nombre: tipo_criterio
+    }
+    post_api(
+        "http://localhost:3000/api/get_umbral",
+        data,
+        cargar_lista_umbrales_proceso,
+        error_cargar_lista_umbrales_proceso
+    );
+});
+
+function cargar_lista_umbrales_proceso(json) {
+    res = "";
+    const umbrales = json['umbrales'];
+    for (var i = 0; i < Object.keys(json.umbrales).length; i++) {
+        res += '<h7>Umbral:</h7>';
+        res += `<h7>${umbrales[i].nombre}</h7>`;
+        res += `<div class="row" onClick="AgregarAccion('${umbrales[i].id}','${umbrales[i].nombre}');">`;
+        res += `<div class="col-sm">`;
+        res += `<div class="input-group mb-1">`;
+        res += `<div class="input-group-prepend">`;
+        res += `<span class="input-group-text" id="inferior_umbral"> Inferior Y Superior:</span>`;
+        res += `</div>`;
+        res += `<input type="text"  class="form-control" value=${umbrales[i].superior} disabled aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />`;
+        res += `<input type="text"  class="form-control" value=${umbrales[i].superior} disabled aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />`;
+        res += `</div>`;
+        res += `</div>`;
+        res += `</div>`;
+    }
+    document.getElementById("umbrales_lista").innerHTML = res;
+
+}
+
+
+function error_cargar_lista_umbrales_proceso(err) {
+    alert("No se puede cargar los umbrales" + err);
+}
+var UmbralId = undefined;
+
+function AgregarAccion(id, nombre) {
+    try {
+        UmbralId = id;
+        var nombreU = document.getElementById("Nombre_umbral");
+        nombreU.innerHTML = nombre;
+        data2 = {
+            id: UmbralId,
+        }
+        post_api(
+            "http://localhost:3000/api/get_accion",
+            data2,
+            cargar_accion_table,
+            error_cargar_accion_table
+        );
+        $("#modal_agregar_accion_proceso").modal("show");
+    } catch (error) {
+        alert(error);
+    }
+}
+
+function activarFormularioAgregarAccion() {
+    document.getElementById("nombre_accion").disabled = false;
+    document.getElementById("descripcion_accion").disabled = false;
+    document.getElementById("activoAccion").disabled = false;
+    document.getElementById("btn-agregarAccion").disabled = false;
+    document.getElementById("btn-CancelarAccion").disabled = false;
+}
+
+function desactivarFormularioAgregarAccion() {
+    document.getElementById("nombre_accion").disabled = true;
+    document.getElementById("descripcion_accion").disabled = true;
+    document.getElementById("activoAccion").disabled = true;
+    document.getElementById("btn-agregarAccion").disabled = true;
+    document.getElementById("btn-CancelarAccion").disabled = true;
+    document.getElementById("nombre_accion").value = "";
+    document.getElementById("descripcion_accion").value = "";
+}
+
+function GuardarAccion() {
+    var data = {
+        id: UmbralId,
+        nombre: document.getElementById("nombre_accion").value,
+        descripcion: document.getElementById("descripcion_accion").value,
+        activo: document.getElementById("activoAccion").checked,
+    }
+    var data2 = {
+        id: UmbralId,
+    }
+    if (!!data.nombre && !!data.descripcion) {
+
+        post_api("http://localhost:3000/api/add_accion/",
+            data,
+            mensaje_exitoEnvioAccion,
+            mensaje_errorEnvioAccion);
+        desactivarFormularioAgregarAccion();
+        post_api(
+            "http://localhost:3000/api/get_accion",
+            data2,
+            cargar_accion_table,
+            error_cargar_accion_table
+        );
+    } else {
+        alert("Debe llenar todos los campos");
+    }
+
+}
+
+function mensaje_exitoEnvioAccion(json) {
+    alert(json.mensaje);
+}
+
+function mensaje_errorEnvioAccion(err) {
+    alert(err);
+}
+
+function cargar_accion_table(json) {
+    res = "";
+    json.forEach((as) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="accion_seleccionada" value="${as.id}" data-name="${as.nombre}" data-descripcion="${as.descripcion}" data-activo="${as.activo == "true"}"></td>`;
+        res += `<td>${as.id}</td>`;
+        res += `<td>${as.nombre}</td>`;
+        res += `<td>${as.descripcion}</td>`;
+        if (as.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_accion").innerHTML = res;
+}
+
+function error_cargar_accion_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+
+function guardar_eliminar_accion() {
+    var radio = document.getElementsByName("accion_seleccionada");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        data2 = {
+            id: UmbralId,
+        };
+        post_api(
+            "http://localhost:3000/api/del_accion/",
+            data,
+            mensaje_exitoEnvioAccion,
+            mensaje_errorEnvioAccion
+        );
+        post_api(
+            "http://localhost:3000/api/get_accion/",
+            data2,
+            cargar_accion_table,
+            error_cargar_accion_table
+        );
+    } else alert("Debe seleccionar un elemento para eliminar");
 }
