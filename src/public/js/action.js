@@ -289,7 +289,7 @@ function actualizar_sujetos() {
     if (sujeto_selecciona_seccion_sujeto_modal) {
         abrirModalObjetosSujetos(sujeto_selecciona_seccion_sujeto_modal.id, sujeto_selecciona_seccion_sujeto_modal.nombre);
     } else {
-        alert("No selecciono ningun sujeto de Autoconsciencia");
+        alert("No selecciono ningun sujeto de Autoconc");
     }
     /*if (selec && actualizacion.length == 0)
         abrirModalObjetosSujetos(selec.id, selec.nombre);

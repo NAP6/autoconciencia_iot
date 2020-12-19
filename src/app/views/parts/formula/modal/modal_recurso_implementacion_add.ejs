@@ -13,44 +13,46 @@
                 <div class="row">
                     <div class="col-sm">
                         <div class="form-group row">
-                            <label for="" class="col-sm-4 col-form-label">Nombre:</label>
+                            <label for="input-name-add" class="col-sm-4 col-form-label">Nombre:</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="input-name-add" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-4 col-form-label">Descripción:</label>
+                            <label for="input-descripcion-add" class="col-sm-4 col-form-label">Descripción:</label>
                             <div class="col-sm-12">
                                 <input type="text" class="form-control" id="input-descripcion-add" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-4 col-form-label">Tipo Dato Salida</label>
+                            <label for="tipo_escalas" class="col-sm-4 col-form-label">Tipo Dato Salida</label>
                             <div class="col-sm-12">
-                                <input type="text" class="form-control" id="input-tipe-add" value="" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                                <select class="custom-select" id="tipo_escalas" name="tipo_escalas" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();"></select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-4 col-form-label">Tipo Recurso:</label>
+                            <label for="select_tipo_recurso" class="col-sm-4 col-form-label">Tipo Recurso:</label>
                             <div class="col-sm-12">
-                                <select id="select_tipo_recurso" class="custom-select" required name="select_recurso" style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();">
-                                    <option value="Seleccione">Seleccione un Recurso</option> 
-                                    <option value="FÓRMULA">FÓRMULA</option> 
-                                    <option value="FUNCIÓN">FUNCIÓN</option>
-                                    <option value="SERVICIO">SERVICIO</option>
+                                <select id="select_tipo_recurso" class="custom-select" required name="select_recurso" 
+                                        style="text-transform:uppercase;"  onkeyup="javascript:this.value=this.value.toUpperCase();"
+                                        onchange="cargar_recurso(this)">
+                                    <option value="Seleccione" selected >Seleccione un Recurso</option> 
+                                    <option value="modal_tipo_recurso_formula_add" >FÓRMULA</option> 
+                                    <option value="modal_tipo_recurso_funcion_add" >FUNCIÓN</option>
+                                    <option value="modal_tipo_recurso_servicio_add" >SERVICIO</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="" class="col-sm-4 col-form-label"></label>
-                            <div class="col-sm-12" id="tipo_recurso">
-                            </div>
+                        <div class="form-group row" id="tipo_recurso" >
+                            <%- include('../modal/modal_tipo_recurso_formula_add'); %>
+                                <%- include('../modal/modal_tipo_recurso_funcion_add'); %>
+                                    <%- include('../modal/modal_tipo_recurso_servicio_add'); %>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="guardarNuevaRecImpl(); add_Tipo_Recurso()">Guardar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarNuevaRecImpl(); ">Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Cancelar
         </button>
@@ -59,3 +61,6 @@
         </div>
     </div>
 </div>
+
+
+  
