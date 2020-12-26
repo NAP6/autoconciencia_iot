@@ -5,6 +5,16 @@ import {
   mysql_connector,
 } from "../models/database";
 
+export function deployment_resources(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database();
+    db.get_deployment_resources((json: object) => {
+      res.json(json);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function subjects(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session!.active_model.modelID;
@@ -83,7 +93,7 @@ export function entity(req: Request, res: Response) {
     var seleccion = req.body.valorS;
     var db = new database();
 
-    db.get_entitys(id,seleccion,(json:object)=>{
+    db.get_entitys(id, seleccion, (json: object) => {
       res.json(json);
     });
   } else {
@@ -126,9 +136,9 @@ export function enumeracion(req: Request, res: Response) {
 export function get_enumeracion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
-    var nombre=req.body.tipo; 
+    var nombre = req.body.tipo;
     var db = new database();
-    db.getUser_get_enumeracion(id,nombre, (jsonEscala: object) => {
+    db.getUser_get_enumeracion(id, nombre, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -389,9 +399,9 @@ export function upd_umbral(req: Request, res: Response) {
 export function aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
-    var idP=req.body.id;
+    var idP = req.body.id;
     var db = new database();
-    db.getUser_Aspects(id,idP,(jsonEscala: object) => {
+    db.getUser_Aspects(id, idP, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -403,13 +413,13 @@ export function add_aspects(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var tipo=req.body.tipoS;
-    var peso=req.body.peso;
-    var idP=req.body.id;
-    var activo=req.body.activo.toString();
-    console.log(tipo)
+    var tipo = req.body.tipoS;
+    var peso = req.body.peso;
+    var idP = req.body.id;
+    var activo = req.body.activo.toString();
+    console.log(tipo);
     var db = new database();
-    db.addUser_aspects(idUser, name, descripcion, tipo, peso,idP,activo);
+    db.addUser_aspects(idUser, name, descripcion, tipo, peso, idP, activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -432,14 +442,24 @@ export function add_metrica(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var abreviatura=req.body.abreviatura;
-    var escala=req.body.escala;
-    var unidad=req.body.unidad;
-    var tipo=req.body.tipo;
-    var idP=req.body.id;
-    var activo=req.body.activo.toString();
+    var abreviatura = req.body.abreviatura;
+    var escala = req.body.escala;
+    var unidad = req.body.unidad;
+    var tipo = req.body.tipo;
+    var idP = req.body.id;
+    var activo = req.body.activo.toString();
     var db = new database();
-    db.addUser_metrica(idUser, name, descripcion, abreviatura, escala,unidad,tipo,idP,activo);
+    db.addUser_metrica(
+      idUser,
+      name,
+      descripcion,
+      abreviatura,
+      escala,
+      unidad,
+      tipo,
+      idP,
+      activo
+    );
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -448,9 +468,9 @@ export function add_metrica(req: Request, res: Response) {
 export function get_metrica(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
-    var idP=req.body.id;
+    var idP = req.body.id;
     var db = new database();
-    db.getUser_Metrica(id,idP,(jsonEscala: object) => {
+    db.getUser_Metrica(id, idP, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -460,10 +480,10 @@ export function get_metrica(req: Request, res: Response) {
 export function get_metrica_select(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
-    var nombreAs=req.body.nombre;
-    var tipoM=req.body.tipo;
+    var nombreAs = req.body.nombre;
+    var tipoM = req.body.tipo;
     var db = new database();
-    db.getUser_Metrica_select(id,nombreAs,tipoM,(jsonEscala: object) => {
+    db.getUser_Metrica_select(id, nombreAs, tipoM, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -486,10 +506,10 @@ export function add_accion(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var idP=req.body.id;
-    var activo=req.body.activo.toString();
+    var idP = req.body.id;
+    var activo = req.body.activo.toString();
     var db = new database();
-    db.addUser_accion(idUser, name, descripcion,idP,activo);
+    db.addUser_accion(idUser, name, descripcion, idP, activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -498,9 +518,9 @@ export function add_accion(req: Request, res: Response) {
 export function get_accion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
-    var idP=req.body.id;
+    var idP = req.body.id;
     var db = new database();
-    db.getUser_accion(id,idP,(jsonEscala: object) => {
+    db.getUser_accion(id, idP, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -519,7 +539,6 @@ export function del_accion(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-
 
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
@@ -588,9 +607,19 @@ export function add_ri(req: Request, res: Response) {
     var instruccionS = req.body.instruccionS;
     var ts = req.body.ts;
     var db = new database();
-    db.addUser_ri(idUser, name, descripcion, tipo_dato_salida, 
-      tipo_recurso, expresion, path, instruccion, pf,
-      instruccionS, ts);
+    db.addUser_ri(
+      idUser,
+      name,
+      descripcion,
+      tipo_dato_salida,
+      tipo_recurso,
+      expresion,
+      path,
+      instruccion,
+      pf,
+      instruccionS,
+      ts
+    );
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -624,3 +653,4 @@ export function upd_ri(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+
