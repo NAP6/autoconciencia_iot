@@ -63,6 +63,7 @@ function cargar_recursos_de_implementacion_tabla(json) {
   });
 }
 function agregar_recurso() {
+  limpiar_add_recusos();
   $("#modal_resource_add").modal("show");
 }
 function modificar_recurso() {}
@@ -85,7 +86,7 @@ function visivilidad_tipo_recurso_form_add(elem) {
     document
       .getElementById("funciones_form_add")
       .classList.replace("d-none", "d-block");
-  else
+  else if (elem.value == "2")
     document
       .getElementById("services_form_add")
       .classList.replace("d-none", "d-block");
@@ -99,6 +100,15 @@ function agregar_a_formula(nuevo) {
   var text = document.getElementById("area_de_nueva_formula");
   text.value += nuevo;
   text.focus();
+}
+
+function limpiar_add_recusos() {
+  document.getElementById("input-name-resource-add").value = "";
+  document.getElementById("input-descripton-resource-add").value = "";
+  document.getElementById("area_de_nueva_formula").value = "";
+  document.getElementById("select_tipo_recurso").selectedIndex = "0";
+  document.getElementById("selectTipoSalidaFormulaRecursoAdd").selectedIndex = "0";
+  visivilidad_tipo_recurso_form_add(document.createElement('input'));
 }
 
 /* 
