@@ -81,7 +81,6 @@ function cargar_select_tipo_dato_salida(json) {
 
 function cargar_select_formato(json) {
     var ope = document.createElement("select");
-
     ope.innerHTML = "";
     json.forEach((element) => {
         var option = document.createElement("option");
@@ -319,6 +318,97 @@ function limpiar_add_recusos() {
     idParametroCont = 0;
 }
 
+function recuperarRecursoFormula() {
+    var formula = document.getElementById("area_de_nueva_formula").value;
+    var datoSalida = document.getElementById("selectTipoSalidaFormulaRecursoAdd").value;
+    var data = {
+        formula: formula,
+        datoSalida: datoSalida,
+    }
+    return data;
+}
+
+function recuperarRecursoFuncion() {
+    var instrucciones = document.getElementById("area_de_nueva_istruccion_funcion").value;
+    var datoSalida = document.getElementById("selectTipoSalidaFuncionesRecursoAdd").value;
+    var data = {
+        instrucciones: instrucciones,
+        datoSalida: datoSalida,
+    }
+    return data;
+
+}
+
+function recuperarRecursoServicio() {
+    var endPoint = document.getElementById("input_endpoint_resource").value;
+    var instrucciones = document.getElementById("area_de_nueva_istruccion_funcion").value;
+    var datoSalida = document.getElementById("selectTipoSalidaServiciosRecursoAdd").value;
+    var formatoSalida = document.getElementById("selectFormatodeSalida").value;
+    var data = {
+        endPoint: endPoint,
+        instrucciones: instrucciones,
+        datoSalida: datoSalida,
+        formatoSalida: formatoSalida
+    }
+    return data;
+
+}
+
+function getParametrosRecursosImple(id) {
+    var parametros = document.querySelectorAll(`#${id} #lista_parametros_recursos li`);
+    var arregloParametros = [];
+    Array.from(parametros).forEach(element => {
+        var datos = {
+            ordinal: element.dataset.ordinal,
+            nombre: element.dataset.nombre,
+            tipo: element.dataset.tipo,
+            opcional: element.dataset.opcional,
+            activo: element.dataset.activo,
+        };
+        arregloParametros.push(datos);
+    });
+    return arregloParametros;
+}
+
+function guardarRecursoImplementacion() {
+    var nombre = document.getElementById("input-name-resource-add").value;
+    var descripcion = document.getElementById("input-descripton-resource-add").value;
+    var tipoRecurso = document.getElementById("select_tipo_recurso").value;
+    if (tipoRecurso) {
+        var EspecificoTipo;
+        var arregloParametros;
+        if (tipoRecurso == 0) {
+            EspecificoTipo = recuperarRecursoFormula();
+            arregloParametros = getParametrosRecursosImple("parametro_formula");
+
+        } else if (tipoRecurso == 1) {
+            EspecificoTipo = recuperarRecursoFuncion();
+            arregloParametros = getParametrosRecursosImple("parametro_funciones");
+        } else if (tipoRecurso == 2) {
+            EspecificoTipo = recuperarRecursoServicio();
+            arregloParametros = getParametrosRecursosImple("parametro_servicios");
+        }
+        var data = {
+                nombre: nombre,
+                descripcion: descripcion,
+                tipoRecurso: tipoRecurso,
+                EspecificoTipo: EspecificoTipo,
+                arregloParametros: arregloParametros,
+            }
+            /*post_api(
+                "http://localhost:3000/api/",
+                data,
+                res => { console.log(res) },
+                res => { console.log(res) }
+
+            )*/
+        console.log(data);
+        $("#modal_resource_add").modal("hide");
+    } else {
+        alert("No se selecciono un tipo de recurso");
+    }
+
+}
 
 
 
