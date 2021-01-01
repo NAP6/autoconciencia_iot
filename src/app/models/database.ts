@@ -111,6 +111,46 @@ export class mysql_connector {
     );
   }
 
+  public add_deployment_resources(json: resource, func: Function) {
+    var sql = `INSERT INTO recursoimplementacion (ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso) VALUES ('${json.nombre}', '${json.descripcion}', '${json.EspecificoTipo.datoSalida}', '${json.tipoRecurso}');`;
+    this.connector.query(sql, (err, result) => {
+      if (err) throw err;
+      console.log(json);
+      if (json.tipoRecurso == "0") {
+        sql = `INSERT INTO formula (for_expresion, ri_id) VALUES ('${json.EspecificoTipo.formula}', '${result.insertId}');`;
+        this.connector.query(sql, (err, result) => {
+          if (err) throw err;
+        });
+      } else if (json.tipoRecurso == "1") {
+        sql = `INSERT INTO funcion (fun_instrucciones, ri_id) VALUES ('${json.EspecificoTipo.instrucciones}', '${result.insertId}');`;
+        console.log(sql);
+        this.connector.query(sql, (err, result) => {
+          if (err) throw err;
+        });
+      } else if (json.tipoRecurso == "2") {
+        sql = `INSERT INTO servicio (ser_punto_final, ser_instrucciones, ser_tipo_formato_dato_salida, ri_id) VALUES ('${json.EspecificoTipo.endPoint}', '${json.EspecificoTipo.instrucciones}', '${json.EspecificoTipo.formatoSalida}', '${result.insertId}')`;
+        console.log(sql);
+        this.connector.query(sql, (err, result) => {
+          if (err) throw err;
+        });
+      }
+      json.arregloParametros.forEach((parametro) => {
+        sql = `INSERT INTO parametro (par_ordinal, par_nombre, par_opcional, par_activo, par_tipo_dato, ri_id) VALUES ('${
+          parametro.ordinal
+        }', '${parametro.nombre}', '${
+          parametro.opcional == "true" ? 1 : 0
+        }', '${parametro.activo == "true" ? 1 : 0}', '${parametro.tipo}', '${
+          result.insertId
+        }');`;
+        this.connector.query(sql, (err, result) => {
+          if (err) throw err;
+        });
+      });
+    });
+
+    func({ mensaje: "todo bien" });
+  }
+
   public get_deployment_resources(func: Function) {
     var sql = `SELECT ri_id as id, ri_nombre as nombre, ri_descripcion as descripcion, ri_tipo_dato_salida as tipo_salida, ri_activo as activo, ri_tipo_recurso as tipo_recurso FROM recursoimplementacion`;
     this.connector.query(sql, (err, result) => {
@@ -3199,4 +3239,24 @@ interface systemEnt {
   Entity?: [systemEnt] | undefined;
   containsResource?: [systemEnt] | undefined;
 }
-
+interface resource {
+  nombre: string;
+  descripcion: string;
+  tipoRecurso: string;
+  EspecificoTipo: {
+    formula?: string;
+    instrucciones?: string;
+    endPoint?: string;
+    datoSalida: string;
+    formatoSalida?: string;
+  };
+  arregloParametros: [
+    {
+      ordinal: string;
+      nombre: string;
+      tipo: string;
+      opcional: string;
+      activo: string;
+    }
+  ];
+}
