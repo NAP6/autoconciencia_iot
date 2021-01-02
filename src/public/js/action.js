@@ -146,7 +146,33 @@ function agregar_recurso() {
 
 function modificar_recurso() {}
 
-function eliminar_recurso() {}
+function eliminar_recurso() {
+  var radios = document.getElementsByName("radio_recurso_implementacion");
+  var id = undefined;
+  Array.from(radios).forEach((rad) => {
+    if (rad.checked) {
+      id = rad.dataset.id;
+      return;
+    }
+  });
+  if (id) {
+    if (confirm("Esta seguro de que desea eliminar el recurso")) {
+      post_api(
+        "http://localhost:3000/api/del_deployment_resources/",
+        { id: id },
+        (res) => {
+          console.log(res);
+        },
+        (res) => {
+          console.log(res);
+        }
+      );
+    }
+    cargar_recursos_de_implementacion();
+  } else {
+    alert("No se ha seleccionado ningun recurso");
+  }
+}
 
 function visivilidad_tipo_recurso_form_add(elem) {
   document

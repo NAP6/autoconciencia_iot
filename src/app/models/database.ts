@@ -111,6 +111,15 @@ export class mysql_connector {
     );
   }
 
+  public del_deployment_resources(id: string, func: Function) {
+    console.log("Entra hasta aqui");
+    var sql = `DELETE FROM recursoimplementacion WHERE ri_id = '${id}'`;
+    console.log(sql);
+    this.connector.query(sql, function (err, result) {
+      if (err) throw err;
+      func({ mensaje: "exito al eleminar" });
+    });
+  }
   public add_deployment_resources(json: resource, func: Function) {
     var sql = `INSERT INTO recursoimplementacion (ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso) VALUES ('${json.nombre}', '${json.descripcion}', '${json.EspecificoTipo.datoSalida}', '${json.tipoRecurso}');`;
     this.connector.query(sql, (err, result) => {

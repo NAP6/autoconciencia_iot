@@ -14,6 +14,17 @@ export function add_deployment_resources(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function del_deployment_resources(req: Request, res: Response) {
+  if (req.session?.user) {
+    console.log("LLega hasta qui")
+    var db = new database();
+    db.del_deployment_resources(req.body.id, (json: object) => {
+      res.json(json);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function deployment_resources(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database();

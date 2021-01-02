@@ -4,6 +4,7 @@ import * as api from '../app/controller/controller-api';
 export default function (app: Application) {
   app.get("/api/deployment_resources/", api.deployment_resources);
   app.post("/api/add_deployment_resources/", api.add_deployment_resources);
+  app.post("/api/del_deployment_resources/", api.del_deployment_resources);
   app.get("/api/subjects/", api.subjects);
   app.post("/api/subjects_objects/", api.subjects_objects);
   app.post("/api/save_subjects_objects/", api.save_subjects_objects);
