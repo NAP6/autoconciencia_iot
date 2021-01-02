@@ -164,7 +164,7 @@ export class mysql_connector {
       });
 
     } else if (json.tipoRecurso == "2") {
-      var sql = `SELECT ser_punto_final as punto,ser_instrucciones as instrucciones, ser_tipo_formato_salida as formato FROM servicio  WHERE ri_id = '${id}'`;
+      var sql = `SELECT ser_punto_final as punto,ser_instrucciones as instrucciones, ser_tipo_formato_dato_salida as formato FROM servicio  WHERE ri_id = '${id}'`;
       this.connector.query(sql, function (err, result) {
         if (err) throw err;
         json.EspecificoTipo.endPoint = result[0].punto;
