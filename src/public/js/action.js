@@ -157,9 +157,28 @@ function modificar_recurso() {
     terminar_creacion_parametro("parametro_formula");
     terminar_creacion_parametro("parametro_funciones");
     terminar_creacion_parametro("parametro_servicios");
-    post_api(
+    var radios = document.getElementsByName("radio_recurso_implementacion");
+    var id = undefined;
+    Array.from(radios).forEach((rad) => {
+        if (rad.checked) {
+            id = rad.dataset.id;
+            return;
+        }
+    });
+    if (id) {
+        post_api(
+            "http://localhost:3000/api/ask_deployment_resources/", { id: id },
+            (res) => {
+                console.log(res);
+            },
+            (res) => {
+                console.log(res);
+            }
+        );
+    } else {
+        alert("No se ha seleccionado ningun recurso");
+    }
 
-    )
     $("#modal_resource_add").modal("show");
 
 }
