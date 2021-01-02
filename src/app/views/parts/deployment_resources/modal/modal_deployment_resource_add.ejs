@@ -46,12 +46,21 @@
       </div>
       <div class="modal-footer">
         <button
+        id="GuardarRecurso_btn"
           type="button"
-          class="btn btn-primary"
+          class="btn btn-primary inline-block"
           onclick="guardarRecursoImplementacion()"
         >
           Guardar
         </button>
+        <button
+        type="button"
+        id="ModificarRecurso_btn"
+        class="btn btn-primary d-none"
+        onclick="modificarRecursoImplementacion()"
+      >
+        Modificar
+      </button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           Cancelar
         </button>

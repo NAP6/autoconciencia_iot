@@ -16,9 +16,29 @@ export function add_deployment_resources(req: Request, res: Response) {
 }
 export function del_deployment_resources(req: Request, res: Response) {
   if (req.session?.user) {
-    console.log("LLega hasta qui")
     var db = new database();
     db.del_deployment_resources(req.body.id, (json: object) => {
+      res.json(json);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function mod_deployment_resources(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database();
+    db.mod_deployment_resources(req.body.id, (json: object) => {
+      res.json(json);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function ask_deployment_resources(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database();
+
+    db.ask_deployment_resources(req.body.id, (json: object) => {
       res.json(json);
     });
   } else {
