@@ -157,6 +157,7 @@ export class mysql_connector {
       });
     } else if (json.tipoRecurso == "1") {
       var sql = `SELECT fun_instrucciones as instrucciones FROM funcion WHERE ri_id = '${id}'`;
+      console.log(sql);
       this.connector.query(sql, function (err, result) {
         if (err) throw err;
         json.EspecificoTipo.instrucciones = result[0]['instrucciones'];
@@ -217,6 +218,7 @@ export class mysql_connector {
           }', '${parametro!.nombre}', '${parametro!.opcional == "true" ? 1 : 0
           }', '${parametro!.activo == "true" ? 1 : 0}', '${parametro!.tipo}', '${result.insertId
           }');`;
+          console.log(sql);
         this.connector.query(sql, (err, result) => {
           if (err) throw err;
         });
