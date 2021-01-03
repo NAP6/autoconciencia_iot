@@ -3229,8 +3229,23 @@ Procesos Pre Reflexivos
 */
 
 function agregarProcesoPreReflexivo() {
-    mostrarMetodos();
+    var tipoComunicacion = "TIPO_COMUNICACION";
+    data = {
+        tipo: tipoComunicacion,
+    };
+    post_api(
+        "http://localhost:3000/api/get_enumeracion",
+        data,
+        cargar_select_tipo_comunicacion,
+        error_cargar_select_tipo_comunicacion
+    );
+    consultar_api(
+        "http://localhost:3000/api/decision_criteria",
+        cargar_select_criterios_proceso,
+        error_cargar_select_criterios_proceso
+    );
     $("#modal_proceso_pre_reflexivo").modal("show");
+
 }
 if (document.getElementById("lista_sujetos_activos_proceso"))
     consultar_api(
@@ -3481,41 +3496,16 @@ function error_cargar_select_indicador_proceso() {
     alert("No se cargo el indicar metrica en el modal procesos");
 }
 
-function mostrarMetodos() {
-    var formulario1 = document.getElementById("formularios_divididos");
-    var formulario2 = document.getElementById("formularios_divididos2");
-    formulario1.classList.replace("d-none", "d-flex");
-    formulario2.classList.replace("d-flex", "d-none");
-    var tipoComunicacion = "TIPO_COMUNICACION";
-    data = {
-        tipo: tipoComunicacion,
-    };
 
-    post_api(
-        "http://localhost:3000/api/get_enumeracion",
-        data,
-        cargar_select_tipo_comunicacion,
-        error_cargar_select_tipo_comunicacion
-    );
-}
 
-function mostrarModelo() {
-    var formulario1 = document.getElementById("formularios_divididos");
-    var formulario2 = document.getElementById("formularios_divididos2");
-    formulario2.classList.replace("d-none", "d-flex");
-    formulario1.classList.replace("d-flex", "d-none");
 
-    consultar_api(
-        "http://localhost:3000/api/decision_criteria",
-        cargar_select_criterios_proceso,
-        error_cargar_select_criterios_proceso
-    );
-}
 
 function cargar_select_criterios_proceso(json) {
     var ope = document.getElementById("criterio_de_decision");
     ope.innerHTML = "";
-    ope.appendChild(document.createElement("option"));
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    ope.appendChild(seleccione);
     json.forEach((element) => {
         var option = document.createElement("option");
         option.value = element.id;
@@ -3560,24 +3550,18 @@ $("#criterio_de_decision").change(function() {
 });
 
 function cargar_lista_umbrales_proceso(json) {
+    console.log(json);
     res = "";
-    const umbrales = json["umbrales"];
-    for (var i = 0; i < Object.keys(json.umbrales).length; i++) {
-        res += "<h7>Umbral:</h7>";
-        res += `<h7>${umbrales[i].nombre}</h7>`;
-        res += `<div class="row" onClick="AgregarAccion('${umbrales[i].id}','${umbrales[i].nombre}');">`;
-        res += `<div class="col-sm">`;
-        res += `<div class="input-group mb-1">`;
-        res += `<div class="input-group-prepend">`;
-        res += `<span class="input-group-text" id="inferior_umbral"> Inferior Y Superior:</span>`;
-        res += `</div>`;
-        res += `<input type="text"  class="form-control" value=${umbrales[i].superior} disabled aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />`;
-        res += `<input type="text"  class="form-control" value=${umbrales[i].superior} disabled aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />`;
-        res += `</div>`;
-        res += `</div>`;
-        res += `</div>`;
-    }
-    document.getElementById("umbrales_lista").innerHTML = res;
+    json.forEach((cd) => {
+        res += `<tr onClick="">`;
+        res += `<td><input type="checkbox" name="umbral_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-inferior="${cd.inferior}" data-superior="${cd.superior}"></td>`;
+        res += `<td>${cd.id}</td>`;
+        res += `<td>${cd.nombre}</td>`;
+        res += `<td>${cd.inferior}</td>`;
+        res += `<td>${cd.superior}</td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_umbrales_procesos").innerHTML = res;
 }
 
 function error_cargar_lista_umbrales_proceso(err) {
@@ -3713,4 +3697,27 @@ function guardar_eliminar_accion() {
             error_cargar_accion_table
         );
     } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function SeleccionaRecursoSelect(element) {
+    if (element.value) {
+        post_api(
+            "http://localhost:3000/api/ask_deployment_resources_select/", { tipo: element.value },
+            cargar_select_recurso_proceso,
+            json => { console.log(json); }
+        );
+    }
+}
+
+function cargar_select_recurso_proceso(json) {
+    var ope = document.createElement("select");
+    ope.innerHTML = "";
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+    document.getElementById("recurso").innerHTML =
+        ope.innerHTML;
 }

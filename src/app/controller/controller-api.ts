@@ -24,10 +24,10 @@ export function del_deployment_resources(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export function mod_deployment_resources(req: Request, res: Response) {
+export function ask_deployment_resources_select(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database();
-    db.mod_deployment_resources(req.body.id, (json: object) => {
+    db.ask_deployment_resources_select(req.body.tipo, (json: object) => {
       res.json(json);
     });
   } else {

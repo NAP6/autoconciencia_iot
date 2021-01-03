@@ -17,9 +17,7 @@ export default function (app: Application, upload: Multer) {
   app.get("/measurement_units", nv.loggedIn, nv.measurement_units);
   app.get("/scales", nv.loggedIn, nv.scales);
   app.get("/decision_criteria", nv.loggedIn, nv.decision_criteria);
-  app.get("/formulas", nv.loggedIn, nv.formulas);
-  app.get("/calculation_functions", nv.loggedIn, nv.calculation_functions);
-  app.get("/calculation_services", nv.loggedIn, nv.calculation_services);
+  app.get("/deployment_resources", nv.loggedIn, nv.deployment_resources);
   app.get("/generate_model", nv.loggedIn, nv.generate_model);
 
   app.post(

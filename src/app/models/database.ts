@@ -120,18 +120,18 @@ export class mysql_connector {
       func({ mensaje: "exito al eleminar" });
     });
   }
-  public mod_deployment_resources(id: string, func: Function) {
+  public ask_deployment_resources_select(tipo: string, func: Function) {
+    var sql = `SELECT ri_id as id, ri_nombre as nombre FROM recursoimplementacion WHERE ri_tipo_recurso = '${tipo}'`;
 
-    var sql = `DELETE FROM recursoimplementacion WHERE ri_id = '${id}'`;
     console.log(sql);
     this.connector.query(sql, function (err, result) {
       if (err) throw err;
-      func({ mensaje: "exito al eleminar" });
+      func(result);
     });
   }
   public ask_deployment_resources(id: string, func: Function) {
     var sql = `SELECT ri_nombre as nombre, ri_descripcion as descripcion, ri_tipo_dato_salida as tipo, ri_activo as activo, ri_tipo_recurso as recurso FROM recursoimplementacion WHERE ri_id = '${id}'`;
-    var respuesta: resource={nombre:"",descripcion:"",tipoRecurso:"",EspecificoTipo:{datoSalida:"",instrucciones:"",endPoint:"",formatoSalida:"",formula:""},arregloParametros:[]};
+    var respuesta: resource = { nombre: "", descripcion: "", tipoRecurso: "", EspecificoTipo: { datoSalida: "", instrucciones: "", endPoint: "", formatoSalida: "", formula: "" }, arregloParametros: [] };
     console.log(sql);
     this.connector.query(sql, function (err, result) {
       if (err) throw err;
@@ -140,8 +140,8 @@ export class mysql_connector {
       respuesta.descripcion = result[0]['descripcion'];
       respuesta.EspecificoTipo.datoSalida = result[0]['tipo'].toString();
       respuesta.tipoRecurso = result[0]['recurso'].toString();
-      var db=new mysql_connector();
-      db.ask_parametros(respuesta,id,func);
+      var db = new mysql_connector();
+      db.ask_parametros(respuesta, id, func);
 
     });
   }
@@ -183,8 +183,8 @@ export class mysql_connector {
         var par: parametros = { ordinal: element['ordinal'].toString(), nombre: element['nombre'], opcional: element['opcional'].toString(), activo: element['activo'].toString(), tipo: element['tipo'].toString() };
         json.arregloParametros.push(par);
       });
-      var db=new mysql_connector();
-      db.ask_tipo_recurso(json,id,func);
+      var db = new mysql_connector();
+      db.ask_tipo_recurso(json, id, func);
 
     });
   }
@@ -218,7 +218,7 @@ export class mysql_connector {
           }', '${parametro!.nombre}', '${parametro!.opcional == "true" ? 1 : 0
           }', '${parametro!.activo == "true" ? 1 : 0}', '${parametro!.tipo}', '${result.insertId
           }');`;
-          console.log(sql);
+        console.log(sql);
         this.connector.query(sql, (err, result) => {
           if (err) throw err;
         });

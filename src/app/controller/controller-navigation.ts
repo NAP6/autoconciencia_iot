@@ -164,30 +164,13 @@ export function decision_criteria(req: Request, res: Response) {
   });
 }
 
-export function formulas(req: Request, res: Response) {
-  res.render("formulas", {
+export function deployment_resources(req: Request, res: Response) {
+  res.render("deployment_resources", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
   });
 }
-
-export function calculation_functions(req: Request, res: Response) {
-  res.render("calcule_functions", {
-    error: req.flash("error"),
-    succes: req.flash("succes"),
-    session: req.session,
-  });
-}
-
-export function calculation_services(req: Request, res: Response) {
-  res.render("calculation_services", {
-    error: req.flash("error"),
-    succes: req.flash("succes"),
-    session: req.session,
-  });
-}
-
 export function generate_model(req: Request, res: Response) {
   res.render("generate_model", {
     error: req.flash("error"),

@@ -11,26 +11,42 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Nombre:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="input-name-proceso-pre-reflexivo" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase(); " />
+                            </div>
+                        </div>
+
+                        <div class="form-group row ">
+                            <label for=" " class="col-sm-2 col-form-label ">Descripcion:</label>
+                            <div class="col-sm-10 ">
+                                <textarea type="text " class="form-control " id="input-descripcion-proceso-pre-reflexivo " style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase(); "></textarea>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col">
+                        <div class="form-group row">
                             <label for="" class="col-sm-3 col-form-label">Inicio periodo:</label>
                             <input type="date" id="inicio_del_periodo" name="inicio_del_periodo" value="" min="2020-01-01" max="2050-01-01">
                         </div>
-                        <h6>Seleccionar sujeto de autoconsciencia:</h6>
-                        <div id="sujetos_activos_proceso" class="card col-12 col-lg-10">
-                            <ul id="lista_sujetos_activos_proceso"></ul>
-                        </div>
-
-                        <h6>Seleccionar aspecto de autoconsciencia</h6>
-                        <div class="input-group col-11">
-                            <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia">
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col">
                         <div class="form-group row">
                             <label for="" class="col-sm-3 col-form-label">Fin periodo:</label>
                             <input type="date" id="fin_del_periodo" name="fin_del_periodo" value="" min="2020-01-01" max="2050-01-01">
                         </div>
-                        <h6>Categoría de objeto de autoconsciencia:</h6>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <h6>Sujetos de autoconsciencia:</h6>
+                        <div id="sujetos_activos_proceso" class="card col-12 col-lg-10" style="overflow-y: auto;height: 166px;">
+                            <ul id="lista_sujetos_activos_proceso"></ul>
+                        </div>
+
+                    </div>
+                    <div class="col-6">
+                        <h6>Categoría de objetos:</h6>
                         <div class="input-group col-11">
                             <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos">
                               <option id="1" value="1">Entidades Físicas</option>
@@ -43,133 +59,129 @@
                               <option value="8">Red</option>
                             </select>
                         </div>
-                        <br>
-                        <h6>Seleccionar objeto de autoconsciencia:</h6>
+                        <h6>Objeto de autoconsciencia:</h6>
                         <div class="col-sm-11">
-                            <div id="entidades_seleccionados_area_procesos" class="card col-lg-12">
+                            <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
                                 <ul id="lista_entidades_seleccionadas_procesos"></ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <br>
-                <div class="row justify-content-center">
-                    <div class="col-6">
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-secondary active">
-                              <input type="radio" name="options" id="option1" autocomplete="off"  onclick="mostrarMetodos()"> Método de recolección de datos
-                            </label>
-                            <label class="btn btn-secondary">
-                              <input type="radio" name="options" id="option2" autocomplete="off" onclick="mostrarModelo()"> Modelo de análisis
-                            </label>
-                        </div>
-                    </div>
+                <h6 class="text-center">Aspectos de autoconsciencia</h6>
+                <div class="input-group col-11">
+                    <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia">
+                    </select>
                 </div>
-                <br>
-                <div class="container-fluid">
-                    <div class="d-flex row" id="formularios_divididos">
-                        <div class="col-6">
-                            <div class="input-group mb-4" id="Nombre_metodos">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="spanNombreMetodos">Nombre</span>
+                <nav class="mt-4">
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-recoleccion-tab" data-toggle="tab" href="#nav-recoleccion" role="tab" aria-controls="nav-recoleccion" aria-selected="true">Método de recolección de datos</a>
+                        <a class="nav-item nav-link" id="nav-modelo-tab" data-toggle="tab" href="#nav-modelo" role="tab" aria-controls="nav-modelo" aria-selected="false">Modelo de análisis</a>
+                    </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-recoleccion" role="tabpanel" aria-labelledby="nav-recoleccion-tab">
+                        <div class="row mt-3" id="formularios_divididos">
+                            <div class="col-6">
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" id="tipo_comunicacion_metodos">Tipo de comunicación: </label>
+                                    </div>
+                                    <select class="custom-select" name="tipo_comunicacion" id="tipo_comunicacion">
+                                  </select>
                                 </div>
-                                <input type="text" name="form_entidad_new" id="nombre_metodo_recoleccion" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="spanDescripcionMetodos">Descripción</span>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" id="alcance_recoleccion_metodos">Alcance de la recolección: </label>
+                                    </div>
+                                    <select class="custom-select" name="alcance_recoleccion" id="alcance_recoleccion">
+                                        <option value="1">Unicamente el objeto seleccionado</option>
+                                        <option value="2">Todos los objetos de la misma categoría</option>
+                                  </select>
                                 </div>
-                                <textarea type="text" name="form_entidad_new" id="descripcion_metodo_recoleccion" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" id="tipo_comunicacion_metodos">Tipo de comunicación: </label>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" id="propiedad_recoleccion_metodos">Propiedad: </label>
+                                    </div>
+                                    <select class="custom-select" name="proiedad_recoleccion" id="proiedad_recoleccion">
+                                  </select>
                                 </div>
-                                <select class="custom-select" name="tipo_comunicacion" id="tipo_comunicacion">
-                              </select>
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" id="alcance_recoleccion_metodos">Alcance de la recolección: </label>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" id="metrica_metodos">Métrica directa: </label>
+                                    </div>
+                                    <select class="custom-select" name="metrica_directa" id="metrica_directa">
+                                  </select>
                                 </div>
-                                <select class="custom-select" name="alcance_recoleccion" id="alcance_recoleccion">
-                                    <option value="1">Unicamente el objeto seleccionado</option>
-                                    <option value="2">Todos los objetos de la misma categoría</option>
-                              </select>
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" id="propiedad_recoleccion_metodos">Propiedad: </label>
-                                </div>
-                                <select class="custom-select" name="proiedad_recoleccion" id="proiedad_recoleccion">
-                              </select>
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" id="metrica_metodos">Métrica directa: </label>
-                                </div>
-                                <select class="custom-select" name="metrica_directa" id="metrica_directa">
-                              </select>
                             </div>
                         </div>
                     </div>
-                    <div class="d-none row justify-content-center" id="formularios_divididos2">
-                        <div class="col-5">
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="nombreModelo"> Nombre</span>
+                    <div class="tab-pane fade" id="nav-modelo" role="tabpanel" aria-labelledby="nav-modelo-tab">
+                        <div class=" row justify-content-center mt-3" id="formularios_divididos2">
+                            <div class="col-5">
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" id="tiporecursoModelo">Tipo de recurso: </label>
+                                    </div>
+                                    <select class="custom-select" name="tipo_recurso" id="tipo_recurso" onchange="SeleccionaRecursoSelect(this);">
+                                        <option >Seleccione..</option>
+                                        <option value="0">Fórmula</option>
+                                        <option value="1">Función</option>
+                                        <option value="2">Servicio</option>
+                                  </select>
                                 </div>
-                                <input type="text" name="form_entidad_new" id="nombre_modelo_analisis" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="descripcionModelo">Descripción</span>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="recurso">Recurso:</label>
+                                    </div>
+                                    <select class="custom-select" name="recurso" id="recurso">
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="button">Mapeo de parametros</button>
+                                    </div>
                                 </div>
-                                <textarea type="text" name="form_entidad_new" id="descripcion_modelo_analisis" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" id="tiporecursoModelo">Tipo de recurso: </label>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" id="indicadorModelo">Indicador: </label>
+                                    </div>
+                                    <select class="custom-select" name="indicador_modelo" id="indicador_modelo">
+                                  </select>
                                 </div>
-                                <select class="custom-select" name="tipo_recurso" id="tipo_recurso">
-                                    <option value="1">Fórmula</option>
-                                    <option value="1">Función</option>
-                                    <option value="1">Servicio</option>
-                              </select>
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" id="recursoModelo">Recurso: </label>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="criterio_de_decision">Criterio de decisión:</label>
+                                    </div>
+                                    <select class="custom-select" name="criterio_de_decision" id="criterio_de_decision">
+                                        <option value=""></option>
+                                  </select>
                                 </div>
-                                <select class="custom-select" name="recurso" id="recurso">
-                              </select>
                             </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" id="indicadorModelo">Indicador: </label>
-                                </div>
-                                <select class="custom-select" name="indicador_modelo" id="indicador_modelo">
-                              </select>
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <label class="input-group-text" id="criterioModelo">Criterio de decisión: </label>
-                                </div>
-                                <select class="custom-select" name="criterio_de_decision" id="criterio_de_decision">
-                                    <option value=""></option>
-                              </select>
-                            </div>
-                        </div>
-                        <div class="col-7">
-                            <div id="umbrales_lista" class="overflow-auto container-fluid" style="overflow-y: auto;height: 400px;">
+                            <div class="col-7">
+                                <table class="table table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Inferior</th>
+                                            <th scope="col">Superior</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tbody id="tabla_umbrales_procesos">
+                                        </tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Guardar</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
+</div>
