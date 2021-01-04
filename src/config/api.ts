@@ -7,6 +7,7 @@ export default function (app: Application) {
   app.post("/api/del_deployment_resources/", api.del_deployment_resources);
   app.post("/api/ask_deployment_resources_select/", api.ask_deployment_resources_select);
   app.post("/api/ask_deployment_resources/", api.ask_deployment_resources);
+  app.post("/api/ask_input_arguments/", api.ask_input_arguments);
   app.get("/api/subjects/", api.subjects);
   app.post("/api/subjects_objects/", api.subjects_objects);
   app.post("/api/save_subjects_objects/", api.save_subjects_objects);

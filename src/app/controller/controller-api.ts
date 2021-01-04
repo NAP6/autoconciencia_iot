@@ -45,6 +45,17 @@ export function ask_deployment_resources(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+
+export function ask_input_arguments(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database();
+    db.sk_input_arguments(req.body.aspectoId,req.body.metricaId, (json: object) => {
+      res.json(json);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function deployment_resources(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database();

@@ -146,6 +146,15 @@ export class mysql_connector {
 
     });
   }
+  public sk_input_arguments(AspectoId: string,metricaT:string, func: Function) {
+    var sql = `SELECT met_id as id, met_nombre as nombre FROM metrica WHERE met_activo=1 AND aa_id=${AspectoId} AND met_tipo=${metricaT}`;
+     this.connector.query(sql, function (err, result) {
+      if (err) throw err;
+      func(result);
+ 
+
+    });
+  }
 
   public ask_tipo_recurso(json: resource, id: string, func: Function,) {
     if (json.tipoRecurso == "0") {
@@ -177,11 +186,11 @@ export class mysql_connector {
     }
   }
   public ask_parametros(json: resource, id: string, func: Function,) {
-    var sql = `SELECT par_ordinal as ordinal,par_nombre as nombre, par_opcional as opcional, par_activo as activo,par_tipo_dato as tipo FROM parametro  WHERE ri_id = '${id}'`;
+    var sql = `SELECT pa.par_ordinal as ordinal,pa.par_nombre as nombre, pa.par_opcional as opcional, pa.par_activo as activo,pa.par_tipo_dato as tipo,enu.enu_nombre_valor as nombre_salida FROM parametro pa, enumeracion enu  WHERE ri_id = '${id}' AND pa.par_tipo_dato=enu.enu_id`;
     this.connector.query(sql, function (err, result) {
       if (err) throw err;
       result.forEach(element => {
-        var par: parametros = { ordinal: element['ordinal'].toString(), nombre: element['nombre'], opcional: element['opcional'].toString(), activo: element['activo'].toString(), tipo: element['tipo'].toString() };
+        var par: parametros = { ordinal: element['ordinal'].toString(), nombre: element['nombre'], opcional: element['opcional'].toString(), activo: element['activo'].toString(), tipo: element['tipo'].toString(),tipoNombre:element['nombre_salida'] };
         json.arregloParametros.push(par);
       });
       var db = new mysql_connector();
@@ -3332,5 +3341,6 @@ interface parametros {
   tipo: string;
   opcional: string;
   activo: string;
+  tipoNombre?:string;
 
 }

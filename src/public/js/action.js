@@ -3602,7 +3602,6 @@ function abrirModalMapeoParametros() {
 }
 
 function cargar_modal_mapeo_parametros(json) {
-    console.log(json);
     document.getElementById("nombre_temporal_mapeo").innerHTML = json.nombre;
     document.getElementById("tipo_dato_salida_mapeo").innerHTML = json.EspecificoTipo.nombre_datoSalida;
     document.getElementById("descripcion_mapeo").innerHTML = json.descripcion;
@@ -3624,15 +3623,80 @@ function cargar_modal_mapeo_parametros(json) {
             tr.appendChild(argumentoEntrada);
             id.innerHTML = element.ordinal;
             nombre.innerHTML = element.nombre;
-            tipoDato.innerHTML = element.nombre;
-            nombre.innerHTML = element.nombre;
-            nombre.innerHTML = element.nombre;
-            nombre.innerHTML = element.nombre;
+            tipoDato.innerHTML = element.tipoNombre;
+            opcional.innerHTML = element.opcional == "1";
+            var select = document.createElement("select");
+            select.id = `tipo_mapeo_select_${element.ordinal}`;
+            select.name = `tipo_mapeo_select`;
+            select.dataset.ordinal = element.ordinal;
+            select.style.border = "transparent";
+            select.setAttribute(
+                "onChange",
+                `cargar_metricas_tipo_mapeo(this);`
+            );
+            var optionSeleccione = document.createElement("option");
+            optionSeleccione.innerHTML = "SELECCIONE..";
+            select.appendChild(optionSeleccione);
+            var selectMetricas = document.createElement("select");
+            selectMetricas.style.border = "transparent";
+            selectMetricas.id = `tipo_argumento_select_${element.ordinal}`;
+            selectMetricas.appendChild(optionSeleccione.cloneNode(true));
+            argumentoEntrada.appendChild(selectMetricas);
+            tipoMapeo.appendChild(select);
             tbody.appendChild(tr);
         }
-
     });
 
+    post_api(
+        "http://localhost:3000/api/get_enumeracion", { tipo: "TIPO_METRICA" },
+        cargar_select_mapeo_tipo,
+        (err) => {
+            alert(err);
+        }
+    );
+
+}
+
+function cargar_select_mapeo_tipo(json) {
+    console.log(json.nombre);
+    var select = document.getElementsByName("tipo_mapeo_select");
+    console.log(select);
+    Array.from(select).forEach(element => {
+        json.forEach(ele => {
+            var option = document.createElement("option");
+            option.value = ele.id;
+            option.innerHTML = ele.nombre;
+            element.appendChild(option);
+        });
+
+    });
+}
+
+function cargar_metricas_tipo_mapeo(elemento) {
+    data = {
+        aspectoId: document.getElementById("Aspectos_autoconsciencia").value,
+        metricaId: elemento.value,
+    }
+    post_api(
+        "http://localhost:3000/api/ask_input_arguments",
+        data,
+        cargar_select_argumento_entrada,
+        (err) => {
+            alert(err);
+        }
+    );
+    OrdinalGeneral=elemento.dataset.ordinal;
+}
+var OrdinalGeneral=undefined;
+function cargar_select_argumento_entrada(json) {
+var select=document.getElementById(`tipo_argumento_select_${OrdinalGeneral}`);
+select.innerHTML="<option>Seleccione</option>";
+json.forEach(ele=>{
+    var option = document.createElement("option");
+            option.value = ele.id;
+            option.innerHTML = ele.nombre;
+            select.appendChild(option);
+});
 }
 var UmbralId = undefined;
 
