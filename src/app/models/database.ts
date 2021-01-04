@@ -130,8 +130,8 @@ export class mysql_connector {
     });
   }
   public ask_deployment_resources(id: string, func: Function) {
-    var sql = `SELECT ri_nombre as nombre, ri_descripcion as descripcion, ri_tipo_dato_salida as tipo, ri_activo as activo, ri_tipo_recurso as recurso FROM recursoimplementacion WHERE ri_id = '${id}'`;
-    var respuesta: resource = { nombre: "", descripcion: "", tipoRecurso: "", EspecificoTipo: { datoSalida: "", instrucciones: "", endPoint: "", formatoSalida: "", formula: "" }, arregloParametros: [] };
+    var sql = `SELECT ri.ri_nombre as nombre, ri.ri_descripcion as descripcion, ri.ri_tipo_dato_salida as tipo, ri.ri_activo as activo, ri.ri_tipo_recurso as recurso,en.enu_nombre_valor as nombre_salida FROM recursoimplementacion ri ,enumeracion en WHERE ri_id = '${id}'  AND ri.ri_tipo_dato_salida=en.enu_id`;
+    var respuesta: resource = { nombre: "", descripcion: "", tipoRecurso: "", EspecificoTipo: { datoSalida: ""}, arregloParametros: [] };
     console.log(sql);
     this.connector.query(sql, function (err, result) {
       if (err) throw err;
@@ -139,6 +139,7 @@ export class mysql_connector {
       respuesta.nombre = result[0]['nombre'];
       respuesta.descripcion = result[0]['descripcion'];
       respuesta.EspecificoTipo.datoSalida = result[0]['tipo'].toString();
+      respuesta.EspecificoTipo.nombre_datoSalida = result[0]['nombre_salida'];
       respuesta.tipoRecurso = result[0]['recurso'].toString();
       var db = new mysql_connector();
       db.ask_parametros(respuesta, id, func);
@@ -191,7 +192,7 @@ export class mysql_connector {
 
 
   public add_deployment_resources(json: resource, func: Function) {
-    var sql = `INSERT INTO recursoimplementacion (ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso) VALUES ('${json.nombre}', '${json.descripcion}', '${json.EspecificoTipo.datoSalida}', '${json.tipoRecurso}');`;
+    var sql = `INSERT INTO recursoimplementacion (ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso) VALUES ('${json.nombre}', '${json.descripcion.replace("'","\\'")}', '${json.EspecificoTipo.datoSalida}', '${json.tipoRecurso}');`;
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       console.log(json);
@@ -3318,6 +3319,7 @@ interface resource {
     instrucciones?: string;
     endPoint?: string;
     datoSalida: string;
+    nombre_datoSalida?:string;
     formatoSalida?: string;
   };
   arregloParametros: [

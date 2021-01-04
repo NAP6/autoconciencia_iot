@@ -129,7 +129,11 @@ function cargar_recursos_de_implementacion_tabla(json) {
         clon.getElementById("x").appendChild(radio);
         clon.getElementById("id").innerHTML = elem.id;
         clon.getElementById("name").innerHTML = elem.nombre;
-        clon.getElementById("description").innerHTML = elem.descripcion;
+        if (elem.descripcion.length > 20) {
+            clon.getElementById("description").innerHTML = elem.descripcion.substring(0, 20) + " ...";
+        } else {
+            clon.getElementById("description").innerHTML = elem.descripcion;
+        }
         clon.getElementById("type").innerHTML = recurso[elem.tipo_recurso];
         table.appendChild(clon);
     });
@@ -3550,11 +3554,10 @@ $("#criterio_de_decision").change(function() {
 });
 
 function cargar_lista_umbrales_proceso(json) {
-    console.log(json);
     res = "";
-    json.forEach((cd) => {
-        res += `<tr onClick="">`;
-        res += `<td><input type="checkbox" name="umbral_seleccionado" value="${cd.id}" data-name="${cd.nombre}" data-inferior="${cd.inferior}" data-superior="${cd.superior}"></td>`;
+    json.umbrales.forEach((cd) => {
+        res += `<tr>`;
+        res += `<td><input type="checkbox" name="umbral_seleccionado" onClick="cargar_activos_umbrales(this);" data-id="${cd.id}" data-name="${cd.nombre}" data-inferior="${cd.inferior}" data-superior="${cd.superior}"></td>`;
         res += `<td>${cd.id}</td>`;
         res += `<td>${cd.nombre}</td>`;
         res += `<td>${cd.inferior}</td>`;
@@ -3566,6 +3569,70 @@ function cargar_lista_umbrales_proceso(json) {
 
 function error_cargar_lista_umbrales_proceso(err) {
     alert("No se puede cargar los umbrales" + err);
+}
+
+function cargar_activos_umbrales(element) {
+    $("#modal_proceso_pre_reflexivo").modal("hide");
+    $("#modal_activos_procesos").modal("show");
+
+    element.checked = false;
+}
+
+function cerrar_modal_activos() {
+    $("#modal_proceso_pre_reflexivo").modal("show");
+    $("#modal_activos_procesos").modal("hide");
+}
+
+function abrirModalMapeoParametros() {
+    var id = document.getElementById("recurso").value;
+    if (id) {
+        post_api(
+            "http://localhost:3000/api/ask_deployment_resources/", { id: id },
+            cargar_modal_mapeo_parametros,
+            (res) => {
+                console.log(res);
+            }
+        );
+        $("#modal_proceso_pre_reflexivo").modal("hide");
+        $("#modal_mapeo_parametros").modal("show");
+    } else {
+        alert("Debe seleccionar un recurso");
+    }
+
+}
+
+function cargar_modal_mapeo_parametros(json) {
+    console.log(json);
+    document.getElementById("nombre_temporal_mapeo").innerHTML = json.nombre;
+    document.getElementById("tipo_dato_salida_mapeo").innerHTML = json.EspecificoTipo.nombre_datoSalida;
+    document.getElementById("descripcion_mapeo").innerHTML = json.descripcion;
+    var tbody = document.getElementById("tabla_mapeo_parametros");
+    json.arregloParametros.forEach(element => {
+        if (element.activo == "1") {
+            var tr = document.createElement("tr");
+            var id = document.createElement("td");
+            tr.appendChild(id);
+            var nombre = document.createElement("td");
+            tr.appendChild(nombre);
+            var tipoDato = document.createElement("td");
+            tr.appendChild(tipoDato);
+            var opcional = document.createElement("td");
+            tr.appendChild(opcional);
+            var tipoMapeo = document.createElement("td");
+            tr.appendChild(tipoMapeo);
+            var argumentoEntrada = document.createElement("td");
+            tr.appendChild(argumentoEntrada);
+            id.innerHTML = element.ordinal;
+            nombre.innerHTML = element.nombre;
+            tipoDato.innerHTML = element.nombre;
+            nombre.innerHTML = element.nombre;
+            nombre.innerHTML = element.nombre;
+            nombre.innerHTML = element.nombre;
+            tbody.appendChild(tr);
+        }
+
+    });
+
 }
 var UmbralId = undefined;
 
