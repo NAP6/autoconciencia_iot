@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
+                <h5 class="modal-title text-center" style="width: 100%;">
                     Objetivos del sujeto de autoconsciencia
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -10,7 +10,7 @@
         </button>
             </div>
             <div class="modal-body">
-                <h5>Sujeto: <span id="nombreSujetoObjetoActivo"></span></h5>
+                <h6>Sujeto: <span id="nombreSujetoObjetoActivo"></span></h6>
                 <div class="row">
                     <div class="col-6">
                         <button class="btn btn-primary" onclick="activarFormularioAgregarObjeto()">
@@ -19,7 +19,7 @@
                         <button class="btn btn-primary" onclick="eliminarObjeto()">
               Eliminar
             </button>
-                        <h4 class="mt-4">Árbol de objetivos:</h4>
+                        <h6 class="mt-4">Árbol de objetivos:</h6>
                         <div id="arbol_objetivos_del_sujeto"></div>
                     </div>
                     <div class="col-6">
@@ -37,6 +37,8 @@
                 aria-label="Default"
                 aria-describedby="inputGroup-sizing-default1"
                 disabled
+                style=" text-transform:uppercase;"
+                onkeyup="javascript:this.value=this.value.toUpperCase();"
               />
             </div>
             <div class="input-group mb-4">
@@ -45,15 +47,17 @@
                   >Descripción</span
                 >
               </div>
-              <input
+              <textarea
                 type="text"
                 name="descripcionObjeto"
                 id="descripcionObjeto"
                 class="form-control"
                 aria-label="Default"
                 aria-describedby="inputGroup-sizing-default3"
+                style=" text-transform:uppercase;"
+                onkeyup="javascript:this.value=this.value.toUpperCase();"
                 disabled
-              />
+              ></textarea>
             </div>
             <div class="input-group mb-4">
               <div class="input-group-prepend">
@@ -62,7 +66,7 @@
                 >
               </div>
               <input
-                type="text"
+                type="number"
                 name="pesoObjeto"
                 id="pesoObjeto"
                 class="form-control"
@@ -90,8 +94,9 @@
                   class="form-check-input"
                   type="checkbox"
                   name="activoObjeto"
-                  id="activoObjeto"
-                  disabled
+                    id="activoObjeto"
+                   disabled
+                  checked
                 />
                 <label class="form-check-label" for="activoObjeto">
                   Activo

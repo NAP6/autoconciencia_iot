@@ -704,3 +704,15 @@ export function upd_ri(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function add_process_pre_reflexive(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var db = new database();
+    db.add_process_pre_reflexive(idUser, name, descripcion);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}

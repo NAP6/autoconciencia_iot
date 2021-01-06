@@ -1,9 +1,9 @@
 <div class="modal fade bd-example-modal-lg" id="modal_mapeo_parametros" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Mapeo Parametros</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title text-center" id="exampleModalLabel" style="width: 100%;">Mapeo Parametros</h5>
+                <button type="button" class="close" onclick="cancelar_mapeo_parametros()" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
             </div>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary">Guardar</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelar_mapeo_parametros()">Cancelar</button>
                 </div>
             </div>
         </div>

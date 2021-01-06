@@ -263,6 +263,7 @@ export class mysql_connector {
   }
   public get_subjectsObjects(subjectID: string, func: Function) {
     var sql = `SELECT obj_id as id, obj_nombre as nombre, obj_descripcion as descripcion, obj_peso as peso, obj_operacion_agregacion as asignacion, obj_activo as activo, obj_id_padre as padre  FROM objetivo WHERE suj_id = ${subjectID} ORDER BY id`;
+    console.log(sql);
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       func(result);
@@ -1459,6 +1460,21 @@ export class mysql_connector {
         listaUmedicion.push(auxmedicion);
       }
       func(listaUmedicion);
+    });
+  }
+  public add_process_pre_reflexive(
+    idUser: string,
+    name: string,
+    descripcion: string
+  ): void {
+    console.log(
+      `############# Envio a la funcion 'addUser_criteriaDecision' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}`
+    );
+    var sql = `INSERT INTO criteriodecision (cd_nombre, cd_descripcion, cd_activo) 
+    VALUES ('${name}', '${descripcion}', '1')`;
+    this.connector.query(sql, function (error, results) {
+      if (error) throw error;
+      //console.log('The solution is: ', results[0].solution);
     });
   }
 

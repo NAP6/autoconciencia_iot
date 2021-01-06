@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">
+                <h5 class="modal-title text-center" style="width: 100%;">
                     Metricas para evaluar aspectos de autoconsciencia
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -12,25 +12,25 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-4">
-                        <h5>Objeto: <span id="nombreEntidadActiva2"></span></h5>
+                        <h6>Objeto: <span id="nombreEntidadActiva2"></span></h6>
                     </div>
                     <div class="col-md-4 offset-md-0">
-                        <h5>Aspecto: <span id="nombreAspecto"></span></h5>
+                        <h6>Aspecto: <span id="nombreAspecto"></span></h6>
                     </div>
                 </div>
                 <br>
                 <div class="row justify-content-around">
                     <div class="col-3">
-                        <h5>Listado de métricas</h5>
+                        <h6>Listado de métricas</h6>
                     </div>
                     <div class="col-8">
-                        <div class="row">
-                            <button class="btn btn-primary" onclick="activarFormularioAgregarMetrica()">Agregar</button>
-                            <button class="btn btn-primary" onclick="eliminar_metrica()">Eliminar</button>
-                        </div>
+
+                        <button class="btn btn-primary" onclick="activarFormularioAgregarMetrica()">Agregar</button>
+                        <button class="btn btn-primary" onclick="eliminar_metrica()">Eliminar</button>
+
                     </div>
                 </div>
-                <div class="row">
+                <div class="row my-3">
                     <div class="col-6">
                         <div class="col">
                             <table class="table table-hover">
@@ -91,7 +91,7 @@
                             <div class="col-sm-2">Activo:</div>
                             <div class="col-sm-10">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="activoMetrica" disabled>
+                                    <input class="form-check-input" type="checkbox" id="activoMetrica" disabled checked>
                                 </div>
                             </div>
                         </div>

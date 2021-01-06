@@ -1014,7 +1014,6 @@ function activarFormularioAgregarObjeto() {
     document.getElementById("descripcionObjeto").disabled = false;
     document.getElementById("pesoObjeto").disabled = false;
     document.getElementById("operadorAsigObjetos").disabled = false;
-    document.getElementById("activoObjeto").disabled = false;
     document.getElementById("btn-agregarObjetoLista").disabled = false;
     var arbol = document.getElementsByName("item_arbol_objetos");
     var idSelected = null;
@@ -1038,7 +1037,7 @@ function desactivarFormularioAgregarObjeto() {
     document.getElementById("descripcionObjeto").value = "";
     document.getElementById("pesoObjeto").value = "";
     document.getElementById("operadorAsigObjetos").value = "";
-    document.getElementById("activoObjeto").checked = false;
+
 }
 
 function agregarObjeto() {
@@ -2066,6 +2065,12 @@ function Administrar_Metricas() {
 }
 
 function mensaje_exitoEnvioAspects(json) {
+    post_api(
+        "http://localhost:3000/api/aspects",
+        data,
+        cargar_aspectos_table,
+        error_cargar_aspectos_table
+    );
     alert(json.mensaje);
 }
 
@@ -2214,7 +2219,6 @@ function activarFormularioAgregarMetrica() {
         document.getElementById("escalas_seccion_entidad").disabled = false;
         document.getElementById("unidad_medida_metrica").disabled = false;
         document.getElementById("select_metrica").disabled = false;
-        document.getElementById("activoMetrica").disabled = false;
         document.getElementById("btn-agregarMetrica").disabled = false;
         document.getElementById("btn-CancelarMetrica").disabled = false;
     } catch (error) {
@@ -2783,7 +2787,6 @@ function activarFormularioAgregarEntidad() {
         document.getElementById("descripcionEntidad").disabled = false;
         document.getElementById("PesoEntidad").disabled = false;
         document.getElementById("tipo_aspectos").disabled = false;
-        document.getElementById("activoEntidad").disabled = false;
         document.getElementById("btn-agregarEntidadLista").disabled = false;
         document.getElementById("btn-agregarEntidadLista").disabled = false;
         document.getElementById("btn-CancelarEntidadLista").disabled = false;
@@ -2803,7 +2806,6 @@ function desactivarFormularioAgregarEntidad() {
     document.getElementById("nombreEntidad").value = "";
     document.getElementById("descripcionEntidad").value = "";
     document.getElementById("PesoEntidad").value = "";
-    document.getElementById("activoEntidad").value = "";
 }
 
 function agregarAspecto() {
@@ -2825,12 +2827,7 @@ function agregarAspecto() {
                 mensaje_exitoEnvioAspects,
                 mensaje_errorEnvioAspects
             );
-        post_api(
-            "http://localhost:3000/api/aspects",
-            data,
-            cargar_aspectos_table,
-            error_cargar_aspectos_table
-        );
+
     } else {
         alert("Debe llenar todos los campos");
     }
@@ -2885,9 +2882,7 @@ function GuardarMetrica() {
         tipo: tipoS,
         activo: document.getElementById("activoMetrica").checked,
     };
-    var data2 = {
-        id: AspectoId,
-    };
+
     if (!!data.nombre &&
         !!data.descripcion &&
         !!data.abreviatura &&
@@ -2902,14 +2897,10 @@ function GuardarMetrica() {
             mensaje_errorEnvioMetrica
         );
         desactivarFormularioAgregarMetrica();
-        post_api(
-            "http://localhost:3000/api/get_metrica",
-            data2,
-            cargar_aspectos_metrica_table,
-            error_cargar_aspectos_metrica_table
-        );
+
     }
 }
+
 
 function eliminar_metrica() {
     var radio = document.getElementsByName("metrica_seleccionado");
@@ -2942,6 +2933,15 @@ function eliminar_metrica() {
 }
 
 function mensaje_exitoEnvioMetrica(json) {
+    var data2 = {
+        id: AspectoId,
+    };
+    post_api(
+        "http://localhost:3000/api/get_metrica",
+        data2,
+        cargar_aspectos_metrica_table,
+        error_cargar_aspectos_metrica_table
+    );
     alert(json.mensaje);
 }
 
@@ -3248,8 +3248,40 @@ function agregarProcesoPreReflexivo() {
         cargar_select_criterios_proceso,
         error_cargar_select_criterios_proceso
     );
-    $("#modal_proceso_pre_reflexivo").modal("show");
 
+    Abrir_limpiar_modal_proceso_pre_reflexivo();
+
+
+}
+
+function Abrir_limpiar_modal_proceso_pre_reflexivo() {
+    document.getElementById("input-name-proceso-pre-reflexivo").value = "";
+    document.getElementById("input-descripcion-proceso-pre-reflexivo").value = "";
+    document.getElementById("inicio_del_periodo").value = "";
+    document.getElementById("fin_del_periodo").value = "";
+    document.getElementById("input-name-proceso-pre-reflexivo").value = "";
+    document.getElementById("CategoriaEntidadesProcesos").selectedIndex = "0";
+    document.getElementById("Aspectos_autoconsciencia").selectedIndex = "0";
+    document.getElementById("tipo_comunicacion").selectedIndex = "0";
+    document.getElementById("alcance_recoleccion").selectedIndex = "0";
+    document.getElementById("metrica_directa").selectedIndex = "0";
+    document.getElementById("tipo_recurso").selectedIndex = "0";
+    document.getElementById("recurso").selectedIndex = "0";
+    document.getElementById("indicador_modelo").selectedIndex = "0";
+    document.getElementById("criterio_de_decision").selectedIndex = "0";
+    document.getElementById("lista_entidades_seleccionadas_procesos").innerHTML = "";
+    document.getElementById("tabla_umbrales_procesos").innerHTML = "";
+    document.getElementById("Aspectos_autoconsciencia").disabled = true;
+    document.getElementById("tipo_comunicacion").disabled = true;
+    document.getElementById("alcance_recoleccion").disabled = true;
+    document.getElementById("proiedad_recoleccion").disabled = true;
+    document.getElementById("metrica_directa").disabled = true;
+    document.getElementById("tipo_recurso").disabled = true;
+    document.getElementById("indicador_modelo").disabled = true;
+    document.getElementById("criterio_de_decision").disabled = true;
+    document.getElementById("recurso").disabled = true;
+    document.getElementById("mapeo_parametros_btn").disabled = true;
+    $("#modal_proceso_pre_reflexivo").modal("show");
 }
 if (document.getElementById("lista_sujetos_activos_proceso"))
     consultar_api(
@@ -3406,6 +3438,7 @@ function error_cargar_posibles_entidades_modelo_proceso(error) {
 }
 
 function cargar_aspectos(elemento, lado) {
+    document.getElementById("Aspectos_autoconsciencia").disabled = false;
     var checkbox = document.getElementsByName("checkbox_entidades_procesos");
     var auxChecked = elemento.checked;
     Array.from(checkbox).forEach((element) => {
@@ -3425,7 +3458,8 @@ function cargar_aspectos(elemento, lado) {
 }
 
 function cargar_aspectos_select(json) {
-    res = "";
+    res = `<option>Seleccione..</option>`;
+
     json.forEach((as) => {
         res += `<option value='${as.id}'>${as.nombre}</option>`;
     });
@@ -3436,6 +3470,15 @@ function error_cargar_aspectos_select(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
 $("#Aspectos_autoconsciencia").change(function() {
+    document.getElementById("tipo_comunicacion").disabled = false;
+    document.getElementById("alcance_recoleccion").disabled = false;
+    document.getElementById("proiedad_recoleccion").disabled = false;
+    document.getElementById("metrica_directa").disabled = false;
+    document.getElementById("tipo_recurso").disabled = false;
+    document.getElementById("indicador_modelo").disabled = false;
+    document.getElementById("criterio_de_decision").disabled = false;
+
+
     var limpiar = document.getElementById("metrica_directa");
     limpiar.innerHTML = "";
     var seleccionIndicador = document.getElementById("Aspectos_autoconsciencia");
@@ -3472,7 +3515,10 @@ $("#Aspectos_autoconsciencia").change(function() {
 
 function cargar_select_metrica_proceso(json) {
     var ope = document.getElementById("metrica_directa");
+    var option = document.createElement("option");
+    option.innerHTML = "Seleccione..";
     ope.innerHTML = "";
+    ope.appendChild(option);
     json.forEach((element) => {
         var option = document.createElement("option");
         option.value = element.id;
@@ -3487,7 +3533,10 @@ function error_cargar_select_metrica_proceso() {
 
 function cargar_select_indicador_proceso(json) {
     var ope = document.getElementById("indicador_modelo");
+    var opcion = document.createElement("option");
+    opcion.innerHTML = "Seleccione..";
     ope.innerHTML = "";
+    ope.appendChild(opcion);
     json.forEach((element) => {
         var option = document.createElement("option");
         option.value = element.id;
@@ -3499,10 +3548,6 @@ function cargar_select_indicador_proceso(json) {
 function error_cargar_select_indicador_proceso() {
     alert("No se cargo el indicar metrica en el modal procesos");
 }
-
-
-
-
 
 function cargar_select_criterios_proceso(json) {
     var ope = document.getElementById("criterio_de_decision");
@@ -3524,7 +3569,10 @@ function error_cargar_select_criterios_proceso() {
 
 function cargar_select_tipo_comunicacion(json) {
     var ope = document.getElementById("tipo_comunicacion");
+    var opcion = document.createElement("option");
+    opcion.innerHTML = "Seleccione..";
     ope.innerHTML = "";
+    ope.appendChild(opcion);
     json.forEach((element) => {
         var option = document.createElement("option");
         option.value = element.id;
@@ -3579,7 +3627,7 @@ function cargar_activos_umbrales(element) {
 }
 
 function cerrar_modal_activos() {
-    $("#modal_proceso_pre_reflexivo").modal("show");
+    setTimeout(function() { $("#modal_proceso_pre_reflexivo").modal("show"); }, 500);
     $("#modal_activos_procesos").modal("hide");
 }
 
@@ -3685,18 +3733,19 @@ function cargar_metricas_tipo_mapeo(elemento) {
             alert(err);
         }
     );
-    OrdinalGeneral=elemento.dataset.ordinal;
+    OrdinalGeneral = elemento.dataset.ordinal;
 }
-var OrdinalGeneral=undefined;
+var OrdinalGeneral = undefined;
+
 function cargar_select_argumento_entrada(json) {
-var select=document.getElementById(`tipo_argumento_select_${OrdinalGeneral}`);
-select.innerHTML="<option>Seleccione</option>";
-json.forEach(ele=>{
-    var option = document.createElement("option");
-            option.value = ele.id;
-            option.innerHTML = ele.nombre;
-            select.appendChild(option);
-});
+    var select = document.getElementById(`tipo_argumento_select_${OrdinalGeneral}`);
+    select.innerHTML = "<option>Seleccione</option>";
+    json.forEach(ele => {
+        var option = document.createElement("option");
+        option.value = ele.id;
+        option.innerHTML = ele.nombre;
+        select.appendChild(option);
+    });
 }
 var UmbralId = undefined;
 
@@ -3831,6 +3880,8 @@ function guardar_eliminar_accion() {
 }
 
 function SeleccionaRecursoSelect(element) {
+    document.getElementById("recurso").disabled = false;
+    document.getElementById("mapeo_parametros_btn").disabled = false;
     if (element.value) {
         post_api(
             "http://localhost:3000/api/ask_deployment_resources_select/", { tipo: element.value },
@@ -3842,7 +3893,10 @@ function SeleccionaRecursoSelect(element) {
 
 function cargar_select_recurso_proceso(json) {
     var ope = document.createElement("select");
+    var opcion = document.createElement("option");
+    opcion.innerHTML = "Seleccione ..";
     ope.innerHTML = "";
+    ope.appendChild(opcion);
     json.forEach((element) => {
         var option = document.createElement("option");
         option.value = element.id;
@@ -3851,4 +3905,19 @@ function cargar_select_recurso_proceso(json) {
     });
     document.getElementById("recurso").innerHTML =
         ope.innerHTML;
+}
+
+function guardar_procesos_pre_reflexivos() {
+    alert("Los Datos se guardaron con Exito");
+    $("#modal_proceso_pre_reflexivo").modal("hide");
+}
+
+function cancelar_procesos_pre_reflexivos() {
+
+    $("#modal_proceso_pre_reflexivo").modal("hide");
+}
+
+function cancelar_mapeo_parametros() {
+    $("#modal_mapeo_parametros").modal("hide")
+    setTimeout(function() { $("#modal_proceso_pre_reflexivo").modal("show"); }, 500);
 }

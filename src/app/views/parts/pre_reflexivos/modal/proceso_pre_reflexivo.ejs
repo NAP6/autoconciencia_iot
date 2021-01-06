@@ -1,8 +1,8 @@
-<div class="modal fade bd-example-modal-lg" id="modal_proceso_pre_reflexivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modal_proceso_pre_reflexivo" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Proceso Pre-reflexivo</h5>
+                <h5 class="modal-title text-center" style="width: 100%;">Agregar Proceso Pre-reflexivo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -20,7 +20,7 @@
                         <div class="form-group row ">
                             <label for=" " class="col-sm-2 col-form-label ">Descripcion:</label>
                             <div class="col-sm-10 ">
-                                <textarea type="text " class="form-control " id="input-descripcion-proceso-pre-reflexivo " style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase(); "></textarea>
+                                <textarea type="text " class="form-control " id="input-descripcion-proceso-pre-reflexivo" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase(); "></textarea>
                             </div>
                         </div>
 
@@ -49,6 +49,7 @@
                         <h6>Categoría de objetos:</h6>
                         <div class="input-group col-11">
                             <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos">
+                                <option>Seleccione..</option>
                               <option id="1" value="1">Entidades Físicas</option>
                               <option value="2">Nodos Cloud</option>
                               <option value="3">Nodos Fog</option>
@@ -69,7 +70,7 @@
                 </div>
                 <h6 class="text-center">Aspectos de autoconsciencia</h6>
                 <div class="input-group col-11">
-                    <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia">
+                    <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia" disabled>
                     </select>
                 </div>
                 <nav class="mt-4">
@@ -86,14 +87,15 @@
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" id="tipo_comunicacion_metodos">Tipo de comunicación: </label>
                                     </div>
-                                    <select class="custom-select" name="tipo_comunicacion" id="tipo_comunicacion">
+                                    <select class="custom-select" name="tipo_comunicacion" id="tipo_comunicacion" disabled>
                                   </select>
                                 </div>
                                 <div class="input-group mb-4">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" id="alcance_recoleccion_metodos">Alcance de la recolección: </label>
                                     </div>
-                                    <select class="custom-select" name="alcance_recoleccion" id="alcance_recoleccion">
+                                    <select class="custom-select" name="alcance_recoleccion" id="alcance_recoleccion" disabled>
+                                        <option>Seleccione..</option>
                                         <option value="1">Unicamente el objeto seleccionado</option>
                                         <option value="2">Todos los objetos de la misma categoría</option>
                                   </select>
@@ -102,14 +104,14 @@
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" id="propiedad_recoleccion_metodos">Propiedad: </label>
                                     </div>
-                                    <select class="custom-select" name="proiedad_recoleccion" id="proiedad_recoleccion">
+                                    <select class="custom-select" name="proiedad_recoleccion" id="proiedad_recoleccion" disabled>
                                   </select>
                                 </div>
                                 <div class="input-group mb-4">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" id="metrica_metodos">Métrica directa: </label>
                                     </div>
-                                    <select class="custom-select" name="metrica_directa" id="metrica_directa">
+                                    <select class="custom-select" name="metrica_directa" id="metrica_directa" disabled>
                                   </select>
                                 </div>
                             </div>
@@ -122,7 +124,7 @@
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" id="tiporecursoModelo">Tipo de recurso: </label>
                                     </div>
-                                    <select class="custom-select" name="tipo_recurso" id="tipo_recurso" onchange="SeleccionaRecursoSelect(this);">
+                                    <select class="custom-select" name="tipo_recurso" id="tipo_recurso" onchange="SeleccionaRecursoSelect(this);" disabled>
                                         <option >Seleccione..</option>
                                         <option value="0">Fórmula</option>
                                         <option value="1">Función</option>
@@ -134,17 +136,17 @@
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="recurso">Recurso:</label>
                                     </div>
-                                    <select class="custom-select" name="recurso" id="recurso">
+                                    <select class="custom-select" name="recurso" id="recurso" disabled>
                                     </select>
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary" type="button" onclick="abrirModalMapeoParametros();">Mapeo de parametros</button>
+                                        <button class="btn btn-outline-secondary" id="mapeo_parametros_btn" type="button" onclick="abrirModalMapeoParametros();" disabled>Mapeo de parametros</button>
                                     </div>
                                 </div>
                                 <div class="input-group mb-4">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" id="indicadorModelo">Indicador: </label>
                                     </div>
-                                    <select class="custom-select" name="indicador_modelo" id="indicador_modelo">
+                                    <select class="custom-select" name="indicador_modelo" id="indicador_modelo" disabled>
                                   </select>
                                 </div>
 
@@ -152,7 +154,7 @@
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="criterio_de_decision">Criterio de decisión:</label>
                                     </div>
-                                    <select class="custom-select" name="criterio_de_decision" id="criterio_de_decision">
+                                    <select class="custom-select" name="criterio_de_decision" id="criterio_de_decision" disabled>
                                         <option value=""></option>
                                   </select>
                                 </div>
@@ -180,8 +182,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Guardar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardar_procesos_pre_reflexivos()">Guardar</button>
+                <button type="button" class="btn btn-secondary" onclick="cancelar_procesos_pre_reflexivos()">Cancelar</button>
             </div>
         </div>
     </div>
