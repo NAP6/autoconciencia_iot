@@ -60,6 +60,9 @@ export class json {
         auxEntity = this.extraerItems(element.subPhysicalEntity, true);
       }
       var data: systemEnt = { $: element.$ };
+      if(element.has){
+        data["has"]=element.has;
+    }
       if (auxComputing)
         data["comput"] = auxComputing;
       if (auxEntity)
@@ -93,7 +96,11 @@ export class json {
       if (element.subPhysicalEntity) {
         auxEntity = this.extraerItems(element.subPhysicalEntity, true);
       }
+      
       var data: systemEnt = { $: element.$ };
+      if(element.has){
+        data["has"]=element.has;
+    }
       if (auxComputing)
         data["comput"] = auxComputing;
       if (auxEntity)
@@ -118,6 +125,7 @@ interface systemEnt {
   $: { 'xsi:type'?: string; id: string; name: string; };
   comput?: ([systemEnt] | undefined);
   Entity?: ([systemEnt] | undefined);
+  has?:[{$:{id?:string,name?:string}}|undefined];
   containsResource?: ([systemEnt] | undefined);
 }
 

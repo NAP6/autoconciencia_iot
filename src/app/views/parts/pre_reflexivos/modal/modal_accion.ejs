@@ -1,83 +1,39 @@
-<div class="modal fullscreen-modal fade" id="modal_agregar_accion_proceso" tabindex="-1" aria-labelledby="" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered">
+<div class="modal fade" id="modal_agregar_accion_proceso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
                     Agregar Accion
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
+          <span aria-hidden="true">&times;</span>
+        </button>
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-4">
-                        <h5>Umbral: <span id="Nombre_umbral"></span></h5>
-                    </div>
-                </div>
-                <br>
-                <div class="row justify-content-around">
-                    <div class="col-3">
-                        <h5>Listado de Acciones</h5>
-                    </div>
-                    <div class="col-8">
-                        <div class="row">
-                            <button class="btn btn-primary" onclick="activarFormularioAgregarAccion()">Agregar</button>
-                            <button class="btn btn-primary" onclick="guardar_eliminar_accion()">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6">
-                        <div class="col">
-                            <table class="table table-hover">
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col">Descripcion</th>
-                                        <th scope="col">Activo</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="tabla_accion"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Nombre</span>
+                    <div class="col-sm">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Nombre:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" />
                             </div>
-                            <input name="form_entidad_new" id="nombre_accion" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                        <div class="input-group mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Descripción</span>
-                            </div>
-                            <textarea type="text" name="form_entidad_new" id="descripcion_accion" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
                         </div>
                         <div class="form-group row">
-                            <div class="col-sm-2">Activo:</div>
+                            <label for="" class="col-sm-2 col-form-label">Descripcion:</label>
                             <div class="col-sm-10">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="activoAccion" disabled>
-                                </div>
+                                <textarea type="text" class="form-control" id="" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
                             </div>
                         </div>
-                        <button class="btn btn-primary" id="btn-agregarAccion" onclick="GuardarAccion()" disabled>
-            Guardar
-          </button>
-                        <button class="btn btn-primary" id="btn-CancelarAccion" onclick="desactivarFormularioAgregarAccion()" disabled>
-            Cancelar
-          </button>
+
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="guardarNuevaEscala()">Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
-        Cancelar
-      </button>
+          Cancelar
+        </button>
+
             </div>
         </div>
     </div>

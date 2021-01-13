@@ -709,9 +709,79 @@ export function add_process_pre_reflexive(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
+    var inicioP = req.body.inicioP;
+    var finP = req.body.finP;
+    var aspId=req.body.aspId;
+    var sujId=req.body.sujId;
+    var paTipo=req.body.paTipo;
+    var objId=req.body.objId;
     var db = new database();
-    db.add_process_pre_reflexive(idUser, name, descripcion);
+    db.add_process_pre_reflexive(idUser, name, descripcion,inicioP,finP,aspId,objId,sujId,paTipo,(id: number) => {
+      res.json({id:id});
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function procesos_pre_reflexive(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.getUser_procesos_pre_reflexive(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function process_pre_reflexive_id(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id = req.body.id;
+  
+    var db = new database();
+    db.getUser_procesos_pre_reflexive_id(idUser, id,(jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function del_process_pre_reflexive(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var id = req.body.id;
+    var db = new database();
+    db.del_process_pre_reflexive(idUser, id);
     res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function add_metodo_modelo(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var tipoComunicacion = req.body.tipoC;
+    var metId = req.body.metId;
+    var metRecoleccion = req.body.metRecoleccion;
+    var proAlcance = req.body.proAlcance;
+    var modeloTipo=req.body.modeloTipo;
+    var criterioId=req.body.criterioId;
+    var db = new database();
+    db.add_metodo_modelo(idUser, tipoComunicacion, metId,metRecoleccion,proAlcance,modeloTipo,criterioId);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function properties(req: Request, res: Response) {
+  if (req.session?.user) {
+
+    var idObj=req.body.id;
+    var db = new database();
+    db.getUser_properties(idObj,(jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

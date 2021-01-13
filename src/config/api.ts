@@ -55,5 +55,10 @@ export default function (app: Application) {
   app.post("/api/add_ri/", api.add_ri);
   app.post("/api/del_ri/", api.del_ri);
   app.post("/api/upd_ri/", api.upd_ri);
+  app.get("/api/procesos_pre_reflexive/", api.procesos_pre_reflexive);
+  app.post("/api/procesos_pre_reflexive_id/", api.process_pre_reflexive_id);
   app.post("/api/add_process_pre_reflexive/", api.add_process_pre_reflexive);
+  app.post("/api/del_process_pre_reflexive/", api.del_process_pre_reflexive);
+  app.post("/api/properties/", api.properties);
+  app.post("/api/add_metodo_modelo",api.add_metodo_modelo);
 };
