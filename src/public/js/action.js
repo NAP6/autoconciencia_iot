@@ -2347,7 +2347,7 @@ if (document.getElementById("select_modelo_para_activar_trabajo"))
     );
 
 function cargar_modelos_trabajo_actual(json) {
-    res = "<option value=''>Seleccione un modelo para trabajar</option>";
+    res = "<option value='-6'>Seleccione un modelo para trabajar</option>";
     json.forEach((md) => {
         res += `<option value="${md.id}">${md.nombre}</option>`;
     });
@@ -3259,6 +3259,10 @@ function verificarSeleccion(elemento) {
 Procesos Pre Reflexivos
 */
 
+if (document.getElementById("pagina_proceso")) {
+    agregarProcesoPreReflexivo();
+}
+
 function agregarProcesoPreReflexivo() {
     var tipoComunicacion = "TIPO_COMUNICACION";
     data = {
@@ -3285,11 +3289,7 @@ function agregarProcesoPreReflexivo() {
         cargar_select_tipo_recoleccion,
         error_cargar_select_tipo_recoleccion
     );
-
-
     Abrir_limpiar_modal_proceso_pre_reflexivo();
-
-
 }
 
 function Abrir_limpiar_modal_proceso_pre_reflexivo() {
@@ -3309,6 +3309,7 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
     document.getElementById("inicio_del_periodo").value = "";
     document.getElementById("fin_del_periodo").value = "";
     document.getElementById("input-name-proceso-pre-reflexivo").value = "";
+    document.getElementById("id_proceso_pre_reflexivo").value = "";
     document.getElementById("CategoriaEntidadesProcesos").selectedIndex = "0";
     document.getElementById("Aspectos_autoconsciencia").selectedIndex = "0";
     document.getElementById("tipo_comunicacion").selectedIndex = "0";
@@ -3330,7 +3331,6 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
     document.getElementById("criterio_de_decision").disabled = true;
     document.getElementById("recurso").disabled = true;
     document.getElementById("mapeo_parametros_btn").disabled = true;
-    $("#modal_proceso_pre_reflexivo").modal("show");
 }
 if (document.getElementById("lista_sujetos_activos_proceso"))
     consultar_api(
@@ -3586,6 +3586,7 @@ $("#Aspectos_autoconsciencia").change(function() {
 function cargar_select_metrica_proceso(json) {
     var ope = document.getElementById("metrica_directa");
     var option = document.createElement("option");
+    option.value = "-6";
     option.innerHTML = "Seleccione..";
     ope.innerHTML = "";
     ope.appendChild(option);
@@ -3605,6 +3606,7 @@ function cargar_select_indicador_proceso(json) {
     var ope = document.getElementById("indicador_modelo");
     var opcion = document.createElement("option");
     opcion.innerHTML = "Seleccione..";
+    opcion.value = "-6";
     ope.innerHTML = "";
     ope.appendChild(opcion);
     json.forEach((element) => {
@@ -3624,6 +3626,7 @@ function cargar_select_criterios_proceso(json) {
     ope.innerHTML = "";
     var seleccione = document.createElement("option");
     seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
     ope.appendChild(seleccione);
     json.forEach((element) => {
         var option = document.createElement("option");
@@ -3641,6 +3644,7 @@ function cargar_select_tipo_comunicacion(json) {
     var ope = document.getElementById("tipo_comunicacion");
     var opcion = document.createElement("option");
     opcion.innerHTML = "Seleccione..";
+    opcion.value = "-6";
     ope.innerHTML = "";
     ope.appendChild(opcion);
     json.forEach((element) => {
@@ -3659,6 +3663,7 @@ function cargar_select_tipo_recoleccion(json) {
     var ope = document.getElementById("alcance_recoleccion");
     var opcion = document.createElement("option");
     opcion.innerHTML = "Seleccione..";
+    opcion.value = "-6";
     ope.innerHTML = "";
     ope.appendChild(opcion);
     json.forEach((element) => {
@@ -3726,13 +3731,12 @@ function error_cargar_lista_umbrales_proceso(err) {
 }
 
 function cargar_activos_umbrales() {
-    $("#modal_proceso_pre_reflexivo").modal("hide");
+
     $("#modal_activos_procesos").modal("show");
 
 }
 
 function cerrar_modal_activos() {
-    setTimeout(function() { $("#modal_proceso_pre_reflexivo").modal("show"); }, 500);
     $("#modal_activos_procesos").modal("hide");
 }
 
@@ -3747,7 +3751,6 @@ function abrirModalMapeoParametros() {
                 console.log(res);
             }
         );
-        $("#modal_proceso_pre_reflexivo").modal("hide");
         $("#modal_mapeo_parametros").modal("show");
     } else {
         alert("Debe seleccionar un recurso");
@@ -3763,17 +3766,25 @@ function cargar_modal_mapeo_parametros(json) {
     json.arregloParametros.forEach(element => {
         if (element.activo == "1") {
             var tr = document.createElement("tr");
+            tr.setAttribute("name", "tr_fila_parametros");
+            console.log("llega al tr xd");
             var id = document.createElement("td");
+            id.id = "id_fila_parametros";
             tr.appendChild(id);
             var nombre = document.createElement("td");
+            nombre.id = "nombre_fila_parametros"
             tr.appendChild(nombre);
             var tipoDato = document.createElement("td");
+            tipoDato.id = "tipo_dato_fila_parametros";
             tr.appendChild(tipoDato);
             var opcional = document.createElement("td");
+            opcional.id = "opcional_fila_parametros";
             tr.appendChild(opcional);
             var tipoMapeo = document.createElement("td");
+            tipoMapeo.id = "tipo_mapeo_fila_parametros";
             tr.appendChild(tipoMapeo);
             var argumentoEntrada = document.createElement("td");
+            argumentoEntrada.id = "argumento_entrada_fila_parametros";
             tr.appendChild(argumentoEntrada);
             id.innerHTML = element.ordinal;
             nombre.innerHTML = element.nombre;
@@ -3789,6 +3800,7 @@ function cargar_modal_mapeo_parametros(json) {
                 `cargar_metricas_tipo_mapeo(this);`
             );
             var optionSeleccione = document.createElement("option");
+            optionSeleccione.value = "-6";
             optionSeleccione.innerHTML = "SELECCIONE..";
             select.appendChild(optionSeleccione);
             var selectMetricas = document.createElement("select");
@@ -3844,7 +3856,7 @@ var OrdinalGeneral = undefined;
 
 function cargar_select_argumento_entrada(json) {
     var select = document.getElementById(`tipo_argumento_select_${OrdinalGeneral}`);
-    select.innerHTML = "<option>Seleccione</option>";
+    select.innerHTML = "<option value='-6'>Seleccione</option>";
     json.forEach(ele => {
         var option = document.createElement("option");
         option.value = ele.id;
@@ -3951,7 +3963,7 @@ function guardar_eliminar_accion() {
 
 function SeleccionaRecursoSelect(element) {
     document.getElementById("recurso").disabled = false;
-    document.getElementById("mapeo_parametros_btn").disabled = false;
+
     if (element.value) {
         post_api(
             "http://localhost:3000/api/ask_deployment_resources_select/", { tipo: element.value },
@@ -4030,11 +4042,7 @@ function guardar_procesos_pre_reflexivos() {
 }
 
 function mensaje_exitoEnvioproceso_pre_reflexivo(json) {
-    consultar_api(
-        "http://localhost:3000/api/procesos_pre_reflexive",
-        cargar_procesos_pre_reflexivos_table,
-        error_procesos_pre_reflexivos_table
-    );
+    console.log(json);
     document.getElementById("id_proceso_pre_reflexivo").value = json.id;
 }
 
@@ -4043,18 +4051,70 @@ function mensaje_errorEnvioproceso_pre_reflexivo(error) {
 }
 
 function guardar_modelos_metodos() {
-    var tipoComunicacion = document.getElementById("tipo_comunicacion").value;
-    var alcance = document.getElementById("alcance_recoleccion").value;
-    var propiedad = document.getElementById("proiedad_recoleccion").value;
-    var metrica = document.getElementById("metrica_metodos").value;
-    var tipoRecurso = document.getElementById("tipo_recurso").value;
-    var criterioDes = document.getElementById("criterio_de_decision").value;
+
+    var mr_tipo = document.getElementById("tipo_comunicacion").value;
+    var pro_alcance = document.getElementById("alcance_recoleccion").value;
+    var pro_id = document.getElementById("proiedad_recoleccion").value;
+    var met_id = document.getElementById("metrica_directa").value;
+    var ma_tipo = document.getElementById("tipo_recurso").value;
+    var criterio_id = document.getElementById("criterio_de_decision").value;
+    var proceso_id = document.getElementById("id_proceso_pre_reflexivo").value;
+    var indicador_id = document.getElementById("indicador_modelo").value;
+    if (mr_tipo != "-6" && pro_alcance != "-6" && ma_tipo != "-6" && criterio_id != "-6" && !!proceso_id && met_id != "-6" && indicador_id != "-6") {
+        console.log(met_id);
+        var datos = {
+            proceso_id: proceso_id,
+            m_recoleccion: {
+                mr_tipo: mr_tipo,
+                pro_id: pro_id == "-6" ? undefined : pro_id,
+                pro_alcance: pro_alcance,
+                met_id: met_id == "-6" ? undefined : met_id,
+            },
+            m_modelo: {
+                ma_tipo: ma_tipo,
+                criterio_id: criterio_id,
+                met_id: indicador_id,
+            }
+        }
+        console.log(datos.proceso_id + "-" + datos.met_id + "-" + datos.m_recoleccion.mr_tipo + "-" + datos.m_recoleccion.pro_id + "-" + datos.m_recoleccion.pro_alcance);
+        post_api(
+            "http://localhost:3000/api/add_metodo_modelo",
+            datos,
+            mensajeCorrectoGuardarMetodos,
+            errormensajeCorrectoGuardarMetodos,
+
+        )
+
+    } else {
+        alert("Debe tener los campos seleccionados");
+    }
+
+}
+
+function mensajeCorrectoGuardarMetodos() {
+    document.getElementById("tipo_comunicacion").disabled = true;
+    document.getElementById("alcance_recoleccion").disabled = true;
+    document.getElementById("proiedad_recoleccion").disabled = true;
+    document.getElementById("metrica_directa").disabled = true;
+    document.getElementById("tipo_recurso").disabled = true;
+    document.getElementById("indicador_modelo").disabled = true;
+    document.getElementById("criterio_de_decision").disabled = true;
+    document.getElementById("id_proceso_pre_reflexivo").disabled = true;
+    document.getElementById("mapeo_parametros_btn").disabled = false;
+    document.getElementById("btn-recomendaciones_model").disabled = false;
+    document.getElementById("recurso").disabled = true;
+    document.getElementById("btn-guardar_modelos_metodos").classList.replace("inline-block", "d-none", );
+
+
+
+    alert("Datos correctamente guardados");
+}
+
+function errormensajeCorrectoGuardarMetodos(error) {
+    console.log(error);
 }
 
 
-function cancelar_procesos_pre_reflexivos() {
-    $("#modal_proceso_pre_reflexivo").modal("hide");
-}
 if (document.getElementById("tabla_proceso_pre_reflexivo"))
     consultar_api(
         "http://localhost:3000/api/procesos_pre_reflexive",
@@ -4068,11 +4128,10 @@ function cargar_procesos_pre_reflexivos_table(json) {
         var ini = pro.inicio.split("T");
         var fin = pro.fin.split("T");
         res += "<tr>";
-        res += `<td><input type="radio" name="proceso_seleccionado" value="${pro.id }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-objeto="${pro.objeto}" data-aspecto="${pro.aspecto}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${pro.activo == "true"}"></td>`;
+        res += `<td><input type="radio" name="proceso_seleccionado" value="${pro.id }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-aspecto="${pro.aspecto}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${pro.activo == "true"}"></td>`;
         res += `<td>${pro.id}</td>`;
         res += `<td>${pro.nombre}</td>`;
         res += `<td>${pro.sujeto}</td>`;
-        res += `<td>${pro.objeto}</td>`;
         res += `<td>${pro.aspecto}</td>`;
         res += `<td>${ini[0]}</td>`;
         res += `<td>${fin[0]}</td>`;
@@ -4090,7 +4149,7 @@ function error_procesos_pre_reflexivos_table(error) {
 
 function cancelar_mapeo_parametros() {
     $("#modal_mapeo_parametros").modal("hide")
-    setTimeout(function() { $("#modal_proceso_pre_reflexivo").modal("show"); }, 500);
+
 }
 
 function modificarProcesoPreReflexivo() {
@@ -4138,6 +4197,24 @@ function elminarProcesoPreReflexivo() {
     } else alert("Debe seleccionar un proceso para eliminar");
 }
 
-function mensaje_errorEnvioproceso_pre_reflexivo() {
+function mensaje_errorEnvioproceso_pre_reflexivo(error) {
+    console.log(error);
+}
 
+function Guagar_nuevo_Mapeo() {
+    var nombreP = document.getElementsByName("tr_fila_parametros");
+    var aux = [];
+    Array.from(nombreP).forEach(element => {
+        var aux2 = {
+            nombre: element.querySelector("td#nombre_fila_parametros").innerHTML,
+            id: element.querySelector("td#id_fila_parametros").innerHTML,
+            tipoDato: element.querySelector("td#tipo_dato_fila_parametros").innerHTML,
+            opcional: element.querySelector("td#opcional_fila_parametros").innerHTML,
+            tipoMapeo: element.querySelector("td#tipo_mapeo_fila_parametros select").value,
+            argumentoEntrada: element.querySelector("td#argumento_entrada_fila_parametros select").value,
+        };
+        aux.push(aux2);
+
+    });
+    console.log(aux);
 }

@@ -3,7 +3,7 @@ export default {
 	"db-port": 3307,
 	"db-user": "root",
 	"db-password": "",
-	"db-schema": "db_autoconsciencia",
+	"db-schema": "db_autoconscienciaf",
 	"server-port": 3000,
 
 	//Diego BD

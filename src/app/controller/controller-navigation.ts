@@ -171,6 +171,20 @@ export function deployment_resources(req: Request, res: Response) {
     session: req.session,
   });
 }
+export function proceso_pre_reflexivo(req: Request, res: Response) {
+  res.render("proceso_pre_reflexivo", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+export function procesos_reflexivos(req: Request, res: Response) {
+  res.render("procesos_reflexivos", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
 export function generate_model(req: Request, res: Response) {
   res.render("generate_model", {
     error: req.flash("error"),

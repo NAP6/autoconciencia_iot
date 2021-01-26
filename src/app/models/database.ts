@@ -113,7 +113,7 @@ export class mysql_connector {
   public del_deployment_resources(id: string, func: Function) {
 
     var sql = `DELETE FROM recursoimplementacion WHERE ri_id = '${id}'`;
-  
+
     this.connector.query(sql, function (err, result) {
       if (err) throw err;
       func({ mensaje: "exito al eleminar" });
@@ -122,7 +122,7 @@ export class mysql_connector {
   public ask_deployment_resources_select(tipo: string, func: Function) {
     var sql = `SELECT ri_id as id, ri_nombre as nombre FROM recursoimplementacion WHERE ri_tipo_recurso = '${tipo}'`;
 
-    
+
     this.connector.query(sql, function (err, result) {
       if (err) throw err;
       func(result);
@@ -130,8 +130,8 @@ export class mysql_connector {
   }
   public ask_deployment_resources(id: string, func: Function) {
     var sql = `SELECT ri.ri_nombre as nombre, ri.ri_descripcion as descripcion, ri.ri_tipo_dato_salida as tipo, ri.ri_activo as activo, ri.ri_tipo_recurso as recurso,en.enu_nombre_valor as nombre_salida FROM recursoimplementacion ri ,enumeracion en WHERE ri_id = '${id}'  AND ri.ri_tipo_dato_salida=en.enu_id`;
-    var respuesta: resource = { nombre: "", descripcion: "", tipoRecurso: "", EspecificoTipo: { datoSalida: ""}, arregloParametros: [] };
-   
+    var respuesta: resource = { nombre: "", descripcion: "", tipoRecurso: "", EspecificoTipo: { datoSalida: "" }, arregloParametros: [] };
+
     this.connector.query(sql, function (err, result) {
       if (err) throw err;
       console.log(result[0]);
@@ -145,12 +145,12 @@ export class mysql_connector {
 
     });
   }
-  public sk_input_arguments(AspectoId: string,metricaT:string, func: Function) {
+  public sk_input_arguments(AspectoId: string, metricaT: string, func: Function) {
     var sql = `SELECT met_id as id, met_nombre as nombre FROM metrica WHERE met_activo=1 AND aa_id=${AspectoId} AND met_tipo=${metricaT}`;
-     this.connector.query(sql, function (err, result) {
+    this.connector.query(sql, function (err, result) {
       if (err) throw err;
       func(result);
- 
+
 
     });
   }
@@ -158,7 +158,7 @@ export class mysql_connector {
   public ask_tipo_recurso(json: resource, id: string, func: Function,) {
     if (json.tipoRecurso == "0") {
       var sql = `SELECT for_expresion as expresion FROM formula  WHERE ri_id = '${id}'`;
-    
+
       this.connector.query(sql, function (err, result) {
         if (err) throw err;
         json.EspecificoTipo.formula = result[0]['expresion'];
@@ -166,7 +166,7 @@ export class mysql_connector {
       });
     } else if (json.tipoRecurso == "1") {
       var sql = `SELECT fun_instrucciones as instrucciones FROM funcion WHERE ri_id = '${id}'`;
-      
+
       this.connector.query(sql, function (err, result) {
         if (err) throw err;
         json.EspecificoTipo.instrucciones = result[0]['instrucciones'];
@@ -189,7 +189,7 @@ export class mysql_connector {
     this.connector.query(sql, function (err, result) {
       if (err) throw err;
       result.forEach(element => {
-        var par: parametros = { ordinal: element['ordinal'].toString(), nombre: element['nombre'], opcional: element['opcional'].toString(), activo: element['activo'].toString(), tipo: element['tipo'].toString(),tipoNombre:element['nombre_salida'] };
+        var par: parametros = { ordinal: element['ordinal'].toString(), nombre: element['nombre'], opcional: element['opcional'].toString(), activo: element['activo'].toString(), tipo: element['tipo'].toString(), tipoNombre: element['nombre_salida'] };
         json.arregloParametros.push(par);
       });
       var db = new mysql_connector();
@@ -200,7 +200,7 @@ export class mysql_connector {
 
 
   public add_deployment_resources(json: resource, func: Function) {
-    var sql = `INSERT INTO recursoimplementacion (ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso) VALUES ('${json.nombre}', '${json.descripcion.replace("'","\\'")}', '${json.EspecificoTipo.datoSalida}', '${json.tipoRecurso}');`;
+    var sql = `INSERT INTO recursoimplementacion (ri_nombre, ri_descripcion, ri_tipo_dato_salida, ri_tipo_recurso) VALUES ('${json.nombre}', '${json.descripcion.replace("'", "\\'")}', '${json.EspecificoTipo.datoSalida}', '${json.tipoRecurso}');`;
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       console.log(json);
@@ -210,14 +210,13 @@ export class mysql_connector {
           if (err) throw err;
         });
       } else if (json.tipoRecurso == "1") {
-        sql = `INSERT INTO funcion (fun_instrucciones,fun_pre_existente, ri_id) VALUES ('${json.EspecificoTipo.instrucciones}','${json.EspecificoTipo.preExistent? 1 : 0}', '${result.insertId}');`;
-  
+        sql = `INSERT INTO funcion (fun_instrucciones,fun_pre_existente, ri_id) VALUES ('${json.EspecificoTipo.instrucciones}','${json.EspecificoTipo.preExistent ? 1 : 0}', '${result.insertId}');`;
         this.connector.query(sql, (err, result) => {
           if (err) throw err;
         });
       } else if (json.tipoRecurso == "2") {
-        sql = `INSERT INTO servicio (ser_punto_final, ser_instrucciones,ser_pre_existente, ser_tipo_formato_dato_salida, ri_id) VALUES ('${json.EspecificoTipo.endPoint}', '${json.EspecificoTipo.instrucciones}','${json.EspecificoTipo.preExistent? 1 : 0}', '${json.EspecificoTipo.formatoSalida}', '${result.insertId}')`;
-       
+        sql = `INSERT INTO servicio (ser_punto_final, ser_instrucciones,ser_pre_existente, ser_tipo_formato_dato_salida, ri_id) VALUES ('${json.EspecificoTipo.endPoint}', '${json.EspecificoTipo.instrucciones}','${json.EspecificoTipo.preExistent ? 1 : 0}', '${json.EspecificoTipo.formatoSalida}', '${result.insertId}')`;
+
         this.connector.query(sql, (err, result) => {
           if (err) throw err;
         });
@@ -227,7 +226,7 @@ export class mysql_connector {
           }', '${parametro!.nombre}', '${parametro!.opcional == "true" ? 1 : 0
           }', '${parametro!.activo == "true" ? 1 : 0}', '${parametro!.tipo}', '${result.insertId
           }');`;
-      
+
         this.connector.query(sql, (err, result) => {
           if (err) throw err;
         });
@@ -246,7 +245,7 @@ export class mysql_connector {
   }
 
   public get_subjects(modelID: string, func: Function) {
-    var sql = `SELECT suj_id as id, suj_nombre as nombre, suj_activo as activo, suj_id_padre as padre FROM sujeto WHERE ma_id = ${modelID} ORDER BY id`;
+    var sql = `SELECT suj_id as id, suj_nombre as nombre, suj_activo as activo, suj_padre as padre FROM sujeto WHERE ma_id = ${modelID} ORDER BY id`;
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       func(result);
@@ -261,8 +260,8 @@ export class mysql_connector {
     });
   }
   public get_subjectsObjects(subjectID: string, func: Function) {
-    var sql = `SELECT obj_id as id, obj_nombre as nombre, obj_descripcion as descripcion, obj_peso as peso, obj_operacion_agregacion as asignacion, obj_activo as activo, obj_id_padre as padre  FROM objetivo WHERE suj_id = ${subjectID} ORDER BY id`;
-  
+    var sql = `SELECT obj_id as id, obj_nombre as nombre, obj_descripcion as descripcion, obj_peso as peso, obj_operacion_agregacion as asignacion, obj_activo as activo, obj_padre as padre  FROM objetivo WHERE suj_id = ${subjectID} ORDER BY id`;
+
     this.connector.query(sql, (err, result) => {
       if (err) throw err;
       func(result);
@@ -283,7 +282,7 @@ export class mysql_connector {
   ) {
     var sql = ``;
     if (newObject.id_padre) {
-      sql = `INSERT INTO objetivo (obj_nombre, obj_descripcion, obj_peso, obj_operacion_agregacion, suj_id, obj_activo, obj_id_padre) VALUES ('${newObject.nombre
+      sql = `INSERT INTO objetivo (obj_nombre, obj_descripcion, obj_peso, obj_operacion_agregacion, suj_id, obj_activo, obj_padre) VALUES ('${newObject.nombre
         }', '${newObject.descripcion}', '${newObject.peso}', '${newObject.operador
         }', '${newObject.sujeto_id}', '${newObject.activo ? 1 : 0}', '${newObject.id_padre
         }');`;
@@ -338,7 +337,7 @@ export class mysql_connector {
     if (i != -1) {
       listaS.splice(i, 1);
     }
-    var sql = `SELECT obj_id as id, obj_tipo as tipo, obj_nombre as nombre, obj_activo as activo, obj_id_padre as padre FROM objeto WHERE ma_id = ${modelID} AND `;
+    var sql = `SELECT obj_id as id, obj_tipo as tipo, obj_nombre as nombre, obj_activo as activo, obj_padre as padre FROM objeto WHERE ma_id = ${modelID} AND `;
     select = listaS.pop();
     listaS.forEach((element) => {
       sql += `obj_tipo!='${element}' AND `;
@@ -363,7 +362,7 @@ export class mysql_connector {
   ) {
     var sql = ``;
     if (subjectSup) {
-      sql = `INSERT INTO sujeto (ma_id, suj_nombre, suj_id_padre) VALUES (${modelID}, '${subject.$.name}', ${subjectSup});`;
+      sql = `INSERT INTO sujeto (ma_id, suj_nombre, suj_padre) VALUES (${modelID}, '${subject.$.name}', ${subjectSup});`;
     } else {
       sql = `INSERT INTO sujeto (ma_id, suj_nombre) VALUES (${modelID}, '${subject.$.name}')`;
     }
@@ -415,13 +414,13 @@ export class mysql_connector {
       !(entity.$["xsi:type"] == "Actuator") &&
       !(entity.$["xsi:type"] == "IoTGateway")
     ) {
-      sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre, obj_id_padre) VALUES (${modelID},'${entity.$["xsi:type"]}','${entity.$.name}', ${subjectSup});`;
+      sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre, obj_padre) VALUES (${modelID},'${entity.$["xsi:type"]}','${entity.$.name}', ${subjectSup});`;
     } else {
       sql = `INSERT INTO objeto (ma_id, obj_tipo, obj_nombre) VALUES (${modelID}, '${entity.$["xsi:type"]}', '${entity.$.name}')`;
     }
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
-      if(entity.has){
+      if (entity.has) {
         var db = new mysql_connector();
         db.save_properties(entity, results.insertId);
       }
@@ -445,16 +444,16 @@ export class mysql_connector {
       }
     });
   }
-  public save_properties(system:systemEnt,id:string){
-    var sql =`INSERT INTO propiedades(prop_nombre,obj_id) VALUES `;
+  public save_properties(system: systemEnt, id: string) {
+    var sql = `INSERT INTO propiedad(pro_nombre,obj_id) VALUES `;
     system.has?.forEach(element => {
       sql += `('${element?.$.name}','${id}'),`;
     });
-    sql = sql.substr(0,sql.length-1);
-    
+    sql = sql.substr(0, sql.length - 1);
+
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
-    
+
     });
   }
   public update_entity(id: string, active: string) {
@@ -695,7 +694,7 @@ export class mysql_connector {
       `############# Envio a la funcion 'getUser_escales' el id de usuario '${userID}`
     );
     this.connector.query(
-      `SELECT esc_id, esc_nombre, esc_valor_valido, esc_tipo, esc_activo
+      `SELECT esc_id, esc_nombre, esc_valores_validos, esc_tipo, esc_activo
       FROM escala`,
       (err, result, fields) => {
         if (err) err;
@@ -722,7 +721,7 @@ export class mysql_connector {
           var auxescala = {
             id: result[i]["esc_id"],
             nombre: result[i]["esc_nombre"],
-            valor_valido: result[i]["esc_valor_valido"],
+            valor_valido: result[i]["esc_valores_validos"],
             tipo: tip,
             activo: act,
           };
@@ -749,7 +748,7 @@ export class mysql_connector {
       tip = 4;
     }
     this.connector.query(
-      `INSERT INTO escala (esc_nombre, esc_valor_valido, esc_tipo, esc_activo) 
+      `INSERT INTO escala (esc_nombre, esc_valores_validos, esc_tipo, esc_activo) 
       VALUES ('${name}', '${valor_valido}','${tip}', '1')`,
       function (error, results) {
         if (error) throw error;
@@ -800,7 +799,7 @@ export class mysql_connector {
     }
     this.connector.query(
       `UPDATE escala 
-      SET esc_nombre = '${name}', esc_valor_valido = '${valor_valido}', esc_tipo = '${tip}', esc_activo = '${act}'
+      SET esc_nombre = '${name}', esc_valores_validos = '${valor_valido}', esc_tipo = '${tip}', esc_activo = '${act}'
       WHERE esc_id = '${id}'`,
       function (err, result) {
         if (err) throw err;
@@ -1011,7 +1010,7 @@ export class mysql_connector {
     }
     this.connector.query(
       `UPDATE escala 
-      SET esc_nombre = '${name}', esc_valor_valido = '${valor_valido}', esc_tipo = '${tip}', esc_activo = '${act}'
+      SET esc_nombre = '${name}', esc_valores_validos = '${valor_valido}', esc_tipo = '${tip}', esc_activo = '${act}'
       WHERE esc_id = '${id}'`,
       function (err, result) {
         if (err) throw err;
@@ -1272,7 +1271,7 @@ export class mysql_connector {
       } else {
         act = 0;
       }
-      var sql = `INSERT INTO aspectoautoconsciencia (aa_nombre, aa_descripcion, aa_alcance, aa_tipo, obj_id, aa_activo) 
+      var sql = `INSERT INTO aspectoautoconsciencia (aa_nombre, aa_descripcion, aa_peso, aa_tipo, obj_id, aa_activo) 
     VALUES ('${name}', '${descripcion}','${peso}','${idTipo}','${id}', '${act}')`;
       this.connector.query(sql, function (error, results) {
         if (error) throw error;
@@ -1458,7 +1457,7 @@ export class mysql_connector {
     var act;
     var sql = `SELECT met_id, met_nombre
     FROM metrica WHERE (SELECT aa_id From aspectoautoconsciencia WHERE aa_nombre='${id}') = aa_id AND met_tipo = (SELECT enu_id FROM enumeracion WHERE enu_nombre_valor='${tipo}' ) Order BY met_id`;
-    
+
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaUmedicion: Array<object> = [];
@@ -1476,22 +1475,22 @@ export class mysql_connector {
     idUser: string,
     name: string,
     descripcion: string,
-    inicioP:string,
-    finP:string,
-    aspId:string,
-    objId:string,
-    sujId:string,
-    paTipo:string,
-    func:Function,
+    inicioP: string,
+    finP: string,
+    aspId: string,
+    objId: string,
+    sujId: string,
+    paTipo: string,
+    func: Function,
   ): void {
     console.log(
       `############# Envio a la funcion 'addUser_procesos_pre_reflexivos' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}`
     );
-    var sql = `INSERT INTO procesoautoconsciencia (pa_nombre, pa_descripcion, pa_inico_periodo,pa_fin_periodo,pa_activo,aa_id,suj_id,obj_id,pa_tipo) 
-    VALUES ('${name}', '${descripcion}','${inicioP}','${finP}','1','${aspId}','${sujId}','${objId}','${paTipo}')`;
+    var sql = `INSERT INTO procesoautoconsciencia (pa_nombre, pa_descripcion, pa_inico_periodo_ejecucion,pa_fin_periodo_ejecucion,pa_activo,aa_id,suj_id,pa_tipo) 
+    VALUES ('${name}', '${descripcion}','${inicioP}','${finP}','1','${aspId}','${sujId}','${paTipo}')`;
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
-     func(results.insertId)
+      func(results.insertId)
     });
   }
 
@@ -1499,7 +1498,7 @@ export class mysql_connector {
     userID: string,
     func: Function
   ): void {
-    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo as inicio,pro.pa_fin_periodo as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto,ob.obj_nombre as objeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp, objeto ob,sujeto su WHERE asp.aa_id=pro.aa_id AND ob.obj_id=pro.obj_id AND su.suj_id =pro.suj_id`;
+    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo_ejecucion as inicio,pro.pa_fin_periodo_ejecucion as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp,sujeto su WHERE asp.aa_id=pro.aa_id AND su.suj_id =pro.suj_id ORDER BY pro.pa_id`;
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaProcesos: { procesos: Array<object> } = {
@@ -1507,10 +1506,10 @@ export class mysql_connector {
       };
       var act;
       for (const i in result) {
-        if(result[i]["activo"]==1){
-          act="true";
-        }else {
-          act="false";
+        if (result[i]["activo"] == 1) {
+          act = "true";
+        } else {
+          act = "false";
         }
         var auxmedicion = {
           id: result[i]["id"],
@@ -1521,7 +1520,7 @@ export class mysql_connector {
           aspecto: result[i]["aspecto"],
           sujeto: result[i]["sujeto"],
           objeto: result[i]["objeto"],
-          activo:act,
+          activo: act,
         };
         listaProcesos.procesos.push(auxmedicion);
       }
@@ -1530,7 +1529,7 @@ export class mysql_connector {
   }
   public getUser_procesos_pre_reflexive_id(
     userID: string,
-    id:string,
+    id: string,
     func: Function
   ): void {
     var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo as inicio,pro.pa_fin_periodo as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto,ob.obj_nombre as objeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp, objeto ob,sujeto su WHERE pro.pa_id=${id} AND asp.aa_id=pro.aa_id AND ob.obj_id=pro.obj_id AND su.suj_id =pro.suj_id`;
@@ -1541,10 +1540,10 @@ export class mysql_connector {
       };
       var act;
       for (const i in result) {
-        if(result[i]["activo"]==1){
-          act="true";
-        }else {
-          act="false";
+        if (result[i]["activo"] == 1) {
+          act = "true";
+        } else {
+          act = "false";
         }
         var auxmedicion = {
           id: result[i]["id"],
@@ -1555,7 +1554,7 @@ export class mysql_connector {
           aspecto: result[i]["aspecto"],
           sujeto: result[i]["sujeto"],
           objeto: result[i]["objeto"],
-          activo:act,
+          activo: act,
         };
         listaProcesos.procesos.push(auxmedicion);
       }
@@ -1580,7 +1579,7 @@ export class mysql_connector {
     id: string,
     func: Function
   ): void {
-    var sql = `SELECT prop_id as id, prop_nombre as nombre FROM propiedades WHERE obj_id=${id}`;
+    var sql = `SELECT pro_id as id, pro_nombre as nombre FROM propiedad WHERE obj_id=${id}`;
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       func(result);
@@ -1588,21 +1587,49 @@ export class mysql_connector {
   }
 
   public add_metodo_modelo(
-    idUser: string,
-    tipoComunicacion: string,
-    metId: string,
-    metRecoleccion:string,
-    proAlcance:string,
-    modeloTipo:string,
-    criterioId:string,
+    data: metodo_modelo_proceso,
   ): void {
-    console.log(
-      `############# Envio a la funcion 'addUser_metodos_modelos`
-    );
-    var sql="";
+    var idSup;
+
+    var sql = `INSERT INTO metodoaprendizajerazonamiento (pa_id,mea_tipo,met_id) VALUES ('${data.proceso_id}','${21}','${data.m_recoleccion.met_id}')`;
+    console.log(sql);
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
-      //console.log('The solution is: ', results[0].solution);
+      idSup = results.insertId;
+      console.log(data.m_recoleccion);
+      var sql2 = `INSERT INTO metodorecoleccion (mr_tipo_comunicacion,pro_id,mr_alcance_recoleccion,mea_id) VALUES ('${data.m_recoleccion.mr_tipo}',${data.m_recoleccion.pro_id==undefined?"NULL":"'"+data.m_recoleccion.pro_id+"'"},'${data.m_recoleccion.pro_alcance}','${idSup}')`;
+      console.log(sql2);
+      var db = new mysql_connector();
+      db.connector.query(sql2, function (error, results) {
+        if (error) throw error;
+      });
+    });
+     sql = `INSERT INTO metodoaprendizajerazonamiento (pa_id,mea_tipo,met_id) VALUES ('${data.proceso_id}','${22}','${data.m_modelo.met_id}')`;
+    console.log(sql);
+    this.connector.query(sql, function (error, results) {
+      if (error) throw error;
+      idSup = results.insertId;
+      console.log(data.m_recoleccion);
+      var sql4=`INSERT INTO modeloanalisis (ma_tipo_recurso,cd_id,mea_id) VALUES ('${data.m_modelo.ma_tipo}','${data.m_modelo.criterio_id}','${idSup}')`
+      console.log(sql4);
+      var db = new mysql_connector();
+      db.connector.query(sql4, function (error, results) {
+        if (error) throw error;
+      });
+    });
+  }
+
+  public add_mapeo_parametros(
+    data:[mapeo_parametros],
+  ): void {
+    var stryaux="";
+    data.forEach(element => {
+      stryaux=`('${element.par_ordinal}', '${element.mea_id}','${element.mp_tipo_entrada}','${element.met_id}','1','${element.vs_id}','${element.md_id}')`;
+    });
+    var sql = `INSERT INTO mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
+    VALUES `+stryaux;
+    this.connector.query(sql, function (error, results) {
+      if (error) throw error;
     });
   }
   // La atributo variable no existe, solo le pusimos para probar
@@ -3460,7 +3487,7 @@ interface systemEnt {
   $: { 'xsi:type'?: string; id: string; name: string; };
   comput?: ([systemEnt] | undefined);
   Entity?: ([systemEnt] | undefined);
-  has?:[{$:{id?:string,name?:string}}|undefined];
+  has?: [{ $: { id?: string, name?: string } } | undefined];
   containsResource?: ([systemEnt] | undefined);
 }
 interface resource {
@@ -3472,9 +3499,9 @@ interface resource {
     instrucciones?: string;
     endPoint?: string;
     datoSalida: string;
-    nombre_datoSalida?:string;
+    nombre_datoSalida?: string;
     formatoSalida?: string;
-    preExistent?:Boolean;
+    preExistent?: Boolean;
   };
   arregloParametros: [
     parametros?
@@ -3486,6 +3513,29 @@ interface parametros {
   tipo: string;
   opcional: string;
   activo: string;
-  tipoNombre?:string;
+  tipoNombre?: string;
 
+}
+interface metodo_modelo_proceso {
+  proceso_id: string;
+  m_recoleccion: {
+    mr_tipo: string;
+    pro_id: string;
+    pro_alcance: string;
+    met_id:string;
+  };
+  m_modelo: {
+    ma_tipo: string;
+    criterio_id: string;
+    met_id:string;
+  }
+}
+
+interface mapeo_parametros{
+  par_ordinal:string;
+  mea_id:string;
+  mp_tipo_entrada:string;
+  met_id:string;
+  vs_id:string;
+  md_id:string;
 }

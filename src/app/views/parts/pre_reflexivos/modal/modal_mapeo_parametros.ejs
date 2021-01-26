@@ -10,24 +10,31 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col">
-                        <div class="row">
-                            <div class="col-12">
+                        <div class="col-12 col-lg-12">
+                            <h6>Recurso Implementacion:</h6>
+                            <div class="card" style="height: 160px; width: 1080px;">
                                 <div class="row">
-                                    <div class="col">
-                                        <h5>Nombre:</h5>
-                                        <p id="nombre_temporal_mapeo">Nombre Temporal</p>
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5>Nombre:</h5>
+                                                <p id="nombre_temporal_mapeo">Nombre Temporal</p>
+                                            </div>
+                                            <div class="col">
+                                                <h5>Tipo dato de salida:</h5>
+                                                <p id="tipo_dato_salida_mapeo"></p>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col">
-                                        <h5>Tipo dato de salida:</h5>
-                                        <p id="tipo_dato_salida_mapeo"></p>
+                                        <h5>Descripcion:</h5>
+                                        <p id="descripcion_mapeo"></p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
-                                <h5>Descripcion:</h5>
-                                <p id="descripcion_mapeo"></p>
-                            </div>
+                            <br>
                         </div>
+
                         <table class="table table-hover">
                             <thead class="thead-dark">
                                 <tr>
@@ -44,7 +51,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Guardar</button>
+                    <button type="button" class="btn btn-primary" onclick="Guagar_nuevo_Mapeo()">Guardar</button>
                     <button type="button" class="btn btn-secondary" onclick="cancelar_mapeo_parametros()">Cancelar</button>
                 </div>
             </div>

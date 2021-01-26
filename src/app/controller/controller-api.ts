@@ -760,19 +760,27 @@ export function del_process_pre_reflexive(req: Request, res: Response) {
 }
 export function add_metodo_modelo(req: Request, res: Response) {
   if (req.session?.user) {
-    var idUser = req.session?.user.userID;
-    var tipoComunicacion = req.body.tipoC;
-    var metId = req.body.metId;
-    var metRecoleccion = req.body.metRecoleccion;
-    var proAlcance = req.body.proAlcance;
-    var modeloTipo=req.body.modeloTipo;
-    var criterioId=req.body.criterioId;
+    var data:metodo_modelo_proceso=req.body;
+    console.log(data);
     var db = new database();
-    db.add_metodo_modelo(idUser, tipoComunicacion, metId,metRecoleccion,proAlcance,modeloTipo,criterioId);
+    db.add_metodo_modelo(data);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
+  
+}
+export function add_mapeo_parametros(req: Request, res: Response) {
+  if (req.session?.user) {
+    var data:[mapeo_parametros]=req.body;
+    console.log(data);
+    var db = new database();
+    db.add_mapeo_parametros(data);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+  
 }
 export function properties(req: Request, res: Response) {
   if (req.session?.user) {
@@ -785,4 +793,26 @@ export function properties(req: Request, res: Response) {
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
+}
+interface metodo_modelo_proceso {
+  proceso_id: string;
+  m_recoleccion:{
+    mr_tipo:string;
+    pro_id:string;
+    pro_alcance:string;
+    met_id:string;
+  };
+  m_modelo:{
+    ma_tipo:string;
+    criterio_id:string;
+    met_id:string;
+  }
+}
+interface mapeo_parametros{
+  par_ordinal:string;
+  mea_id:string;
+  mp_tipo_entrada:string;
+  met_id:string;
+  vs_id:string;
+  md_id:string;
 }

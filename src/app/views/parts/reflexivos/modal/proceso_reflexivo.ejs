@@ -1,0 +1,80 @@
+<div class="container" id="pagina_proceso_reflexivo">
+    <div class="row">
+        <div class="col">
+            <h6></h6>
+            <div class="col">
+                <input type="text" class="d-none" id="id_proceso_reflexivo">
+                <div class="form-group row">
+                    <label for="" class="col-sm-2 col-form-label">Nombre:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="input-name-proceso-reflexivo" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase(); " />
+                    </div>
+                </div>
+
+                <div class="form-group row ">
+                    <label for=" " class="col-sm-2 col-form-label ">Descripcion:</label>
+                    <div class="col-sm-10 ">
+                        <textarea type="text " class="form-control " id="input-descripcion-proceso-reflexivo" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase(); "></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col">
+            <h6>Periodo de ejecución:</h6>
+            <div class="col card" style="height: 102px;">
+                <div class="form-group row">
+                    <label for="" class="col-sm-2 col-form-label">Inicio:</label>
+                    <input type="date" id="inicio_del_periodo_reflexivo" name="inicio_del_periodo_reflexivo" value="" min="2020-01-01" max="2050-01-01">
+                </div>
+                <div class="form-group row">
+                    <label for="" class="col-sm-2 col-form-label">Fin:</label>
+                    <input type="date" id="fin_del_periodo_reflexivo" name="fin_del_periodo_reflexivo" value="" min="2020-01-01" max="2050-01-01">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            <h6>Sujetos de autoconsciencia:</h6>
+            <div id="sujetos_activos_proceso_reflexivos" class="card col-12 col-lg-10" style="overflow-y: auto;height: 166px;">
+                <ul id="lista_sujetos_activos_proceso_reflexivo"></ul>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <h6>Categoría de objetos:</h6>
+            <div class="input-group col-11">
+                <select class="custom-select" name="CategoriaEntidadesProcesos_reflexivos" id="CategoriaEntidadesProcesos_reflexivos">
+                                <option>Seleccione..</option>
+                              <option id="1" value="1">Entidades Físicas</option>
+                              <option value="2">Nodos Cloud</option>
+                              <option value="3">Nodos Fog</option>
+                              <option value="4">Gateway IoT</option>
+                              <option value="5">Sensores</option>
+                              <option value="6">Tags</option>
+                              <option value="7">Actuadores</option>
+                              <option value="8">Red</option>
+                            </select>
+            </div>
+            <h6>Objeto de autoconsciencia:</h6>
+            <div class="col-sm-11">
+                <div id="entidades_seleccionados_area_procesos_reflexivos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
+                    <ul id="lista_entidades_seleccionadas_procesos_reflexivos"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h6 class="text-center">Aspectos de autoconsciencia</h6>
+    <div class="input-group col-11">
+        <select class="custom-select" name="Aspectos_autoconsciencia_reflexivos" id="Aspectos_autoconsciencia_reflexivos" disabled>
+                    </select>
+    </div>
+    <%- include('modal_metodo_modelos_reflexivos'); %>
+</div>
+<div class="modal-footer">
+    <button type="button" id="btn-guarda_procesos_reflexivos" class="btn btn-primary inline-block" onclick="guardar_procesos_reflexivos()">Guardar proceso reflexivo</button>
+    <button type="button" id="btn-guardar_modelos_metodos_reflexivos" class="btn btn-primary d-none" onclick="guardar_modelos_metodos_reflexivos()">Guardar</button>
+    <a type="button" class="btn btn-secondary" href="reflexivos">Cancelar</a>
+</div>
