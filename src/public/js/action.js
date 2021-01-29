@@ -3789,6 +3789,7 @@ function cargar_modal_mapeo_parametros(json) {
             id.innerHTML = element.ordinal;
             nombre.innerHTML = element.nombre;
             tipoDato.innerHTML = element.tipoNombre;
+            tipoDato.dataset.id = element.tipo;
             opcional.innerHTML = element.opcional == "1";
             var select = document.createElement("select");
             select.id = `tipo_mapeo_select_${element.ordinal}`;
@@ -4091,7 +4092,7 @@ function guardar_modelos_metodos() {
 
 }
 
-function mensajeCorrectoGuardarMetodos() {
+function mensajeCorrectoGuardarMetodos(json) {
     document.getElementById("tipo_comunicacion").disabled = true;
     document.getElementById("alcance_recoleccion").disabled = true;
     document.getElementById("proiedad_recoleccion").disabled = true;
@@ -4105,7 +4106,8 @@ function mensajeCorrectoGuardarMetodos() {
     document.getElementById("recurso").disabled = true;
     document.getElementById("btn-guardar_modelos_metodos").classList.replace("inline-block", "d-none", );
 
-
+    console.log(json)
+    document.getElementById("id_metodo_aprendizaje_directo").value = json.join("-");
 
     alert("Datos correctamente guardados");
 }
@@ -4204,17 +4206,364 @@ function mensaje_errorEnvioproceso_pre_reflexivo(error) {
 function Guagar_nuevo_Mapeo() {
     var nombreP = document.getElementsByName("tr_fila_parametros");
     var aux = [];
+    var mea_id_rec = document.getElementById("id_metodo_aprendizaje_directo").value.split("-");
     Array.from(nombreP).forEach(element => {
         var aux2 = {
             nombre: element.querySelector("td#nombre_fila_parametros").innerHTML,
-            id: element.querySelector("td#id_fila_parametros").innerHTML,
-            tipoDato: element.querySelector("td#tipo_dato_fila_parametros").innerHTML,
+            par_ordinal: element.querySelector("td#id_fila_parametros").innerHTML,
+            mp_tipo_entrada: element.querySelector("td#tipo_dato_fila_parametros").dataset.id,
             opcional: element.querySelector("td#opcional_fila_parametros").innerHTML,
             tipoMapeo: element.querySelector("td#tipo_mapeo_fila_parametros select").value,
-            argumentoEntrada: element.querySelector("td#argumento_entrada_fila_parametros select").value,
+            met_id: element.querySelector("td#argumento_entrada_fila_parametros select").value,
+            mea_id: mea_id_rec[0],
+        };
+        var aux3 = {
+            nombre: aux2.nombre,
+            par_ordinal: aux2.par_ordinal,
+            mp_tipo_entrada: aux2.mp_tipo_entrada,
+            opcional: aux2.opcional,
+            tipoMapeo: aux2.tipoMapeo,
+            met_id: aux2.met_id,
+            mea_id: mea_id_rec[1],
         };
         aux.push(aux2);
+        aux.push(aux3);
 
     });
-    console.log(aux);
+
+    post_api(
+        "http://localhost:3000/api/add_mapeo_parametros/",
+        aux,
+        mensaje_correcto_envio_mapeo,
+        mensaje_error_envio_mapeo,
+    );
+}
+
+function mensaje_correcto_envio_mapeo(json) {
+    alert("Dtos guardados correctamente" + json);
+    $("#modal_mapeo_parametros").modal("hide");
+
+}
+
+function mensaje_error_envio_mapeo(error) {
+    alert("error mapeo" + error);
+}
+
+if (document.getElementById("pagina_proceso_reflexivo")) {
+    agregarProcesoReflexivo();
+}
+
+function agregarProcesoReflexivo() {
+    Abrir_limpiar_modal_proceso_reflexivo();
+}
+
+function Abrir_limpiar_modal_proceso_reflexivo() {
+    document.getElementById("id_proceso_reflexivo").value = "";
+    document.getElementById("nombre_proceso_reflexivo").value = "";
+    document.getElementById("descripcion_proceso_reflexivo").value = "";
+    document.getElementById("inicio_del_periodo_reflexivo").value = "";
+    document.getElementById("fin_del_periodo_reflexivo").value = "";
+    document.getElementById("CategoriaEntidadesProcesos_reflexivos").selectedIndex = "0";
+    document.getElementById("Aspectos_autoconsciencia_reflexivos").selectedIndex = "0";
+    document.getElementById("btn-guarda_procesos_reflexivos").classList.replace("d-none", "inline-block");
+    document.getElementById("btn-guardar_modelos_metodos_reflexivos").classList.replace("inline-block", "d-none");
+    document.getElementById("inicio_del_periodo_reflexivo_metodo").value = "";
+    document.getElementById("fin_del_periodo_reflexivo_metodo").value = "";
+    document.getElementById("tipo_recurso_metodos_reflexivo").selectedIndex = "0";
+    document.getElementById("recurso_reflexivos").selectedIndex = "0";
+    document.getElementById("metrica_indirecta_reflexivos").selectedIndex = "0";
+    document.getElementById("tipo_recurso_modelos_reflexivos").selectedIndex = "0";
+
+    document.getElementById("nombre_proceso_reflexivo").disabled = false;
+    document.getElementById("descripcion_proceso_reflexivo").disabled = false;
+    document.getElementById("inicio_del_periodo_reflexivo").disabled = false;
+    document.getElementById("fin_del_periodo_reflexivo").disabled = false;
+    document.getElementById("sujetos_activos_proceso_reflexivos").disabled = false;
+    document.getElementById("CategoriaEntidadesProcesos_reflexivos").disabled = true;
+    document.getElementById("Aspectos_autoconsciencia_reflexivos").disabled = true;
+
+    document.getElementById("inicio_del_periodo_reflexivo_metodo").disabled = true;
+    document.getElementById("fin_del_periodo_reflexivo_metodo").disabled = true;
+    document.getElementById("tipo_recurso_metodos_reflexivo").disabled = true;
+    document.getElementById("recurso_reflexivos").disabled = true;
+    document.getElementById("mapeo_parametros_btn").disabled = true;
+    document.getElementById("metrica_indirecta_reflexivos").disabled = true;
+    document.getElementById("escenario_simulacion").disabled = true;
+    document.getElementById("tipo_recurso_modelos_reflexivos").disabled = true;
+    document.getElementById("recurso_modelos").disabled = true;
+    document.getElementById("mapeo_parametros_modelo").disabled = true;
+
+
+}
+if (document.getElementById("lista_sujetos_activos_proceso_reflexivo")) {
+    consultar_api(
+        "http://localhost:3000/api/subjects",
+        cargar_sujetos_activos_procesos_reflexivos,
+        error_cargar_sujetos_activos_procesos_reflexivos
+    );
+}
+
+function cargar_sujetos_activos_procesos_reflexivos(json) {
+    var aux_visible_activo = new Set();
+    var aux_visible_inactivo = new Set();
+    json.forEach((elemento) => {
+        if (!!elemento.padre && elemento.activo == 1) {
+            aux_visible_activo.add(elemento.padre);
+        } else if (!!elemento.padre && elemento.activo == 0) {
+            aux_visible_inactivo.add(elemento.padre);
+        }
+    });
+    json.forEach((elemento) => {
+        var insertar;
+        if (!elemento.padre) {
+            insertar = document.getElementById("lista_sujetos_activos_proceso_reflexivo");
+        } else {
+            insertar = document.createElement("ul");
+            document
+                .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+                .appendChild(insertar);
+        }
+        li = document.createElement("li");
+        li.id = `li_entidad_seleccionado_${elemento.id}`;
+        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+            li.style.display = "list-item";
+        } else {
+            li.style.display = "none";
+        }
+        divFormCheck = document.createElement("div");
+        divFormCheck.classList.add("form-check");
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `sujeto_seleccionado_${elemento.id}`;
+        checkbox.name = "checkbox_sujetos_procesos_reflexivos";
+        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.puro_id = elemento.id;
+        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.setAttribute("onclick", "verificarSeleccionProceso_reflexivo(this);");
+        labelChek = document.createElement("label");
+        labelChek.classList.add("form-check-label");
+        labelChek.htmlFor = checkbox.id;
+        var button = document.createElement("button");
+        button.classList.add("btn", "py-0", "px-0");
+        button.innerHTML = elemento.nombre;
+        labelChek.appendChild(button);
+        li.appendChild(divFormCheck);
+        divFormCheck.appendChild(checkbox);
+        divFormCheck.appendChild(labelChek);
+        insertar.appendChild(li);
+    });
+}
+
+function error_cargar_sujetos_activos_procesos_reflexivos(error) {
+    alert("Error al cargar los datos del modelo: " + error);
+}
+var sujetoGuardarproceso_reflexivo = undefined;
+
+function verificarSeleccionProceso_reflexivo(elemento) {
+    var checkbox = document.getElementsByName("checkbox_sujetos_procesos_reflexivos");
+    var auxChecked = elemento.checked;
+    sujetoGuardarproceso_reflexivo = elemento.dataset.puro_id;
+    Array.from(checkbox).forEach((element) => {
+        element.checked = false;
+        document.getElementById("CategoriaEntidadesProcesos_reflexivos").disabled = true;
+    });
+    elemento.checked = auxChecked;
+    document.getElementById("CategoriaEntidadesProcesos_reflexivos").disabled = false;
+}
+$("#CategoriaEntidadesProcesos_reflexivos").change(function() {
+    var limpiar2 = document.getElementById(
+        "lista_entidades_seleccionadas_procesos_reflexivos"
+    );
+    limpiar2.innerHTML = "";
+    var seleccion = document.getElementById("CategoriaEntidadesProcesos_reflexivos");
+    var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
+    data = {
+        valorS: tipo_valor,
+    };
+    post_api(
+        "http://localhost:3000/api/entity",
+        data,
+        cargar_posibles_entidades_modelo_proceso_reflexivo,
+        error_cargar_posibles_entidades_modelo_proceso_reflexivo
+    );
+});
+
+function cargar_posibles_entidades_modelo_proceso_reflexivo(json) {
+    var aux_visible_activo = new Set();
+    var aux_visible_inactivo = new Set();
+    json.forEach((elemento) => {
+        if (!!elemento.padre && elemento.activo == 1) {
+            aux_visible_activo.add(elemento.padre);
+        } else if (!!elemento.padre && elemento.activo == 0) {
+            aux_visible_inactivo.add(elemento.padre);
+        }
+    });
+    json.forEach((elemento) => {
+        var insertar;
+        if (!elemento.padre) {
+            insertar = document.getElementById(
+                "lista_entidades_seleccionadas_procesos_reflexivos"
+            );
+        } else {
+            insertar = document.createElement("ul");
+            var insertarAux = document.getElementById(
+                `li_ent_seleccionado_${elemento.padre}`
+            );
+            if (insertarAux) {
+                insertarAux.appendChild(insertar);
+            }
+        }
+        li = document.createElement("li");
+        li.id = `li_ent_seleccionado_${elemento.id}`;
+        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+            li.style.display = "list-item";
+        } else {
+            li.style.display = "none";
+        }
+        divFormCheck = document.createElement("div");
+        divFormCheck.classList.add("form-check");
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.classList.add(
+            "form-check-input",
+            `hijo_entidad_de_${elemento.padre}_seleccionado`,
+            "checkbox_seleccionado_entidad"
+        );
+        checkbox.id = `sujeto_seleccionado_procesos_${elemento.id}`;
+        checkbox.name = "checkbox_entidades_procesos_reflexivos";
+        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.puro_id = elemento.id;
+        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.setAttribute("onclick", "cargar_aspectos_reflexivos(this,'seleccionado');");
+        labelChek = document.createElement("label");
+        labelChek.classList.add("form-check-label");
+        labelChek.htmlFor = checkbox.id;
+        var button = document.createElement("button");
+        button.classList.add("btn", "py-0", "px-0");
+        button.innerHTML = elemento.nombre;
+        labelChek.appendChild(button);
+        li.appendChild(divFormCheck);
+        divFormCheck.appendChild(checkbox);
+        divFormCheck.appendChild(labelChek);
+        insertar.appendChild(li);
+    });
+}
+
+function error_cargar_posibles_entidades_modelo_proceso_reflexivo(error) {
+    alert("Error al cargar los datos del modelo: " + error);
+}
+var obj_Id_reflexivos = undefined;
+
+function cargar_aspectos_reflexivos(elemento, lado) {
+    document.getElementById("Aspectos_autoconsciencia_reflexivos").disabled = false;
+    var checkbox = document.getElementsByName("checkbox_entidades_procesos_reflexivos");
+    var auxChecked = elemento.checked;
+    obj_Id_reflexivos = elemento.dataset.puro_id;
+    Array.from(checkbox).forEach((element) => {
+        element.checked = false;
+    });
+    elemento.checked = auxChecked;
+    var idObjeto = elemento.dataset.puro_id;
+    var data = {
+        id: idObjeto,
+    };
+    post_api(
+        "http://localhost:3000/api/aspects",
+        data,
+        cargar_aspectos_select_reflexivos,
+        error_cargar_aspectos_select_reflexivos
+    );
+}
+
+function cargar_aspectos_select_reflexivos(json) {
+    res = `<option value="-6">Seleccione..</option>`;
+
+    json.forEach((as) => {
+        res += `<option value='${as.id}'>${as.nombre}</option>`;
+    });
+    document.getElementById("Aspectos_autoconsciencia_reflexivos").innerHTML = res;
+}
+
+function error_cargar_aspectos_select_reflexivos(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+
+function guardar_procesos_reflexivos() {
+    var nombre = document.getElementById("nombre_proceso_reflexivo").value;
+    var descripcion = document.getElementById("descripcion_proceso_reflexivo").value;
+    var inicioP = document.getElementById("inicio_del_periodo_reflexivo").value;
+    var finP = document.getElementById("fin_del_periodo_reflexivo").value;
+    var objetoId = obj_Id_reflexivos;
+    var sujetoId = sujetoGuardarproceso_reflexivo;
+    var aspId = document.getElementById("Aspectos_autoconsciencia_reflexivos").value;
+    if (!!nombre && !!descripcion && !!inicioP && !!finP && !!objetoId && !!sujetoId && aspId != "-6") {
+        data = {
+            nombre: nombre,
+            descripcion: descripcion,
+            inicioP: inicioP,
+            finP: finP,
+            aspId: aspId,
+            sujId: sujetoId,
+            objId: objetoId,
+            paTipo: "18",
+        }
+        post_api(
+            "http://localhost:3000/api/add_process_pre_reflexive/",
+            data,
+            mensaje_exitoEnvioproceso_pre_reflexivo,
+            mensaje_errorEnvioproceso_pre_reflexivo
+        );
+        document.getElementById("nombre_proceso_reflexivo").disabled = true;
+        document.getElementById("descripcion_proceso_reflexivo").disabled = true;
+        document.getElementById("inicio_del_periodo_reflexivo_metodo").disabled = true;
+        document.getElementById("fin_del_periodo_reflexivo_metodo").disabled = true;
+        document.getElementById("sujetos_activos_proceso_reflexivos").disabled = true;
+        document.getElementById("CategoriaEntidadesProcesos_reflexivos").disabled = true;
+        document.getElementById("lista_entidades_seleccionadas_procesos_reflexivos").disabled = true;
+        document.getElementById("Aspectos_autoconsciencia_reflexivos").disabled = true;
+        var checkSujetos = document.getElementsByName("checkbox_entidades_procesos_reflexivos");
+        var checkObjetos = document.getElementsByName("checkbox_entidades_procesos_reflexivos");
+        Array.from(checkSujetos).forEach(element => {
+            element.disabled = true;
+        });
+        Array.from(checkObjetos).forEach(element => {
+            element.disabled = true;
+        });
+        document.getElementById("btn-guarda_procesos_reflexivos").classList.replace("inline-block", "d-none");
+        document.getElementById("btn-guardar_modelos_metodos_reflexivos").classList.replace("d-none", "inline-block");
+        document.getElementById("modal_metodo_reflexivos_add").classList.replace("d-none", "d-block");
+    } else {
+        alert("Debe Llenar todos los campos");
+    }
+}
+if (document.getElementById("tabla_proceso_reflexivo"))
+    consultar_api(
+        "http://localhost:3000/api/procesos_reflexive",
+        cargar_procesos_reflexivos_table,
+        error_procesos_reflexivos_table
+    );
+
+function cargar_procesos_reflexivos_table(json) {
+    res = "";
+    json.procesos.forEach((pro) => {
+        var ini = pro.inicio.split("T");
+        var fin = pro.fin.split("T");
+        res += "<tr>";
+        res += `<td><input type="radio" name="proceso_reflexivo_seleccionado" value="${pro.id }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-aspecto="${pro.aspecto}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${pro.activo == "true"}"></td>`;
+        res += `<td>${pro.id}</td>`;
+        res += `<td>${pro.nombre}</td>`;
+        res += `<td>${pro.sujeto}</td>`;
+        res += `<td>${pro.aspecto}</td>`;
+        res += `<td>${ini[0]}</td>`;
+        res += `<td>${fin[0]}</td>`;
+        if (pro.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_proceso_reflexivo").innerHTML = res;
+}
+
+function error_procesos_reflexivos_table(error) {
+    console.log(error);
 }

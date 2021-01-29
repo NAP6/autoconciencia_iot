@@ -2,7 +2,8 @@
     <div class="row">
         <div class="col">
             <input type="text" class="d-none" id="id_proceso_pre_reflexivo">
-            <div class="form-group row">
+            <input type="text" class="d-none" id="id_metodo_aprendizaje_directo">
+            <div class="form-group mt-4 row">
                 <label for="" class="col-sm-2 col-form-label">Nombre:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="input-name-proceso-pre-reflexivo" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase(); " />
@@ -18,11 +19,10 @@
 
 
         </div>
-
         <div class="col">
-
-            <div class="col card" style="height: 118px;">
-                <div class="form-group row">
+            <h6>Periodo de ejecucion:</h6>
+            <div class="col card" style="height: 115px;">
+                <div class="form-group mt-2 row">
                     <label for="" class="col-sm-2 col-form-label">Inicio:</label>
                     <input type="date" id="inicio_del_periodo" name="inicio_del_periodo" value="" min="2020-01-01" max="2050-01-01">
                 </div>
@@ -44,7 +44,7 @@
         <div class="col-6">
             <h6>Categoría de objetos:</h6>
             <div class="input-group col-11">
-                <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos">
+                <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
                                 <option>Seleccione..</option>
                               <option id="1" value="1">Entidades Físicas</option>
                               <option value="2">Nodos Cloud</option>

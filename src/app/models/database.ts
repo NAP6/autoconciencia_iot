@@ -129,7 +129,7 @@ export class mysql_connector {
     });
   }
   public ask_deployment_resources(id: string, func: Function) {
-    var sql = `SELECT ri.ri_nombre as nombre, ri.ri_descripcion as descripcion, ri.ri_tipo_dato_salida as tipo, ri.ri_activo as activo, ri.ri_tipo_recurso as recurso,en.enu_nombre_valor as nombre_salida FROM recursoimplementacion ri ,enumeracion en WHERE ri_id = '${id}'  AND ri.ri_tipo_dato_salida=en.enu_id`;
+    var sql = `SELECT ri.ri_nombre as nombre, ri.ri_descripcion as descripcion, ri.ri_tipo_dato_salida as tipo , ri.ri_activo as activo, ri.ri_tipo_recurso as recurso,en.enu_nombre_valor as nombre_salida FROM recursoimplementacion ri ,enumeracion en WHERE ri_id = '${id}'  AND ri.ri_tipo_dato_salida=en.enu_id`;
     var respuesta: resource = { nombre: "", descripcion: "", tipoRecurso: "", EspecificoTipo: { datoSalida: "" }, arregloParametros: [] };
 
     this.connector.query(sql, function (err, result) {
@@ -1498,7 +1498,7 @@ export class mysql_connector {
     userID: string,
     func: Function
   ): void {
-    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo_ejecucion as inicio,pro.pa_fin_periodo_ejecucion as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp,sujeto su WHERE asp.aa_id=pro.aa_id AND su.suj_id =pro.suj_id ORDER BY pro.pa_id`;
+    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo_ejecucion as inicio,pro.pa_fin_periodo_ejecucion as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp,sujeto su WHERE asp.aa_id=pro.aa_id AND su.suj_id =pro.suj_id AND pro.pa_tipo=17 ORDER BY pro.pa_id`;
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaProcesos: { procesos: Array<object> } = {
@@ -1532,7 +1532,8 @@ export class mysql_connector {
     id: string,
     func: Function
   ): void {
-    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo as inicio,pro.pa_fin_periodo as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto,ob.obj_nombre as objeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp, objeto ob,sujeto su WHERE pro.pa_id=${id} AND asp.aa_id=pro.aa_id AND ob.obj_id=pro.obj_id AND su.suj_id =pro.suj_id`;
+    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo as inicio,pro.pa_fin_periodo as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto,ob.obj_nombre as objeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp, objeto ob,sujeto su WHERE pro.pa_id=${id} AND asp.aa_id=pro.aa_id AND ob.obj_id=pro.obj_id AND su.suj_id =pro.suj_id `;
+    console.log(sql);
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaProcesos: { procesos: Array<object> } = {
@@ -1588,48 +1589,91 @@ export class mysql_connector {
 
   public add_metodo_modelo(
     data: metodo_modelo_proceso,
+    func:Function
   ): void {
-    var idSup;
-
+    var idSup1;
+    var idSup2;
     var sql = `INSERT INTO metodoaprendizajerazonamiento (pa_id,mea_tipo,met_id) VALUES ('${data.proceso_id}','${21}','${data.m_recoleccion.met_id}')`;
     console.log(sql);
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
-      idSup = results.insertId;
-      console.log(data.m_recoleccion);
-      var sql2 = `INSERT INTO metodorecoleccion (mr_tipo_comunicacion,pro_id,mr_alcance_recoleccion,mea_id) VALUES ('${data.m_recoleccion.mr_tipo}',${data.m_recoleccion.pro_id==undefined?"NULL":"'"+data.m_recoleccion.pro_id+"'"},'${data.m_recoleccion.pro_alcance}','${idSup}')`;
-      console.log(sql2);
       var db = new mysql_connector();
+      idSup1 = results.insertId;
+      sql = `INSERT INTO metodoaprendizajerazonamiento (pa_id,mea_tipo,met_id) VALUES ('${data.proceso_id}','${22}','${data.m_modelo.met_id}')`;
+      console.log(sql);
+      db.connector.query(sql, function (error, results) {
+        if (error) throw error;
+        idSup2 = results.insertId;
+        func([idSup1, idSup2])
+        console.log(data.m_recoleccion);
+        var sql4=`INSERT INTO modeloanalisis (ma_tipo_recurso,cd_id,mea_id) VALUES ('${data.m_modelo.ma_tipo}','${data.m_modelo.criterio_id}','${idSup2}')`
+        console.log(sql4);
+        var db = new mysql_connector();
+        db.connector.query(sql4, function (error, results) {
+          if (error) throw error;
+        });
+      });
+
+      console.log(data.m_recoleccion);
+      var sql2 = `INSERT INTO metodorecoleccion (mr_tipo_comunicacion,pro_id,mr_alcance_recoleccion,mea_id) VALUES ('${data.m_recoleccion.mr_tipo}',${data.m_recoleccion.pro_id==undefined?"NULL":"'"+data.m_recoleccion.pro_id+"'"},'${data.m_recoleccion.pro_alcance}','${idSup1}')`;
+      console.log(sql2);
+      
       db.connector.query(sql2, function (error, results) {
         if (error) throw error;
       });
     });
-     sql = `INSERT INTO metodoaprendizajerazonamiento (pa_id,mea_tipo,met_id) VALUES ('${data.proceso_id}','${22}','${data.m_modelo.met_id}')`;
-    console.log(sql);
-    this.connector.query(sql, function (error, results) {
-      if (error) throw error;
-      idSup = results.insertId;
-      console.log(data.m_recoleccion);
-      var sql4=`INSERT INTO modeloanalisis (ma_tipo_recurso,cd_id,mea_id) VALUES ('${data.m_modelo.ma_tipo}','${data.m_modelo.criterio_id}','${idSup}')`
-      console.log(sql4);
-      var db = new mysql_connector();
-      db.connector.query(sql4, function (error, results) {
-        if (error) throw error;
-      });
-    });
+    
   }
 
   public add_mapeo_parametros(
     data:[mapeo_parametros],
   ): void {
+    
     var stryaux="";
     data.forEach(element => {
-      stryaux=`('${element.par_ordinal}', '${element.mea_id}','${element.mp_tipo_entrada}','${element.met_id}','1','${element.vs_id}','${element.md_id}')`;
+      console.log(element);
+      stryaux+=`('${element.par_ordinal}', '${element.mea_id}','${element.mp_tipo_entrada}','${element.met_id}',${element.vs_id==undefined?"NULL":"'"+element.vs_id+"'"},${element.md_id==undefined?"NULL":"'"+element.md_id+"'"}),`;
     });
     var sql = `INSERT INTO mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
-    VALUES `+stryaux;
+    VALUES `+stryaux.substring(0,stryaux.length-1);
+    console.log(sql);
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
+    });
+  }
+
+
+  public getUser_procesos_reflexive(
+    userID: string,
+    func: Function
+  ): void {
+    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo_ejecucion as inicio,pro.pa_fin_periodo_ejecucion as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp,sujeto su WHERE asp.aa_id=pro.aa_id AND su.suj_id =pro.suj_id AND pro.pa_tipo=18 ORDER BY pro.pa_id`;
+    this.connector.query(sql, (err, result, fields) => {
+      if (err) err;
+      var listaProcesos: { procesos: Array<object> } = {
+        procesos: [],
+      };
+      var act;
+      for (const i in result) {
+        if (result[i]["activo"] == 1) {
+          act = "true";
+        } else {
+          act = "false";
+        }
+        var auxmedicion = {
+          id: result[i]["id"],
+          nombre: result[i]["nombre"],
+          descripcion: result[i]["descripcion"],
+          inicio: result[i]["inicio"],
+          fin: result[i]["fin"],
+          aspecto: result[i]["aspecto"],
+          sujeto: result[i]["sujeto"],
+          objeto: result[i]["objeto"],
+          activo: act,
+        };
+        listaProcesos.procesos.push(auxmedicion);
+      }
+      func(listaProcesos);
     });
   }
   // La atributo variable no existe, solo le pusimos para probar

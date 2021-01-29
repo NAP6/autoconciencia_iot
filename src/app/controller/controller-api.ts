@@ -763,8 +763,9 @@ export function add_metodo_modelo(req: Request, res: Response) {
     var data:metodo_modelo_proceso=req.body;
     console.log(data);
     var db = new database();
-    db.add_metodo_modelo(data);
-    res.json({ mensaje: "La accion fue realizada con exito" });
+    db.add_metodo_modelo(data, (resp) => {
+      res.json(resp);
+    });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -773,7 +774,6 @@ export function add_metodo_modelo(req: Request, res: Response) {
 export function add_mapeo_parametros(req: Request, res: Response) {
   if (req.session?.user) {
     var data:[mapeo_parametros]=req.body;
-    console.log(data);
     var db = new database();
     db.add_mapeo_parametros(data);
     res.json({ mensaje: "La accion fue realizada con exito" });
@@ -781,6 +781,17 @@ export function add_mapeo_parametros(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
   
+}
+export function procesos_reflexive(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.getUser_procesos_reflexive(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
 }
 export function properties(req: Request, res: Response) {
   if (req.session?.user) {
