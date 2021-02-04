@@ -178,6 +178,20 @@ export function proceso_pre_reflexivo(req: Request, res: Response) {
     session: req.session,
   });
 }
+export function modificar_pre_reflexivos(req: Request, res: Response) {
+  var id =req.body.proceso_seleccionado;
+  var idUser = req.session?.user.userID;
+  var db= new mysql_connector();
+  db.getUser_procesos_pre_reflexive_id(idUser, id,(jsonEscala: object) => {
+    res.render("modificar_pre_reflexivos", {
+      error: req.flash("error"),
+      succes: req.flash("succes"),
+      modificar:jsonEscala,
+      session: req.session,
+    });
+  });
+
+}
 export function procesos_reflexivos(req: Request, res: Response) {
   res.render("procesos_reflexivos", {
     error: req.flash("error"),

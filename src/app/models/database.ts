@@ -1486,7 +1486,7 @@ export class mysql_connector {
     console.log(
       `############# Envio a la funcion 'addUser_procesos_pre_reflexivos' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}`
     );
-    var sql = `INSERT INTO procesoautoconsciencia (pa_nombre, pa_descripcion, pa_inico_periodo_ejecucion,pa_fin_periodo_ejecucion,pa_activo,aa_id,suj_id,pa_tipo) 
+    var sql = `INSERT INTO procesoautoconsciencia (pa_nombre, pa_descripcion, pa_inicio_periodo_ejecucion,pa_fin_periodo_ejecucion,pa_activo,aa_id,suj_id,pa_tipo) 
     VALUES ('${name}', '${descripcion}','${inicioP}','${finP}','1','${aspId}','${sujId}','${paTipo}')`;
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
@@ -1498,7 +1498,7 @@ export class mysql_connector {
     userID: string,
     func: Function
   ): void {
-    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo_ejecucion as inicio,pro.pa_fin_periodo_ejecucion as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp,sujeto su WHERE asp.aa_id=pro.aa_id AND su.suj_id =pro.suj_id AND pro.pa_tipo=17 ORDER BY pro.pa_id`;
+    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inicio_periodo_ejecucion as inicio,pro.pa_fin_periodo_ejecucion as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp,sujeto su WHERE asp.aa_id=pro.aa_id AND su.suj_id =pro.suj_id AND pro.pa_tipo=17 ORDER BY pro.pa_id`;
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaProcesos: { procesos: Array<object> } = {
@@ -1532,34 +1532,29 @@ export class mysql_connector {
     id: string,
     func: Function
   ): void {
-    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo as inicio,pro.pa_fin_periodo as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto,ob.obj_nombre as objeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp, objeto ob,sujeto su WHERE pro.pa_id=${id} AND asp.aa_id=pro.aa_id AND ob.obj_id=pro.obj_id AND su.suj_id =pro.suj_id `;
+    var sql = `SELECT pa.pa_id as id, pa.pa_nombre as nombre,pa.pa_descripcion as descripcion, DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,asp.aa_nombre as aspecto_nombre,asp.aa_id as aspecto_id, obj.obj_nombre as objeto_nombre, obj.obj_id as objeto_id,obj.obj_tipo as objeto_tipo, pa.suj_id as sujeto, pa.pa_activo as activo FROM procesoautoconsciencia pa, aspectoautoconsciencia asp, objeto obj WHERE pa.pa_id=${id} AND pa.aa_id=asp.aa_id AND obj.obj_id=asp.obj_id`;
     console.log(sql);
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
-      var listaProcesos: { procesos: Array<object> } = {
-        procesos: [],
-      };
       var act;
-      for (const i in result) {
-        if (result[i]["activo"] == 1) {
-          act = "true";
-        } else {
-          act = "false";
-        }
-        var auxmedicion = {
-          id: result[i]["id"],
-          nombre: result[i]["nombre"],
-          descripcion: result[i]["descripcion"],
-          inicio: result[i]["inicio"],
-          fin: result[i]["fin"],
-          aspecto: result[i]["aspecto"],
-          sujeto: result[i]["sujeto"],
-          objeto: result[i]["objeto"],
-          activo: act,
-        };
-        listaProcesos.procesos.push(auxmedicion);
+      if (result[0]["activo"] == 1) {
+        act = "true";
+      } else {
+        act = "false";
       }
-      func(listaProcesos);
+      var procesos= result[0];
+      /*  {
+          id: result[0]["id"],
+          nombre: result[0]["nombre"],
+          descripcion: result[0]["descripcion"],
+          inicio: result[0]["inicio"],
+          fin: result[0]["fin"],
+          aspecto: result[0]["aspecto_nombre"],
+          sujeto: result[0]["sujeto"],
+          activo: act,
+        }; */
+      
+      func(procesos);
     });
   }
 
@@ -1647,7 +1642,7 @@ export class mysql_connector {
     userID: string,
     func: Function
   ): void {
-    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inico_periodo_ejecucion as inicio,pro.pa_fin_periodo_ejecucion as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp,sujeto su WHERE asp.aa_id=pro.aa_id AND su.suj_id =pro.suj_id AND pro.pa_tipo=18 ORDER BY pro.pa_id`;
+    var sql = `SELECT pro.pa_id as id, pro.pa_nombre as nombre,pro.pa_descripcion as descripcion,pro.pa_inicio_periodo_ejecucion as inicio,pro.pa_fin_periodo_ejecucion as fin,pro.pa_activo as activo, asp.aa_nombre as aspecto ,su.suj_nombre as sujeto FROM procesoautoconsciencia pro, aspectoautoconsciencia asp,sujeto su WHERE asp.aa_id=pro.aa_id AND su.suj_id =pro.suj_id AND pro.pa_tipo=18 ORDER BY pro.pa_id`;
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaProcesos: { procesos: Array<object> } = {

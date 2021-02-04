@@ -738,7 +738,6 @@ export function process_pre_reflexive_id(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
     var id = req.body.id;
-  
     var db = new database();
     db.getUser_procesos_pre_reflexive_id(idUser, id,(jsonEscala: object) => {
       res.json(jsonEscala);

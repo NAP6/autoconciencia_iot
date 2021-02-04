@@ -1,0 +1,26 @@
+<p>
+    <button class="btn btn-link" type="button" onclick="guardar_informacion_reflexivos_boton('guardar_informacion_general_reflexivos')">Paso 1: Información General</button>
+    <span id="btn-section-reflexivos" class="d-none">
+        <span  class="text-primary">></span>
+    <button class="btn btn-link" type="button" onclick="guardar_informacion_reflexivos_boton('navegador_metodos_modelos_reflexivos')">
+            Paso 2: Métodos de aprendizaje y razonamiento <span id="btn-guardar-metodos" class="d-none">> Paso 3: Párametros y recomendaciones</span>
+    </button>
+    </span>
+</p>
+<div class="row">
+    <div class="col-12">
+        <div class="collapse multi-collapse show" id="guardar_informacion_general_reflexivos">
+            <div class="card card-body">
+                <%- include('modal/proceso_reflexivo'); %>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="collapse multi-collapse" id="navegador_metodos_modelos_reflexivos">
+            <div class="card card-body">
+                <%- include('modal/modal_metodo_modelos_reflexivos'); %>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" id="btn-guardar-reflexivos" class="btn btn-secondary btn-lg btn-block mt-3 mx-4 mb-2" onclick="guardar_proceso_reflexivo_boton()">Guardar (Información General)</button>

@@ -17,6 +17,16 @@ function post_api(url = "", data, fun1, fun2) {
         .then((json) => fun1(json))
         .catch((error) => fun2(error));
 }
+
+
+function alert(txt) {
+    div = document.createElement('div');
+    div.classList.add('alert', 'alert-danger');
+    div.setAttribute('role', 'alert');
+    div.innerHTML = txt + `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
+    document.getElementById('alert-zone').appendChild(div);
+}
+
 /* 
     SECCION RECURSOS DE IMPLEMENTACION
         Descripcion:
@@ -3260,6 +3270,7 @@ Procesos Pre Reflexivos
 */
 
 if (document.getElementById("pagina_proceso")) {
+    console.log("Entra");
     agregarProcesoPreReflexivo();
 }
 
@@ -3293,8 +3304,6 @@ function agregarProcesoPreReflexivo() {
 }
 
 function Abrir_limpiar_modal_proceso_pre_reflexivo() {
-    document.getElementById("btn-guarda_procesos_pre").classList.replace("d-none", "inline-block");
-    document.getElementById("btn-guardar_modelos_metodos").classList.replace("inline-block", "d-none");
     document.getElementById("modal_metodo_add").classList.replace("d-block", "d-none");
     document.getElementById("input-name-proceso-pre-reflexivo").disabled = false;
     document.getElementById("input-descripcion-proceso-pre-reflexivo").disabled = false;
@@ -4034,11 +4043,11 @@ function guardar_procesos_pre_reflexivos() {
         Array.from(checkObjetos).forEach(element => {
             element.disabled = true;
         });
-        document.getElementById("btn-guarda_procesos_pre").classList.replace("inline-block", "d-none");
-        document.getElementById("btn-guardar_modelos_metodos").classList.replace("d-none", "inline-block");
+
         document.getElementById("modal_metodo_add").classList.replace("d-none", "d-block");
+        return true;
     } else {
-        alert("Debe Llenar todos los campos");
+        return false;
     }
 }
 
@@ -4085,9 +4094,9 @@ function guardar_modelos_metodos() {
             errormensajeCorrectoGuardarMetodos,
 
         )
-
+        return true;
     } else {
-        alert("Debe tener los campos seleccionados");
+        return false;
     }
 
 }
@@ -4104,12 +4113,7 @@ function mensajeCorrectoGuardarMetodos(json) {
     document.getElementById("mapeo_parametros_btn").disabled = false;
     document.getElementById("btn-recomendaciones_model").disabled = false;
     document.getElementById("recurso").disabled = true;
-    document.getElementById("btn-guardar_modelos_metodos").classList.replace("inline-block", "d-none", );
-
-    console.log(json)
     document.getElementById("id_metodo_aprendizaje_directo").value = json.join("-");
-
-    alert("Datos correctamente guardados");
 }
 
 function errormensajeCorrectoGuardarMetodos(error) {
@@ -4130,7 +4134,7 @@ function cargar_procesos_pre_reflexivos_table(json) {
         var ini = pro.inicio.split("T");
         var fin = pro.fin.split("T");
         res += "<tr>";
-        res += `<td><input type="radio" name="proceso_seleccionado" value="${pro.id }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-aspecto="${pro.aspecto}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${pro.activo == "true"}"></td>`;
+        res += `<td><input type="radio" form="modificar_proceso_form" name="proceso_seleccionado" value="${pro.id }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-aspecto="${pro.aspecto}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${pro.activo == "true"}"></td>`;
         res += `<td>${pro.id}</td>`;
         res += `<td>${pro.nombre}</td>`;
         res += `<td>${pro.sujeto}</td>`;
@@ -4154,6 +4158,10 @@ function cancelar_mapeo_parametros() {
 
 }
 
+if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
+    modificarProcesoPreReflexivo();
+}
+
 function modificarProcesoPreReflexivo() {
     var radio = document.getElementsByName("proceso_seleccionado");
     var id;
@@ -4164,14 +4172,20 @@ function modificarProcesoPreReflexivo() {
         }
     });
     if (!!id) {
-        Abrir_limpiar_modal_proceso_pre_reflexivo();
         post_api(
-            "http://localhost:3000/api/del_process_pre_reflexive/",
-            data,
+            "http://localhost:3000/api/procesos_pre_reflexive_id/", { id: id },
             cargar_modificar_procesos_pre,
             mensaje_error_cargar_modificar_procesos_pre
         );
-    } else alert("Debe seleccionar un proceso para modificar");
+    }
+}
+
+function cargar_modificar_procesos_pre(json) {
+
+}
+
+function mensaje_error_cargar_modificar_procesos_pre(error) {
+    alert(error)
 }
 
 function elminarProcesoPreReflexivo() {
@@ -4265,8 +4279,6 @@ function Abrir_limpiar_modal_proceso_reflexivo() {
     document.getElementById("fin_del_periodo_reflexivo").value = "";
     document.getElementById("CategoriaEntidadesProcesos_reflexivos").selectedIndex = "0";
     document.getElementById("Aspectos_autoconsciencia_reflexivos").selectedIndex = "0";
-    document.getElementById("btn-guarda_procesos_reflexivos").classList.replace("d-none", "inline-block");
-    document.getElementById("btn-guardar_modelos_metodos_reflexivos").classList.replace("inline-block", "d-none");
     document.getElementById("inicio_del_periodo_reflexivo_metodo").value = "";
     document.getElementById("fin_del_periodo_reflexivo_metodo").value = "";
     document.getElementById("tipo_recurso_metodos_reflexivo").selectedIndex = "0";
@@ -4507,6 +4519,7 @@ function guardar_procesos_reflexivos() {
             objId: objetoId,
             paTipo: "18",
         }
+
         post_api(
             "http://localhost:3000/api/add_process_pre_reflexive/",
             data,
@@ -4529,11 +4542,10 @@ function guardar_procesos_reflexivos() {
         Array.from(checkObjetos).forEach(element => {
             element.disabled = true;
         });
-        document.getElementById("btn-guarda_procesos_reflexivos").classList.replace("inline-block", "d-none");
-        document.getElementById("btn-guardar_modelos_metodos_reflexivos").classList.replace("d-none", "inline-block");
         document.getElementById("modal_metodo_reflexivos_add").classList.replace("d-none", "d-block");
+        return true;
     } else {
-        alert("Debe Llenar todos los campos");
+        return false;
     }
 }
 if (document.getElementById("tabla_proceso_reflexivo"))
@@ -4566,4 +4578,183 @@ function cargar_procesos_reflexivos_table(json) {
 
 function error_procesos_reflexivos_table(error) {
     console.log(error);
+}
+
+function guardar_informacion_boton(id) {
+    $('#guardar_informacion_general.collapse').collapse('hide');
+    $('#navegador_metodos_modelos.collapse').collapse('hide');
+    $(`#${id}.collapse`).collapse('show');
+}
+cont_paso = 1;
+
+function guardar_proceso_pre_reflexivo_boton() {
+    if (cont_paso == 1) {
+        if (guardar_procesos_pre_reflexivos()) {
+            document.getElementById('btn-section-2').classList.replace('d-none', 'd-inline');
+            document.getElementById('btn-guardar').innerHTML = `Guardar (Metodos modelos)`;
+            $('#guardar_informacion_general.collapse').collapse('hide');
+            $('#navegador_metodos_modelos.collapse').collapse('show');
+            cont_paso++;
+        } else {
+            alert("No se ha podido guardar, verifique todos los campos");
+        }
+    } else if (cont_paso == 2) {
+        if (guardar_modelos_metodos()) {
+            document.getElementById('btn-section-3').classList.replace('d-none', 'd-inline');
+            document.getElementById('btn-guardar').innerHTML = `Regresar`;
+            cont_paso++;
+        } else {
+            alert("No se ha podido guardar, verifique todos los campos");
+        }
+    } else if (cont_paso == 3) {
+        alert("No esta programado aun");
+    }
+}
+
+function guardar_informacion_reflexivos_boton(id) {
+    $('#guardar_informacion_general_reflexivos.collapse').collapse('hide');
+    $('#navegador_metodos_modelos_reflexivos.collapse').collapse('hide');
+    $(`#${id}.collapse`).collapse('show');
+}
+cont_paso_reflexivos = 1;
+
+function guardar_proceso_reflexivo_boton() {
+    if (cont_paso_reflexivos == 1) {
+        console.log("ENTRA 1")
+        if (guardar_procesos_reflexivos()) {
+            document.getElementById('btn-section-reflexivos').classList.replace('d-none', 'd-inline');
+            document.getElementById('btn-guardar-reflexivos').innerHTML = `Guardar (Metodos modelos)`;
+            $('#guardar_informacion_general_reflexivos.collapse').collapse('hide');
+            $('#navegador_metodos_modelos_reflexivos.collapse').collapse('show');
+            cont_paso_reflexivos++;
+        } else {
+            alert("No se ha podido guardar, verifique todos los campos");
+        }
+    } else if (cont_paso_reflexivos == 2) {
+        if (guardar_modelos_metodos()) {
+            document.getElementById('btn-guardar-metodo').classList.replace('d-none', 'd-inline');
+            document.getElementById('btn-guardar-reflexivos').innerHTML = `Regresar`;
+            cont_paso_reflexivos++;
+        } else {
+            alert("No se ha podido guardar, verifique todos los campos");
+        }
+    } else if (cont_paso_reflexivos == 3) {
+        alert("No esta programado aun");
+    }
+}
+
+//Modificar procesos
+
+function modificar_informacion_boton(id) {
+    $('#modificar_informacion_general.collapse').collapse('hide');
+    $('#modificar_metodos_modelos.collapse').collapse('hide');
+    $(`#${id}.collapse`).collapse('show');
+}
+cont_paso = 1;
+
+function modificar_proceso_pre_reflexivo_boton() {
+    if (cont_paso == 1) {
+        if (guardar_procesos_pre_reflexivos()) {
+            document.getElementById('btn-section-2-modificar').classList.replace('d-none', 'd-inline');
+            document.getElementById('btn-modificar').innerHTML = `Guardar (Metodos modelos)`;
+            $('#modificar_informacion_general.collapse').collapse('hide');
+            $('#modificar_metodos_modelos.collapse').collapse('show');
+            cont_paso++;
+        } else {
+            alert("No se ha podido guardar, verifique todos los campos");
+        }
+    } else if (cont_paso == 2) {
+        if (guardar_modelos_metodos()) {
+            document.getElementById('btn-section-3-modificar').classList.replace('d-none', 'd-inline');
+            document.getElementById('btn-modificar').innerHTML = `Regresar`;
+            cont_paso++;
+        } else {
+            alert("No se ha podido guardar, verifique todos los campos");
+        }
+    } else if (cont_paso == 3) {
+        alert("No esta programado aun");
+    }
+}
+
+if (document.getElementById("lista_sujetos_activos_proceso_modificar"))
+    consultar_api(
+        "http://localhost:3000/api/subjects",
+        cargar_sujetos_activos_procesos_modificar,
+        error_cargar_sujetos_activos_procesos_modificar
+    );
+
+function cargar_sujetos_activos_procesos_modificar(json) {
+    var aux_visible_activo = new Set();
+    var aux_visible_inactivo = new Set();
+    json.forEach((elemento) => {
+        if (!!elemento.padre && elemento.activo == 1) {
+            aux_visible_activo.add(elemento.padre);
+        } else if (!!elemento.padre && elemento.activo == 0) {
+            aux_visible_inactivo.add(elemento.padre);
+        }
+    });
+    var idModificar = document.getElementById("id_sujeto").value;
+    json.forEach((elemento) => {
+        var insertar;
+        if (!elemento.padre) {
+            insertar = document.getElementById("lista_sujetos_activos_proceso_modificar");
+        } else {
+            insertar = document.createElement("ul");
+            document
+                .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+                .appendChild(insertar);
+        }
+        li = document.createElement("li");
+        li.id = `li_entidad_seleccionado_${elemento.id}`;
+        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+            li.style.display = "list-item";
+        } else {
+            li.style.display = "none";
+        }
+        divFormCheck = document.createElement("div");
+        divFormCheck.classList.add("form-check");
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `sujeto_seleccionado_${elemento.id}`;
+        checkbox.disabled = true;
+        checkbox.name = "checkbox_sujetos_procesos";
+        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.puro_id = elemento.id;
+        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.setAttribute("onclick", "");
+        if (checkbox.dataset.puro_id == idModificar) {
+            checkbox.checked = true;
+        }
+        labelChek = document.createElement("label");
+        labelChek.classList.add("form-check-label");
+        labelChek.htmlFor = checkbox.id;
+        var button = document.createElement("button");
+        button.classList.add("btn", "py-0", "px-0");
+        button.innerHTML = elemento.nombre;
+        labelChek.appendChild(button);
+        li.appendChild(divFormCheck);
+        divFormCheck.appendChild(checkbox);
+        divFormCheck.appendChild(labelChek);
+        insertar.appendChild(li);
+    });
+}
+
+function error_cargar_sujetos_activos_procesos_modificar(error) {
+    alert("Error al cargar los datos del modelo: " + error);
+}
+
+function validarSeleccion() {
+    var radio = document.getElementsByName("proceso_seleccionado");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!id) {
+        alert("Debe seleccionar un proceso para modificar");
+        return false;
+
+    }
 }

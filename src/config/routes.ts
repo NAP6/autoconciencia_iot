@@ -20,6 +20,7 @@ export default function (app: Application, upload: Multer) {
   app.get("/deployment_resources", nv.loggedIn, nv.deployment_resources);
   app.get("/generate_model", nv.loggedIn, nv.generate_model);
   app.get("/proceso_pre_reflexivo",nv.loggedIn,nv.proceso_pre_reflexivo);
+  app.post("/modificar_pre_reflexivos",nv.loggedIn,nv.modificar_pre_reflexivos);
   app.get("/procesos_reflexivos",nv.loggedIn,nv.procesos_reflexivos);
 
   app.post(
