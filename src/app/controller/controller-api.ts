@@ -757,6 +757,22 @@ export function del_process_pre_reflexive(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function mod_process_pre_reflexive(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.body.id;
+    var name = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var inicio = req.body.inicio;
+    var fin = req.body.fin;
+    var db = new database();
+    db.mod_process_pre_reflexive(
+       id,name,descripcion,inicio,fin
+    );
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function add_metodo_modelo(req: Request, res: Response) {
   if (req.session?.user) {
     var data:metodo_modelo_proceso=req.body;

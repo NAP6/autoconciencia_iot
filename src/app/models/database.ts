@@ -1532,7 +1532,57 @@ export class mysql_connector {
     id: string,
     func: Function
   ): void {
-    var sql = `SELECT pa.pa_id as id, pa.pa_nombre as nombre,pa.pa_descripcion as descripcion, DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,asp.aa_nombre as aspecto_nombre,asp.aa_id as aspecto_id, obj.obj_nombre as objeto_nombre, obj.obj_id as objeto_id,obj.obj_tipo as objeto_tipo, pa.suj_id as sujeto, pa.pa_activo as activo FROM procesoautoconsciencia pa, aspectoautoconsciencia asp, objeto obj WHERE pa.pa_id=${id} AND pa.aa_id=asp.aa_id AND obj.obj_id=asp.obj_id`;
+    var sql = `SELECT 	pa.pa_id as id, 
+		pa.pa_nombre as nombre,
+		pa.pa_descripcion as descripcion, 
+		DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, 
+		DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
+		asp.aa_nombre as aspecto_nombre,
+		asp.aa_id as aspecto_id, 
+		obj.obj_nombre as objeto_nombre, 
+		obj.obj_id as objeto_id,
+		obj.obj_tipo as objeto_tipo, 
+		pa.suj_id as sujeto, 
+		pa.pa_activo as activo,
+        enu.enu_nombre_valor as tipoComunicacion,
+        enu.enu_id as tipo_comunicacion_id,
+        enu2.enu_nombre_valor as alcance,
+     	enu2.enu_id as alcance_id,
+        pro.pro_nombre as propiedad,
+        pro.pro_id as propiedad_id,
+        model.ma_tipo_recurso as recurso,
+        met2.met_nombre as indicador,
+        met2.met_id as indicador_id,
+        met.met_nombre as metrica,
+        met.met_id as metrica_id,
+        crt.cd_id as criterio_id,
+        crt.cd_nombre as criterio
+FROM 	procesoautoconsciencia pa, 
+    	aspectoautoconsciencia asp, 
+		objeto obj,
+        metodoaprendizajerazonamiento apren,
+        metodoaprendizajerazonamiento apren2,
+        metodorecoleccion mr,
+        enumeracion enu,
+        enumeracion enu2,
+        propiedad pro,
+        modeloanalisis model,
+        metrica met,
+        metrica met2,
+        criteriodecision crt
+WHERE 	pa.pa_id=${id} AND 
+		pa.aa_id=asp.aa_id AND 
+		obj.obj_id=asp.obj_id AND
+        apren.pa_id=pa.pa_id AND
+        mr.mea_id=apren.mea_id AND
+        mr.mr_tipo_comunicacion=enu.enu_id AND
+        mr.mr_alcance_recoleccion=enu2.enu_id AND
+        pro.pro_id= mr.pro_id AND
+        met.met_id=apren.met_id AND
+        apren2.pa_id=pa.pa_id AND
+        model.mea_id=apren2.mea_id AND
+        apren2.met_id= met2.met_id AND
+        crt.cd_id=model.cd_id`;
     console.log(sql);
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
@@ -1557,8 +1607,6 @@ export class mysql_connector {
       func(procesos);
     });
   }
-
-
   public del_process_pre_reflexive(idUser: string, id: string): void {
     console.log(
       `############# Envio a la funcion 'delUser_aspects' el id de usuario '${idUser}, id: ${id}`
@@ -1616,8 +1664,19 @@ export class mysql_connector {
       db.connector.query(sql2, function (error, results) {
         if (error) throw error;
       });
+    })
+  }
+  
+  public mod_process_pre_reflexive(
+    id:string,nombre:string,descripcion:string,inicio:string,fin:string,
+  ): void {
+    var sql = `UPDATE procesoautoconsciencia 
+    SET pa_nombre = '${nombre}', pa_descripcion = '${descripcion}', pa_inicio_periodo_ejecucion = '${inicio}', pa_fin_periodo_ejecucion = '${fin}'
+    WHERE pa_id = '${id}'`;
+    console.log(sql);
+    this.connector.query(sql, function (error, results) {
+      if (error) throw error;
     });
-    
   }
 
   public add_mapeo_parametros(

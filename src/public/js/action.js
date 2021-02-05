@@ -4654,7 +4654,7 @@ cont_paso = 1;
 
 function modificar_proceso_pre_reflexivo_boton() {
     if (cont_paso == 1) {
-        if (guardar_procesos_pre_reflexivos()) {
+        if (modificar_proceso_pre_reflexivo()) {
             document.getElementById('btn-section-2-modificar').classList.replace('d-none', 'd-inline');
             document.getElementById('btn-modificar').innerHTML = `Guardar (Metodos modelos)`;
             $('#modificar_informacion_general.collapse').collapse('hide');
@@ -4757,4 +4757,44 @@ function validarSeleccion() {
         return false;
 
     }
+}
+
+function modificar_proceso_pre_reflexivo() {
+    var nombre = document.getElementById("input-name-proceso-pre-reflexivo_modificar").value;
+    var descripcion = document.getElementById("input-descripcion-proceso-pre-reflexivo_modificar").value;
+    var inicio = document.getElementById("inicio_del_periodo_modificar").value;
+    var fin = document.getElementById("fin_del_periodo_modificar").value;
+    var id = document.getElementById("id_proceso_pre_reflexivo_modificar").value;
+    if (!!nombre && !!descripcion && !!inicio && !!fin) {
+        data = {
+            nombre: nombre,
+            descripcion: descripcion,
+            inicio: inicio,
+            fin: fin,
+            id: id,
+        }
+        post_api(
+            "http://localhost:3000/api/mod_process_pre_reflexive/",
+            data,
+            mensaje_exitoModificarproceso_pre_reflexivo,
+            mensaje_errorModificarproceso_pre_reflexivo
+        );
+        document.getElementById("input-name-proceso-pre-reflexivo_modificar").disabled = true;
+        document.getElementById("input-descripcion-proceso-pre-reflexivo_modificar").disabled = true;
+        document.getElementById("inicio_del_periodo_modificar").disabled = true;
+        document.getElementById("fin_del_periodo_modificar").disabled = true;
+        document.getElementById("modal_metodo_mod").classList.replace("d-none", "d-block");
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function mensaje_exitoModificarproceso_pre_reflexivo(json) {
+    console.log(json);
+    document.getElementById("id_proceso_pre_reflexivo").value = json.id;
+}
+
+function mensaje_errorModificarproceso_pre_reflexivo(error) {
+    alert(errorr);
 }
