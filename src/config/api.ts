@@ -64,4 +64,6 @@ export default function (app: Application) {
   app.post("/api/add_metodo_modelo",api.add_metodo_modelo);
   app.post("/api/add_mapeo_parametros",api.add_mapeo_parametros);
   app.get("/api/procesos_reflexive/", api.procesos_reflexive);
+  app.post("/api/add_metodo_modelo_reflexivos",api.add_metodo_modelo_reflexivos);
+  app.post("/api/objetivos_sujetos",api.objetivos_sujetos);
 };

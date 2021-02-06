@@ -1481,13 +1481,14 @@ export class mysql_connector {
     objId: string,
     sujId: string,
     paTipo: string,
+    objetivo:string,
     func: Function,
   ): void {
     console.log(
       `############# Envio a la funcion 'addUser_procesos_pre_reflexivos' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}`
     );
-    var sql = `INSERT INTO procesoautoconsciencia (pa_nombre, pa_descripcion, pa_inicio_periodo_ejecucion,pa_fin_periodo_ejecucion,pa_activo,aa_id,suj_id,pa_tipo) 
-    VALUES ('${name}', '${descripcion}','${inicioP}','${finP}','1','${aspId}','${sujId}','${paTipo}')`;
+    var sql = `INSERT INTO procesoautoconsciencia (pa_nombre, pa_descripcion, pa_inicio_periodo_ejecucion,pa_fin_periodo_ejecucion,pa_activo,aa_id,suj_id,pa_tipo,obj_id) 
+    VALUES ('${name}', '${descripcion}','${inicioP}','${finP}','1','${aspId}','${sujId}','${paTipo}','${objetivo}')`;
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
       func(results.insertId)
@@ -1532,57 +1533,61 @@ export class mysql_connector {
     id: string,
     func: Function
   ): void {
-    var sql = `SELECT 	pa.pa_id as id, 
-		pa.pa_nombre as nombre,
-		pa.pa_descripcion as descripcion, 
-		DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, 
-		DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
-		asp.aa_nombre as aspecto_nombre,
-		asp.aa_id as aspecto_id, 
-		obj.obj_nombre as objeto_nombre, 
-		obj.obj_id as objeto_id,
-		obj.obj_tipo as objeto_tipo, 
-		pa.suj_id as sujeto, 
-		pa.pa_activo as activo,
-        enu.enu_nombre_valor as tipoComunicacion,
-        enu.enu_id as tipo_comunicacion_id,
-        enu2.enu_nombre_valor as alcance,
-     	enu2.enu_id as alcance_id,
-        pro.pro_nombre as propiedad,
-        pro.pro_id as propiedad_id,
-        model.ma_tipo_recurso as recurso,
-        met2.met_nombre as indicador,
-        met2.met_id as indicador_id,
-        met.met_nombre as metrica,
-        met.met_id as metrica_id,
-        crt.cd_id as criterio_id,
-        crt.cd_nombre as criterio
-FROM 	procesoautoconsciencia pa, 
-    	aspectoautoconsciencia asp, 
-		objeto obj,
-        metodoaprendizajerazonamiento apren,
-        metodoaprendizajerazonamiento apren2,
-        metodorecoleccion mr,
-        enumeracion enu,
-        enumeracion enu2,
-        propiedad pro,
-        modeloanalisis model,
-        metrica met,
-        metrica met2,
-        criteriodecision crt
-WHERE 	pa.pa_id=${id} AND 
-		pa.aa_id=asp.aa_id AND 
-		obj.obj_id=asp.obj_id AND
-        apren.pa_id=pa.pa_id AND
-        mr.mea_id=apren.mea_id AND
-        mr.mr_tipo_comunicacion=enu.enu_id AND
-        mr.mr_alcance_recoleccion=enu2.enu_id AND
-        pro.pro_id= mr.pro_id AND
-        met.met_id=apren.met_id AND
-        apren2.pa_id=pa.pa_id AND
-        model.mea_id=apren2.mea_id AND
-        apren2.met_id= met2.met_id AND
-        crt.cd_id=model.cd_id`;
+    var sql = `SELECT  pa.pa_id as id, 
+    pa.pa_nombre as nombre,
+    pa.pa_descripcion as descripcion,
+    DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio,
+    DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
+    asp.aa_nombre as aspecto_nombre,
+    asp.aa_id as aspecto_id,
+    obj.obj_nombre as objeto_nombre,
+    obj.obj_id as objeto_id,
+    obj.obj_tipo as objeto_tipo,
+    pa.suj_id as sujeto,
+    pa.pa_activo as activo,
+enu.enu_nombre_valor as tipoComunicacion,
+enu.enu_id as tipo_comunicacion_id,
+enu2.enu_nombre_valor as alcance,
+enu2.enu_id as alcance_id,
+pro.pro_nombre as propiedad,
+pro.pro_id as propiedad_id,
+model.ma_tipo_recurso as recurso,
+met2.met_nombre as indicador,
+met2.met_id as indicador_id,
+met.met_nombre as metrica,
+met.met_id as metrica_id,
+crt.cd_id as criterio_id,
+crt.cd_nombre as criterio,
+objetivo.obj_nombre as objetivo_nombre,
+objetivo.obj_id as objetivo_id
+FROM    procesoautoconsciencia pa,
+aspectoautoconsciencia asp,
+    objeto obj,
+metodoaprendizajerazonamiento apren,
+metodoaprendizajerazonamiento apren2,
+metodorecoleccion mr,
+enumeracion enu,
+enumeracion enu2,
+propiedad pro,
+modeloanalisis model,
+metrica met,
+metrica met2,
+criteriodecision crt,
+objetivo objetivo
+WHERE   pa.pa_id=${id} AND
+    pa.aa_id=asp.aa_id AND
+    obj.obj_id=asp.obj_id AND
+apren.pa_id=pa.pa_id AND
+mr.mea_id=apren.mea_id AND
+mr.mr_tipo_comunicacion=enu.enu_id AND
+mr.mr_alcance_recoleccion=enu2.enu_id AND
+pro.pro_id= mr.pro_id AND
+met.met_id=apren.met_id AND
+apren2.pa_id=pa.pa_id AND
+model.mea_id=apren2.mea_id AND
+apren2.met_id= met2.met_id AND
+crt.cd_id=model.cd_id AND
+objetivo.obj_id =pa.obj_id`;
     console.log(sql);
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
@@ -1730,6 +1735,66 @@ WHERE 	pa.pa_id=${id} AND
       func(listaProcesos);
     });
   }
+
+
+
+
+  public add_metodo_modelo_reflexivos(
+    data: metodo_modelo_proceso_reflexivos,
+    func:Function
+  ): void {
+    var idSup1;
+    var idSup2;
+    var sql = `INSERT INTO metodoaprendizajerazonamiento (pa_id,mea_tipo,met_id) VALUES ('${data.proceso_id}','${23}','${data.m_calculo.met_id}')`;
+    console.log(sql);
+    this.connector.query(sql, function (error, results) {
+      if (error) throw error;
+      var db = new mysql_connector();
+      idSup1 = results.insertId;
+      sql = `INSERT INTO metodoaprendizajerazonamiento (pa_id,mea_tipo,met_id) VALUES ('${data.proceso_id}','${22}','${data.modelo.met_id}')`;
+      console.log(sql);
+      db.connector.query(sql, function (error, results) {
+        if (error) throw error;
+        idSup2 = results.insertId;
+        func([idSup1, idSup2])
+        var sql4=`INSERT INTO modeloanalisis (ma_tipo_recurso,cd_id,mea_id) VALUES ('${data.modelo.modeloTipo}','${data.modelo.criterio_id}','${idSup2}')`
+        console.log(sql4);
+        var db = new mysql_connector();
+        db.connector.query(sql4, function (error, results) {
+          if (error) throw error;
+        });
+      });
+
+      console.log(data.m_calculo);
+      var sql2 = `INSERT INTO metodocalculo (mc_tipo_recurso,mc_inicio_periodo_calculo,mc_fin_periodo_calculo,mea_id) VALUES ('${data.m_calculo.tipo_recurso}',${data.m_calculo.inicio==undefined?"NULL":"'"+data.m_calculo.inicio+"'"},${data.m_calculo.fin==undefined?"NULL":"'"+data.m_calculo.fin+"'"},'${idSup1}')`;
+      console.log(sql2);
+      
+      db.connector.query(sql2, function (error, results) {
+        if (error) throw error;
+      });
+    })
+  }
+  
+  public objetivos_sujetos(
+    id: string,
+    func: Function
+  ): void {
+    var sql = `SELECT obj_id, obj_nombre
+    FROM objetivo WHERE suj_id=${id}`;
+    this.connector.query(sql, (err, result, fields) => {
+      if (err) err;
+      var listaUmedicion: Array<object> = [];
+      for (const i in result) {
+        var auxmedicion = {
+          id: result[i]["obj_id"],
+          nombre: result[i]["obj_nombre"],
+        };
+        listaUmedicion.push(auxmedicion);
+      }
+      func(listaUmedicion);
+    });
+  }
+
   // La atributo variable no existe, solo le pusimos para probar
   private modelo = {
     "MonitorIoT:DataMonitoringArchitectureModel": {
@@ -3625,6 +3690,20 @@ interface metodo_modelo_proceso {
   m_modelo: {
     ma_tipo: string;
     criterio_id: string;
+    met_id:string;
+  }
+}
+interface metodo_modelo_proceso_reflexivos {
+  proceso_id: string;
+  m_calculo:{
+    inicio:string;
+    fin:string;
+    tipo_recurso:string;
+    met_id:string;
+  };
+  modelo:{
+    modeloTipo:string;
+    criterio_id:string;
     met_id:string;
   }
 }

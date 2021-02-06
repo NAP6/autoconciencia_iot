@@ -40,44 +40,58 @@
 
         </div>
         <div class="col-6">
-            <h6>Categoría de objetos:</h6>
-            <div class="input-group col-11">
-                <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
-                        <% switch (modificar.objeto_tipo) {
-                            case 'CloudNode' : %>
-                            <option value="2">Nodos Cloud</option>
-                                    <% break;
-                            case 'PhysicalEntity' : %>
-                            <option value="1">Entidades Físicas</option>
-                                    <% break;
-                            case 'Network' : %>
-                            <option value="8">Red</option>
-                                    <% break;
-                            case 'Middleware' : %>
-                            <option value="2">Nodos Cloud</option>
-                                    <% break;
-                            case 'NetworkInterface' : %>
-                            <option value="4">Gateway IoT</option>
-                                    <% break;
-                            case 'Actuator' : %>
-                            <option value="7">Actuadores</option>
-                                    <% break;
-                            case 'IoTGateway' : %>
-                            <option value="4">Gateway IoT</option>
-                                    <% break;
-                            case 'FogNode' : %>
-                            <option value="3">Nodos Fog</option>
-                                    <% break;
-                            case 'Tag' : %>
-                            <option value="6">Tags</option>
-                                    <% break;
-                            case 'Sensor' : %>
-                            <option value="5">Sensores</option>
-                                    <% break;
-                                    
-                            } %>
-                            </select>
+            <div class="row">
+                <div class="col-6">
+                    <h6>Categoría de objetos:</h6>
+                    <div class="input-group col-11">
+                        <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
+                                <% switch (modificar.objeto_tipo) {
+                                    case 'CloudNode' : %>
+                                    <option value="2">Nodos Cloud</option>
+                                            <% break;
+                                    case 'PhysicalEntity' : %>
+                                    <option value="1">Entidades Físicas</option>
+                                            <% break;
+                                    case 'Network' : %>
+                                    <option value="8">Red</option>
+                                            <% break;
+                                    case 'Middleware' : %>
+                                    <option value="2">Nodos Cloud</option>
+                                            <% break;
+                                    case 'NetworkInterface' : %>
+                                    <option value="4">Gateway IoT</option>
+                                            <% break;
+                                    case 'Actuator' : %>
+                                    <option value="7">Actuadores</option>
+                                            <% break;
+                                    case 'IoTGateway' : %>
+                                    <option value="4">Gateway IoT</option>
+                                            <% break;
+                                    case 'FogNode' : %>
+                                    <option value="3">Nodos Fog</option>
+                                            <% break;
+                                    case 'Tag' : %>
+                                    <option value="6">Tags</option>
+                                            <% break;
+                                    case 'Sensor' : %>
+                                    <option value="5">Sensores</option>
+                                            <% break;
+                                            
+                                    } %>
+                                    </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h6>Objetivo de alto nivel:</h6>
+                    <div class="input-group col-11">
+                        <select class="custom-select" name="objetivos_alto_nivel_modificar" id="objetivos_alto_nivel_modificar" disabled>
+                        <option value="<%= modificar.objetivo_id %>">   <%= modificar.objetivo_nombre %></option>
+                    </select>
+
+                    </div>
+                </div>
             </div>
+
             <h6>Objeto de autoconsciencia:</h6>
             <div class="col-sm-11">
                 <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">

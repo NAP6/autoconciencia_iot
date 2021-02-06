@@ -1,4 +1,4 @@
-<div class="container" id="pagina_proceso">
+<div class="" id="pagina_proceso">
     <div class="row">
         <div class="col">
             <input type="text" class="d-none" id="id_proceso_pre_reflexivo">
@@ -39,31 +39,42 @@
 
         </div>
         <div class="col-6">
-            <h6>Categoría de objetos:</h6>
-            <div class="input-group col-11">
-                <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
-                                <option>Seleccione..</option>
-                              <option id="1" value="1">Entidades Físicas</option>
-                              <option value="2">Nodos Cloud</option>
-                              <option value="3">Nodos Fog</option>
-                              <option value="4">Gateway IoT</option>
-                              <option value="5">Sensores</option>
-                              <option value="6">Tags</option>
-                              <option value="7">Actuadores</option>
-                              <option value="8">Red</option>
-                            </select>
-            </div>
-            <h6>Objeto de autoconsciencia:</h6>
-            <div class="col-sm-11">
-                <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
-                    <ul id="lista_entidades_seleccionadas_procesos"></ul>
+            <div class="row">
+                <div class="col-6">
+                    <h6>Categoría de objetos:</h6>
+                    <div class="input-group col-11">
+                        <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
+                                        <option>Seleccione..</option>
+                                      <option id="1" value="1">Entidades Físicas</option>
+                                      <option value="2">Nodos Cloud</option>
+                                      <option value="3">Nodos Fog</option>
+                                      <option value="4">Gateway IoT</option>
+                                      <option value="5">Sensores</option>
+                                      <option value="6">Tags</option>
+                                      <option value="7">Actuadores</option>
+                                      <option value="8">Red</option>
+                                    </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <h6>Objetivo de alto nivel:</h6>
+                    <div class="input-group col-11">
+                        <select class="custom-select" name="objetivos_alto_nivel" id="objetivos_alto_nivel" disabled></select>
+                    </div>
+
+                </div>
+
+                <h6>Objeto de autoconsciencia:</h6>
+                <div class="col-sm-11">
+                    <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
+                        <ul id="lista_entidades_seleccionadas_procesos"></ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <h6 class="text-center">Aspectos de autoconsciencia</h6>
-    <div class="input-group col-11">
-        <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia" disabled>
+        <h6 class="text-center">Aspectos de autoconsciencia</h6>
+        <div class="input-group col-11">
+            <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia" disabled>
                     </select>
+        </div>
     </div>
-</div>

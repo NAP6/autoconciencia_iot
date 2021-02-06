@@ -715,8 +715,9 @@ export function add_process_pre_reflexive(req: Request, res: Response) {
     var sujId=req.body.sujId;
     var paTipo=req.body.paTipo;
     var objId=req.body.objId;
+    var objetivo=req.body.objetivo;
     var db = new database();
-    db.add_process_pre_reflexive(idUser, name, descripcion,inicioP,finP,aspId,objId,sujId,paTipo,(id: number) => {
+    db.add_process_pre_reflexive(idUser, name, descripcion,inicioP,finP,aspId,objId,sujId,paTipo,objetivo,(id: number) => {
       res.json({id:id});
     });
   } else {
@@ -820,6 +821,32 @@ export function properties(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function add_metodo_modelo_reflexivos(req: Request, res: Response) {
+  if (req.session?.user) {
+    var data:metodo_modelo_proceso_reflexivos=req.body;
+    console.log(data);
+    var db = new database();
+    db.add_metodo_modelo_reflexivos(data, (resp) => {
+      res.json(resp);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+  
+}
+export function objetivos_sujetos(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id=req.body.id;
+
+    var db = new database();
+    db.objetivos_sujetos(id, (resp) => {
+      res.json(resp);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+  
+}
 interface metodo_modelo_proceso {
   proceso_id: string;
   m_recoleccion:{
@@ -841,4 +868,18 @@ interface mapeo_parametros{
   met_id:string;
   vs_id:string;
   md_id:string;
+}
+interface metodo_modelo_proceso_reflexivos {
+  proceso_id: string;
+  m_calculo:{
+    inicio:string;
+    fin:string;
+    tipo_recurso:string;
+    met_id:string;
+  };
+  modelo:{
+    modeloTipo:string;
+    criterio_id:string;
+    met_id:string;
+  }
 }
