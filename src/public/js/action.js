@@ -3270,7 +3270,6 @@ Procesos Pre Reflexivos
 */
 
 if (document.getElementById("pagina_proceso")) {
-    console.log("Entra");
     agregarProcesoPreReflexivo();
 }
 
@@ -3769,14 +3768,92 @@ function error_cargar_lista_umbrales_proceso(err) {
 }
 
 function cargar_activos_umbrales() {
-
     $("#modal_activos_procesos").modal("show");
-
 }
 
 function cerrar_modal_activos() {
     $("#modal_activos_procesos").modal("hide");
 }
+
+function guardarAccionUmbral() {
+    consultar_api(
+        "http://localhost:3000/api/get_metodo_aprendizaje",
+        enviarDatos_acciones_umbrales,
+        errorenviarDatos_acciones_umbrales
+    )
+}
+
+function enviarDatos_acciones_umbrales(json) {
+    console.log(json);
+    var data = {
+        nombre: document.getElementById("nombre_accion_umbral").value,
+        descripcion: document.getElementById("descripcion_accion_umbral").value,
+        UmbralId: UmbralId,
+        meaId: json.id,
+    }
+    post_api(
+        "http://localhost:3000/api/add_accion",
+        data,
+        mensajeExitosoAgregarAccionesUmbrales,
+        mensajeErrorAgregarAccionesUmbrales,
+    );
+}
+
+function mensajeExitosoAgregarAccionesUmbrales(json) {
+    alert("Datos guardados con exito");
+    $("#modal_agregar_accion_proceso").modal("hide");
+    cargarDespuesdeEliminarAcciones();
+    $("#modal_activos_procesos").modal("show");
+}
+
+function mensajeErrorAgregarAccionesUmbrales(error) {
+    alert(error);
+}
+
+function errorenviarDatos_acciones_umbrales(error) {
+    console.log(error);
+}
+
+function eliminarAccionesUmbrales() {
+    var radio = document.getElementsByName("accion_seleccionada");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        data = {
+            id: id,
+        };
+        post_api(
+            "http://localhost:3000/api/del_accion/",
+            data,
+            mensaje_exitosoEliminacionAcciones,
+            (res) => {
+                console.log(res);
+            }
+        );
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function mensaje_exitosoEliminacionAcciones(json) {
+    alert("Eliminacion realizada");
+    cargarDespuesdeEliminarAcciones();
+
+}
+
+function cargarDespuesdeEliminarAcciones() {
+    post_api(
+        "http://localhost:3000/api/get_accion/", { id: UmbralId },
+        cargar_accion_table,
+        (res) => {
+            console.log(res);
+        }
+    );
+}
+
 
 function abrirModalMapeoParametros() {
     document.getElementById("tabla_mapeo_parametros").innerHTML = "";
@@ -3909,43 +3986,9 @@ function agregarAccionesUmbrales() {
     $("#modal_activos_procesos").modal("hide");
 }
 
-function guardar_accion_umbral() {
-    var data = {
-        id: UmbralId,
-        nombre: document.getElementById("nombre_accion_umbral_proceso").value,
-        descripcion: document.getElementById("input_descripcion_accion_umbral").value,
-        activo: "1"
-    };
-    var data2 = {
-        id: UmbralId
-    }
-    if (!!data.nombre && !!data.descripcion) {
-        post_api(
-            "http://localhost:3000/api/add_accion/",
-            data,
-            mensaje_exitoEnvioAccion,
-            mensaje_errorEnvioAccion
-        );
-        post_api(
-            "http://localhost:3000/api/get_accion",
-            data2,
-            cargar_accion_table,
-            error_cargar_accion_table
-        );
-    } else {
-        alert("Debe llenar todos los campos");
-    }
-}
-
-function mensaje_exitoEnvioAccion(json) {
-    alert(json.mensaje);
-}
-
-function mensaje_errorEnvioAccion(err) {
-    alert(err);
-}
 
 function cargar_accion_table(json) {
+    console.log(json);
     res = "";
     json.forEach((as) => {
         res += "<tr>";
@@ -3967,37 +4010,6 @@ function cargar_accion_table(json) {
 
 function error_cargar_accion_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
-}
-
-function guardar_eliminar_accion() {
-    var radio = document.getElementsByName("accion_seleccionada");
-    var id;
-    radio.forEach((elem) => {
-        if (elem.checked) {
-            id = elem.value;
-            return;
-        }
-    });
-    if (!!id) {
-        data = {
-            id: id,
-        };
-        data2 = {
-            id: UmbralId,
-        };
-        post_api(
-            "http://localhost:3000/api/del_accion/",
-            data,
-            mensaje_exitoEnvioAccion,
-            mensaje_errorEnvioAccion
-        );
-        post_api(
-            "http://localhost:3000/api/get_accion/",
-            data2,
-            cargar_accion_table,
-            error_cargar_accion_table
-        );
-    } else alert("Debe seleccionar un elemento para eliminar");
 }
 
 function SeleccionaRecursoSelect(element) {
@@ -4037,10 +4049,7 @@ function guardar_procesos_pre_reflexivos() {
     var sujetoId = SujetoGuardarProceso;
     var aspId = document.getElementById("Aspectos_autoconsciencia").value;
     var objetivo = document.getElementById("objetivos_alto_nivel").value;
-    console.log(aspId);
-    console.log(!!aspId);
-
-    if (!!nombre && !!descripcion && !!inicioP && !!finP && !!objetoId && !!sujetoId && aspId != "-6" && objetivo != "-6") {
+    if (!!nombre && !!descripcion && !!objetoId && !!sujetoId && aspId != "-6" && objetivo != "-6") {
         data = {
             nombre: nombre,
             descripcion: descripcion,
@@ -4083,7 +4092,6 @@ function guardar_procesos_pre_reflexivos() {
 }
 
 function mensaje_exitoEnvioproceso_pre_reflexivo(json) {
-    console.log(json);
     if (document.getElementById("id_proceso_pre_reflexivo")) {
         document.getElementById("id_proceso_pre_reflexivo").value = json.id;
     } else if (document.getElementById("id_proceso_reflexivo")) {
@@ -4095,8 +4103,9 @@ function mensaje_errorEnvioproceso_pre_reflexivo(error) {
     alert(err);
 }
 
-function guardar_modelos_metodos() {
 
+
+function guardar_modelos_metodos() {
     var mr_tipo = document.getElementById("tipo_comunicacion").value;
     var pro_alcance = document.getElementById("alcance_recoleccion").value;
     var pro_id = document.getElementById("proiedad_recoleccion").value;
@@ -4106,7 +4115,6 @@ function guardar_modelos_metodos() {
     var proceso_id = document.getElementById("id_proceso_pre_reflexivo").value;
     var indicador_id = document.getElementById("indicador_modelo").value;
     if (mr_tipo != "-6" && pro_alcance != "-6" && ma_tipo != "-6" && criterio_id != "-6" && !!proceso_id && met_id != "-6" && indicador_id != "-6") {
-        console.log(met_id);
         var datos = {
             proceso_id: proceso_id,
             m_recoleccion: {
@@ -4121,7 +4129,6 @@ function guardar_modelos_metodos() {
                 met_id: indicador_id,
             }
         }
-        console.log(datos.proceso_id + "-" + datos.met_id + "-" + datos.m_recoleccion.mr_tipo + "-" + datos.m_recoleccion.pro_id + "-" + datos.m_recoleccion.pro_alcance);
         post_api(
             "http://localhost:3000/api/add_metodo_modelo",
             datos,
@@ -4240,13 +4247,26 @@ function elminarProcesoPreReflexivo() {
             post_api(
                 "http://localhost:3000/api/del_process_pre_reflexive/",
                 data,
-                mensaje_exitoEnvioproceso_pre_reflexivo,
-                mensaje_errorEnvioproceso_pre_reflexivo
+                mensaje_exitosBorrar_pre_reflexivo,
+                mensaje_errorBorrar_pre_reflexivo
             );
         }
 
     } else alert("Debe seleccionar un proceso para eliminar");
 }
+
+function mensaje_exitosBorrar_pre_reflexivo(json) {
+    consultar_api(
+        "http://localhost:3000/api/procesos_pre_reflexive",
+        cargar_procesos_pre_reflexivos_table,
+        error_procesos_pre_reflexivos_table
+    );
+}
+
+function mensaje_errorBorrar_pre_reflexivo(error) {
+    alert(err);
+}
+
 
 function mensaje_errorEnvioproceso_pre_reflexivo(error) {
     console.log(error);
@@ -4564,7 +4584,7 @@ function guardar_procesos_reflexivos() {
     var sujetoId = sujetoGuardarproceso_reflexivo;
     var aspId = document.getElementById("Aspectos_autoconsciencia_reflexivos").value;
     var objetivo = document.getElementById("objetivos_alto_nivel_reflexivos").value;
-    if (!!nombre && !!descripcion && !!inicioP && !!finP && !!objetoId && !!sujetoId && aspId != "-6") {
+    if (!!nombre && !!descripcion && !!objetoId && !!sujetoId && aspId != "-6") {
         data = {
             nombre: nombre,
             descripcion: descripcion,

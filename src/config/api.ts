@@ -66,4 +66,5 @@ export default function (app: Application) {
   app.get("/api/procesos_reflexive/", api.procesos_reflexive);
   app.post("/api/add_metodo_modelo_reflexivos",api.add_metodo_modelo_reflexivos);
   app.post("/api/objetivos_sujetos",api.objetivos_sujetos);
+  app.get("/api/get_metodo_aprendizaje/", api.get_metodo_aprendizaje);
 };

@@ -557,10 +557,10 @@ export function add_accion(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var idP = req.body.id;
-    var activo = req.body.activo.toString();
+    var meaId= req.body.meaId;
+    var idP = req.body.UmbralId;
     var db = new database();
-    db.addUser_accion(idUser, name, descripcion, idP, activo);
+    db.addUser_accion(idUser, name, descripcion,idP,meaId);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -846,6 +846,17 @@ export function objetivos_sujetos(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
   
+}
+export function get_metodo_aprendizaje(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.get_metodo_aprendizaje(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
 }
 interface metodo_modelo_proceso {
   proceso_id: string;

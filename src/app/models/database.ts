@@ -1333,12 +1333,13 @@ export class mysql_connector {
     name: string,
     descripcion: string,
     idP: string,
-    activo: string
+    meaId: string
   ): void {
     var act;
-    this.connector.query(
-      `INSERT INTO accion (acc_nombre, acc_descripcion, umb_id, acc_activo,mea_id) 
-      VALUES ('${name}', '${descripcion}','${idP}','${activo}','1')`,
+    var sql=`INSERT INTO accion (acc_nombre, acc_descripcion, umb_id, acc_activo,mea_id) 
+    VALUES ('${name}', '${descripcion}','${idP}','1',${meaId})`;
+    console.log(sql);
+    this.connector.query(sql,
       function (error, results) {
         if (error) throw error;
       }
@@ -1488,7 +1489,8 @@ export class mysql_connector {
       `############# Envio a la funcion 'addUser_procesos_pre_reflexivos' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}`
     );
     var sql = `INSERT INTO procesoautoconsciencia (pa_nombre, pa_descripcion, pa_inicio_periodo_ejecucion,pa_fin_periodo_ejecucion,pa_activo,aa_id,suj_id,pa_tipo,obj_id) 
-    VALUES ('${name}', '${descripcion}','${inicioP}','${finP}','1','${aspId}','${sujId}','${paTipo}','${objetivo}')`;
+    VALUES ('${name}', '${descripcion}','${inicioP==undefined?"NULL":""+inicioP+""}','${finP==undefined?"NULL":""+finP+""}','1','${aspId}','${sujId}','${paTipo}','${objetivo}')`;
+    console.log(sql);
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
       func(results.insertId)
@@ -1780,7 +1782,8 @@ objetivo.obj_id =pa.obj_id`;
     func: Function
   ): void {
     var sql = `SELECT obj_id, obj_nombre
-    FROM objetivo WHERE suj_id=${id}`;
+    FROM objetivo WHERE suj_id=${id} AND obj_padre IS NULL`;
+console.log(sql);    
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaUmedicion: Array<object> = [];
@@ -1792,6 +1795,18 @@ objetivo.obj_id =pa.obj_id`;
         listaUmedicion.push(auxmedicion);
       }
       func(listaUmedicion);
+    });
+  }
+  public get_metodo_aprendizaje(
+    id: string,
+    func: Function
+  ): void {
+    var sql = `SELECT MAX(mea_id) as id
+    FROM metodoaprendizajerazonamiento WHERE mea_tipo=22 `;
+    this.connector.query(sql, (err, result, fields) => {
+      if (err) err;
+      var id= result[0];
+      func(id);
     });
   }
 
