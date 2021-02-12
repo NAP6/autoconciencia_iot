@@ -16,34 +16,36 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-6">
             <h6>Periodo de ejecucion:</h6>
-            <div class="col card" style="height: 115px;">
+            <div class="col card" style="height: 55px;">
                 <div class="form-group mt-2 row">
                     <label for="" class="col-sm-2 col-form-label">Inicio:</label>
                     <input type="date" id="inicio_del_periodo" name="inicio_del_periodo" value="" min="2020-01-01" max="2050-01-01">
-                </div>
-                <div class="form-group row">
                     <label for="" class="col-sm-2 col-form-label">Fin:</label>
                     <input type="date" id="fin_del_periodo" name="fin_del_periodo" value="" min="2020-01-01" max="2050-01-01">
+                </div>
+                <div class="row">
+                    <h6>Objetivo de alto nivel:</h6>
+                    <div class="col-12">
+                        <select class="custom-select" name="objetivos_alto_nivel" id="objetivos_alto_nivel" disabled></select>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mb-3">
+    <div class="row">
         <div class="col-6">
             <h6>Sujetos de autoconsciencia:</h6>
             <div id="sujetos_activos_proceso" class="card col-12 col-lg-10" style="overflow-y: auto;height: 166px;">
                 <ul id="lista_sujetos_activos_proceso"></ul>
             </div>
-
         </div>
         <div class="col-6">
-            <div class="row">
-                <div class="col-6">
-                    <h6>Categoría de objetos:</h6>
-                    <div class="input-group col-11">
-                        <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
+            <div class="mt-2">
+                <h6>Categoría de objetos:</h6>
+                <div class="form-group mt-1 col-12">
+                    <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
                                         <option>Seleccione..</option>
                                       <option id="1" value="1">Entidades Físicas</option>
                                       <option value="2">Nodos Cloud</option>
@@ -54,19 +56,10 @@
                                       <option value="7">Actuadores</option>
                                       <option value="8">Red</option>
                                     </select>
-                    </div>
                 </div>
-                <div class="col-6">
-                    <h6>Objetivo de alto nivel:</h6>
-                    <div class="input-group col-11">
-                        <select class="custom-select" name="objetivos_alto_nivel" id="objetivos_alto_nivel" disabled></select>
-                    </div>
-
-                </div>
-
                 <h6>Objeto de autoconsciencia:</h6>
                 <div class="col-sm-11">
-                    <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
+                    <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 90px;">
                         <ul id="lista_entidades_seleccionadas_procesos"></ul>
                     </div>
                 </div>

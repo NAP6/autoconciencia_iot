@@ -1384,6 +1384,28 @@ export class mysql_connector {
       }
     );
   }
+  public upd_acciones_umbrales(
+    id: string,
+    idE:string,
+    nombre:string,
+    descripcion:string,
+    activo:string,
+  ): void {
+    if (activo=="true"){
+      var act="1";
+    }else{
+      var act="0"
+    }
+    var sql =`UPDATE accion 
+    SET acc_nombre = '${nombre}', acc_descripcion = '${descripcion}', acc_activo = '${act}'
+    WHERE acc_id = '${idE}'`;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
 
   public delUser_aspects(idUser: string, id: string): void {
     console.log(
@@ -1626,6 +1648,81 @@ objetivo.obj_id =pa.obj_id`;
       }
     );
   }
+
+  public getUser_procesos_reflexive_id(
+    userID: string,
+    id: string,
+    func: Function
+  ): void {
+    var sql = `SELECT  pa.pa_id as id, 
+    pa.pa_nombre as nombre,
+    pa.pa_descripcion as descripcion,
+    DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio,
+    DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
+    asp.aa_nombre as aspecto_nombre,
+    asp.aa_id as aspecto_id,
+    obj.obj_nombre as objeto_nombre,
+    obj.obj_id as objeto_id,
+    obj.obj_tipo as objeto_tipo,
+    pa.suj_id as sujeto,
+    pa.pa_activo as activo,
+    objetivo.obj_nombre as objetivo_nombre,
+	objetivo.obj_id as objetivo_id,
+    model.ma_tipo_recurso as recurso,
+    crt.cd_id as criterio_id,
+crt.cd_nombre as criterio,
+mtc.mc_tipo_recurso as recursoMetodo,
+DATE_FORMAT(mtc.mc_inicio_periodo_calculo,"%Y-%m-%d") as inicio_metodo_calculo,
+DATE_FORMAT(mtc.mc_fin_periodo_calculo,"%Y-%m-%d") as fin_metodo_calculo,
+met.met_nombre as indicador,
+met.met_id as indircador_id,
+met2.met_nombre as indirecta,
+met2.met_id as indirecta_id
+FROM    procesoautoconsciencia pa,
+	aspectoautoconsciencia asp,
+    objeto obj,
+    modeloanalisis model,
+    metodoaprendizajerazonamiento apren2,
+    metodoaprendizajerazonamiento apren,
+    criteriodecision crt,
+    objetivo objetivo,
+    metodocalculo mtc,
+    metrica met,
+    metrica met2
+WHERE   pa.pa_id=${id} AND
+    pa.aa_id=asp.aa_id AND
+    obj.obj_id=asp.obj_id AND
+    model.mea_id=apren2.mea_id AND
+    crt.cd_id=model.cd_id AND
+    objetivo.obj_id =pa.obj_id AND
+    mtc.mea_id=apren.mea_id AND
+    apren2.met_id=met.met_id AND
+    apren.met_id =met2.met_id`;
+    console.log(sql);
+    this.connector.query(sql, (err, result, fields) => {
+      if (err) err;
+      var act;
+      if (result[0]["activo"] == 1) {
+        act = "true";
+      } else {
+        act = "false";
+      }
+      var procesos= result[0];
+      /*  {
+          id: result[0]["id"],
+          nombre: result[0]["nombre"],
+          descripcion: result[0]["descripcion"],
+          inicio: result[0]["inicio"],
+          fin: result[0]["fin"],
+          aspecto: result[0]["aspecto_nombre"],
+          sujeto: result[0]["sujeto"],
+          activo: act,
+        }; */
+      
+      func(procesos);
+    });
+  }
+
   public getUser_properties(
     id: string,
     func: Function
@@ -1770,7 +1867,6 @@ objetivo.obj_id =pa.obj_id`;
       console.log(data.m_calculo);
       var sql2 = `INSERT INTO metodocalculo (mc_tipo_recurso,mc_inicio_periodo_calculo,mc_fin_periodo_calculo,mea_id) VALUES ('${data.m_calculo.tipo_recurso}',${data.m_calculo.inicio==undefined?"NULL":"'"+data.m_calculo.inicio+"'"},${data.m_calculo.fin==undefined?"NULL":"'"+data.m_calculo.fin+"'"},'${idSup1}')`;
       console.log(sql2);
-      
       db.connector.query(sql2, function (error, results) {
         if (error) throw error;
       });
@@ -1799,17 +1895,118 @@ console.log(sql);
   }
   public get_metodo_aprendizaje(
     id: string,
-    func: Function
+    metodoId:string,
+    func: Function,
   ): void {
     var sql = `SELECT MAX(mea_id) as id
-    FROM metodoaprendizajerazonamiento WHERE mea_tipo=22 `;
+    FROM metodoaprendizajerazonamiento WHERE mea_tipo=${metodoId} `;
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var id= result[0];
       func(id);
     });
   }
-
+  public add_escenario_simulacion(
+    id: string,
+    nombre:string,
+    descripcion:string,
+    mea_id:string,
+    func: Function,
+  ): void {
+    var sql =`INSERT INTO escenariosimulacion (es_nombre,es_descripcion,mea_id,es_activo) VALUES ('${nombre}','${descripcion}',${mea_id},'1')`;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+  public escenario_simulacion(
+    userID: string,
+    func: Function
+  ): void {
+    var sql = `SELECT es_id as id, es_nombre as nombre,es_descripcion as descripcion,es_activo as activo FROM escenariosimulacion`;
+    this.connector.query(sql, (err, result, fields) => {
+      if (err) err;
+      var listaProcesos: { procesos: Array<object> } = {
+        procesos: [],
+      };
+      var act;
+      for (const i in result) {
+        if (result[i]["activo"] == 1) {
+          act = "true";
+        } else {
+          act = "false";
+        }
+        var auxmedicion = {
+          id: result[i]["id"],
+          nombre: result[i]["nombre"],
+          descripcion: result[i]["descripcion"],
+          activo: act,
+        };
+        listaProcesos.procesos.push(auxmedicion);
+      }
+      func(listaProcesos);
+    });
+  }
+  public del_escenario_simulacion(
+    id: string,
+    idE:string,
+    func: Function,
+  ): void {
+    var sql =`DELETE FROM escenariosimulacion WHERE es_id=${idE} `;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+  public upd_escenario_simulacion(
+    id: string,
+    idE:string,
+    nombre:string,
+    descripcion:string,
+    activo:string,
+    func: Function,
+  ): void {
+    if (activo=="true"){
+      var act="1";
+    }else{
+      var act="0"
+    }
+    var sql =`UPDATE escenariosimulacion 
+    SET es_nombre = '${nombre}', es_descripcion = '${descripcion}', es_activo = '${act}'
+    WHERE es_id = '${idE}'`;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+  public get_variables_valor(
+    userID: string,
+    id:string,
+    func: Function
+  ): void {
+    var sql = `SELECT vas.vs_id as id_variable, vas.vs_nombre as nombre_variable,vs.vs_id as valor_id,vs.vas_valor as valor FROM valorsimulacion vs, variablesimulacion vas WHERE vs.es_id=${id} AND vas.vs_id=vs.vs_id`;
+    this.connector.query(sql, (err, result, fields) => {
+      if (err) err;
+      var listaProcesos: { procesos: Array<object> } = {
+        procesos: [],
+      };
+      for (const i in result) {
+        var auxmedicion = {
+          id: result[i]["id_variable"],
+          nombre: result[i]["nombre_variable"],
+          valor: result[i]["valor"],
+        };
+        listaProcesos.procesos.push(auxmedicion);
+      }
+      func(listaProcesos);
+    });
+  }
   // La atributo variable no existe, solo le pusimos para probar
   private modelo = {
     "MonitorIoT:DataMonitoringArchitectureModel": {

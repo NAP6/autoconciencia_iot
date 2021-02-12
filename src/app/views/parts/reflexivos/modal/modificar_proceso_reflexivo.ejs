@@ -1,19 +1,19 @@
 <div class="" id="pagina_proceso_modificar">
     <div class="row">
         <div class="col">
-            <input type="text" class="d-none" id="id_proceso_pre_reflexivo_modificar" value="<%= modificar.id %>">
+            <input type="text" class="d-none" id="id_proceso_reflexivo_modificar" value="<%= modificar.id %>">
             <input type="text" class="d-none" id="id_sujeto" value="<%= modificar.sujeto %>">
             <input type="text" class="d-none" id="id_aspecto" value="<%= modificar.aspecto %>">
             <div class="form-group mt-4 row">
                 <label for="" class="col-sm-3 col-form-label">Nombre:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" id="input-name-proceso-pre-reflexivo_modificar" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" value="<%= modificar.nombre %>" />
+                    <input type="text" class="form-control" id="input-name-proceso-reflexivo_modificar" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" value="<%= modificar.nombre %>" />
                 </div>
             </div>
             <div class="form-group row ">
                 <label for=" " class="col-sm-3 col-form-label ">Descripcion:</label>
                 <div class="col-sm-7">
-                    <textarea type="text " class="form-control " id="input-descripcion-proceso-pre-reflexivo_modificar" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();"><%= modificar.descripcion %></textarea>
+                    <textarea type="text " class="form-control " id="input-descripcion-proceso-reflexivo_modificar" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();"><%= modificar.descripcion %></textarea>
                 </div>
             </div>
         </div>
@@ -22,14 +22,14 @@
             <div class="col card" style="height: 55px;">
                 <div class="form-group mt-2 row">
                     <label for="" class="col-sm-2 col-form-label">Inicio:</label>
-                    <input type="date" id="inicio_del_periodo_modificar" name="inicio_del_periodo_modificar" value="<%= modificar.inicio %>" min="2020-01-01" max="2050-01-01">
+                    <input type="date" id="inicio_del_periodo_reflexivo_modificar" name="inicio_del_periodo_reflexivo_modificar" value="<%= modificar.inicio %>" min="2020-01-01" max="2050-01-01">
                     <label for="" class="col-sm-2 col-form-label">Fin:</label>
-                    <input type="date" id="fin_del_periodo_modificar" name="fin_del_periodo_modificar" value="<%= modificar.fin %>" min="2020-01-01" max="2050-01-01">
+                    <input type="date" id="fin_del_periodo_reflexivo_modificar" name="fin_del_periodo_reflexivo_modificar" value="<%= modificar.fin %>" min="2020-01-01" max="2050-01-01">
                 </div>
                 <div class="row">
                     <h6>Objetivo de alto nivel:</h6>
-                    <div class="col-12">
-                        <select class="custom-select" name="objetivos_alto_nivel_modificar" id="objetivos_alto_nivel_modificar" disabled>
+                    <div class="input-group col-11">
+                        <select class="custom-select" name="objetivos_alto_nivel_modificar_reflexivos" id="objetivos_alto_nivel_modificar_reflexivos" disabled>
                         <option value="<%= modificar.objetivo_id %>">   <%= modificar.objetivo_nombre %></option>
                     </select>
                     </div>
@@ -40,15 +40,15 @@
     <div class="row">
         <div class="col-6">
             <h6>Sujetos de autoconsciencia:</h6>
-            <div id="sujetos_activos_proceso_modificar" class="card col-12 col-lg-10" style="overflow-y: auto;height: 166px;">
-                <ul id="lista_sujetos_activos_proceso_modificar"></ul>
+            <div id="sujetos_activos_proceso_modificar_reflexivos" class="card col-12 col-lg-10" style="overflow-y: auto;height: 166px;">
+                <ul id="lista_sujetos_activos_proceso_reflexivo_modificar"></ul>
             </div>
         </div>
         <div class="col-6">
             <div class="mt-2">
                 <h6>Categoría de objetos:</h6>
-                <div class="form-group col-12">
-                    <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
+                <div class="input-group col-11">
+                    <select class="custom-select" name="CategoriaEntidadesProcesosReflexivos" id="CategoriaEntidadesProcesosReflexivos" disabled>
                                 <% switch (modificar.objeto_tipo) {
                                     case 'CloudNode' : %>
                                     <option value="2">Nodos Cloud</option>
@@ -79,14 +79,13 @@
                                             <% break;
                                     case 'Sensor' : %>
                                     <option value="5">Sensores</option>
-                                            <% break;
-                                            
+                                            <% break;                                            
                                     } %>
                                     </select>
                 </div>
                 <h6>Objeto de autoconsciencia:</h6>
                 <div class="col-sm-11">
-                    <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
+                    <div id="entidades_seleccionados_area_procesos_reflexivos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
                         <ul id="<%= modificar.objeto_id %>">
                             <%= modificar.objeto_nombre %>
                         </ul>
@@ -96,7 +95,7 @@
         </div>
         <h6 class="text-center">Aspectos de autoconsciencia</h6>
         <div class="input-group col-11">
-            <select class="custom-select" name="Aspectos_autoconsciencia_modificar" id="Aspectos_autoconsciencia_modificar" disabled>
+            <select class="custom-select" name="Aspectos_autoconsciencia_modificar_reflexivos" id="Aspectos_autoconsciencia_modificar_reflexivos" disabled>
                    <option value="<%= modificar.aspecto_id %>"><%= modificar.aspecto_nombre %></option>
                  </select>
         </div>

@@ -590,7 +590,21 @@ export function del_accion(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-
+export function upd_acciones_umbrales(req: Request, res: Response) {
+  if (req.session?.user) {
+    var idUser = req.session?.user.userID;
+    var idaccion = req.body.id;
+    var nombre =req.body.nombre;
+    var descripcion=req.body.descripcion;
+    var activo=req.body.activo.toString();
+    console.log(activo);
+    var db = new database();
+    db.upd_acciones_umbrales(idUser, idaccion,nombre,descripcion,activo);
+    res.json({ mensaje: "La accion fue realizada con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
@@ -851,7 +865,73 @@ export function get_metodo_aprendizaje(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    db.get_metodo_aprendizaje(id, (jsonEscala: object) => {
+    var metodoid=req.body.id;
+    db.get_metodo_aprendizaje(id,metodoid, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function add_escenario_simulacion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var nombre=req.body.nombre;
+    var descripcion=req.body.descripcion;
+    var mea_id=req.body.mea_id;
+    db.add_escenario_simulacion(id,nombre,descripcion,mea_id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function escenario_simulacion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.escenario_simulacion(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function del_escenario_simulacion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var idE=req.body.id;
+    db.del_escenario_simulacion(id,idE, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function upd_escenario_simulacion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var idE=req.body.id;
+    var nombre=req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var activo=req.body.activo;
+    db.upd_escenario_simulacion(id,idE,nombre,descripcion,activo, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function get_variables_valor(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var idV=req.body.id;
+    db.get_variables_valor(id,idV, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {

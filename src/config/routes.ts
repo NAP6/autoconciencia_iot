@@ -22,6 +22,7 @@ export default function (app: Application, upload: Multer) {
   app.get("/proceso_pre_reflexivo",nv.loggedIn,nv.proceso_pre_reflexivo);
   app.post("/modificar_pre_reflexivos",nv.loggedIn,nv.modificar_pre_reflexivos);
   app.get("/procesos_reflexivos",nv.loggedIn,nv.procesos_reflexivos);
+  app.post("/modificar_reflexivos",nv.loggedIn,nv.modificar_reflexivos);
 
   app.post(
     "/save_new_model",

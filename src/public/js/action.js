@@ -3776,8 +3776,8 @@ function cerrar_modal_activos() {
 }
 
 function guardarAccionUmbral() {
-    consultar_api(
-        "http://localhost:3000/api/get_metodo_aprendizaje",
+    post_api(
+        "http://localhost:3000/api/get_metodo_aprendizaje", { id: 22 },
         enviarDatos_acciones_umbrales,
         errorenviarDatos_acciones_umbrales
     )
@@ -3852,6 +3852,54 @@ function cargarDespuesdeEliminarAcciones() {
             console.log(res);
         }
     );
+}
+
+function modificarAccionesUmbrales() {
+    var radio = document.getElementsByName("accion_seleccionada");
+    var id;
+    var name;
+    var descripcion;
+    var activo;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            descripcion = elem.dataset.descripcion;
+            activo = elem.dataset.activo == "true";
+            return;
+        }
+    });
+    if (!!id && !!name && !!descripcion) {
+        $("#modal_activos_procesos").modal("hide");
+        document.getElementById("id_accion_umbral_modificar").value = id;
+        document.getElementById("nombre_accion_umbral_modificar").value = name;
+        document.getElementById("descripcion_accion_umbral_modificar").value = descripcion;
+        document.getElementById("activo_accion_umbral_modificar").checked = activo;
+
+        $("#modal_modificar_accion_umbral").modal("show");
+    } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function guardarModificacionAccionesUmbrales() {
+    var data = {
+        id: document.getElementById("id_accion_umbral_modificar").value,
+        nombre: document.getElementById("nombre_accion_umbral_modificar").value,
+        descripcion: document.getElementById("descripcion_accion_umbral_modificar").value,
+        activo: document.getElementById("activo_accion_umbral_modificar").checked,
+    }
+    post_api(
+        "http://localhost:3000/api/upd_acciones_umbrales/", data,
+        (res) => {
+            console.log(res);
+        },
+        (res) => {
+            console.log(res);
+        }
+    );
+    setTimeout(cargarDespuesdeEliminarAcciones, 200);
+    $("#modal_modificar_accion_umbral").modal("hide");
+    $("#modal_activos_procesos").modal("show");
+
 }
 
 
@@ -4639,7 +4687,7 @@ function cargar_procesos_reflexivos_table(json) {
         var ini = pro.inicio.split("T");
         var fin = pro.fin.split("T");
         res += "<tr>";
-        res += `<td><input type="radio" name="proceso_reflexivo_seleccionado" value="${pro.id }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-aspecto="${pro.aspecto}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${pro.activo == "true"}"></td>`;
+        res += `<td><input type="radio" form="modificar_proceso_reflexivo_form" name="proceso_reflexivo_seleccionado" value="${pro.id }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-aspecto="${pro.aspecto}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${pro.activo == "true"}"></td>`;
         res += `<td>${pro.id}</td>`;
         res += `<td>${pro.nombre}</td>`;
         res += `<td>${pro.sujeto}</td>`;
@@ -4679,7 +4727,7 @@ function guardar_proceso_pre_reflexivo_boton() {
     } else if (cont_paso == 2) {
         if (guardar_modelos_metodos()) {
             document.getElementById('btn-section-3').classList.replace('d-none', 'd-inline');
-            document.getElementById('btn-guardar').innerHTML = `Regresar`;
+            document.getElementById('btn-guardar').innerHTML = `Salir`;
             cont_paso++;
         } else {
             alert("No se ha podido guardar, verifique todos los campos");
@@ -4724,7 +4772,7 @@ function guardar_proceso_reflexivo_boton() {
     } else if (cont_paso_reflexivos == 2) {
         if (guardar_modelos_metodos_reflexivos()) {
             document.getElementById('btn-guardar-metodo').classList.replace('d-none', 'd-inline');
-            document.getElementById('btn-guardar-reflexivos').innerHTML = `Regresar`;
+            document.getElementById('btn-guardar-reflexivos').innerHTML = `Salir`;
             cont_paso_reflexivos++;
         } else {
             alert("No se ha podido guardar, verifique todos los campos");
@@ -5230,13 +5278,18 @@ function modificar_proceso_pre_reflexivo_boton() {
 
         if (modificar_modelos_metodos()) {
             document.getElementById('btn-section-3-modificar').classList.replace('d-none', 'd-inline');
-            document.getElementById('btn-modificar').innerHTML = `Regresar`;
+            document.getElementById('btn-modificar').innerHTML = `Salir`;
             cont_paso_modificar++;
         } else {
             alert("No se ha podido guardar, verifique todos los campos");
         }
     } else if (cont_paso_modificar == 3) {
-        alert("No esta programado aun");
+        history.back();
+        consultar_api(
+            "http://localhost:3000/api/procesos_pre_reflexive",
+            cargar_procesos_pre_reflexivos_table,
+            error_procesos_pre_reflexivos_table
+        );
     }
 }
 
@@ -5469,4 +5522,443 @@ function cargar_propiedades_select_modificar(json) {
 
 function error_cargar_propiedades_select_modificar(error) {
     alert(error);
+}
+
+function abrirModalEscenarioSimulacion() {
+    $("#modal_escenarios_simulacion").modal("show");
+    consultar_api(
+        "http://localhost:3000/api/ascenario_simulacion",
+        cargar_tabla_escenarios_simulacion,
+        error_cargar_tabla_escenarios_simulacion
+    );
+}
+
+function cargar_tabla_escenarios_simulacion(json) {
+    res = "";
+    json.procesos.forEach((es) => {
+        res += `<tr onClick="visibilidad_variables_valores('${es.id}');"> `;
+        res += `<td><input type="radio" name="escenario_seleccionado" value="${es.id }" data-name="${es.nombre}" data-descripcion="${es.descripcion}" data-activo="${es.activo == "true"}"></td>`;
+        res += `<td>${es.id}</td>`;
+        res += `<td>${es.nombre}</td>`;
+        res += `<td>${es.descripcion}</td>`;
+        if (es.activo == "true")
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_escenarios").innerHTML = res;
+}
+
+function error_cargar_tabla_escenarios_simulacion(error) {
+    alert("error");
+}
+
+function cerrar_modal_escenarios_simulacion() {
+    $("#modal_escenarios_simulacion").modal("hide");
+}
+
+function agregar_escenario_simulacion() {
+    $("#modal_escenarios_simulacion").modal("hide");
+    $("#modal_agregar_escenario_simulacion").modal("show");
+}
+
+function guardarEscenarioSimulacions() {
+    post_api(
+        "http://localhost:3000/api/get_metodo_aprendizaje", { id: 23 },
+        enviarDatos_escenarios_simulacion,
+        errorenviarDatos_escenarios_simulacion
+    )
+}
+
+function enviarDatos_escenarios_simulacion(json) {
+    var data = {
+        nombre: document.getElementById("nombre_escenario_simulacion").value,
+        descripcion: document.getElementById("descripcion_escenario_simulacion").value,
+        mea_id: json.id,
+    }
+    post_api(
+        "http://localhost:3000/api/add_escenario_simulacion", data,
+        error_guardar_escenarios_simulacion
+    )
+    document.getElementById("nombre_escenario_simulacion").value = "";
+    document.getElementById("descripcion_escenario_simulacion").value = "";
+
+    $("#modal_agregar_escenario_simulacion").modal("hide");
+    setTimeout(guardar_escenarios_simulacion, 200);
+    $("#modal_escenarios_simulacion").modal("show");
+}
+
+function errorenviarDatos_escenarios_simulacion(error) {
+    console.log(error);
+}
+
+function guardar_escenarios_simulacion() {
+    consultar_api(
+        "http://localhost:3000/api/ascenario_simulacion",
+        cargar_tabla_escenarios_simulacion,
+        error_cargar_tabla_escenarios_simulacion
+    );
+}
+
+function error_guardar_escenarios_simulacion(error) {
+    alert(error);
+}
+
+function eliminar_escenario_simulacion() {
+    var radio = document.getElementsByName("escenario_seleccionado");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!!id) {
+        post_api(
+            "http://localhost:3000/api/del_escenario_simulacion/", { id: id },
+            (res) => {
+                console.log(res);
+            },
+            (res) => {
+                console.log(res);
+            }
+        );
+        setTimeout(guardar_escenarios_simulacion, 200);
+    } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function modificar_escenario_simulacion() {
+    var radio = document.getElementsByName("escenario_seleccionado");
+    var id;
+    var name;
+    var descripcion;
+    var activo;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            descripcion = elem.dataset.descripcion;
+            activo = elem.dataset.activo == "true";
+            return;
+        }
+    });
+    if (!!id && !!name && !!descripcion) {
+        document.getElementById("id_escenario_simulacion").value = id;
+        document.getElementById("nombre_escenario_simulacion_modificar").value = name;
+        document.getElementById("descripcion_escenario_simulacion_modificar").value = descripcion;
+        document.getElementById("activoEscenarioSimulacion_modificar").checked = activo;
+        $("#modal_modificar_escenario_simulacion").modal("show");
+    } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function ModificarEscenarioSimulacions() {
+    var data = {
+        id: document.getElementById("id_escenario_simulacion").value,
+        nombre: document.getElementById("nombre_escenario_simulacion_modificar").value,
+        descripcion: document.getElementById("descripcion_escenario_simulacion_modificar").value,
+        activo: document.getElementById("activoEscenarioSimulacion_modificar").checked,
+    }
+    post_api(
+        "http://localhost:3000/api/upd_escenario_simulacion/", data,
+        (res) => {
+            console.log(res);
+        },
+        (res) => {
+            console.log(res);
+        }
+    );
+    setTimeout(guardar_escenarios_simulacion, 200);
+    $("#modal_modificar_escenario_simulacion").modal("hide");
+
+}
+
+function visibilidad_variables_valores(id) {
+    document.getElementById("bt_add_variables_valor").classList.replace("d-none", "inline-block");
+    document.getElementById("bd_mod_variables_valor").classList.replace("d-none", "inline-block");
+    document.getElementById("bd_del_variables_valor").classList.replace("d-none", "inline-block");
+    document.getElementById("tabla_variables_valor_table").classList.replace("d-none", "inline-block");
+    post_api(
+        "http://localhost:3000/api/get_variables_valor/", { id: id },
+        cargar_variables_valor_table,
+        (res) => {
+            console.log(res);
+        }
+    );
+}
+
+function cargar_variables_valor_table(json) {
+    console.log(json);
+    res = "";
+    json.procesos.forEach((as) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="variable_valor_seleccionado" value="${as.id}" data-name="${as.nombre}"></td>`;
+        res += `<td>${as.id}</td>`;
+        res += `<td>${as.nombre_variable}</td>`;
+        res += `<td>${as.valor}</td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tabla_variables_valores").innerHTML = res;
+}
+
+function agregar_variables_valor() {
+    $("#modal_escenarios_simulacion").modal("hide");
+    $("#modal_agregar_variables_valores_simulacion").modal("show");
+}
+
+function cerrar_modal_variables_valor() {
+    $("#modal_escenarios_simulacion").modal("show");
+    $("#modal_agregar_variables_valores_simulacion").modal("hide");
+}
+
+function validarSeleccionReflexivos() {
+    var radio = document.getElementsByName("proceso_reflexivo_seleccionado");
+    var id;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            return;
+        }
+    });
+    if (!id) {
+        alert("Debe seleccionar un proceso para modificar");
+        return false;
+    }
+}
+
+function modificar_informacion_boton_reflexivos(id) {
+    $('#modificar_informacion_general_reflexivos.collapse').collapse('hide');
+    $('#modificar_metodos_modelos_reflexivos.collapse').collapse('hide');
+    $(`#${id}.collapse`).collapse('show');
+}
+cont_paso_modificar_reflexivos = 1;
+
+function modificar_proceso_reflexivo_boton() {
+    if (cont_paso_modificar_reflexivos == 1) {
+        if (modificar_proceso_reflexivo()) {
+            document.getElementById('btn-reflexivos-modificar').classList.replace('d-none', 'd-inline');
+            document.getElementById('btn-modificar_reflexivos').innerHTML = `Modificar (Metodos modelos)`;
+            $('#modificar_informacion_general_reflexivos.collapse').collapse('hide');
+            $('#modificar_metodos_modelos_reflexivos.collapse').collapse('show');
+            cont_paso_modificar_reflexivos++;
+            cargar_select_metrica_indirecta_modificar_reflexivos();
+        } else {
+            alert("No se ha podido guardar, verifique todos los campos");
+        }
+    } else if (cont_paso_modificar_reflexivos == 2) {
+
+        if (modificar_modelos_metodos_reflexivos()) {
+
+            document.getElementById('btn-reflexivos-3-modificar').classList.replace('d-none', 'd-inline');
+            document.getElementById('btn-modificar_reflexivos').innerHTML = `Salir`;
+            cont_paso_modificar_reflexivos++;
+        } else {
+            alert("No se ha podido guardar, verifique todos los campos metodos");
+        }
+    } else if (cont_paso_modificar_reflexivos == 3) {
+        consultar_api(
+            "http://localhost:3000/api/procesos_pre_reflexive",
+            cargar_procesos_pre_reflexivos_table,
+            error_procesos_pre_reflexivos_table
+        );
+        history.back();
+
+    }
+}
+
+function modificar_modelos_metodos_reflexivos() {
+    document.getElementById("inicio_metodos_reflexivos_modificar").disabled = true;
+    document.getElementById("fin_metodos_reflexivos_modificar").disabled = true;
+    document.getElementById("metrica_indirecta_reflexivos_modificar").disabled = true;
+    document.getElementById("indicador_modelo_modificar").disabled = true;
+    document.getElementById("mapeo_parametros_btn_metodos_modificar").disabled = false;
+    document.getElementById("escenario_simulacion_modificar").disabled = false;
+    document.getElementById("mapeo_parametros_modelo_modificar").disabled = false;
+    document.getElementById("btn-recomendaciones_model_modificar").disabled = false;
+    return true;
+}
+
+function cargar_select_metrica_indirecta_modificar_reflexivos() {
+    var limpiar = document.getElementById("metrica_indirecta_reflexivos_modificar");
+
+    var seleccionIndicador = document.getElementById("Aspectos_autoconsciencia_modificar_reflexivos");
+    var tipo_valor = seleccionIndicador.options[seleccionIndicador.selectedIndex].text;
+    tipoM = "INDIRECTA";
+    data = {
+        nombre: tipo_valor,
+        tipo: tipoM,
+    };
+    post_api(
+        "http://localhost:3000/api/get_metrica_select",
+        data,
+        cargar_select_metrica_proceso_reflexivo_modificar,
+        error_cargar_select_metrica_proceso_reflexivo_modificar
+    );
+
+    var limpiar3 = document.getElementById("indicador_modelo_modificar");
+    var seleccion = document.getElementById("Aspectos_autoconsciencia_modificar_reflexivos");
+    var tipo_valor_Indicador = seleccion.options[seleccion.selectedIndex].text;
+    var tipoIndi = "INDICADOR";
+    data2 = {
+        nombre: tipo_valor_Indicador,
+        tipo: tipoIndi,
+    };
+    post_api(
+        "http://localhost:3000/api/get_metrica_select",
+        data2,
+        cargar_select_indicador_proceso_reflexivo_modificar,
+        error_cargar_select_indicador_proceso_reflexivo_modificar
+    );
+}
+
+function cargar_select_metrica_proceso_reflexivo_modificar(json) {
+    var ope = document.getElementById("metrica_indirecta_reflexivos_modificar");
+    var seleccion = document.getElementById("metrica_indirecta_reflexivos_modificar").value;
+    console.log(seleccion);
+    var opcion = document.createElement("option");
+    opcion.innerHTML = "Seleccione..";
+    opcion.value = "-6";
+    ope.innerHTML = "";
+    ope.appendChild(opcion);
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        if (seleccion == option.value) {
+            option.selected = true;
+        }
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+}
+
+function error_cargar_select_metrica_proceso_reflexivo_modificar() {
+    alert("No se cargo el select metrica en el modal procesos reflexivo");
+}
+
+function cargar_select_indicador_proceso_reflexivo_modificar(json) {
+    var ope = document.getElementById("indicador_modelo_modificar");
+    var seleccion = document.getElementById("indicador_modelo_modificar").value;
+    var opcion = document.createElement("option");
+    opcion.innerHTML = "Seleccione..";
+    opcion.value = "-6";
+    ope.innerHTML = "";
+    ope.appendChild(opcion);
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        if (seleccion == option.value) {
+            option.selected = true;
+        }
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+}
+
+function error_cargar_select_indicador_proceso_reflexivo_modificar() {
+    alert("No se cargo el indicar metrica en el modal procesos");
+}
+
+function modificar_proceso_reflexivo() {
+    var nombre = document.getElementById("input-name-proceso-reflexivo_modificar").value;
+    var descripcion = document.getElementById("input-descripcion-proceso-reflexivo_modificar").value;
+    var inicio = document.getElementById("inicio_del_periodo_reflexivo_modificar").value;
+    var fin = document.getElementById("fin_del_periodo_reflexivo_modificar").value;
+    var id = document.getElementById("id_proceso_reflexivo_modificar").value;
+    if (!!nombre && !!descripcion) {
+        data = {
+            nombre: nombre,
+            descripcion: descripcion,
+            inicio: inicio,
+            fin: fin,
+            id: id,
+        }
+        post_api(
+            "http://localhost:3000/api/mod_process_pre_reflexive/",
+            data,
+            mensaje_exitoModificarproceso_reflexivo,
+            mensaje_errorModificarproceso_reflexivo
+        );
+        document.getElementById("input-name-proceso-reflexivo_modificar").disabled = true;
+        document.getElementById("input-descripcion-proceso-reflexivo_modificar").disabled = true;
+        document.getElementById("inicio_del_periodo_reflexivo_modificar").disabled = true;
+        document.getElementById("fin_del_periodo_reflexivo_modificar").disabled = true;
+        document.getElementById("modal_metodo_mod_reflexivos").classList.replace("d-none", "d-block");
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function mensaje_exitoModificarproceso_reflexivo(json) {
+    console.log(json);
+}
+
+function mensaje_errorModificarproceso_reflexivo(error) {
+    alert(error);
+}
+
+if (document.getElementById("lista_sujetos_activos_proceso_reflexivo_modificar"))
+    consultar_api(
+        "http://localhost:3000/api/subjects",
+        cargar_sujetos_activos_procesos_modificar_reflexivos,
+        error_cargar_sujetos_activos_procesos_modificar_reflexivos
+    );
+
+function cargar_sujetos_activos_procesos_modificar_reflexivos(json) {
+    var aux_visible_activo = new Set();
+    var aux_visible_inactivo = new Set();
+    json.forEach((elemento) => {
+        if (!!elemento.padre && elemento.activo == 1) {
+            aux_visible_activo.add(elemento.padre);
+        } else if (!!elemento.padre && elemento.activo == 0) {
+            aux_visible_inactivo.add(elemento.padre);
+        }
+    });
+    var idModificar = document.getElementById("id_sujeto").value;
+    json.forEach((elemento) => {
+        var insertar;
+        if (!elemento.padre) {
+            insertar = document.getElementById("lista_sujetos_activos_proceso_reflexivo_modificar");
+        } else {
+            insertar = document.createElement("ul");
+            document
+                .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+                .appendChild(insertar);
+        }
+        li = document.createElement("li");
+        li.id = `li_entidad_seleccionado_${elemento.id}`;
+        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+            li.style.display = "list-item";
+        } else {
+            li.style.display = "none";
+        }
+        divFormCheck = document.createElement("div");
+        divFormCheck.classList.add("form-check");
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `sujeto_seleccionado_${elemento.id}`;
+        checkbox.disabled = true;
+        checkbox.name = "checkbox_sujetos_procesos";
+        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.puro_id = elemento.id;
+        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.setAttribute("onclick", "");
+        if (checkbox.dataset.puro_id == idModificar) {
+            checkbox.checked = true;
+        }
+        labelChek = document.createElement("label");
+        labelChek.classList.add("form-check-label");
+        labelChek.htmlFor = checkbox.id;
+        var button = document.createElement("button");
+        button.classList.add("btn", "py-0", "px-0");
+        button.innerHTML = elemento.nombre;
+        labelChek.appendChild(button);
+        li.appendChild(divFormCheck);
+        divFormCheck.appendChild(checkbox);
+        divFormCheck.appendChild(labelChek);
+        insertar.appendChild(li);
+    });
+}
+
+function error_cargar_sujetos_activos_procesos_modificar_reflexivos(error) {
+    alert("Error al cargar los datos del modelo: " + error);
 }

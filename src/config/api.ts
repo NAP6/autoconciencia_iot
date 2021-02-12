@@ -47,6 +47,7 @@ export default function (app: Application) {
   app.post("/api/add_accion/",api.add_accion);
   app.post("/api/get_accion",api.get_accion);
   app.post("/api/del_accion/", api.del_accion);
+  app.post("/api/upd_acciones_umbrales/", api.upd_acciones_umbrales);
   app.get("/api/user_models/", api.user_models);
   app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
   app.get("/api/last_EntityID/", api.last_EntityID);
@@ -66,5 +67,10 @@ export default function (app: Application) {
   app.get("/api/procesos_reflexive/", api.procesos_reflexive);
   app.post("/api/add_metodo_modelo_reflexivos",api.add_metodo_modelo_reflexivos);
   app.post("/api/objetivos_sujetos",api.objetivos_sujetos);
-  app.get("/api/get_metodo_aprendizaje/", api.get_metodo_aprendizaje);
+  app.post("/api/get_metodo_aprendizaje/", api.get_metodo_aprendizaje);
+  app.post("/api/add_escenario_simulacion/", api.add_escenario_simulacion);
+  app.get("/api/ascenario_simulacion/", api.escenario_simulacion);
+  app.post("/api/del_escenario_simulacion/", api.del_escenario_simulacion);
+  app.post("/api/upd_escenario_simulacion/", api.upd_escenario_simulacion);
+  app.post("/api/get_variables_valor/", api.get_variables_valor);
 };

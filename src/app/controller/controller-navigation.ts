@@ -190,7 +190,19 @@ export function modificar_pre_reflexivos(req: Request, res: Response) {
       session: req.session,
     });
   });
-
+}
+export function modificar_reflexivos(req: Request, res: Response) {
+  var id =req.body.proceso_reflexivo_seleccionado;
+  var idUser = req.session?.user.userID;
+  var db= new mysql_connector();
+  db.getUser_procesos_reflexive_id(idUser, id,(jsonEscala: object) => {
+    res.render("modificar_reflexivos", {
+      error: req.flash("error"),
+      succes: req.flash("succes"),
+      modificar:jsonEscala,
+      session: req.session,
+    });
+  });
 }
 export function procesos_reflexivos(req: Request, res: Response) {
   res.render("procesos_reflexivos", {
@@ -200,11 +212,14 @@ export function procesos_reflexivos(req: Request, res: Response) {
   });
 }
 export function generate_model(req: Request, res: Response) {
+  var modeloID=req.session?.active_model.modelID;
   res.render("generate_model", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
   });
+  var db
+  
 }
 
 export function save_new_model(
