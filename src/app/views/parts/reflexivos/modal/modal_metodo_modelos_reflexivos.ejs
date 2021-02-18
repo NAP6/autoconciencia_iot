@@ -8,7 +8,7 @@
     <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade show active" id="nav-recoleccion" role="tabpanel" aria-labelledby="nav-recoleccion-tab">
             <div class="row mt-3" id="formularios_divididos">
-                <div class="col-6">
+                <div class="col-7">
                     <div class="col card input-group mb-2 mt-2" style="height: 40px; width: auto;">
                         <div class="form-group mt-2 row">
                             <label class="col">Inicio:</label>
@@ -35,10 +35,13 @@
                         <select class="custom-select" name="recurso_reflexivos" id="recurso_reflexivos" disabled>
                     </select>
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" id="mapeo_parametros_btn_metodos" type="button" onclick="abrirMapeoParametros_metodos();" disabled>Mapeo de parametros</button>
+                            <button class="btn btn-outline-secondary" id="variables_simulacion" type="button" onclick="AbrirModalAgregarVariablesSimulacion();" disabled>Variables de simulación</button>
                         </div>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" id="escenario_simulacion" type="button" onclick="abrirModalEscenarioSimulacion();" disabled>Escenarios de simulación</button>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" id="mapeo_parametros_btn_metodos" type="button" onclick="abrirMapeoParametros_metodos();" disabled>Mapeo de parametros</button>
                         </div>
                     </div>
 
@@ -91,7 +94,7 @@
                         <select class="custom-select" name="criterio_de_decision_modelo" id="criterio_de_decision_modelo">
                   </select>
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" id="btn-recomendaciones_model" type="button" onclick="" disabled>Recomendaciones prescriptivas</button>
+                            <button class="btn btn-outline-secondary" id="btn-recomendaciones_model" type="button" onclick="recomendaciones_procesos_reflexivos();" disabled>Recomendaciones prescriptivas</button>
                         </div>
                     </div>
                 </div>

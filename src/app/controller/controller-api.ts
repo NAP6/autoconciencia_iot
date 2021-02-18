@@ -918,7 +918,7 @@ export function upd_escenario_simulacion(req: Request, res: Response) {
     var idE=req.body.id;
     var nombre=req.body.nombre;
     var descripcion = req.body.descripcion;
-    var activo=req.body.activo;
+    var activo=req.body.activo.toString();
     db.upd_escenario_simulacion(id,idE,nombre,descripcion,activo, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
@@ -932,6 +932,101 @@ export function get_variables_valor(req: Request, res: Response) {
     var db = new database();
     var idV=req.body.id;
     db.get_variables_valor(id,idV, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function get_variable_simulacion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.get_variable_simulacion(id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function add_variable_simulacion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var nombre=req.body.nombre;
+    var mea_id=req.body.mea_id;
+    db.add_variable_simulacion(id,nombre,mea_id, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_variable_simulacion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var idE=req.body.id;
+    db.del_variable_simulacion(id,idE, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function upd_variable_simulacion(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var idE=req.body.id;
+    var nombre=req.body.nombre;
+    var activo=req.body.activo.toString();
+    db.upd_variable_simulacion(id,idE,nombre,activo, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function add_variables_valor(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var es_id=req.body.es_id;
+    var vs_id=req.body.vs_id;
+    var vas_valor=req.body.vas_valor;
+    db.add_variables_valor(id,es_id,vs_id,vas_valor, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export function del_variables_valor(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var idE=req.body.vas_valor;
+    db.del_variables_valor(id,idE, (jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function upd_variables_valor(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var vs_id=req.body.vs_id;
+    var vas_valor=req.body.vas_valor;
+    var vas_valor_viejo=req.body.vas_valor_viejo;
+    db.upd_variables_valor(id,vs_id,vas_valor,vas_valor_viejo,(jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {

@@ -1991,6 +1991,7 @@ console.log(sql);
     func: Function
   ): void {
     var sql = `SELECT vas.vs_id as id_variable, vas.vs_nombre as nombre_variable,vs.vs_id as valor_id,vs.vas_valor as valor FROM valorsimulacion vs, variablesimulacion vas WHERE vs.es_id=${id} AND vas.vs_id=vs.vs_id`;
+    console.log(sql);
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaProcesos: { procesos: Array<object> } = {
@@ -2007,6 +2008,132 @@ console.log(sql);
       func(listaProcesos);
     });
   }
+  public get_variable_simulacion(
+    userID: string,
+    func: Function
+  ): void {
+    var sql = `SELECT vs_id as id, vs_nombre as nombre,vs_activo as activo FROM variablesimulacion`;
+    this.connector.query(sql, (err, result, fields) => {
+      if (err) err;
+      var listaProcesos: { procesos: Array<object> } = {
+        procesos: [],
+      };
+      var act;
+      for (const i in result) {
+        if (result[i]["activo"] == 1) {
+          act = "true";
+        } else {
+          act = "false";
+        }
+        var auxmedicion = {
+          id: result[i]["id"],
+          nombre: result[i]["nombre"],
+          activo: act,
+        };
+        listaProcesos.procesos.push(auxmedicion);
+      }
+      func(listaProcesos);
+    });
+  }
+  public add_variable_simulacion(
+    id: string,
+    nombre:string,
+    mea_id:string,
+    func: Function,
+  ): void {
+    var sql =`INSERT INTO variablesimulacion (vs_nombre,mea_id,vs_activo) VALUES ('${nombre}',${mea_id},'1')`;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+
+  public del_variable_simulacion(
+    id: string,
+    idE:string,
+    func: Function,
+  ): void {
+    var sql =`DELETE FROM variablesimulacion WHERE vs_id=${idE} `;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+  public upd_variable_simulacion(
+    id: string,
+    idE:string,
+    nombre:string,
+    activo:string,
+    func: Function,
+  ): void {
+    if (activo=="true"){
+      var act="1";
+    }else{
+      var act="0"
+    }
+    var sql =`UPDATE variablesimulacion 
+    SET vs_nombre = '${nombre}', vs_activo = '${act}'
+    WHERE vs_id = '${idE}'`;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+
+  public add_variables_valor(
+    id: string,
+    es_id:string,
+    vs_id:string,
+    vas_valor:string,
+    func: Function,
+  ): void {
+    var sql =`INSERT INTO valorsimulacion (es_id,vs_id,vas_valor) VALUES (${es_id},${vs_id},${vas_valor})`;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+
+  public del_variables_valor(
+    id: string,
+    idE:string,
+    func: Function,
+  ): void {
+    var sql =`DELETE FROM valorsimulacion WHERE vas_valor=${idE} `;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+  public upd_variables_valor(
+    id: string,
+    vas_valor:string,
+    vs_id:string,
+    vas_valor_viejo:string,
+    func: Function,
+  ): void {
+    var sql =`UPDATE valorsimulacion 
+    SET vs_id = '${vs_id}', vas_valor = '${vas_valor}'
+    WHERE vs_id = '${vas_valor_viejo}'`;
+    console.log(sql);
+    this.connector.query(sql,
+      function (err, result, fields)  {
+      if (err) throw err;
+    }
+    );
+  }
+
+
   // La atributo variable no existe, solo le pusimos para probar
   private modelo = {
     "MonitorIoT:DataMonitoringArchitectureModel": {

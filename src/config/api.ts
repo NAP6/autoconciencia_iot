@@ -73,4 +73,11 @@ export default function (app: Application) {
   app.post("/api/del_escenario_simulacion/", api.del_escenario_simulacion);
   app.post("/api/upd_escenario_simulacion/", api.upd_escenario_simulacion);
   app.post("/api/get_variables_valor/", api.get_variables_valor);
+  app.post("/api/add_variables_valor/", api.add_variables_valor);
+  app.post("/api/del_variables_valor/", api.del_variables_valor);
+  app.post("/api/upd_variables_valor/", api.upd_variables_valor);
+  app.get("/api/get_variable_simulacion/", api.get_variable_simulacion);
+  app.post("/api/add_variable_simulacion/", api.add_variable_simulacion);
+  app.post("/api/del_variable_simulacion/", api.del_variable_simulacion);
+  app.post("/api/upd_variable_simulacion/", api.upd_variable_simulacion);
 };
