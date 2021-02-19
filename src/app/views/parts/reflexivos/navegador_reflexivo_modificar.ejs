@@ -26,10 +26,15 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <button type="button" id="btn-modificar_reflexivos" class="btn btn-secondary btn-lg btn-block mt-3 mx-4 mb-2" onclick="modificar_proceso_reflexivo_boton()">Modificar (Información General)</button>
+            <button type="button" id="btn-modificar_reflexivos" class="d-inline btn btn-secondary btn-lg btn-block mt-3 mx-4 mb-2" onclick="modificar_proceso_reflexivo_boton()">Modificar (Información General)</button>
         </div>
         <div class="col">
-            <button type="button" id="btn-saltar-modificar_reflexivos" class="btn btn-secondary btn-lg btn-block mt-3 mx-4 mb-2" onclick="saltar_proceso_reflexivo_boton()">Saltar</button>
+            <button type="button" id="btn-saltar-modificar_reflexivos" class="d-inline btn btn-secondary btn-lg btn-block mt-3 mx-4 mb-2" onclick="saltar_proceso_reflexivo_boton()">Saltar (Información General)</button>
         </div>
     </div>
 </div>
+<%- include('modal/modal_mapeo_metodo'); %>
+    <%- include('modal/modal_mapeo_modelos'); %>
+        <%- include('modal/modal_escenarios_simulacion'); %>
+            <%- include('modal/modal_recomendaciones'); %>
+                <%- include('modal/modal_variables_simulacion'); %>

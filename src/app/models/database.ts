@@ -2035,6 +2035,35 @@ console.log(sql);
       func(listaProcesos);
     });
   }
+  public get_variable_simulacion_id(
+    userID: string,
+    id:string,
+    func: Function
+  ): void {
+    var sql = `SELECT vs_id as id, vs_nombre as nombre,vs_activo as activo FROM variablesimulacion WHERE mea_id=${id}`;
+    console.log(sql);
+    this.connector.query(sql, (err, result, fields) => {
+      if (err) err;
+      var listaProcesos: { procesos: Array<object> } = {
+        procesos: [],
+      };
+      var act;
+      for (const i in result) {
+        if (result[i]["activo"] == 1) {
+          act = "true";
+        } else {
+          act = "false";
+        }
+        var auxmedicion = {
+          id: result[i]["id"],
+          nombre: result[i]["nombre"],
+          activo: act,
+        };
+        listaProcesos.procesos.push(auxmedicion);
+      }
+      func(listaProcesos);
+    });
+  }
   public add_variable_simulacion(
     id: string,
     nombre:string,
@@ -2095,10 +2124,10 @@ console.log(sql);
   ): void {
     var sql =`INSERT INTO valorsimulacion (es_id,vs_id,vas_valor) VALUES (${es_id},${vs_id},${vas_valor})`;
     console.log(sql);
-    this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      this.connector.query(sql,
+        function (err, result, fields)  {
+        if (err) func({error:"El dato ya existe"});
+      }
     );
   }
 
