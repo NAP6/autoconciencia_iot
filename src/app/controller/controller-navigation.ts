@@ -256,6 +256,8 @@ export function active_model(req: Request, res: Response, next: NextFunction) {
   });
 }
 
+
+
 export function home(req: Request, res: Response) {
   res.render("principal", {
     error: req.flash("error"),

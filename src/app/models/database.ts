@@ -450,12 +450,14 @@ export class mysql_connector {
       sql += `('${element?.$.name}','${id}'),`;
     });
     sql = sql.substr(0, sql.length - 1);
-
+    console.log(sql);
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
-
+      console.log(results.insertId);
     });
   }
+ 
+
   public update_entity(id: string, active: string) {
     var sql = `UPDATE objeto SET obj_activo = '${active ? 1 : 0
       }' WHERE objeto.obj_id = ${id};`;
@@ -4018,8 +4020,24 @@ interface systemEnt {
   $: { 'xsi:type'?: string; id: string; name: string; };
   comput?: ([systemEnt] | undefined);
   Entity?: ([systemEnt] | undefined);
-  has?: [{ $: { id?: string, name?: string } } | undefined];
+  has?: [flujos?];
+  containsDataFlow?: [constainsDataFlow?];
   containsResource?: ([systemEnt] | undefined);
+}
+
+interface constainsDataFlow {
+  id: string;
+  descripcion: string;
+  communicationType: string;
+}
+interface flujos {
+  $: { id: string, name: string }, 
+  dataFlow?: [dataFlow?]
+}
+interface dataFlow { 
+  id: string, 
+  description: string, 
+  communicationType: string 
 }
 interface resource {
   nombre: string;

@@ -30,7 +30,6 @@ export class json {
     this.json = json;
     return json;
   }
-
   public getSystem(): [systemObj] {
     var nameModel: string = Object.keys(this.json)[0];
     const ob = this.json[nameModel]["represents"];
@@ -60,9 +59,22 @@ export class json {
         auxEntity = this.extraerItems(element.subPhysicalEntity, true);
       }
       var data: systemEnt = { $: element.$ };
-      if(element.has){
-        data["has"]=element.has;
-    }
+      if (element.has) {
+        var hasAux:[flujos?] = [];
+        //data["has"] = element.has;
+        element.has.forEach(element2 => {
+          var aux2: flujos={$:element2.$}
+          if (element2.$.hasRulePropertyToDataColumn) {
+            var nameModel: string = Object.keys(this.json)[0];
+            var ob = this.json[nameModel]["containsDataFlow"];
+            var dataF = this.extracDataFlow(element2.$.hasRulePropertyToDataColumn, ob);
+            console.log(dataF);
+            aux2.dataFlow = dataF;
+          }
+          hasAux.push(aux2);
+        });
+        data["has"] = hasAux;
+      }
       if (auxComputing)
         data["comput"] = auxComputing;
       if (auxEntity)
@@ -96,11 +108,24 @@ export class json {
       if (element.subPhysicalEntity) {
         auxEntity = this.extraerItems(element.subPhysicalEntity, true);
       }
-      
+
       var data: systemEnt = { $: element.$ };
-      if(element.has){
-        data["has"]=element.has;
-    }
+      if (element.has) {
+        var hasAux:[flujos?] = [];
+        //data["has"] = element.has;
+        element.has.forEach(element2 => {
+          var aux2: flujos={$:element2.$}
+          if (element2.$.hasRulePropertyToDataColumn) {
+            var nameModel: string = Object.keys(this.json)[0];
+            var ob = this.json[nameModel]["containsDataFlow"];
+            var dataF = this.extracDataFlow(element2.$.hasRulePropertyToDataColumn, ob);
+            console.log(dataF);
+            aux2.dataFlow = dataF;
+          }
+          hasAux.push(aux2);
+        });
+        data["has"] = hasAux;
+      }
       if (auxComputing)
         data["comput"] = auxComputing;
       if (auxEntity)
@@ -115,6 +140,20 @@ export class json {
     });
     return obj;
   }
+
+  private extracDataFlow(listDataFlow: string, listJson: Array<Object>): [dataFlow?] {
+    var lista = listDataFlow.split(" ");
+    var obj: [dataFlow?] = [];
+    lista.forEach(element => {
+      var aux = element.split("/").join("");
+      var aux2 = aux.split("@");
+      var indice = aux2[1].split(".");
+      var elem:any = (listJson[parseInt(indice[1])]);
+      var flu:dataFlow = {id: elem.$.id, description: elem.$.description,communicationType: elem.$.communicationType};
+      obj.push(flu);
+    });
+    return obj;
+  }
 }
 
 interface systemObj {
@@ -125,7 +164,22 @@ interface systemEnt {
   $: { 'xsi:type'?: string; id: string; name: string; };
   comput?: ([systemEnt] | undefined);
   Entity?: ([systemEnt] | undefined);
-  has?:[{$:{id?:string,name?:string}}|undefined];
+  has?: [flujos?];
+  containsDataFlow?: [constainsDataFlow?];
   containsResource?: ([systemEnt] | undefined);
 }
 
+interface constainsDataFlow {
+  id: string;
+  descripcion: string;
+  communicationType: string;
+}
+interface flujos {
+  $: { id: string, name: string }, 
+  dataFlow?: [dataFlow?]
+}
+interface dataFlow { 
+  id: string, 
+  description: string, 
+  communicationType: string 
+}

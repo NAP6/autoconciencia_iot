@@ -4182,8 +4182,20 @@ function guardar_modelos_metodos() {
             datos,
             mensajeCorrectoGuardarMetodos,
             errormensajeCorrectoGuardarMetodos,
-
         )
+
+        var metodo = document.getElementById("nav-recoleccion-tab");
+        var modelo = document.getElementById("nav-modelo-tab");
+        modelo.classList.remove("active");
+        metodo.classList.add("active");
+        modelo.setAttribute('aria-selected', 'false');
+        metodo.setAttribute('aria-selected', 'true');
+        var metodo_ventana = document.getElementById("nav-recoleccion");
+        var modelo_ventana = document.getElementById("nav-modelo");
+        metodo_ventana.classList.add("active");
+        metodo_ventana.classList.add("show");
+        modelo_ventana.classList.remove("active");
+        modelo_ventana.classList.remove("show");
         return true;
     } else {
         return false;
@@ -4707,9 +4719,15 @@ function error_procesos_reflexivos_table(error) {
 }
 
 function guardar_informacion_boton(id) {
-    $('#guardar_informacion_general.collapse').collapse('hide');
-    $('#navegador_metodos_modelos.collapse').collapse('hide');
-    $(`#${id}.collapse`).collapse('show');
+    var guardar = $('#guardar_informacion_general');
+    var navegador = $('#navegador_metodos_modelos');
+    if (id == "navegador_metodos_modelos") {
+        navegador.collapse('show');
+        guardar.collapse('hide');
+    } else {
+        guardar.collapse('show');
+        navegador.collapse('hide');
+    }
 }
 cont_paso = 1;
 
@@ -5346,6 +5364,7 @@ function modificar_proceso_pre_reflexivo_boton() {
             $('#modificar_informacion_general.collapse').collapse('hide');
             $('#modificar_metodos_modelos.collapse').collapse('show');
             cont_paso_modificar++;
+            saltar_paso_pre
             cargar_select_tipo_comunicacion_modificar();
             cargar_select_alcance_recoleccion_modificar();
             cargar_select_propiedades_pre_reflexivos();
@@ -5370,6 +5389,45 @@ function modificar_proceso_pre_reflexivo_boton() {
         );
     }
 }
+
+var saltar_paso_pre = 1;
+
+function saltar_proceso_pre_reflexivo_boton() {
+    if (saltar_paso_pre == 1) {
+        document.getElementById('btn-section-2-modificar').classList.replace('d-none', 'd-inline');
+        document.getElementById('btn-modificar').innerHTML = `Modificar (Metodos modelos)`;
+        $('#modificar_informacion_general.collapse').collapse('hide');
+        $('#modificar_metodos_modelos.collapse').collapse('show');
+        saltar_paso_pre++;
+        cont_paso_modificar_reflexivos++;
+        cargar_select_tipo_comunicacion_modificar();
+        cargar_select_alcance_recoleccion_modificar();
+        cargar_select_propiedades_pre_reflexivos();
+        document.getElementById("modal_metodo_mod").classList.replace("d-none", "d-block");
+        document.getElementById("input-name-proceso-pre-reflexivo_modificar").disabled = true;
+        document.getElementById("input-descripcion-proceso-pre-reflexivo_modificar").disabled = true;
+        document.getElementById("inicio_del_periodo_modificar").disabled = true;
+        document.getElementById("fin_del_periodo_modificar").disabled = true;
+        document.getElementById('btn-saltar-modificar__pre_reflexivos').innerHTML = `Saltar (Metodos modelos)`;
+
+    } else if (saltar_paso_pre == 2) {
+        document.getElementById('btn-section-3-modificar').classList.replace('d-none', 'd-inline');
+        document.getElementById('btn-modificar').classList.replace('d-inline', 'd-none');
+        document.getElementById('btn-saltar-modificar__pre_reflexivos').innerHTML = `Salir`;
+
+        saltar_paso_pre++;
+    } else if (saltar_paso_pre == 3) {
+        consultar_api(
+            "http://localhost:3000/api/procesos_pre_reflexive",
+            cargar_procesos_pre_reflexivos_table,
+            error_procesos_pre_reflexivos_table
+        );
+        history.back();
+        r
+
+    }
+}
+
 
 if (document.getElementById("lista_sujetos_activos_proceso_modificar"))
     consultar_api(
