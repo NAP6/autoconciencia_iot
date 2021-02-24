@@ -445,17 +445,42 @@ export class mysql_connector {
     });
   }
   public save_properties(system: systemEnt, id: string) {
-    var sql = `INSERT INTO propiedad(pro_nombre,obj_id) VALUES `;
+    
     system.has?.forEach(element => {
-      sql += `('${element?.$.name}','${id}'),`;
+      var sql = `INSERT INTO propiedad(pro_nombre,obj_id) VALUES ('${element?.$.name}','${id}')`;
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        var prop_id = results.insertId;
+        var db = new mysql_connector();
+        element?.dataFlow?.forEach(elemento =>{
+          db.save_flujo(element,prop_id);
+        });
+      });
     });
-    sql = sql.substr(0, sql.length - 1);
-    console.log(sql);
-    this.connector.query(sql, function (err, results) {
-      if (err) throw err;
-      console.log(results.insertId);
-    });
+    
   }
+
+  public save_flujo(system: flujos, id_prop: string) {
+    
+    system.dataFlow?.forEach(element => {
+      var sql = `INSERT INTO flujodatos(flu_descripcion,flu_tipo_comunicacion) VALUES ('${element?.description}','${element?.communicationType}')`;
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        var flu_id = results.insertId;
+        var db = new mysql_connector();
+          db.save_flujo_propiedades(flu_id,id_prop);
+      });
+    });
+    
+  }
+  public save_flujo_propiedades(flu_id: string, id_prop: string) {
+      var sql = `INSERT INTO propiedad_flujodatos(pro_id,flu_id) VALUES ('${flu_id}','${id_prop}')`;
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+      });
+    
+  }
+ 
  
 
   public update_entity(id: string, active: string) {
@@ -1837,9 +1862,6 @@ WHERE   pa.pa_id=${id} AND
     });
   }
 
-
-
-
   public add_metodo_modelo_reflexivos(
     data: metodo_modelo_proceso_reflexivos,
     func:Function
@@ -1865,7 +1887,6 @@ WHERE   pa.pa_id=${id} AND
           if (error) throw error;
         });
       });
-
       console.log(data.m_calculo);
       var sql2 = `INSERT INTO metodocalculo (mc_tipo_recurso,mc_inicio_periodo_calculo,mc_fin_periodo_calculo,mea_id) VALUES ('${data.m_calculo.tipo_recurso}',${data.m_calculo.inicio==undefined?"NULL":"'"+data.m_calculo.inicio+"'"},${data.m_calculo.fin==undefined?"NULL":"'"+data.m_calculo.fin+"'"},'${idSup1}')`;
       console.log(sql2);
@@ -2164,6 +2185,96 @@ console.log(sql);
     );
   }
 
+  public generar_modelo(ModeloId:string,fun:Function): void
+  {
+    var sql=`SELECT 
+    mo.ma_id as id,
+    mo.ma_nombre as nombre,
+    mo.ma_descripcion as descripcion,
+    mo.ma_autor as autor,
+    mo.ma_activo as activo
+    FROM
+    modeloautoconsciencia mo
+    WHERE
+    mo.ma_id=${ModeloId}`;
+    var modelo:generar_modelo;
+    this.connector.query(sql,
+      function (err, result)  {
+      if (err) throw err;
+    modelo={$:{id:result[0]["id"],nombre:result[0]["nombre"],descripcion:result[0]["descripcion"],autor:result[0]["autor"],activo:result[0]}};
+    var db = new mysql_connector();
+    db.generar_sujetos(modelo,fun);
+    
+  
+
+
+  }
+    );
+  }
+  public generar_sujetos(modelo:generar_modelo,fun:Function):void{
+    var sql=`SELECT 
+    su.suj_id as id,
+    su.suj_nombre as nombre,
+    su.suj_activo as activo,
+    su.suj_padre as padre,
+    FROM
+    sujeto su
+    WHERE
+    su.ma_id=${modelo.$.id}` ;
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+      modelo.sujeto=[];
+      results.forEach(sujetos => {
+        var sujeto:sujeto={$:{id:sujetos.id,nombre:sujetos.nombre,activo:sujetos.activo,suj_padre:sujetos.padre}};
+        modelo.sujeto?.push(sujeto);   
+      });
+      var db = new mysql_connector();
+    db.generar_objetivos(modelo,fun);
+    });
+
+  }
+public generar_objetivos(modelo:generar_modelo,fun:Function){
+ var value:string="(";
+  modelo.sujeto?.forEach(element => {
+    value+=`${element?.$.id},`;
+  });
+  value=value.substr(0,value.length-1)+")";
+  var sql=`SELECT 
+  obj.obj_id as id,
+  obj.obj_nombre as nombre,
+  obj.obj_descripcion as descripcion,
+  obj.obj_peso as peso,
+  obj.obj_operador_agregacion as operador,
+  obj.obj_activo as activo,
+  obj.suj_id as sujeto_id
+  FROM
+  objetivo obj
+  WHERE
+  obj.suj_id in ${value}` ;
+  var db= new mysql_connector();
+  
+  this.connector.query(sql, function (err, results) {
+    if (err) throw err;
+    results.forEach(obj => {
+      var objetivo:objetivos={$:{id:obj.id,nombre:obj.nombre,descripcion:obj.descripcion,peso:obj.peso,operacion_agregacion:obj.operacion_agregacion,activo:obj.activo}};
+      var cont=0;
+      modelo.sujeto?.forEach(element => {
+          if(element?.$.id==obj.sujeto_id){
+            if(element?.objetivos){
+              element!.objetivos.push(objetivo);
+            }else{
+              element!.objetivos=[];
+              element!.objetivos.push(objetivo);
+            }
+            return;
+              }
+        cont++;
+      });
+    });
+    var db = new mysql_connector();
+  db.generar_objetivos(modelo,fun);
+  });
+}
 
   // La atributo variable no existe, solo le pusimos para probar
   private modelo = {
@@ -4101,4 +4212,255 @@ interface mapeo_parametros{
   met_id:string;
   vs_id:string;
   md_id:string;
+}
+
+interface generar_modelo{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    autor:string,
+    activo:string,
+  },
+  sujeto?:[sujeto?],
+  objetos?:[objeto?],
+  metodo_aprendizaje?:[metodoAprendizaje?],
+  valorSimulacion?:[valorSimulacion?],
+  mapeoParametros?:[mapeoParametros?],
+  metrica?:[metrica?],
+  flujo_datos?:[flujo_datos?],
+}
+interface sujeto{
+$:{
+  id:string,
+  nombre:string,
+  activo:string,
+  suj_padre:string,
+},
+procesoAutocon?:[procesoAutoconsciencia?],
+objetivos?:[objetivos?],
+}
+interface objeto{
+  $:{
+    id:string,
+    tipo:string,
+    nombre:string,
+    activo:string,
+    obj_padre:string,
+  }
+  propiedad?:[propiedad?],
+}
+
+interface procesoAutoconsciencia{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    tipo:string,
+    inicio:string,
+    fin:string,
+    activo:string,
+    proceso_route?:[string?],
+  },
+  aspectosAutoconsciencia?:[aspectosAutoconsciencia?],
+  
+}
+interface metodoAprendizaje{
+  $:{
+    id:string,
+    tipo:string,
+  },
+ metrica_route?:[string?],
+ metodo_recoleccion?:[metodorecoleccion],
+ modeloAnalis?:[modeloAnalis],
+ metodoCalculo?:[metodoCalculo],
+}
+interface metodorecoleccion{
+  $:{
+    tipo_comunicacion:string,
+    alcance:string,
+  }
+}
+interface modeloAnalis{
+  $:{
+    tipo_recurso:string,
+    ruta_criterios?:[string],
+  }
+}
+interface metodoCalculo{
+  $:{
+    tipo_recurso:string,
+    inicio:string,
+    fin:string,
+  },
+  escenarioSimulacion?:[escenarioSimulacion?],
+  variableSimulacion?:[variableSimulacion?],
+}
+
+interface escenarioSimulacion{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    activo:string,
+  }
+}
+interface variableSimulacion{
+  $:{
+    id:string,
+    nombre:string,
+    activo:string,
+  }
+}
+interface mapeoParametros{
+  $:{
+    tipo_entrada:string,
+  }
+  metrica_route?:[string?],
+}
+interface parametros_traer{
+  $:{
+    vas_valor:string,
+    variable_ruta?:[string],
+    escenario_ruta?:[string],
+  }
+}
+interface valorSimulacion{
+  $:{
+    par_ordinal:string,
+    nombre:string,
+    tipo_dato:string,
+    opcional:string,
+    activo:string,
+  }
+}
+interface recursoimplementacion{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    tipo_recurso:string,
+    tipo_salida:string,
+    activo:string,
+  }
+  servicio?:[servicio?],
+  funcion?:[funcion?],
+  formula?:[formula?],
+}
+interface servicio{
+  $:{
+    punto_final:string,
+    instrucciones:string,
+    pre_existente:string,
+    tipo_formato:string,
+  }
+}
+interface funcion{
+  $:{
+    path:string,
+    instrucciones:string,
+
+  }
+}
+interface formula{
+  $:{
+    for_expresion:string,
+  }
+}
+interface metrica{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    abreviacion:string,
+    tipo:string,
+    activo:string,
+  }
+  escala?:[escala?],
+  unidadMedicion?:[unidadMedicion?],
+  aspectosAutoconsciencia?:[aspectosAutoconsciencia?],
+}
+interface objetivos{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    peso:string,
+    operacion_agregacion:string,
+    activo:string,
+  }
+}
+
+interface criterios{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    activo:string,
+  }
+  umbral?:[umbral?],
+}
+interface umbral{
+  $:{
+    id:string,
+    nombre:string,
+    interpretacion:string,
+    inferior:string,
+    superior:string,
+    activo:string,
+  }
+}
+
+
+interface accion{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    activo:string,
+    ruta_umbral?:[string],
+    ruta_modelo?:[string],
+  }
+}
+
+interface escala{
+  $:{
+    id:string,
+    nombre:string,
+    valores_validos:string,
+    tipo:string,
+    activo:string,
+  }
+}
+interface unidadMedicion{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    acronimo:string,
+    activo:string,
+  }
+}
+interface aspectosAutoconsciencia{
+  $:{
+    id:string,
+    nombre:string,
+    descripcion:string,
+    peso:string,
+    tipo:string,
+    activo:string,
+  },
+}
+
+interface flujo_datos{
+  $:{
+    descripcion:string,
+    tipo_comunicacion:string,
+  }
+}
+interface propiedad{
+  $:{
+    id:string,
+    nombre:string,
+  }
 }
