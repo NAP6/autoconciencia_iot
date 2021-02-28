@@ -2,6 +2,7 @@ import { Console } from "console";
 import { randomInt } from "crypto";
 import * as mysql from "mysql";
 import constants from "../../config/constants";
+import { objetivos_sujetos } from "../controller/controller-api";
 
 export class mysql_connector {
   private connector;
@@ -445,43 +446,43 @@ export class mysql_connector {
     });
   }
   public save_properties(system: systemEnt, id: string) {
-    
+
     system.has?.forEach(element => {
       var sql = `INSERT INTO propiedad(pro_nombre,obj_id) VALUES ('${element?.$.name}','${id}')`;
       this.connector.query(sql, function (err, results) {
         if (err) throw err;
         var prop_id = results.insertId;
         var db = new mysql_connector();
-        element?.dataFlow?.forEach(elemento =>{
-          db.save_flujo(element,prop_id);
+        element?.dataFlow?.forEach(elemento => {
+          db.save_flujo(element, prop_id);
         });
       });
     });
-    
+
   }
 
   public save_flujo(system: flujos, id_prop: string) {
-    
+
     system.dataFlow?.forEach(element => {
       var sql = `INSERT INTO flujodatos(flu_descripcion,flu_tipo_comunicacion) VALUES ('${element?.description}','${element?.communicationType}')`;
       this.connector.query(sql, function (err, results) {
         if (err) throw err;
         var flu_id = results.insertId;
         var db = new mysql_connector();
-          db.save_flujo_propiedades(flu_id,id_prop);
+        db.save_flujo_propiedades(flu_id, id_prop);
       });
     });
-    
+
   }
   public save_flujo_propiedades(flu_id: string, id_prop: string) {
-      var sql = `INSERT INTO propiedad_flujodatos(pro_id,flu_id) VALUES ('${flu_id}','${id_prop}')`;
-      this.connector.query(sql, function (err, results) {
-        if (err) throw err;
-      });
-    
+    var sql = `INSERT INTO propiedad_flujodatos(pro_id,flu_id) VALUES ('${flu_id}','${id_prop}')`;
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+    });
+
   }
- 
- 
+
+
 
   public update_entity(id: string, active: string) {
     var sql = `UPDATE objeto SET obj_activo = '${active ? 1 : 0
@@ -1363,7 +1364,7 @@ export class mysql_connector {
     meaId: string
   ): void {
     var act;
-    var sql=`INSERT INTO accion (acc_nombre, acc_descripcion, umb_id, acc_activo,mea_id) 
+    var sql = `INSERT INTO accion (acc_nombre, acc_descripcion, umb_id, acc_activo,mea_id) 
     VALUES ('${name}', '${descripcion}','${idP}','1',${meaId})`;
     console.log(sql);
     this.connector.query(sql,
@@ -1413,24 +1414,24 @@ export class mysql_connector {
   }
   public upd_acciones_umbrales(
     id: string,
-    idE:string,
-    nombre:string,
-    descripcion:string,
-    activo:string,
+    idE: string,
+    nombre: string,
+    descripcion: string,
+    activo: string,
   ): void {
-    if (activo=="true"){
-      var act="1";
-    }else{
-      var act="0"
+    if (activo == "true") {
+      var act = "1";
+    } else {
+      var act = "0"
     }
-    var sql =`UPDATE accion 
+    var sql = `UPDATE accion 
     SET acc_nombre = '${nombre}', acc_descripcion = '${descripcion}', acc_activo = '${act}'
     WHERE acc_id = '${idE}'`;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
 
@@ -1531,14 +1532,14 @@ export class mysql_connector {
     objId: string,
     sujId: string,
     paTipo: string,
-    objetivo:string,
+    objetivo: string,
     func: Function,
   ): void {
     console.log(
       `############# Envio a la funcion 'addUser_procesos_pre_reflexivos' el id de usuario '${idUser}, nombre: ${name}, descripcion: ${descripcion}`
     );
     var sql = `INSERT INTO procesoautoconsciencia (pa_nombre, pa_descripcion, pa_inicio_periodo_ejecucion,pa_fin_periodo_ejecucion,pa_activo,aa_id,suj_id,pa_tipo,obj_id) 
-    VALUES ('${name}', '${descripcion}','${inicioP==undefined?"NULL":""+inicioP+""}','${finP==undefined?"NULL":""+finP+""}','1','${aspId}','${sujId}','${paTipo}','${objetivo}')`;
+    VALUES ('${name}', '${descripcion}','${inicioP == undefined ? "NULL" : "" + inicioP + ""}','${finP == undefined ? "NULL" : "" + finP + ""}','1','${aspId}','${sujId}','${paTipo}','${objetivo}')`;
     console.log(sql);
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
@@ -1648,7 +1649,7 @@ objetivo.obj_id =pa.obj_id`;
       } else {
         act = "false";
       }
-      var procesos= result[0];
+      var procesos = result[0];
       /*  {
           id: result[0]["id"],
           nombre: result[0]["nombre"],
@@ -1659,7 +1660,7 @@ objetivo.obj_id =pa.obj_id`;
           sujeto: result[0]["sujeto"],
           activo: act,
         }; */
-      
+
       func(procesos);
     });
   }
@@ -1734,7 +1735,7 @@ WHERE   pa.pa_id=${id} AND
       } else {
         act = "false";
       }
-      var procesos= result[0];
+      var procesos = result[0];
       /*  {
           id: result[0]["id"],
           nombre: result[0]["nombre"],
@@ -1745,7 +1746,7 @@ WHERE   pa.pa_id=${id} AND
           sujeto: result[0]["sujeto"],
           activo: act,
         }; */
-      
+
       func(procesos);
     });
   }
@@ -1763,7 +1764,7 @@ WHERE   pa.pa_id=${id} AND
 
   public add_metodo_modelo(
     data: metodo_modelo_proceso,
-    func:Function
+    func: Function
   ): void {
     var idSup1;
     var idSup2;
@@ -1780,7 +1781,7 @@ WHERE   pa.pa_id=${id} AND
         idSup2 = results.insertId;
         func([idSup1, idSup2])
         console.log(data.m_recoleccion);
-        var sql4=`INSERT INTO modeloanalisis (ma_tipo_recurso,cd_id,mea_id) VALUES ('${data.m_modelo.ma_tipo}','${data.m_modelo.criterio_id}','${idSup2}')`
+        var sql4 = `INSERT INTO modeloanalisis (ma_tipo_recurso,cd_id,mea_id) VALUES ('${data.m_modelo.ma_tipo}','${data.m_modelo.criterio_id}','${idSup2}')`
         console.log(sql4);
         var db = new mysql_connector();
         db.connector.query(sql4, function (error, results) {
@@ -1789,17 +1790,17 @@ WHERE   pa.pa_id=${id} AND
       });
 
       console.log(data.m_recoleccion);
-      var sql2 = `INSERT INTO metodorecoleccion (mr_tipo_comunicacion,pro_id,mr_alcance_recoleccion,mea_id) VALUES ('${data.m_recoleccion.mr_tipo}',${data.m_recoleccion.pro_id==undefined?"NULL":"'"+data.m_recoleccion.pro_id+"'"},'${data.m_recoleccion.pro_alcance}','${idSup1}')`;
+      var sql2 = `INSERT INTO metodorecoleccion (mr_tipo_comunicacion,pro_id,mr_alcance_recoleccion,mea_id) VALUES ('${data.m_recoleccion.mr_tipo}',${data.m_recoleccion.pro_id == undefined ? "NULL" : "'" + data.m_recoleccion.pro_id + "'"},'${data.m_recoleccion.pro_alcance}','${idSup1}')`;
       console.log(sql2);
-      
+
       db.connector.query(sql2, function (error, results) {
         if (error) throw error;
       });
     })
   }
-  
+
   public mod_process_pre_reflexive(
-    id:string,nombre:string,descripcion:string,inicio:string,fin:string,
+    id: string, nombre: string, descripcion: string, inicio: string, fin: string,
   ): void {
     var sql = `UPDATE procesoautoconsciencia 
     SET pa_nombre = '${nombre}', pa_descripcion = '${descripcion}', pa_inicio_periodo_ejecucion = '${inicio}', pa_fin_periodo_ejecucion = '${fin}'
@@ -1811,16 +1812,16 @@ WHERE   pa.pa_id=${id} AND
   }
 
   public add_mapeo_parametros(
-    data:[mapeo_parametros],
+    data: [mapeo_parametros],
   ): void {
-    
-    var stryaux="";
+
+    var stryaux = "";
     data.forEach(element => {
       console.log(element);
-      stryaux+=`('${element.par_ordinal}', '${element.mea_id}','${element.mp_tipo_entrada}','${element.met_id}',${element.vs_id==undefined?"NULL":"'"+element.vs_id+"'"},${element.md_id==undefined?"NULL":"'"+element.md_id+"'"}),`;
+      stryaux += `('${element.par_ordinal}', '${element.mea_id}','${element.mp_tipo_entrada}','${element.met_id}',${element.vs_id == undefined ? "NULL" : "'" + element.vs_id + "'"},${element.md_id == undefined ? "NULL" : "'" + element.md_id + "'"}),`;
     });
     var sql = `INSERT INTO mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
-    VALUES `+stryaux.substring(0,stryaux.length-1);
+    VALUES `+ stryaux.substring(0, stryaux.length - 1);
     console.log(sql);
     this.connector.query(sql, function (error, results) {
       if (error) throw error;
@@ -1864,7 +1865,7 @@ WHERE   pa.pa_id=${id} AND
 
   public add_metodo_modelo_reflexivos(
     data: metodo_modelo_proceso_reflexivos,
-    func:Function
+    func: Function
   ): void {
     var idSup1;
     var idSup2;
@@ -1880,7 +1881,7 @@ WHERE   pa.pa_id=${id} AND
         if (error) throw error;
         idSup2 = results.insertId;
         func([idSup1, idSup2])
-        var sql4=`INSERT INTO modeloanalisis (ma_tipo_recurso,cd_id,mea_id) VALUES ('${data.modelo.modeloTipo}','${data.modelo.criterio_id}','${idSup2}')`
+        var sql4 = `INSERT INTO modeloanalisis (ma_tipo_recurso,cd_id,mea_id) VALUES ('${data.modelo.modeloTipo}','${data.modelo.criterio_id}','${idSup2}')`
         console.log(sql4);
         var db = new mysql_connector();
         db.connector.query(sql4, function (error, results) {
@@ -1888,21 +1889,21 @@ WHERE   pa.pa_id=${id} AND
         });
       });
       console.log(data.m_calculo);
-      var sql2 = `INSERT INTO metodocalculo (mc_tipo_recurso,mc_inicio_periodo_calculo,mc_fin_periodo_calculo,mea_id) VALUES ('${data.m_calculo.tipo_recurso}',${data.m_calculo.inicio==undefined?"NULL":"'"+data.m_calculo.inicio+"'"},${data.m_calculo.fin==undefined?"NULL":"'"+data.m_calculo.fin+"'"},'${idSup1}')`;
+      var sql2 = `INSERT INTO metodocalculo (mc_tipo_recurso,mc_inicio_periodo_calculo,mc_fin_periodo_calculo,mea_id) VALUES ('${data.m_calculo.tipo_recurso}',${data.m_calculo.inicio == undefined ? "NULL" : "'" + data.m_calculo.inicio + "'"},${data.m_calculo.fin == undefined ? "NULL" : "'" + data.m_calculo.fin + "'"},'${idSup1}')`;
       console.log(sql2);
       db.connector.query(sql2, function (error, results) {
         if (error) throw error;
       });
     })
   }
-  
+
   public objetivos_sujetos(
     id: string,
     func: Function
   ): void {
     var sql = `SELECT obj_id, obj_nombre
     FROM objetivo WHERE suj_id=${id} AND obj_padre IS NULL`;
-console.log(sql);    
+    console.log(sql);
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
       var listaUmedicion: Array<object> = [];
@@ -1918,30 +1919,30 @@ console.log(sql);
   }
   public get_metodo_aprendizaje(
     id: string,
-    metodoId:string,
+    metodoId: string,
     func: Function,
   ): void {
     var sql = `SELECT MAX(mea_id) as id
     FROM metodoaprendizajerazonamiento WHERE mea_tipo=${metodoId} `;
     this.connector.query(sql, (err, result, fields) => {
       if (err) err;
-      var id= result[0];
+      var id = result[0];
       func(id);
     });
   }
   public add_escenario_simulacion(
     id: string,
-    nombre:string,
-    descripcion:string,
-    mea_id:string,
+    nombre: string,
+    descripcion: string,
+    mea_id: string,
     func: Function,
   ): void {
-    var sql =`INSERT INTO escenariosimulacion (es_nombre,es_descripcion,mea_id,es_activo) VALUES ('${nombre}','${descripcion}',${mea_id},'1')`;
+    var sql = `INSERT INTO escenariosimulacion (es_nombre,es_descripcion,mea_id,es_activo) VALUES ('${nombre}','${descripcion}',${mea_id},'1')`;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
   public escenario_simulacion(
@@ -1974,43 +1975,43 @@ console.log(sql);
   }
   public del_escenario_simulacion(
     id: string,
-    idE:string,
+    idE: string,
     func: Function,
   ): void {
-    var sql =`DELETE FROM escenariosimulacion WHERE es_id=${idE} `;
+    var sql = `DELETE FROM escenariosimulacion WHERE es_id=${idE} `;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
   public upd_escenario_simulacion(
     id: string,
-    idE:string,
-    nombre:string,
-    descripcion:string,
-    activo:string,
+    idE: string,
+    nombre: string,
+    descripcion: string,
+    activo: string,
     func: Function,
   ): void {
-    if (activo=="true"){
-      var act="1";
-    }else{
-      var act="0"
+    if (activo == "true") {
+      var act = "1";
+    } else {
+      var act = "0"
     }
-    var sql =`UPDATE escenariosimulacion 
+    var sql = `UPDATE escenariosimulacion 
     SET es_nombre = '${nombre}', es_descripcion = '${descripcion}', es_activo = '${act}'
     WHERE es_id = '${idE}'`;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
   public get_variables_valor(
     userID: string,
-    id:string,
+    id: string,
     func: Function
   ): void {
     var sql = `SELECT vas.vs_id as id_variable, vas.vs_nombre as nombre_variable,vs.vs_id as valor_id,vs.vas_valor as valor FROM valorsimulacion vs, variablesimulacion vas WHERE vs.es_id=${id} AND vas.vs_id=vs.vs_id`;
@@ -2060,7 +2061,7 @@ console.log(sql);
   }
   public get_variable_simulacion_id(
     userID: string,
-    id:string,
+    id: string,
     func: Function
   ): void {
     var sql = `SELECT vs_id as id, vs_nombre as nombre,vs_activo as activo FROM variablesimulacion WHERE mea_id=${id}`;
@@ -2089,105 +2090,104 @@ console.log(sql);
   }
   public add_variable_simulacion(
     id: string,
-    nombre:string,
-    mea_id:string,
+    nombre: string,
+    mea_id: string,
     func: Function,
   ): void {
-    var sql =`INSERT INTO variablesimulacion (vs_nombre,mea_id,vs_activo) VALUES ('${nombre}',${mea_id},'1')`;
+    var sql = `INSERT INTO variablesimulacion (vs_nombre,mea_id,vs_activo) VALUES ('${nombre}',${mea_id},'1')`;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
 
   public del_variable_simulacion(
     id: string,
-    idE:string,
+    idE: string,
     func: Function,
   ): void {
-    var sql =`DELETE FROM variablesimulacion WHERE vs_id=${idE} `;
+    var sql = `DELETE FROM variablesimulacion WHERE vs_id=${idE} `;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
   public upd_variable_simulacion(
     id: string,
-    idE:string,
-    nombre:string,
-    activo:string,
+    idE: string,
+    nombre: string,
+    activo: string,
     func: Function,
   ): void {
-    if (activo=="true"){
-      var act="1";
-    }else{
-      var act="0"
+    if (activo == "true") {
+      var act = "1";
+    } else {
+      var act = "0"
     }
-    var sql =`UPDATE variablesimulacion 
+    var sql = `UPDATE variablesimulacion 
     SET vs_nombre = '${nombre}', vs_activo = '${act}'
     WHERE vs_id = '${idE}'`;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
 
   public add_variables_valor(
     id: string,
-    es_id:string,
-    vs_id:string,
-    vas_valor:string,
+    es_id: string,
+    vs_id: string,
+    vas_valor: string,
     func: Function,
   ): void {
-    var sql =`INSERT INTO valorsimulacion (es_id,vs_id,vas_valor) VALUES (${es_id},${vs_id},${vas_valor})`;
+    var sql = `INSERT INTO valorsimulacion (es_id,vs_id,vas_valor) VALUES (${es_id},${vs_id},${vas_valor})`;
     console.log(sql);
-      this.connector.query(sql,
-        function (err, result, fields)  {
-        if (err) func({error:"El dato ya existe"});
+    this.connector.query(sql,
+      function (err, result, fields) {
+        if (err) func({ error: "El dato ya existe" });
       }
     );
   }
 
   public del_variables_valor(
     id: string,
-    idE:string,
+    idE: string,
     func: Function,
   ): void {
-    var sql =`DELETE FROM valorsimulacion WHERE vas_valor=${idE} `;
+    var sql = `DELETE FROM valorsimulacion WHERE vas_valor=${idE} `;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
   public upd_variables_valor(
     id: string,
-    vas_valor:string,
-    vs_id:string,
-    vas_valor_viejo:string,
+    vas_valor: string,
+    vs_id: string,
+    vas_valor_viejo: string,
     func: Function,
   ): void {
-    var sql =`UPDATE valorsimulacion 
+    var sql = `UPDATE valorsimulacion 
     SET vs_id = '${vs_id}', vas_valor = '${vas_valor}'
     WHERE vs_id = '${vas_valor_viejo}'`;
     console.log(sql);
     this.connector.query(sql,
-      function (err, result, fields)  {
-      if (err) throw err;
-    }
+      function (err, result, fields) {
+        if (err) throw err;
+      }
     );
   }
 
-  public generar_modelo(ModeloId:string,fun:Function): void
-  {
-    var sql=`SELECT 
+  public generar_modelo(ModeloId: string, fun: Function): void {
+    var sql = `SELECT 
     mo.ma_id as id,
     mo.ma_nombre as nombre,
     mo.ma_descripcion as descripcion,
@@ -2197,85 +2197,712 @@ console.log(sql);
     modeloautoconsciencia mo
     WHERE
     mo.ma_id=${ModeloId}`;
-    var modelo:generar_modelo;
+    var modelo: generar_modelo;
     this.connector.query(sql,
-      function (err, result)  {
-      if (err) throw err;
-    modelo={$:{id:result[0]["id"],nombre:result[0]["nombre"],descripcion:result[0]["descripcion"],autor:result[0]["autor"],activo:result[0]}};
-    var db = new mysql_connector();
-    db.generar_sujetos(modelo,fun);
-    
-  
-
-
-  }
+      function (err, result) {
+        if (err) throw err;
+        modelo = { $: { id: result[0]["id"], nombre: result[0]["nombre"], descripcion: result[0]["descripcion"], autor: result[0]["autor"], activo: result[0]["activo"] } };
+        var db = new mysql_connector();
+        db.generar_sujetos(modelo, fun);
+      }
     );
   }
-  public generar_sujetos(modelo:generar_modelo,fun:Function):void{
-    var sql=`SELECT 
+  public generar_sujetos(modelo: generar_modelo, fun: Function): void {
+    var sql = `SELECT 
     su.suj_id as id,
     su.suj_nombre as nombre,
     su.suj_activo as activo,
-    su.suj_padre as padre,
+    su.suj_padre as padre
     FROM
     sujeto su
     WHERE
-    su.ma_id=${modelo.$.id}` ;
+    su.ma_id=${modelo.$.id}`;
     this.connector.query(sql, function (err, results) {
       if (err) throw err;
-      modelo.sujeto=[];
+      modelo.sujeto = [];
       results.forEach(sujetos => {
-        var sujeto:sujeto={$:{id:sujetos.id,nombre:sujetos.nombre,activo:sujetos.activo,suj_padre:sujetos.padre}};
-        modelo.sujeto?.push(sujeto);   
+        var sujeto: sujeto = { $: { id: sujetos.id, nombre: sujetos.nombre, activo: sujetos.activo, suj_padre: sujetos.padre } };
+        modelo.sujeto?.push(sujeto);
       });
       var db = new mysql_connector();
-    db.generar_objetivos(modelo,fun);
-    });
+      db.generar_objetivos(modelo, fun);
+      db.generar_procesoAutocon(modelo, fun);
 
+    });
   }
-public generar_objetivos(modelo:generar_modelo,fun:Function){
- var value:string="(";
-  modelo.sujeto?.forEach(element => {
-    value+=`${element?.$.id},`;
-  });
-  value=value.substr(0,value.length-1)+")";
-  var sql=`SELECT 
+  public generar_objetivos(modelo: generar_modelo, fun: Function) {
+    var value: string = "(";
+    modelo.sujeto?.forEach(element => {
+      value += `${element?.$.id},`;
+    });
+    value = value.substr(0, value.length - 1) + ")";
+    var sql = `SELECT 
   obj.obj_id as id,
   obj.obj_nombre as nombre,
   obj.obj_descripcion as descripcion,
   obj.obj_peso as peso,
-  obj.obj_operador_agregacion as operador,
+  obj.obj_operacion_agregacion as operador,
   obj.obj_activo as activo,
   obj.suj_id as sujeto_id
   FROM
   objetivo obj
   WHERE
-  obj.suj_id in ${value}` ;
-  var db= new mysql_connector();
-  
-  this.connector.query(sql, function (err, results) {
-    if (err) throw err;
-    results.forEach(obj => {
-      var objetivo:objetivos={$:{id:obj.id,nombre:obj.nombre,descripcion:obj.descripcion,peso:obj.peso,operacion_agregacion:obj.operacion_agregacion,activo:obj.activo}};
-      var cont=0;
-      modelo.sujeto?.forEach(element => {
-          if(element?.$.id==obj.sujeto_id){
-            if(element?.objetivos){
+  obj.suj_id in ${value}`;
+    var db = new mysql_connector();
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+      results.forEach(obj => {
+        var objetivo: objetivos = { $: { id: obj.id, nombre: obj.nombre, descripcion: obj.descripcion, peso: obj.peso, operacion_agregacion: obj.operacion_agregacion, activo: obj.activo } };
+        var cont = 0;
+        modelo.sujeto?.forEach(element => {
+          if (element?.$.id == obj.sujeto_id) {
+            if (element?.objetivos) {
               element!.objetivos.push(objetivo);
-            }else{
-              element!.objetivos=[];
+            } else {
+              element!.objetivos = [];
               element!.objetivos.push(objetivo);
             }
             return;
+          }
+          cont++;
+        });
+      });
+      // var db = new mysql_connector();
+      //db.generar_objetivos(modelo,fun);
+    });
+  }
+  public generar_procesoAutocon(modelo: generar_modelo, fun: Function) {
+    var value: string = "(";
+    modelo.sujeto?.forEach(element => {
+      value += `${element?.$.id},`;
+    });
+    value = value.substr(0, value.length - 1) + ")";
+    var sql = `SELECT 
+   pro.pa_id as id,
+   pro.pa_nombre as nombre,
+   pro.pa_descripcion as descripcion,
+   pro.pa_inicio_periodo_ejecucion as inicio_periodo,
+   pro.pa_fin_periodo_ejecucion as fin_periodo,
+   pro.pa_tipo as tipo,
+   pro.pa_activo as activo,
+   pro.aa_id as aspecto_id,
+   pro.suj_id as sujeto_id,
+   pro.obj_id as objeto_id
+   FROM
+   procesoautoconsciencia pro
+   WHERE
+   pro.suj_id in ${value}`;
+    var db = new mysql_connector();
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+      results.forEach(pro => {
+        var proceso: procesoAutoconsciencia = {
+          $: {
+            id: pro.id,
+            nombre: pro.nombre,
+            descripcion: pro.descripcion,
+            inicio: pro.pa_inicio_periodo_ejecucion,
+            fin: pro.pa_fin_periodo_ejecucion,
+            tipo: pro.tipo,
+            activo: pro.activo
+          }
+        };
+        var cont = 0;
+        modelo.sujeto?.forEach(element => {
+          if (element?.$.id == pro.sujeto_id) {
+            if (element?.procesoAutocon) {
+              element!.procesoAutocon.push(proceso);
+            } else {
+              element!.procesoAutocon = [];
+              element!.procesoAutocon.push(proceso);
+            }
+            return;
+          }
+          cont++;
+        });
+      });
+      // var db = new mysql_connector();
+      //db.generar_objetivos(modelo,fun);
+      db.generar_metodo_aprendizaje(modelo, fun);
+    });
+  }
+
+  public generar_metodo_aprendizaje(modelo: generar_modelo, fun: Function) {
+    var value: string = "(";
+    modelo.sujeto?.forEach(element => {
+      element?.procesoAutocon?.forEach(element2 => {
+        value += `${element2?.$.id},`;
+      });
+
+    });
+    value = value.substr(0, value.length - 1) + ")";
+    var sql = `SELECT 
+   mea.mea_id as id,
+   enu.enu_nombre_valor as tipo,
+   mea.pa_id as proceso_id
+   FROM
+   metodoaprendizajerazonamiento mea,
+   enumeracion enu
+   WHERE
+   enu.enu_id=mea.mea_tipo AND
+   mea.pa_id in ${value}`;
+    var db = new mysql_connector();
+    this.connector.query(sql, function (err, results) {
+      if (err) throw err;
+      results.forEach(mea => {
+        var metodo: metodoAprendizaje = { $: { id: mea.id, tipo: mea.tipo } };
+        var cont = 0;
+        if (modelo.metodo_aprendizaje) {
+          modelo.metodo_aprendizaje.push(metodo);
+        } else {
+          modelo.metodo_aprendizaje = [];
+          modelo.metodo_aprendizaje?.push(metodo);
+        }
+        modelo.sujeto?.forEach(element => {
+          element?.procesoAutocon?.forEach(element2 => {
+            if (element2?.$.id == mea.proceso_id) {
+              if (element2?.$.ruta_metodoAprendizaje) {
+                element2.$.ruta_metodoAprendizaje.push(`metodo_aprendizaje.${modelo.metodo_aprendizaje!.length - 1}`);
+              } else {
+                element2!.$.ruta_metodoAprendizaje = [];
+                element2!.$.ruta_metodoAprendizaje.push(`metodo_aprendizaje.${modelo.metodo_aprendizaje!.length - 1}`);
               }
-        cont++;
+              return;
+            }
+            cont++;
+          });
+
+        });
+      });
+      db.generar_metodo_recoleccion(modelo, fun);
+    });
+
+  }
+
+  public generar_metodo_recoleccion(modelo: generar_modelo, fun: Function) {
+    if (modelo.metodo_aprendizaje!.length > 0) {
+      var value: string = "(";
+      modelo.metodo_aprendizaje?.forEach(element => {
+        value += `${element?.$.id},`;
+      });
+      value = value.substr(0, value.length - 1) + ")";
+      var sql = `SELECT 
+   enu.enu_nombre_valor as tipo_comunicacion,
+   enu2.enu_nombre_valor as alcance_recoleccion,
+   mr.mea_id as mea_id
+   FROM
+   metodorecoleccion mr,
+   enumeracion enu,
+   enumeracion enu2
+   WHERE
+   enu.enu_id=mr.mr_tipo_comunicacion AND
+   mr.mea_id in ${value} AND
+   enu2.enu_id=mr.mr_alcance_recoleccion` ;
+      var db = new mysql_connector();
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(mr => {
+          var metodo_recol: metodorecoleccion = { $: { tipo_comunicacion: mr.tipo_comunicacion, alcance: mr.alcance_recoleccion } };
+          modelo.metodo_aprendizaje?.forEach(element => {
+            if (element?.$.id == mr.mea_id) {
+              element!.metodo_recoleccion = metodo_recol;
+              return;
+            }
+          });
+        });
+        db.generar_modelo_analisis(modelo, fun);
+      });
+    } else {
+      var db = new mysql_connector();
+      console.log('         ######### No entro 1')
+      db.generar_modelo_analisis(modelo, fun);
+    }
+  }
+  public generar_modelo_analisis(modelo: generar_modelo, fun: Function) {
+    if (modelo.metodo_aprendizaje!.length > 0) {
+      var value: string = "(";
+      modelo.metodo_aprendizaje?.forEach(element => {
+        value += `${element?.$.id},`;
+      });
+      value = value.substr(0, value.length - 1) + ")";
+      var sql = `SELECT 
+   if(ma.ma_tipo_recurso=0,'Formula', IF(ma.ma_tipo_recurso=1,'Funcion','Servicio')) as tipo_recurso,
+      ma.mea_id as mea_id
+      FROM
+      modeloanalisis ma
+      WHERE
+   ma.mea_id in ${value}`;
+      var db = new mysql_connector();
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(ma => {
+          var modelo_anali: modeloAnalis = { $: { tipo_recurso: ma.tipo_recurso } };
+          modelo.metodo_aprendizaje?.forEach(element => {
+            if (element?.$.id == ma.mea_id) {
+              element!.modeloAnalis = modelo_anali;
+              return;
+            }
+          });
+        });
+        db.generar_metodo_calculo(modelo, fun);
+      });
+    } else {
+      var db = new mysql_connector();
+      console.log('         ######### No entro 2')
+      db.generar_metodo_calculo(modelo, fun);
+    }
+  }
+  public generar_metodo_calculo(modelo: generar_modelo, fun: Function) {
+    if (modelo.metodo_aprendizaje!.length > 0) {
+      var value: string = "(";
+      modelo.metodo_aprendizaje?.forEach(element => {
+        value += `${element?.$.id},`;
+      });
+      value = value.substr(0, value.length - 1) + ")";
+      var sql = `SELECT 
+   if(mc.mc_tipo_recurso=0,'Formula', IF(mc.mc_tipo_recurso=1,'Funcion','Servicio')) as tipo_recurso,
+   mc_inicio_periodo_calculo inicio_periodo,
+   mc_fin_periodo_calculo fin_periodo,
+      mc.mea_id as mea_id
+      FROM
+      metodocalculo mc
+      WHERE
+   mc.mea_id in ${value}`;
+      var db = new mysql_connector();
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(mc => {
+          var metodo_calcul: metodoCalculo = { $: { tipo_recurso: mc.tipo_recurso, inicio: mc.inicio_periodo, fin: mc.fin_periodo } };
+          modelo.metodo_aprendizaje?.forEach(element => {
+            if (element?.$.id == mc.mea_id) {
+              element!.metodoCalculo = metodo_calcul;
+              return;
+            }
+          });
+        });
+        db.generar_escenario_simulacion(modelo, fun);
+      });
+    } else {
+      var db = new mysql_connector();
+      console.log('         ######### No entro 3')
+      db.generar_escenario_simulacion(modelo, fun);
+    }
+  }
+  public generar_escenario_simulacion(modelo: generar_modelo, fun: Function) {
+    var value: string = "(";
+    modelo.metodo_aprendizaje?.forEach(element => {
+      value += `${element?.$.id},`;
+    });
+    if (value.length > 1) {
+      value = value.substr(0, value.length - 1) + ")";
+      var sql = `SELECT 
+  es.es_id as id,
+  es.es_nombre as nombre,
+  es.es_descripcion as descripcion,
+  es.mea_id,
+  es.es_activo as activo
+     FROM
+     escenariosimulacion es
+     WHERE
+  es.mea_id in ${value}`;
+      var db = new mysql_connector();
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(es => {
+          var escenario: escenarioSimulacion = { $: { id: es.id, nombre: es.nombre, descripcion: es.descripcion, activo: es.activo } };
+          var cont = 0;
+          modelo.metodo_aprendizaje?.forEach(element => {
+            if (element?.$.id == es.mea_id) {
+              if (element?.metodoCalculo) {
+                if (element?.metodoCalculo?.escenarioSimulacion) {
+                  element?.metodoCalculo?.escenarioSimulacion?.push(escenario);
+                } else {
+                  element!.metodoCalculo!.escenarioSimulacion = [];
+                  element?.metodoCalculo?.escenarioSimulacion?.push(escenario);
+                }
+              }
+              return;
+            }
+            cont++;
+          });
+        });
+        db.generar_variables_simulacion(modelo, fun);
+      });
+    } else {
+      var db = new mysql_connector();
+      db.generar_variables_simulacion(modelo, fun);
+    }
+  }
+  public generar_variables_simulacion(modelo: generar_modelo, fun: Function) {
+    var value: string = "(";
+    modelo.metodo_aprendizaje?.forEach(element => {
+      value += `${element?.$.id},`;
+    });
+    if (value.length > 1) {
+      value = value.substr(0, value.length - 1) + ")";
+      var sql = `SELECT 
+   vs.vs_id as id,
+   vs.vs_nombre as nombre,
+   vs.mea_id as mea_id,
+   vs.vs_activo as activo
+      FROM
+      variablesimulacion vs
+      WHERE
+   vs.mea_id in ${value}`;
+      var db = new mysql_connector();
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(vs => {
+          var variable_si: variableSimulacion = { $: { id: vs.id, nombre: vs.nombre, activo: vs.activo } };
+          var cont = 0;
+          modelo.metodo_aprendizaje?.forEach(element => {
+            if (element?.$.id == vs.mea_id) {
+              if (element?.metodoCalculo) {
+                if (element?.metodoCalculo?.variableSimulacion) {
+                  element?.metodoCalculo?.variableSimulacion?.push(variable_si);
+                } else {
+                  element!.metodoCalculo!.variableSimulacion = [];
+                  element?.metodoCalculo?.variableSimulacion?.push(variable_si);
+                }
+                return;
+              }
+            }
+            cont++;
+          });
+        });
+        db.generar_valores_simulacion(modelo, fun);
+      });
+    } else {
+      var db = new mysql_connector();
+      db.generar_valores_simulacion(modelo, fun);
+    }
+  }
+
+  public generar_valores_simulacion(modelo: generar_modelo, fun: Function) {
+    var value: string = "(";
+    modelo.metodo_aprendizaje?.forEach(element => {
+      value += `${element?.$.id},`;
+    });
+    if (value.length > 1) {
+      value = value.substr(0, value.length - 1) + ")";
+      var sql = `SELECT
+      vs.vas_valor as valor,
+      vs.es_id as escenario_id,
+      vs.vs_id as variable_id,
+      es.mea_id
+      FROM
+      valorsimulacion vs,
+      escenariosimulacion es
+      WHERE
+      es.es_id=vs.es_id AND
+      es.mea_id IN ${value}`;
+      var db = new mysql_connector();
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(vs => {
+          // var valor_simu: valorSimulacion = { $:{vas_valor:vs.valor,} };
+          var con_apren = 0
+          modelo.metodo_aprendizaje?.forEach(element => {
+            if (element?.$.id == vs.mea_id) {
+
+              if (element?.metodoCalculo) {
+                var cont = 0;
+                var escenario_aux = -1;
+                var variable_aux = -1;
+                element.metodoCalculo.escenarioSimulacion?.forEach(escenario => {
+                  if (escenario!.$.id = vs.escenario_id) {
+                    escenario_aux = cont;
+                    cont++;
+                  }
+                });
+                cont = 0;
+                element.metodoCalculo.variableSimulacion?.forEach(variable_sim => {
+                  if (variable_sim!.$.id = vs.variable_id) {
+                    variable_aux = cont;
+                    cont++;
+                  }
+                });
+                var valor_simu: valorSimulacion = {
+                  $: {
+                    vas_valor: vs.valor,
+                    ruta_escenario: `metodo_aprendizaje.${con_apren}@metodoCalculo@escenarioSimulacion.${escenario_aux}`,
+                    ruta_variable: `metodo_aprendizaje.${con_apren}@metodoCalculo@variableSimulacion.${variable_aux}`,
+
+                  }
+                };
+                if (element?.metodoCalculo?.valorSimulacion) {
+                  element?.metodoCalculo?.valorSimulacion?.push(valor_simu);
+                } else {
+                  element!.metodoCalculo!.valorSimulacion = [];
+                  element?.metodoCalculo?.valorSimulacion?.push(valor_simu);
+                }
+                return;
+              }
+            }
+            con_apren++;
+          });
+        });
+        db.generar_objetos(modelo, fun);
+
+      });
+    } else {
+      var db = new mysql_connector();
+      db.generar_objetos(modelo, fun);
+    }
+  }
+  public generar_objetos(modelo: generar_modelo, fun: Function): void {
+    if (modelo.$.id) {
+      var sql = `SELECT 
+    obj.obj_id as id,
+    obj.obj_nombre as nombre,
+    obj.obj_tipo as tipo,
+    obj.obj_padre as padre,
+    obj.obj_activo as activo
+    FROM
+    objeto obj
+    WHERE
+    obj.ma_id=${modelo.$.id}`;
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        modelo.objetos = [];
+        results.forEach(obj => {
+          var objeto: objeto = {
+            $: {
+              id: obj.id,
+              nombre: obj.nombre,
+              tipo: obj.tipo,
+              activo: obj.activo,
+              obj_padre: obj.padre
+            }
+          };
+          modelo.objetos?.push(objeto);
+        });
+        var db = new mysql_connector();
+        db.generar_aspecto(modelo, fun);
+      });
+    } else {
+      var db = new mysql_connector();
+      db.generar_aspecto(modelo, fun);
+    }
+  }
+  public generar_aspecto(modelo: generar_modelo, fun: Function): void {
+    var value: string = "(";
+    modelo.objetos?.forEach(element => {
+      value += `${element?.$.id},`;
+    });
+    value = value.substr(0, value.length - 1) + ")";
+    if (value.length > 1) {
+      var sql = `SELECT 
+    asp.aa_id as id,
+    asp.aa_nombre as nombre,
+    asp.aa_descripcion as descripcion,
+    asp.aa_peso as peso,
+    asp.aa_tipo as tipo,
+    asp.aa_activo as activo,
+    asp.obj_id 
+    FROM
+    aspectoautoconsciencia asp
+    WHERE
+    asp.obj_id IN ${value}`;
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(asp => {
+          var aspecto: aspectosAutoconsciencia = {
+            $: {
+              id: asp.id,
+              nombre: asp.nombre,
+              descripcion: asp.descripcion,
+              peso: asp.peso,
+              tipo: asp.tipo,
+              activo: asp.activo
+            }
+          };
+          modelo.objetos?.forEach(element => {
+            if (element?.$.id == asp.obj_id) {
+              if (element?.aspectosAutoconsciencia) {
+                element.aspectosAutoconsciencia.push(aspecto);
+              } else {
+                element!.aspectosAutoconsciencia = [aspecto];
+              }
+              return;
+            }
+          });
+        });
+        var db = new mysql_connector();
+        db.generar_propiedad(modelo, fun);
+      });
+    } else {
+      var db = new mysql_connector();
+      db.generar_propiedad(modelo, fun);
+    }
+  }
+  public generar_propiedad(modelo: generar_modelo, fun: Function): void {
+    var value: string = "(";
+    modelo.objetos?.forEach(element => {
+      value += `${element?.$.id},`;
+    });
+    value = value.substr(0, value.length - 1) + ")";
+    if (value.length > 1) {
+      var sql = `SELECT 
+    pro.pro_id as id,
+    pro.pro_nombre as nombre,
+    pro.obj_id 
+    FROM
+    propiedad pro
+    WHERE
+    pro.obj_id IN ${value}`;
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(pro => {
+          var prop: propiedad = {
+            $: {
+              id: pro.id,
+              nombre: pro.nombre,
+            }
+          };
+          modelo.objetos?.forEach(element => {
+            if (element?.$.id == pro.obj_id) {
+              if (element?.propiedad) {
+                element.propiedad.push(prop);
+              } else {
+                element!.propiedad = [prop];
+              }
+              return;
+            }
+          });
+        });
+        var db=new mysql_connector();
+        db.generar_metricas(modelo,fun);
+      });
+    } else {
+      var db=new mysql_connector();
+      db.generar_metricas(modelo,fun);
+    }
+  }
+
+  public generar_metricas(modelo: generar_modelo, fun: Function): void {
+    var value: string = "(";
+    modelo.objetos?.forEach(element => {
+      element?.aspectosAutoconsciencia?.forEach(element2 => {
+        value += `${element2?.$.id},`;
       });
     });
-    var db = new mysql_connector();
-  db.generar_objetivos(modelo,fun);
-  });
-}
+    value = value.substr(0, value.length - 1) + ")";
+    if (value.length > 1) {
+      var sql = `SELECT 
+    met.met_id as metrica_id,
+    met.met_nombre as metrica_nombre,
+    met.met_descripcion as metrica_decripcion,
+    met.met_abreviacion AS metrica_abreviacion,
+    met.met_activo as metrica_activo,
+    met.met_tipo as metrica_tipo,
+    esc.esc_id as escala_id,
+    esc.esc_nombre as escala_nombre,
+    esc.esc_valores_validos as valor_valido,
+    esc.esc_tipo as escala_tipo,
+    esc.esc_activo as escala_activo,
+    un.um_id as unidad_id,
+    un.um_nombre as unidad_nombre,
+    un.um_descripcion as unidad_descripcion,
+    un.um_acronimo as unidad_acronimo,
+    un.um_activo as unidad_activo
+    FROM
+    metrica met,
+    escala esc,
+    unidadmedicion un
+    WHERE
+    met.esc_id=esc.esc_id AND
+    met.um_id=un.um_id AND
+    met.aa_id IN ${value}`;
+      console.log(sql);
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(metrica => {
+          var unidad: unidadMedicion = {
+            $: {
+              id: metrica.unidad_id,
+              nombre: metrica.unidad_nombre,
+              descripcion: metrica.unidad_descripcion,
+              acronimo: metrica.unidad_acronimo,
+              activo: metrica.unidad_activo
 
+            }
+          };
+          var escala: escala = {
+            $: {
+              id: metrica.escala_id,
+              nombre: metrica.escala_nombre,
+              valores_validos: metrica.valor_valido,
+              tipo: metrica.escala_tipo,
+              activo: metrica.escala_activo
+            }
+          }
+          var metricas: metrica = {
+            $: {
+              id: metrica.metrica_id,
+              nombre: metrica.metrica_nombre,
+              descripcion: metrica.metrica_decripcion,
+              abreviacion: metrica.metrica_abreviacion,
+              tipo: metrica.metrica_tipo,
+              activo: metrica.metrica_activo
+            }, escala: escala, unidadMedicion: unidad
+          }
+          if (modelo.metrica) {
+            modelo.metrica.push(metricas);
+          } else {
+            modelo.metrica = [metricas];
+          }
+        });
+        fun(modelo);
+      });
+    } else {
+      fun(modelo);
+    }
+  }
+
+  public generar_criterios(modelo: generar_modelo, fun: Function): void {
+    var value: string = "(";
+    modelo.objetos?.forEach(element => {
+      value += `${element?.$.id},`;
+    });
+    value = value.substr(0, value.length - 1) + ")";
+    if (value.length > 1) {
+      var sql = `SELECT 
+    pro.pro_id as id,
+    pro.pro_nombre as nombre,
+    pro.obj_id 
+    FROM
+    propiedad pro
+    WHERE
+    pro.obj_id IN ${value}`;
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(pro => {
+          var prop: propiedad = {
+            $: {
+              id: pro.id,
+              nombre: pro.nombre,
+            }
+          };
+          modelo.objetos?.forEach(element => {
+            if (element?.$.id == pro.obj_id) {
+              if (element?.propiedad) {
+                element.propiedad.push(prop);
+              } else {
+                element!.propiedad = [prop];
+              }
+              return;
+            }
+          });
+        });
+        var db=new mysql_connector();
+        db.generar_metricas(modelo,fun);
+      });
+    } else {
+      var db=new mysql_connector();
+      db.generar_metricas(modelo,fun);
+    }
+  }
   // La atributo variable no existe, solo le pusimos para probar
   private modelo = {
     "MonitorIoT:DataMonitoringArchitectureModel": {
@@ -4142,13 +4769,13 @@ interface constainsDataFlow {
   communicationType: string;
 }
 interface flujos {
-  $: { id: string, name: string }, 
+  $: { id: string, name: string },
   dataFlow?: [dataFlow?]
 }
-interface dataFlow { 
-  id: string, 
-  description: string, 
-  communicationType: string 
+interface dataFlow {
+  id: string,
+  description: string,
+  communicationType: string
 }
 interface resource {
   nombre: string;
@@ -4182,285 +4809,283 @@ interface metodo_modelo_proceso {
     mr_tipo: string;
     pro_id: string;
     pro_alcance: string;
-    met_id:string;
+    met_id: string;
   };
   m_modelo: {
     ma_tipo: string;
     criterio_id: string;
-    met_id:string;
+    met_id: string;
   }
 }
 interface metodo_modelo_proceso_reflexivos {
   proceso_id: string;
-  m_calculo:{
-    inicio:string;
-    fin:string;
-    tipo_recurso:string;
-    met_id:string;
+  m_calculo: {
+    inicio: string;
+    fin: string;
+    tipo_recurso: string;
+    met_id: string;
   };
-  modelo:{
-    modeloTipo:string;
-    criterio_id:string;
-    met_id:string;
+  modelo: {
+    modeloTipo: string;
+    criterio_id: string;
+    met_id: string;
   }
 }
 
-interface mapeo_parametros{
-  par_ordinal:string;
-  mea_id:string;
-  mp_tipo_entrada:string;
-  met_id:string;
-  vs_id:string;
-  md_id:string;
+interface mapeo_parametros {
+  par_ordinal: string;
+  mea_id: string;
+  mp_tipo_entrada: string;
+  met_id: string;
+  vs_id: string;
+  md_id: string;
 }
 
-interface generar_modelo{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    autor:string,
-    activo:string,
+interface generar_modelo {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    autor: string,
+    activo: string,
   },
-  sujeto?:[sujeto?],
-  objetos?:[objeto?],
-  metodo_aprendizaje?:[metodoAprendizaje?],
-  valorSimulacion?:[valorSimulacion?],
-  mapeoParametros?:[mapeoParametros?],
-  metrica?:[metrica?],
-  flujo_datos?:[flujo_datos?],
+  sujeto?: [sujeto?],
+  objetos?: [objeto?],
+  metodo_aprendizaje?: [metodoAprendizaje?],
+  mapeoParametros?: [mapeoParametros?],
+  metrica?: [metrica?],
+  flujo_datos?: [flujo_datos?],
 }
-interface sujeto{
-$:{
-  id:string,
-  nombre:string,
-  activo:string,
-  suj_padre:string,
-},
-procesoAutocon?:[procesoAutoconsciencia?],
-objetivos?:[objetivos?],
-}
-interface objeto{
-  $:{
-    id:string,
-    tipo:string,
-    nombre:string,
-    activo:string,
-    obj_padre:string,
-  }
-  propiedad?:[propiedad?],
-}
-
-interface procesoAutoconsciencia{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    tipo:string,
-    inicio:string,
-    fin:string,
-    activo:string,
-    proceso_route?:[string?],
+interface sujeto {
+  $: {
+    id: string,
+    nombre: string,
+    activo: string,
+    suj_padre: string,
   },
-  aspectosAutoconsciencia?:[aspectosAutoconsciencia?],
-  
+  procesoAutocon?: [procesoAutoconsciencia?],
+  objetivos?: [objetivos?],
 }
-interface metodoAprendizaje{
-  $:{
-    id:string,
-    tipo:string,
+interface objeto {
+  $: {
+    id: string,
+    tipo: string,
+    nombre: string,
+    activo: string,
+    obj_padre: string,
+  }
+  propiedad?: [propiedad?],
+  aspectosAutoconsciencia?: [aspectosAutoconsciencia?],
+}
+
+interface procesoAutoconsciencia {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    tipo: string,
+    inicio: string,
+    fin: string,
+    activo: string,
+    ruta_metodoAprendizaje?: [string?],
   },
- metrica_route?:[string?],
- metodo_recoleccion?:[metodorecoleccion],
- modeloAnalis?:[modeloAnalis],
- metodoCalculo?:[metodoCalculo],
+  aspectosAutoconsciencia?: [aspectosAutoconsciencia?],
+
 }
-interface metodorecoleccion{
-  $:{
-    tipo_comunicacion:string,
-    alcance:string,
-  }
-}
-interface modeloAnalis{
-  $:{
-    tipo_recurso:string,
-    ruta_criterios?:[string],
-  }
-}
-interface metodoCalculo{
-  $:{
-    tipo_recurso:string,
-    inicio:string,
-    fin:string,
+interface metodoAprendizaje {
+  $: {
+    id: string,
+    tipo: string,
   },
-  escenarioSimulacion?:[escenarioSimulacion?],
-  variableSimulacion?:[variableSimulacion?],
+  metrica_route?: [string?],
+  metodo_recoleccion?: metodorecoleccion,
+  modeloAnalis?: modeloAnalis,
+  metodoCalculo?: metodoCalculo,
+}
+interface metodorecoleccion {
+  $: {
+    tipo_comunicacion: string,
+    alcance: string,
+  }
+}
+interface modeloAnalis {
+  $: {
+    tipo_recurso: string,
+    ruta_criterios?: [string],
+  }
+}
+interface metodoCalculo {
+  $: {
+    tipo_recurso: string,
+    inicio: string,
+    fin: string,
+  },
+  escenarioSimulacion?: [escenarioSimulacion?],
+  variableSimulacion?: [variableSimulacion?],
+  valorSimulacion?: [valorSimulacion?],
 }
 
-interface escenarioSimulacion{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    activo:string,
+interface escenarioSimulacion {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    activo: string,
   }
 }
-interface variableSimulacion{
-  $:{
-    id:string,
-    nombre:string,
-    activo:string,
+interface variableSimulacion {
+  $: {
+    id: string,
+    nombre: string,
+    activo: string,
   }
 }
-interface mapeoParametros{
-  $:{
-    tipo_entrada:string,
+interface mapeoParametros {
+  $: {
+    tipo_entrada: string,
   }
-  metrica_route?:[string?],
+  metrica_route?: [string?],
 }
-interface parametros_traer{
-  $:{
-    vas_valor:string,
-    variable_ruta?:[string],
-    escenario_ruta?:[string],
-  }
-}
-interface valorSimulacion{
-  $:{
-    par_ordinal:string,
-    nombre:string,
-    tipo_dato:string,
-    opcional:string,
-    activo:string,
+interface parametros_traer {
+  $: {
+    vas_valor: string,
+    variable_ruta?: [string],
+    escenario_ruta?: [string],
   }
 }
-interface recursoimplementacion{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    tipo_recurso:string,
-    tipo_salida:string,
-    activo:string,
-  }
-  servicio?:[servicio?],
-  funcion?:[funcion?],
-  formula?:[formula?],
-}
-interface servicio{
-  $:{
-    punto_final:string,
-    instrucciones:string,
-    pre_existente:string,
-    tipo_formato:string,
+interface valorSimulacion {
+  $: {
+    vas_valor: string,
+    ruta_escenario?: string
+    ruta_variable?: string
   }
 }
-interface funcion{
-  $:{
-    path:string,
-    instrucciones:string,
+interface recursoimplementacion {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    tipo_recurso: string,
+    tipo_salida: string,
+    activo: string,
+  }
+  servicio?: [servicio?],
+  funcion?: [funcion?],
+  formula?: [formula?],
+}
+interface servicio {
+  $: {
+    punto_final: string,
+    instrucciones: string,
+    pre_existente: string,
+    tipo_formato: string,
+  }
+}
+interface funcion {
+  $: {
+    path: string,
+    instrucciones: string,
 
   }
 }
-interface formula{
-  $:{
-    for_expresion:string,
+interface formula {
+  $: {
+    for_expresion: string,
   }
 }
-interface metrica{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    abreviacion:string,
-    tipo:string,
-    activo:string,
+interface metrica {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    abreviacion: string,
+    tipo: string,
+    activo: string,
   }
-  escala?:[escala?],
-  unidadMedicion?:[unidadMedicion?],
-  aspectosAutoconsciencia?:[aspectosAutoconsciencia?],
+  escala?: escala,
+  unidadMedicion?: unidadMedicion,
 }
-interface objetivos{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    peso:string,
-    operacion_agregacion:string,
-    activo:string,
-  }
-}
-
-interface criterios{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    activo:string,
-  }
-  umbral?:[umbral?],
-}
-interface umbral{
-  $:{
-    id:string,
-    nombre:string,
-    interpretacion:string,
-    inferior:string,
-    superior:string,
-    activo:string,
-  }
-}
-
-
-interface accion{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    activo:string,
-    ruta_umbral?:[string],
-    ruta_modelo?:[string],
+interface objetivos {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    peso: string,
+    operacion_agregacion: string,
+    activo: string,
   }
 }
 
-interface escala{
-  $:{
-    id:string,
-    nombre:string,
-    valores_validos:string,
-    tipo:string,
-    activo:string,
+interface criterios {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    activo: string,
+  }
+  umbral?: [umbral?],
+}
+interface umbral {
+  $: {
+    id: string,
+    nombre: string,
+    interpretacion: string,
+    inferior: string,
+    superior: string,
+    activo: string,
   }
 }
-interface unidadMedicion{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    acronimo:string,
-    activo:string,
+
+
+interface accion {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    activo: string,
+    ruta_umbral?: [string],
+    ruta_modelo?: [string],
   }
 }
-interface aspectosAutoconsciencia{
-  $:{
-    id:string,
-    nombre:string,
-    descripcion:string,
-    peso:string,
-    tipo:string,
-    activo:string,
+
+interface escala {
+  $: {
+    id: string,
+    nombre: string,
+    valores_validos: string,
+    tipo: string,
+    activo: string,
+  }
+}
+interface unidadMedicion {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    acronimo: string,
+    activo: string,
+  }
+}
+interface aspectosAutoconsciencia {
+  $: {
+    id: string,
+    nombre: string,
+    descripcion: string,
+    peso: string,
+    tipo: string,
+    activo: string,
   },
 }
 
-interface flujo_datos{
-  $:{
-    descripcion:string,
-    tipo_comunicacion:string,
+interface flujo_datos {
+  $: {
+    descripcion: string,
+    tipo_comunicacion: string,
   }
 }
-interface propiedad{
-  $:{
-    id:string,
-    nombre:string,
+interface propiedad {
+  $: {
+    id: string,
+    nombre: string,
   }
 }

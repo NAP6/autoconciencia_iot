@@ -213,13 +213,17 @@ export function procesos_reflexivos(req: Request, res: Response) {
 }
 export function generate_model(req: Request, res: Response) {
   var modeloID=req.session?.active_model.modelID;
-  res.render("generate_model", {
-    error: req.flash("error"),
-    succes: req.flash("succes"),
-    session: req.session,
+  var db = new mysql_connector();
+  db.generar_modelo(modeloID,(modelo:any)=>{
+console.log();
+res.render("generate_model", {
+  error: req.flash("error"),
+  succes: req.flash("succes"),
+  model:JSON.stringify(modelo,null,"  "),
+  session: req.session,
+});
   });
-  var db
-  
+
 }
 
 export function save_new_model(
