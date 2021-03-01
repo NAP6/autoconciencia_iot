@@ -2357,7 +2357,7 @@ if (document.getElementById("select_modelo_para_activar_trabajo"))
     );
 
 function cargar_modelos_trabajo_actual(json) {
-    res = "<option value='-6'>Seleccione un modelo para trabajar</option>";
+    res = "<option value=''>Seleccione un modelo para trabajar</option>";
     json.forEach((md) => {
         res += `<option value="${md.id}">${md.nombre}</option>`;
     });
@@ -3263,6 +3263,7 @@ function verificarSeleccion(elemento) {
         element.checked = false;
     });
     elemento.checked = auxChecked;
+    document.getElementById("CategoriaEntidades").disabled = false;
 }
 
 /*
@@ -5660,10 +5661,25 @@ function error_cargar_propiedades_select_modificar(error) {
     alert(error);
 }
 
+function recuperar_ultimo_metodo_aprendizaje_escenario() {
+    post_api(
+        "http://localhost:3000/api/get_metodo_aprendizaje", { id: 23 },
+        consultar_tabla_escenarios,
+        (res) => {
+            console.log(res);
+        }
+    );
+};
+
 function abrirModalEscenarioSimulacion() {
     $("#modal_escenarios_simulacion").modal("show");
-    consultar_api(
-        "http://localhost:3000/api/ascenario_simulacion",
+    recuperar_ultimo_metodo_aprendizaje_escenario();
+
+}
+
+function consultar_tabla_escenarios(json) {
+    post_api(
+        "http://localhost:3000/api/ascenario_simulacion", { mea_id: json.id },
         cargar_tabla_escenarios_simulacion,
         error_cargar_tabla_escenarios_simulacion
     );
@@ -5720,20 +5736,12 @@ function enviarDatos_escenarios_simulacion(json) {
     document.getElementById("descripcion_escenario_simulacion").value = "";
 
     $("#modal_agregar_escenario_simulacion").modal("hide");
-    setTimeout(guardar_escenarios_simulacion, 200);
+    setTimeout(recuperar_ultimo_metodo_aprendizaje_escenario, 200);
     $("#modal_escenarios_simulacion").modal("show");
 }
 
 function errorenviarDatos_escenarios_simulacion(error) {
     console.log(error);
-}
-
-function guardar_escenarios_simulacion() {
-    consultar_api(
-        "http://localhost:3000/api/ascenario_simulacion",
-        cargar_tabla_escenarios_simulacion,
-        error_cargar_tabla_escenarios_simulacion
-    );
 }
 
 function error_guardar_escenarios_simulacion(error) {
@@ -5759,7 +5767,7 @@ function eliminar_escenario_simulacion() {
                 console.log(res);
             }
         );
-        setTimeout(guardar_escenarios_simulacion, 200);
+        setTimeout(recuperar_ultimo_metodo_aprendizaje_escenario, 200);
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -5783,6 +5791,7 @@ function modificar_escenario_simulacion() {
         document.getElementById("nombre_escenario_simulacion_modificar").value = name;
         document.getElementById("descripcion_escenario_simulacion_modificar").value = descripcion;
         document.getElementById("activoEscenarioSimulacion_modificar").checked = activo;
+        $("#modal_escenarios_simulacion").modal("hide");
         $("#modal_modificar_escenario_simulacion").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
@@ -5803,8 +5812,9 @@ function ModificarEscenarioSimulacions() {
             console.log(res);
         }
     );
-    setTimeout(guardar_escenarios_simulacion, 200);
+    setTimeout(recuperar_ultimo_metodo_aprendizaje_escenario, 200);
     $("#modal_modificar_escenario_simulacion").modal("hide");
+    $("#modal_escenarios_simulacion").modal("show");
 
 }
 var escenarioSeleccionado = undefined;
@@ -5844,6 +5854,23 @@ function cargar_variables_valor_table(json) {
 function agregar_variables_valor() {
     $("#modal_escenarios_simulacion").modal("hide");
     $("#modal_agregar_variables_valores_simulacion").modal("show");
+    post_api(
+        "http://localhost:3000/api/get_metodo_aprendizaje", { id: 23 },
+        consultar_variables_select,
+        (res) => {
+            console.log(res);
+        }
+    );
+}
+
+function consultar_variables_select(json) {
+    post_api(
+        "http://localhost:3000/api/get_variable_simulacion/", { mea_id: json.id },
+        cargar_variables_simulacion_select,
+        (res) => {
+            console.log(res);
+        }
+    )
 }
 
 function cerrar_modal_variables_valor() {
@@ -6228,12 +6255,22 @@ function recomendaciones_procesos_reflexivos() {
 
 function AbrirModalAgregarVariablesSimulacion() {
     $("#modal_variables_simulacion").modal("show");
-    consultar_tabla_varibles();
+    recuperar_ultimo_metodo_aprendizaje();
 }
 
-function consultar_tabla_varibles() {
-    consultar_api(
-        "http://localhost:3000/api/get_variable_simulacion/",
+function recuperar_ultimo_metodo_aprendizaje() {
+    post_api(
+        "http://localhost:3000/api/get_metodo_aprendizaje", { id: 23 },
+        consultar_tabla_varibles,
+        (res) => {
+            console.log(res);
+        }
+    );
+};
+
+function consultar_tabla_varibles(json) {
+    post_api(
+        "http://localhost:3000/api/get_variable_simulacion/", { mea_id: json.id },
         cargar_tabla_variables_simulacion,
         (res) => {
             console.log(res);
@@ -6299,7 +6336,7 @@ function cerrar_agregar_variables_simulacion() {
 function variables_guardadas_correctamente(json) {
     $("#modal_variables_simulacion").modal("show");
     $("#modal_agregar_variables_simulacion").modal("hide");
-    setTimeout(consultar_tabla_varibles, 200);
+    setTimeout(recuperar_ultimo_metodo_aprendizaje, 100);
 }
 
 function error_guardando_variables(error) {
@@ -6325,7 +6362,7 @@ function eliminar_variables_simulacion() {
                 console.log(res);
             }
         );
-        setTimeout(consultar_tabla_varibles, 200);
+        setTimeout(recuperar_ultimo_metodo_aprendizaje, 100);
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -6366,18 +6403,9 @@ function ModificarVariableSimulacions() {
             console.log(res);
         }
     );
-    setTimeout(consultar_tabla_varibles, 200);
+    setTimeout(recuperar_ultimo_metodo_aprendizaje, 100);
     $("#modal_modificar_variable_simulacion").modal("hide");
     $("#modal_variables_simulacion").modal("show");
-}
-if (document.getElementById("seleccionar_variable_simulacion")) {
-    consultar_api(
-        "http://localhost:3000/api/get_variable_simulacion/",
-        cargar_variables_simulacion_select,
-        (res) => {
-            console.log(res);
-        }
-    )
 }
 
 function cargar_variables_simulacion_select(json) {
@@ -6409,20 +6437,18 @@ function guardarvariables_valor() {
         (res) => {
             console.log(res);
         }
-
     );
     correcto_guardado_variables_valor();
+
 }
 
 function correcto_guardado_variables_valor(json) {
-    if (json.error) {
-        alert(json.error);
-    }
-    document.getElementById("seleccionar_variable_simulacion").value = "-6";
-    document.getElementById("agregar_valor_simulacion").value = "0";
+    console.log(json);
+    document.getElementById("agregar_valor_simulacion").value = "";
     $("#modal_agregar_variables_valores_simulacion").modal("hide");
     $("#modal_escenarios_simulacion").modal("show");
-    setTimeout(consultar_tabla_valores_variables(escenarioSeleccionado), 200);
+    agregar_variables_valor();
+    setTimeout(consultar_tabla_valores_variables(escenarioSeleccionado), 100);
 }
 
 function elminarProcesoReflexivo() {

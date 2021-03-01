@@ -892,7 +892,8 @@ export function escenario_simulacion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    db.escenario_simulacion(id, (jsonEscala: object) => {
+    var mea_id=req.body.mea_id;
+    db.escenario_simulacion(id,mea_id, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -943,7 +944,8 @@ export function get_variable_simulacion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    db.get_variable_simulacion(id, (jsonEscala: object) => {
+    var mea_id=req.body.mea_id;
+    db.get_variable_simulacion(id,mea_id, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
