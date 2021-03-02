@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import {
   mysql_connector as database,
   mysql_connector,
-} from "../models/database";
+} from "../data/database";
 export function add_deployment_resources(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database();
