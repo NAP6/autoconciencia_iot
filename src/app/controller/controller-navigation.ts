@@ -179,27 +179,27 @@ export function proceso_pre_reflexivo(req: Request, res: Response) {
   });
 }
 export function modificar_pre_reflexivos(req: Request, res: Response) {
-  var id =req.body.proceso_seleccionado;
+  var id = req.body.proceso_seleccionado;
   var idUser = req.session?.user.userID;
-  var db= new mysql_connector();
-  db.getUser_procesos_pre_reflexive_id(idUser, id,(jsonEscala: object) => {
+  var db = new mysql_connector();
+  db.getUser_procesos_pre_reflexive_id(idUser, id, (jsonEscala: object) => {
     res.render("modificar_pre_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
-      modificar:jsonEscala,
+      modificar: jsonEscala,
       session: req.session,
     });
   });
 }
 export function modificar_reflexivos(req: Request, res: Response) {
-  var id =req.body.proceso_reflexivo_seleccionado;
+  var id = req.body.proceso_reflexivo_seleccionado;
   var idUser = req.session?.user.userID;
-  var db= new mysql_connector();
-  db.getUser_procesos_reflexive_id(idUser, id,(jsonEscala: object) => {
+  var db = new mysql_connector();
+  db.getUser_procesos_reflexive_id(idUser, id, (jsonEscala: object) => {
     res.render("modificar_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
-      modificar:jsonEscala,
+      modificar: jsonEscala,
       session: req.session,
     });
   });
@@ -212,16 +212,16 @@ export function procesos_reflexivos(req: Request, res: Response) {
   });
 }
 export function generate_model(req: Request, res: Response) {
-  var modeloID=req.session?.active_model.modelID;
+  var modeloID = req.session?.active_model.modelID;
   var db = new mysql_connector();
-  db.generar_modelo(modeloID,(modelo:any)=>{
-console.log();
-res.render("generate_model", {
-  error: req.flash("error"),
-  succes: req.flash("succes"),
-  model:JSON.stringify(modelo,null,"  "),
-  session: req.session,
-});
+  db.generar_modelo(modeloID, (modelo: any) => {
+    console.log();
+    res.render("generate_model", {
+      error: req.flash("error"),
+      succes: req.flash("succes"),
+      model: JSON.stringify(modelo, null, "  "),
+      session: req.session,
+    });
   });
 
 }
@@ -237,13 +237,13 @@ export function save_new_model(
     var nombre = req.body.nombre_modelo;
     var descripcion = req.body.descripcion_ecenario;
     var autor = req.body.autor_modelo;
-    var user_id=req.session?.user.userID;
+    var user_id = req.session?.user.userID;
     var db = new mysql_connector();
-    db.save_newModel(nombre, descripcion, autor, js.getJSON(),user_id, (id: string) => {
-      db.getModel(id, (active_model: {nombre: string, descripcion: string, modelID: string}) => {
+    db.save_newModel(nombre, descripcion, autor, js.getJSON(), user_id, (id: string) => {
+      db.getModel(id, (active_model: { nombre: string, descripcion: string, modelID: string }) => {
         req.session!.active_model = active_model;
-      db.save_subjects(active_model.modelID, js.getSystem());
-      db.save_entity(active_model.modelID,js.getEntity());
+        db.save_subjects(active_model.modelID, js.getSystem());
+        db.save_entity(active_model.modelID, js.getEntity());
         next();
       });
     });

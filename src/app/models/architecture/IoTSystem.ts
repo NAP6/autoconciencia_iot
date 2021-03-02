@@ -1,4 +1,4 @@
-import { Entity } from './Entity';
+import { Entity } from "./Entity";
 
 export class IoTSystem {
   private _id: number;
@@ -29,30 +29,19 @@ export class IoTSystem {
     this._name = name;
   }
 
-  addSubSystem(system: IoTSystem): void {
-    this._IoTSubSystem.push(system);
+  get IoTSubSystem(): IoTSystem[] {
+    return this._IoTSubSystem;
   }
 
-  removeSubSystem(i: number): boolean {
-    if (-1 >= i && i >= this._IoTSubSystem.length) {
-      return false;
-    }
-    this._IoTSubSystem.splice(i, 1);
-    return true;
-  }
-
-  getSubSystem(i: number): IoTSystem | undefined {
-    if (i < this._IoTSubSystem.length) {
-      return this._IoTSubSystem[i];
-    }
-    return undefined;
-  }
-
-  sizeSubSystem(): number {
-    return this._IoTSubSystem.length;
+  set IoTSubSystem(system: IoTSystem[]) {
+    this._IoTSubSystem = system;
   }
 
   get entity(): Entity[] {
     return this._entity;
+  }
+
+  set entity(entity: Entity[]) {
+    this._entity = entity;
   }
 }
