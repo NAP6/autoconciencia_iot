@@ -1,7 +1,6 @@
 import { Entity } from "./Entity";
-import { SQL_Qwerty } from '../SQL_Qwerty';
 
-export class IoTSystem implements SQL_Qwerty {
+export class IoTSystem {
   private _id: number;
   private _name: string;
   private _IoTSubSystem: IoTSystem[];
@@ -44,9 +43,5 @@ export class IoTSystem implements SQL_Qwerty {
 
   set entity(entity: Entity[]) {
     this._entity = entity;
-  }
-
-  toSql(): string {
-    return `INSERT INTO sujeto (ma_id, suj_nombre, suj_padre) VALUES (/@/MODELO/@/, '${this._name}', /@/PADRE/@/)`;
   }
 }

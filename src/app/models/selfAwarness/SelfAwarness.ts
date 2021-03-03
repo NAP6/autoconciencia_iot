@@ -1,6 +1,4 @@
-import { SQL_Qwerty } from "../SQL_Qwerty";
-
-export class SelfAwarness implements SQL_Qwerty {
+export class SelfAwarness {
   private _id: number;
   private _name: string;
   private _description: string;
@@ -14,7 +12,7 @@ export class SelfAwarness implements SQL_Qwerty {
     this._description = description;
     this._author = author;
     this._active = true;
-    this._architectureModel = architectureModel
+    this._architectureModel = architectureModel.split("'").join('"')
   }
 
   get id(): number {
@@ -63,9 +61,5 @@ export class SelfAwarness implements SQL_Qwerty {
 
   set active(value: boolean) {
     this._active = value;
-  }
-
-  toSql(): string {
-    return `INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura , usr_id) VALUES ('${this._name}','${this._description}','${this._author}','${this._architectureModel}', /@/USER/@/)`;
   }
 }

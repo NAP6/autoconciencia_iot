@@ -1,32 +1,40 @@
 import { JSON2Architecture } from "../models/JSON2Architecture";
 import { SQL_Qwerty } from "../models/SQL_Qwerty";
-import { Entity } from "../models/architecture/Entity";
-import { IoTSystem } from "../models/architecture/IoTSystem";
-import { DataFlow } from "../models/architecture/DataFlow";
+import { EntityQ } from "../models/architecture/EntityQ";
+import { IoTSystemQ } from "../models/architecture/IoTSystemQ";
+import { DataFlowQ } from "../models/architecture/DataFlowQ";
+import { PropertyQ } from "../models/architecture/PropertyQ";
 const mysql = require("mysql2/promise");
+import constants from "../../config/constants";
 
 export class database2 {
-  private connection;
 
-  constructor() {}
-  public async conectar() {
-    this.connection = await mysql.createConnection({
-      host: "localhost",
-      user: "root",
-      database: "db_autoconscienciaf",
+  constructor() { }
+  private async conectar() {
+    var connection = await mysql.createConnection({
+      host: constants["db-url"],
+      port: constants["db-port"],
+      user: constants["db-user"],
+      password: constants["db-password"],
+      database: constants["db-schema"],
     });
+    return connection;
   }
 
   public async insert(element: SQL_Qwerty, tag: string[], value: string[]) {
-    var sql = element.toSql();
+    var connection = await this.conectar();
+    var sql = element.toSqlInsert();
     for (var i = 0; i < tag.length; i++) {
       sql = sql.replace(tag[i], value[i]);
     }
-    var [rows, fields] = await this.connection.execute(sql);
+    var [rows, fields] = await connection.execute(sql);
     element.id = rows.insertId;
+    connection.end();
   }
-  public async select(element: SQL_Qwerty, tag: string[], value: string[]) {}
-  public async delete(element: SQL_Qwerty, tag: string[], value: string[]) {}
+
+  public async select(element: SQL_Qwerty, tag: string[], value: string[]) { }
+  public async delete(element: SQL_Qwerty, tag: string[], value: string[]) { }
+
   public async architecture(architecture: JSON2Architecture, modelID: string) {
     await this.insert(
       architecture.modelIoTSystem,
@@ -53,7 +61,7 @@ export class database2 {
   }
 
   private async insertar_entidades_recursivo(
-    entidades: Entity[],
+    entidades: EntityQ[],
     value: string[]
   ) {
     for (var i = 0; i < entidades.length; i++) {
@@ -85,19 +93,23 @@ export class database2 {
     }
   }
 
-  private relation_sujeto_objeto(id: string, systemas: IoTSystem[]) {
+  private async relation_sujeto_objeto(id: string, systemas: IoTSystemQ[]) {
+    var connection = await this.conectar();
     systemas.forEach((sys) => {
-      this.connection.execute(
+      connection.execute(
         `insert INTO sujeto_objeto(suj_id,obj_id) VALUES (${sys.id},${id})`
       );
     });
+    connection.end();
   }
 
-  private relation_propiedad_flujo(id: string, flujos: DataFlow[]) {
+  private async relation_propiedad_flujo(id: string, flujos: DataFlowQ[]) {
+    var connection = await this.conectar();
     flujos.forEach((flu) => {
-      this.connection.execute(
+      connection.execute(
         `insert INTO propiedad_flujodatos (pro_id, flu_id) VALUES (${id},${flu.id})`
       );
     });
+    connection.end();
   }
 }

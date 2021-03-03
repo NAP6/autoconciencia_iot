@@ -1,8 +1,7 @@
 import { Property } from "./Property";
 import { IoTSystem } from "./IoTSystem";
-import { SQL_Qwerty } from '../SQL_Qwerty';
 
-export class Entity implements SQL_Qwerty {
+export class Entity {
   private _id: number;
   private _name: string;
   private _entityType: string;
@@ -10,7 +9,7 @@ export class Entity implements SQL_Qwerty {
   private _subEntity: Entity[];
   private _iotSystem: IoTSystem[];
 
-  public constructor(id: number, name: string, entityType: string) {
+  constructor(id: number, name: string, entityType: string) {
     this._id = id;
     this._name = name;
     this._entityType = entityType;
@@ -65,9 +64,5 @@ export class Entity implements SQL_Qwerty {
 
   set iotSystem(iotSystem: IoTSystem[]) {
     this._iotSystem = iotSystem;
-  }
-
-  toSql(): string {
-    return `INSERT INTO objeto (ma_id, obj_nombre, obj_tipo, obj_padre) VALUES (/@/MODELO/@/, '${this._name}', '${this._entityType}' , /@/PADRE/@/)`;
   }
 }

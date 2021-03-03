@@ -1,7 +1,6 @@
 import { DataFlow } from './DataFlow';
-import { SQL_Qwerty } from '../SQL_Qwerty';
 
-export class Property implements SQL_Qwerty {
+export class Property {
   private _id: number;
   private _name: string;
   private _dataFlow: DataFlow[];
@@ -32,7 +31,7 @@ export class Property implements SQL_Qwerty {
     return this._dataFlow;
   }
 
-  toSql(): string {
-    return `INSERT INTO propiedad ( pro_nombre, obj_id) VALUES ('${this._name}', /@/OBJETOS/@/)`;
+  set dataFlow(dataFlow: DataFlow[]) {
+    this._dataFlow = dataFlow;
   }
 }

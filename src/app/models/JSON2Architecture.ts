@@ -1,61 +1,61 @@
-import { Entity } from "./architecture/Entity";
-import { DataFlow } from "./architecture/DataFlow";
-import { IoTSystem } from "./architecture/IoTSystem";
-import { Property } from "./architecture/Property";
+import { EntityQ } from "./architecture/EntityQ";
+import { DataFlowQ } from "./architecture/DataFlowQ";
+import { IoTSystemQ } from "./architecture/IoTSystemQ";
+import { PropertyQ } from "./architecture/PropertyQ";
 
 export class JSON2Architecture {
-  private _json: Architecture;
-  private _modelEntity: Entity[];
-  private _modelDataFlow: DataFlow[];
-  private _modelIoTSystem: IoTSystem;
+  private _json: any;
+  private _modelEntity: EntityQ[];
+  private _modelDataFlow: DataFlowQ[];
+  private _modelIoTSystem: IoTSystemQ;
 
-  constructor(json: Architecture) {
+  constructor(json: any) {
     this._json = json[Object.keys(json)[0]];
     if (this._json == undefined) this._json = {}
     this._modelEntity = [];
     this._modelDataFlow = [];
-    this._modelIoTSystem = new IoTSystem(-1, "");
+    this._modelIoTSystem = new IoTSystemQ(-1, "");
     this.extractSystems();
     this.extractDataFlows();
     this.extractEntitys();
   }
 
-  get json(): Architecture {
+  get json(): any {
     return this._json;
   }
 
-  set json(json: Architecture) {
+  set json(json: any) {
     this._json = json;
   }
 
-  get modelEntity(): Entity[] {
+  get modelEntity(): EntityQ[] {
     return this._modelEntity;
   }
 
-  set modelEntity(modelEntity: Entity[]) {
+  set modelEntity(modelEntity: EntityQ[]) {
     this._modelEntity = modelEntity;
   }
 
-  get modelDataFlow(): DataFlow[] {
+  get modelDataFlow(): DataFlowQ[] {
     return this._modelDataFlow;
   }
 
-  set modelDataFlow(modelDataFlow: DataFlow[]) {
+  set modelDataFlow(modelDataFlow: DataFlowQ[]) {
     this._modelDataFlow = modelDataFlow;
   }
 
-  get modelIoTSystem(): IoTSystem {
+  get modelIoTSystem(): IoTSystemQ {
     return this._modelIoTSystem;
   }
 
-  set modelIoTSystem(modelIoTSystem: IoTSystem) {
+  set modelIoTSystem(modelIoTSystem: IoTSystemQ) {
     this.modelIoTSystem = modelIoTSystem;
   }
 
   private extractSystems() {
     if (this._json["containsIoTSystem"]) {
       var containsIoTSystem = this._json["containsIoTSystem"][0];
-      var system = new IoTSystem(containsIoTSystem.$.id, containsIoTSystem.$.name);
+      var system = new IoTSystemQ(containsIoTSystem.$.id, containsIoTSystem.$.name);
       if (containsIoTSystem.containsIoTSubSystem) {
         system.IoTSubSystem = this.extractSystems_recursive(
           containsIoTSystem.containsIoTSubSystem
@@ -65,10 +65,10 @@ export class JSON2Architecture {
     }
   }
 
-  private extractSystems_recursive(system: any): IoTSystem[] {
-    var systeRe: IoTSystem[] = [];
+  private extractSystems_recursive(system: any): IoTSystemQ[] {
+    var systeRe: IoTSystemQ[] = [];
     system.forEach((subSystem) => {
-      var sub = new IoTSystem(subSystem.$.id, subSystem.$.name);
+      var sub = new IoTSystemQ(subSystem.$.id, subSystem.$.name);
       if (subSystem.containsIoTSubSystem) {
         sub.IoTSubSystem = this.extractSystems_recursive(
           subSystem.containsIoTSubSystem
@@ -83,7 +83,7 @@ export class JSON2Architecture {
     if (this._json["containsDataFlow"]) {
       var containsDataFlow = this._json["containsDataFlow"];
       containsDataFlow.forEach((flows) => {
-        var newFlow = new DataFlow(
+        var newFlow = new DataFlowQ(
           flows.$.id,
           flows.$.description,
           flows.$.communicationType
@@ -100,13 +100,13 @@ export class JSON2Architecture {
     }
   }
 
-  private extractEntitys_recursive(entitys: any): Entity[] {
-    var entitysRe: Entity[] = [];
+  private extractEntitys_recursive(entitys: any): EntityQ[] {
+    var entitysRe: EntityQ[] = [];
     entitys.forEach((entity) => {
       var id = entity.$.id;
       var name = entity.$.name;
       var entityType = entity.$["xsi:type"].split(":")[1];
-      var newEntity = new Entity(id, name, entityType);
+      var newEntity = new EntityQ(id, name, entityType);
 
       if (entity.$.isPartOf) {
         this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
@@ -160,13 +160,13 @@ export class JSON2Architecture {
     return entitysRe;
   }
 
-  private extractSubPhysicalEntitys(entitys: any): Entity[] {
-    var entitysRe: Entity[] = [];
+  private extractSubPhysicalEntitys(entitys: any): EntityQ[] {
+    var entitysRe: EntityQ[] = [];
     entitys.forEach((entity) => {
       var id = entity.$.id;
       var name = entity.$.name;
       var entityType = "PhysicalEntity";
-      var newEntity = new Entity(id, name, entityType);
+      var newEntity = new EntityQ(id, name, entityType);
 
       if (entity.$.isPartOf) {
         this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
@@ -190,10 +190,10 @@ export class JSON2Architecture {
     return entitysRe;
   }
 
-  private matchPairs_SystemEntity(entity: Entity, isPartOf: string) {
+  private matchPairs_SystemEntity(entity: EntityQ, isPartOf: string) {
     var listRoutes = isPartOf.split(" ");
     listRoutes.forEach((route) => {
-      var system: IoTSystem = this._modelIoTSystem;
+      var system: IoTSystemQ = this._modelIoTSystem;
       var routeAux: string[] = route.substring(1, route.length).split("/@");
       routeAux = routeAux.splice(2, routeAux.length);
       routeAux.forEach((stop) => {
@@ -205,10 +205,10 @@ export class JSON2Architecture {
     });
   }
 
-  private extractPropertys(propertys: any): Property[] {
-    var propertysRe: Property[] = [];
+  private extractPropertys(propertys: any): PropertyQ[] {
+    var propertysRe: PropertyQ[] = [];
     propertys.forEach((prop) => {
-      var newProperty = new Property(prop.$.id, prop.$.name);
+      var newProperty = new PropertyQ(prop.$.id, prop.$.name);
       if (prop.$.hasRulePropertyToDataColumn) {
         this.matchPairs_PropertyDataFlow(
           newProperty,
@@ -221,7 +221,7 @@ export class JSON2Architecture {
   }
 
   private matchPairs_PropertyDataFlow(
-    property: Property,
+    property: PropertyQ,
     RuleProperty: string
   ) {
     var listRoutes = RuleProperty.split(" ");
@@ -234,5 +234,3 @@ export class JSON2Architecture {
     });
   }
 }
-
-interface Architecture { }

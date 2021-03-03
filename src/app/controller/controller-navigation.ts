@@ -4,7 +4,7 @@ import { database2 } from "../data/database2";
 import * as fs from "fs";
 import { parseString } from "xml2js";
 import { JSON2Architecture } from "../models/JSON2Architecture";
-import { SelfAwarness } from "../models/selfAwarness/SelfAwarness";
+import { SelfAwarnessQ } from "../models/selfAwarness/SelfAwarnessQ";
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
   if (req.session!.user) {
@@ -241,7 +241,6 @@ export async function save_new_model(
     var db = new mysql_connector();
     //######################
     var db2 = new database2();
-    await db2.conectar();
     var json: object = [];
     try {
       const xml = fs.readFileSync(req.file.path);
@@ -253,12 +252,12 @@ export async function save_new_model(
       console.log("No se ha ingresado ningun valor");
     }
     var arquitectura = new JSON2Architecture(json);
-    var modelo = new SelfAwarness(
+    var modelo = new SelfAwarnessQ(
       -1,
       nombre,
       descripcion,
       autor,
-      JSON.stringify(json, null, "  ").split("'").join('"')
+      JSON.stringify(json, null, "  ")
     );
     await db2.insert(modelo, ["/@/USER/@/"], [user_id.toString()]);
     db2.architecture(arquitectura, modelo.id.toString());
