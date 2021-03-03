@@ -2856,12 +2856,10 @@ WHERE   pa.pa_id=${id} AND
             modelo.metrica = [metricas];
           }
         });
-        var db= new mysql_connector();
-        db.generar_mapeo_parametros(modelo,fun);
+        fun(modelo);
       });
     } else {
-      var db= new mysql_connector();
-      db.generar_mapeo_parametros(modelo,fun);
+      fun(modelo);
     }
   }
 
@@ -2911,7 +2909,7 @@ WHERE   pa.pa_id=${id} AND
   }*/
 
 
-  public generar_mapeo_parametros(modelo: generar_modelo, fun: Function): void {
+  /*public generar_mapeo_parametros(modelo: generar_modelo, fun: Function): void {
     if (modelo.metodo_aprendizaje!.length > 0) {
       var value: string = "(";
       modelo.metodo_aprendizaje?.forEach(element => {
@@ -3007,7 +3005,7 @@ public generar_recurso_implementacion(modelo: generar_modelo, fun: Function): vo
     db.generar_metricas(modelo,fun);
   }
 }
-}
+}*/
 
 
   // La atributo variable no existe, solo le pusimos para probar
