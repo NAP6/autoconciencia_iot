@@ -47,6 +47,6 @@ export class IoTSystem implements SQL_Qwerty {
   }
 
   toSql(): string {
-    return "";
+    return `INSERT INTO sujeto (ma_id, suj_nombre, suj_padre) VALUES (/@/MODELO/@/, '${this._name}', /@/PADRE/@/)`;
   }
 }
