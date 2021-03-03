@@ -43,6 +43,6 @@ export class DataFlow implements SQL_Qwerty {
     }
 
     toSql(): string {
-        return "";
+        return `INSERT INTO flujodatos (flu_descripcion,flu_tipo_comunicacion) VALUES ('${this._description}','${this._comunicationType}')`;
     }
 }

@@ -68,6 +68,6 @@ export class Entity implements SQL_Qwerty {
   }
 
   toSql(): string {
-    return "";
+    return `INSERT INTO objeto (ma_id, obj_nombre, obj_tipo, obj_padre) VALUES (/@/MODELO/@/, '${this._name}', '${this._entityType}' , /@/PADRE/@/)`;
   }
 }
