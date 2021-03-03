@@ -33,6 +33,6 @@ export class Property implements SQL_Qwerty {
   }
 
   toSql(): string {
-    return `INSERT INTO propiedades ( prop_nombre, obj_id) VALUES ('${this._name}', /@/OBJETOS/@/)`;
+    return `INSERT INTO propiedad ( pro_nombre, obj_id) VALUES ('${this._name}', /@/OBJETOS/@/)`;
   }
 }

@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { mysql_connector } from "../data/database";
-import { json as jsModel } from "../models/handling-json";
+import { database2 } from "../data/database2";
 import * as fs from "fs";
-import * as parser from "xml2js";
-import { JSON2Architecture as j2A } from "../models/JSON2Architecture";
+import { parseString } from "xml2js";
+import { JSON2Architecture } from "../models/JSON2Architecture";
+import { SelfAwarness } from "../models/selfAwarness/SelfAwarness";
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
   if (req.session!.user) {
@@ -227,43 +228,48 @@ export function generate_model(req: Request, res: Response) {
   });
 }
 
-export function save_new_model(
+export async function save_new_model(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   if (req.session!.user) {
-    var js = new jsModel();
-    js.xml_file2json(req.file.path);
     var nombre = req.body.nombre_modelo;
     var descripcion = req.body.descripcion_ecenario;
     var autor = req.body.autor_modelo;
     var user_id = req.session?.user.userID;
     var db = new mysql_connector();
-    var architecture = new j2A(js.getJSON());
-    console.log(architecture);
-    db.save_newModel(
+    //######################
+    var db2 = new database2();
+    await db2.conectar();
+    var json: object = [];
+    try {
+      const xml = fs.readFileSync(req.file.path);
+      parseString(xml, function (err: Error, result: Object) {
+        if (err) throw err;
+        json = result;
+      });
+    } catch (error) {
+      console.log("No se ha ingresado ningun valor");
+    }
+    var arquitectura = new JSON2Architecture(json);
+    var modelo = new SelfAwarness(
+      -1,
       nombre,
       descripcion,
       autor,
-      js.getJSON(),
-      user_id,
-      (id: string) => {
-        db.getModel(
-          id,
-          (active_model: {
-            nombre: string;
-            descripcion: string;
-            modelID: string;
-          }) => {
-            req.session!.active_model = active_model;
-            db.save_subjects(active_model.modelID, js.getSystem());
-            db.save_entity(active_model.modelID, js.getEntity());
-            next();
-          }
-        );
-      }
+      JSON.stringify(json, null, "  ").split("'").join('"')
     );
+    await db2.insert(modelo, ["/@/USER/@/"], [user_id.toString()]);
+    db2.architecture(arquitectura, modelo.id.toString());
+    req.session!.active_model = {
+      nombre: modelo.name,
+      descripcion: modelo.description,
+      modelID: modelo.id.toString(),
+    };
+    console.log(req.session!.active_model);
+    //#####################################################
+    next();
   } else {
     res.redirect("/login");
   }

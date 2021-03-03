@@ -208,11 +208,11 @@ export class JSON2Architecture {
   private extractPropertys(propertys: any): Property[] {
     var propertysRe: Property[] = [];
     propertys.forEach((prop) => {
-      var newProperty = new Property(prop.id, prop.name);
-      if (prop.hasRulePropertyToDataColumn) {
+      var newProperty = new Property(prop.$.id, prop.$.name);
+      if (prop.$.hasRulePropertyToDataColumn) {
         this.matchPairs_PropertyDataFlow(
           newProperty,
-          prop.hasRulePropertyToDataColumn
+          prop.$.hasRulePropertyToDataColumn
         );
       }
       propertysRe.push(newProperty);
