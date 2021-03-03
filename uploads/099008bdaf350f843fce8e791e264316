@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { mysql_connector } from "../models/database";
+import { mysql_connector } from "../data/database";
 import { json as jsModel } from "../models/handling-json";
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
