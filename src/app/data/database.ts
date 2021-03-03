@@ -2782,7 +2782,6 @@ WHERE   pa.pa_id=${id} AND
       db.generar_metricas(modelo,fun);
     }
   }
-
   public generar_metricas(modelo: generar_modelo, fun: Function): void {
     var value: string = "(";
     modelo.objetos?.forEach(element => {
@@ -3006,8 +3005,6 @@ public generar_recurso_implementacion(modelo: generar_modelo, fun: Function): vo
   }
 }
 }*/
-
-
   // La atributo variable no existe, solo le pusimos para probar
   private modelo = {
     "MonitorIoT:DataMonitoringArchitectureModel": {
