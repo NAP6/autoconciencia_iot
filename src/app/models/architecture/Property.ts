@@ -1,6 +1,7 @@
 import { DataFlow } from './DataFlow';
+import { SQL_Qwerty } from '../SQL_Qwerty';
 
-export class Property {
+export class Property implements SQL_Qwerty {
   private _id: number;
   private _name: string;
   private _dataFlow: DataFlow[];
@@ -29,5 +30,9 @@ export class Property {
 
   get dataFlow(): DataFlow[] {
     return this._dataFlow;
+  }
+
+  toSql(): string {
+    return "";
   }
 }

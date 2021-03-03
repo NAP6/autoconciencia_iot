@@ -11,6 +11,7 @@ export class JSON2Architecture {
 
   constructor(json: Architecture) {
     this._json = json[Object.keys(json)[0]];
+    if (this._json == undefined) this._json = {}
     this._modelEntity = [];
     this._modelDataFlow = [];
     this._modelIoTSystem = new IoTSystem(-1, "");
@@ -52,20 +53,22 @@ export class JSON2Architecture {
   }
 
   private extractSystems() {
-    var containsIoTSystem = this._json["containsIoTSystem"];
-    var system = new IoTSystem(containsIoTSystem.id, containsIoTSystem.name);
-    if (containsIoTSystem.containsIoTSubSystem) {
-      system.IoTSubSystem = this.extractSystems_recursive(
-        containsIoTSystem.containsIoTSubSystem
-      );
+    if (this._json["containsIoTSystem"]) {
+      var containsIoTSystem = this._json["containsIoTSystem"][0];
+      var system = new IoTSystem(containsIoTSystem.$.id, containsIoTSystem.$.name);
+      if (containsIoTSystem.containsIoTSubSystem) {
+        system.IoTSubSystem = this.extractSystems_recursive(
+          containsIoTSystem.containsIoTSubSystem
+        );
+      }
+      this._modelIoTSystem = system;
     }
-    this._modelIoTSystem = system;
   }
 
   private extractSystems_recursive(system: any): IoTSystem[] {
     var systeRe: IoTSystem[] = [];
     system.forEach((subSystem) => {
-      var sub = new IoTSystem(subSystem.id, subSystem.name);
+      var sub = new IoTSystem(subSystem.$.id, subSystem.$.name);
       if (subSystem.containsIoTSubSystem) {
         sub.IoTSubSystem = this.extractSystems_recursive(
           subSystem.containsIoTSubSystem
@@ -77,32 +80,36 @@ export class JSON2Architecture {
   }
 
   private extractDataFlows() {
-    var containsDataFlow = this._json["containsDataFlow"];
-    containsDataFlow.forEach((flows) => {
-      var newFlow = new DataFlow(
-        flows.id,
-        flows.description,
-        flows.communicationType
-      );
-      this._modelDataFlow.push(newFlow);
-    });
+    if (this._json["containsDataFlow"]) {
+      var containsDataFlow = this._json["containsDataFlow"];
+      containsDataFlow.forEach((flows) => {
+        var newFlow = new DataFlow(
+          flows.$.id,
+          flows.$.description,
+          flows.$.communicationType
+        );
+        this._modelDataFlow.push(newFlow);
+      });
+    }
   }
 
   private extractEntitys() {
-    var containsEntity = this._json["containsEntity"];
-    this.extractEntitys_recursive(containsEntity);
+    if (this._json["containsEntity"]) {
+      var containsEntity = this._json["containsEntity"];
+      this._modelEntity = this.extractEntitys_recursive(containsEntity);
+    }
   }
 
   private extractEntitys_recursive(entitys: any): Entity[] {
     var entitysRe: Entity[] = [];
     entitys.forEach((entity) => {
-      var id = entity.id;
-      var name = entity.name;
-      var entityType = entity["xsi:type"].split(":")[1];
+      var id = entity.$.id;
+      var name = entity.$.name;
+      var entityType = entity.$["xsi:type"].split(":")[1];
       var newEntity = new Entity(id, name, entityType);
 
-      if (entity.isPartOf) {
-        this.matchPairs_SystemEntity(newEntity, entity.isPartOf);
+      if (entity.$.isPartOf) {
+        this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
       }
 
       // Inicio: Extraer de PhysicalEntity
@@ -113,12 +120,12 @@ export class JSON2Architecture {
         newEntity.entityType == "NonHumanUser"
       ) {
         if (entity.containsSubPhysicalEntity) {
-          newEntity.subEntity.concat(
+          newEntity.subEntity = newEntity.subEntity.concat(
             this.extractSubPhysicalEntitys(entity.containsSubPhysicalEntity)
           );
         }
         if (entity.containsComputingNode) {
-          newEntity.subEntity.concat(
+          newEntity.subEntity = newEntity.subEntity.concat(
             this.extractEntitys_recursive(entity.containsComputingNode)
           );
         }
@@ -138,7 +145,7 @@ export class JSON2Architecture {
         newEntity.entityType == "Actuator"
       ) {
         if (entity.containsResource) {
-          newEntity.subEntity.concat(
+          newEntity.subEntity = newEntity.subEntity.concat(
             this.extractEntitys_recursive(entity.containsResource)
           );
         }
@@ -156,22 +163,22 @@ export class JSON2Architecture {
   private extractSubPhysicalEntitys(entitys: any): Entity[] {
     var entitysRe: Entity[] = [];
     entitys.forEach((entity) => {
-      var id = entity.id;
-      var name = entity.name;
+      var id = entity.$.id;
+      var name = entity.$.name;
       var entityType = "PhysicalEntity";
       var newEntity = new Entity(id, name, entityType);
 
-      if (entity.isPartOf) {
-        this.matchPairs_SystemEntity(newEntity, entity.isPartOf);
+      if (entity.$.isPartOf) {
+        this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
       }
 
       if (entity.containsSubPhysicalEntity) {
-        newEntity.subEntity.concat(
+        newEntity.subEntity = newEntity.subEntity.concat(
           this.extractSubPhysicalEntitys(entity.containsSubPhysicalEntity)
         );
       }
       if (entity.containsComputingNode) {
-        newEntity.subEntity.concat(
+        newEntity.subEntity = newEntity.subEntity.concat(
           this.extractEntitys_recursive(entity.containsComputingNode)
         );
       }
@@ -228,4 +235,4 @@ export class JSON2Architecture {
   }
 }
 
-interface Architecture {}
+interface Architecture { }

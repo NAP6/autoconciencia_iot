@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { mysql_connector } from "../data/database";
 import { json as jsModel } from "../models/handling-json";
+import * as fs from "fs";
+import * as parser from "xml2js";
+import { JSON2Architecture as j2A } from "../models/JSON2Architecture";
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
   if (req.session!.user) {
@@ -69,7 +72,6 @@ export function start_session(req: Request, res: Response, next: NextFunction) {
       res.redirect("/");
     }
   });
-
 }
 
 export function select_model(req: Request, res: Response) {
@@ -223,7 +225,6 @@ export function generate_model(req: Request, res: Response) {
       session: req.session,
     });
   });
-
 }
 
 export function save_new_model(
@@ -239,14 +240,30 @@ export function save_new_model(
     var autor = req.body.autor_modelo;
     var user_id = req.session?.user.userID;
     var db = new mysql_connector();
-    db.save_newModel(nombre, descripcion, autor, js.getJSON(), user_id, (id: string) => {
-      db.getModel(id, (active_model: { nombre: string, descripcion: string, modelID: string }) => {
-        req.session!.active_model = active_model;
-        db.save_subjects(active_model.modelID, js.getSystem());
-        db.save_entity(active_model.modelID, js.getEntity());
-        next();
-      });
-    });
+    var architecture = new j2A(js.getJSON());
+    console.log(architecture);
+    db.save_newModel(
+      nombre,
+      descripcion,
+      autor,
+      js.getJSON(),
+      user_id,
+      (id: string) => {
+        db.getModel(
+          id,
+          (active_model: {
+            nombre: string;
+            descripcion: string;
+            modelID: string;
+          }) => {
+            req.session!.active_model = active_model;
+            db.save_subjects(active_model.modelID, js.getSystem());
+            db.save_entity(active_model.modelID, js.getEntity());
+            next();
+          }
+        );
+      }
+    );
   } else {
     res.redirect("/login");
   }
@@ -259,8 +276,6 @@ export function active_model(req: Request, res: Response, next: NextFunction) {
     next();
   });
 }
-
-
 
 export function home(req: Request, res: Response) {
   res.render("principal", {

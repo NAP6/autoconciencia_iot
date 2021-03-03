@@ -1,7 +1,8 @@
 import { Property } from "./Property";
 import { IoTSystem } from "./IoTSystem";
+import { SQL_Qwerty } from '../SQL_Qwerty';
 
-export class Entity {
+export class Entity implements SQL_Qwerty {
   private _id: number;
   private _name: string;
   private _entityType: string;
@@ -64,5 +65,9 @@ export class Entity {
 
   set iotSystem(iotSystem: IoTSystem[]) {
     this._iotSystem = iotSystem;
+  }
+
+  toSql(): string {
+    return "";
   }
 }
