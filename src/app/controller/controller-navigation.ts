@@ -4,7 +4,7 @@ import { database2 } from "../data/database2";
 import * as fs from "fs";
 import { parseString } from "xml2js";
 import { JSON2Architecture } from "../models/JSON2Architecture";
-import { SelfAwarnessQ } from "../models/selfAwarness/SelfAwarnessQ";
+import { SelfAwarnessQ } from "../models/selfAwarness/qwertyModels/SelfAwarnessQ";
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
   if (req.session!.user) {

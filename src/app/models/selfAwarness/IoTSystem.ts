@@ -1,14 +1,17 @@
-export class Subject {
+import { Span } from "./Span";
+
+export class IoTSystem extends Span {
   private _id: number;
   private _name: string;
   private _active: boolean;
-  private _subSubjects: Subject[];
+  private _containsSubIoTSystem: IoTSystem[];
 
   constructor(id: number, name: string) {
+    super();
     this._id = id;
     this._name = name;
     this._active = true;
-    this._subSubjects = [];
+    this._containsSubIoTSystem = [];
   }
 
   get id(): number {
@@ -35,11 +38,11 @@ export class Subject {
     this._active = value;
   }
 
-  get subSubjects(): Subject[] {
-    return this._subSubjects;
+  get containsSubIoTSystem(): IoTSystem[] {
+    return this._containsSubIoTSystem;
   }
 
-  set subSubjects(value: Subject[]) {
-    this._subSubjects = value;
+  set containsSubIoTSystem(value: IoTSystem[]) {
+    this._containsSubIoTSystem = value;
   }
 }

@@ -1,3 +1,6 @@
+import { Span } from "./Span";
+import { DecisionCriteria } from "./DecisionCriteria";
+
 export class SelfAwarness {
   private _id: number;
   private _name: string;
@@ -5,14 +8,24 @@ export class SelfAwarness {
   private _author: string;
   private _active: boolean;
   private _architectureModel: string;
+  private _containsSpan: Span[];
+	private _containsDecisionCriteria: DecisionCriteria[];
 
-  constructor(id: number, name: string, description: string, author: string, architectureModel: string) {
+  constructor(
+    id: number,
+    name: string,
+    description: string,
+    author: string,
+    architectureModel: string
+  ) {
     this._id = id;
     this._name = name;
     this._description = description;
     this._author = author;
     this._active = true;
-    this._architectureModel = architectureModel.split("'").join('"')
+    this._architectureModel = architectureModel.split("'").join('"');
+    this._containsSpan = [];
+    this._containsDecisionCriteria = [];
   }
 
   get id(): number {
@@ -62,4 +75,21 @@ export class SelfAwarness {
   set active(value: boolean) {
     this._active = value;
   }
+
+  get containsSpan(): Span[] {
+    return this._containsSpan;
+  }
+
+  set containsSpan(value: Span[]) {
+    this._containsSpan = value;
+  }
+
+  get containsDecisionCriteria(): DecisionCriteria[] {
+    return this._containsDecisionCriteria;
+  }
+
+  set containsDecisionCriteria(value: DecisionCriteria[]) {
+    this._containsDecisionCriteria = value;
+  }
+
 }
