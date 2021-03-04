@@ -1,17 +1,17 @@
 import { Metric } from "./Metric";
 
-export class Scale {
+export class MeasurementUnit {
   private _id: number;
   private _name: string;
-  private _validValues: string;
-  private _scaleType;
+  private _description: string;
+  private _acronym: string;
   private _isUsedBy: Metric[];
 
-  constructor(id: number, name: string, validValues: string, scaleType) {
+  constructor(id: number, name: string, description: string, acronym: string) {
     this._id = id;
     this._name = name;
-    this._validValues = validValues;
-    this._scaleType = scaleType;
+    this._description = description;
+    this._acronym = acronym;
     this._isUsedBy = [];
   }
 
@@ -31,20 +31,20 @@ export class Scale {
     this._name = value;
   }
 
-  get validValues(): string {
-    return this._validValues;
+  get description(): string {
+    return this._description;
   }
 
-  set validValues(value: string) {
-    this._validValues = value;
+  set description(value: string) {
+    this._description = value;
   }
 
-  get scaleType() {
-    return this._scaleType;
+  get acronym(): string {
+    return this._acronym;
   }
 
-  set scaleType(value) {
-    this._scaleType = value;
+  set acronym(value: string) {
+    this._acronym = value;
   }
 
   get isUsedBy(): Metric[] {

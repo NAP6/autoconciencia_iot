@@ -1,5 +1,6 @@
 import { Span } from "./Span";
 import { DecisionCriteria } from "./DecisionCriteria";
+import { Scale } from "./Scale";
 import { Scope } from "./Scope";
 import { ImplementationResource } from "./ImplementationResource";
 
@@ -11,7 +12,8 @@ export class SelfAwarness {
   private _active: boolean;
   private _architectureModel: string;
   private _containsSpan: Span[];
-	private _containsDecisionCriteria: DecisionCriteria[];
+  private _containsDecisionCriteria: DecisionCriteria[];
+  private _containsScale: Scale[];
   private _containsScope: Scope[];
   private _containsImplementationResource:ImplementationResource[];
 
@@ -97,7 +99,15 @@ export class SelfAwarness {
   set containsDecisionCriteria(value: DecisionCriteria[]) {
     this._containsDecisionCriteria = value;
   }
-  
+
+  get containsScale(): Scale[] {
+    return this._containsScale;
+  }
+
+  set containsScale(value: Scale[]) {
+    this._containsScale = value;
+  }
+
   get containsScope(): Scope[] {
     return this._containsScope;
   }
