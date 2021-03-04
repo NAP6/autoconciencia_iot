@@ -1,11 +1,13 @@
 import { LearningReasoningMethod } from "./LearningReasoningMethod";
 import { Action } from "./Action";
 import { DecisionCriteria } from "./DecisionCriteria";
+import { Indicator } from "./Indicator";
 
 export class AnalysisModel extends LearningReasoningMethod {
   private _implementationResourceType;
   private _containsAction: Action[];
   private _uses: DecisionCriteria | undefined;
+  private _produces: Indicator | undefined;
 
   constructor(id: number, implementationResourceType) {
     super(id);
@@ -35,5 +37,13 @@ export class AnalysisModel extends LearningReasoningMethod {
 
   set containsAction(value: Action[]) {
     this._containsAction = value;
+  }
+
+  get produces(): Indicator | undefined {
+    return this._produces;
+  }
+
+  set produces(value: Indicator | undefined) {
+    this._produces = value;
   }
 }
