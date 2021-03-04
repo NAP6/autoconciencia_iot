@@ -1,5 +1,6 @@
 import { Span } from "./Span";
 import { DecisionCriteria } from "./DecisionCriteria";
+import { Scale } from "./Scale";
 
 export class SelfAwarness {
   private _id: number;
@@ -9,7 +10,8 @@ export class SelfAwarness {
   private _active: boolean;
   private _architectureModel: string;
   private _containsSpan: Span[];
-	private _containsDecisionCriteria: DecisionCriteria[];
+  private _containsDecisionCriteria: DecisionCriteria[];
+  private _containsScale: Scale[];
 
   constructor(
     id: number,
@@ -26,6 +28,7 @@ export class SelfAwarness {
     this._architectureModel = architectureModel.split("'").join('"');
     this._containsSpan = [];
     this._containsDecisionCriteria = [];
+    this._containsScale = [];
   }
 
   get id(): number {
@@ -92,4 +95,11 @@ export class SelfAwarness {
     this._containsDecisionCriteria = value;
   }
 
+  get containsScale(): Scale[] {
+    return this._containsScale;
+  }
+
+  set containsScale(value: Scale[]) {
+    this._containsScale = value;
+  }
 }
