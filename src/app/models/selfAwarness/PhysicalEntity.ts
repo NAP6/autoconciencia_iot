@@ -2,8 +2,8 @@ import { Entity } from "./Entity";
 
 export class PhysicalEntity extends Entity {
     private _containsSubPhysicalEntity: PhysicalEntity[];
-    constructor() {
-        super();
+    constructor(id: number, name: string, description:string) {
+        super(id,name,description);
         this._containsSubPhysicalEntity = [];
       }
       get containsSubPhysicalEntity(): PhysicalEntity[] {

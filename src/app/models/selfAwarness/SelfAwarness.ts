@@ -2,6 +2,7 @@ import { Span } from "./Span";
 import { DecisionCriteria } from "./DecisionCriteria";
 import { Scale } from "./Scale";
 import { Scope } from "./Scope";
+import { ImplementationResource } from "./ImplementationResource";
 
 export class SelfAwarness {
   private _id: number;
@@ -14,6 +15,7 @@ export class SelfAwarness {
   private _containsDecisionCriteria: DecisionCriteria[];
   private _containsScale: Scale[];
   private _containsScope: Scope[];
+  private _containsImplementationResource:ImplementationResource[];
 
   constructor(
     id: number,
@@ -30,8 +32,8 @@ export class SelfAwarness {
     this._architectureModel = architectureModel.split("'").join('"');
     this._containsSpan = [];
     this._containsDecisionCriteria = [];
-    this._containsScale = [];
-    this._containsScope = [];
+    this._containsScope=[];
+    this._containsImplementationResource=[];
   }
 
   get id(): number {
@@ -112,5 +114,12 @@ export class SelfAwarness {
 
   set containsScope(value: Scope[]) {
     this._containsScope = value;
+  }
+  get containsImplementationResource(): ImplementationResource[] {
+    return this._containsImplementationResource;
+  }
+
+  set containsImplementationResource(value: ImplementationResource[]) {
+    this._containsImplementationResource = value;
   }
 }

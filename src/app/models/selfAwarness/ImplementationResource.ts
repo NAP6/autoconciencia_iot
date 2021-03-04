@@ -1,10 +1,15 @@
 import { AnalysisModel } from "./AnalysisModel";
+import { CalculationMethod } from "./CalculationMethod";
+import { Parameter } from "./Parameter";
 export class ImplementationResource{
     private _id: number;
     private _name: string;
     private _description: string;
     private _returnDataType;
-    private 
+    private _implementsAnalysisModel:AnalysisModel[];
+    private _implementsCalculationMethod:CalculationMethod[];
+    private _containsParameter:Parameter[];
+
   
     constructor(
       id: number,
@@ -17,6 +22,9 @@ export class ImplementationResource{
       this._name = name;
       this._description = description;
       this._returnDataType=returnDataType;
+      this._implementsAnalysisModel=[];
+      this._implementsCalculationMethod=[];
+      this._containsParameter=[];
   
     }
   
@@ -50,5 +58,26 @@ export class ImplementationResource{
     set returnDataType(value: string) {
       this._returnDataType = value;
     }
+    get implementsAnalysisModel(): AnalysisModel[] {
+        return this._implementsAnalysisModel;
+      }
+    
+    set implementsAnalysisModel(value: AnalysisModel[]) {
+        this._implementsAnalysisModel = value;
+      }
+      get implementsCalculationMethod(): CalculationMethod[] {
+        return this._implementsCalculationMethod;
+      }
+    
+    set implementsCalculationMethod(value: CalculationMethod[]) {
+        this._implementsCalculationMethod = value;
+      }
+      get containsParameter(): Parameter[] {
+        return this._containsParameter;
+      }
+    
+    set containsParameter(value: Parameter[]) {
+        this._containsParameter = value;
+      }
   }
   
