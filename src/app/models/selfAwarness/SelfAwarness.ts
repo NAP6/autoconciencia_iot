@@ -1,6 +1,7 @@
 import { Span } from "./Span";
 import { DecisionCriteria } from "./DecisionCriteria";
 import { Scale } from "./Scale";
+import { Scope } from "./Scope";
 
 export class SelfAwarness {
   private _id: number;
@@ -12,6 +13,7 @@ export class SelfAwarness {
   private _containsSpan: Span[];
   private _containsDecisionCriteria: DecisionCriteria[];
   private _containsScale: Scale[];
+  private _containsScope: Scope[];
 
   constructor(
     id: number,
@@ -29,6 +31,7 @@ export class SelfAwarness {
     this._containsSpan = [];
     this._containsDecisionCriteria = [];
     this._containsScale = [];
+    this._containsScope = [];
   }
 
   get id(): number {
@@ -101,5 +104,13 @@ export class SelfAwarness {
 
   set containsScale(value: Scale[]) {
     this._containsScale = value;
+  }
+
+  get containsScope(): Scope[] {
+    return this._containsScope;
+  }
+
+  set containsScope(value: Scope[]) {
+    this._containsScope = value;
   }
 }

@@ -1,4 +1,5 @@
 import { Goal } from "./Goal";
+import { SelfAwarenessAspect } from "./SelfAwarenessAspect";
 
 export class SelfAwarenessProcess {
   private _id: number;
@@ -7,13 +8,14 @@ export class SelfAwarenessProcess {
   private _executionPeriodStart: Date;
   private _executionPeriodEnd: Date;
   private _supports: Goal | undefined;
+  private _captures: SelfAwarenessAspect | undefined;
 
   constructor(
     id: number,
     name: string,
     description: string,
     executionPeriodStart: Date,
-    executionPeriodEnd: Date,
+    executionPeriodEnd: Date
   ) {
     this._id = id;
     this._name = name;
@@ -62,11 +64,19 @@ export class SelfAwarenessProcess {
     this._executionPeriodEnd = value;
   }
 
-  get supports(): Goal | undefined{
+  get supports(): Goal | undefined {
     return this._supports;
   }
 
   set supports(value: Goal | undefined) {
     this._supports = value;
+  }
+
+  get captures(): SelfAwarenessAspect | undefined {
+    return this._captures;
+  }
+
+  set captures(value: SelfAwarenessAspect | undefined) {
+    this._captures = value;
   }
 }

@@ -1,5 +1,5 @@
-import { SelfAwarness } from "./SelfAwarness";
-import { SQL_Qwerty } from "../SQL_Qwerty";
+import { SelfAwarness } from "../SelfAwarness";
+import { SQL_Qwerty } from "../../SQL_Qwerty";
 
 export class SelfAwarnessQ extends SelfAwarness implements SQL_Qwerty {
 

@@ -1,10 +1,14 @@
+import { CollectionMethod } from "./CollectionMethod";
 export class Property {
   private _id: number;
   private _name: string;
+  private _isCollectedBy: CollectionMethod[];
+
 
   constructor(id: number, name: string) {
     this._id = id;
     this._name = name;
+    this._isCollectedBy=[];
   }
 
   get id(): number {
@@ -21,5 +25,12 @@ export class Property {
 
   set name(value: string) {
     this._name = value;
+  }
+  get isCollectedBy(): CollectionMethod[] {
+    return this._isCollectedBy;
+  }
+
+  set isCollectedBy(value: CollectionMethod[]) {
+    this._isCollectedBy = value;
   }
 }
