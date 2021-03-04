@@ -1,5 +1,6 @@
 import { Scale } from "./Scale";
 import { MeasurementUnit } from "./MeasurementUnit";
+import { MetricToParameterMapping } from "./MetricToParameterMapping";
 
 export class Metric {
   private _id: number;
@@ -8,6 +9,7 @@ export class Metric {
   private _abbreviation: string;
   private _isValidatedBy: Scale | undefined;
   private _isExpressedIn: MeasurementUnit | undefined;
+  private _isUsedIn:MetricToParameterMapping[];
 
   constructor(
     id: number,
@@ -19,6 +21,7 @@ export class Metric {
     this._name = name;
     this._description = description;
     this._abbreviation = abbreviation;
+    this._isUsedIn=[];
   }
   get id(): number {
     return this._id;
@@ -66,5 +69,12 @@ export class Metric {
 
   set isExpressedIn(value: MeasurementUnit | undefined) {
     this._isExpressedIn = value;
+  }
+  get isUsedIn(): MetricToParameterMapping[]{
+    return this._isUsedIn;
+  }
+
+  set isUsedIn(value: MetricToParameterMapping[]) {
+    this._isUsedIn = value;
   }
 }

@@ -1,5 +1,6 @@
 
 import { Parameter } from "./Parameter";
+
 export class ArgumentToParameterMapping{
     private _id: number;
     private _relatesParameter:Parameter|undefined;
