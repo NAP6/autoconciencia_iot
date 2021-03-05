@@ -8,7 +8,9 @@ export class SelfAwarnessQ extends SelfAwarness implements SQL_Qwerty {
     }
 
     toSqlSelect(): string {
-        return ``;
+        return `SELECT ma_id as id, ma_nombre as name, ma_descripcion as description, ma_autor as author, CONVERT(ma_modelo_arquitectura USING utf8) as architectureModel,ma_activo as active
+        FROM modeloautoconsciencia
+        WHERE usr_id = /@/USER/@/`;
     }
 
     toSqlDelete(): string {

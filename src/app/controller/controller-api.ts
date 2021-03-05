@@ -1,9 +1,11 @@
 import { json } from "../models/handling-json";
+import {SelfAwarnessQ } from "../models/selfAwarnessModels";
 import { Request, Response } from "express";
 import {
   mysql_connector as database,
   mysql_connector,
 } from "../data/database";
+import {database2} from "../data/database2";
 export function add_deployment_resources(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database();
@@ -605,13 +607,24 @@ export function upd_acciones_umbrales(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export function user_models(req: Request, res: Response) {
+/*export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
     db.getUserModels(id, (jsonModel: object) => {
       res.json(jsonModel);
     });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}*/
+export async function user_models(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database2();
+    var models=await db.select(new SelfAwarnessQ(-1,"","","",""),["/@/USER/@/"],id.toString());
+    res.json(models);
+
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

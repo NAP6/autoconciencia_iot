@@ -2204,25 +2204,25 @@ if (document.getElementById("tabla_modelos_autoconciencia"))
 function cargar_modelos_table(json) {
     res = "";
     json.forEach((md) => {
-        modelo_fisico_json = JSON.parse(md.json);
-        res += `<tr id='modelo-${md.id}-tabla'>`;
+        modelo_fisico_json = JSON.parse(md._architectureModel);
+
+        res += `<tr id='modelo-${md._id}-tabla'>`;
         res += `<td name="modelo-${
-      md.id
+      md._id
     }"><input type="radio" name="modelo_seleccionado_tabla" value="${
-      md.id
-    }" data-name="${md.nombre}" data-autor="${md.autor}" data-descripcion="${
-      md.descripcion
-    }" data-activo="${md.activo == "true"}"></td>`;
-        res += `<td name="modelo-${md.id}">${md.id}</td>`;
-        res += `<td name="modelo-${md.id}">${md.nombre}</td>`;
-        res += `<td name="modelo-${md.id}">${md.autor}</td>`;
-        res += `<td name="modelo-${md.id}">${md.descripcion}</td>`;
+      md._id
+    }" data-name="${md._name}" data-autor="${md._author}" data-descripcion="${
+      md._description
+    }" data-activo="${md._active == "true"}"></td>`;
+        res += `<td name="modelo-${md._id}">${md._id}</td>`;
+        res += `<td name="modelo-${md._id}">${md._name}</td>`;
+        res += `<td name="modelo-${md._id}">${md._author}</td>`;
+        res += `<td name="modelo-${md._id}">${md._description}</td>`;
         res += `<td name="modelo-${
-      md.id
-    }"><buttom class="btn btn-link" onclick="mostrar_modal_json()">${
-      Object.keys(JSON.parse(md.json))[0]
-    }</buttom></td>`;
-        if (md.activo == "true")
+      md._id
+    }"><buttom class="btn btn-link" onclick="mostrar_modal_json()">${Object.keys(modelo_fisico_json)[0] }
+    </buttom></td>`;
+        if (md._active == 1)
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
@@ -2359,7 +2359,7 @@ if (document.getElementById("select_modelo_para_activar_trabajo"))
 function cargar_modelos_trabajo_actual(json) {
     res = "<option value='-6'>Seleccione un modelo para trabajar</option>";
     json.forEach((md) => {
-        res += `<option value="${md.id}">${md.nombre}</option>`;
+        res += `<option value="${md._id}">${md._name}</option>`;
     });
     document.getElementById("select_modelo_para_activar_trabajo").innerHTML = res;
 }

@@ -241,7 +241,7 @@ export async function save_new_model(
     var db = new mysql_connector();
     //######################
     var db2 = new database2();
-    var json: object = [];
+    var json: Object = [];
     try {
       const xml = fs.readFileSync(req.file.path);
       parseString(xml, function (err: Error, result: Object) {

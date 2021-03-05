@@ -32,7 +32,7 @@ export class SelfAwarness {
     this._description = description;
     this._author = author;
     this._active = true;
-    this._architectureModel = architectureModel.split("'").join('"');
+    this._architectureModel = architectureModel.split("'").join('`');
     this._containsSpan = [];
     this._containsDecisionCriteria = [];
     this._containsScope=[];
