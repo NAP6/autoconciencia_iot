@@ -7,7 +7,7 @@ export class WebService extends ImplementationResource {
     constructor(id: number,
         name: string,
         description: string,
-        returnDataType,,endPoint:string,instrucctions:string,DataFormatType) {
+        returnDataType,endPoint:string,instrucctions:string,DataFormatType) {
         super(id,name,description,returnDataType);
         this._endPoint=endPoint;
         this._instrucctions=instrucctions;

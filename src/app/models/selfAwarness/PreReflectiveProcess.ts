@@ -13,7 +13,6 @@ export class PreReflecriveProcess extends SelfAwarenessProcess {
     description: string,
     executionPeriodStart: Date,
     executionPeriodEnd: Date,
-    supports: Goal,
     usesCollectionMehod: CollectionMethod,
     usesAnalysisModel: AnalysisModel
   ) {
@@ -22,8 +21,7 @@ export class PreReflecriveProcess extends SelfAwarenessProcess {
       name,
       description,
       executionPeriodStart,
-      executionPeriodEnd,
-      supports
+      executionPeriodEnd
     );
     this._usesCollectionMethod = usesCollectionMehod;
     this._usesAnalysisModel = usesAnalysisModel;

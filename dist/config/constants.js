@@ -5,6 +5,6 @@ exports.default = {
     "db-port": 3306,
     "db-user": "root",
     "db-password": "",
-    "db-schema": "db_autocosciencia",
+    "db-schema": "db_autoconscienciaf",
     "server-port": 3000,
 };

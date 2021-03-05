@@ -31,7 +31,7 @@ app.use(body_parser_1.json()); // get information from html forms
 app.use(body_parser_1.urlencoded()); // get information from html forms
 //view engine setup
 app.use(express_1.default.static(path_1.join(__dirname, 'public')));
-app.set('views', path_1.join(__dirname, 'app/views'));
+app.set('views', path_1.join(__dirname, '/app/views'));
 app.set('view engine', 'ejs'); // set up ejs for templating
 app.use(express_session_1.default({
     secret: 'Autoconciencia',
