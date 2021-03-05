@@ -1,0 +1,115 @@
+<div id="services_form_add" class="container-fluid d-none">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#end" role="tab" aria-controls="end" aria-selected="true">endpoint</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        id="profile-tab"
+        data-toggle="tab"
+        href="#params"
+        role="tab"
+        aria-controls="params"
+        aria-selected="false"
+        >Parámetros</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        id="profile-tab"
+        data-toggle="tab"
+        href="#istruccioness"
+        role="tab"
+        aria-controls="istruccioness"
+        aria-selected="false"
+        >Instrucciones</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        id="profile-tab"
+        data-toggle="tab"
+        href="#tipos"
+        role="tab"
+        aria-controls="tipos"
+        aria-selected="false"
+        >Tipo de salida</a
+      >
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div
+      class="tab-pane fade show active"
+      id="end"
+      role="tabpanel"
+      aria-labelledby="function-tab"
+    >
+      <div class="form-group">
+        <label for="input_endpoint_resource">End Point</label>
+        <input type="text" class="form-control" id="input_endpoint_resource" />
+      </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="params"
+      role="tabpanel"
+      aria-labelledby="param-tab"
+    >
+    <div id="parametro_servicios">
+      <% tipo="parametro_servicios" %> 
+      <%- include('modal_pestana_parametros'); %>
+    </div>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="istruccioness"
+      role="tabpanel"
+      aria-labelledby="function-tab"
+    >
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="pre_existente_servicios" onclick="verificar_pre_existente_servicios(this);">
+      <label class="form-check-label" for="exampleCheck1">Pre existente </label>
+    </div>
+      <textarea
+        name=""
+        id="area_de_nueva_istruccion_servicios"
+        style="height: 280px; width: 100%"
+      ></textarea>
+    </div>
+    <div
+      class="tab-pane fade"
+      id="tipos"
+      role="tabpanel"
+      aria-labelledby="function-tab"
+    >
+      <div class="input-group my-3">
+        <div class="input-group-prepend">
+          <label
+            class="input-group-text"
+            for="selectTipoSalidaServicioRecursoAdd"
+            >Tipo de dato de salida</label
+          >
+        </div>
+        <select class="custom-select" id="selectTipoSalidaServiciosRecursoAdd">
+          <option value="1" selected></option>
+        </select>
+      </div>
+      <div class="input-group my-3">
+        <div class="input-group-prepend">
+          <label
+            class="input-group-text"
+            for="selectTipoSalidaFormulaRecursoAdd"
+            >Formato de salida</label
+          >
+        </div>
+        <select class="custom-select" id="selectFormatodeSalida">
+          <option value="1" selected></option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

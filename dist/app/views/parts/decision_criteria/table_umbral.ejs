@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <button id="bt_addUmbral" class="btn btn-primary" onclick="agregar_umbral()" style="display: none;">Agregar</button>
+            <button id="bd_modUmbral" class="btn btn-primary" onclick="modificar_umbral()" style="display: none;">Modificar</button>
+            <button id="bd_delUmbral" class="btn btn-primary" onclick="eliminar_umbral()" style="display: none;">Eliminar</button>
+        </div>
+    </div>
+    <br>
+    <div class="row container">
+        <div class="col-12" id="seccion_umbrales">
+        </div>
+    </div>
+</div>
+<template id="templeta_tabla_umbral">
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Interpretacion</th>
+                <th scope="col">Inferior</th>
+                <th scope="col">Superior</th>
+                <th scope="col">Activo</th>
+            </tr>
+        </thead>
+        <tbody id="tabla_umbral">
+        </tbody>
+    </table>
+</template>
+<%- include('../decision_criteria/modal/modal_umbral_add'); %>
+    <%- include('../decision_criteria/modal/modal_umbral_mod'); %>
+        <%- include('../decision_criteria/modal/modal_umbral_del'); %>
