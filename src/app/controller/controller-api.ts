@@ -621,7 +621,7 @@ export function upd_acciones_umbrales(req: Request, res: Response) {
 }*/
 export async function user_models(req: Request, res: Response) {
   if (req.session?.user) {
-    var id = req.session?.user.userID;
+    var id = req.session?.user._id;
     var db = new database2();
     var model: SelfAwarnessQ = new SelfAwarnessQ(-1, "", "", "", "");
     var rows = await db.qwerty(

@@ -1,11 +1,15 @@
-import { Application } from 'express';
-import * as api from '../app/controller/controller-api';
+import { Application } from "express";
+import * as api from "../app/controller/controller-api";
+import * as rt from "../app/controller/page_contollers";
 
 export default function (app: Application) {
   app.get("/api/deployment_resources/", api.deployment_resources);
   app.post("/api/add_deployment_resources/", api.add_deployment_resources);
   app.post("/api/del_deployment_resources/", api.del_deployment_resources);
-  app.post("/api/ask_deployment_resources_select/", api.ask_deployment_resources_select);
+  app.post(
+    "/api/ask_deployment_resources_select/",
+    api.ask_deployment_resources_select
+  );
   app.post("/api/ask_deployment_resources/", api.ask_deployment_resources);
   app.post("/api/ask_input_arguments/", api.ask_input_arguments);
   app.get("/api/subjects/", api.subjects);
@@ -27,7 +31,7 @@ export default function (app: Application) {
   app.post("/api/add_escales/", api.add_escales);
   app.post("/api/del_escales/", api.del_escales);
   app.post("/api/upd_escales/", api.upd_escales);
-  app.get("/api/escalas_select"),api.get_escales_select;
+  app.get("/api/escalas_select"), api.get_escales_select;
   app.get("/api/decision_criteria/", api.decision_criteria);
   app.post("/api/add_decision_criteria/", api.add_decision_criteria);
   app.post("/api/del_decision_criteria/", api.del_decision_criteria);
@@ -40,15 +44,14 @@ export default function (app: Application) {
   app.post("/api/aspects/", api.aspects);
   app.post("/api/add_aspects/", api.add_aspects);
   app.post("/api/del_aspects/", api.del_aspects);
-  app.post("/api/add_metrica/",api.add_metrica);
-  app.post("/api/get_metrica",api.get_metrica);
-  app.post("/api/get_metrica_select",api.get_metrica_select);
-  app.post("/api/del_metrica/",api.del_metrica);
-  app.post("/api/add_accion/",api.add_accion);
-  app.post("/api/get_accion",api.get_accion);
+  app.post("/api/add_metrica/", api.add_metrica);
+  app.post("/api/get_metrica", api.get_metrica);
+  app.post("/api/get_metrica_select", api.get_metrica_select);
+  app.post("/api/del_metrica/", api.del_metrica);
+  app.post("/api/add_accion/", api.add_accion);
+  app.post("/api/get_accion", api.get_accion);
   app.post("/api/del_accion/", api.del_accion);
   app.post("/api/upd_acciones_umbrales/", api.upd_acciones_umbrales);
-  app.get("/api/user_models/", api.user_models);
   app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
   app.get("/api/last_EntityID/", api.last_EntityID);
   app.get("/api/", api.home);
@@ -60,13 +63,16 @@ export default function (app: Application) {
   app.post("/api/procesos_pre_reflexive_id/", api.process_pre_reflexive_id);
   app.post("/api/add_process_pre_reflexive/", api.add_process_pre_reflexive);
   app.post("/api/del_process_pre_reflexive/", api.del_process_pre_reflexive);
-  app.post("/api/mod_process_pre_reflexive",api.mod_process_pre_reflexive);
+  app.post("/api/mod_process_pre_reflexive", api.mod_process_pre_reflexive);
   app.post("/api/properties/", api.properties);
-  app.post("/api/add_metodo_modelo",api.add_metodo_modelo);
-  app.post("/api/add_mapeo_parametros",api.add_mapeo_parametros);
+  app.post("/api/add_metodo_modelo", api.add_metodo_modelo);
+  app.post("/api/add_mapeo_parametros", api.add_mapeo_parametros);
   app.get("/api/procesos_reflexive/", api.procesos_reflexive);
-  app.post("/api/add_metodo_modelo_reflexivos",api.add_metodo_modelo_reflexivos);
-  app.post("/api/objetivos_sujetos",api.objetivos_sujetos);
+  app.post(
+    "/api/add_metodo_modelo_reflexivos",
+    api.add_metodo_modelo_reflexivos
+  );
+  app.post("/api/objetivos_sujetos", api.objetivos_sujetos);
   app.post("/api/get_metodo_aprendizaje/", api.get_metodo_aprendizaje);
   app.post("/api/add_escenario_simulacion/", api.add_escenario_simulacion);
   app.get("/api/ascenario_simulacion/", api.escenario_simulacion);
@@ -82,4 +88,7 @@ export default function (app: Application) {
   app.post("/api/del_variable_simulacion/", api.del_variable_simulacion);
   app.post("/api/upd_variable_simulacion/", api.upd_variable_simulacion);
   app.post("/api/get_flujo_datos/", api.get_flujo_datos);
-};
+
+  //Rutas revisadas
+  app.get("/api/user_models/", rt.user_models);
+}
