@@ -4,7 +4,6 @@ import { EntityQ } from "../models/architecture/EntityQ";
 import { IoTSystemQ } from "../models/architecture/IoTSystemQ";
 import { DataFlowQ } from "../models/architecture/DataFlowQ";
 import { PropertyQ } from "../models/architecture/PropertyQ";
-import { SelfAwarnessQ } from "../models/selfAwarnessModels"
 const mysql = require("mysql2/promise");
 import constants from "../../config/constants";
 import routes from "../../config/routes";
@@ -36,10 +35,8 @@ export class database2 {
 
   public async select(element: SQL_Qwerty, tag: string[], value: string[]): Promise<SQL_Qwerty[]> {
     var connection = await this.conectar();
-    var sql = element.toSqlSelect();
-    for (var i = 0; i < tag.length; i++) {
-      sql = sql.replace(tag[i], value[i]);
-    }
+    var sql = element.toSqlSelect(tag, value);
+    console.log(sql);
     var [rows, fields] = await connection.execute(sql);
     connection.end();
     return element.toObjectArray(rows);

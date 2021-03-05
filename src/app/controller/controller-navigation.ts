@@ -214,17 +214,16 @@ export function procesos_reflexivos(req: Request, res: Response) {
     session: req.session,
   });
 }
-export function generate_model(req: Request, res: Response) {
+export async function generate_model(req: Request, res: Response) {
   var modeloID = req.session?.active_model.modelID;
-  var db = new mysql_connector();
-  db.generar_modelo(modeloID, (modelo: any) => {
-    console.log();
-    res.render("generate_model", {
-      error: req.flash("error"),
-      succes: req.flash("succes"),
-      model: JSON.stringify(modelo, null, "  "),
-      session: req.session,
-    });
+  var db = new database2();
+  var modelo = await db.select(new SelfAwarnessQ(-1, "", "", "", ""), ["/@/MODEL/@/"], [modeloID.toString()]);
+  console.log(modelo);
+  res.render("generate_model", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+    model: JSON.stringify(modelo, null, '  ')
   });
 }
 

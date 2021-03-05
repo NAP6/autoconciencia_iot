@@ -22,7 +22,7 @@ export class DataFlowQ extends DataFlow implements SQL_Qwerty {
     return `INSERT INTO flujodatos (flu_descripcion,flu_tipo_comunicacion) VALUES ('${this.description}','${this.comunicationType}')`;
   }
 
-  toSqlSelect(): string {
+  toSqlSelect(tag:string[],value:string[]): string {
     return ``;
   }
 

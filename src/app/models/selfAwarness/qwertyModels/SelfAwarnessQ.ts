@@ -6,8 +6,8 @@ export class SelfAwarnessQ extends SelfAwarness implements SQL_Qwerty {
     return `INSERT INTO modeloautoconsciencia (ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura , usr_id) VALUES ('${this.name}','${this.description}','${this.author}','${this.architectureModel}', /@/USER/@/)`;
   }
 
-  toSqlSelect(): string {
-    return `SELECT 
+  toSqlSelect(tag: string[], value: string[]): string {
+    var sql = `SELECT 
     		ma_id as id, 
 		ma_nombre as name, 
 		ma_descripcion as description, 
@@ -16,8 +16,18 @@ export class SelfAwarnessQ extends SelfAwarness implements SQL_Qwerty {
 		ma_activo as active
             FROM 
 	    	modeloautoconsciencia
-            WHERE 
-	  	usr_id = /@/USER/@/`;
+            WHERE `;
+    var tagList = {
+      '/@/USER/@/': 'usr_id = ',
+      '/@/MODEL/@/': 'ma_id = '
+    };
+    for (var i = 0; i < tag.length; i++) {
+      sql += tagList[tag[i]] + value[i]
+      if (i < tag.length - 1) {
+        sql += " AND "
+      }
+    }
+    return sql;
   }
 
   toSqlDelete(): string {

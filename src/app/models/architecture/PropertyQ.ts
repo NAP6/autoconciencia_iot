@@ -22,7 +22,7 @@ export class PropertyQ extends Property implements SQL_Qwerty {
     return `INSERT INTO propiedad ( pro_nombre, obj_id) VALUES ('${this.name}', /@/OBJETOS/@/)`;
   }
 
-  toSqlSelect(): string {
+  toSqlSelect(tag:string[],value:string[]): string {
     return ``;
   }
 

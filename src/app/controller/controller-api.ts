@@ -1058,6 +1058,19 @@ export function upd_variables_valor(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export function get_flujo_datos(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var comuni = req.body.comunicacion;
+    var propiedad = req.body.propiedad;
+    db.get_flujo_datos(id,comuni,propiedad,(jsonEscala: object) => {
+      res.json(jsonEscala);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 interface metodo_modelo_proceso {
   proceso_id: string;
   m_recoleccion: {

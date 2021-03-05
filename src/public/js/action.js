@@ -3302,6 +3302,40 @@ function agregarProcesoPreReflexivo() {
     Abrir_limpiar_modal_proceso_pre_reflexivo();
 }
 
+function generar_flujo_datos_select() {
+    var tipoComununicacionSeleccionado = document.getElementById("tipo_comunicacion");
+    comunicacion = tipoComununicacionSeleccionado.options[tipoComununicacionSeleccionado.selectedIndex].text;
+    var porpiedadSeleccionada = document.getElementById("proiedad_recoleccion").value;
+    if (comunicacion != "Seleccione.." && porpiedadSeleccionada != "-6") {
+        post_api(
+            "http://localhost:3000/api/get_flujo_datos/", { comunicacion: comunicacion, propiedad: porpiedadSeleccionada },
+            cargar_select_flujo_datos, (res) => {
+                console.log(res);
+            });
+
+
+    } else {
+        var ope = document.getElementById("flujo_de_datos");
+        ope.innerHTML = "";
+    }
+}
+
+function cargar_select_flujo_datos(json) {
+    var ope = document.getElementById("flujo_de_datos");
+    ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
+    console.log(json);
+    json.procesos.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        option.innerHTML = element.descripcion;
+        ope.appendChild(option);
+    });
+}
+
 function Abrir_limpiar_modal_proceso_pre_reflexivo() {
     document.getElementById("modal_metodo_add").classList.replace("d-block", "d-none");
     document.getElementById("input-name-proceso-pre-reflexivo").disabled = false;
