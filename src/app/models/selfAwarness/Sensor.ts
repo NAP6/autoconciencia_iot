@@ -1,7 +1,7 @@
 import { IoTDevice } from "./IoTDevice";
 
 export class Sensor extends IoTDevice {
-    constructor() {
-        super();
+    constructor(id: number, name: string, description:string) {
+        super(id,name,description);
       }
 }
