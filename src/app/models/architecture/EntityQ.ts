@@ -1,57 +1,61 @@
 import { Entity } from "./Entity";
 import { PropertyQ } from "./PropertyQ";
 import { IoTSystemQ } from "./IoTSystemQ";
-import { SQL_Qwerty } from '../SQL_Qwerty';
+import { SQL_Qwerty } from "../SQL_Qwerty";
 
 export class EntityQ extends Entity implements SQL_Qwerty {
-    private _propertysQ: PropertyQ[];
-    private _subEntityQ: EntityQ[];
-    private _iotSystemQ: IoTSystemQ[];
+  private _propertysQ: PropertyQ[];
+  private _subEntityQ: EntityQ[];
+  private _iotSystemQ: IoTSystemQ[];
 
-    constructor(id: number, name: string, entityType: string) {
-        super(id, name, entityType)
-        this._propertysQ = [];
-        this._subEntityQ = [];
-        this._iotSystemQ = [];
-    }
+  constructor(id: number, name: string, entityType: string) {
+    super(id, name, entityType);
+    this._propertysQ = [];
+    this._subEntityQ = [];
+    this._iotSystemQ = [];
+  }
 
-    get propertys(): PropertyQ[] {
-        return this._propertysQ;
-    }
+  get propertys(): PropertyQ[] {
+    return this._propertysQ;
+  }
 
-    set propertys(propertys: PropertyQ[]) {
-        this._propertysQ = propertys;
-    }
+  set propertys(propertys: PropertyQ[]) {
+    this._propertysQ = propertys;
+  }
 
-    get subEntity(): EntityQ[] {
-        return this._subEntityQ;
-    }
+  get subEntity(): EntityQ[] {
+    return this._subEntityQ;
+  }
 
-    set subEntity(subEntity: EntityQ[]) {
-        this._subEntityQ = subEntity;
-    }
+  set subEntity(subEntity: EntityQ[]) {
+    this._subEntityQ = subEntity;
+  }
 
-    get iotSystem(): IoTSystemQ[] {
-        return this._iotSystemQ;
-    }
+  get iotSystem(): IoTSystemQ[] {
+    return this._iotSystemQ;
+  }
 
-    set iotSystem(iotSystem: IoTSystemQ[]) {
-        this._iotSystemQ = iotSystem;
-    }
+  set iotSystem(iotSystem: IoTSystemQ[]) {
+    this._iotSystemQ = iotSystem;
+  }
 
-    toSqlInsert(): string {
-        return `INSERT INTO objeto (ma_id, obj_nombre, obj_tipo, obj_padre) VALUES (/@/MODELO/@/, '${this.name}', '${this.entityType}' , /@/PADRE/@/)`;
-    }
+  toSqlInsert(): string {
+    return `INSERT INTO objeto (ma_id, obj_nombre, obj_tipo, obj_padre) VALUES (/@/MODELO/@/, '${this.name}', '${this.entityType}' , /@/PADRE/@/)`;
+  }
 
-    toSqlSelect(): string {
-        return ``;
-    }
+  toSqlSelect(): string {
+    return ``;
+  }
 
-    toSqlDelete(): string {
-        return ``;
-    }
+  toSqlDelete(): string {
+    return ``;
+  }
 
-    /* static parceQ(value: Entity): EntityQ {
+  toObjectArray(rows): SQL_Qwerty[] {
+    return [];
+  }
+
+  /* static parceQ(value: Entity): EntityQ {
         var ent = new EntityQ(value.id, value.name, value.entityType);
         ent.propertys = value.propertys;
         ent.subEntity = value.subEntity;

@@ -34,7 +34,7 @@ export class database2 {
     connection.end();
   }
 
-  public async select(element: SQL_Qwerty, tag: string[], value: string[]): Promise<SQL_Qwerty[] | undefined> {
+  public async select(element: SQL_Qwerty, tag: string[], value: string[]): Promise<SQL_Qwerty[]> {
     var connection = await this.conectar();
     var sql = element.toSqlSelect();
     for (var i = 0; i < tag.length; i++) {
@@ -42,16 +42,7 @@ export class database2 {
     }
     var [rows, fields] = await connection.execute(sql);
     connection.end();
-    if (element instanceof SelfAwarnessQ) {
-      var results: SelfAwarnessQ[] = [];
-      rows.forEach(element => {
-        var aux = new SelfAwarnessQ(element.id, element.name, element.description, element.author, element.architectureModel);
-        aux.active=element.active;
-        results.push(aux);
-      });
-      return results;
-    }
-    return undefined;
+    return element.toObjectArray(rows);
   }
   public async delete(element: SQL_Qwerty, tag: string[], value: string[]) { }
 

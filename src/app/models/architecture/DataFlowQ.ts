@@ -1,36 +1,40 @@
-import { DataFlow } from './DataFlow';
-import { PropertyQ } from './PropertyQ';
-import { SQL_Qwerty } from '../SQL_Qwerty';
+import { DataFlow } from "./DataFlow";
+import { PropertyQ } from "./PropertyQ";
+import { SQL_Qwerty } from "../SQL_Qwerty";
 
 export class DataFlowQ extends DataFlow implements SQL_Qwerty {
-    private _propertysQ: PropertyQ[];
+  private _propertysQ: PropertyQ[];
 
-    constructor(id: number, description: string, comunicationType: string) {
-        super(id, description, comunicationType)
-        this._propertysQ = [];
-    }
+  constructor(id: number, description: string, comunicationType: string) {
+    super(id, description, comunicationType);
+    this._propertysQ = [];
+  }
 
-    get propertys(): PropertyQ[] {
-        return this._propertysQ;
-    }
+  get propertys(): PropertyQ[] {
+    return this._propertysQ;
+  }
 
-    set propertys(propertys: PropertyQ[]) {
-        this._propertysQ = propertys;
-    }
+  set propertys(propertys: PropertyQ[]) {
+    this._propertysQ = propertys;
+  }
 
-    toSqlInsert(): string {
-        return `INSERT INTO flujodatos (flu_descripcion,flu_tipo_comunicacion) VALUES ('${this.description}','${this.comunicationType}')`;
-    }
+  toSqlInsert(): string {
+    return `INSERT INTO flujodatos (flu_descripcion,flu_tipo_comunicacion) VALUES ('${this.description}','${this.comunicationType}')`;
+  }
 
-    toSqlSelect(): string {
-        return ``;
-    }
+  toSqlSelect(): string {
+    return ``;
+  }
 
-    toSqlDelete(): string {
-        return ``;
-    }
+  toSqlDelete(): string {
+    return ``;
+  }
 
-    /* static parceQ(value: DataFlow): DataFlowQ {
+  toObjectArray(rows): SQL_Qwerty[] {
+    return [];
+  }
+
+  /* static parceQ(value: DataFlow): DataFlowQ {
         var flow = new DataFlowQ(value.id, value.description, value.comunicationType);
         flow.propertys = value.propertys;
         return flow;
