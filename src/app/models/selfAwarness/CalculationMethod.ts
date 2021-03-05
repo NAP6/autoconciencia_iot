@@ -2,6 +2,7 @@ import { LearningReasoningMethod } from "./LearningReasoningMethod";
 import { SimulationScenario } from "./SimulationScenario";
 import { ImplementationResource } from "./ImplementationResource";
 import { ArgumentToParameterMapping } from "./ArgumentToParameterMapping";
+import { SimulationVariable } from "./SimulationVariable";
 
 export class CalculationMethod extends LearningReasoningMethod {
   private _implementationResourceType;
@@ -10,6 +11,7 @@ export class CalculationMethod extends LearningReasoningMethod {
   private _containsSimulationScenario: SimulationScenario[];
   private _isImplmentedBy: ImplementationResource|undefined;
   private _containsArgumentToParameterMapping: ArgumentToParameterMapping[];
+  private _containsSimulationVariable:SimulationVariable[];
 
   constructor(
     id: number,
@@ -23,6 +25,7 @@ export class CalculationMethod extends LearningReasoningMethod {
     this._calculationPeriodEnd = calculationPeriodEnd;
     this._containsSimulationScenario = [];
     this._containsArgumentToParameterMapping = [];
+    this._containsSimulationVariable = [];
   }
 
   get implementationResourceType() {
@@ -69,5 +72,12 @@ export class CalculationMethod extends LearningReasoningMethod {
 
   set containsArgumentToParameterMapping(value: ArgumentToParameterMapping[]) {
     this._containsArgumentToParameterMapping = value;
+  }
+  get containsSimulationVariable(): SimulationVariable[] {
+    return this._containsSimulationVariable;
+  }
+
+  set containsSimulationVariable(value: SimulationVariable[]) {
+    this._containsSimulationVariable = value;
   }
 }

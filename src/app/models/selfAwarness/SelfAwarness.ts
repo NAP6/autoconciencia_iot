@@ -3,6 +3,8 @@ import { DecisionCriteria } from "./DecisionCriteria";
 import { Scale } from "./Scale";
 import { Scope } from "./Scope";
 import { ImplementationResource } from "./ImplementationResource";
+import {  } from "./DataFlow";
+import { DataFlow } from "../architecture/DataFlow";
 
 export class SelfAwarness {
   private _id: number;
@@ -16,6 +18,7 @@ export class SelfAwarness {
   private _containsScale: Scale[];
   private _containsScope: Scope[];
   private _containsImplementationResource:ImplementationResource[];
+  private _containsDataFlow:DataFlow[];
 
   constructor(
     id: number,
@@ -33,7 +36,9 @@ export class SelfAwarness {
     this._containsSpan = [];
     this._containsDecisionCriteria = [];
     this._containsScope=[];
+    this._containsScale=[];
     this._containsImplementationResource=[];
+    this._containsDataFlow=[];
   }
 
   get id(): number {
@@ -121,5 +126,13 @@ export class SelfAwarness {
 
   set containsImplementationResource(value: ImplementationResource[]) {
     this._containsImplementationResource = value;
+  }
+
+  get containsDataFlow(): DataFlow[] {
+    return this._containsDataFlow;
+  }
+
+  set containsDataFlow(value: DataFlow[]) {
+    this._containsDataFlow = value;
   }
 }
