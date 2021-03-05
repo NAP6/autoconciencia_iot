@@ -217,13 +217,17 @@ export function procesos_reflexivos(req: Request, res: Response) {
 export async function generate_model(req: Request, res: Response) {
   var modeloID = req.session?.active_model.modelID;
   var db = new database2();
-  var modelo = await db.select(new SelfAwarnessQ(-1, "", "", "", ""), ["/@/MODEL/@/"], [modeloID.toString()]);
+  var modelo: SelfAwarnessQ = new SelfAwarnessQ(-1, "", "", "", "");
+  var rows = await db.qwerty(
+    modelo.toSqlInsert(["/@/MODEL/@/"], [modeloID.toString()])
+  );
+  modelo = modelo.toObjectArray(rows)[0];
   console.log(modelo);
   res.render("generate_model", {
     error: req.flash("error"),
     succes: req.flash("succes"),
     session: req.session,
-    model: JSON.stringify(modelo, null, '  ')
+    model: JSON.stringify(modelo, null, "  "),
   });
 }
 
@@ -247,6 +251,9 @@ export async function save_new_model(
         if (err) throw err;
         json = result;
       });
+      fs.unlink(req.file.path, (err) => {
+        if (err) throw err;
+      });
     } catch (error) {
       console.log("No se ha ingresado ningun valor");
     }
@@ -258,12 +265,14 @@ export async function save_new_model(
       autor,
       JSON.stringify(json, null, "  ")
     );
-    await db2.insert(modelo, ["/@/USER/@/"], [user_id.toString()]);
-    db2.architecture(arquitectura, modelo.id.toString());
+    var rows = await db2.qwerty(
+      modelo.toSqlInsert(["/@/USER/@/"], [user_id.toString()])
+    );
+    db2.architecture(arquitectura, rows.insertId.toString());
     req.session!.active_model = {
       nombre: modelo.name,
       descripcion: modelo.description,
-      modelID: modelo.id.toString(),
+      modelID: rows.insertId.toString(),
     };
     console.log(req.session!.active_model);
     //#####################################################

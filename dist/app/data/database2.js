@@ -13,13 +13,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.database2 = void 0;
-const mysql = require("mysql2/promise");
+const promise_1 = __importDefault(require("mysql2/promise"));
 const constants_1 = __importDefault(require("../../config/constants"));
 class database2 {
     constructor() { }
     conectar() {
         return __awaiter(this, void 0, void 0, function* () {
-            var connection = yield mysql.createConnection({
+            var connection = yield promise_1.default.createConnection({
                 host: constants_1.default["db-url"],
                 port: constants_1.default["db-port"],
                 user: constants_1.default["db-user"],
@@ -29,35 +29,25 @@ class database2 {
             return connection;
         });
     }
-    insert(element, tag, value) {
+    qwerty(sql) {
         return __awaiter(this, void 0, void 0, function* () {
             var connection = yield this.conectar();
-            var sql = element.toSqlInsert();
-            for (var i = 0; i < tag.length; i++) {
-                sql = sql.replace(tag[i], value[i]);
-            }
             var [rows, fields] = yield connection.execute(sql);
-            element.id = rows.insertId;
             connection.end();
+            return rows;
         });
-    }
-    select(element, tag, value) {
-        return __awaiter(this, void 0, void 0, function* () { });
-    }
-    delete(element, tag, value) {
-        return __awaiter(this, void 0, void 0, function* () { });
     }
     architecture(architecture, modelID) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.insert(architecture.modelIoTSystem, ["/@/MODELO/@/", "/@/PADRE/@/"], [modelID, "NULL"]);
+            yield this.qwerty(architecture.modelIoTSystem.toSqlInsert(["/@/MODELO/@/", "/@/PADRE/@/"], [modelID, "NULL"]));
             var systems = architecture.modelIoTSystem.IoTSubSystem;
             var id = architecture.modelIoTSystem.id;
             for (var i = 0; i < systems.length; i++) {
-                yield this.insert(systems[i], ["/@/MODELO/@/", "/@/PADRE/@/"], [modelID, `${id}`]);
+                yield this.qwerty(systems[i].toSqlInsert(["/@/MODELO/@/", "/@/PADRE/@/"], [modelID, `${id}`]));
             }
             var dataFlows = architecture.modelDataFlow;
             for (var i = 0; i < dataFlows.length; i++) {
-                yield this.insert(dataFlows[i], [], []);
+                yield this.qwerty(dataFlows[i].toSqlInsert([], []));
             }
             this.insertar_entidades_recursivo(architecture.modelEntity, [
                 modelID,
@@ -68,10 +58,10 @@ class database2 {
     insertar_entidades_recursivo(entidades, value) {
         return __awaiter(this, void 0, void 0, function* () {
             for (var i = 0; i < entidades.length; i++) {
-                yield this.insert(entidades[i], ["/@/MODELO/@/", "/@/PADRE/@/"], value);
+                yield this.qwerty(entidades[i].toSqlInsert(["/@/MODELO/@/", "/@/PADRE/@/"], value));
                 if (entidades[i].propertys.length > 0) {
                     for (var j = 0; j < entidades[i].propertys.length; j++) {
-                        yield this.insert(entidades[i].propertys[j], ["/@/OBJETOS/@/"], [`${entidades[i].id}`]);
+                        yield this.qwerty(entidades[i].propertys[j].toSqlInsert(["/@/OBJETOS/@/"], [`${entidades[i].id}`]));
                         this.relation_propiedad_flujo(entidades[i].propertys[j].id.toString(), entidades[i].propertys[j].dataFlow);
                     }
                 }

@@ -20,14 +20,30 @@ class IoTSystemQ extends IoTSystem_1.IoTSystem {
     set entity(entity) {
         this._entityQ = entity;
     }
-    toSqlInsert() {
-        return `INSERT INTO sujeto (ma_id, suj_nombre, suj_padre) VALUES (/@/MODELO/@/, '${this.name}', /@/PADRE/@/)`;
+    toSqlInsert(tag, value) {
+        var sql = `INSERT INTO 
+	  	sujeto (
+	  		ma_id, 
+		  	suj_nombre, 
+		  	suj_padre
+  		) VALUES (
+		  	/@/MODELO/@/, 
+		  	'${this.name}', 
+		  	/@/PADRE/@/
+  		)`;
+        for (var i = 0; i < tag.length; i++) {
+            sql.replace(tag[i], value[i]);
+        }
+        return sql;
     }
-    toSqlSelect() {
+    toSqlSelect(tag, value) {
         return ``;
     }
-    toSqlDelete() {
+    toSqlDelete(tag, value) {
         return ``;
+    }
+    toObjectArray(rows) {
+        return [];
     }
 }
 exports.IoTSystemQ = IoTSystemQ;

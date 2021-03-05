@@ -1,7 +1,18 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.upd_variables_valor = exports.del_variables_valor = exports.add_variables_valor = exports.upd_variable_simulacion = exports.del_variable_simulacion = exports.add_variable_simulacion = exports.get_variable_simulacion_id = exports.get_variable_simulacion = exports.get_variables_valor = exports.upd_escenario_simulacion = exports.del_escenario_simulacion = exports.escenario_simulacion = exports.add_escenario_simulacion = exports.get_metodo_aprendizaje = exports.objetivos_sujetos = exports.add_metodo_modelo_reflexivos = exports.properties = exports.procesos_reflexive = exports.add_mapeo_parametros = exports.add_metodo_modelo = exports.mod_process_pre_reflexive = exports.del_process_pre_reflexive = exports.process_pre_reflexive_id = exports.procesos_pre_reflexive = exports.add_process_pre_reflexive = exports.upd_ri = exports.del_ri = exports.add_ri = exports.ri = exports.last_EntityID = exports.last_ObjectSubjectID = exports.home = exports.user_models = exports.upd_acciones_umbrales = exports.del_accion = exports.get_accion = exports.add_accion = exports.del_metrica = exports.get_metrica_select = exports.get_metrica = exports.add_metrica = exports.del_aspects = exports.add_aspects = exports.aspects = exports.upd_umbral = exports.del_umbral = exports.add_umbral = exports.get_umbral = exports.umbral = exports.upd_decision_criteria = exports.del_decision_criteria = exports.add_decision_criteria = exports.decision_criteria = exports.upd_escales = exports.del_escales = exports.add_escales = exports.get_escales_select = exports.escales = exports.upd_measurement_units = exports.del_measurement_units = exports.add_measurement_units = exports.measurement_units = exports.get_enumeracion = exports.enumeracion = exports.update_entity = exports.save_entity = exports.entity = exports.update_subjects = exports.save_subjects = exports.save_subjects_objects = exports.delete_subjects_objects = exports.subjects_objects = exports.subjects = exports.deployment_resources = exports.ask_input_arguments = exports.ask_deployment_resources = exports.ask_deployment_resources_select = exports.del_deployment_resources = exports.add_deployment_resources = void 0;
+exports.get_flujo_datos = exports.upd_variables_valor = exports.del_variables_valor = exports.add_variables_valor = exports.upd_variable_simulacion = exports.del_variable_simulacion = exports.add_variable_simulacion = exports.get_variable_simulacion_id = exports.get_variable_simulacion = exports.get_variables_valor = exports.upd_escenario_simulacion = exports.del_escenario_simulacion = exports.escenario_simulacion = exports.add_escenario_simulacion = exports.get_metodo_aprendizaje = exports.objetivos_sujetos = exports.add_metodo_modelo_reflexivos = exports.properties = exports.procesos_reflexive = exports.add_mapeo_parametros = exports.add_metodo_modelo = exports.mod_process_pre_reflexive = exports.del_process_pre_reflexive = exports.process_pre_reflexive_id = exports.procesos_pre_reflexive = exports.add_process_pre_reflexive = exports.upd_ri = exports.del_ri = exports.add_ri = exports.ri = exports.last_EntityID = exports.last_ObjectSubjectID = exports.home = exports.user_models = exports.upd_acciones_umbrales = exports.del_accion = exports.get_accion = exports.add_accion = exports.del_metrica = exports.get_metrica_select = exports.get_metrica = exports.add_metrica = exports.del_aspects = exports.add_aspects = exports.aspects = exports.upd_umbral = exports.del_umbral = exports.add_umbral = exports.get_umbral = exports.umbral = exports.upd_decision_criteria = exports.del_decision_criteria = exports.add_decision_criteria = exports.decision_criteria = exports.upd_escales = exports.del_escales = exports.add_escales = exports.get_escales_select = exports.escales = exports.upd_measurement_units = exports.del_measurement_units = exports.add_measurement_units = exports.measurement_units = exports.get_enumeracion = exports.enumeracion = exports.update_entity = exports.save_entity = exports.entity = exports.update_subjects = exports.save_subjects = exports.save_subjects_objects = exports.delete_subjects_objects = exports.subjects_objects = exports.subjects = exports.deployment_resources = exports.ask_input_arguments = exports.ask_deployment_resources = exports.ask_deployment_resources_select = exports.del_deployment_resources = exports.add_deployment_resources = void 0;
+const selfAwarnessModels_1 = require("../models/selfAwarnessModels");
 const database_1 = require("../data/database");
+const database2_1 = require("../data/database2");
 function add_deployment_resources(req, res) {
     var _a;
     if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
@@ -697,18 +708,31 @@ function upd_acciones_umbrales(req, res) {
     }
 }
 exports.upd_acciones_umbrales = upd_acciones_umbrales;
+/*export function user_models(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    db.getUserModels(id, (jsonModel: object) => {
+      res.json(jsonModel);
+    });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}*/
 function user_models(req, res) {
     var _a, _b;
-    if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
-        var id = (_b = req.session) === null || _b === void 0 ? void 0 : _b.user.userID;
-        var db = new database_1.mysql_connector();
-        db.getUserModels(id, (jsonModel) => {
-            res.json(jsonModel);
-        });
-    }
-    else {
-        res.json({ error: "debe iniciar session para poder usar la api" });
-    }
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var id = (_b = req.session) === null || _b === void 0 ? void 0 : _b.user.userID;
+            var db = new database2_1.database2();
+            var model = new selfAwarnessModels_1.SelfAwarnessQ(-1, "", "", "", "");
+            var rows = yield db.qwerty(model.toSqlSelect(["/@/USER/@/"], id.toString()));
+            res.json(model.toObjectArray(rows));
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
 }
 exports.user_models = user_models;
 function home(req, res) {
@@ -1204,3 +1228,19 @@ function upd_variables_valor(req, res) {
     }
 }
 exports.upd_variables_valor = upd_variables_valor;
+function get_flujo_datos(req, res) {
+    var _a, _b;
+    if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+        var id = (_b = req.session) === null || _b === void 0 ? void 0 : _b.user.userID;
+        var db = new database_1.mysql_connector();
+        var comuni = req.body.comunicacion;
+        var propiedad = req.body.propiedad;
+        db.get_flujo_datos(id, comuni, propiedad, (jsonEscala) => {
+            res.json(jsonEscala);
+        });
+    }
+    else {
+        res.json({ error: "debe iniciar session para poder usar la api" });
+    }
+}
+exports.get_flujo_datos = get_flujo_datos;

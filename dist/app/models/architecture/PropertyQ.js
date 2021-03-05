@@ -13,14 +13,28 @@ class PropertyQ extends Property_1.Property {
     set dataFlow(dataFlow) {
         this._dataFlowQ = dataFlow;
     }
-    toSqlInsert() {
-        return `INSERT INTO propiedad ( pro_nombre, obj_id) VALUES ('${this.name}', /@/OBJETOS/@/)`;
+    toSqlInsert(tag, value) {
+        var sql = `INSERT INTO 
+	  	propiedad ( 
+	  		pro_nombre, 
+			obj_id
+		) VALUES (
+			'${this.name}', 
+			/@/OBJETOS/@/
+		)`;
+        for (var i = 0; i < tag.length; i++) {
+            sql.replace(tag[i], value[i]);
+        }
+        return sql;
     }
-    toSqlSelect() {
+    toSqlSelect(tag, value) {
         return ``;
     }
-    toSqlDelete() {
+    toSqlDelete(tag, value) {
         return ``;
+    }
+    toObjectArray(rows) {
+        return [];
     }
 }
 exports.PropertyQ = PropertyQ;

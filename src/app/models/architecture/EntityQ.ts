@@ -39,39 +39,33 @@ export class EntityQ extends Entity implements SQL_Qwerty {
     this._iotSystemQ = iotSystem;
   }
 
-  toSqlInsert(): string {
-    return `INSERT INTO objeto (ma_id, obj_nombre, obj_tipo, obj_padre) VALUES (/@/MODELO/@/, '${this.name}', '${this.entityType}' , /@/PADRE/@/)`;
+  toSqlInsert(tag: string[], value: string[]): string {
+    var sql = `INSERT INTO objeto(
+	    	ma_id, 
+	    	obj_nombre, 
+	    	obj_tipo, 
+		obj_padre
+            ) VALUES (
+	    	/@/MODELO/@/, 
+	    	'${this.name}', 
+	    	'${this.entityType}', 
+	    	/@/PADRE/@/
+    	   )`;
+    for (var i = 0; i < tag.length; i++) {
+      sql = sql.replace(tag[i], value[i]);
+    }
+    return sql;
   }
 
-  toSqlSelect(tag:string[],value:string[]): string {
+  toSqlSelect(tag: string[], value: string[]): string {
     return ``;
   }
 
-  toSqlDelete(): string {
+  toSqlDelete(tag: string[], value: string[]): string {
     return ``;
   }
 
   toObjectArray(rows): SQL_Qwerty[] {
     return [];
   }
-
-  /* static parceQ(value: Entity): EntityQ {
-        var ent = new EntityQ(value.id, value.name, value.entityType);
-        ent.propertys = value.propertys;
-        ent.subEntity = value.subEntity;
-        ent.iotSystem = value.iotSystem;
-        return ent;
-    }
-
-    static parceQA(value: Entity[]): EntityQ[] {
-        var returnV: EntityQ[] = [];
-        for (var i = 0; i < value.length; i++) {
-            var ent = new EntityQ(value[i].id, value[i].name, value[i].entityType);
-            ent.propertys = value[i].propertys;
-            ent.subEntity = value[i].subEntity;
-            ent.iotSystem = value[i].iotSystem;
-            returnV.push(ent);
-        }
-        return returnV;
-    } */
 }

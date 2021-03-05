@@ -13,14 +13,28 @@ class DataFlowQ extends DataFlow_1.DataFlow {
     set propertys(propertys) {
         this._propertysQ = propertys;
     }
-    toSqlInsert() {
-        return `INSERT INTO flujodatos (flu_descripcion,flu_tipo_comunicacion) VALUES ('${this.description}','${this.comunicationType}')`;
+    toSqlInsert(tag, value) {
+        var sql = `INSERT INTO 
+	  	flujodatos (
+	  		flu_descripcion,
+		  	flu_tipo_comunicacion
+  		) VALUES (
+	  		'${this.description}',
+		  	'${this.comunicationType}'
+  		)`;
+        for (var i = 0; i < tag.length; i++) {
+            sql.replace(tag[i], value[i]);
+        }
+        return sql;
     }
-    toSqlSelect() {
+    toSqlSelect(tag, value) {
         return ``;
     }
-    toSqlDelete() {
+    toSqlDelete(tag, value) {
         return ``;
+    }
+    toObjectArray(rows) {
+        return [];
     }
 }
 exports.DataFlowQ = DataFlowQ;

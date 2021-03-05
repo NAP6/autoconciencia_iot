@@ -3,14 +3,12 @@ import { SQL_Qwerty } from "../models/SQL_Qwerty";
 import { EntityQ } from "../models/architecture/EntityQ";
 import { IoTSystemQ } from "../models/architecture/IoTSystemQ";
 import { DataFlowQ } from "../models/architecture/DataFlowQ";
-import { PropertyQ } from "../models/architecture/PropertyQ";
-const mysql = require("mysql2/promise");
+import mysql from "mysql2/promise";
 import constants from "../../config/constants";
-import routes from "../../config/routes";
 
 export class database2 {
+  constructor() {}
 
-  constructor() { }
   private async conectar() {
     var connection = await mysql.createConnection({
       host: constants["db-url"],
@@ -22,45 +20,23 @@ export class database2 {
     return connection;
   }
 
-  public async insert(element: SQL_Qwerty, tag: string[], value: string[]) {
+  public async qwerty(sql: string): Promise<any> {
     var connection = await this.conectar();
-    var sql = element.toSqlInsert();
-    for (var i = 0; i < tag.length; i++) {
-      sql = sql.replace(tag[i], value[i]);
-    }
-    var [rows, fields] = await connection.execute(sql);
-    element.id = rows.insertId;
-    connection.end();
-  }
-
-  public async select(element: SQL_Qwerty, tag: string[], value: string[]): Promise<SQL_Qwerty[]> {
-    var connection = await this.conectar();
-    var sql = element.toSqlSelect(tag, value);
-    console.log(sql);
     var [rows, fields] = await connection.execute(sql);
     connection.end();
-    return element.toObjectArray(rows);
+    return rows;
   }
-  public async delete(element: SQL_Qwerty, tag: string[], value: string[]) { }
 
   public async architecture(architecture: JSON2Architecture, modelID: string) {
-    await this.insert(
-      architecture.modelIoTSystem,
-      ["/@/MODELO/@/", "/@/PADRE/@/"],
-      [modelID, "NULL"]
+    this.insertar_sistemas_recursivo(
+      modelID,
+      "NULL",
+      architecture.modelIoTSystem
     );
-    var systems = architecture.modelIoTSystem.IoTSubSystem;
-    var id = architecture.modelIoTSystem.id;
-    for (var i = 0; i < systems.length; i++) {
-      await this.insert(
-        systems[i],
-        ["/@/MODELO/@/", "/@/PADRE/@/"],
-        [modelID, `${id}`]
-      );
-    }
     var dataFlows = architecture.modelDataFlow;
     for (var i = 0; i < dataFlows.length; i++) {
-      await this.insert(dataFlows[i], [], []);
+      var insertedFlow = await this.qwerty(dataFlows[i].toSqlInsert([], []));
+      dataFlows[i] = insertedFlow.insertId.toString();
     }
     this.insertar_entidades_recursivo(architecture.modelEntity, [
       modelID,
@@ -68,19 +44,43 @@ export class database2 {
     ]);
   }
 
+  private async insertar_sistemas_recursivo(
+    modelID: string,
+    idPadre: string,
+    system: IoTSystemQ
+  ) {
+    var architectureFather = await this.qwerty(
+      system.toSqlInsert(
+        ["/@/MODELO/@/", "/@/PADRE/@/"],
+        [modelID, `${idPadre}`]
+      )
+    );
+    var systems = system.IoTSubSystem;
+    var id = architectureFather.insertId.toString();
+    system.id = id;
+    for (var i = 0; i < systems.length; i++) {
+      this.insertar_sistemas_recursivo(modelID, id, systems[i]);
+    }
+  }
+
   private async insertar_entidades_recursivo(
     entidades: EntityQ[],
     value: string[]
   ) {
     for (var i = 0; i < entidades.length; i++) {
-      await this.insert(entidades[i], ["/@/MODELO/@/", "/@/PADRE/@/"], value);
+      var insertEnt = await this.qwerty(
+        entidades[i].toSqlInsert(["/@/MODELO/@/", "/@/PADRE/@/"], value)
+      );
+      entidades[i].id = insertEnt.insertId.toString();
       if (entidades[i].propertys.length > 0) {
         for (var j = 0; j < entidades[i].propertys.length; j++) {
-          await this.insert(
-            entidades[i].propertys[j],
-            ["/@/OBJETOS/@/"],
-            [`${entidades[i].id}`]
+          var insertProp = await this.qwerty(
+            entidades[i].propertys[j].toSqlInsert(
+              ["/@/OBJETOS/@/"],
+              [`${entidades[i].id}`]
+            )
           );
+          entidades[i].propertys[j].id = insertProp.insertId.toString();
           this.relation_propiedad_flujo(
             entidades[i].propertys[j].id.toString(),
             entidades[i].propertys[j].dataFlow

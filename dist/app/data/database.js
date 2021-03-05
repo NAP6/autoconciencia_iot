@@ -4273,5 +4273,31 @@ WHERE   pa.pa_id=${id} AND
             db.generar_metricas(modelo, fun);
         }
     }
+    get_flujo_datos(userID, comunicacion, propiedad, func) {
+        var comu;
+        if (comunicacion == "SÍNCRONA") {
+            comu = "Synchronous";
+        }
+        else if (comunicacion == "ASÍNCRONA") {
+            comu = undefined;
+        }
+        var sql = `SELECT flu.flu_id as id, flu.flu_descripcion as descripcion FROM flujodatos flu, propiedad_flujodatos pro_flu WHERE flu.flu_tipo_comunicacion='${comu}' AND pro_flu.pro_id=${propiedad} AND pro_flu.flu_id=flu.flu_id`;
+        console.log(sql);
+        this.connector.query(sql, (err, result, fields) => {
+            if (err)
+                err;
+            var listaProcesos = {
+                procesos: [],
+            };
+            for (const i in result) {
+                var auxmedicion = {
+                    id: result[i]["id"],
+                    descripcion: result[i]["descripcion"],
+                };
+                listaProcesos.procesos.push(auxmedicion);
+            }
+            func(listaProcesos);
+        });
+    }
 }
 exports.mysql_connector = mysql_connector;

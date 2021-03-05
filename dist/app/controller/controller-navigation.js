@@ -262,15 +262,18 @@ function procesos_reflexivos(req, res) {
 exports.procesos_reflexivos = procesos_reflexivos;
 function generate_model(req, res) {
     var _a;
-    var modeloID = (_a = req.session) === null || _a === void 0 ? void 0 : _a.active_model.modelID;
-    var db = new database_1.mysql_connector();
-    db.generar_modelo(modeloID, (modelo) => {
-        console.log();
+    return __awaiter(this, void 0, void 0, function* () {
+        var modeloID = (_a = req.session) === null || _a === void 0 ? void 0 : _a.active_model.modelID;
+        var db = new database2_1.database2();
+        var modelo = new SelfAwarnessQ_1.SelfAwarnessQ(-1, "", "", "", "");
+        var rows = yield db.qwerty(modelo.toSqlInsert(["/@/MODEL/@/"], [modeloID.toString()]));
+        modelo = modelo.toObjectArray(rows)[0];
+        console.log(modelo);
         res.render("generate_model", {
             error: req.flash("error"),
             succes: req.flash("succes"),
-            model: JSON.stringify(modelo, null, "  "),
             session: req.session,
+            model: JSON.stringify(modelo, null, "  "),
         });
     });
 }
@@ -300,12 +303,12 @@ function save_new_model(req, res, next) {
             }
             var arquitectura = new JSON2Architecture_1.JSON2Architecture(json);
             var modelo = new SelfAwarnessQ_1.SelfAwarnessQ(-1, nombre, descripcion, autor, JSON.stringify(json, null, "  "));
-            yield db2.insert(modelo, ["/@/USER/@/"], [user_id.toString()]);
-            db2.architecture(arquitectura, modelo.id.toString());
+            var rows = yield db2.qwerty(modelo.toSqlInsert(["/@/USER/@/"], [user_id.toString()]));
+            db2.architecture(arquitectura, rows.insertId.toString());
             req.session.active_model = {
                 nombre: modelo.name,
                 descripcion: modelo.description,
-                modelID: modelo.id.toString(),
+                modelID: rows.insertId.toString(),
             };
             console.log(req.session.active_model);
             //#####################################################

@@ -18,35 +18,30 @@ export class DataFlowQ extends DataFlow implements SQL_Qwerty {
     this._propertysQ = propertys;
   }
 
-  toSqlInsert(): string {
-    return `INSERT INTO flujodatos (flu_descripcion,flu_tipo_comunicacion) VALUES ('${this.description}','${this.comunicationType}')`;
+  toSqlInsert(tag: string[], value: string[]): string {
+    var sql =  `INSERT INTO 
+	  	flujodatos (
+	  		flu_descripcion,
+		  	flu_tipo_comunicacion
+  		) VALUES (
+	  		'${this.description}',
+		  	'${this.comunicationType}'
+  		)`;
+    for (var i = 0; i < tag.length; i++) {
+      sql = sql.replace(tag[i], value[i]);
+    }
+    return sql;
   }
 
-  toSqlSelect(tag:string[],value:string[]): string {
+  toSqlSelect(tag: string[], value: string[]): string {
     return ``;
   }
 
-  toSqlDelete(): string {
+  toSqlDelete(tag: string[], value: string[]): string {
     return ``;
   }
 
   toObjectArray(rows): SQL_Qwerty[] {
     return [];
   }
-
-  /* static parceQ(value: DataFlow): DataFlowQ {
-        var flow = new DataFlowQ(value.id, value.description, value.comunicationType);
-        flow.propertys = value.propertys;
-        return flow;
-    }
-
-    static parceQA(value: DataFlow[]): DataFlowQ[] {
-        var returnV: DataFlowQ[] = [];
-        for (var i = 0; i < value.length; i++) {
-            var flow = new DataFlowQ(value[i].id, value[i].description, value[i].comunicationType);
-            flow.propertys = value[i].propertys;
-            returnV.push(flow);
-        }
-        return returnV;
-    } */
 }

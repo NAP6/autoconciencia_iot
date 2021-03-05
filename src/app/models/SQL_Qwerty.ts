@@ -2,8 +2,8 @@ import { SSL_OP_NO_QUERY_MTU } from "constants";
 
 export interface SQL_Qwerty {
   id: number;
-  toSqlInsert(): string;
+  toSqlInsert(tag:string[],value:string[]): string;
   toSqlSelect(tag:string[],value:string[]): string;
-  toSqlDelete(): string;
-  toObjectArray(rows): SQL_Qwerty[];
+  toSqlDelete(tag:string[],value:string[]): string;
+  toObjectArray(rows): any[];
 }

@@ -100,6 +100,7 @@ function default_1(app) {
     app.post("/api/add_variable_simulacion/", api.add_variable_simulacion);
     app.post("/api/del_variable_simulacion/", api.del_variable_simulacion);
     app.post("/api/upd_variable_simulacion/", api.upd_variable_simulacion);
+    app.post("/api/get_flujo_datos/", api.get_flujo_datos);
 }
 exports.default = default_1;
 ;

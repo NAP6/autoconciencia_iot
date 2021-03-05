@@ -27,14 +27,31 @@ class EntityQ extends Entity_1.Entity {
     set iotSystem(iotSystem) {
         this._iotSystemQ = iotSystem;
     }
-    toSqlInsert() {
-        return `INSERT INTO objeto (ma_id, obj_nombre, obj_tipo, obj_padre) VALUES (/@/MODELO/@/, '${this.name}', '${this.entityType}' , /@/PADRE/@/)`;
+    toSqlInsert(tag, value) {
+        var sql = `INSERT INTO objeto(
+	    	ma_id, 
+	    	obj_nombre, 
+	    	obj_tipo, 
+		obj_padre
+            ) VALUES (
+	    	/@/MODELO/@/, 
+	    	'${this.name}', 
+	    	'${this.entityType}', 
+	    	/@/PADRE/@/
+    	   )`;
+        for (var i = 0; i < tag.length; i++) {
+            sql.replace(tag[i], value[i]);
+        }
+        return sql;
     }
-    toSqlSelect() {
+    toSqlSelect(tag, value) {
         return ``;
     }
-    toSqlDelete() {
+    toSqlDelete(tag, value) {
         return ``;
+    }
+    toObjectArray(rows) {
+        return [];
     }
 }
 exports.EntityQ = EntityQ;
