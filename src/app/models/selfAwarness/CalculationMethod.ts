@@ -3,15 +3,17 @@ import { SimulationScenario } from "./SimulationScenario";
 import { ImplementationResource } from "./ImplementationResource";
 import { ArgumentToParameterMapping } from "./ArgumentToParameterMapping";
 import { SimulationVariable } from "./SimulationVariable";
+import { IndirectMetric } from "./IndirectMetric";
 
 export class CalculationMethod extends LearningReasoningMethod {
   private _implementationResourceType;
   private _calculationPeriodStart: Date;
   private _calculationPeriodEnd: Date;
   private _containsSimulationScenario: SimulationScenario[];
-  private _isImplmentedBy: ImplementationResource|undefined;
+  private _isImplmentedBy: ImplementationResource | undefined;
   private _containsArgumentToParameterMapping: ArgumentToParameterMapping[];
   private _containsSimulationVariable:SimulationVariable[];
+  private _produces: IndirectMetric | undefined;
 
   constructor(
     id: number,
@@ -59,13 +61,15 @@ export class CalculationMethod extends LearningReasoningMethod {
   set containsSimulationScenario(value: SimulationScenario[]) {
     this._containsSimulationScenario = value;
   }
-  get isImplmentedBy(): ImplementationResource| undefined {
+
+  get isImplmentedBy(): ImplementationResource | undefined {
     return this._isImplmentedBy;
   }
 
-  set isImplmentedBy(value: ImplementationResource| undefined) {
+  set isImplmentedBy(value: ImplementationResource | undefined) {
     this._isImplmentedBy = value;
   }
+
   get containsArgumentToParameterMapping(): ArgumentToParameterMapping[] {
     return this._containsArgumentToParameterMapping;
   }
@@ -79,5 +83,13 @@ export class CalculationMethod extends LearningReasoningMethod {
 
   set containsSimulationVariable(value: SimulationVariable[]) {
     this._containsSimulationVariable = value;
+  }
+  
+  get produces(): IndirectMetric | undefined {
+    return this._produces;
+  }
+
+  set produces(value: IndirectMetric | undefined) {
+    this._produces = value;
   }
 }
