@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ComputeNode = void 0;
 const PhysicalEntity_1 = require("./PhysicalEntity");
 class ComputeNode extends PhysicalEntity_1.PhysicalEntity {
-    constructor() {
-        super();
+    constructor(id, name, description) {
+        super(id, name, description);
         this._containsResource = [];
     }
     get containsResource() {
