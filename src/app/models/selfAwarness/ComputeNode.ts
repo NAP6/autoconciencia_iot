@@ -3,8 +3,8 @@ import { Resource } from "./Resource";
 
 export class ComputeNode extends PhysicalEntity {
     private _containsResource: Resource[];
-    constructor() {
-        super();
+    constructor(id: number, name: string, description:string) {
+        super(id,name,description);
         this._containsResource = [];
       }
 
