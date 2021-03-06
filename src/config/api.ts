@@ -12,12 +12,10 @@ export default function (app: Application) {
   );
   app.post("/api/ask_deployment_resources/", api.ask_deployment_resources);
   app.post("/api/ask_input_arguments/", api.ask_input_arguments);
-  app.get("/api/subjects/", api.subjects);
   app.post("/api/subjects_objects/", api.subjects_objects);
   app.post("/api/save_subjects_objects/", api.save_subjects_objects);
   app.post("/api/delete_subjects_objects/", api.delete_subjects_objects);
   app.post("/api/save_subjects/", api.save_subjects);
-  app.post("/api/update_subjects/", api.update_subjects);
   app.post("/api/save_entity/", api.save_entity);
   app.post("/api/update_entity/", api.update_entity);
   app.post("/api/entity/", api.entity);
@@ -91,4 +89,6 @@ export default function (app: Application) {
 
   //Rutas revisadas
   app.get("/api/user_models/", rt.user_models);
+  app.get("/api/subjects/", rt.subjects);
+  app.post("/api/update_subjects/", rt.update_subjects);
 }

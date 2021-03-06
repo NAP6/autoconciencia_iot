@@ -54,6 +54,10 @@ export class IoTSystemQ extends IoTSystem implements SQL_Qwerty {
     return ``;
   }
 
+  toSqlUpdate(tag: string[], value: string[]): string {
+    return ``;
+  }
+
   toObjectArray(rows): SQL_Qwerty[] {
     return [];
   }

@@ -39,6 +39,10 @@ WHERE `;
     return ``;
   }
 
+  toSqlUpdate(tag: string[], value: string[]): string {
+    return ``;
+  }
+
   toObjectArray(rows): UserQ[] {
     var results: UserQ[] = [];
     rows.forEach((element) => {

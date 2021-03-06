@@ -65,6 +65,10 @@ export class EntityQ extends Entity implements SQL_Qwerty {
     return ``;
   }
 
+  toSqlUpdate(tag: string[], value: string[]): string {
+    return ``;
+  }
+
   toObjectArray(rows): SQL_Qwerty[] {
     return [];
   }

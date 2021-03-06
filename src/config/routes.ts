@@ -4,11 +4,7 @@ import * as nv from "../app/controller/controller-navigation";
 import * as rt from "../app/controller/page_contollers";
 
 export default function (app: Application, upload: Multer) {
-  app.get("/logout", nv.logout);
   app.route("/singup").get(nv.singup).post(nv.singup_save);
-  app.get("/models", nv.loggedIn, nv.models);
-  app.post("/update_model", nv.loggedIn, nv.update_model);
-  app.get("/subject", nv.loggedIn, nv.subject);
   app.get("/object", nv.loggedIn, nv.object);
   app.get("/pre_reflexivos", nv.loggedIn, nv.pre_reflexivos);
   app.get("/reflexivos", nv.loggedIn, nv.reflexivos);
@@ -33,7 +29,10 @@ export default function (app: Application, upload: Multer) {
 
   //Rutas Revisadas
   app.get("/login", rt.login);
-  app.route("/start_session").get(rt.select_model).post(rt.start_session, rt.select_model);
+  app
+    .route("/start_session")
+    .get(rt.select_model)
+    .post(rt.start_session, rt.select_model);
   app.post(
     "/save_new_model",
     upload.single("file_modelo_xmi"),
@@ -45,4 +44,16 @@ export default function (app: Application, upload: Multer) {
     .route("/")
     .get(rt.loggedIn, rt.home)
     .post(rt.active_model, rt.loggedIn, rt.home);
+  app.get("/logout", rt.logout);
+  app
+    .route("/models")
+    .get(rt.loggedIn, rt.models)
+    .post(
+      upload.single("file_modelo_xmi"),
+      rt.save_new_model,
+      rt.loggedIn,
+      rt.models
+    );
+  app.post("/update_model", rt.loggedIn, rt.update_model);
+  app.get("/subject", rt.loggedIn, rt.subject);
 }

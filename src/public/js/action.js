@@ -182,7 +182,9 @@ function modificar_recurso() {
     if (id) {
         document.getElementById("input-id-resource-mod").value = id;
         post_api(
-            "http://localhost:3000/api/ask_deployment_resources/", { id: id },
+            "http://localhost:3000/api/ask_deployment_resources/", {
+                id: id
+            },
             cargar_recurso_para_modificar,
             (res) => {
                 console.log(res);
@@ -215,7 +217,9 @@ function cargar_recurso_para_modificar(json) {
 
 function modificarRecursoImplementacion() {
     post_api(
-        "http://localhost:3000/api/del_deployment_resources/", { id: document.getElementById("input-id-resource-mod").value },
+        "http://localhost:3000/api/del_deployment_resources/", {
+            id: document.getElementById("input-id-resource-mod").value
+        },
         (res) => {
             guardarRecursoImplementacion();
         },
@@ -302,7 +306,9 @@ function eliminar_recurso() {
     if (id) {
         if (confirm("Esta seguro de que desea eliminar el recurso")) {
             post_api(
-                "http://localhost:3000/api/del_deployment_resources/", { id: id },
+                "http://localhost:3000/api/del_deployment_resources/", {
+                    id: id
+                },
                 (res) => {
                     console.log(res);
                 },
@@ -685,26 +691,26 @@ function cargar_posibles_sujetos_modelo(json) {
     var aux_visible_activo = new Set();
     var aux_visible_inactivo = new Set();
     json.forEach((elemento) => {
-        if (!!elemento.padre && elemento.activo == 1) {
-            aux_visible_activo.add(elemento.padre);
-        } else if (!!elemento.padre && elemento.activo == 0) {
-            aux_visible_inactivo.add(elemento.padre);
+        if (!!elemento.father && elemento.active == 1) {
+            aux_visible_activo.add(elemento.father);
+        } else if (!!elemento.father && elemento.active == 0) {
+            aux_visible_inactivo.add(elemento.father);
         }
     });
 
     json.forEach((elemento) => {
         var insertar;
-        if (!elemento.padre) {
+        if (!elemento.father) {
             insertar = document.getElementById("lista_sujetos_para_cargar");
         } else {
             insertar = document.createElement("ul");
             document
-                .getElementById(`li_entidad_para_seleccion_${elemento.padre}`)
+                .getElementById(`li_entidad_para_seleccion_${elemento.father}`)
                 .appendChild(insertar);
         }
         var li = document.createElement("li");
         li.id = `li_entidad_para_seleccion_${elemento.id}`;
-        if (elemento.activo == 0 || aux_visible_inactivo.has(elemento.id)) {
+        if (elemento.active == 0 || aux_visible_inactivo.has(elemento.id)) {
             li.style.display = "list-item";
         } else {
             li.style.display = "none";
@@ -715,11 +721,11 @@ function cargar_posibles_sujetos_modelo(json) {
         checkbox.type = "checkbox";
         checkbox.classList.add(
             "form-check-input",
-            `hijo_de_${elemento.padre}_para_seleccion` /*, "sujeto_para_seleccion_padre"*/ ,
+            `hijo_de_${elemento.father}_para_seleccion` /*, "sujeto_para_seleccion_padre"*/ ,
             "checkbox_para_seleccion"
         );
         checkbox.id = `sujeto_para_seleccion_${elemento.id}`;
-        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.padre_id = elemento.father;
         checkbox.dataset.puro_id = elemento.id;
         checkbox.setAttribute(
             "onclick",
@@ -728,7 +734,7 @@ function cargar_posibles_sujetos_modelo(json) {
         var labelChek = document.createElement("label");
         labelChek.classList.add("form-check-label");
         labelChek.htmlFor = checkbox.id;
-        labelChek.innerHTML = elemento.nombre;
+        labelChek.innerHTML = elemento.name;
         li.appendChild(divFormCheck);
         divFormCheck.appendChild(checkbox);
         divFormCheck.appendChild(labelChek);
@@ -736,17 +742,17 @@ function cargar_posibles_sujetos_modelo(json) {
 
         // ===========================================================================================
 
-        if (!elemento.padre) {
+        if (!elemento.father) {
             insertar = document.getElementById("lista_sujetos_seleccionados");
         } else {
             insertar = document.createElement("ul");
             document
-                .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+                .getElementById(`li_entidad_seleccionado_${elemento.father}`)
                 .appendChild(insertar);
         }
         li = document.createElement("li");
         li.id = `li_entidad_seleccionado_${elemento.id}`;
-        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+        if (elemento.active == 1 || aux_visible_activo.has(elemento.id)) {
             li.style.display = "list-item";
         } else {
             li.style.display = "none";
@@ -757,13 +763,13 @@ function cargar_posibles_sujetos_modelo(json) {
         checkbox.type = "checkbox";
         checkbox.classList.add(
             "form-check-input",
-            `hijo_de_${elemento.padre}_seleccionado`,
+            `hijo_de_${elemento.father}_seleccionado`,
             "checkbox_seleccionado"
         );
         checkbox.id = `sujeto_seleccionado_${elemento.id}`;
-        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.padre_id = elemento.father;
         checkbox.dataset.puro_id = elemento.id;
-        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.dataset.nombre = elemento.name;
         checkbox.setAttribute(
             "onclick",
             "verificar_seleccion_hijo_padre(this, 'seleccionado');"
@@ -775,9 +781,9 @@ function cargar_posibles_sujetos_modelo(json) {
         button.classList.add("btn", "btn-link", "py-0", "px-0");
         button.setAttribute(
             "onclick",
-            `abrirModalObjetosSujetosColor('${elemento.id}', '${elemento.nombre}');`
+            `abrirModalObjetosSujetosColor('${elemento.id}', '${elemento.name}');`
         );
-        button.innerHTML = elemento.nombre;
+        button.innerHTML = elemento.name;
         labelChek.appendChild(button);
         li.appendChild(divFormCheck);
         divFormCheck.appendChild(checkbox);
@@ -998,7 +1004,9 @@ function abrirModalObjetosSujetos(id, nombre) {
 
 function cargar_arbol(id) {
     post_api(
-        (url = "http://localhost:3000/api/subjects_objects"), { id: id },
+        (url = "http://localhost:3000/api/subjects_objects"), {
+            id: id
+        },
         (json) => {
             document.getElementById(`arbol_objetivos_del_sujeto`).innerHTML = "";
             json.forEach((e) => {
@@ -1624,7 +1632,9 @@ function cargar_criterios_table(json) {
         else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
         post_api(
-            "http://localhost:3000/api/umbral", { id: cd.id },
+            "http://localhost:3000/api/umbral", {
+                id: cd.id
+            },
             cargar_umbral_table,
             () => {
                 console.log("Error Al cargar el Umbral");
@@ -2370,7 +2380,7 @@ function error_cargar_models_trabajo_actual(err) {
 var entidades_list = [];
 var entidades_aux = {};
 
-$("#CategoriaEntidades").change(function() {
+$("#CategoriaEntidades").change(function () {
     entidad_selecciona_seccion_objetos_modal = undefined;
     var limpiar = document.getElementById("lista_entidades_para_cargar");
     limpiar.innerHTML = "";
@@ -3308,7 +3318,10 @@ function generar_flujo_datos_select() {
     var porpiedadSeleccionada = document.getElementById("proiedad_recoleccion").value;
     if (comunicacion != "Seleccione.." && porpiedadSeleccionada != "-6") {
         post_api(
-            "http://localhost:3000/api/get_flujo_datos/", { comunicacion: comunicacion, propiedad: porpiedadSeleccionada },
+            "http://localhost:3000/api/get_flujo_datos/", {
+                comunicacion: comunicacion,
+                propiedad: porpiedadSeleccionada
+            },
             cargar_select_flujo_datos, (res) => {
                 console.log(res);
             });
@@ -3443,7 +3456,9 @@ function verificarSeleccionProceso(elemento) {
     SujetoGuardarProceso = elemento.dataset.puro_id;
     Array.from(checkbox).forEach((element) => {
         post_api(
-            "http://localhost:3000/api/objetivos_sujetos", { id: SujetoGuardarProceso },
+            "http://localhost:3000/api/objetivos_sujetos", {
+                id: SujetoGuardarProceso
+            },
             cargar_objetivos_sujetos_select,
             error_cargar_objetivos_sujetos_select
         );
@@ -3475,7 +3490,7 @@ function error_cargar_objetivos_sujetos_select(error) {
     console.log(error);
 }
 
-$("#CategoriaEntidadesProcesos").change(function() {
+$("#CategoriaEntidadesProcesos").change(function () {
     var limpiar2 = document.getElementById(
         "lista_entidades_seleccionadas_procesos"
     );
@@ -3581,7 +3596,9 @@ function cargar_aspectos(elemento, lado) {
         error_cargar_aspectos_select
     );
     post_api(
-        "http://localhost:3000/api/properties", { id: idObjeto },
+        "http://localhost:3000/api/properties", {
+            id: idObjeto
+        },
         cargar_propiedades_select,
         error_cargar_propiedades_select
     );
@@ -3612,7 +3629,7 @@ function cargar_aspectos_select(json) {
 function error_cargar_aspectos_select(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
-$("#Aspectos_autoconsciencia").change(function() {
+$("#Aspectos_autoconsciencia").change(function () {
     document.getElementById("tipo_comunicacion").disabled = false;
     document.getElementById("alcance_recoleccion").disabled = false;
     document.getElementById("proiedad_recoleccion").disabled = false;
@@ -3749,7 +3766,7 @@ function error_cargar_select_tipo_recoleccion() {
     alert("No se cargo el select tipo comunicacion");
 }
 
-$("#criterio_de_decision").change(function() {
+$("#criterio_de_decision").change(function () {
     var seleccionCriterio = document.getElementById("criterio_de_decision");
     var tipo_criterio =
         seleccionCriterio.options[seleccionCriterio.selectedIndex].text;
@@ -3788,7 +3805,9 @@ function visibilidad_acciones_umbral(id) {
     document.getElementById("bd_del_activo").classList.replace("d-none", "inline-block");
     document.getElementById("tabla_acciones_umbral").classList.replace("d-none", "inline-block");
     post_api(
-        "http://localhost:3000/api/get_accion/", { id: id },
+        "http://localhost:3000/api/get_accion/", {
+            id: id
+        },
         cargar_accion_table,
         (res) => {
             console.log(res);
@@ -3811,7 +3830,9 @@ function cerrar_modal_activos() {
 
 function guardarAccionUmbral() {
     post_api(
-        "http://localhost:3000/api/get_metodo_aprendizaje", { id: 22 },
+        "http://localhost:3000/api/get_metodo_aprendizaje", {
+            id: 22
+        },
         enviarDatos_acciones_umbrales,
         errorenviarDatos_acciones_umbrales
     )
@@ -3880,7 +3901,9 @@ function mensaje_exitosoEliminacionAcciones(json) {
 
 function cargarDespuesdeEliminarAcciones() {
     post_api(
-        "http://localhost:3000/api/get_accion/", { id: UmbralId },
+        "http://localhost:3000/api/get_accion/", {
+            id: UmbralId
+        },
         cargar_accion_table,
         (res) => {
             console.log(res);
@@ -3942,7 +3965,9 @@ function abrirModalMapeoParametros() {
     var id = document.getElementById("recurso").value;
     if (id) {
         post_api(
-            "http://localhost:3000/api/ask_deployment_resources/", { id: id },
+            "http://localhost:3000/api/ask_deployment_resources/", {
+                id: id
+            },
             cargar_modal_mapeo_parametros,
             (res) => {
                 console.log(res);
@@ -4012,7 +4037,9 @@ function cargar_modal_mapeo_parametros(json) {
     });
 
     post_api(
-        "http://localhost:3000/api/get_enumeracion", { tipo: "TIPO_METRICA" },
+        "http://localhost:3000/api/get_enumeracion", {
+            tipo: "TIPO_METRICA"
+        },
         cargar_select_mapeo_tipo,
         (err) => {
             alert(err);
@@ -4099,9 +4126,13 @@ function SeleccionaRecursoSelect(element) {
 
     if (element.value) {
         post_api(
-            "http://localhost:3000/api/ask_deployment_resources_select/", { tipo: element.value },
+            "http://localhost:3000/api/ask_deployment_resources_select/", {
+                tipo: element.value
+            },
             cargar_select_recurso_proceso,
-            json => { console.log(json); }
+            json => {
+                console.log(json);
+            }
         );
     }
 }
@@ -4309,7 +4340,9 @@ function modificarProcesoPreReflexivo() {
     });
     if (!!id) {
         post_api(
-            "http://localhost:3000/api/procesos_pre_reflexive_id/", { id: id },
+            "http://localhost:3000/api/procesos_pre_reflexive_id/", {
+                id: id
+            },
             cargar_modificar_procesos_pre,
             mensaje_error_cargar_modificar_procesos_pre
         );
@@ -4522,7 +4555,9 @@ function verificarSeleccionProceso_reflexivo(elemento) {
         element.checked = false;
         document.getElementById("CategoriaEntidadesProcesos_reflexivos").disabled = true;
         post_api(
-            "http://localhost:3000/api/objetivos_sujetos", { id: sujetoGuardarproceso_reflexivo },
+            "http://localhost:3000/api/objetivos_sujetos", {
+                id: sujetoGuardarproceso_reflexivo
+            },
             cargar_objetivos_sujetos_select_reflexivos,
             error_cargar_objetivos_sujetos_select_reflexivos
         );
@@ -4551,7 +4586,7 @@ function cargar_objetivos_sujetos_select_reflexivos(json) {
 function error_cargar_objetivos_sujetos_select_reflexivos(error) {
     console.log(error);
 }
-$("#CategoriaEntidadesProcesos_reflexivos").change(function() {
+$("#CategoriaEntidadesProcesos_reflexivos").change(function () {
     var limpiar2 = document.getElementById(
         "lista_entidades_seleccionadas_procesos_reflexivos"
     );
@@ -4937,7 +4972,7 @@ function cargar_select_criterios_metodos_reflexivos(json) {
 function error_cargar_select_metodos_reflexivos(error) {
     alert("Error cargadon select criterios reflexivos");
 }
-$("#Aspectos_autoconsciencia_reflexivos").change(function() {
+$("#Aspectos_autoconsciencia_reflexivos").change(function () {
     var limpiar = document.getElementById("metrica_indirecta_reflexivos");
     limpiar.innerHTML = "";
     var seleccionIndicador = document.getElementById("Aspectos_autoconsciencia_reflexivos");
@@ -5019,9 +5054,13 @@ function SeleccionaRecursoReflexivosMetodos(element) {
 
     if (element.value) {
         post_api(
-            "http://localhost:3000/api/ask_deployment_resources_select/", { tipo: element.value },
+            "http://localhost:3000/api/ask_deployment_resources_select/", {
+                tipo: element.value
+            },
             cargar_select_recurso_proceso_metodos,
-            json => { console.log(json); }
+            json => {
+                console.log(json);
+            }
         );
     }
 }
@@ -5047,9 +5086,13 @@ function SeleccionaRecursoReflexivosModelos(element) {
 
     if (element.value) {
         post_api(
-            "http://localhost:3000/api/ask_deployment_resources_select/", { tipo: element.value },
+            "http://localhost:3000/api/ask_deployment_resources_select/", {
+                tipo: element.value
+            },
             cargar_select_recurso_proceso_modelos,
-            json => { console.log(json); }
+            json => {
+                console.log(json);
+            }
         );
     }
 }
@@ -5075,7 +5118,9 @@ function abrirMapeoParametros_metodos() {
     var id = document.getElementById("recurso_reflexivos").value;
     if (id) {
         post_api(
-            "http://localhost:3000/api/ask_deployment_resources/", { id: id },
+            "http://localhost:3000/api/ask_deployment_resources/", {
+                id: id
+            },
             cargar_modal_mapeo_parametros_metodos,
             (res) => {
                 console.log(res);
@@ -5142,7 +5187,9 @@ function cargar_modal_mapeo_parametros_metodos(json) {
         }
     });
     post_api(
-        "http://localhost:3000/api/get_enumeracion", { tipo: "TIPO_METRICA" },
+        "http://localhost:3000/api/get_enumeracion", {
+            tipo: "TIPO_METRICA"
+        },
         cargar_select_mapeo_tipo_metodos,
         (err) => {
             alert(err);
@@ -5162,7 +5209,9 @@ function cargar_select_mapeo_tipo_metodos(json) {
 
     });
     post_api(
-        "http://localhost:3000/api/get_enumeracion", { tipo: "TIPO_METRICA_METODO" },
+        "http://localhost:3000/api/get_enumeracion", {
+            tipo: "TIPO_METRICA_METODO"
+        },
         cargar_select_mapeo_tipo_metodos_2,
         (err) => {
             alert(err);
@@ -5187,7 +5236,9 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
     console.log(elemento.value);
     if (elemento.value == 24) {
         post_api(
-            "http://localhost:3000/api/get_metodo_aprendizaje", { id: 23 },
+            "http://localhost:3000/api/get_metodo_aprendizaje", {
+                id: 23
+            },
             cargar_select_mapeo_variables_simulacion,
             error_cargar_select_mapeo_variables_simulacion
         )
@@ -5258,7 +5309,9 @@ function abrirMapeoParametros_modelos() {
     var id = document.getElementById("recurso_modelos_reflexivos").value;
     if (id) {
         post_api(
-            "http://localhost:3000/api/ask_deployment_resources/", { id: id },
+            "http://localhost:3000/api/ask_deployment_resources/", {
+                id: id
+            },
             cargar_modal_mapeo_parametros_modelos,
             (res) => {
                 console.log(res);
@@ -5326,7 +5379,9 @@ function cargar_modal_mapeo_parametros_modelos(json) {
         }
     });
     post_api(
-        "http://localhost:3000/api/get_enumeracion", { tipo: "TIPO_METRICA" },
+        "http://localhost:3000/api/get_enumeracion", {
+            tipo: "TIPO_METRICA"
+        },
         cargar_select_mapeo_tipo_modelos,
         (err) => {
             alert(err);
@@ -5665,7 +5720,9 @@ function error_cargar_select_tipo_recoleccion_metodos_modificar() {
 function cargar_select_propiedades_pre_reflexivos() {
     objetoIdReco = document.getElementById("id_objeto_seleccionado").value;
     post_api(
-        "http://localhost:3000/api/properties", { id: objetoIdReco },
+        "http://localhost:3000/api/properties", {
+            id: objetoIdReco
+        },
         cargar_propiedades_select_modificar,
         error_cargar_propiedades_select_modificar
     );
@@ -5734,7 +5791,9 @@ function agregar_escenario_simulacion() {
 
 function guardarEscenarioSimulacions() {
     post_api(
-        "http://localhost:3000/api/get_metodo_aprendizaje", { id: 23 },
+        "http://localhost:3000/api/get_metodo_aprendizaje", {
+            id: 23
+        },
         enviarDatos_escenarios_simulacion,
         errorenviarDatos_escenarios_simulacion
     )
@@ -5785,7 +5844,9 @@ function eliminar_escenario_simulacion() {
     });
     if (!!id) {
         post_api(
-            "http://localhost:3000/api/del_escenario_simulacion/", { id: id },
+            "http://localhost:3000/api/del_escenario_simulacion/", {
+                id: id
+            },
             (res) => {
                 console.log(res);
             },
@@ -5854,7 +5915,9 @@ function visibilidad_variables_valores(id) {
 
 function consultar_tabla_valores_variables(id) {
     post_api(
-        "http://localhost:3000/api/get_variables_valor/", { id: id },
+        "http://localhost:3000/api/get_variables_valor/", {
+            id: id
+        },
         cargar_variables_valor_table,
         (res) => {
             console.log(res);
@@ -6187,7 +6250,7 @@ function error_cargar_sujetos_activos_procesos_modificar_reflexivos(error) {
     alert("Error al cargar los datos del modelo: " + error);
 }
 
-$("#criterio_de_decision_modelo").change(function() {
+$("#criterio_de_decision_modelo").change(function () {
     var seleccionCriterio = document.getElementById("criterio_de_decision_modelo");
     var tipo_criterio = seleccionCriterio.options[seleccionCriterio.selectedIndex].text;
     data = {
@@ -6223,7 +6286,9 @@ function visibilidad_acciones_umbral_reflexivo(id) {
     document.getElementById("bd_del_activo_reflexivos").classList.replace("d-none", "inline-block");
     document.getElementById("tabla_acciones_umbral_reflexivos").classList.replace("d-none", "inline-block");
     post_api(
-        "http://localhost:3000/api/get_accion/", { id: id },
+        "http://localhost:3000/api/get_accion/", {
+            id: id
+        },
         cargar_accion_table_reflexivos,
         (res) => {
             console.log(res);
@@ -6305,7 +6370,9 @@ function agregar_variables_simulacion() {
 
 function guardarVariableSimulacion() {
     post_api(
-        "http://localhost:3000/api/get_metodo_aprendizaje", { id: 23 },
+        "http://localhost:3000/api/get_metodo_aprendizaje", {
+            id: 23
+        },
         enviarDatos_variables_simulacion,
         errorenviarDatos_variables_simulacion
     )
@@ -6314,7 +6381,10 @@ function guardarVariableSimulacion() {
 function enviarDatos_variables_simulacion(json) {
     var nombre = document.getElementById("nombre_variable_simulacion").value;
     post_api(
-        "http://localhost:3000/api/add_variable_simulacion/", { nombre: nombre, mea_id: json.id },
+        "http://localhost:3000/api/add_variable_simulacion/", {
+            nombre: nombre,
+            mea_id: json.id
+        },
         variables_guardadas_correctamente,
         error_guardando_variables
     );
@@ -6351,7 +6421,9 @@ function eliminar_variables_simulacion() {
     });
     if (!!id) {
         post_api(
-            "http://localhost:3000/api/del_variable_simulacion/", { id: id },
+            "http://localhost:3000/api/del_variable_simulacion/", {
+                id: id
+            },
             (res) => {
                 console.log(res);
             },

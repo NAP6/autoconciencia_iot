@@ -19,7 +19,7 @@ export class DataFlowQ extends DataFlow implements SQL_Qwerty {
   }
 
   toSqlInsert(tag: string[], value: string[]): string {
-    var sql =  `INSERT INTO 
+    var sql = `INSERT INTO 
 	  	flujodatos (
 	  		flu_descripcion,
 		  	flu_tipo_comunicacion
@@ -38,6 +38,10 @@ export class DataFlowQ extends DataFlow implements SQL_Qwerty {
   }
 
   toSqlDelete(tag: string[], value: string[]): string {
+    return ``;
+  }
+
+  toSqlUpdate(tag: string[], value: string[]): string {
     return ``;
   }
 

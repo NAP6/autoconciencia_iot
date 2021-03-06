@@ -41,6 +41,10 @@ export class PropertyQ extends Property implements SQL_Qwerty {
     return ``;
   }
 
+  toSqlUpdate(tag: string[], value: string[]): string {
+    return ``;
+  }
+
   toObjectArray(rows): SQL_Qwerty[] {
     return [];
   }

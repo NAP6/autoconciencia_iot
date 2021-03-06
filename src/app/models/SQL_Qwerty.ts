@@ -5,5 +5,6 @@ export interface SQL_Qwerty {
   toSqlInsert(tag:string[],value:string[]): string;
   toSqlSelect(tag:string[],value:string[]): string;
   toSqlDelete(tag:string[],value:string[]): string;
+  toSqlUpdate(tag:string[],value:string[]): string;
   toObjectArray(rows): any[];
 }
