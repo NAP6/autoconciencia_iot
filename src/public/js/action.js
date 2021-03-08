@@ -3206,29 +3206,30 @@ if (document.getElementById("lista_sujetos_activos"))
     );
 
 function cargar_sujetos_activos(json) {
+    console.log(json);
     var aux_visible_activo = new Set();
     var aux_visible_inactivo = new Set();
     json.forEach((elemento) => {
-        if (!!elemento.padre && elemento.activo == 1) {
-            aux_visible_activo.add(elemento.padre);
-        } else if (!!elemento.padre && elemento.activo == 0) {
-            aux_visible_inactivo.add(elemento.padre);
+        if (!!elemento.father && elemento.active == 1) {
+            aux_visible_activo.add(elemento.father);
+        } else if (!!elemento.father && elemento.active == 0) {
+            aux_visible_inactivo.add(elemento.father);
         }
     });
     console.log(aux_visible_inactivo);
     json.forEach((elemento) => {
         var insertar;
-        if (!elemento.padre) {
+        if (!elemento.father) {
             insertar = document.getElementById("lista_sujetos_activos");
         } else {
             insertar = document.createElement("ul");
             document
-                .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+                .getElementById(`li_entidad_seleccionado_${elemento.father}`)
                 .appendChild(insertar);
         }
         li = document.createElement("li");
         li.id = `li_entidad_seleccionado_${elemento.id}`;
-        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+        if (elemento.active == 1 || aux_visible_activo.has(elemento.id)) {
             li.style.display = "list-item";
         } else {
             li.style.display = "none";
@@ -3239,21 +3240,21 @@ function cargar_sujetos_activos(json) {
         checkbox.type = "checkbox";
         checkbox.classList.add(
             "form-check-input",
-            `hijo_de_${elemento.padre}_seleccionado`,
+            `hijo_de_${elemento.father}_seleccionado`,
             "checkbox_seleccionado"
         );
         checkbox.id = `sujeto_seleccionado_${elemento.id}`;
         checkbox.name = "checkbox_sujetos_objetos";
-        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.padre_id = elemento.father;
         checkbox.dataset.puro_id = elemento.id;
-        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.dataset.nombre = elemento.name;
         checkbox.setAttribute("onclick", "verificarSeleccion(this);");
         labelChek = document.createElement("label");
         labelChek.classList.add("form-check-label");
         labelChek.htmlFor = checkbox.id;
         var button = document.createElement("button");
         button.classList.add("btn", "py-0", "px-0");
-        button.innerHTML = elemento.nombre;
+        button.innerHTML = elemento.name;
         labelChek.appendChild(button);
         li.appendChild(divFormCheck);
         divFormCheck.appendChild(checkbox);
