@@ -1,0 +1,41 @@
+<div class="modal fade" id="modal_agregar_variables_valores_simulacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Variables y valores de simulación
+                </h5>
+                <button type="button" onclick="cerrar_modal_variables_valor();" class="close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="recurso">Variable:</label>
+                            </div>
+                            <select class="custom-select" name="seleccionar_variable_simulacion" id="seleccionar_variable_simulacion">
+                        </select>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Valor:</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="agregar_valor_simulacion" style="text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="guardarvariables_valor()">Guardar</button>
+                <button type="button" class="btn btn-secondary" onclick="cerrar_modal_variables_valor();">
+          Cancelar
+        </button>
+
+            </div>
+        </div>
+    </div>
+</div>

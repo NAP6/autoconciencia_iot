@@ -49,13 +49,130 @@ class json {
         catch (error) {
             console.log("No se ha ingresado ningun valor");
         }
+        this.json = json;
         return json;
     }
     getSystem() {
-        return [];
+        var nameModel = Object.keys(this.json)[0];
+        const ob = this.json[nameModel]["represents"];
+        return ob;
     }
+    /*public getEntity(): [systemEnt] {
+      var nameModel: string = Object.keys(this.json)[0];
+      const ob = this.json[nameModel]["containsEntity"];
+      return ob;
+    }*/
     getEntity() {
-        return [];
+        var nameM = Object.keys(this.json)[0];
+        var entidades = this.json[nameM]["containsEntity"];
+        var obj;
+        entidades.forEach(element => {
+            element.$["xsi:type"] = element.$["xsi:type"].split(':')[1];
+            var auxComputing;
+            var auxEntity;
+            var auxcontain;
+            if (element.containsResource) {
+                auxcontain = this.extraerItems(element.containsResource);
+            }
+            if (element.containsComputingNode) {
+                auxComputing = this.extraerItems(element.containsComputingNode);
+            }
+            if (element.subPhysicalEntity) {
+                auxEntity = this.extraerItems(element.subPhysicalEntity, true);
+            }
+            var data = { $: element.$ };
+            if (element.has) {
+                var hasAux = [];
+                //data["has"] = element.has;
+                element.has.forEach(element2 => {
+                    var aux2 = { $: element2.$ };
+                    if (element2.$.hasRulePropertyToDataColumn) {
+                        var nameModel = Object.keys(this.json)[0];
+                        var ob = this.json[nameModel]["containsDataFlow"];
+                        var dataF = this.extracDataFlow(element2.$.hasRulePropertyToDataColumn, ob);
+                        console.log(dataF);
+                        aux2.dataFlow = dataF;
+                    }
+                    hasAux.push(aux2);
+                });
+                data["has"] = hasAux;
+            }
+            if (auxComputing)
+                data["comput"] = auxComputing;
+            if (auxEntity)
+                data["Entity"] = auxEntity;
+            if (auxcontain)
+                data["containsResource"] = auxcontain;
+            if (obj)
+                obj.push(data);
+            else
+                obj = [data];
+        });
+        return obj;
+    }
+    extraerItems(item, isSubEntity = false) {
+        var obj;
+        item.forEach(element => {
+            if (isSubEntity) {
+                element.$["xsi:type"] = "PhysicalEntity";
+            }
+            else if (element.$["xsi:type"]) {
+                element.$["xsi:type"] = element.$["xsi:type"].split(':')[1];
+            }
+            var auxComputing;
+            var auxEntity;
+            var auxcontain;
+            if (element.containsResource) {
+                auxcontain = this.extraerItems(element.containsResource);
+            }
+            if (element.containsComputingNode) {
+                auxComputing = this.extraerItems(element.containsComputingNode);
+            }
+            if (element.subPhysicalEntity) {
+                auxEntity = this.extraerItems(element.subPhysicalEntity, true);
+            }
+            var data = { $: element.$ };
+            if (element.has) {
+                var hasAux = [];
+                //data["has"] = element.has;
+                element.has.forEach(element2 => {
+                    var aux2 = { $: element2.$ };
+                    if (element2.$.hasRulePropertyToDataColumn) {
+                        var nameModel = Object.keys(this.json)[0];
+                        var ob = this.json[nameModel]["containsDataFlow"];
+                        var dataF = this.extracDataFlow(element2.$.hasRulePropertyToDataColumn, ob);
+                        console.log(dataF);
+                        aux2.dataFlow = dataF;
+                    }
+                    hasAux.push(aux2);
+                });
+                data["has"] = hasAux;
+            }
+            if (auxComputing)
+                data["comput"] = auxComputing;
+            if (auxEntity)
+                data["Entity"] = auxEntity;
+            if (auxcontain)
+                data["containsResource"] = auxcontain;
+            if (obj)
+                obj.push(data);
+            else
+                obj = [data];
+        });
+        return obj;
+    }
+    extracDataFlow(listDataFlow, listJson) {
+        var lista = listDataFlow.split(" ");
+        var obj = [];
+        lista.forEach(element => {
+            var aux = element.split("/").join("");
+            var aux2 = aux.split("@");
+            var indice = aux2[1].split(".");
+            var elem = (listJson[parseInt(indice[1])]);
+            var flu = { id: elem.$.id, description: elem.$.description, communicationType: elem.$.communicationType };
+            obj.push(flu);
+        });
+        return obj;
     }
 }
 exports.json = json;

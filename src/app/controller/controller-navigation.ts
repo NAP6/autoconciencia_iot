@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { mysql_connector } from "../data/database";
 import { json as jsModel } from "../models/handling-json";
+import { database2 } from "../data/database2";
+import * as fs from "fs";
+import { parseString } from "xml2js";
+import { JSON2Architecture } from "../models/JSON2Architecture";
+import { SelfAwarnessQ } from "../models/selfAwarness/qwertyModels/SelfAwarnessQ";
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
   if (req.session!.user) {
@@ -25,6 +30,7 @@ export function login(req: Request, res: Response) {
 
 export function logout(req: Request, res: Response, next: NextFunction) {
   delete req.session?.user;
+  delete req.session?.active_model;
   res.redirect("/login");
 }
 
@@ -69,7 +75,6 @@ export function start_session(req: Request, res: Response, next: NextFunction) {
       res.redirect("/");
     }
   });
-
 }
 
 export function select_model(req: Request, res: Response) {
@@ -179,27 +184,27 @@ export function proceso_pre_reflexivo(req: Request, res: Response) {
   });
 }
 export function modificar_pre_reflexivos(req: Request, res: Response) {
-  var id =req.body.proceso_seleccionado;
+  var id = req.body.proceso_seleccionado;
   var idUser = req.session?.user.userID;
-  var db= new mysql_connector();
-  db.getUser_procesos_pre_reflexive_id(idUser, id,(jsonEscala: object) => {
+  var db = new mysql_connector();
+  db.getUser_procesos_pre_reflexive_id(idUser, id, (jsonEscala: object) => {
     res.render("modificar_pre_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
-      modificar:jsonEscala,
+      modificar: jsonEscala,
       session: req.session,
     });
   });
 }
 export function modificar_reflexivos(req: Request, res: Response) {
-  var id =req.body.proceso_reflexivo_seleccionado;
+  var id = req.body.proceso_reflexivo_seleccionado;
   var idUser = req.session?.user.userID;
-  var db= new mysql_connector();
-  db.getUser_procesos_reflexive_id(idUser, id,(jsonEscala: object) => {
+  var db = new mysql_connector();
+  db.getUser_procesos_reflexive_id(idUser, id, (jsonEscala: object) => {
     res.render("modificar_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
-      modificar:jsonEscala,
+      modificar: jsonEscala,
       session: req.session,
     });
   });
@@ -211,42 +216,69 @@ export function procesos_reflexivos(req: Request, res: Response) {
     session: req.session,
   });
 }
-export function generate_model(req: Request, res: Response) {
-  var modeloID=req.session?.active_model.modelID;
-  var db = new mysql_connector();
-  db.generar_modelo(modeloID,(modelo:any)=>{
-console.log();
-res.render("generate_model", {
-  error: req.flash("error"),
-  succes: req.flash("succes"),
-  model:JSON.stringify(modelo,null,"  "),
-  session: req.session,
-});
+export async function generate_model(req: Request, res: Response) {
+  var modeloID = req.session?.active_model.modelID;
+  var db = new database2();
+  var modelo: SelfAwarnessQ = new SelfAwarnessQ(-1, "", "", "", "");
+  var rows = await db.qwerty(
+    modelo.toSqlInsert(["/@/MODEL/@/"], [modeloID.toString()])
+  );
+  modelo = modelo.toObjectArray(rows)[0];
+  console.log(modelo);
+  res.render("generate_model", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+    model: JSON.stringify(modelo, null, "  "),
   });
-
 }
 
-export function save_new_model(
+export async function save_new_model(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   if (req.session!.user) {
-    var js = new jsModel();
-    js.xml_file2json(req.file.path);
     var nombre = req.body.nombre_modelo;
     var descripcion = req.body.descripcion_ecenario;
     var autor = req.body.autor_modelo;
-    var user_id=req.session?.user.userID;
+    var user_id = req.session?.user.userID;
     var db = new mysql_connector();
-    db.save_newModel(nombre, descripcion, autor, js.getJSON(),user_id, (id: string) => {
-      db.getModel(id, (active_model: {nombre: string, descripcion: string, modelID: string}) => {
-        req.session!.active_model = active_model;
-      db.save_subjects(active_model.modelID, js.getSystem());
-      db.save_entity(active_model.modelID,js.getEntity());
-        next();
+    //######################
+    var db2 = new database2();
+    var json: Object = [];
+    try {
+      const xml = fs.readFileSync(req.file.path);
+      parseString(xml, function (err: Error, result: Object) {
+        if (err) throw err;
+        json = result;
       });
-    });
+      fs.unlink(req.file.path, (err) => {
+        if (err) throw err;
+      });
+    } catch (error) {
+      console.log("No se ha ingresado ningun valor");
+    }
+    var arquitectura = new JSON2Architecture(json);
+    var modelo = new SelfAwarnessQ(
+      -1,
+      nombre,
+      descripcion,
+      autor,
+      JSON.stringify(json, null, "  ")
+    );
+    var rows = await db2.qwerty(
+      modelo.toSqlInsert(["/@/USER/@/"], [user_id.toString()])
+    );
+    db2.architecture(arquitectura, rows.insertId.toString());
+    req.session!.active_model = {
+      nombre: modelo.name,
+      descripcion: modelo.description,
+      modelID: rows.insertId.toString(),
+    };
+    console.log(req.session!.active_model);
+    //#####################################################
+    next();
   } else {
     res.redirect("/login");
   }
@@ -259,8 +291,6 @@ export function active_model(req: Request, res: Response, next: NextFunction) {
     next();
   });
 }
-
-
 
 export function home(req: Request, res: Response) {
   res.render("principal", {

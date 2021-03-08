@@ -30,4 +30,8 @@ export class Property {
   get dataFlow(): DataFlow[] {
     return this._dataFlow;
   }
+
+  set dataFlow(dataFlow: DataFlow[]) {
+    this._dataFlow = dataFlow;
+  }
 }

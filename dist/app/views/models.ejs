@@ -1,0 +1,19 @@
+<%- include('parts/before_the_body'); %>
+    <%- include('parts/sidebar_menu'); %>
+
+        <div id="layoutSidenav_content">
+            <main id="model_page" class="container-fluid">
+                <div class="row justify-content-between">
+                    <div class="col-12 shadow p-3 mb-5 bg-white rounded">
+                        <h4 class="text-right">Area de Trabajo:
+                            <%- session.active_model.nombre %>
+                        </h4>
+                    </div>
+                </div>
+                <div id='alert-zone'></div>
+                <%- include('parts/create_model/cargar_modelo'); %>
+                    <%- include('parts/create_model/modal/modal_json'); %>
+            </main>
+        </div>
+
+        <%- include('parts/after_the_body'); %>
