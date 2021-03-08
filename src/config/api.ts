@@ -91,4 +91,6 @@ export default function (app: Application) {
   app.get("/api/user_models/", rt.user_models);
   app.get("/api/subjects/", rt.subjects);
   app.post("/api/update_subjects/", rt.update_subjects);
+ // app.post("/api/entitys/", rt.entitys);
+
 }

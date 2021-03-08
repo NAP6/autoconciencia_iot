@@ -31,7 +31,6 @@ export class IoTSystemQ extends IoTSystem implements SQL_Qwerty {
                 sql += " AND ";
             }
         }
-        console.log(sql)
         return sql + ' ORDER BY id ';
     }
 

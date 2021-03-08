@@ -6,3 +6,4 @@ export { active_model, home } from "./page_contollers/home";
 export { logout } from "./page_contollers/logOut";
 export { models, update_model } from "./page_contollers/models";
 export { subject, subjects, update_subjects } from "./page_contollers/subject";
+export { entity, entitys, update_entitys } from "./page_contollers/entity";

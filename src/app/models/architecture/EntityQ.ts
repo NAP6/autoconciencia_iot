@@ -58,7 +58,18 @@ export class EntityQ extends Entity implements SQL_Qwerty {
   }
 
   toSqlSelect(tag: string[], value: string[]): string {
-    return ``;
+    var tagList={
+      "/@/MODEL/@/":"ma_id= ",
+    };
+    var sql=`SELECT obj_id as id, obj_nombre as name, obj_tipo as obj_type, obj_activo as active, obj_padre as father FROM objeto WHERE `
+    for (var i = 0; i < tag.length; i++) {
+      sql += tagList[tag[i]] + value[i];
+      if (i < tag.length - 1) {
+          sql += " AND ";
+      }
+  }
+  console.log(sql);
+    return sql+'  ORDER BY  ';
   }
 
   toSqlDelete(tag: string[], value: string[]): string {

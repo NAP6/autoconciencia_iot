@@ -2380,7 +2380,7 @@ function error_cargar_models_trabajo_actual(err) {
 var entidades_list = [];
 var entidades_aux = {};
 
-$("#CategoriaEntidades").change(function () {
+$("#CategoriaEntidades").change(function() {
     entidad_selecciona_seccion_objetos_modal = undefined;
     var limpiar = document.getElementById("lista_entidades_para_cargar");
     limpiar.innerHTML = "";
@@ -3490,7 +3490,7 @@ function error_cargar_objetivos_sujetos_select(error) {
     console.log(error);
 }
 
-$("#CategoriaEntidadesProcesos").change(function () {
+$("#CategoriaEntidadesProcesos").change(function() {
     var limpiar2 = document.getElementById(
         "lista_entidades_seleccionadas_procesos"
     );
@@ -3629,7 +3629,7 @@ function cargar_aspectos_select(json) {
 function error_cargar_aspectos_select(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
-$("#Aspectos_autoconsciencia").change(function () {
+$("#Aspectos_autoconsciencia").change(function() {
     document.getElementById("tipo_comunicacion").disabled = false;
     document.getElementById("alcance_recoleccion").disabled = false;
     document.getElementById("proiedad_recoleccion").disabled = false;
@@ -3766,7 +3766,7 @@ function error_cargar_select_tipo_recoleccion() {
     alert("No se cargo el select tipo comunicacion");
 }
 
-$("#criterio_de_decision").change(function () {
+$("#criterio_de_decision").change(function() {
     var seleccionCriterio = document.getElementById("criterio_de_decision");
     var tipo_criterio =
         seleccionCriterio.options[seleccionCriterio.selectedIndex].text;
@@ -4586,7 +4586,7 @@ function cargar_objetivos_sujetos_select_reflexivos(json) {
 function error_cargar_objetivos_sujetos_select_reflexivos(error) {
     console.log(error);
 }
-$("#CategoriaEntidadesProcesos_reflexivos").change(function () {
+$("#CategoriaEntidadesProcesos_reflexivos").change(function() {
     var limpiar2 = document.getElementById(
         "lista_entidades_seleccionadas_procesos_reflexivos"
     );
@@ -4972,7 +4972,7 @@ function cargar_select_criterios_metodos_reflexivos(json) {
 function error_cargar_select_metodos_reflexivos(error) {
     alert("Error cargadon select criterios reflexivos");
 }
-$("#Aspectos_autoconsciencia_reflexivos").change(function () {
+$("#Aspectos_autoconsciencia_reflexivos").change(function() {
     var limpiar = document.getElementById("metrica_indirecta_reflexivos");
     limpiar.innerHTML = "";
     var seleccionIndicador = document.getElementById("Aspectos_autoconsciencia_reflexivos");
@@ -6250,7 +6250,7 @@ function error_cargar_sujetos_activos_procesos_modificar_reflexivos(error) {
     alert("Error al cargar los datos del modelo: " + error);
 }
 
-$("#criterio_de_decision_modelo").change(function () {
+$("#criterio_de_decision_modelo").change(function() {
     var seleccionCriterio = document.getElementById("criterio_de_decision_modelo");
     var tipo_criterio = seleccionCriterio.options[seleccionCriterio.selectedIndex].text;
     data = {
