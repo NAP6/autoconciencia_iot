@@ -2392,7 +2392,7 @@ $("#CategoriaEntidades").change(function() {
         valorS: tipo_valor,
     };
     post_api(
-        "http://localhost:3000/api/entity",
+        "http://localhost:3000/api/entitys",
         data,
         cargar_posibles_entidades_modelo,
         error_cargar_posibles_entidades_modelo
@@ -3501,7 +3501,7 @@ $("#CategoriaEntidadesProcesos").change(function() {
         valorS: tipo_valor,
     };
     post_api(
-        "http://localhost:3000/api/entity",
+        "http://localhost:3000/api/entitys",
         data,
         cargar_posibles_entidades_modelo_proceso,
         error_cargar_posibles_entidades_modelo_proceso
@@ -4597,7 +4597,7 @@ $("#CategoriaEntidadesProcesos_reflexivos").change(function() {
         valorS: tipo_valor,
     };
     post_api(
-        "http://localhost:3000/api/entity",
+        "http://localhost:3000/api/entitys",
         data,
         cargar_posibles_entidades_modelo_proceso_reflexivo,
         error_cargar_posibles_entidades_modelo_proceso_reflexivo

@@ -16,9 +16,9 @@ export async function entitys(req: Request, res: Response) {
         var id = req.session!.active_model.modelID;
         var db = new database2();
         var seleccion=req.body.valorS;
-        console.log(seleccion);
+       
         var objeto: EntityQ = new EntityQ(-1, "","");
-        var rows = await db.qwerty(objeto.toSqlSelect(["/@/MODEL/@/"], [id]));
+        var rows = await db.qwerty(objeto.toSqlSelect(["/@/MODEL/@/"], [id],seleccion));
         //console.log(rows)
         res.json(rows);
     } else {
