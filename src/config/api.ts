@@ -12,15 +12,12 @@ export default function (app: Application) {
   );
   app.post("/api/ask_deployment_resources/", api.ask_deployment_resources);
   app.post("/api/ask_input_arguments/", api.ask_input_arguments);
-  app.post("/api/subjects_objects/", api.subjects_objects);
-  app.post("/api/save_subjects_objects/", api.save_subjects_objects);
-  app.post("/api/delete_subjects_objects/", api.delete_subjects_objects);
+
   app.post("/api/save_subjects/", api.save_subjects);
   app.post("/api/save_entity/", api.save_entity);
   app.post("/api/update_entity/", api.update_entity);
   app.post("/api/entity/", api.entity);
   app.get("/api/enumeracion/", api.enumeracion);
-  app.post("/api/get_enumeracion/", api.get_enumeracion);
   app.get("/api/measurement_units/", api.measurement_units);
   app.post("/api/add_measurement_units/", api.add_measurement_units);
   app.post("/api/del_measurement_units/", api.del_measurement_units);
@@ -91,4 +88,8 @@ export default function (app: Application) {
   app.get("/api/user_models/", rt.user_models);
   app.get("/api/subjects/", rt.subjects);
   app.post("/api/update_subjects/", rt.update_subjects);
+  app.post("/api/subjects_objects/", rt.subjects_goals);
+  app.post("/api/get_enumeracion/", rt.get_enumeracion);
+  app.post("/api/save_subjects_objects/", rt.save_subjects_goal);
+  app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
 }
