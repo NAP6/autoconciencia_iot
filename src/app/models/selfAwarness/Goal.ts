@@ -7,6 +7,7 @@ export class Goal {
   private _description: string;
   private _weight: number;
   private _aggregationOperator: string;
+  private _active: boolean;
   private _containsSubGoal: Goal[];
   private _isSuported: SelfAwarenessProcess[];
   private _isInterpretedBy: DecisionCriteria | undefined;
@@ -23,6 +24,7 @@ export class Goal {
     this._description = description;
     this._weight = weight;
     this._aggregationOperator = aggregationOperator;
+    this._active = true;
     this._containsSubGoal = [];
     this._isSuported = [];
   }
@@ -65,6 +67,14 @@ export class Goal {
 
   set aggregationOperator(value: string) {
     this._aggregationOperator = value;
+  }
+
+  get active(): boolean {
+    return this._active;
+  }
+
+  set active(value: boolean) {
+    this._active = value;
   }
 
   get containsSubGoal(): Goal[] {

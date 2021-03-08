@@ -1094,13 +1094,13 @@ function agregarObjeto() {
     if ((!!id_padre, !!nombre, !!descripcion, !!peso, !!operador)) {
         post_api(
             (url = "http://localhost:3000/api/save_subjects_objects"), {
-                id_padre: id_padre,
-                nombre: nombre,
-                descripcion: descripcion,
-                peso: peso,
-                operador: operador,
-                activo: activo,
-                sujeto_id: idSujetoObjetoActual,
+                father: id_padre,
+                name: nombre,
+                description: descripcion,
+                weigth: peso,
+                agregationOperator: operador,
+                active: activo,
+                system: idSujetoObjetoActual,
             },
             (json) => {
                 console.log(json);
