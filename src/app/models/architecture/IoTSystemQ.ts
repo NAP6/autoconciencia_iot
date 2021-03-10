@@ -31,10 +31,12 @@ export class IoTSystemQ extends IoTSystem implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
     var sql = `INSERT INTO 
 	  	sujeto (
+			suj_id,
 	  		ma_id, 
 		  	suj_nombre, 
 		  	suj_padre
   		) VALUES (
+		  	'${this.id}', 
 		  	/@/MODELO/@/, 
 		  	'${this.name}', 
 		  	/@/PADRE/@/

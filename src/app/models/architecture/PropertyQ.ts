@@ -21,9 +21,13 @@ export class PropertyQ extends Property implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
     var sql = `INSERT INTO 
 	  	propiedad ( 
+			pro_id,
+			ma_id,
 	  		pro_nombre, 
 			obj_id
 		) VALUES (
+			'${this.id}', 
+			/@/MODELO/@/,
 			'${this.name}', 
 			/@/OBJETOS/@/
 		)`;

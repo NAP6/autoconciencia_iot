@@ -21,7 +21,7 @@ export class database2 {
   }
 
   public async qwerty(sql: string): Promise<any> {
-    console.log(sql);
+    //console.log(sql);
     var connection = await this.conectar();
     var [rows, fields] = await connection.execute(sql);
     connection.end();
@@ -36,8 +36,9 @@ export class database2 {
     );
     var dataFlows = architecture.modelDataFlow;
     for (var i = 0; i < dataFlows.length; i++) {
-      var insertedFlow = await this.qwerty(dataFlows[i].toSqlInsert([], []));
-      dataFlows[i] = insertedFlow.insertId.toString();
+      var insertedFlow = await this.qwerty(
+        dataFlows[i].toSqlInsert(["/@/MODELO/@/"], [modelID])
+      );
     }
     this.insertar_entidades_recursivo(architecture.modelEntity, [
       modelID,
@@ -57,10 +58,12 @@ export class database2 {
       )
     );
     var systems = system.IoTSubSystem;
-    var id = architectureFather.insertId.toString();
-    system.id = id;
     for (var i = 0; i < systems.length; i++) {
-      this.insertar_sistemas_recursivo(modelID, id, systems[i]);
+      this.insertar_sistemas_recursivo(
+        modelID,
+        system.id.toString(),
+        systems[i]
+      );
     }
   }
 
@@ -72,19 +75,19 @@ export class database2 {
       var insertEnt = await this.qwerty(
         entidades[i].toSqlInsert(["/@/MODELO/@/", "/@/PADRE/@/"], value)
       );
-      entidades[i].id = insertEnt.insertId.toString();
       if (entidades[i].propertys.length > 0) {
         for (var j = 0; j < entidades[i].propertys.length; j++) {
           var insertProp = await this.qwerty(
             entidades[i].propertys[j].toSqlInsert(
-              ["/@/OBJETOS/@/"],
-              [`${entidades[i].id}`]
+              ["/@/MODELO/@/", "/@/OBJETOS/@/"],
+              [value[0], `${entidades[i].id}`]
             )
           );
-          entidades[i].propertys[j].id = insertProp.insertId.toString();
           this.relation_propiedad_flujo(
             entidades[i].propertys[j].id.toString(),
-            entidades[i].propertys[j].dataFlow
+            entidades[i].propertys[j].dataFlow,
+            value[0],
+            entidades[i].id.toString()
           );
         }
       }
@@ -97,26 +100,36 @@ export class database2 {
       }
       this.relation_sujeto_objeto(
         entidades[i].id.toString(),
-        entidades[i].iotSystem
+        entidades[i].iotSystem,
+        value[0]
       );
     }
   }
 
-  private async relation_sujeto_objeto(id: string, systemas: IoTSystemQ[]) {
+  private async relation_sujeto_objeto(
+    id: string,
+    systemas: IoTSystemQ[],
+    ma_id: string
+  ) {
     var connection = await this.conectar();
     systemas.forEach((sys) => {
       connection.execute(
-        `insert INTO sujeto_objeto(suj_id,obj_id) VALUES (${sys.id},${id})`
+        `insert INTO sujeto_objeto(suj_id,obj_id,ma_id) VALUES (${sys.id},${id}, ${ma_id})`
       );
     });
     connection.end();
   }
 
-  private async relation_propiedad_flujo(id: string, flujos: DataFlowQ[]) {
+  private async relation_propiedad_flujo(
+    id: string,
+    flujos: DataFlowQ[],
+    ma_id: string,
+    obj_id: string
+  ) {
     var connection = await this.conectar();
     flujos.forEach((flu) => {
       connection.execute(
-        `insert INTO propiedad_flujodatos (pro_id, flu_id) VALUES (${id},${flu.id})`
+        `insert INTO propiedad_flujodatos (pro_id, flu_id, ma_id, obj_id) VALUES (${id},${flu.id}, ${ma_id}, ${obj_id})`
       );
     });
     connection.end();

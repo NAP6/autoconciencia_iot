@@ -41,11 +41,13 @@ export class EntityQ extends Entity implements SQL_Qwerty {
 
   toSqlInsert(tag: string[], value: string[]): string {
     var sql = `INSERT INTO objeto(
+		obj_id,
 	    	ma_id, 
 	    	obj_nombre, 
 	    	obj_tipo, 
 		obj_padre
             ) VALUES (
+	    	'${this.id}', 
 	    	/@/MODELO/@/, 
 	    	'${this.name}', 
 	    	'${this.entityType}', 
@@ -58,7 +60,7 @@ export class EntityQ extends Entity implements SQL_Qwerty {
   }
 
   toSqlSelect(tag: string[], value: string[]): string {
-    return '';
+    return "";
   }
 
   toSqlDelete(tag: string[], value: string[]): string {

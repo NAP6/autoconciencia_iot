@@ -21,9 +21,13 @@ export class DataFlowQ extends DataFlow implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
     var sql = `INSERT INTO 
 	  	flujodatos (
+			flu_id,
+			ma_id,
 	  		flu_descripcion,
 		  	flu_tipo_comunicacion
   		) VALUES (
+	  		'${this.id}',
+		  	/@/MODELO/@/, 
 	  		'${this.description}',
 		  	'${this.comunicationType}'
   		)`;

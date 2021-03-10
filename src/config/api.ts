@@ -89,7 +89,6 @@ export default function (app: Application) {
   app.get("/api/subjects/", rt.subjects);
   app.post("/api/update_subjects/", rt.update_subjects);
   app.post("/api/entitys/", rt.entitys);
-
   app.post("/api/subjects_objects/", rt.subjects_goals);
   app.post("/api/get_enumeracion/", rt.get_enumeracion);
   app.post("/api/save_subjects_objects/", rt.save_subjects_goal);

@@ -21,8 +21,7 @@ export class UserQ extends User implements SQL_Qwerty {
     usr_nombre as name,
     usr_descripcion as description,
     usr_correo as mail,
-    usr_password as password,
-    usr_user as user
+    usr_password as password
 FROM 
 	usuario 
 WHERE `;
