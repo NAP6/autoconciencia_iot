@@ -27,10 +27,13 @@ export async function update_subjects(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var elementos = req.body;
+    var id = req.session!.active_model.modelID;
     for (var i = 0; i < elementos.length; i++) {
       var system: IoTSystemQ = new IoTSystemQ(parseInt(elementos[i].id), "");
       system.active = elementos[i].activo ? true : false;
-      await db.qwerty(system.toSqlUpdate(["/@/ACTIVE/@/"], []));
+      await db.qwerty(
+        system.toSqlUpdate(["/@/ACTIVE/@/", "/@/MODEL/@/"], [system.active, id])
+      );
     }
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
@@ -42,8 +45,11 @@ export async function subjects_goals(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var systemID = req.body.id;
+    var modelID = req.session!.active_model.modelID;
     var goal: GoalQ = new GoalQ(-1, "", "", 0, "");
-    var rows = await db.qwerty(goal.toSqlSelect(["/@/SYSTEM/@/"], [systemID]));
+    var rows = await db.qwerty(
+      goal.toSqlSelect(["/@/SYSTEM/@/", "/@/MODEL/@/"], [systemID, modelID])
+    );
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -62,10 +68,11 @@ export async function save_subjects_goal(req: Request, res: Response) {
       newGoal.agregationOperator
     );
     goal.active = newGoal.active;
+    var modelID = req.session!.active_model.modelID;
     await db.qwerty(
       goal.toSqlInsert(
-        ["/@/FATHER/@/", "/@/IOTSYSTEM/@/"],
-        [newGoal.father, newGoal.system]
+        ["/@/FATHER/@/", "/@/IOTSYSTEM/@/", "/@/MODEL/@/", "/@/CRITERIA/@/"],
+        [newGoal.father, newGoal.system, modelID, newGoal.criteria]
       )
     );
     res.json({ Mensaje: "Los datos se han enviado con exito" });

@@ -11,6 +11,8 @@ export class GoalQ extends Goal implements SQL_Qwerty {
 		    	obj_peso, 
 		    	obj_operacion_agregacion, 
 		    	suj_id, 
+			ma_id,
+			cd_id,
 		    	obj_activo,
 			obj_padre
 		) VALUES (
@@ -19,6 +21,8 @@ export class GoalQ extends Goal implements SQL_Qwerty {
 			'${this.weight}',
 			'${this.aggregationOperator}',
 			'${value[tag.indexOf("/@/IOTSYSTEM/@/")]}',
+			'${value[tag.indexOf("/@/MODEL/@/")]}',
+			'${value[tag.indexOf("/@/CRITERIA/@/")]}',
 			'${this.active ? 1 : 0}', 
 			${
         value[tag.indexOf("/@/FATHER/@/")]
@@ -42,7 +46,7 @@ export class GoalQ extends Goal implements SQL_Qwerty {
 	     	objetivo `;
     if (value.length == 1)
       sql += `WHERE 
-	  	suj_id = ${value[0]} ORDER BY id`;
+	  	suj_id = ${value[tag.indexOf('/@/SYSTEM/@/')]} AND ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} ORDER BY id`;
     return sql;
   }
   toSqlDelete(tag: string[], value: string[]): string {
