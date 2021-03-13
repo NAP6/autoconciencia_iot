@@ -4,7 +4,6 @@ import * as nv from "../app/controller/controller-navigation";
 import * as rt from "../app/controller/page_contollers";
 
 export default function (app: Application, upload: Multer) {
-  app.route("/singup").get(nv.singup).post(nv.singup_save);
   app.get("/object", nv.loggedIn, nv.object);
   app.get("/pre_reflexivos", nv.loggedIn, nv.pre_reflexivos);
   app.get("/reflexivos", nv.loggedIn, nv.reflexivos);
@@ -29,6 +28,7 @@ export default function (app: Application, upload: Multer) {
 
   //Rutas Revisadas
   app.get("/login", rt.login);
+  app.route("/singup").get(rt.singup).post(rt.singup_save);
   app
     .route("/start_session")
     .get(rt.select_model)

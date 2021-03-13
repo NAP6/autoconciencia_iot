@@ -3,11 +3,17 @@ import { SQL_Qwerty } from "../../SQL_Qwerty";
 
 export class UserQ extends User implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
-    var sql: string = ``;
-
-    for (var i = 0; i < tag.length; i++) {
-      sql = sql.replace(tag[i], value[i]);
-    }
+    var sql: string = `INSERT INTO usuario(
+				usr_nombre,
+				usr_descripcion,
+				usr_correo,
+				usr_password
+	    		) values (
+				'${this.name}',
+				'${this.description}',
+				'${this.mail}',
+				'${this.password}'
+	    		)`;
     return sql;
   }
 

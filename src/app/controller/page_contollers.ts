@@ -19,3 +19,4 @@ export {
   delete_subjects_goal,
 } from "./page_contollers/subject";
 export { get_enumeracion } from "./page_contollers/enumeration";
+export { singup, singup_save } from "./page_contollers/singup";

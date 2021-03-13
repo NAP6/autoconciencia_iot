@@ -48,7 +48,7 @@ function cargar_tipo_dato_select() {
     tipo: tipo,
   };
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_dato_salida,
     (err) => {
@@ -63,7 +63,7 @@ function cargar_formato_select() {
     tipo: tipo,
   };
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_formato,
     (err) => {
@@ -112,7 +112,7 @@ function cargar_select_formato(json) {
 
 function cargar_recursos_de_implementacion() {
   consultar_api(
-    (url = "http://localhost:3000/api/deployment_resources"),
+    (url = "http://alvapala.ddns.net:3000/api/deployment_resources"),
     cargar_recursos_de_implementacion_tabla,
     (err) => {
       alert(err);
@@ -184,7 +184,7 @@ function modificar_recurso() {
   if (id) {
     document.getElementById("input-id-resource-mod").value = id;
     post_api(
-      "http://localhost:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -219,7 +219,7 @@ function cargar_recurso_para_modificar(json) {
 
 function modificarRecursoImplementacion() {
   post_api(
-    "http://localhost:3000/api/del_deployment_resources/",
+    "http://alvapala.ddns.net:3000/api/del_deployment_resources/",
     {
       id: document.getElementById("input-id-resource-mod").value,
     },
@@ -336,7 +336,7 @@ function eliminar_recurso() {
   if (id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://localhost:3000/api/del_deployment_resources/",
+        "http://alvapala.ddns.net:3000/api/del_deployment_resources/",
         {
           id: id,
         },
@@ -687,7 +687,7 @@ function guardarRecursoImplementacion() {
       arregloParametros: arregloParametros,
     };
     post_api(
-      "http://localhost:3000/api/add_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/add_deployment_resources/",
       data,
       (res) => {
         cargar_recursos_de_implementacion();
@@ -726,7 +726,7 @@ function guardarRecursoImplementacion() {
 */
 if (document.getElementById("lista_sujetos_para_cargar"))
   consultar_api(
-    "http://localhost:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_posibles_sujetos_modelo,
     error_cargar_posibles_sujetos_modelo
   );
@@ -972,7 +972,7 @@ function actualizar_activos() {
     actualizacion.push(elem);
   });
   post_api(
-    (url = "http://localhost:3000/api/update_subjects"),
+    (url = "http://alvapala.ddns.net:3000/api/update_subjects"),
     actualizacion,
     (json) => {
       console.log(json);
@@ -1016,7 +1016,7 @@ function cargar_select_operador_agregacion() {
     tipo: nombre,
   };
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_operador_asignacion_select,
     error_cargar_operador_asignacion_select
@@ -1050,7 +1050,7 @@ function abrirModalObjetosSujetos(id, nombre) {
 
 function cargar_arbol(id) {
   post_api(
-    (url = "http://localhost:3000/api/subjects_objects"),
+    (url = "http://alvapala.ddns.net:3000/api/subjects_objects"),
     {
       id: id,
     },
@@ -1140,7 +1140,7 @@ function agregarObjeto() {
   if ((!!id_padre, !!nombre, !!descripcion, !!peso, !!operador)) {
     //Aqui falta agregar el criterio
     post_api(
-      (url = "http://localhost:3000/api/save_subjects_objects"),
+      (url = "http://alvapala.ddns.net:3000/api/save_subjects_objects"),
       {
         father: id_padre,
         name: nombre,
@@ -1175,7 +1175,7 @@ function eliminarObjeto() {
     }
   });
   post_api(
-    (url = "http://localhost:3000/api/delete_subjects_objects"),
+    (url = "http://alvapala.ddns.net:3000/api/delete_subjects_objects"),
     {
       id: id,
     },
@@ -1216,7 +1216,7 @@ function error_cargar_tipo_metrica_select(err) {
 
 if (document.getElementById("unidad_medida_metrica"))
   consultar_api(
-    "http://localhost:3000/api/measurement_units",
+    "http://alvapala.ddns.net:3000/api/measurement_units",
     cargar_unidades_de_medida_select,
     error_cargar_unidades_de_medida_select
   );
@@ -1240,7 +1240,7 @@ if (
   document.getElementById("tipo_escalas2")
 )
   consultar_api(
-    "http://localhost:3000/api/enumeracion",
+    "http://alvapala.ddns.net:3000/api/enumeracion",
     cargar_enumeracion_select,
     error_cargar_enumeracion_select
   );
@@ -1307,13 +1307,13 @@ function guardarNuevaUnidadMedida() {
   };
   if (!!data.nombre && !!data.descripcion && !!data.acronym) {
     post_api(
-      "http://localhost:3000/api/add_measurement_units/",
+      "http://alvapala.ddns.net:3000/api/add_measurement_units/",
       data,
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
     );
     consultar_api(
-      "http://localhost:3000/api/measurement_units",
+      "http://alvapala.ddns.net:3000/api/measurement_units",
       cargar_unidades_de_medida_table,
       error_cargar_unidades_de_medida_table
     );
@@ -1362,13 +1362,13 @@ function GuardarEliminarUnidadMedida() {
       id: id,
     };
     post_api(
-      "http://localhost:3000/api/del_measurement_units/",
+      "http://alvapala.ddns.net:3000/api/del_measurement_units/",
       data,
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
     );
     consultar_api(
-      "http://localhost:3000/api/measurement_units",
+      "http://alvapala.ddns.net:3000/api/measurement_units",
       cargar_unidades_de_medida_table,
       error_cargar_unidades_de_medida_table
     );
@@ -1417,13 +1417,13 @@ function guardarModificacionMedida() {
   };
   if (!!data.id && !!data.nombre && !!data.descripcion && !!data.acronym) {
     post_api(
-      "http://localhost:3000/api/upd_measurement_units/",
+      "http://alvapala.ddns.net:3000/api/upd_measurement_units/",
       data,
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
     );
     consultar_api(
-      "http://localhost:3000/api/measurement_units",
+      "http://alvapala.ddns.net:3000/api/measurement_units",
       cargar_unidades_de_medida_table,
       error_cargar_unidades_de_medida_table
     );
@@ -1453,7 +1453,7 @@ function mensaje_errorEnvioUnidadesMedida(err) {
 
 if (document.getElementById("tabla_unidades_de_medida"))
   consultar_api(
-    "http://localhost:3000/api/measurement_units",
+    "http://alvapala.ddns.net:3000/api/measurement_units",
     cargar_unidades_de_medida_table,
     error_cargar_unidades_de_medida_table
   );
@@ -1472,7 +1472,7 @@ if (document.getElementById("tabla_unidades_de_medida"))
 
 if (document.getElementById("tabla_escalas"))
   consultar_api(
-    "http://localhost:3000/api/escales",
+    "http://alvapala.ddns.net:3000/api/escales",
     cargar_escales_table,
     error_cargar_escales_table
   );
@@ -1527,13 +1527,13 @@ function guardarNuevaEscala() {
     alert(data.tipo);
     if (!!data.nombre && !!data.valor_valido && !!data.tipo) {
       post_api(
-        "http://localhost:3000/api/add_escales/",
+        "http://alvapala.ddns.net:3000/api/add_escales/",
         data,
         mensaje_exitoEnvioEscalas,
         mensaje_errorEnvioEscalas
       );
       consultar_api(
-        "http://localhost:3000/api/escales",
+        "http://alvapala.ddns.net:3000/api/escales",
         cargar_escales_table,
         error_cargar_escales_table
       );
@@ -1582,13 +1582,13 @@ function GuardareliminarEscala() {
     };
 
     post_api(
-      "http://localhost:3000/api/del_escales/",
+      "http://alvapala.ddns.net:3000/api/del_escales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://localhost:3000/api/escales",
+      "http://alvapala.ddns.net:3000/api/escales",
       cargar_escales_table,
       error_cargar_escales_table
     );
@@ -1633,13 +1633,13 @@ function guardarModificacionEscala() {
   };
   if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
     post_api(
-      "http://localhost:3000/api/upd_escales/",
+      "http://alvapala.ddns.net:3000/api/upd_escales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://localhost:3000/api/escales",
+      "http://alvapala.ddns.net:3000/api/escales",
       cargar_escales_table,
       error_cargar_escales_table
     );
@@ -1682,7 +1682,7 @@ function cargar_criterios_table(json) {
     else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";
     post_api(
-      "http://localhost:3000/api/umbral",
+      "http://alvapala.ddns.net:3000/api/umbral",
       {
         id: cd.id,
       },
@@ -1711,13 +1711,13 @@ function guardarNuevoCriterio() {
   };
   if (!!data.nombre && !!data.descripcion) {
     post_api(
-      "http://localhost:3000/api/add_decision_criteria/",
+      "http://alvapala.ddns.net:3000/api/add_decision_criteria/",
       data,
       mensaje_exitoEnvioDecisionCriteria,
       mensaje_errorEnvioDecisionCriteria
     );
     consultar_api(
-      "http://localhost:3000/api/decision_criteria",
+      "http://alvapala.ddns.net:3000/api/decision_criteria",
       cargar_criterios_table,
       error_cargar_criterios_table
     );
@@ -1764,13 +1764,13 @@ function guardar_eliminar_criterio_decision() {
         id: id,
       };
       post_api(
-        "http://localhost:3000/api/del_decision_criteria/",
+        "http://alvapala.ddns.net:3000/api/del_decision_criteria/",
         data,
         mensaje_exitoEnvioDecisionCriteria,
         mensaje_errorEnvioDecisionCriteria
       );
       consultar_api(
-        "http://localhost:3000/api/decision_criteria",
+        "http://alvapala.ddns.net:3000/api/decision_criteria",
         cargar_criterios_table,
         error_cargar_criterios_table
       );
@@ -1822,13 +1822,13 @@ function guardarModificacionCriterios() {
     };
     if (!!data.id && !!data.nombre && !!data.descripcion) {
       post_api(
-        "http://localhost:3000/api/upd_decision_criteria/",
+        "http://alvapala.ddns.net:3000/api/upd_decision_criteria/",
         data,
         mensaje_exitoEnvioDecisionCriteria,
         mensaje_errorEnvioDecisionCriteria
       );
       consultar_api(
-        "http://localhost:3000/api/decision_criteria",
+        "http://alvapala.ddns.net:3000/api/decision_criteria",
         cargar_criterios_table,
         error_cargar_criterios_table
       );
@@ -1939,13 +1939,13 @@ function guardarNuevoUmbral() {
       !!data.superior
     ) {
       post_api(
-        "http://localhost:3000/api/add_umbral/",
+        "http://alvapala.ddns.net:3000/api/add_umbral/",
         data,
         mensaje_exitoEnvioUmbral,
         mensaje_errorEnvioUmbral
       );
       $("#modal_umbral_add").modal("hide");
-      post_api("http://localhost:3000/api/umbral/", data2, cargar_umbral_table);
+      post_api("http://alvapala.ddns.net:3000/api/umbral/", data2, cargar_umbral_table);
     } else alert("Ingrese todos los campos del formulario");
   } catch (error) {
     alert(error);
@@ -2002,7 +2002,7 @@ function guardar_eliminar_umbral() {
       id: id,
     };
     post_api(
-      "http://localhost:3000/api/del_umbral/",
+      "http://alvapala.ddns.net:3000/api/del_umbral/",
       data,
       mensaje_exitoEnvioUmbral,
       mensaje_errorEnvioUmbral
@@ -2062,7 +2062,7 @@ function guardarModificacionUmbral() {
       !!data.superior
     ) {
       post_api(
-        "http://localhost:3000/api/upd_umbral/",
+        "http://alvapala.ddns.net:3000/api/upd_umbral/",
         data,
         mensaje_exitoEnvioUmbral,
         mensaje_errorEnvioUmbral
@@ -2105,13 +2105,13 @@ function guardarNuevoAspecto() {
   };
   if (!!data.descripcion) {
     post_api(
-      "http://localhost:3000/api/add_aspects/",
+      "http://alvapala.ddns.net:3000/api/add_aspects/",
       data,
       mensaje_exitoEnvioAspects,
       mensaje_errorEnvioAspects
     );
     consultar_api(
-      "http://localhost:3000/api/aspects",
+      "http://alvapala.ddns.net:3000/api/aspects",
       cargar_aspectos_table,
       error_cargar_aspectos_table
     );
@@ -2144,13 +2144,13 @@ function Administrar_Metricas() {
         tipo: busca,
       };
       post_api(
-        "http://localhost:3000/api/get_metrica",
+        "http://alvapala.ddns.net:3000/api/get_metrica",
         data,
         cargar_aspectos_metrica_table,
         error_cargar_aspectos_metrica_table
       );
       post_api(
-        "http://localhost:3000/api/get_enumeracion",
+        "http://alvapala.ddns.net:3000/api/get_enumeracion",
         data2,
         cargar_tipo_metrica_select,
         error_cargar_tipo_metrica_select
@@ -2165,7 +2165,7 @@ function Administrar_Metricas() {
 
 function mensaje_exitoEnvioAspects(json) {
   post_api(
-    "http://localhost:3000/api/aspects",
+    "http://alvapala.ddns.net:3000/api/aspects",
     data,
     cargar_aspectos_table,
     error_cargar_aspectos_table
@@ -2179,7 +2179,7 @@ function mensaje_errorEnvioAspects(err) {
 
 if (document.getElementById("tabla_criterios_decision"))
   consultar_api(
-    "http://localhost:3000/api/decision_criteria",
+    "http://alvapala.ddns.net:3000/api/decision_criteria",
     cargar_criterios_table,
     error_cargar_criterios_table
   );
@@ -2259,7 +2259,7 @@ function error_cargar_aspectos_metrica_table(err) {
 var modelo_fisico_json;
 if (document.getElementById("tabla_modelos_autoconciencia"))
   consultar_api(
-    "http://localhost:3000/api/user_models",
+    "http://alvapala.ddns.net:3000/api/user_models",
     cargar_modelos_table,
     error_cargar_models_table
   );
@@ -2347,7 +2347,7 @@ function desactivarFormularioAgregarMetrica() {
 }
 if (document.getElementById("escalas_seccion_entidad"))
   consultar_api(
-    "http://localhost:3000/api/escales",
+    "http://alvapala.ddns.net:3000/api/escales",
     cargar_escalas_select,
     error_escalas_select
   );
@@ -2416,7 +2416,7 @@ function modal_modificar_modelo() {
 
 if (document.getElementById("select_modelo_para_activar_trabajo"))
   consultar_api(
-    "http://localhost:3000/api/user_models",
+    "http://alvapala.ddns.net:3000/api/user_models",
     cargar_modelos_trabajo_actual,
     error_cargar_models_trabajo_actual
   );
@@ -2447,7 +2447,7 @@ $("#CategoriaEntidades").change(function () {
     valorS: tipo_valor,
   };
   post_api(
-    "http://localhost:3000/api/entitys",
+    "http://alvapala.ddns.net:3000/api/entitys",
     data,
     cargar_posibles_entidades_modelo,
     error_cargar_posibles_entidades_modelo
@@ -2752,7 +2752,7 @@ function actualizar_activos_entidad() {
     actualizacion.push(elem);
   });
   post_api(
-    (url = "http://localhost:3000/api/update_entity"),
+    (url = "http://alvapala.ddns.net:3000/api/update_entity"),
     actualizacion,
     (json) => {
       console.log(json);
@@ -2846,7 +2846,7 @@ function abrirModalEntidad(id, nombre) {
       id: idSeleccion,
     };
     post_api(
-      "http://localhost:3000/api/aspects",
+      "http://alvapala.ddns.net:3000/api/aspects",
       data,
       cargar_aspectos_table,
       error_cargar_aspectos_table
@@ -2863,7 +2863,7 @@ function cargar_select_tipo_as() {
     tipo: tipo,
   };
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto,
     error_select_tipo_aspecto
@@ -2926,7 +2926,7 @@ function agregarAspecto() {
   if (!!data.nombre && !!data.descripcion && !!data.peso && !!data.tipoS) {
     desactivarFormularioAgregarEntidad(),
       post_api(
-        "http://localhost:3000/api/add_aspects/",
+        "http://alvapala.ddns.net:3000/api/add_aspects/",
         data,
         mensaje_exitoEnvioAspects,
         mensaje_errorEnvioAspects
@@ -2951,13 +2951,13 @@ function EliminarAspecto() {
       id: idSeleccion,
     };
     post_api(
-      "http://localhost:3000/api/del_aspects/",
+      "http://alvapala.ddns.net:3000/api/del_aspects/",
       data,
       mensaje_exitoEnvioAspects,
       mensaje_errorEnvioAspects
     );
     post_api(
-      "http://localhost:3000/api/aspects",
+      "http://alvapala.ddns.net:3000/api/aspects",
       data,
       cargar_aspectos_table,
       error_cargar_aspectos_table
@@ -2995,7 +2995,7 @@ function GuardarMetrica() {
     !!data.tipo
   ) {
     post_api(
-      "http://localhost:3000/api/add_metrica/",
+      "http://alvapala.ddns.net:3000/api/add_metrica/",
       data,
       mensaje_exitoEnvioMetrica,
       mensaje_errorEnvioMetrica
@@ -3019,13 +3019,13 @@ function eliminar_metrica() {
       id: AspectoId,
     };
     post_api(
-      "http://localhost:3000/api/del_metrica/",
+      "http://alvapala.ddns.net:3000/api/del_metrica/",
       data,
       mensaje_exitoEnvioMetrica,
       mensaje_errorEnvioMetrica
     );
     post_api(
-      "http://localhost:3000/api/get_metrica",
+      "http://alvapala.ddns.net:3000/api/get_metrica",
       data,
       cargar_aspectos_metrica_table,
       error_cargar_aspectos_metrica_table
@@ -3039,7 +3039,7 @@ function mensaje_exitoEnvioMetrica(json) {
     id: AspectoId,
   };
   post_api(
-    "http://localhost:3000/api/get_metrica",
+    "http://alvapala.ddns.net:3000/api/get_metrica",
     data2,
     cargar_aspectos_metrica_table,
     error_cargar_aspectos_metrica_table
@@ -3078,13 +3078,13 @@ function guardarNuevaRecImpl() {
     !!data.tipo_recurso
   ) {
     post_api(
-      "http://localhost:3000/api/add_ri/",
+      "http://alvapala.ddns.net:3000/api/add_ri/",
       data,
       mensaje_exitoEnvioRI,
       mensaje_errorEnvioRI
     );
     consultar_api(
-      "http://localhost:3000/api/add_ri/",
+      "http://alvapala.ddns.net:3000/api/add_ri/",
       cargar_ri_table,
       error_cargar_ri_table
     );
@@ -3107,13 +3107,13 @@ function eliminar_recurso_implementacion() {
     };
     console.log(data);
     post_api(
-      "http://localhost:3000/api/del_escales/",
+      "http://alvapala.ddns.net:3000/api/del_escales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://localhost:3000/api/escales",
+      "http://alvapala.ddns.net:3000/api/escales",
       cargar_escales_table,
       error_cargar_escales_table
     );
@@ -3160,13 +3160,13 @@ function guardarModificacionRI() {
   };
   if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
     post_api(
-      "http://localhost:3000/api/upd_escales/",
+      "http://alvapala.ddns.net:3000/api/upd_escales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://localhost:3000/api/escales",
+      "http://alvapala.ddns.net:3000/api/escales",
       cargar_escales_table,
       error_cargar_escales_table
     );
@@ -3198,7 +3198,7 @@ function mensaje_errorEnvioRI(err) {
 
 if (document.getElementById("tabla_recurso_implementacion"))
   consultar_api(
-    "http://localhost:3000/api/recurso_implementacion",
+    "http://alvapala.ddns.net:3000/api/recurso_implementacion",
     cargar_ri_table,
     error_cargar_ri_table
   );
@@ -3256,7 +3256,7 @@ function add_Tipo_Recurso() {
 }
 if (document.getElementById("lista_sujetos_activos"))
   consultar_api(
-    "http://localhost:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos,
     error_cargar_sujetos_activos
   );
@@ -3347,13 +3347,13 @@ function agregarProcesoPreReflexivo() {
     tipo: tipoComunicacion,
   };
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_comunicacion,
     error_cargar_select_tipo_comunicacion
   );
   consultar_api(
-    "http://localhost:3000/api/decision_criteria",
+    "http://alvapala.ddns.net:3000/api/decision_criteria",
     cargar_select_criterios_proceso,
     error_cargar_select_criterios_proceso
   );
@@ -3362,7 +3362,7 @@ function agregarProcesoPreReflexivo() {
     tipo: "TIPO_RECOLECCION",
   };
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data2,
     cargar_select_tipo_recoleccion,
     error_cargar_select_tipo_recoleccion
@@ -3382,7 +3382,7 @@ function generar_flujo_datos_select() {
     .value;
   if (comunicacion != "Seleccione.." && porpiedadSeleccionada != "-6") {
     post_api(
-      "http://localhost:3000/api/get_flujo_datos/",
+      "http://alvapala.ddns.net:3000/api/get_flujo_datos/",
       {
         comunicacion: comunicacion,
         propiedad: porpiedadSeleccionada,
@@ -3461,7 +3461,7 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
 }
 if (document.getElementById("lista_sujetos_activos_proceso"))
   consultar_api(
-    "http://localhost:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos,
     error_cargar_sujetos_activos_procesos
   );
@@ -3528,7 +3528,7 @@ function verificarSeleccionProceso(elemento) {
   SujetoGuardarProceso = elemento.dataset.puro_id;
   Array.from(checkbox).forEach((element) => {
     post_api(
-      "http://localhost:3000/api/objetivos_sujetos",
+      "http://alvapala.ddns.net:3000/api/objetivos_sujetos",
       {
         id: SujetoGuardarProceso,
       },
@@ -3574,7 +3574,7 @@ $("#CategoriaEntidadesProcesos").change(function () {
     valorS: tipo_valor,
   };
   post_api(
-    "http://localhost:3000/api/entitys",
+    "http://alvapala.ddns.net:3000/api/entitys",
     data,
     cargar_posibles_entidades_modelo_proceso,
     error_cargar_posibles_entidades_modelo_proceso
@@ -3662,13 +3662,13 @@ function cargar_aspectos(elemento, lado) {
     id: idObjeto,
   };
   post_api(
-    "http://localhost:3000/api/aspects",
+    "http://alvapala.ddns.net:3000/api/aspects",
     data,
     cargar_aspectos_select,
     error_cargar_aspectos_select
   );
   post_api(
-    "http://localhost:3000/api/properties",
+    "http://alvapala.ddns.net:3000/api/properties",
     {
       id: idObjeto,
     },
@@ -3721,7 +3721,7 @@ $("#Aspectos_autoconsciencia").change(function () {
     tipo: tipoM,
   };
   post_api(
-    "http://localhost:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrica_select",
     data,
     cargar_select_metrica_proceso,
     error_cargar_select_metrica_proceso
@@ -3737,7 +3737,7 @@ $("#Aspectos_autoconsciencia").change(function () {
     tipo: tipoIndi,
   };
   post_api(
-    "http://localhost:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrica_select",
     data2,
     cargar_select_indicador_proceso,
     error_cargar_select_indicador_proceso
@@ -3848,7 +3848,7 @@ $("#criterio_de_decision").change(function () {
     nombre: tipo_criterio,
   };
   post_api(
-    "http://localhost:3000/api/get_umbral",
+    "http://alvapala.ddns.net:3000/api/get_umbral",
     data,
     cargar_lista_umbrales_proceso,
     error_cargar_lista_umbrales_proceso
@@ -3888,7 +3888,7 @@ function visibilidad_acciones_umbral(id) {
     .getElementById("tabla_acciones_umbral")
     .classList.replace("d-none", "inline-block");
   post_api(
-    "http://localhost:3000/api/get_accion/",
+    "http://alvapala.ddns.net:3000/api/get_accion/",
     {
       id: id,
     },
@@ -3913,7 +3913,7 @@ function cerrar_modal_activos() {
 
 function guardarAccionUmbral() {
   post_api(
-    "http://localhost:3000/api/get_metodo_aprendizaje",
+    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
     {
       id: 22,
     },
@@ -3931,7 +3931,7 @@ function enviarDatos_acciones_umbrales(json) {
     meaId: json.id,
   };
   post_api(
-    "http://localhost:3000/api/add_accion",
+    "http://alvapala.ddns.net:3000/api/add_accion",
     data,
     mensajeExitosoAgregarAccionesUmbrales,
     mensajeErrorAgregarAccionesUmbrales
@@ -3967,7 +3967,7 @@ function eliminarAccionesUmbrales() {
       id: id,
     };
     post_api(
-      "http://localhost:3000/api/del_accion/",
+      "http://alvapala.ddns.net:3000/api/del_accion/",
       data,
       mensaje_exitosoEliminacionAcciones,
       (res) => {
@@ -3984,7 +3984,7 @@ function mensaje_exitosoEliminacionAcciones(json) {
 
 function cargarDespuesdeEliminarAcciones() {
   post_api(
-    "http://localhost:3000/api/get_accion/",
+    "http://alvapala.ddns.net:3000/api/get_accion/",
     {
       id: UmbralId,
     },
@@ -4032,7 +4032,7 @@ function guardarModificacionAccionesUmbrales() {
     activo: document.getElementById("activo_accion_umbral_modificar").checked,
   };
   post_api(
-    "http://localhost:3000/api/upd_acciones_umbrales/",
+    "http://alvapala.ddns.net:3000/api/upd_acciones_umbrales/",
     data,
     (res) => {
       console.log(res);
@@ -4051,7 +4051,7 @@ function abrirModalMapeoParametros() {
   var id = document.getElementById("recurso").value;
   if (id) {
     post_api(
-      "http://localhost:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -4121,7 +4121,7 @@ function cargar_modal_mapeo_parametros(json) {
   });
 
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
@@ -4151,7 +4151,7 @@ function cargar_metricas_tipo_mapeo(elemento) {
     metricaId: elemento.value,
   };
   post_api(
-    "http://localhost:3000/api/ask_input_arguments",
+    "http://alvapala.ddns.net:3000/api/ask_input_arguments",
     data,
     cargar_select_argumento_entrada,
     (err) => {
@@ -4210,7 +4210,7 @@ function SeleccionaRecursoSelect(element) {
 
   if (element.value) {
     post_api(
-      "http://localhost:3000/api/ask_deployment_resources_select/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -4269,7 +4269,7 @@ function guardar_procesos_pre_reflexivos() {
       objetivo: objetivo,
     };
     post_api(
-      "http://localhost:3000/api/add_process_pre_reflexive/",
+      "http://alvapala.ddns.net:3000/api/add_process_pre_reflexive/",
       data,
       mensaje_exitoEnvioproceso_pre_reflexivo,
       mensaje_errorEnvioproceso_pre_reflexivo
@@ -4351,7 +4351,7 @@ function guardar_modelos_metodos() {
       },
     };
     post_api(
-      "http://localhost:3000/api/add_metodo_modelo",
+      "http://alvapala.ddns.net:3000/api/add_metodo_modelo",
       datos,
       mensajeCorrectoGuardarMetodos,
       errormensajeCorrectoGuardarMetodos
@@ -4398,7 +4398,7 @@ function errormensajeCorrectoGuardarMetodos(error) {
 
 if (document.getElementById("tabla_proceso_pre_reflexivo"))
   consultar_api(
-    "http://localhost:3000/api/procesos_pre_reflexive",
+    "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
@@ -4453,7 +4453,7 @@ function modificarProcesoPreReflexivo() {
   });
   if (!!id) {
     post_api(
-      "http://localhost:3000/api/procesos_pre_reflexive_id/",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive_id/",
       {
         id: id,
       },
@@ -4484,7 +4484,7 @@ function elminarProcesoPreReflexivo() {
         id: id,
       };
       post_api(
-        "http://localhost:3000/api/del_process_pre_reflexive/",
+        "http://alvapala.ddns.net:3000/api/del_process_pre_reflexive/",
         data,
         mensaje_exitosBorrar_pre_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
@@ -4495,7 +4495,7 @@ function elminarProcesoPreReflexivo() {
 
 function mensaje_exitosBorrar_pre_reflexivo(json) {
   consultar_api(
-    "http://localhost:3000/api/procesos_pre_reflexive",
+    "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
@@ -4544,7 +4544,7 @@ function Guagar_nuevo_Mapeo() {
   });
 
   post_api(
-    "http://localhost:3000/api/add_mapeo_parametros/",
+    "http://alvapala.ddns.net:3000/api/add_mapeo_parametros/",
     aux,
     mensaje_correcto_envio_mapeo,
     mensaje_error_envio_mapeo
@@ -4607,7 +4607,7 @@ function Abrir_limpiar_modal_proceso_reflexivo() {
 }
 if (document.getElementById("lista_sujetos_activos_proceso_reflexivo")) {
   consultar_api(
-    "http://localhost:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos_reflexivos,
     error_cargar_sujetos_activos_procesos_reflexivos
   );
@@ -4686,7 +4686,7 @@ function verificarSeleccionProceso_reflexivo(elemento) {
       "CategoriaEntidadesProcesos_reflexivos"
     ).disabled = true;
     post_api(
-      "http://localhost:3000/api/objetivos_sujetos",
+      "http://alvapala.ddns.net:3000/api/objetivos_sujetos",
       {
         id: sujetoGuardarproceso_reflexivo,
       },
@@ -4732,7 +4732,7 @@ $("#CategoriaEntidadesProcesos_reflexivos").change(function () {
     valorS: tipo_valor,
   };
   post_api(
-    "http://localhost:3000/api/entitys",
+    "http://alvapala.ddns.net:3000/api/entitys",
     data,
     cargar_posibles_entidades_modelo_proceso_reflexivo,
     error_cargar_posibles_entidades_modelo_proceso_reflexivo
@@ -4826,7 +4826,7 @@ function cargar_aspectos_reflexivos(elemento, lado) {
     id: idObjeto,
   };
   post_api(
-    "http://localhost:3000/api/aspects",
+    "http://alvapala.ddns.net:3000/api/aspects",
     data,
     cargar_aspectos_select_reflexivos,
     error_cargar_aspectos_select_reflexivos
@@ -4874,7 +4874,7 @@ function guardar_procesos_reflexivos() {
     };
 
     post_api(
-      "http://localhost:3000/api/add_process_pre_reflexive/",
+      "http://alvapala.ddns.net:3000/api/add_process_pre_reflexive/",
       data,
       mensaje_exitoEnvioproceso_pre_reflexivo,
       mensaje_errorEnvioproceso_pre_reflexivo
@@ -4918,7 +4918,7 @@ function guardar_procesos_reflexivos() {
 }
 if (document.getElementById("tabla_proceso_reflexivo"))
   consultar_api(
-    "http://localhost:3000/api/procesos_reflexive",
+    "http://alvapala.ddns.net:3000/api/procesos_reflexive",
     cargar_procesos_reflexivos_table,
     error_procesos_reflexivos_table
   );
@@ -4995,7 +4995,7 @@ function guardar_proceso_pre_reflexivo_boton() {
   } else if (cont_paso == 3) {
     history.back();
     consultar_api(
-      "http://localhost:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -5022,7 +5022,7 @@ function guardar_proceso_reflexivo_boton() {
         .getElementById("btn-section-reflexivos")
         .classList.replace("d-none", "d-inline");
       consultar_api(
-        "http://localhost:3000/api/decision_criteria",
+        "http://alvapala.ddns.net:3000/api/decision_criteria",
         cargar_select_criterios_metodos_reflexivos,
         error_cargar_select_metodos_reflexivos
       );
@@ -5048,7 +5048,7 @@ function guardar_proceso_reflexivo_boton() {
   } else if (cont_paso_reflexivos == 3) {
     history.back();
     consultar_api(
-      "http://localhost:3000/api/procesos_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_reflexive",
       cargar_procesos_reflexivos_table,
       error_procesos_reflexivos_table
     );
@@ -5093,7 +5093,7 @@ function guardar_modelos_metodos_reflexivos() {
       },
     };
     post_api(
-      "http://localhost:3000/api/add_metodo_modelo_reflexivos",
+      "http://alvapala.ddns.net:3000/api/add_metodo_modelo_reflexivos",
       datos,
       mensajeCorrectoGuardarMetodosReflexivos,
       errormensajeCorrectoGuardarMetodosReflexivos
@@ -5171,7 +5171,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
     tipo: tipoM,
   };
   post_api(
-    "http://localhost:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrica_select",
     data,
     cargar_select_metrica_proceso_reflexivo,
     error_cargar_select_metrica_proceso_reflexivo
@@ -5189,7 +5189,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
     tipo: tipoIndi,
   };
   post_api(
-    "http://localhost:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrica_select",
     data2,
     cargar_select_indicador_proceso_reflexivo,
     error_cargar_select_indicador_proceso_reflexivo
@@ -5243,7 +5243,7 @@ function SeleccionaRecursoReflexivosMetodos(element) {
 
   if (element.value) {
     post_api(
-      "http://localhost:3000/api/ask_deployment_resources_select/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -5275,7 +5275,7 @@ function SeleccionaRecursoReflexivosModelos(element) {
 
   if (element.value) {
     post_api(
-      "http://localhost:3000/api/ask_deployment_resources_select/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -5308,7 +5308,7 @@ function abrirMapeoParametros_metodos() {
   var id = document.getElementById("recurso_reflexivos").value;
   if (id) {
     post_api(
-      "http://localhost:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -5381,7 +5381,7 @@ function cargar_modal_mapeo_parametros_metodos(json) {
     }
   });
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
@@ -5403,7 +5403,7 @@ function cargar_select_mapeo_tipo_metodos(json) {
     });
   });
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA_METODO",
     },
@@ -5430,7 +5430,7 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
   console.log(elemento.value);
   if (elemento.value == 24) {
     post_api(
-      "http://localhost:3000/api/get_metodo_aprendizaje",
+      "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
       {
         id: 23,
       },
@@ -5445,7 +5445,7 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
       metricaId: elemento.value,
     };
     post_api(
-      "http://localhost:3000/api/ask_input_arguments",
+      "http://alvapala.ddns.net:3000/api/ask_input_arguments",
       data,
       cargar_select_argumento_entrada_metodos,
       (err) => {
@@ -5472,7 +5472,7 @@ function cargar_select_argumento_entrada_metodos(json) {
 function cargar_select_mapeo_variables_simulacion(json) {
   console.log(json);
   consultar_api(
-    "http://localhost:3000/api/get_variable_simulacion",
+    "http://alvapala.ddns.net:3000/api/get_variable_simulacion",
     cargar_variables_simulacion_select_modal_mapeo,
     (res) => {
       console.log(res);
@@ -5509,7 +5509,7 @@ function abrirMapeoParametros_modelos() {
   var id = document.getElementById("recurso_modelos_reflexivos").value;
   if (id) {
     post_api(
-      "http://localhost:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -5583,7 +5583,7 @@ function cargar_modal_mapeo_parametros_modelos(json) {
     }
   });
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
@@ -5614,7 +5614,7 @@ function cargar_metricas_tipo_mapeo_modelo(elemento) {
     metricaId: elemento.value,
   };
   post_api(
-    "http://localhost:3000/api/ask_input_arguments",
+    "http://alvapala.ddns.net:3000/api/ask_input_arguments",
     data,
     cargar_select_argumento_entrada_modelos,
     (err) => {
@@ -5682,7 +5682,7 @@ function modificar_proceso_pre_reflexivo_boton() {
   } else if (cont_paso_modificar == 3) {
     history.back();
     consultar_api(
-      "http://localhost:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -5734,7 +5734,7 @@ function saltar_proceso_pre_reflexivo_boton() {
     saltar_paso_pre++;
   } else if (saltar_paso_pre == 3) {
     consultar_api(
-      "http://localhost:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -5745,7 +5745,7 @@ function saltar_proceso_pre_reflexivo_boton() {
 
 if (document.getElementById("lista_sujetos_activos_proceso_modificar"))
   consultar_api(
-    "http://localhost:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos_modificar,
     error_cargar_sujetos_activos_procesos_modificar
   );
@@ -5846,7 +5846,7 @@ function modificar_proceso_pre_reflexivo() {
       id: id,
     };
     post_api(
-      "http://localhost:3000/api/mod_process_pre_reflexive/",
+      "http://alvapala.ddns.net:3000/api/mod_process_pre_reflexive/",
       data,
       mensaje_exitoModificarproceso_pre_reflexivo,
       mensaje_errorModificarproceso_pre_reflexivo
@@ -5887,7 +5887,7 @@ function cargar_select_tipo_comunicacion_modificar() {
     tipo: tipoComunicacion,
   };
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_comunicacion_modificar_pre_reflexivos,
     error_cargar_select_tipo_comunicacion_modificar_pre_reflexivos
@@ -5923,7 +5923,7 @@ function cargar_select_alcance_recoleccion_modificar() {
     tipo: "TIPO_RECOLECCION",
   };
   post_api(
-    "http://localhost:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data2,
     cargar_select_tipo_recoleccion_metodos_modificar,
     error_cargar_select_tipo_recoleccion_metodos_modificar
@@ -5957,7 +5957,7 @@ function error_cargar_select_tipo_recoleccion_metodos_modificar() {
 function cargar_select_propiedades_pre_reflexivos() {
   objetoIdReco = document.getElementById("id_objeto_seleccionado").value;
   post_api(
-    "http://localhost:3000/api/properties",
+    "http://alvapala.ddns.net:3000/api/properties",
     {
       id: objetoIdReco,
     },
@@ -5992,7 +5992,7 @@ function error_cargar_propiedades_select_modificar(error) {
 
 function recuperar_ultimo_metodo_aprendizaje_escenario() {
   post_api(
-    "http://localhost:3000/api/get_metodo_aprendizaje",
+    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
     { id: 23 },
     consultar_tabla_escenarios,
     (res) => {
@@ -6008,7 +6008,7 @@ function abrirModalEscenarioSimulacion() {
 
 function consultar_tabla_escenarios(json) {
   post_api(
-    "http://localhost:3000/api/ascenario_simulacion",
+    "http://alvapala.ddns.net:3000/api/ascenario_simulacion",
     { mea_id: json.id },
     cargar_tabla_escenarios_simulacion,
     error_cargar_tabla_escenarios_simulacion
@@ -6050,7 +6050,7 @@ function agregar_escenario_simulacion() {
 
 function guardarEscenarioSimulacions() {
   post_api(
-    "http://localhost:3000/api/get_metodo_aprendizaje",
+    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
     {
       id: 23,
     },
@@ -6067,7 +6067,7 @@ function enviarDatos_escenarios_simulacion(json) {
     mea_id: json.id,
   };
   post_api(
-    "http://localhost:3000/api/add_escenario_simulacion",
+    "http://alvapala.ddns.net:3000/api/add_escenario_simulacion",
     data,
     error_guardar_escenarios_simulacion
   );
@@ -6098,7 +6098,7 @@ function eliminar_escenario_simulacion() {
   });
   if (!!id) {
     post_api(
-      "http://localhost:3000/api/del_escenario_simulacion/",
+      "http://alvapala.ddns.net:3000/api/del_escenario_simulacion/",
       {
         id: id,
       },
@@ -6156,7 +6156,7 @@ function ModificarEscenarioSimulacions() {
       .checked,
   };
   post_api(
-    "http://localhost:3000/api/upd_escenario_simulacion/",
+    "http://alvapala.ddns.net:3000/api/upd_escenario_simulacion/",
     data,
     (res) => {
       console.log(res);
@@ -6190,7 +6190,7 @@ function visibilidad_variables_valores(id) {
 
 function consultar_tabla_valores_variables(id) {
   post_api(
-    "http://localhost:3000/api/get_variables_valor/",
+    "http://alvapala.ddns.net:3000/api/get_variables_valor/",
     {
       id: id,
     },
@@ -6218,7 +6218,7 @@ function agregar_variables_valor() {
   $("#modal_escenarios_simulacion").modal("hide");
   $("#modal_agregar_variables_valores_simulacion").modal("show");
   post_api(
-    "http://localhost:3000/api/get_metodo_aprendizaje",
+    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
     { id: 23 },
     consultar_variables_select,
     (res) => {
@@ -6229,7 +6229,7 @@ function agregar_variables_valor() {
 
 function consultar_variables_select(json) {
   post_api(
-    "http://localhost:3000/api/get_variable_simulacion/",
+    "http://alvapala.ddns.net:3000/api/get_variable_simulacion/",
     { mea_id: json.id },
     cargar_variables_simulacion_select,
     (res) => {
@@ -6301,7 +6301,7 @@ function modificar_proceso_reflexivo_boton() {
     }
   } else if (cont_paso_modificar_reflexivos == 3) {
     consultar_api(
-      "http://localhost:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -6374,7 +6374,7 @@ function saltar_proceso_reflexivo_boton() {
     saltar_paso++;
   } else if (saltar_paso == 3) {
     consultar_api(
-      "http://localhost:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -6423,7 +6423,7 @@ function cargar_select_metrica_indirecta_modificar_reflexivos() {
     tipo: tipoM,
   };
   post_api(
-    "http://localhost:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrica_select",
     data,
     cargar_select_metrica_proceso_reflexivo_modificar,
     error_cargar_select_metrica_proceso_reflexivo_modificar
@@ -6440,7 +6440,7 @@ function cargar_select_metrica_indirecta_modificar_reflexivos() {
     tipo: tipoIndi,
   };
   post_api(
-    "http://localhost:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrica_select",
     data2,
     cargar_select_indicador_proceso_reflexivo_modificar,
     error_cargar_select_indicador_proceso_reflexivo_modificar
@@ -6516,7 +6516,7 @@ function modificar_proceso_reflexivo() {
       id: id,
     };
     post_api(
-      "http://localhost:3000/api/mod_process_pre_reflexive/",
+      "http://alvapala.ddns.net:3000/api/mod_process_pre_reflexive/",
       data,
       mensaje_exitoModificarproceso_reflexivo,
       mensaje_errorModificarproceso_reflexivo
@@ -6554,7 +6554,7 @@ if (
   document.getElementById("lista_sujetos_activos_proceso_reflexivo_modificar")
 )
   consultar_api(
-    "http://localhost:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos_modificar_reflexivos,
     error_cargar_sujetos_activos_procesos_modificar_reflexivos
   );
@@ -6631,7 +6631,7 @@ $("#criterio_de_decision_modelo").change(function () {
     nombre: tipo_criterio,
   };
   post_api(
-    "http://localhost:3000/api/get_umbral",
+    "http://alvapala.ddns.net:3000/api/get_umbral",
     data,
     cargar_lista_umbrales_proceso_reflexivo,
     error_cargar_lista_umbrales_proceso_reflexivo
@@ -6668,7 +6668,7 @@ function visibilidad_acciones_umbral_reflexivo(id) {
     .getElementById("tabla_acciones_umbral_reflexivos")
     .classList.replace("d-none", "inline-block");
   post_api(
-    "http://localhost:3000/api/get_accion/",
+    "http://alvapala.ddns.net:3000/api/get_accion/",
     {
       id: id,
     },
@@ -6714,7 +6714,7 @@ function AbrirModalAgregarVariablesSimulacion() {
 
 function recuperar_ultimo_metodo_aprendizaje() {
   post_api(
-    "http://localhost:3000/api/get_metodo_aprendizaje",
+    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
     { id: 23 },
     consultar_tabla_varibles,
     (res) => {
@@ -6725,7 +6725,7 @@ function recuperar_ultimo_metodo_aprendizaje() {
 
 function consultar_tabla_varibles(json) {
   post_api(
-    "http://localhost:3000/api/get_variable_simulacion/",
+    "http://alvapala.ddns.net:3000/api/get_variable_simulacion/",
     { mea_id: json.id },
     cargar_tabla_variables_simulacion,
     (res) => {
@@ -6763,7 +6763,7 @@ function agregar_variables_simulacion() {
 
 function guardarVariableSimulacion() {
   post_api(
-    "http://localhost:3000/api/get_metodo_aprendizaje",
+    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
     {
       id: 23,
     },
@@ -6775,7 +6775,7 @@ function guardarVariableSimulacion() {
 function enviarDatos_variables_simulacion(json) {
   var nombre = document.getElementById("nombre_variable_simulacion").value;
   post_api(
-    "http://localhost:3000/api/add_variable_simulacion/",
+    "http://alvapala.ddns.net:3000/api/add_variable_simulacion/",
     {
       nombre: nombre,
       mea_id: json.id,
@@ -6816,7 +6816,7 @@ function eliminar_variables_simulacion() {
   });
   if (!!id) {
     post_api(
-      "http://localhost:3000/api/del_variable_simulacion/",
+      "http://alvapala.ddns.net:3000/api/del_variable_simulacion/",
       {
         id: id,
       },
@@ -6866,7 +6866,7 @@ function ModificarVariableSimulacions() {
       .checked,
   };
   post_api(
-    "http://localhost:3000/api/upd_variable_simulacion/",
+    "http://alvapala.ddns.net:3000/api/upd_variable_simulacion/",
     data,
     (res) => {
       console.log(res);
@@ -6903,7 +6903,7 @@ function guardarvariables_valor() {
     vas_valor: document.getElementById("agregar_valor_simulacion").value,
   };
   post_api(
-    "http://localhost:3000/api/add_variables_valor/",
+    "http://alvapala.ddns.net:3000/api/add_variables_valor/",
     data,
     correcto_guardado_variables_valor,
     (res) => {
@@ -6937,7 +6937,7 @@ function elminarProcesoReflexivo() {
         id: id,
       };
       post_api(
-        "http://localhost:3000/api/del_process_pre_reflexive/",
+        "http://alvapala.ddns.net:3000/api/del_process_pre_reflexive/",
         data,
         mensaje_exitosBorrar_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
@@ -6949,7 +6949,7 @@ function elminarProcesoReflexivo() {
 
 function mensaje_exitosBorrar_reflexivo(json) {
   consultar_api(
-    "http://localhost:3000/api/procesos_reflexive",
+    "http://alvapala.ddns.net:3000/api/procesos_reflexive",
     cargar_procesos_reflexivos_table,
     mensaje_errorBorrar_reflexivo
   );
