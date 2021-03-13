@@ -3,6 +3,6 @@ export default {
 	"db-port": 3307,
 	"db-user": "root",
 	"db-password": "",
-	"db-schema": "db_autoconscienciaf",
+	"db-schema": "db_autoconsciencia",
 	"server-port": 3000,
 }
