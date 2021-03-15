@@ -1004,6 +1004,35 @@ function actualizar_sujetos() {
         Incluye:
 */
 
+function cargar_select_criterios_decision() {
+    consultar_api(
+        "http://localhost:3000/api/decision_criteria",
+        cargar_select_criterios_objetivos,
+        error_cargar_select_criterios_objetivos
+    );
+}
+
+function cargar_select_criterios_objetivos(json) {
+    var ope = document.getElementById("criterios_objetivos");
+    ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+}
+
+function error_cargar_select_criterios_objetivos() {
+    alert("No se cargo el select criterio de decicison");
+}
+
+
+
 function cargar_select_operador_agregacion() {
     var nombre = "TIPO_OPERADOR_ASIGNACION";
     var data = {
@@ -1040,6 +1069,7 @@ function abrirModalObjetosSujetos(id, nombre) {
     idSujetoObjetoActual = id;
     cargar_arbol(id);
     cargar_select_operador_agregacion();
+    cargar_select_criterios_decision();
 }
 
 function cargar_arbol(id) {
@@ -1098,6 +1128,7 @@ function activarFormularioAgregarObjeto() {
     document.getElementById("descripcionObjeto").disabled = false;
     document.getElementById("pesoObjeto").disabled = false;
     document.getElementById("operadorAsigObjetos").disabled = false;
+    document.getElementById("criterios_objetivos").disabled = false;
     document.getElementById("btn-agregarObjetoLista").disabled = false;
     var arbol = document.getElementsByName("item_arbol_objetos");
     var idSelected = null;
@@ -1113,6 +1144,7 @@ function desactivarFormularioAgregarObjeto() {
     document.getElementById("descripcionObjeto").disabled = true;
     document.getElementById("pesoObjeto").disabled = true;
     document.getElementById("operadorAsigObjetos").disabled = true;
+    document.getElementById("criterios_objetivos").disabled = true;
     document.getElementById("activoObjeto").disabled = true;
     document.getElementById("btn-agregarObjetoLista").disabled = true;
 
@@ -1121,6 +1153,7 @@ function desactivarFormularioAgregarObjeto() {
     document.getElementById("descripcionObjeto").value = "";
     document.getElementById("pesoObjeto").value = "";
     document.getElementById("operadorAsigObjetos").value = "";
+    document.getElementById("criterios_objetivos").value = "";
 }
 
 function agregarObjeto() {
@@ -1129,6 +1162,7 @@ function agregarObjeto() {
     var descripcion = document.getElementById("descripcionObjeto").value;
     var peso = document.getElementById("pesoObjeto").value;
     var operador = document.getElementById("operadorAsigObjetos").value;
+    var criterio = document.getElementById("criterios_objetivos").value;
     var activo = document.getElementById("activoObjeto").checked;
     if ((!!id_padre, !!nombre, !!descripcion, !!peso, !!operador)) {
         //Aqui falta agregar el criterio
@@ -1141,7 +1175,7 @@ function agregarObjeto() {
                 agregationOperator: operador,
                 active: activo,
                 system: idSujetoObjetoActual,
-                criteria: 1,
+                criteria: criterio,
             },
             (json) => {
                 console.log(json);
