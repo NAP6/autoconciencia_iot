@@ -20,6 +20,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const api = __importStar(require("../app/controller/controller-api"));
+const rt = __importStar(require("../app/controller/page_contollers"));
 function default_1(app) {
     app.get("/api/deployment_resources/", api.deployment_resources);
     app.post("/api/add_deployment_resources/", api.add_deployment_resources);
@@ -27,17 +28,11 @@ function default_1(app) {
     app.post("/api/ask_deployment_resources_select/", api.ask_deployment_resources_select);
     app.post("/api/ask_deployment_resources/", api.ask_deployment_resources);
     app.post("/api/ask_input_arguments/", api.ask_input_arguments);
-    app.get("/api/subjects/", api.subjects);
-    app.post("/api/subjects_objects/", api.subjects_objects);
-    app.post("/api/save_subjects_objects/", api.save_subjects_objects);
-    app.post("/api/delete_subjects_objects/", api.delete_subjects_objects);
     app.post("/api/save_subjects/", api.save_subjects);
-    app.post("/api/update_subjects/", api.update_subjects);
     app.post("/api/save_entity/", api.save_entity);
     app.post("/api/update_entity/", api.update_entity);
     app.post("/api/entity/", api.entity);
     app.get("/api/enumeracion/", api.enumeracion);
-    app.post("/api/get_enumeracion/", api.get_enumeracion);
     app.get("/api/measurement_units/", api.measurement_units);
     app.post("/api/add_measurement_units/", api.add_measurement_units);
     app.post("/api/del_measurement_units/", api.del_measurement_units);
@@ -56,9 +51,9 @@ function default_1(app) {
     app.post("/api/add_umbral/", api.add_umbral);
     app.post("/api/del_umbral/", api.del_umbral);
     app.post("/api/upd_umbral/", api.upd_umbral);
-    app.post("/api/aspects/", api.aspects);
-    app.post("/api/add_aspects/", api.add_aspects);
-    app.post("/api/del_aspects/", api.del_aspects);
+    //app.post("/api/aspects/", api.aspects);
+    //app.post("/api/add_aspects/", api.add_aspects);
+    //app.post("/api/del_aspects/", api.del_aspects);
     app.post("/api/add_metrica/", api.add_metrica);
     app.post("/api/get_metrica", api.get_metrica);
     app.post("/api/get_metrica_select", api.get_metrica_select);
@@ -67,7 +62,6 @@ function default_1(app) {
     app.post("/api/get_accion", api.get_accion);
     app.post("/api/del_accion/", api.del_accion);
     app.post("/api/upd_acciones_umbrales/", api.upd_acciones_umbrales);
-    app.get("/api/user_models/", api.user_models);
     app.get("/api/last_ObjectSubjectID/", api.last_ObjectSubjectID);
     app.get("/api/last_EntityID/", api.last_EntityID);
     app.get("/api/", api.home);
@@ -88,19 +82,37 @@ function default_1(app) {
     app.post("/api/objetivos_sujetos", api.objetivos_sujetos);
     app.post("/api/get_metodo_aprendizaje/", api.get_metodo_aprendizaje);
     app.post("/api/add_escenario_simulacion/", api.add_escenario_simulacion);
-    app.get("/api/ascenario_simulacion/", api.escenario_simulacion);
+    app.post("/api/ascenario_simulacion/", api.escenario_simulacion);
     app.post("/api/del_escenario_simulacion/", api.del_escenario_simulacion);
     app.post("/api/upd_escenario_simulacion/", api.upd_escenario_simulacion);
     app.post("/api/get_variables_valor/", api.get_variables_valor);
     app.post("/api/add_variables_valor/", api.add_variables_valor);
     app.post("/api/del_variables_valor/", api.del_variables_valor);
     app.post("/api/upd_variables_valor/", api.upd_variables_valor);
-    app.get("/api/get_variable_simulacion/", api.get_variable_simulacion);
+    app.post("/api/get_variable_simulacion/", api.get_variable_simulacion);
     app.get("/api/get_variable_simulacion_id/", api.get_variable_simulacion_id);
     app.post("/api/add_variable_simulacion/", api.add_variable_simulacion);
     app.post("/api/del_variable_simulacion/", api.del_variable_simulacion);
     app.post("/api/upd_variable_simulacion/", api.upd_variable_simulacion);
     app.post("/api/get_flujo_datos/", api.get_flujo_datos);
+    //Rutas revisadas
+    app.get("/api/user_models/", rt.user_models);
+    app.get("/api/subjects/", rt.subjects);
+    app.post("/api/update_subjects/", rt.update_subjects);
+    app.post("/api/entitys/", rt.entitys);
+    app.post("/api/subjects_objects/", rt.subjects_goals);
+    app.post("/api/get_enumeracion/", rt.get_enumeracion);
+    app.post("/api/save_subjects_objects/", rt.save_subjects_goal);
+    app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
+    //Metricas
+    app.get("/api/get_metrics/", rt.get_metrics);
+    app.post("/api/add_metrics/", rt.add_metrics);
+    app.post("/api/mod_metrics/", rt.mod_metrics);
+    app.post("/api/del_metrics/", rt.del_metrics);
+    //Aspectos
+    app.get("/api/get_aspects/", rt.get_aspects);
+    app.post("/api/add_aspects/", rt.add_aspects);
+    app.post("/api/mod_aspects/", rt.mod_aspecs);
+    app.post("/api/del_aspects/", rt.del_aspects);
 }
 exports.default = default_1;
-;

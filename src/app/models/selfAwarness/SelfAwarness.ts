@@ -5,6 +5,7 @@ import { Scope } from "./Scope";
 import { ImplementationResource } from "./ImplementationResource";
 import {  } from "./DataFlow";
 import { DataFlow } from "../architecture/DataFlow";
+import { Metric } from "../selfAwarness/Metric";
 
 export class SelfAwarness {
   private _id: number;
@@ -19,6 +20,7 @@ export class SelfAwarness {
   private _containsScope: Scope[];
   private _containsImplementationResource:ImplementationResource[];
   private _containsDataFlow:DataFlow[];
+  private _containsMetric: Metric[];
 
   constructor(
     id: number,
@@ -39,6 +41,7 @@ export class SelfAwarness {
     this._containsScale=[];
     this._containsImplementationResource=[];
     this._containsDataFlow=[];
+    this._containsMetric=[]
   }
 
   get id(): number {
@@ -134,5 +137,12 @@ export class SelfAwarness {
 
   set containsDataFlow(value: DataFlow[]) {
     this._containsDataFlow = value;
+  }
+  get containsMetric(): Metric[] {
+    return this._containsMetric;
+  }
+
+  set containsMetric(value: Metric[]) {
+    this._containsMetric = value;
   }
 }

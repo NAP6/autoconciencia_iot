@@ -470,7 +470,7 @@ export function add_aspects(req: Request, res: Response) {
     var tipo = req.body.tipoS;
     var peso = req.body.peso;
     var idP = req.body.id;
-    var activo = req.body.activo.toString();
+    var activo = req.body.activo;
     console.log(tipo);
     var db = new database();
     db.addUser_aspects(idUser, name, descripcion, tipo, peso, idP, activo);

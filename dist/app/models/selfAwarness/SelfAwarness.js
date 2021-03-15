@@ -15,6 +15,7 @@ class SelfAwarness {
         this._containsScale = [];
         this._containsImplementationResource = [];
         this._containsDataFlow = [];
+        this._containsMetric = [];
     }
     get id() {
         return this._id;
@@ -87,6 +88,12 @@ class SelfAwarness {
     }
     set containsDataFlow(value) {
         this._containsDataFlow = value;
+    }
+    get containsMetric() {
+        return this._containsMetric;
+    }
+    set containsMetric(value) {
+        this._containsMetric = value;
     }
 }
 exports.SelfAwarness = SelfAwarness;

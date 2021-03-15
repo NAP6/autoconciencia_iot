@@ -61,8 +61,9 @@ function login(req, res) {
 }
 exports.login = login;
 function logout(req, res, next) {
-    var _a;
+    var _a, _b;
     (_a = req.session) === null || _a === void 0 ? true : delete _a.user;
+    (_b = req.session) === null || _b === void 0 ? true : delete _b.active_model;
     res.redirect("/login");
 }
 exports.logout = logout;
@@ -296,6 +297,10 @@ function save_new_model(req, res, next) {
                     if (err)
                         throw err;
                     json = result;
+                });
+                fs.unlink(req.file.path, (err) => {
+                    if (err)
+                        throw err;
                 });
             }
             catch (error) {

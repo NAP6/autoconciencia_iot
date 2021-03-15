@@ -36,9 +36,9 @@ export default function (app: Application) {
   app.post("/api/add_umbral/", api.add_umbral);
   app.post("/api/del_umbral/", api.del_umbral);
   app.post("/api/upd_umbral/", api.upd_umbral);
-  app.post("/api/aspects/", api.aspects);
-  app.post("/api/add_aspects/", api.add_aspects);
-  app.post("/api/del_aspects/", api.del_aspects);
+  //app.post("/api/aspects/", api.aspects);
+  //app.post("/api/add_aspects/", api.add_aspects);
+  //app.post("/api/del_aspects/", api.del_aspects);
   app.post("/api/add_metrica/", api.add_metrica);
   app.post("/api/get_metrica", api.get_metrica);
   app.post("/api/get_metrica_select", api.get_metrica_select);
@@ -93,4 +93,15 @@ export default function (app: Application) {
   app.post("/api/get_enumeracion/", rt.get_enumeracion);
   app.post("/api/save_subjects_objects/", rt.save_subjects_goal);
   app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
+  //Metricas
+  app.post("/api/add_metrics/",rt.add_metrics);
+  app.post("/api/add_metrics_aspects/",rt.add_metrics_aspects);
+  app.post("/api/mod_metrics/",rt.mod_metrics);
+  app.post("/api/del_metrics/",rt.del_metrics);
+  app.route("/api/get_metrics/").get(rt.get_metrics).post(rt.get_metrics_aspects);
+  //Aspectos
+  app.route("/api/get_aspects/").get(rt.get_aspects);
+  app.post("/api/add_aspects/",rt.add_aspects);
+  app.post("/api/mod_aspects/",rt.mod_aspecs);
+  app.post("/api/del_aspects/",rt.del_aspects);
 }

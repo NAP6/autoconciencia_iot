@@ -8,6 +8,7 @@ class Goal {
         this._description = description;
         this._weight = weight;
         this._aggregationOperator = aggregationOperator;
+        this._active = true;
         this._containsSubGoal = [];
         this._isSuported = [];
     }
@@ -40,6 +41,12 @@ class Goal {
     }
     set aggregationOperator(value) {
         this._aggregationOperator = value;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
     }
     get containsSubGoal() {
         return this._containsSubGoal;

@@ -4,21 +4,11 @@ exports.SelfAwarnessQ = void 0;
 const SelfAwarness_1 = require("../SelfAwarness");
 class SelfAwarnessQ extends SelfAwarness_1.SelfAwarness {
     toSqlInsert(tag, value) {
-        var sql = `INSERT INTO 
-	  	modeloautoconsciencia(
-			ma_nombre, 
-			ma_descripcion, 
-			ma_autor, 
-			ma_modelo_arquitectura, 
-			usr_id
-		) VALUES (
-			'${this.name}',
-			'${this.description}',
-			'${this.author}',
-			'${this.architectureModel.split("'").join("`")}', 
-			/@/USER/@/)`;
+        var sql = `INSERT INTO modeloautoconsciencia(ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura, usr_id) VALUES ('${this.name}','${this.description}','${this.author}','${this.architectureModel
+            .split("'")
+            .join("`")}', /@/USER/@/)`;
         for (var i = 0; i < tag.length; i++) {
-            sql.replace(tag[i], value[i]);
+            sql = sql.replace(tag[i], value[i]);
         }
         return sql;
     }
@@ -47,6 +37,9 @@ class SelfAwarnessQ extends SelfAwarness_1.SelfAwarness {
     }
     toSqlDelete(tag, value) {
         return ``;
+    }
+    toSqlUpdate(tag, value) {
+        return `UPDATE modeloautoconsciencia SET ma_nombre = '${this.name}', ma_descripcion = '${this.description}', ma_activo = '${this.active ? 1 : 0}' WHERE ma_id = '${this.id}'`;
     }
     toObjectArray(rows) {
         var results = [];

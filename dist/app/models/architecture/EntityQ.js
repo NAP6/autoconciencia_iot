@@ -29,25 +29,30 @@ class EntityQ extends Entity_1.Entity {
     }
     toSqlInsert(tag, value) {
         var sql = `INSERT INTO objeto(
+		obj_id,
 	    	ma_id, 
 	    	obj_nombre, 
 	    	obj_tipo, 
 		obj_padre
             ) VALUES (
+	    	'${this.id}', 
 	    	/@/MODELO/@/, 
 	    	'${this.name}', 
 	    	'${this.entityType}', 
 	    	/@/PADRE/@/
     	   )`;
         for (var i = 0; i < tag.length; i++) {
-            sql.replace(tag[i], value[i]);
+            sql = sql.replace(tag[i], value[i]);
         }
         return sql;
     }
     toSqlSelect(tag, value) {
-        return ``;
+        return "";
     }
     toSqlDelete(tag, value) {
+        return ``;
+    }
+    toSqlUpdate(tag, value) {
         return ``;
     }
     toObjectArray(rows) {

@@ -7,6 +7,7 @@ export class SelfAwarenessAspect {
   private _description: string;
   private _aspectType;
   private _weight: number;
+  private _active:boolean;
   private _isEvaluated: Metric[];
   private _isCaptured: SelfAwarenessProcess[];
 
@@ -14,14 +15,16 @@ export class SelfAwarenessAspect {
     id: number,
     name: string,
     description: string,
+    weight: number,
     aspectType,
-    weight: number
+   
   ) {
     this._id = id;
     this._name = name;
     this._description = description;
-    this._aspectType = aspectType;
     this._weight = weight;
+    this._aspectType = aspectType;
+    this._active=true;
     this._isEvaluated = [];
     this._isCaptured = [];
   }
@@ -63,6 +66,13 @@ export class SelfAwarenessAspect {
 
   set weight(value: number) {
     this._weight = value;
+  }
+  get active(): boolean {
+    return this._active;
+  }
+
+  set active(value: boolean) {
+    this._active = value;
   }
 
   get isEvaluated(): Metric[] {

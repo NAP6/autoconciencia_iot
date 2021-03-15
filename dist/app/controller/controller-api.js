@@ -553,7 +553,7 @@ function add_aspects(req, res) {
         var tipo = req.body.tipoS;
         var peso = req.body.peso;
         var idP = req.body.id;
-        var activo = req.body.activo.toString();
+        var activo = req.body.activo;
         console.log(tipo);
         var db = new database_1.mysql_connector();
         db.addUser_aspects(idUser, name, descripcion, tipo, peso, idP, activo);
@@ -723,7 +723,7 @@ function user_models(req, res) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
-            var id = (_b = req.session) === null || _b === void 0 ? void 0 : _b.user.userID;
+            var id = (_b = req.session) === null || _b === void 0 ? void 0 : _b.user._id;
             var db = new database2_1.database2();
             var model = new selfAwarnessModels_1.SelfAwarnessQ(-1, "", "", "", "");
             var rows = yield db.qwerty(model.toSqlSelect(["/@/USER/@/"], id.toString()));
@@ -1045,7 +1045,8 @@ function escenario_simulacion(req, res) {
     if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
         var id = (_b = req.session) === null || _b === void 0 ? void 0 : _b.user.userID;
         var db = new database_1.mysql_connector();
-        db.escenario_simulacion(id, (jsonEscala) => {
+        var mea_id = req.body.mea_id;
+        db.escenario_simulacion(id, mea_id, (jsonEscala) => {
             res.json(jsonEscala);
         });
     }
@@ -1107,7 +1108,8 @@ function get_variable_simulacion(req, res) {
     if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
         var id = (_b = req.session) === null || _b === void 0 ? void 0 : _b.user.userID;
         var db = new database_1.mysql_connector();
-        db.get_variable_simulacion(id, (jsonEscala) => {
+        var mea_id = req.body.mea_id;
+        db.get_variable_simulacion(id, mea_id, (jsonEscala) => {
             res.json(jsonEscala);
         });
     }

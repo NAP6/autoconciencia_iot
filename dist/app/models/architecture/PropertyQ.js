@@ -16,14 +16,18 @@ class PropertyQ extends Property_1.Property {
     toSqlInsert(tag, value) {
         var sql = `INSERT INTO 
 	  	propiedad ( 
+			pro_id,
+			ma_id,
 	  		pro_nombre, 
 			obj_id
 		) VALUES (
+			'${this.id}', 
+			/@/MODELO/@/,
 			'${this.name}', 
 			/@/OBJETOS/@/
 		)`;
         for (var i = 0; i < tag.length; i++) {
-            sql.replace(tag[i], value[i]);
+            sql = sql.replace(tag[i], value[i]);
         }
         return sql;
     }
@@ -31,6 +35,9 @@ class PropertyQ extends Property_1.Property {
         return ``;
     }
     toSqlDelete(tag, value) {
+        return ``;
+    }
+    toSqlUpdate(tag, value) {
         return ``;
     }
     toObjectArray(rows) {

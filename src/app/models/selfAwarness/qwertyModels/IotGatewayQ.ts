@@ -15,7 +15,7 @@ export class IoTGatewayQ extends IoTGateway implements SQL_Qwerty {
                 o.obj_padre as padre 
                 FROM 
                 objeto as o, 
-                objeto_sujeto as os 
+                sujeto_objeto as os 
                 WHERE 
                 o.obj_id = os.obj_id AND 
                 o.ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} AND 

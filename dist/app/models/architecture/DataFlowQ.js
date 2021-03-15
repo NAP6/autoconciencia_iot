@@ -16,14 +16,18 @@ class DataFlowQ extends DataFlow_1.DataFlow {
     toSqlInsert(tag, value) {
         var sql = `INSERT INTO 
 	  	flujodatos (
+			flu_id,
+			ma_id,
 	  		flu_descripcion,
 		  	flu_tipo_comunicacion
   		) VALUES (
+	  		'${this.id}',
+		  	/@/MODELO/@/, 
 	  		'${this.description}',
 		  	'${this.comunicationType}'
   		)`;
         for (var i = 0; i < tag.length; i++) {
-            sql.replace(tag[i], value[i]);
+            sql = sql.replace(tag[i], value[i]);
         }
         return sql;
     }
@@ -31,6 +35,9 @@ class DataFlowQ extends DataFlow_1.DataFlow {
         return ``;
     }
     toSqlDelete(tag, value) {
+        return ``;
+    }
+    toSqlUpdate(tag, value) {
         return ``;
     }
     toObjectArray(rows) {

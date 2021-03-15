@@ -3303,6 +3303,7 @@ WHERE   pa.pa_id=${id} AND
     get_metodo_aprendizaje(id, metodoId, func) {
         var sql = `SELECT MAX(mea_id) as id
     FROM metodoaprendizajerazonamiento WHERE mea_tipo=${metodoId} `;
+        console.log(sql);
         this.connector.query(sql, (err, result, fields) => {
             if (err)
                 err;
@@ -3318,8 +3319,8 @@ WHERE   pa.pa_id=${id} AND
                 throw err;
         });
     }
-    escenario_simulacion(userID, func) {
-        var sql = `SELECT es_id as id, es_nombre as nombre,es_descripcion as descripcion,es_activo as activo FROM escenariosimulacion`;
+    escenario_simulacion(userID, mea_id, func) {
+        var sql = `SELECT es_id as id, es_nombre as nombre,es_descripcion as descripcion,es_activo as activo FROM escenariosimulacion WHERE mea_id=${mea_id}`;
         this.connector.query(sql, (err, result, fields) => {
             if (err)
                 err;
@@ -3389,8 +3390,8 @@ WHERE   pa.pa_id=${id} AND
             func(listaProcesos);
         });
     }
-    get_variable_simulacion(userID, func) {
-        var sql = `SELECT vs_id as id, vs_nombre as nombre,vs_activo as activo FROM variablesimulacion`;
+    get_variable_simulacion(userID, mea_id, func) {
+        var sql = `SELECT vs_id as id, vs_nombre as nombre,vs_activo as activo FROM variablesimulacion WHERE mea_id=${mea_id}`;
         this.connector.query(sql, (err, result, fields) => {
             if (err)
                 err;
@@ -4225,54 +4226,147 @@ WHERE   pa.pa_id=${id} AND
             fun(modelo);
         }
     }
-    generar_criterios(modelo, fun) {
-        var _a;
-        var value = "(";
-        (_a = modelo.objetos) === null || _a === void 0 ? void 0 : _a.forEach(element => {
-            value += `${element === null || element === void 0 ? void 0 : element.$.id},`;
+    /*public generar_criterios(modelo: generar_modelo, fun: Function): void {
+      var value: string = "(";
+      modelo.objetos?.forEach(element => {
+        value += `${element?.$.id},`;
+      });
+      value = value.substr(0, value.length - 1) + ")";
+      if (value.length > 1) {
+        var sql = `SELECT
+      cri.cd_id as id,
+      cri.cd_nombre as nombre,
+      cri.cd_descripcion as descripcion,
+      cri.cd_activo as activo
+      FROM
+      criteriodecision cri
+      WHERE
+      pro.obj_id IN ${value}`;
+        this.connector.query(sql, function (err, results) {
+          if (err) throw err;
+          results.forEach(pro => {
+            var prop: propiedad = {
+              $: {
+                id: pro.id,
+                nombre: pro.nombre,
+              }
+            };
+            modelo.objetos?.forEach(element => {
+              if (element?.$.id == pro.obj_id) {
+                if (element?.propiedad) {
+                  element.propiedad.push(prop);
+                } else {
+                  element!.propiedad = [prop];
+                }
+                return;
+              }
+            });
+          });
+          var db=new mysql_connector();
+          db.generar_metricas(modelo,fun);
+        });
+      } else {
+        var db=new mysql_connector();
+        db.generar_metricas(modelo,fun);
+      }
+    }*/
+    /*public generar_mapeo_parametros(modelo: generar_modelo, fun: Function): void {
+      if (modelo.metodo_aprendizaje!.length > 0) {
+        var value: string = "(";
+        modelo.metodo_aprendizaje?.forEach(element => {
+          value += `${element?.$.id},`;
         });
         value = value.substr(0, value.length - 1) + ")";
-        if (value.length > 1) {
-            var sql = `SELECT 
-    pro.pro_id as id,
-    pro.pro_nombre as nombre,
-    pro.obj_id 
-    FROM
-    propiedad pro
-    WHERE
-    pro.obj_id IN ${value}`;
-            this.connector.query(sql, function (err, results) {
-                if (err)
-                    throw err;
-                results.forEach(pro => {
-                    var _a;
-                    var prop = {
-                        $: {
-                            id: pro.id,
-                            nombre: pro.nombre,
-                        }
-                    };
-                    (_a = modelo.objetos) === null || _a === void 0 ? void 0 : _a.forEach(element => {
-                        if ((element === null || element === void 0 ? void 0 : element.$.id) == pro.obj_id) {
-                            if (element === null || element === void 0 ? void 0 : element.propiedad) {
-                                element.propiedad.push(prop);
-                            }
-                            else {
-                                element.propiedad = [prop];
-                            }
-                            return;
-                        }
-                    });
-                });
-                var db = new mysql_connector();
-                db.generar_metricas(modelo, fun);
+      if (value.length > 1) {
+        var sql = `SELECT
+      mp.met_id as metrica_id,
+      mp.par_ordinal as ordinal,
+      mp.mp_tipo_entrada as tipo_entrada,
+      mp.vs_id as variable_simulacion,
+      mp.md_id,
+      mp.mea_id
+      FROM
+      mapeoparametros mp
+      WHERE
+      mp.mea_id IN ${value}`;
+        this.connector.query(sql, function (err, results) {
+          if (err) throw err;
+          results.forEach(mp => {
+            var mapeo: mapeoParametros = {
+              $: {
+                tipo_entrada: mp.tipo_entrada,md_id:mp.md_id
+              }
+            };
+            modelo.metodo_aprendizaje?.forEach(element => {
+              if (element?.$.id == mp.mea_id) {
+                if(element?.mapeoParametros){
+                  element.mapeoParametros.push(mapeo);
+                }else{
+                  element!.mapeoParametros=[mapeo];
+                }
+                return;
+              }
             });
-        }
-        else {
-            var db = new mysql_connector();
-            db.generar_metricas(modelo, fun);
-        }
+          });
+          var db=new mysql_connector();
+          db.generar_metricas(modelo,fun);
+        });
+      } else {
+        var db=new mysql_connector();
+        db.generar_metricas(modelo,fun);
+      }
     }
+  }
+  public generar_recurso_implementacion(modelo: generar_modelo, fun: Function): void {
+    if(modelo.recursoimplementacion){
+  
+    }
+    if (modelo.metodo_aprendizaje!.length > 0) {
+      var value: string = "(";
+      modelo.metodo_aprendizaje?.forEach(element => {
+        value += `${element?.$.id},`;
+      });
+      value = value.substr(0, value.length - 1) + ")";
+    if (value.length > 1) {
+      var sql = `SELECT
+    mp.met_id as metrica_id,
+    mp.par_ordinal as ordinal,
+    mp.mp_tipo_entrada as tipo_entrada,
+    mp.vs_id as variable_simulacion,
+    mp.md_id,
+    mp.mea_id
+    FROM
+    mapeoparametros mp
+    WHERE
+    mp.mea_id IN ${value}`;
+      this.connector.query(sql, function (err, results) {
+        if (err) throw err;
+        results.forEach(mp => {
+          var mapeo: mapeoParametros = {
+            $: {
+              tipo_entrada: mp.tipo_entrada,md_id:mp.md_id
+            }
+          };
+          modelo.metodo_aprendizaje?.forEach(element => {
+            if (element?.$.id == mp.mea_id) {
+              if(element?.mapeoParametros){
+                element.mapeoParametros.push(mapeo);
+              }else{
+                element!.mapeoParametros=[mapeo];
+              }
+              return;
+            }
+          });
+        });
+        var db=new mysql_connector();
+        db.generar_metricas(modelo,fun);
+      });
+    } else {
+      var db=new mysql_connector();
+      db.generar_metricas(modelo,fun);
+    }
+  }
+  }*/
     get_flujo_datos(userID, comunicacion, propiedad, func) {
         var comu;
         if (comunicacion == "SÍNCRONA") {

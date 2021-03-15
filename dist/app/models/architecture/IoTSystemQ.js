@@ -23,16 +23,18 @@ class IoTSystemQ extends IoTSystem_1.IoTSystem {
     toSqlInsert(tag, value) {
         var sql = `INSERT INTO 
 	  	sujeto (
+			suj_id,
 	  		ma_id, 
 		  	suj_nombre, 
 		  	suj_padre
   		) VALUES (
+		  	'${this.id}', 
 		  	/@/MODELO/@/, 
 		  	'${this.name}', 
 		  	/@/PADRE/@/
   		)`;
         for (var i = 0; i < tag.length; i++) {
-            sql.replace(tag[i], value[i]);
+            sql = sql.replace(tag[i], value[i]);
         }
         return sql;
     }
@@ -40,6 +42,9 @@ class IoTSystemQ extends IoTSystem_1.IoTSystem {
         return ``;
     }
     toSqlDelete(tag, value) {
+        return ``;
+    }
+    toSqlUpdate(tag, value) {
         return ``;
     }
     toObjectArray(rows) {

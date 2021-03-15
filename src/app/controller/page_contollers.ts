@@ -20,3 +20,6 @@ export {
 } from "./page_contollers/subject";
 export { get_enumeracion } from "./page_contollers/enumeration";
 export { singup, singup_save } from "./page_contollers/singup";
+export { metrics,get_metrics,get_metrics_aspects,add_metrics,mod_metrics,del_metrics,add_metrics_aspects} from "./page_contollers/metrics";
+export { aspects,get_aspects,add_aspects,mod_aspecs,del_aspects } from "./page_contollers/aspects";
+

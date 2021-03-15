@@ -2,12 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Metric = void 0;
 class Metric {
-    constructor(id, name, description, abbreviation) {
+    constructor(id, name, description, abbreviation, perspective) {
         this._id = id;
         this._name = name;
         this._description = description;
         this._abbreviation = abbreviation;
+        this._perspective = perspective;
+        this._active = true;
         this._isUsedIn = [];
+        this._evaluates = [];
     }
     get id() {
         return this._id;
@@ -33,6 +36,18 @@ class Metric {
     set abbreviation(value) {
         this._abbreviation = value;
     }
+    get perspective() {
+        return this._perspective;
+    }
+    set perspective(value) {
+        this._perspective = value;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
+    }
     get isValidatedBy() {
         return this._isValidatedBy;
     }
@@ -50,6 +65,12 @@ class Metric {
     }
     set isUsedIn(value) {
         this._isUsedIn = value;
+    }
+    get evaluates() {
+        return this._evaluates;
+    }
+    set evaluates(value) {
+        this._evaluates = value;
     }
 }
 exports.Metric = Metric;
