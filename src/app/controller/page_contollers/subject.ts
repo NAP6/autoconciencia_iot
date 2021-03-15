@@ -51,6 +51,7 @@ export async function subjects_goals(req: Request, res: Response) {
       goal.toSqlSelect(["/@/SYSTEM/@/", "/@/MODEL/@/"], [systemID, modelID])
     );
     res.json(rows);
+    
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

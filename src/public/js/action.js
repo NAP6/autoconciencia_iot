@@ -2418,7 +2418,6 @@ function verificarSeleccion(elemento) {
 }
 
 $("#CategoriaEntidades").change(function() {
-
     entidad_selecciona_seccion_objetos_modal = undefined;
     var limpiar = document.getElementById("lista_entidades_para_cargar");
     limpiar.innerHTML = "";
@@ -2439,8 +2438,13 @@ $("#CategoriaEntidades").change(function() {
 });
 
 function cargar_posibles_entidades_modelo(json) {
+    console.log(json);
     var aux_visible_activo = new Set();
     var aux_visible_inactivo = new Set();
+    var padreList = [];
+    json.forEach((elemento) => {
+        padreList.push(elemento.id)
+    });
     json.forEach((elemento) => {
         if (!!elemento.padre && elemento.activo == 1) {
             aux_visible_activo.add(elemento.padre);
@@ -2450,7 +2454,7 @@ function cargar_posibles_entidades_modelo(json) {
     });
     json.forEach((elemento) => {
         var insertar;
-        if (!elemento.padre) {
+        if (!elemento.padre || padreList.indexOf(elemento.padre) != -1) {
             insertar = document.getElementById("lista_entidades_para_cargar");
         } else {
             insertar = document.createElement("ul");
@@ -2494,7 +2498,7 @@ function cargar_posibles_entidades_modelo(json) {
         insertar.appendChild(li);
         // ===========================================================================================
 
-        if (!elemento.padre) {
+        if (!elemento.padre || padreList.indexOf(elemento.padre) == -1) {
             insertar = document.getElementById("lista_entidades_seleccionados");
         } else {
             insertar = document.createElement("ul");
@@ -2532,14 +2536,7 @@ function cargar_posibles_entidades_modelo(json) {
         labelChek = document.createElement("label");
         labelChek.classList.add("form-check-label");
         labelChek.htmlFor = checkbox.id;
-        var button = document.createElement("button");
-        button.classList.add("btn", "btn-link", "py-0", "px-0");
-        button.setAttribute(
-            "onclick",
-            `abrirModalEntidadColor('${elemento.id}', '${elemento.nombre}');`
-        );
-        button.innerHTML = elemento.nombre;
-        labelChek.appendChild(button);
+        labelChek.innerHTML = elemento.nombre;
         li.appendChild(divFormCheck);
         divFormCheck.appendChild(checkbox);
         divFormCheck.appendChild(labelChek);
