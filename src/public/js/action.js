@@ -121,7 +121,6 @@ function cargar_recursos_de_implementacion() {
 }
 
 function cargar_recursos_de_implementacion_tabla(json) {
-    console.log(json);
     var table = document.getElementById("tabla_recursos");
     table.innerHTML = "";
     var temp = document.getElementsByTagName("template")[0];
@@ -1193,38 +1192,6 @@ function eliminarObjeto() {
         cargar_unidades_de_medida_select
         error_cargar_unidades_de_medida_select
 */
-
-function cargar_tipo_metrica_select(json) {
-    res = "";
-    json.forEach((me) => {
-        res += `<option value='${me.id}'>${me.nombre}</option>`;
-    });
-    document.getElementById("select_metrica").innerHTML = res;
-}
-
-function error_cargar_tipo_metrica_select(err) {
-    alert("Error al cargar los datos del modelo: " + err);
-}
-
-if (document.getElementById("unidad_medida_metrica"))
-    consultar_api(
-        "http://localhost:3000/api/measurement_units",
-        cargar_unidades_de_medida_select,
-        error_cargar_unidades_de_medida_select
-    );
-
-function cargar_unidades_de_medida_select(json) {
-    res = "";
-    json.forEach((um) => {
-        res += `<option value='${um.id}'>${um.nombre}</option>`;
-    });
-    document.getElementById("unidad_medida_metrica").innerHTML = res;
-}
-
-function error_cargar_unidades_de_medida_select(err) {
-    alert("Error al cargar los datos del modelo: " + err);
-}
-
 /*CARGAR TIPO PARA LA SECCION DE ESCALAS*/
 
 if (
@@ -2133,12 +2100,6 @@ function Administrar_Metricas() {
                 tipo: busca,
             };
             post_api(
-                "http://localhost:3000/api/get_metrica",
-                data,
-                cargar_aspectos_metrica_table,
-                error_cargar_aspectos_metrica_table
-            );
-            post_api(
                 "http://localhost:3000/api/get_enumeracion",
                 data2,
                 cargar_tipo_metrica_select,
@@ -2208,31 +2169,7 @@ function error_cargar_aspectos_table(err) {
     alert("Error al cargar los datos del modelo: " + err);
 }
 
-function cargar_aspectos_metrica_table(json) {
-    res = "";
-    console.log(json);
-    json.forEach((met) => {
-        res += "<tr>";
-        res += `<td><input type="radio" name="metrica_seleccionado" value="${
-        met.id
-      }" data-name="${met.nombre}" data-tipo="${met.tipo}" data-abreviatura="${
-        met.abreviatura
-      }" data-activo="${met.activo == "true"}"></td>`;
-        res += `<td>${met.id}</td>`;
-        res += `<td>${met.nombre}</td>`;
-        res += `<td>${met.tipo}</td>`;
-        res += `<td>${met.abreviatura}</td>`;
-        if (met.activo == "true")
-            res += `<td><input type="checkbox" disabled checked></td>`;
-        else res += `<td><input type="checkbox" disabled></td>`;
-        res += "</tr>";
-    });
-    document.getElementById("tabla_aspectos_Metrica").innerHTML = res;
-}
 
-function error_cargar_aspectos_metrica_table(err) {
-    alert("Error al cargar los datos del modelo: " + err);
-}
 
 /* 
     SECCION LISTAR MODELOS
@@ -2299,58 +2236,6 @@ function mostrar_modal_json() {
         null,
         2
     );
-}
-
-function activarFormularioAgregarMetrica() {
-    try {
-        document.getElementById("nombreMetrica").disabled = false;
-        document.getElementById("descripcionMetrica").disabled = false;
-        document.getElementById("abreviaturaMetrica").disabled = false;
-        document.getElementById("escalas_seccion_entidad").disabled = false;
-        document.getElementById("unidad_medida_metrica").disabled = false;
-        document.getElementById("select_metrica").disabled = false;
-        document.getElementById("btn-agregarMetrica").disabled = false;
-        document.getElementById("btn-CancelarMetrica").disabled = false;
-    } catch (error) {
-        alert(error);
-    }
-}
-
-function desactivarFormularioAgregarMetrica() {
-    try {
-        document.getElementById("nombreMetrica").disabled = true;
-        document.getElementById("descripcionMetrica").disabled = true;
-        document.getElementById("abreviaturaMetrica").disabled = true;
-        document.getElementById("escalas_seccion_entidad").disabled = true;
-        document.getElementById("unidad_medida_metrica").disabled = true;
-        document.getElementById("select_metrica").disabled = true;
-        document.getElementById("activoMetrica").disabled = true;
-        document.getElementById("btn-agregarMetrica").disabled = true;
-        document.getElementById("btn-CancelarMetrica").disabled = true;
-        document.getElementById("nombreMetrica").value = "";
-        document.getElementById("descripcionMetrica").value = "";
-        document.getElementById("abreviaturaMetrica").value = "";
-    } catch (error) {
-        alert(error);
-    }
-}
-if (document.getElementById("escalas_seccion_entidad"))
-    consultar_api(
-        "http://localhost:3000/api/escales",
-        cargar_escalas_select,
-        error_escalas_select
-    );
-
-function cargar_escalas_select(json) {
-    res = "";
-    json.forEach((es) => {
-        res += `<option value='${es.id}'>${es.nombre}</option>`;
-    });
-    document.getElementById("escalas_seccion_entidad").innerHTML = res;
-}
-
-function error_escalas_select(err) {
-    alert("Error al cargar las escalas select: " + err);
 }
 /* 
     SECCION LISTAR MODELOS
@@ -2423,8 +2308,83 @@ function error_cargar_models_trabajo_actual(err) {
 }
 var entidades_list = [];
 var entidades_aux = {};
+var System = undefined;
+
+function cargar_sujetos_activos(json) {
+    console.log(json);
+    var aux_visible_activo = new Set();
+    var aux_visible_inactivo = new Set();
+    json.forEach((elemento) => {
+        if (!!elemento.father && elemento.active == 1) {
+            aux_visible_activo.add(elemento.father);
+        } else if (!!elemento.father && elemento.active == 0) {
+            aux_visible_inactivo.add(elemento.father);
+        }
+    });
+    console.log(aux_visible_inactivo);
+    json.forEach((elemento) => {
+        var insertar;
+        if (!elemento.father) {
+            insertar = document.getElementById("lista_sujetos_activos");
+        } else {
+            insertar = document.createElement("ul");
+            document
+                .getElementById(`li_entidad_seleccionado_${elemento.father}`)
+                .appendChild(insertar);
+        }
+        li = document.createElement("li");
+        li.id = `li_entidad_seleccionado_${elemento.id}`;
+        if (elemento.active == 1 || aux_visible_activo.has(elemento.id)) {
+            li.style.display = "list-item";
+        } else {
+            li.style.display = "none";
+        }
+        divFormCheck = document.createElement("div");
+        divFormCheck.classList.add("form-check");
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.classList.add(
+            "form-check-input",
+            `hijo_de_${elemento.father}_seleccionado`,
+            "checkbox_seleccionado"
+        );
+        checkbox.id = `sujeto_seleccionado_${elemento.id}`;
+        checkbox.name = "checkbox_sujetos_objetos";
+        checkbox.dataset.padre_id = elemento.father;
+        checkbox.dataset.puro_id = elemento.id;
+        checkbox.dataset.nombre = elemento.name;
+        checkbox.setAttribute("onclick", "verificarSeleccion(this);");
+        labelChek = document.createElement("label");
+        labelChek.classList.add("form-check-label");
+        labelChek.htmlFor = checkbox.id;
+        var button = document.createElement("button");
+        button.classList.add("btn", "py-0", "px-0");
+        button.innerHTML = elemento.name;
+        labelChek.appendChild(button);
+        li.appendChild(divFormCheck);
+        divFormCheck.appendChild(checkbox);
+        divFormCheck.appendChild(labelChek);
+        insertar.appendChild(li);
+    });
+}
+
+function error_cargar_sujetos_activos(error) {
+    alert("Error al cargar los datos del modelo: " + error);
+}
+
+function verificarSeleccion(elemento) {
+    var checkbox = document.getElementsByName("checkbox_sujetos_objetos");
+    var auxChecked = elemento.checked;
+    System = elemento.dataset.puro_id;
+    Array.from(checkbox).forEach((element) => {
+        element.checked = false;
+    });
+    elemento.checked = auxChecked;
+    document.getElementById("CategoriaEntidades").disabled = false;
+}
 
 $("#CategoriaEntidades").change(function() {
+
     entidad_selecciona_seccion_objetos_modal = undefined;
     var limpiar = document.getElementById("lista_entidades_para_cargar");
     limpiar.innerHTML = "";
@@ -2434,6 +2394,7 @@ $("#CategoriaEntidades").change(function() {
     var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
     data = {
         valorS: tipo_valor,
+        systemID: System,
     };
     post_api(
         "http://localhost:3000/api/entitys",
@@ -2838,38 +2799,9 @@ function abrirModalEntidad(id, nombre) {
             cargar_aspectos_table,
             error_cargar_aspectos_table
         );
-        cargar_select_tipo_as();
     } catch (error) {
         alert(error);
     }
-}
-
-function cargar_select_tipo_as() {
-    var tipo = "TIPO_ASPECTO";
-    var data = {
-        tipo: tipo,
-    };
-    post_api(
-        "http://localhost:3000/api/get_enumeracion",
-        data,
-        cargar_select_tipo_aspecto,
-        error_select_tipo_aspecto
-    );
-}
-
-function cargar_select_tipo_aspecto(json) {
-    var ope = document.getElementById("tipo_aspectos");
-    ope.innerHTML = "";
-    json.forEach((element) => {
-        var option = document.createElement("option");
-        option.value = element.id;
-        option.innerHTML = element.nombre;
-        ope.appendChild(option);
-    });
-}
-
-function error_select_tipo_aspecto() {
-    alert("No se logro cargar los datos en selec tipo del Modal Aspectos");
 }
 
 function activarFormularioAgregarEntidad() {
@@ -2955,41 +2887,6 @@ function EliminarAspecto() {
 
 /*Seccion de Metricas Botones Guardar Cancelar Agregar y Eliminar*/
 
-function GuardarMetrica() {
-    var escala = document.getElementById("escalas_seccion_entidad");
-    var escalaS = escala.options[escala.selectedIndex].text;
-    var unidad = document.getElementById("unidad_medida_metrica");
-    var unidadS = unidad.options[unidad.selectedIndex].text;
-    var tipo = document.getElementById("select_metrica");
-    var tipoS = tipo.options[tipo.selectedIndex].text;
-    var data = {
-        id: AspectoId,
-        nombre: document.getElementById("nombreMetrica").value,
-        descripcion: document.getElementById("descripcionMetrica").value,
-        abreviatura: document.getElementById("abreviaturaMetrica").value,
-        escala: escalaS,
-        unidad: unidadS,
-        tipo: tipoS,
-        activo: document.getElementById("activoMetrica").checked,
-    };
-
-    if (!!data.nombre &&
-        !!data.descripcion &&
-        !!data.abreviatura &&
-        !!data.escala &&
-        !!data.unidad &&
-        !!data.tipo
-    ) {
-        post_api(
-            "http://localhost:3000/api/add_metrica/",
-            data,
-            mensaje_exitoEnvioMetrica,
-            mensaje_errorEnvioMetrica
-        );
-        desactivarFormularioAgregarMetrica();
-    }
-}
-
 function eliminar_metrica() {
     var radio = document.getElementsByName("metrica_seleccionado");
     var id;
@@ -3010,32 +2907,11 @@ function eliminar_metrica() {
             mensaje_exitoEnvioMetrica,
             mensaje_errorEnvioMetrica
         );
-        post_api(
-            "http://localhost:3000/api/get_metrica",
-            data,
-            cargar_aspectos_metrica_table,
-            error_cargar_aspectos_metrica_table
-        );
         $("#modal_eliminar_unidadMedida").modal("hide");
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
-function mensaje_exitoEnvioMetrica(json) {
-    var data2 = {
-        id: AspectoId,
-    };
-    post_api(
-        "http://localhost:3000/api/get_metrica",
-        data2,
-        cargar_aspectos_metrica_table,
-        error_cargar_aspectos_metrica_table
-    );
-    alert(json.mensaje);
-}
 
-function mensaje_errorEnvioMetrica(err) {
-    alert(err);
-}
 /* 
     SECCION SELECCION SUJETOS CARGAR LOS RECURSOS DE IMPLEMENTACION
   
@@ -3246,77 +3122,7 @@ if (document.getElementById("lista_sujetos_activos"))
         error_cargar_sujetos_activos
     );
 
-function cargar_sujetos_activos(json) {
-    console.log(json);
-    var aux_visible_activo = new Set();
-    var aux_visible_inactivo = new Set();
-    json.forEach((elemento) => {
-        if (!!elemento.father && elemento.active == 1) {
-            aux_visible_activo.add(elemento.father);
-        } else if (!!elemento.father && elemento.active == 0) {
-            aux_visible_inactivo.add(elemento.father);
-        }
-    });
-    console.log(aux_visible_inactivo);
-    json.forEach((elemento) => {
-        var insertar;
-        if (!elemento.father) {
-            insertar = document.getElementById("lista_sujetos_activos");
-        } else {
-            insertar = document.createElement("ul");
-            document
-                .getElementById(`li_entidad_seleccionado_${elemento.father}`)
-                .appendChild(insertar);
-        }
-        li = document.createElement("li");
-        li.id = `li_entidad_seleccionado_${elemento.id}`;
-        if (elemento.active == 1 || aux_visible_activo.has(elemento.id)) {
-            li.style.display = "list-item";
-        } else {
-            li.style.display = "none";
-        }
-        divFormCheck = document.createElement("div");
-        divFormCheck.classList.add("form-check");
-        checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.classList.add(
-            "form-check-input",
-            `hijo_de_${elemento.father}_seleccionado`,
-            "checkbox_seleccionado"
-        );
-        checkbox.id = `sujeto_seleccionado_${elemento.id}`;
-        checkbox.name = "checkbox_sujetos_objetos";
-        checkbox.dataset.padre_id = elemento.father;
-        checkbox.dataset.puro_id = elemento.id;
-        checkbox.dataset.nombre = elemento.name;
-        checkbox.setAttribute("onclick", "verificarSeleccion(this);");
-        labelChek = document.createElement("label");
-        labelChek.classList.add("form-check-label");
-        labelChek.htmlFor = checkbox.id;
-        var button = document.createElement("button");
-        button.classList.add("btn", "py-0", "px-0");
-        button.innerHTML = elemento.name;
-        labelChek.appendChild(button);
-        li.appendChild(divFormCheck);
-        divFormCheck.appendChild(checkbox);
-        divFormCheck.appendChild(labelChek);
-        insertar.appendChild(li);
-    });
-}
 
-function error_cargar_sujetos_activos(error) {
-    alert("Error al cargar los datos del modelo: " + error);
-}
-
-function verificarSeleccion(elemento) {
-    var checkbox = document.getElementsByName("checkbox_sujetos_objetos");
-    var auxChecked = elemento.checked;
-    Array.from(checkbox).forEach((element) => {
-        element.checked = false;
-    });
-    elemento.checked = auxChecked;
-    document.getElementById("CategoriaEntidades").disabled = false;
-}
 
 /*
 Procesos Pre Reflexivos
@@ -3451,28 +3257,29 @@ if (document.getElementById("lista_sujetos_activos_proceso"))
     );
 
 function cargar_sujetos_activos_procesos(json) {
+    console.log(json);
     var aux_visible_activo = new Set();
     var aux_visible_inactivo = new Set();
     json.forEach((elemento) => {
-        if (!!elemento.padre && elemento.activo == 1) {
-            aux_visible_activo.add(elemento.padre);
-        } else if (!!elemento.padre && elemento.activo == 0) {
-            aux_visible_inactivo.add(elemento.padre);
+        if (!!elemento.father && elemento.active == 1) {
+            aux_visible_activo.add(elemento.father);
+        } else if (!!elemento.father && elemento.active == 0) {
+            aux_visible_inactivo.add(elemento.father);
         }
     });
     json.forEach((elemento) => {
         var insertar;
-        if (!elemento.padre) {
+        if (!elemento.father) {
             insertar = document.getElementById("lista_sujetos_activos_proceso");
         } else {
             insertar = document.createElement("ul");
             document
-                .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+                .getElementById(`li_entidad_seleccionado_${elemento.father}`)
                 .appendChild(insertar);
         }
         li = document.createElement("li");
         li.id = `li_entidad_seleccionado_${elemento.id}`;
-        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+        if (elemento.active == 1 || aux_visible_activo.has(elemento.id)) {
             li.style.display = "list-item";
         } else {
             li.style.display = "none";
@@ -3483,16 +3290,16 @@ function cargar_sujetos_activos_procesos(json) {
         checkbox.type = "checkbox";
         checkbox.id = `sujeto_seleccionado_${elemento.id}`;
         checkbox.name = "checkbox_sujetos_procesos";
-        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.padre_id = elemento.father;
         checkbox.dataset.puro_id = elemento.id;
-        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.dataset.nombre = elemento.name;
         checkbox.setAttribute("onclick", "verificarSeleccionProceso(this);");
         labelChek = document.createElement("label");
         labelChek.classList.add("form-check-label");
         labelChek.htmlFor = checkbox.id;
         var button = document.createElement("button");
         button.classList.add("btn", "py-0", "px-0");
-        button.innerHTML = elemento.nombre;
+        button.innerHTML = elemento.name;
         labelChek.appendChild(button);
         li.appendChild(divFormCheck);
         divFormCheck.appendChild(checkbox);
@@ -3528,6 +3335,7 @@ function verificarSeleccionProceso(elemento) {
 }
 
 function cargar_objetivos_sujetos_select(json) {
+    console.log(json);
     var ope = document.getElementById("objetivos_alto_nivel");
     var option = document.createElement("option");
     option.value = "-6";
@@ -3555,7 +3363,9 @@ $("#CategoriaEntidadesProcesos").change(function() {
     var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
     data = {
         valorS: tipo_valor,
+        systemID: SujetoGuardarProceso,
     };
+
     post_api(
         "http://localhost:3000/api/entitys",
         data,
@@ -5751,7 +5561,7 @@ function cargar_sujetos_activos_procesos_modificar(json) {
         checkbox.type = "checkbox";
         checkbox.id = `sujeto_seleccionado_${elemento.id}`;
         checkbox.disabled = true;
-        checkbox.name = "checkbox_sujetos_procesos";
+        checkbox.name = "checkbox_sujetos_procesos_modificar";
         checkbox.dataset.padre_id = elemento.padre;
         checkbox.dataset.puro_id = elemento.id;
         checkbox.dataset.nombre = elemento.nombre;
@@ -6552,7 +6362,7 @@ function cargar_sujetos_activos_procesos_modificar_reflexivos(json) {
         checkbox.type = "checkbox";
         checkbox.id = `sujeto_seleccionado_${elemento.id}`;
         checkbox.disabled = true;
-        checkbox.name = "checkbox_sujetos_procesos";
+        checkbox.name = "checkbox_sujetos_procesos_modificar_reflexivos";
         checkbox.dataset.padre_id = elemento.padre;
         checkbox.dataset.puro_id = elemento.id;
         checkbox.dataset.nombre = elemento.nombre;
@@ -6865,7 +6675,6 @@ function guardarvariables_valor() {
 }
 
 function correcto_guardado_variables_valor(json) {
-    console.log(json);
     document.getElementById("agregar_valor_simulacion").value = "";
     $("#modal_agregar_variables_valores_simulacion").modal("hide");
     $("#modal_escenarios_simulacion").modal("show");
@@ -6908,4 +6717,927 @@ function mensaje_exitosBorrar_reflexivo(json) {
 
 function mensaje_errorBorrar_reflexivo(error) {
     alert(err);
+}
+
+//Nuevas cosas que se aumentaron Aspectos y Metricas
+//PARTE METRICAAAS ////////////////////////////////
+
+if (document.getElementById("TableMetrics")) {
+    cargar_tabla_metricas();
+}
+
+if (document.getElementById("escalas_seccion_entidad"))
+    consultar_api(
+        "http://localhost:3000/api/escales",
+        cargar_escalas_select,
+        error_escalas_select
+    );
+
+function cargar_escalas_select(json) {
+    var ope = document.getElementById("escalas_seccion_entidad");
+    ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+}
+
+function error_escalas_select(err) {
+    alert("Error al cargar las escalas select: " + err);
+}
+
+if (document.getElementById("unidad_medida_metrica"))
+    consultar_api(
+        "http://localhost:3000/api/measurement_units",
+        cargar_unidades_de_medida_select,
+        error_cargar_unidades_de_medida_select
+    );
+
+function cargar_unidades_de_medida_select(json) {
+    var ope = document.getElementById("unidad_medida_metrica");
+    ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+}
+
+function error_cargar_unidades_de_medida_select(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+
+function agregarMetrica() {
+    var guardarButton = document.getElementById("agregarMetricaButton");
+    var modificarButton = document.getElementById("ModificarMetricaButton");
+    guardarButton.classList.replace("d-none", "d-inline-block");
+    modificarButton.classList.replace("d-inline-block", "d-none");
+    document.getElementById("escalas_seccion_entidad").value = "-6";
+    document.getElementById("unidad_medida_metrica").value = "-6";
+    document.getElementById("select_metrica").value = "-6";
+    document.getElementById("nombreMetrica").value = "";
+    document.getElementById("descripcionMetrica").value = "";
+    document.getElementById("abreviaturaMetrica").value = "";
+    document.getElementById("perspectiva_indicador").value = "";
+    $("#add_metrics").modal("show");
+    post_api(
+        "http://localhost:3000/api/get_enumeracion", { tipo: "TIPO_METRICA" },
+        cargar_tipo_metrica_select,
+        error_cargar_tipo_metrica_select
+    );
+}
+
+function cargar_tipo_metrica_select(json) {
+    var ope = document.getElementById("select_metrica");
+    ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+}
+
+function error_cargar_tipo_metrica_select(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+
+function GuardarMetrica() {
+    document.getElementById("Titulos_metricas").innerHTML = "Agregar Métricas";
+    var escala = document.getElementById("escalas_seccion_entidad").value;
+    var unidad = document.getElementById("unidad_medida_metrica").value;
+    var tipo = document.getElementById("select_metrica").value;
+    var data = {
+        name: document.getElementById("nombreMetrica").value,
+        description: document.getElementById("descripcionMetrica").value,
+        abbreviation: document.getElementById("abreviaturaMetrica").value,
+        perspective: document.getElementById("perspectiva_indicador").value,
+        scale: escala,
+        unit: unidad,
+        type_metric: tipo,
+        active: document.getElementById("activoMetrica").checked,
+    };
+    if (!!data.name &&
+        !!data.description &&
+        !!data.abbreviation &&
+        !!data.perspective &&
+        data.scale != -6 &&
+        data.unit != -6 &&
+        data.type_metric != -6) {
+        post_api(
+            "http://localhost:3000/api/add_metrics/",
+            data,
+            mensaje_exitoEnvioMetrica,
+            mensaje_errorEnvioMetrica
+        );
+        CancelarGuardarMetrica();
+
+    } else {
+        alert("Debe llenar todos los campos");
+    }
+}
+
+function CancelarGuardarMetrica() {
+    document.getElementById("escalas_seccion_entidad").value = "-6";
+    document.getElementById("unidad_medida_metrica").value = "-6";
+    document.getElementById("select_metrica").value = "-6";
+    document.getElementById("nombreMetrica").value = "";
+    document.getElementById("descripcionMetrica").value = "";
+    document.getElementById("abreviaturaMetrica").value = "";
+    document.getElementById("perspectiva_indicador").value = "";
+    $("#add_metrics").modal("hide");
+
+}
+
+function cargar_tabla_metricas() {
+    consultar_api(
+        "http://localhost:3000/api/get_metrics",
+        cargar_metrica_table,
+        error_cargar_metrica_table
+    );
+}
+
+function mensaje_exitoEnvioMetrica(json) {
+    cargar_tabla_metricas();
+}
+
+function mensaje_errorEnvioMetrica(err) {
+    alert(err);
+}
+
+function cargar_metrica_table(json) {
+    res = "";
+    json.forEach((met) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="metrica_seleccionado" value="${
+        met.id
+      }" data-name="${met.name}" data-description="${met.description}" data-perspective="${met.perspectiva}" data-tipo="${met.tipo_id}" data-abreviatura="${
+        met.abbreviation}" data-activo="${met.active == 1}" data-scale="${met.scale}" data-unit="${met.unit}"></td>`;
+        res += `<td>${met.id}</td>`;
+        res += `<td>${met.name}</td>`;
+        res += `<td>${met.description}</td>`;
+        res += `<td>${met.abbreviation}</td>`;
+        res += `<td>${met.perspectiva}</td>`;
+        res += `<td>${met.met_type}</td>`;
+        if (met.active == 1)
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("TableMetrics").innerHTML = res;
+}
+
+function error_cargar_metrica_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+
+function modificarMetrica() {
+    agregarMetrica();
+    var radio = document.getElementsByName("metrica_seleccionado");
+    var id;
+    var name;
+    var descripcion;
+    var abbreviation;
+    var perspective;
+    var escale;
+    var unidad;
+    var type;
+    var active;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            descripcion = elem.dataset.description;
+            abbreviation = elem.dataset.abreviatura;
+            perspective = elem.dataset.perspective;
+            escale = elem.dataset.scale;
+            unidad = elem.dataset.unit;
+            type = elem.dataset.tipo;
+            active = elem.dataset.activo == "true";
+            return;
+        }
+    });
+    if (!!id && !!name && !!descripcion && !!abbreviation) {
+        var guardarButton = document.getElementById("agregarMetricaButton");
+        var modificarButton = document.getElementById("ModificarMetricaButton");
+        guardarButton.classList.replace("d-inline-block", "d-none");
+        modificarButton.classList.replace("d-none", "d-inline-block");
+        document.getElementById("Titulos_metricas").innerHTML = "Modificar Métricas";
+        document.getElementById("activoMetrica").disabled = false;
+        document.getElementById("id_metrica_nueva").value = id;
+        document.getElementById("nombreMetrica").value = name;
+        document.getElementById("descripcionMetrica").value = descripcion;
+        document.getElementById("abreviaturaMetrica").value = abbreviation;
+        document.getElementById("perspectiva_indicador").value = perspective;
+        document.getElementById("escalas_seccion_entidad").value = escale;
+        document.getElementById("unidad_medida_metrica").value = unidad;
+        document.getElementById("select_metrica").value = type;
+        document.getElementById("activoMetrica").checked = active;
+        $("#add_metrics").modal("show");
+    } else {
+        alert("Debe seleccionar un elemento para modificar");
+    }
+}
+
+function Guardar_Modificacion_Metrica() {
+    var data = {
+        id: document.getElementById("id_metrica_nueva").value,
+        name: document.getElementById("nombreMetrica").value,
+        description: document.getElementById("descripcionMetrica").value,
+        abbreviation: document.getElementById("abreviaturaMetrica").value,
+        perspective: document.getElementById("perspectiva_indicador").value,
+        scale: document.getElementById("escalas_seccion_entidad").value,
+        unit: document.getElementById("unidad_medida_metrica").value,
+        type_metric: document.getElementById("select_metrica").value,
+        active: document.getElementById("activoMetrica").checked,
+    }
+    if (!!data.id &&
+        !!data.name &&
+        !!data.description &&
+        !!data.abbreviation &&
+        !!data.perspective &&
+        data.scale != -6 &&
+        data.unit != -6 &&
+        data.type_metric != -6) {
+        post_api(
+            "http://localhost:3000/api/mod_metrics/",
+            data,
+            mensaje_exitoEnvioMetrica,
+            mensaje_errorEnvioMetrica
+        );
+        CancelarGuardarMetrica();
+
+    } else {
+        alert("Debe completar todos los campos");
+    }
+}
+
+function eliminarMetrica() {
+    var radio = document.getElementsByName("metrica_seleccionado");
+    var id;
+    radio.forEach((rad) => {
+        if (rad.checked) {
+            id = rad.value;
+            return;
+        }
+    });
+    if (!!id) {
+        if (confirm("Esta seguro de que desea eliminar el recurso")) {
+            post_api(
+                "http://localhost:3000/api/del_metrics/", {
+                    id: id,
+                },
+                (res) => {
+                    console.log(res);
+                },
+                (res) => {
+                    console.log(res);
+                }
+            );
+            cargar_tabla_metricas();
+        }
+    } else {
+        alert("No se ha seleccionado ningun recurso");
+    }
+}
+//PARTE ASPECTOOOOOOOS
+
+
+function cargar_sujetos_activos_aspectos(json) {
+    var aux_visible_activo = new Set();
+    var aux_visible_inactivo = new Set();
+    json.forEach((elemento) => {
+        if (!!elemento.father && elemento.active == 1) {
+            aux_visible_activo.add(elemento.father);
+        } else if (!!elemento.father && elemento.active == 0) {
+            aux_visible_inactivo.add(elemento.father);
+        }
+    });
+    console.log(aux_visible_inactivo);
+    json.forEach((elemento) => {
+        var insertar;
+        if (!elemento.father) {
+            insertar = document.getElementById("lista_sujetos_activos_aspectos");
+        } else {
+            insertar = document.createElement("ul");
+            document
+                .getElementById(`li_entidad_seleccionado_${elemento.father}`)
+                .appendChild(insertar);
+        }
+        li = document.createElement("li");
+        li.id = `li_entidad_seleccionado_${elemento.id}`;
+        if (elemento.active == 1 || aux_visible_activo.has(elemento.id)) {
+            li.style.display = "list-item";
+        } else {
+            li.style.display = "none";
+        }
+        divFormCheck = document.createElement("div");
+        divFormCheck.classList.add("form-check");
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.classList.add(
+            "form-check-input",
+            `hijo_de_${elemento.father}_seleccionado`,
+            "checkbox_seleccionado"
+        );
+        checkbox.id = `sujeto_seleccionado_${elemento.id}`;
+        checkbox.name = "checkbox_sujetos_aspectos";
+        checkbox.dataset.padre_id = elemento.father;
+        checkbox.dataset.puro_id = elemento.id;
+        checkbox.dataset.nombre = elemento.name;
+        checkbox.setAttribute("onclick", "verificarSeleccionAspectos(this);");
+        labelChek = document.createElement("label");
+        labelChek.classList.add("form-check-label");
+        labelChek.htmlFor = checkbox.id;
+        var button = document.createElement("button");
+        button.classList.add("btn", "py-0", "px-0");
+        button.innerHTML = elemento.name;
+        labelChek.appendChild(button);
+        li.appendChild(divFormCheck);
+        divFormCheck.appendChild(checkbox);
+        divFormCheck.appendChild(labelChek);
+        insertar.appendChild(li);
+    });
+}
+
+function error_cargar_sujetos_activos_aspectos(error) {
+    alert("Error al cargar los datos del modelo: " + error);
+}
+var systemID = undefined;
+var sujeto_aspecto_id = undefined;
+
+function verificarSeleccionAspectos(elemento) {
+    var checkbox = document.getElementsByName("checkbox_sujetos_aspectos");
+    var auxChecked = elemento.checked;
+    systemID = elemento.dataset.puro_id;
+    sujeto_aspecto_id = elemento.dataset.puro_id;
+    Array.from(checkbox).forEach((element) => {
+        element.checked = false;
+    });
+    elemento.checked = auxChecked;
+    document.getElementById("CategoriaEntidadesAspectos").disabled = false;
+}
+
+$("#CategoriaEntidadesAspectos").change(function() {
+    var limpiar2 = document.getElementById(
+        "lista_entidades_seleccionadas_aspectos"
+    );
+    limpiar2.innerHTML = "";
+    var seleccion = document.getElementById("CategoriaEntidadesAspectos");
+    var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
+    data = {
+        valorS: tipo_valor,
+        systemID: systemID,
+    };
+    post_api(
+        "http://localhost:3000/api/entitys",
+        data,
+        cargar_posibles_entidades_modelo_aspecto,
+        error_cargar_posibles_entidades_modelo_aspecto
+    );
+});
+
+function cargar_posibles_entidades_modelo_aspecto(json) {
+    var aux_visible_activo = new Set();
+    var aux_visible_inactivo = new Set();
+    json.forEach((elemento) => {
+        if (!!elemento.padre && elemento.activo == 1) {
+            aux_visible_activo.add(elemento.padre);
+        } else if (!!elemento.padre && elemento.activo == 0) {
+            aux_visible_inactivo.add(elemento.padre);
+        }
+    });
+    json.forEach((elemento) => {
+        var insertar;
+        if (!elemento.padre) {
+            insertar = document.getElementById(
+                "lista_entidades_seleccionadas_aspectos"
+            );
+        } else {
+            insertar = document.createElement("ul");
+            var insertarAux = document.getElementById(
+                `li_ent_seleccionado_${elemento.padre}`
+            );
+            if (insertarAux) {
+                insertarAux.appendChild(insertar);
+            }
+        }
+        li = document.createElement("li");
+        li.id = `li_ent_seleccionado_${elemento.id}`;
+        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+            li.style.display = "list-item";
+        } else {
+            li.style.display = "none";
+        }
+        divFormCheck = document.createElement("div");
+        divFormCheck.classList.add("form-check");
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.classList.add(
+            "form-check-input",
+            `hijo_entidad_de_${elemento.padre}_seleccionado`,
+            "checkbox_seleccionado_entidad"
+        );
+        checkbox.id = `sujeto_seleccionado_aspectos_${elemento.id}`;
+        checkbox.name = "checkbox_entidades_aspectos";
+        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.puro_id = elemento.id;
+        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.setAttribute("onclick", "activarFormularioAspecto(this);");
+        labelChek = document.createElement("label");
+        labelChek.classList.add("form-check-label");
+        labelChek.htmlFor = checkbox.id;
+        var button = document.createElement("button");
+        button.classList.add("btn", "py-0", "px-0");
+        button.innerHTML = elemento.nombre;
+        labelChek.appendChild(button);
+        li.appendChild(divFormCheck);
+        divFormCheck.appendChild(checkbox);
+        divFormCheck.appendChild(labelChek);
+        insertar.appendChild(li);
+    });
+}
+
+function error_cargar_posibles_entidades_modelo_aspecto(error) {
+    alert("Error al cargar los datos del modelo: " + error);
+}
+var objeto_aspecto_id = undefined;
+
+function activarFormularioAspecto(elemento) {
+    document.getElementById("nombreAspecto").disabled = false;
+    document.getElementById("descripcionAspecto").disabled = false;
+    document.getElementById("pesoAspecto").disabled = false;
+    document.getElementById("select_aspecto").disabled = false;
+    objeto_aspecto_id = elemento.dataset.puro_id;
+}
+
+
+if (document.getElementById("select_aspecto")) {
+    cargar_select_tipo_as();
+}
+
+function agregarAspectos() {
+    document.getElementById("lista_sujetos_activos_aspectos").innerHTML = "";
+    consultar_api(
+        "http://localhost:3000/api/subjects",
+        cargar_sujetos_activos_aspectos,
+        error_cargar_sujetos_activos_aspectos
+    );
+    var guardarButton = document.getElementById("guardarAspectoButton");
+    var modificarButton = document.getElementById("modificarAspectoButtom");
+    guardarButton.classList.replace("d-none", "inline-block");
+    modificarButton.classList.replace("inline-block", "d-none");
+    $("#add_aspects").modal("show");
+}
+
+function cargar_select_tipo_as() {
+    var tipo = "TIPO_ASPECTO";
+    var data = {
+        tipo: tipo,
+    };
+    post_api(
+        "http://localhost:3000/api/get_enumeracion",
+        data,
+        cargar_select_tipo_aspecto,
+        error_select_tipo_aspecto
+    );
+}
+
+function cargar_select_tipo_aspecto(json) {
+    var ope = document.getElementById("select_aspecto");
+    ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+}
+
+function cargar_select_tipo_as_mod() {
+    var tipo = "TIPO_ASPECTO";
+    var data = {
+        tipo: tipo,
+    };
+    post_api(
+        "http://localhost:3000/api/get_enumeracion",
+        data,
+        cargar_select_tipo_aspecto_mod,
+        error_select_tipo_aspecto
+    );
+}
+
+function cargar_select_tipo_aspecto_mod(json) {
+    var ope = document.getElementById("select_aspecto_mod");
+    ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
+    json.forEach((element) => {
+        var option = document.createElement("option");
+        option.value = element.id;
+        option.innerHTML = element.nombre;
+        ope.appendChild(option);
+    });
+}
+
+function error_select_tipo_aspecto() {
+    alert("No se logro cargar los datos en selec tipo del Modal Aspectos");
+}
+
+function guardarAspecto() {
+    var data = {
+        name: document.getElementById("nombreAspecto").value,
+        description: document.getElementById("descripcionAspecto").value,
+        weigth: document.getElementById("pesoAspecto").value,
+        type: document.getElementById("select_aspecto").value,
+        suj_id: sujeto_aspecto_id,
+        obj_id: objeto_aspecto_id,
+    }
+    if (!!data.name && !!data.description && !!data.weigth && data.type != -6 && !!data.suj_id && !!data.obj_id) {
+        post_api(
+            "http://localhost:3000/api/add_aspects/",
+            data,
+            mensaje_exitoEnvioAspectos,
+            mensaje_errorEnvioAspectos
+        );
+    } else {
+        alert("Debe completar todos los campos");
+    }
+}
+
+function limpiarFomulario() {
+    document.getElementById("nombreAspecto").disabled = true;
+    document.getElementById("descripcionAspecto").disabled = true;
+    document.getElementById("pesoAspecto").disabled = true;
+    document.getElementById("select_aspecto").disabled = true;
+    document.getElementById("nombreAspecto").value = "";
+    document.getElementById("descripcionAspecto").value = "";
+    document.getElementById("pesoAspecto").value = "";
+    document.getElementById("select_aspecto").value = -6;
+    document.getElementById("CategoriaEntidadesAspectos").value = -6;
+    document.getElementById("lista_entidades_seleccionadas_aspectos").innerHTML = "";
+    $("#add_aspects").modal("hide");
+
+}
+
+function mensaje_exitoEnvioAspectos(json) {
+    cargar_tabla_aspectos();
+    limpiarFomulario();
+}
+
+function mensaje_errorEnvioAspectos(error) {
+    alert("ERROR AL CARGAR LOS ASPECTOS");
+}
+
+if (document.getElementById("tableAspects")) {
+    cargar_tabla_aspectos();
+}
+
+function cargar_tabla_aspectos() {
+    consultar_api(
+        "http://localhost:3000/api/get_aspects",
+        cargar_aspectos_table,
+        error_cargar_aspectos_table
+    );
+}
+
+function cargar_aspectos_table(json) {
+    res = "";
+    json.forEach((met) => {
+        res += "<tr>";
+        res += `<td><input type="radio" name="aspecto_seleccionado" data-id="${
+        met.id
+      }" data-name="${met.name}" data-description="${met.description}" data-peso="${met.weigth}" data-tipo="${met.tipo_id}"
+      data-activo="${met.active == 1}" data-objeto="${met.obj}" data-sujeto="${met.suj}" data-modelo="${met.model}"></td>`;
+        res += `<td>${met.id}</td>`;
+        res += `<td>${met.name}</td>`;
+        res += `<td>${met.description}</td>`;
+        res += `<td>${met.weigth}</td>`;
+        res += `<td>${met.met_aspect}</td>`;
+        if (met.active == 1)
+            res += `<td><input type="checkbox" disabled checked></td>`;
+        else res += `<td><input type="checkbox" disabled></td>`;
+        res += "</tr>";
+    });
+    document.getElementById("tableAspects").innerHTML = res;
+}
+
+function error_cargar_aspectos_table(err) {
+    alert("Error al cargar los datos del modelo: " + err);
+}
+
+
+function eliminarAspectos() {
+    var radio = document.getElementsByName("aspecto_seleccionado");
+    var id;
+    radio.forEach((rad) => {
+        if (rad.checked) {
+            id = rad.value;
+            return;
+        }
+    });
+    if (!!id) {
+        if (confirm("Esta seguro de que desea eliminar el recurso")) {
+            post_api(
+                "http://localhost:3000/api/del_aspects/", {
+                    id: id,
+                },
+                (res) => {
+                    console.log(res);
+                },
+                (res) => {
+                    console.log(res);
+                }
+            );
+            cargar_tabla_aspectos();
+        }
+    } else {
+        alert("No se ha seleccionado ningun recurso");
+    }
+}
+var aspectoSeleccionadoMetricas = undefined;
+
+function administrarMetrics() {
+    var radio = document.getElementsByName("aspecto_seleccionado");
+    var id;
+    var nombre;
+    var descripcion;
+    radio.forEach((rad) => {
+        if (rad.checked) {
+            id = rad.dataset.id;
+            nombre = rad.dataset.name;
+            descripcion = rad.dataset.description;
+            return;
+        }
+    });
+    aspectoSeleccionadoMetricas = id;
+    if (!!id) {
+        document.getElementById("nombreAspecto_admin_metricas").innerHTML = nombre;
+        document.getElementById("descripcionAspecto_admin_metricas").innerHTML = descripcion;
+        llenar_listado_metricas(id);
+        $("#admin_metrics").modal("show");
+    } else {
+        alert("No se ha seleccionado ningun recurso");
+    }
+}
+
+
+function SalirAdministrarMetricas() {
+    $("#admin_metrics").modal("hide");
+}
+
+function llenar_listado_metricas(id) {
+    post_api(
+        "http://localhost:3000/api/get_metrics", { id: id },
+        cargar_metricas_disponibles, (json) => {
+            console.log(json);
+        }
+    );
+}
+
+function cargar_metricas_disponibles(json) {
+    console.log(json);
+    var lista = document.getElementById("lista_metricas_disponibles");
+    var lista2 = document.getElementById("lista_metricas_seleccionadas");
+    lista.innerHTML = "";
+    lista2.innerHTML = "";
+    json.forEach(element => {
+        var div = document.createElement("div");
+        if (element.existe == 1) {
+            div.classList.add("d-none");
+        }
+        var checkbox = document.createElement("input");
+        checkbox.dataset.puro_existe = element.existe;
+        div.classList.add("form-check");
+        checkbox.type = "checkbox";
+        checkbox.id = `metrica_seleccion_${element.id}`;
+        checkbox.dataset.puro_id = element.id;
+        checkbox.classList.add("form-check-input");
+        checkbox.name = `checkbox_seleccion`;
+        div.appendChild(checkbox);
+        var label = document.createElement("label");
+        label.classList.add("form-check-label");
+        label.htmlfor = checkbox.id;
+        label.innerHTML = `${element.name}`;
+        div.appendChild(label);
+        lista.appendChild(div);
+
+        var div2 = document.createElement("div");
+        if (element.existe == 0) {
+            div2.classList.add("d-none");
+        }
+        var checkbox2 = document.createElement("input");
+        checkbox2.dataset.puro_existe = element.existe;
+        div2.classList.add("form-check");
+
+        checkbox2.type = "checkbox";
+        checkbox2.id = `metrica_seleccionada_${element.id}`;
+        checkbox2.dataset.puro_id = element.id;
+        checkbox2.name = `checkbox_seleccionado`;
+
+        checkbox2.classList.add("form-check-input");
+        div2.appendChild(checkbox2);
+        var label2 = document.createElement("label");
+        label2.classList.add("form-check-label");
+        label2.htmlfor = checkbox2.id;
+        label2.innerHTML = `${element.name}`;
+        div2.appendChild(label2);
+        lista2.appendChild(div2);
+    });
+}
+
+function agregar_metrica_seleccionado() {
+    var checkbox = document.getElementsByName("checkbox_seleccion");
+    var metricasSeleccion = [];
+    Array.from(checkbox).forEach(element => {
+        var aux = {};
+        aux.aa_id = aspectoSeleccionadoMetricas;
+        aux.met_id = element.dataset.puro_id;
+        aux.existe = element.dataset.puro_existe;
+        if (element.checked) {
+            aux.existe = '1';
+        }
+        metricasSeleccion.push(aux);
+    });
+    post_api(
+        "http://localhost:3000/api/add_metrics_aspects", metricasSeleccion, cambiar_metrica_lado, error_cambiar_metrica_lado,
+    );
+}
+
+
+function remover_metrica_seleccionado() {
+    var checkbox = document.getElementsByName("checkbox_seleccionado");
+    var metricasSeleccion = [];
+    Array.from(checkbox).forEach(element => {
+        var aux = {};
+        aux.aa_id = aspectoSeleccionadoMetricas;
+        aux.met_id = element.dataset.puro_id;
+        aux.existe = element.dataset.puro_existe;
+        if (element.checked) {
+            aux.existe = '0';
+        }
+        metricasSeleccion.push(aux);
+    });
+    post_api(
+        "http://localhost:3000/api/add_metrics_aspects", metricasSeleccion, cambiar_metrica_lado, error_cambiar_metrica_lado,
+    );
+}
+
+
+function cambiar_metrica_lado() {
+    llenar_listado_metricas();
+}
+
+function error_cambiar_metrica_lado(error) {
+    alert("Error al cambiar las metricas" + error);
+}
+
+if (document.getElementById("select_aspecto_mod")) {
+    cargar_select_tipo_as_mod();
+}
+
+function limpiarFomularioMod() {
+    document.getElementById("nombreAspectoMod").disabled = true;
+    document.getElementById("descripcionAspectoMod").disabled = true;
+    document.getElementById("pesoAspectoMod").disabled = true;
+    document.getElementById("select_aspecto_mod").disabled = true;
+    document.getElementById("nombreAspectoMod").value = "";
+    document.getElementById("descripcionAspectoMod").value = "";
+    document.getElementById("pesoAspectoMod").value = "";
+    document.getElementById("select_aspecto_mod").value = -6;
+    document.getElementById("CategoriaEntidadesAspectosMod").value = -6;
+    document.getElementById("lista_entidades_seleccionadas_aspectos_mod").innerHTML = "";
+    $("#mod_aspects").modal("hide");
+
+}
+
+function modficarAspectos() {
+    var radio = document.getElementsByName("aspecto_seleccionado");
+    var id;
+    var name;
+    var descripcion;
+    var peso;
+    var tipo;
+    var active;
+    var obj;
+    var suj;
+    radio.forEach((elem) => {
+        if (elem.checked) {
+            id = elem.value;
+            name = elem.dataset.name;
+            descripcion = elem.dataset.description;
+            peso = elem.dataset.peso;
+            tipo = elem.dataset.tipo;
+            active = elem.dataset.activo == "true";
+            obj = elem.dataset.objeto;
+            suj = elem.dataset.sujeto;
+            return;
+        }
+    });
+    if (!!id && !!name && !!descripcion && !!peso) {
+        consultar_api(
+            "http://localhost:3000/api/subjects",
+            cargar_sujetos_activos_aspectos_modificar,
+            error_cargar_sujetos_activos_aspectos_modificar
+        );
+        document.getElementById("activoAspectosMod").disabled = false;
+        document.getElementById("id_aspecto").value = id;
+        document.getElementById("nombreAspectoMod").value = name;
+        document.getElementById("descripcionAspectoMod").value = descripcion;
+        document.getElementById("pesoAspectoMod").value = peso;
+        document.getElementById("select_aspecto_mod").value = tipo;
+        document.getElementById("objeto_id_aspecto").value = obj;
+        document.getElementById("sujeto_id_aspecto").value = suj;
+        document.getElementById("activoAspectosMod").checked = active;
+        document.getElementById("nombreAspectoMod").disabled = false;
+        document.getElementById("descripcionAspectoMod").disabled = false;
+        document.getElementById("pesoAspectoMod").disabled = false;
+        document.getElementById("select_aspecto_mod").disabled = false;
+        $("#mod_aspects").modal("show");
+    } else {
+        alert("Debe seleccionar un elemento para modificar");
+    }
+}
+
+function cargar_sujetos_activos_aspectos_modificar(json) {
+    var aux_visible_activo = new Set();
+    var aux_visible_inactivo = new Set();
+    json.forEach((elemento) => {
+        if (!!elemento.padre && elemento.activo == 1) {
+            aux_visible_activo.add(elemento.padre);
+        } else if (!!elemento.padre && elemento.activo == 0) {
+            aux_visible_inactivo.add(elemento.padre);
+        }
+    });
+    var idModificar = document.getElementById("sujeto_id_aspecto").value;
+    json.forEach((elemento) => {
+        var insertar;
+        if (!elemento.padre) {
+            insertar = document.getElementById(
+                "lista_sujetos_activos_aspectos_mod"
+            );
+        } else {
+            insertar = document.createElement("ul");
+            document
+                .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+                .appendChild(insertar);
+        }
+        li = document.createElement("li");
+        li.id = `li_entidad_seleccionado_${elemento.id}`;
+        if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+            li.style.display = "list-item";
+        } else {
+            li.style.display = "none";
+        }
+        divFormCheck = document.createElement("div");
+        divFormCheck.classList.add("form-check");
+        checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `sujeto_seleccionado_${elemento.id}`;
+        checkbox.disabled = true;
+        checkbox.name = "checkbox_sujetos_aspectos";
+        checkbox.dataset.padre_id = elemento.padre;
+        checkbox.dataset.puro_id = elemento.id;
+        checkbox.dataset.nombre = elemento.nombre;
+        checkbox.setAttribute("onclick", "");
+        if (checkbox.dataset.puro_id == idModificar) {
+            checkbox.checked = true;
+        }
+        labelChek = document.createElement("label");
+        labelChek.classList.add("form-check-label");
+        labelChek.htmlFor = checkbox.id;
+        var button = document.createElement("button");
+        button.classList.add("btn", "py-0", "px-0");
+        button.innerHTML = elemento.nombre;
+        labelChek.appendChild(button);
+        li.appendChild(divFormCheck);
+        divFormCheck.appendChild(checkbox);
+        divFormCheck.appendChild(labelChek);
+        insertar.appendChild(li);
+    });
+}
+
+function error_cargar_sujetos_activos_aspectos_modificar(error) {
+    alert("Error al cargar los datos del modelo: " + error);
 }

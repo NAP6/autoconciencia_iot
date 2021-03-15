@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Page Title - SB Admin</title>
+    <link href="css/styles.css" rel="stylesheet" />
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-primary">
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="justify-content-center">
+                        <div class="card shadow-lg border-0 rounded-lg mt-5">
+                            <div class="card-body">
+                                <div class="row">
+
+                                    <div class="col-sm-5">
+                                        <h5 class="card-title">Seleccione su Modelo</h5>
+                                        <br><br>
+                                        <div id='alert-zone'></div>
+                                        <form action="/" method="POST" class="was-validated">
+                                            <div class="form-group">
+                                                <select id="select_modelo_para_activar_trabajo" class="custom-select" required name="select_model">
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <button type="submit" class="btn btn-primary">Seleccionar</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="col-sm-1">
+                                        <div class="vl"></div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <h5 class="card-title">Crear su Modelo</h5>
+                                        <%- include('parts/create_model/create_model'); %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="js/action.js"></script>
+</body>
+
+</html>

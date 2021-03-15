@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <button id="bt_add_measurement_units" class="btn btn-primary" onclick="agregarUnidadMedida()">
+        Agregar
+      </button>
+            <button id="bd_mod_measurement_units" class="btn btn-primary" onclick="modificarUnidadMedida()">
+        Modificar
+      </button>
+            <button id="bd_del_measurement_units" class="btn btn-primary" onclick="eliminarUnidadMedida()">
+        Eliminar
+      </button>
+
+        </div>
+    </div>
+    <br />
+    <div class="row container">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Acrónimo</th>
+                        <th scope="col">Activo</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla_unidades_de_medida"></tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+</div>
+
+<%- include('../units_of_measure/modal/modal_units_add'); %>
+    <%- include('../units_of_measure/modal/modal_units_mod'); %>
+        <%- include('../units_of_measure/modal/modal_units_del'); %>

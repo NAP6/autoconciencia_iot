@@ -1,9 +1,8 @@
 import { json } from "../models/handling-json";
+import { SelfAwarnessQ } from "../models/selfAwarnessModels";
 import { Request, Response } from "express";
-import {
-  mysql_connector as database,
-  mysql_connector,
-} from "../data/database";
+import { mysql_connector as database, mysql_connector } from "../data/database";
+import { database2 } from "../data/database2";
 export function add_deployment_resources(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database();
@@ -49,9 +48,13 @@ export function ask_deployment_resources(req: Request, res: Response) {
 export function ask_input_arguments(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database();
-    db.sk_input_arguments(req.body.aspectoId,req.body.metricaId, (json: object) => {
-      res.json(json);
-    });
+    db.sk_input_arguments(
+      req.body.aspectoId,
+      req.body.metricaId,
+      (json: object) => {
+        res.json(json);
+      }
+    );
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -467,7 +470,7 @@ export function add_aspects(req: Request, res: Response) {
     var tipo = req.body.tipoS;
     var peso = req.body.peso;
     var idP = req.body.id;
-    var activo = req.body.activo.toString();
+    var activo = req.body.activo;
     console.log(tipo);
     var db = new database();
     db.addUser_aspects(idUser, name, descripcion, tipo, peso, idP, activo);
@@ -557,10 +560,10 @@ export function add_accion(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var meaId= req.body.meaId;
+    var meaId = req.body.meaId;
     var idP = req.body.UmbralId;
     var db = new database();
-    db.addUser_accion(idUser, name, descripcion,idP,meaId);
+    db.addUser_accion(idUser, name, descripcion, idP, meaId);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -594,24 +597,37 @@ export function upd_acciones_umbrales(req: Request, res: Response) {
   if (req.session?.user) {
     var idUser = req.session?.user.userID;
     var idaccion = req.body.id;
-    var nombre =req.body.nombre;
-    var descripcion=req.body.descripcion;
-    var activo=req.body.activo.toString();
+    var nombre = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var activo = req.body.activo.toString();
     console.log(activo);
     var db = new database();
-    db.upd_acciones_umbrales(idUser, idaccion,nombre,descripcion,activo);
+    db.upd_acciones_umbrales(idUser, idaccion, nombre, descripcion, activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export function user_models(req: Request, res: Response) {
+/*export function user_models(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
     db.getUserModels(id, (jsonModel: object) => {
       res.json(jsonModel);
     });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}*/
+export async function user_models(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user._id;
+    var db = new database2();
+    var model: SelfAwarnessQ = new SelfAwarnessQ(-1, "", "", "", "");
+    var rows = await db.qwerty(
+      model.toSqlSelect(["/@/USER/@/"], id.toString())
+    );
+    res.json(model.toObjectArray(rows));
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -725,15 +741,27 @@ export function add_process_pre_reflexive(req: Request, res: Response) {
     var descripcion = req.body.descripcion;
     var inicioP = req.body.inicioP;
     var finP = req.body.finP;
-    var aspId=req.body.aspId;
-    var sujId=req.body.sujId;
-    var paTipo=req.body.paTipo;
-    var objId=req.body.objId;
-    var objetivo=req.body.objetivo;
+    var aspId = req.body.aspId;
+    var sujId = req.body.sujId;
+    var paTipo = req.body.paTipo;
+    var objId = req.body.objId;
+    var objetivo = req.body.objetivo;
     var db = new database();
-    db.add_process_pre_reflexive(idUser, name, descripcion,inicioP,finP,aspId,objId,sujId,paTipo,objetivo,(id: number) => {
-      res.json({id:id});
-    });
+    db.add_process_pre_reflexive(
+      idUser,
+      name,
+      descripcion,
+      inicioP,
+      finP,
+      aspId,
+      objId,
+      sujId,
+      paTipo,
+      objetivo,
+      (id: number) => {
+        res.json({ id: id });
+      }
+    );
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -754,7 +782,7 @@ export function process_pre_reflexive_id(req: Request, res: Response) {
     var idUser = req.session?.user.userID;
     var id = req.body.id;
     var db = new database();
-    db.getUser_procesos_pre_reflexive_id(idUser, id,(jsonEscala: object) => {
+    db.getUser_procesos_pre_reflexive_id(idUser, id, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -780,9 +808,7 @@ export function mod_process_pre_reflexive(req: Request, res: Response) {
     var inicio = req.body.inicio;
     var fin = req.body.fin;
     var db = new database();
-    db.mod_process_pre_reflexive(
-       id,name,descripcion,inicio,fin
-    );
+    db.mod_process_pre_reflexive(id, name, descripcion, inicio, fin);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -790,7 +816,7 @@ export function mod_process_pre_reflexive(req: Request, res: Response) {
 }
 export function add_metodo_modelo(req: Request, res: Response) {
   if (req.session?.user) {
-    var data:metodo_modelo_proceso=req.body;
+    var data: metodo_modelo_proceso = req.body;
     console.log(data);
     var db = new database();
     db.add_metodo_modelo(data, (resp) => {
@@ -799,18 +825,16 @@ export function add_metodo_modelo(req: Request, res: Response) {
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
-  
 }
 export function add_mapeo_parametros(req: Request, res: Response) {
   if (req.session?.user) {
-    var data:[mapeo_parametros]=req.body;
+    var data: [mapeo_parametros] = req.body;
     var db = new database();
     db.add_mapeo_parametros(data);
     res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
-  
 }
 export function procesos_reflexive(req: Request, res: Response) {
   if (req.session?.user) {
@@ -825,10 +849,9 @@ export function procesos_reflexive(req: Request, res: Response) {
 }
 export function properties(req: Request, res: Response) {
   if (req.session?.user) {
-
-    var idObj=req.body.id;
+    var idObj = req.body.id;
     var db = new database();
-    db.getUser_properties(idObj,(jsonEscala: object) => {
+    db.getUser_properties(idObj, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -837,7 +860,7 @@ export function properties(req: Request, res: Response) {
 }
 export function add_metodo_modelo_reflexivos(req: Request, res: Response) {
   if (req.session?.user) {
-    var data:metodo_modelo_proceso_reflexivos=req.body;
+    var data: metodo_modelo_proceso_reflexivos = req.body;
     console.log(data);
     var db = new database();
     db.add_metodo_modelo_reflexivos(data, (resp) => {
@@ -846,11 +869,10 @@ export function add_metodo_modelo_reflexivos(req: Request, res: Response) {
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
-  
 }
 export function objetivos_sujetos(req: Request, res: Response) {
   if (req.session?.user) {
-    var id=req.body.id;
+    var id = req.body.id;
 
     var db = new database();
     db.objetivos_sujetos(id, (resp) => {
@@ -859,14 +881,13 @@ export function objetivos_sujetos(req: Request, res: Response) {
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
-  
 }
 export function get_metodo_aprendizaje(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var metodoid=req.body.id;
-    db.get_metodo_aprendizaje(id,metodoid, (jsonEscala: object) => {
+    var metodoid = req.body.id;
+    db.get_metodo_aprendizaje(id, metodoid, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -878,12 +899,18 @@ export function add_escenario_simulacion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var nombre=req.body.nombre;
-    var descripcion=req.body.descripcion;
-    var mea_id=req.body.mea_id;
-    db.add_escenario_simulacion(id,nombre,descripcion,mea_id, (jsonEscala: object) => {
-      res.json(jsonEscala);
-    });
+    var nombre = req.body.nombre;
+    var descripcion = req.body.descripcion;
+    var mea_id = req.body.mea_id;
+    db.add_escenario_simulacion(
+      id,
+      nombre,
+      descripcion,
+      mea_id,
+      (jsonEscala: object) => {
+        res.json(jsonEscala);
+      }
+    );
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -904,8 +931,8 @@ export function del_escenario_simulacion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var idE=req.body.id;
-    db.del_escenario_simulacion(id,idE, (jsonEscala: object) => {
+    var idE = req.body.id;
+    db.del_escenario_simulacion(id, idE, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -916,13 +943,20 @@ export function upd_escenario_simulacion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var idE=req.body.id;
-    var nombre=req.body.nombre;
+    var idE = req.body.id;
+    var nombre = req.body.nombre;
     var descripcion = req.body.descripcion;
-    var activo=req.body.activo.toString();
-    db.upd_escenario_simulacion(id,idE,nombre,descripcion,activo, (jsonEscala: object) => {
-      res.json(jsonEscala);
-    });
+    var activo = req.body.activo.toString();
+    db.upd_escenario_simulacion(
+      id,
+      idE,
+      nombre,
+      descripcion,
+      activo,
+      (jsonEscala: object) => {
+        res.json(jsonEscala);
+      }
+    );
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -931,8 +965,8 @@ export function get_variables_valor(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var idV=req.body.id;
-    db.get_variables_valor(id,idV, (jsonEscala: object) => {
+    var idV = req.body.id;
+    db.get_variables_valor(id, idV, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -956,8 +990,8 @@ export function get_variable_simulacion_id(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var idP= req.body.id;
-    db.get_variable_simulacion_id(id,idP, (jsonEscala: object) => {
+    var idP = req.body.id;
+    db.get_variable_simulacion_id(id, idP, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -969,9 +1003,9 @@ export function add_variable_simulacion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var nombre=req.body.nombre;
-    var mea_id=req.body.mea_id;
-    db.add_variable_simulacion(id,nombre,mea_id, (jsonEscala: object) => {
+    var nombre = req.body.nombre;
+    var mea_id = req.body.mea_id;
+    db.add_variable_simulacion(id, nombre, mea_id, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -983,8 +1017,8 @@ export function del_variable_simulacion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var idE=req.body.id;
-    db.del_variable_simulacion(id,idE, (jsonEscala: object) => {
+    var idE = req.body.id;
+    db.del_variable_simulacion(id, idE, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -995,12 +1029,18 @@ export function upd_variable_simulacion(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var idE=req.body.id;
-    var nombre=req.body.nombre;
-    var activo=req.body.activo.toString();
-    db.upd_variable_simulacion(id,idE,nombre,activo, (jsonEscala: object) => {
-      res.json(jsonEscala);
-    });
+    var idE = req.body.id;
+    var nombre = req.body.nombre;
+    var activo = req.body.activo.toString();
+    db.upd_variable_simulacion(
+      id,
+      idE,
+      nombre,
+      activo,
+      (jsonEscala: object) => {
+        res.json(jsonEscala);
+      }
+    );
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -1010,12 +1050,18 @@ export function add_variables_valor(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var es_id=req.body.es_id;
-    var vs_id=req.body.vs_id;
-    var vas_valor=req.body.vas_valor;
-      db.add_variables_valor(id,es_id,vs_id,vas_valor, (jsonEscala: object) => {
+    var es_id = req.body.es_id;
+    var vs_id = req.body.vs_id;
+    var vas_valor = req.body.vas_valor;
+    db.add_variables_valor(
+      id,
+      es_id,
+      vs_id,
+      vas_valor,
+      (jsonEscala: object) => {
         res.json(jsonEscala);
-      });
+      }
+    );
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -1025,8 +1071,8 @@ export function del_variables_valor(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var idE=req.body.vas_valor;
-    db.del_variables_valor(id,idE, (jsonEscala: object) => {
+    var idE = req.body.vas_valor;
+    db.del_variables_valor(id, idE, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -1037,10 +1083,29 @@ export function upd_variables_valor(req: Request, res: Response) {
   if (req.session?.user) {
     var id = req.session?.user.userID;
     var db = new database();
-    var vs_id=req.body.vs_id;
-    var vas_valor=req.body.vas_valor;
-    var vas_valor_viejo=req.body.vas_valor_viejo;
-    db.upd_variables_valor(id,vs_id,vas_valor,vas_valor_viejo,(jsonEscala: object) => {
+    var vs_id = req.body.vs_id;
+    var vas_valor = req.body.vas_valor;
+    var vas_valor_viejo = req.body.vas_valor_viejo;
+    db.upd_variables_valor(
+      id,
+      vs_id,
+      vas_valor,
+      vas_valor_viejo,
+      (jsonEscala: object) => {
+        res.json(jsonEscala);
+      }
+    );
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export function get_flujo_datos(req: Request, res: Response) {
+  if (req.session?.user) {
+    var id = req.session?.user.userID;
+    var db = new database();
+    var comuni = req.body.comunicacion;
+    var propiedad = req.body.propiedad;
+    db.get_flujo_datos(id, comuni, propiedad, (jsonEscala: object) => {
       res.json(jsonEscala);
     });
   } else {
@@ -1049,37 +1114,37 @@ export function upd_variables_valor(req: Request, res: Response) {
 }
 interface metodo_modelo_proceso {
   proceso_id: string;
-  m_recoleccion:{
-    mr_tipo:string;
-    pro_id:string;
-    pro_alcance:string;
-    met_id:string;
+  m_recoleccion: {
+    mr_tipo: string;
+    pro_id: string;
+    pro_alcance: string;
+    met_id: string;
   };
-  m_modelo:{
-    ma_tipo:string;
-    criterio_id:string;
-    met_id:string;
-  }
+  m_modelo: {
+    ma_tipo: string;
+    criterio_id: string;
+    met_id: string;
+  };
 }
-interface mapeo_parametros{
-  par_ordinal:string;
-  mea_id:string;
-  mp_tipo_entrada:string;
-  met_id:string;
-  vs_id:string;
-  md_id:string;
+interface mapeo_parametros {
+  par_ordinal: string;
+  mea_id: string;
+  mp_tipo_entrada: string;
+  met_id: string;
+  vs_id: string;
+  md_id: string;
 }
 interface metodo_modelo_proceso_reflexivos {
   proceso_id: string;
-  m_calculo:{
-    inicio:string;
-    fin:string;
-    tipo_recurso:string;
-    met_id:string;
+  m_calculo: {
+    inicio: string;
+    fin: string;
+    tipo_recurso: string;
+    met_id: string;
   };
-  modelo:{
-    modeloTipo:string;
-    criterio_id:string;
-    met_id:string;
-  }
+  modelo: {
+    modeloTipo: string;
+    criterio_id: string;
+    met_id: string;
+  };
 }

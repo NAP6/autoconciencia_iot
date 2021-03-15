@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <button id="bt_add_scale" class="btn btn-primary" onclick="agregar_escala()">
+                Agregar
+              </button>
+            <button id="bd_mod_scale" class="btn btn-primary" onclick="modificarEscalas()">
+                Modificar
+              </button>
+            <button id="bd_del_scale" class="btn btn-primary" onclick="eliminarEscala()">
+                Eliminar
+              </button>
+        </div>
+    </div>
+    <br>
+    <div class="row container">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Valor Valido</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Activo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tbody id="tabla_escalas">
+                    </tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<%- include('../escales/modal/modal_escales_add'); %>
+    <%- include('../escales/modal/modal_escales_mod'); %>
+        <%- include('../escales/modal/modal_escales_del'); %>

@@ -1,0 +1,72 @@
+<div class="modal fade" id="modal_resource_add" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="modal_resource_addLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" style="width: 100%;">
+                    Agregar Recurso de Implemetacion
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group row">
+                            <input type="text" class="d-none" id="input-id-resource-mod" />
+                            <label for="" class="col-sm-2 col-form-label">Nombre:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="input-name-resource-add" style="text-transform: uppercase" onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-2 col-form-label">Descripción:</label>
+                            <div class="col-sm-10">
+                                <textarea type="text" class="form-control" id="input-descripton-resource-add" style="text-transform: uppercase" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="select_tipo_recurso">Tipo de recurso</label
+                >
+              </div>
+              <select class="custom-select" id="select_tipo_recurso" onchange="visivilidad_tipo_recurso_form_add(this.value);">
+                <option selected>Seleccione...</option>
+                <option value="0">Fórmula</option>
+                <option value="1">Funcion</option>
+                <option value="2">Servicio</option>
+              </select>
+            </div>
+
+            <%- include('modal_resurces_formula'); %>
+            <%- include('modal_resouces_funciones'); %>
+            <%- include('modal_resources_services'); %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+        id="GuardarRecurso_btn"
+          type="button"
+          class="btn btn-primary inline-block"
+          onclick="guardarRecursoImplementacion()"
+        >
+          Guardar
+        </button>
+        
+        <button
+        type="button"
+        id="ModificarRecurso_btn"
+        class="btn btn-primary d-none"
+        onclick="modificarRecursoImplementacion()"
+      >
+        Modificar
+      </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

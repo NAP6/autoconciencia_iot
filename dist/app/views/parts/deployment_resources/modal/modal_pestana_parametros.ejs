@@ -1,0 +1,99 @@
+<div id="parametros">
+    <div class="row my-3">
+        <div class="col-md-12">
+            <button id="bt_add_parametros" class="btn btn-primary" onclick="agregar_parametro('<%= tipo %>')">
+            Agregar
+          </button>
+            <button id="bd_mod_parametros" class="btn btn-primary" onclick="modificar_parametro('<%= tipo %>')">
+            Modificar
+          </button>
+            <button id="bd_del_parametros" class="btn btn-primary" onclick="eliminar_parametro('<%= tipo %>')">
+            Eliminar
+          </button>
+        </div>
+    </div>
+    <div id="lista_parametros" class="d-block">
+        <ul id="lista_parametros_recursos" class="list-group" style="overflow-y: auto; height: 200px">
+        </ul>
+    </div>
+    <div id="formulario_parametros" class="d-none">
+        <div class="input-group mb-4">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default3">Ordinal</span
+                >
+              </div>
+              <input
+                type="number"
+                name="ordinalParametro"
+                id="ordinalParametro"
+                class="form-control"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default3"
+              />
+            </div>
+            <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-default3">Nombre</span
+                    >
+                  </div>
+                  <input type="text"
+                    name="nombreParametro"
+                    id="nombreParametro"
+                    class="form-control"
+                    aria-label="Default"
+                    aria-describedby="inputGroup-sizing-default3"
+                  />
+                </div>
+                
+                <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="tipo_dato_parametro"
+                        >Tipo de Dato: </label>
+                    </div> <select
+                      class="custom-select"
+                      name="tipo_dato_parametro"
+                      id="tipo_dato_parametro"
+                      >
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        name="opcional_parametro"
+                        id="opcional_parametro"/>
+                      <label class="form-check-label" for="opcional_parametro">
+                        Opcional
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox"
+                        name="activo_parametro"
+                        id="activo_parametro"/>
+                      <label class="form-check-label" for="activo_parametro">
+                        Activo
+                      </label>
+                    </div>
+                  </div>
+                  <button
+                  class="btn btn-primary inline-block"
+                  id="btn-agregarParametro"
+                  onclick="guardar_parametro('<%= tipo %>')">
+                  Guardar
+                </button>
+                <button
+                class="btn btn-primary d-none"
+                id="btn-modificarParametro"
+                onclick="guardar_modificar_parametro('<%= tipo %>')">
+                Modificar
+              </button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  onclick="terminar_creacion_parametro('<%= tipo %>')">
+                  Cancelar </button>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="modal fade" id="admin_metrics" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="modal_resource_addLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" style="width: 100%;">
+                    Agregar Métricas-Aspecto
+                </h5>
+                <button type="button" class="close" onclick="SalirAdministrarMetricas();">
+          <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="card" style="height: 160px; width: 1080px;">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Aspecto:</h6>
+                                            <p id="nombreAspecto_admin_metricas"></p>
+                                        </div>
+
+                                    </div>
+                                    <h6>Descripcion:</h6>
+                                    <p id="descripcionAspecto_admin_metricas"></p>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row px-3">
+
+                            <div id="sujetos_para_seleccion_area" class="col-12 col-lg-5">
+                                <h6>Metricas disponibles:</h6>
+                                <div class="card" style="overflow-y: auto;height: 100px;">
+                                    <ul id="lista_metricas_disponibles"></ul>
+                                </div>
+
+                            </div>
+                            <div class="col-12 col-lg-2 my-3 text-center">
+                                <button class="btn btn-success my-1" onclick="agregar_metrica_seleccionado();">Agregar</button>
+                                <button class="btn btn-danger my-1" onclick="remover_metrica_seleccionado();">Eliminar</button>
+                            </div>
+
+                            <div id="sujetos_seleccionados_area" class="col-12 col-lg-5">
+                                <h6>Seleccionadas:</h6>
+                                <div class="card" style="overflow-y: auto;height: 100px;">
+                                    <ul id="lista_metricas_seleccionadas"></ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="SalirAdministrarMetricas()">
+          Cancelar
+        </button>
+            </div>
+        </div>
+    </div>
+</div>

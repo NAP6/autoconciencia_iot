@@ -40,4 +40,8 @@ export class DataFlow {
     get propertys(): Property[] {
         return this._propertys;
     }
+
+    set propertys(propertys: Property[]) {
+        this._propertys = propertys;
+    }
 }
