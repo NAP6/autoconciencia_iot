@@ -3,7 +3,6 @@ import * as api from "../app/controller/controller-api";
 import * as rt from "../app/controller/page_contollers";
 
 export default function (app: Application) {
-  app.get("/api/deployment_resources/", api.deployment_resources);
   app.post("/api/add_deployment_resources/", api.add_deployment_resources);
   app.post("/api/del_deployment_resources/", api.del_deployment_resources);
   app.post(
@@ -94,14 +93,19 @@ export default function (app: Application) {
   app.post("/api/save_subjects_objects/", rt.save_subjects_goal);
   app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
   //Metricas
-  app.post("/api/add_metrics/",rt.add_metrics);
-  app.post("/api/add_metrics_aspects/",rt.add_metrics_aspects);
-  app.post("/api/mod_metrics/",rt.mod_metrics);
-  app.post("/api/del_metrics/",rt.del_metrics);
-  app.route("/api/get_metrics/").get(rt.get_metrics).post(rt.get_metrics_aspects);
+  app.post("/api/add_metrics/", rt.add_metrics);
+  app.post("/api/add_metrics_aspects/", rt.add_metrics_aspects);
+  app.post("/api/mod_metrics/", rt.mod_metrics);
+  app.post("/api/del_metrics/", rt.del_metrics);
+  app
+    .route("/api/get_metrics/")
+    .get(rt.get_metrics)
+    .post(rt.get_metrics_aspects);
   //Aspectos
   app.route("/api/get_aspects/").get(rt.get_aspects);
-  app.post("/api/add_aspects/",rt.add_aspects);
-  app.post("/api/mod_aspects/",rt.mod_aspecs);
-  app.post("/api/del_aspects/",rt.del_aspects);
+  app.post("/api/add_aspects/", rt.add_aspects);
+  app.post("/api/mod_aspects/", rt.mod_aspecs);
+  app.post("/api/del_aspects/", rt.del_aspects);
+  //Recursos de implementacion
+  app.get("/api/deployment_resources/", api.deployment_resources);
 }
