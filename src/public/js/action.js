@@ -1432,18 +1432,18 @@ function mensaje_errorEnvioUnidadesMedida(err) {
         Descripcion:
         Esta seccion contiene las funciones de que carga las escalas
         en la pagina
-  
-        Incluye:
-        cargar_escalas_table
-        error_cargar_escalas_table
 */
-
-if (document.getElementById("tabla_escalas"))
+function consultar_get_escalas() {
     consultar_api(
-        "http://alvapala.ddns.net:3000/api/escales",
+        "http://alvapala.ddns.net:3000/api/get_scales",
         cargar_escales_table,
         error_cargar_escales_table
     );
+}
+if (document.getElementById("tabla_escalas")) {
+    consultar_get_escalas();
+}
+
 
 function cargar_escales_table(json) {
     res = "";
@@ -1451,14 +1451,14 @@ function cargar_escales_table(json) {
         res += "<tr>";
         res += `<td><input type="radio" name="escala_seleccionada" value="${
       es.id
-    }" data-name="${es.nombre}" data-valor_valido="${
-      es.valor_valido
-    }" data-tipo="${es.tipo}" data-activo="${es.activo == "true"}"></td>`;
+    }" data-name="${es.name}" data-valor_valido="${
+      es.valid_value
+    }" data-tipo="${es.type}" data-activo="${es.active == "true"}"></td>`;
         res += `<td>${es.id}</td>`;
-        res += `<td>${es.nombre}</td>`;
-        res += `<td>${es.valor_valido}</td>`;
-        res += `<td>${es.tipo}</td>`;
-        if (es.activo == "true")
+        res += `<td>${es.name}</td>`;
+        res += `<td>${es.valid_value}</td>`;
+        res += `<td>${es.type}</td>`;
+        if (es.active == "true")
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
@@ -1487,10 +1487,10 @@ function guardarNuevaEscala() {
         var escala = document.getElementById("tipo_escalas");
         var escala_valor = escala.options[escala.selectedIndex].text;
         var data = {
-            nombre: document.getElementById("input-name-scale-add").value,
-            valor_valido: document.getElementById("input-valor-add").value,
-            tipo: escala_valor,
-            activo: document.getElementById("activoEscalas").value,
+            name: document.getElementById("input-name-scale-add").value,
+            valid_values: document.getElementById("input-valor-add").value,
+            type: escala_valor,
+            active: document.getElementById("activoEscalas").value,
         };
         alert(data.tipo);
         if (!!data.nombre && !!data.valor_valido && !!data.tipo) {
@@ -1500,11 +1500,7 @@ function guardarNuevaEscala() {
                 mensaje_exitoEnvioEscalas,
                 mensaje_errorEnvioEscalas
             );
-            consultar_api(
-                "http://alvapala.ddns.net:3000/api/escales",
-                cargar_escales_table,
-                error_cargar_escales_table
-            );
+            consultar_get_escalas();
             $("#modal_scales_add").modal("hide");
         } else alert("Ingrese todos los campos del formulario");
     } catch (error) {

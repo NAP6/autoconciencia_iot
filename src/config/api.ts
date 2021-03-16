@@ -22,11 +22,11 @@ export default function (app: Application) {
   //app.post("/api/add_measurement_units/", api.add_measurement_units);
  // app.post("/api/del_measurement_units/", api.del_measurement_units);
  // app.post("/api/upd_measurement_units/", api.upd_measurement_units);
-  app.get("/api/escales/", api.escales);
-  app.post("/api/add_escales/", api.add_escales);
-  app.post("/api/del_escales/", api.del_escales);
-  app.post("/api/upd_escales/", api.upd_escales);
-  app.get("/api/escalas_select"), api.get_escales_select;
+ // app.get("/api/escales/", api.escales);
+ // app.post("/api/add_escales/", api.add_escales);
+  //app.post("/api/del_escales/", api.del_escales);
+  //app.post("/api/upd_escales/", api.upd_escales);
+  //app.get("/api/escalas_select"), api.get_escales_select;
   app.get("/api/decision_criteria/", api.decision_criteria);
   app.post("/api/add_decision_criteria/", api.add_decision_criteria);
   app.post("/api/del_decision_criteria/", api.del_decision_criteria);
@@ -111,5 +111,10 @@ export default function (app: Application) {
   app.post("/api/add_measurement_units/", rt.add_measurement_units);
   app.post("/api/del_measurement_units/", rt.del_measurement_units);
   app.post("/api/upd_measurement_units/", rt.upd_measurement_units);
+  //Escalas
+  app.get("/api/get_scales/", rt.get_scales);
+  app.post("/api/add_scales/", rt.add_scales);
+  app.post("/api/del_scales/", rt.del_scales);
+  app.post("/api/upd_scales/", rt.upd_scales);
 
 }

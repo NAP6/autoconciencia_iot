@@ -6,6 +6,7 @@ export class Scale {
   private _validValues: string;
   private _scaleType;
   private _isUsedBy: Metric[];
+  private _active: Boolean;
 
   constructor(id: number, name: string, validValues: string, scaleType) {
     this._id = id;
@@ -13,6 +14,7 @@ export class Scale {
     this._validValues = validValues;
     this._scaleType = scaleType;
     this._isUsedBy = [];
+    this._active=true;
   }
 
   get id(): number {
@@ -53,5 +55,12 @@ export class Scale {
 
   set isUsedBy(value: Metric[]) {
     this._isUsedBy = value;
+  }
+  get active(): Boolean {
+    return this._active;
+  }
+
+  set active(value: Boolean) {
+    this._active = value;
   }
 }
