@@ -6,6 +6,7 @@ export class MeasurementUnit {
   private _description: string;
   private _acronym: string;
   private _isUsedBy: Metric[];
+  private _active:Boolean;
 
   constructor(id: number, name: string, description: string, acronym: string) {
     this._id = id;
@@ -13,6 +14,7 @@ export class MeasurementUnit {
     this._description = description;
     this._acronym = acronym;
     this._isUsedBy = [];
+    this._active=true;
   }
 
   get id(): number {
@@ -47,6 +49,13 @@ export class MeasurementUnit {
     this._acronym = value;
   }
 
+  get active(): Boolean {
+    return this._active;
+  }
+
+  set active(value: Boolean) {
+    this._active = value;
+  }
   get isUsedBy(): Metric[] {
     return this._isUsedBy;
   }
