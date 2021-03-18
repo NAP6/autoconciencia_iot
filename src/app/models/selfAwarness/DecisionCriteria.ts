@@ -6,6 +6,7 @@ export class DecisionCriteria {
   private _id: number;
   private _name: string;
   private _description: string;
+  private _active :Boolean;
   private _containsThreshold: Threshold[];
   private _isUded: AnalysisModel[];
   private _interprets: Goal[];
@@ -14,9 +15,11 @@ export class DecisionCriteria {
     this._id = id;
     this._name = name;
     this._description = description;
+    this._active=true;
     this._containsThreshold = [];
     this._isUded = [];
     this._interprets = [];
+
   }
 
   get id(): number {
@@ -37,6 +40,13 @@ export class DecisionCriteria {
 
   get description(): string {
     return this._description;
+  }
+
+  set active(value: Boolean) {
+    this._active = value;
+  }
+  get active(): Boolean {
+    return this._active;
   }
 
   set description(value: string) {

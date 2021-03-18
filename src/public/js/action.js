@@ -1621,25 +1621,37 @@ function mensaje_errorEnvioEscalas(err) {
         Incluye:
 */
 //
+if (document.getElementById("tabla_criterios_decision")) {
+    get_criterios_table();
+}
+
+function get_criterios_table() {
+    consultar_api(
+        "http://alvapala.ddns.net:3000/api/get_criteria",
+        cargar_criterios_table,
+        error_cargar_criterios_table
+    );
+}
+
 function cargar_criterios_table(json) {
     res = "";
     json.forEach((cd) => {
         res += `<tr onClick="visibilidad_umbral('${cd.id}')">`;
         res += `<td><input type="checkbox" name="criterio_seleccionado" value="${
       cd.id
-    }" data-name="${cd.nombre}" data-descripcion="${
-      cd.descripcion
-    }" data-activo="${cd.activo == "true"}"></td>`;
+    }" data-name="${cd.name}" data-descripcion="${
+      cd.description
+    }" data-activo="${cd.active == "true"}"></td>`;
         res += `<td>${cd.id}</td>`;
-        res += `<td>${cd.nombre}</td>`;
-        res += `<td>${cd.descripcion}</td>`;
-        if (cd.activo == "true")
+        res += `<td>${cd.name}</td>`;
+        res += `<td>${cd.description}</td>`;
+        if (cd.active == "true")
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
         post_api(
-            "http://alvapala.ddns.net:3000/api/umbral", {
-                id: cd.id,
+            "http://alvapala.ddns.net:3000/api/get_umbral", {
+                criterio: cd.id,
             },
             cargar_umbral_table,
             () => {
@@ -1661,21 +1673,18 @@ function agregar_criterio_decision() {
 
 function guardarNuevoCriterio() {
     var data = {
-        nombre: document.getElementById("input-name-criteria-add").value,
-        descripcion: document.getElementById("input-descripton-criteria-add").value,
+        name: document.getElementById("input-name-criteria-add").value,
+        description: document.getElementById("input-descripton-criteria-add").value,
     };
-    if (!!data.nombre && !!data.descripcion) {
+    if (!!data.name && !!data.description) {
         post_api(
-            "http://alvapala.ddns.net:3000/api/add_decision_criteria/",
+            "http://alvapala.ddns.net:3000/api/add_criteria/",
             data,
             mensaje_exitoEnvioDecisionCriteria,
             mensaje_errorEnvioDecisionCriteria
         );
-        consultar_api(
-            "http://alvapala.ddns.net:3000/api/decision_criteria",
-            cargar_criterios_table,
-            error_cargar_criterios_table
-        );
+        get_criterios_table();
+
         $("#modal_criteria_add").modal("hide");
     } else alert("Ingrese todos los campos del formulario");
 }
@@ -1719,16 +1728,12 @@ function guardar_eliminar_criterio_decision() {
                 id: id,
             };
             post_api(
-                "http://alvapala.ddns.net:3000/api/del_decision_criteria/",
+                "http://alvapala.ddns.net:3000/api/del_criteria/",
                 data,
                 mensaje_exitoEnvioDecisionCriteria,
                 mensaje_errorEnvioDecisionCriteria
             );
-            consultar_api(
-                "http://alvapala.ddns.net:3000/api/decision_criteria",
-                cargar_criterios_table,
-                error_cargar_criterios_table
-            );
+            get_criterios_table();
             $("#modal_eliminar_criterios").modal("hide");
         } else alert("Debe seleccionar un elemento para eliminar");
     } catch (error) {
@@ -1741,18 +1746,18 @@ function modificar_criterio_decision() {
         var radio = document.getElementsByName("criterio_seleccionado");
         var id;
         var name;
-        var descripcion;
-        var activo;
+        var description;
+        var active;
         radio.forEach((elem) => {
             if (elem.checked) {
                 id = elem.value;
                 name = elem.dataset.name;
-                descripcion = elem.dataset.descripcion;
-                activo = elem.dataset.activo == "true";
+                description = elem.dataset.descripcion;
+                active = elem.dataset.activo == "true";
                 return;
             }
         });
-        if (!!id && !!name && !!descripcion) {
+        if (!!id && !!name && !!description) {
             document.getElementById("input-id-criteria-update").value = id;
             document.getElementById("input-name-criteria-update").value = name;
             document.getElementById(
@@ -1770,24 +1775,19 @@ function guardarModificacionCriterios() {
     try {
         var data = {
             id: document.getElementById("input-id-criteria-update").value,
-            nombre: document.getElementById("input-name-criteria-update").value,
-            descripcion: document.getElementById("input-descripton-criteria-update")
+            name: document.getElementById("input-name-criteria-update").value,
+            description: document.getElementById("input-descripton-criteria-update")
                 .value,
             activo: document.getElementById("activoCriteria").checked,
         };
-        if (!!data.id && !!data.nombre && !!data.descripcion) {
+        if (!!data.id && !!data.name && !!data.description) {
             post_api(
-                "http://alvapala.ddns.net:3000/api/upd_decision_criteria/",
+                "http://alvapala.ddns.net:3000/api/upd_criteria/",
                 data,
                 mensaje_exitoEnvioDecisionCriteria,
                 mensaje_errorEnvioDecisionCriteria
             );
-            consultar_api(
-                "http://alvapala.ddns.net:3000/api/decision_criteria",
-                cargar_criterios_table,
-                error_cargar_criterios_table
-            );
-
+            get_criterios_table();
             $("#modal_modificar_criterios").modal("hide");
         } else alert("Debe debe completar todos los campos");
     } catch (error) {
@@ -1831,11 +1831,11 @@ function cargar_umbral_table(json) {
         input.type = "radio";
         input.name = "umbral_seleccionado";
         input.dataset.id = um.id;
-        input.dataset.nombre = um.nombre;
+        input.dataset.nombre = um.name;
         input.dataset.interpretacion = um.interpretacion;
         input.dataset.inferior = um.inferior;
         input.dataset.superior = um.superior;
-        input.dataset.activo = um.activo;
+        input.dataset.activo = um.active;
         input.dataset.id_crite = json.id_decicion;
         dato.appendChild(input);
         fila.appendChild(dato);
@@ -1843,7 +1843,7 @@ function cargar_umbral_table(json) {
         dato.innerHTML = um.id;
         fila.appendChild(dato);
         dato = document.createElement("td");
-        dato.innerHTML = um.nombre;
+        dato.innerHTML = um.name;
         fila.appendChild(dato);
         dato = document.createElement("td");
         dato.innerHTML = um.interpretacion;
@@ -1857,7 +1857,7 @@ function cargar_umbral_table(json) {
         input = document.createElement("input");
         input.type = "checkbox";
         input.disabled = true;
-        input.checked = um.activo == "true";
+        input.checked = um.active == "true";
         dato = document.createElement("td");
         dato.appendChild(input);
         fila.appendChild(dato);
@@ -1877,10 +1877,10 @@ function agregar_umbral() {
 function guardarNuevoUmbral() {
     try {
         var data2 = {
-            id: criterio_select,
+            criterio: criterio_select,
         };
         var data = {
-            nombre: document.getElementById("input-name-umbral-add").value,
+            name: document.getElementById("input-name-umbral-add").value,
             interpretacion: document.getElementById("input-interpretacion-umbral-add")
                 .value,
             inferior: document.getElementById("input-inferior-umbral-add").value,
@@ -1900,7 +1900,7 @@ function guardarNuevoUmbral() {
             );
             $("#modal_umbral_add").modal("hide");
             post_api(
-                "http://alvapala.ddns.net:3000/api/umbral/",
+                "http://alvapala.ddns.net:3000/api/get_umbral/",
                 data2,
                 cargar_umbral_table
             );
@@ -2004,16 +2004,16 @@ function guardarModificacionUmbral() {
     try {
         var data = {
             id: document.getElementById("input-id-umbral-update").value,
-            nombre: document.getElementById("input-name-umbral-update").value,
+            name: document.getElementById("input-name-umbral-update").value,
             interpretacion: document.getElementById(
                 "input-interpretacion-umbral-update"
             ).value,
             inferior: document.getElementById("input-inferior-umbral-update").value,
             superior: document.getElementById("input-superior-umbral-update").value,
-            activo: document.getElementById("activoUmbral").checked,
+            active: document.getElementById("activoUmbral").checked,
         };
         if (!!data.id &&
-            !!data.nombre &&
+            !!data.name &&
             !!data.interpretacion &&
             !!data.inferior &&
             !!data.superior
@@ -2040,18 +2040,7 @@ function mensaje_errorEnvioUmbral(err) {
     alert(err);
 }
 
-/* 
-    SECCION CARGAR CRITERIOS DECISION
-  
-        Descripcion:
-        Esta seccion contiene las funciones de que carga los criterios de decision
-  
-        Incluye:
-        cargar_criterios_table
-        error_cargar_criterios_table
-*/
-
-/*Botones para los aspectos Ingresar Modificar y Eliminar*/
+//=========================================================================
 function agregar_aspecto() {
     $("#modal_aspecto_add").modal("show");
 }
@@ -2128,12 +2117,7 @@ function mensaje_errorEnvioAspects(err) {
     alert(err);
 }
 
-if (document.getElementById("tabla_criterios_decision"))
-    consultar_api(
-        "http://alvapala.ddns.net:3000/api/decision_criteria",
-        cargar_criterios_table,
-        error_cargar_criterios_table
-    );
+
 
 /* 
     SECCION CARGAR ASPECTOS AUTOCONSCIENCIA
@@ -7650,4 +7634,6 @@ function cargar_sujetos_activos_aspectos_modificar(json) {
 
 function error_cargar_sujetos_activos_aspectos_modificar(error) {
     alert("Error al cargar los datos del modelo: " + error);
+}
+alert("Error al cargar los datos del modelo: " + error);
 }

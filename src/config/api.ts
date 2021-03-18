@@ -32,10 +32,10 @@ export default function (app: Application) {
   app.post("/api/del_decision_criteria/", api.del_decision_criteria);
   app.post("/api/upd_decision_criteria/", api.upd_decision_criteria);
   app.post("/api/umbral/", api.umbral);
-  app.post("/api/get_umbral/", api.get_umbral);
-  app.post("/api/add_umbral/", api.add_umbral);
-  app.post("/api/del_umbral/", api.del_umbral);
-  app.post("/api/upd_umbral/", api.upd_umbral);
+ // app.post("/api/get_umbral/", api.get_umbral);
+ // app.post("/api/add_umbral/", api.add_umbral);
+ // app.post("/api/del_umbral/", api.del_umbral);
+  //app.post("/api/upd_umbral/", api.upd_umbral);
   //app.post("/api/aspects/", api.aspects);
   //app.post("/api/add_aspects/", api.add_aspects);
   //app.post("/api/del_aspects/", api.del_aspects);
@@ -116,5 +116,14 @@ export default function (app: Application) {
   app.post("/api/add_scales/", rt.add_scales);
   app.post("/api/del_scales/", rt.del_scales);
   app.post("/api/upd_scales/", rt.upd_scales);
-
+  //Criterios
+  app.get("/api/get_criteria/", rt.get_criteria);
+  app.post("/api/add_criteria/", rt.add_criteria);
+  app.post("/api/del_criteria/", rt.del_criteria);
+  app.post("/api/upd_criteria/", rt.upd_criteria);
+  //Umbrales
+  app.post("/api/get_umbral/", rt.get_umbral);
+  app.post("/api/add_umbral/", rt.add_umbral);
+  app.post("/api/del_umbral/", rt.del_umbral);
+  app.post("/api/upd_umbral/", rt.upd_umbral);
 }

@@ -24,5 +24,7 @@ export { aspects,get_aspects,add_aspects,mod_aspecs,del_aspects } from "./page_c
 export { metrics,get_metrics,get_metrics_aspects,add_metrics,mod_metrics,del_metrics,add_metrics_aspects} from "./page_contollers/metrics";
 export { measurement_units,get_measurement_units,add_measurement_units,del_measurement_units,upd_measurement_units} from "./page_contollers/measurement_units";
 export { scales,get_scales,add_scales,del_scales,upd_scales} from "./page_contollers/scales";
+export { criteria,get_criteria,add_criteria,del_criteria,upd_criteria} from "./page_contollers/criteria";
+export { get_umbral,add_umbral,del_umbral,upd_umbral} from "./page_contollers/umbral";
 
 
