@@ -1493,9 +1493,9 @@ function guardarNuevaEscala() {
             active: document.getElementById("activoEscalas").value,
         };
         alert(data.tipo);
-        if (!!data.nombre && !!data.valor_valido && !!data.tipo) {
+        if (!!data.name && !!data.valid_values && !!data.type) {
             post_api(
-                "http://alvapala.ddns.net:3000/api/add_escales/",
+                "http://alvapala.ddns.net:3000/api/add_scales/",
                 data,
                 mensaje_exitoEnvioEscalas,
                 mensaje_errorEnvioEscalas
@@ -1512,21 +1512,21 @@ function eliminarEscala() {
     var radio = document.getElementsByName("escala_seleccionada");
     var id;
     var name;
-    var valor_valido;
-    var activo;
-    var tipo;
+    var valid_values;
+    var active;
+    var type;
     radio.forEach((elem) => {
         if (elem.checked) {
             id = elem.value;
             name = elem.dataset.name;
-            valor_valido = elem.dataset.valor_valido;
-            tipo = elem.dataset.tipo;
-            activo = elem.dataset.activo == "true";
+            valid_values = elem.dataset.valor_valido;
+            type = elem.dataset.tipo;
+            active = elem.dataset.activo == "true";
             return;
         }
     });
 
-    if (!!id && !!name && !!valor_valido && !!tipo) {
+    if (!!id && !!name && !!valid_values && !!type) {
         $("#modal_escalas_del").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
@@ -1546,16 +1546,12 @@ function GuardareliminarEscala() {
         };
 
         post_api(
-            "http://alvapala.ddns.net:3000/api/del_escales/",
+            "http://alvapala.ddns.net:3000/api/del_scales/",
             data,
             mensaje_exitoEnvioEscalas,
             mensaje_errorEnvioEscalas
         );
-        consultar_api(
-            "http://alvapala.ddns.net:3000/api/escales",
-            cargar_escales_table,
-            error_cargar_escales_table
-        );
+        consultar_get_escalas();
         $("#modal_escalas_del").modal("hide");
     } else alert("Debe seleccionar un elemento para eliminar");
 }
@@ -1564,25 +1560,25 @@ function modificarEscalas() {
     var radio = document.getElementsByName("escala_seleccionada");
     var id;
     var name;
-    var valor_valido;
-    var activo;
-    var tipo;
+    var valid_values;
+    var active;
+    var type;
     radio.forEach((elem) => {
         if (elem.checked) {
             id = elem.value;
             name = elem.dataset.name;
-            valor_valido = elem.dataset.valor_valido;
-            tipo = elem.dataset.tipo;
-            activo = elem.dataset.activo == "true";
+            valid_values = elem.dataset.valor_valido;
+            type = elem.dataset.tipo;
+            active = elem.dataset.activo == "true";
             return;
         }
     });
 
-    if (!!id && !!name && !!valor_valido && !!tipo) {
+    if (!!id && !!name && !!valid_values && !!type) {
         document.getElementById("input-escale-id-update").value = id;
         document.getElementById("input-escale-name-update").value = name;
-        document.getElementById("input-escale-valor-update").value = valor_valido;
-        document.getElementById("activoEscalas").checked = activo;
+        document.getElementById("input-escale-valor-update").value = valid_values;
+        document.getElementById("activoEscalas").checked = active;
         $("#modal_escalas_mod").modal("show");
     } else alert("Debe seleccionar un elemento para modificar");
 }
@@ -1590,23 +1586,19 @@ function modificarEscalas() {
 function guardarModificacionEscala() {
     var data = {
         id: document.getElementById("input-escale-id-update").value,
-        nombre: document.getElementById("input-escale-name-update").value,
-        valor_valido: document.getElementById("input-escale-valor-update").value,
-        tipo: document.getElementById("tipo_escalas").value,
-        activo: document.getElementById("activoEscalas").checked,
+        name: document.getElementById("input-escale-name-update").value,
+        valid_values: document.getElementById("input-escale-valor-update").value,
+        type: document.getElementById("tipo_escalas").value,
+        active: document.getElementById("activoEscalas").checked,
     };
-    if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
+    if (!!data.id && !!data.name && !!data.valid_values && !!data.type) {
         post_api(
-            "http://alvapala.ddns.net:3000/api/upd_escales/",
+            "http://alvapala.ddns.net:3000/api/upd_scales/",
             data,
             mensaje_exitoEnvioEscalas,
             mensaje_errorEnvioEscalas
         );
-        consultar_api(
-            "http://alvapala.ddns.net:3000/api/escales",
-            cargar_escales_table,
-            error_cargar_escales_table
-        );
+        consultar_get_escalas();
 
         $("#modal_escalas_mod").modal("hide");
     } else alert("Debe debe completar todos los campos");
