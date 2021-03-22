@@ -1885,6 +1885,7 @@ function guardarNuevoUmbral() {
         alert(error);
     }
 }
+
 function guardar_eliminar_umbral() {
     var radio = document.getElementsByName("umbral_seleccionado");
     var id;
