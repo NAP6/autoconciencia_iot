@@ -7635,5 +7635,3 @@ function cargar_sujetos_activos_aspectos_modificar(json) {
 function error_cargar_sujetos_activos_aspectos_modificar(error) {
     alert("Error al cargar los datos del modelo: " + error);
 }
-alert("Error al cargar los datos del modelo: " + error);
-}
