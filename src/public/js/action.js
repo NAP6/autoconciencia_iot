@@ -1281,7 +1281,7 @@ function cargar_unidades_de_medida_table(json) {
         res += `<td>${um.name}</td>`;
         res += `<td>${um.description}</td>`;
         res += `<td>${um.acronym}</td>`;
-        if (um.active == "true")
+        if (um.active == 1)
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
 
@@ -1295,7 +1295,11 @@ function error_cargar_unidades_de_medida_table(err) {
 }
 
 function agregarUnidadMedida() {
+    document.getElementById("input-name-add").value = "";
+    document.getElementById("input-descripton-add").value = "";
+    document.getElementById("input-weight-add").value = "";
     $("#modal_units_add").modal("show");
+
 }
 
 function guardarNuevaUnidadMedida() {
@@ -1316,33 +1320,6 @@ function guardarNuevaUnidadMedida() {
     } else alert("Ingrese todos los campos del formulario");
 }
 
-function eliminarUnidadMedida() {
-    try {
-        var radio = document.getElementsByName("unidad_seleccionada");
-        var id;
-        var name;
-        var descripcion;
-        var acronym;
-        var activo;
-        radio.forEach((elem) => {
-            if (elem.checked) {
-                id = elem.value;
-                name = elem.dataset.name;
-                descripcion = elem.dataset.descripcion;
-                acronym = elem.dataset.acronym;
-                activo = elem.dataset.activo == "true";
-                return;
-            }
-        });
-
-        if (!!id && !!name && !!descripcion && !!acronym) {
-            $("#modal_eliminar_unidadMedida").modal("show");
-        } else alert("Debe seleccionar un elemento para modificar");
-    } catch (error) {
-        alert(error);
-    }
-}
-
 function GuardarEliminarUnidadMedida() {
     var radio = document.getElementsByName("unidad_seleccionada");
     var id;
@@ -1353,17 +1330,16 @@ function GuardarEliminarUnidadMedida() {
         }
     });
     if (!!id) {
-        data = {
-            id: id,
-        };
-        post_api(
-            "http://alvapala.ddns.net:3000/api/del_measurement_units/",
-            data,
-            mensaje_exitoEnvioUnidadesMedida,
-            mensaje_errorEnvioUnidadesMedida
-        );
+        if (confirm("Esta seguro que desea eliminar la unidad de Medida")) {
+
+            post_api(
+                "http://alvapala.ddns.net:3000/api/del_measurement_units/", { id: id },
+                data,
+                mensaje_exitoEnvioUnidadesMedida,
+                mensaje_errorEnvioUnidadesMedida
+            );
+        }
         consultar_get_unidades_medida();
-        $("#modal_eliminar_unidadMedida").modal("hide");
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -1390,7 +1366,7 @@ function modificarUnidadMedida() {
             document.getElementById("input-name-update").value = name;
             document.getElementById("input-descripton-update").value = description;
             document.getElementById("input-acronym-update").value = acronym;
-            document.getElementById("ActivoUnits").checked = activo;
+            document.getElementById("ActivoUnits").checked = active;
             $("#modal_modificar_unidadMedida").modal("show");
         } else alert("Debe seleccionar un elemento para modificar");
     } catch (error) {
@@ -1458,7 +1434,7 @@ function cargar_escales_table(json) {
         res += `<td>${es.name}</td>`;
         res += `<td>${es.valid_value}</td>`;
         res += `<td>${es.type}</td>`;
-        if (es.active == "true")
+        if (es.active == 1)
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
@@ -1480,6 +1456,9 @@ function error_cargar_escales_table(err) {
 
 function agregar_escala() {
     $("#modal_scales_add").modal("show");
+    document.getElementById("input-name-scale-add").value = "";
+    document.getElementById("input-valor-add").value = "";
+    document.getElementById("tipo_escalas").valie = "-6";
 }
 
 function guardarNuevaEscala() {
@@ -1541,18 +1520,14 @@ function GuardareliminarEscala() {
         }
     });
     if (!!id) {
-        data = {
-            id: id,
-        };
-
-        post_api(
-            "http://alvapala.ddns.net:3000/api/del_scales/",
-            data,
-            mensaje_exitoEnvioEscalas,
-            mensaje_errorEnvioEscalas
-        );
+        if (confirm("Esta seguro de que desea eliminar la escala");) {
+            post_api(
+                "http://alvapala.ddns.net:3000/api/del_scales/", { id: id },
+                mensaje_exitoEnvioEscalas,
+                mensaje_errorEnvioEscalas
+            );
+        }
         consultar_get_escalas();
-        $("#modal_escalas_del").modal("hide");
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -1645,7 +1620,7 @@ function cargar_criterios_table(json) {
         res += `<td>${cd.id}</td>`;
         res += `<td>${cd.name}</td>`;
         res += `<td>${cd.description}</td>`;
-        if (cd.active == "true")
+        if (cd.active == 1)
             res += `<td><input type="checkbox" disabled checked></td>`;
         else res += `<td><input type="checkbox" disabled></td>`;
         res += "</tr>";
@@ -1724,17 +1699,18 @@ function guardar_eliminar_criterio_decision() {
             }
         });
         if (!!id) {
-            data = {
-                id: id,
-            };
-            post_api(
-                "http://alvapala.ddns.net:3000/api/del_criteria/",
-                data,
-                mensaje_exitoEnvioDecisionCriteria,
-                mensaje_errorEnvioDecisionCriteria
-            );
+            if (confirm("Esta seguro que desea eliminar el criterio de decision")) {
+                data = {
+                    id: id,
+                };
+                post_api(
+                    "http://alvapala.ddns.net:3000/api/del_criteria/",
+                    data,
+                    mensaje_exitoEnvioDecisionCriteria,
+                    mensaje_errorEnvioDecisionCriteria
+                );
+            }
             get_criterios_table();
-            $("#modal_eliminar_criterios").modal("hide");
         } else alert("Debe seleccionar un elemento para eliminar");
     } catch (error) {
         alert(error);
@@ -1857,7 +1833,7 @@ function cargar_umbral_table(json) {
         input = document.createElement("input");
         input.type = "checkbox";
         input.disabled = true;
-        input.checked = um.active == "true";
+        input.checked = um.active == 1;
         dato = document.createElement("td");
         dato.appendChild(input);
         fila.appendChild(dato);
@@ -1909,43 +1885,6 @@ function guardarNuevoUmbral() {
         alert(error);
     }
 }
-
-function eliminar_umbral() {
-    try {
-        var radio = document.getElementsByName("umbral_seleccionado");
-        var id;
-        var name;
-        var interpretacion;
-        var inferior;
-        var superior;
-        var activo;
-        radio.forEach((elem) => {
-            if (elem.checked) {
-                id = elem.dataset.id;
-                name = elem.dataset.nombre;
-                interpretacion = elem.dataset.interpretacion;
-                inferior = elem.dataset.inferior;
-                superior = elem.dataset.superior;
-                activo = elem.dataset.activo == "true";
-                return;
-            }
-        });
-        if (!!id && !!name && !!interpretacion && !!superior && !!inferior) {
-            document.getElementById("input-id-umbral-del").value = id;
-            document.getElementById("input-name-umbral-del").value = name;
-            document.getElementById(
-                "input-interpretacion-umbral-del"
-            ).value = interpretacion;
-            document.getElementById("input-superior-umbral-del").value = superior;
-            document.getElementById("input-inferior-umbral-del").value = inferior;
-            document.getElementById("activoUmbralDel").checked = activo;
-            $("#modal_eliminar_umbral").modal("show");
-        } else alert("Seleccione el Elemento");
-    } catch (error) {
-        alert(error);
-    }
-}
-
 function guardar_eliminar_umbral() {
     var radio = document.getElementsByName("umbral_seleccionado");
     var id;
@@ -1956,15 +1895,14 @@ function guardar_eliminar_umbral() {
         }
     });
     if (!!id) {
-        data = {
-            id: id,
-        };
-        post_api(
-            "http://alvapala.ddns.net:3000/api/del_umbral/",
-            data,
-            mensaje_exitoEnvioUmbral,
-            mensaje_errorEnvioUmbral
-        );
+        if (confirm("Esta seguro que desea eliminar este Umbral")) {
+            post_api(
+                "http://alvapala.ddns.net:3000/api/del_umbral/", { id: id },
+                mensaje_exitoEnvioUmbral,
+                mensaje_errorEnvioUmbral
+            );
+        }
+
     } else alert("Debe seleccionar un elemento para eliminar");
 }
 
