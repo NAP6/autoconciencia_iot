@@ -12,7 +12,7 @@ var sql=`INSERT INTO
                 '${this.name}',
                 '${this.description}',
                 '${this.acronym}',
-                '${this.active ? 1: 0}',
+                '${this.active ? 1: 0}'
 
             )`;
 return sql;

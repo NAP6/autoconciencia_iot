@@ -10,4 +10,5 @@ export { TagQ } from "./selfAwarness/qwertyModels/TagQ";
 export { CloudNodeQ } from "./selfAwarness/qwertyModels/CloudNodeQ";
 export { ActuatorQ } from "./selfAwarness/qwertyModels/ActuatorQ";
 export { NetworkQ } from "./selfAwarness/qwertyModels/NetworkQ";
-
+export { ImplementationResourceQ } from "./selfAwarness/qwertyModels/ImplementationResourceQ";
+export { FormulaQ } from "./selfAwarness/qwertyModels/FormulaQ";
