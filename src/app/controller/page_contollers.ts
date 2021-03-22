@@ -51,3 +51,16 @@ export {
   upd_scales,
 } from "./page_contollers/scales";
 export { deployment_resources } from "./page_contollers/deployment_resources";
+export {
+  criteria,
+  get_criteria,
+  add_criteria,
+  del_criteria,
+  upd_criteria,
+} from "./page_contollers/criteria";
+export {
+  get_umbral,
+  add_umbral,
+  del_umbral,
+  upd_umbral,
+} from "./page_contollers/umbral";

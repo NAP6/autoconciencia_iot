@@ -6,6 +6,7 @@ export class Threshold {
   private _interpretation: string;
   private _lowerThreshold: number;
   private _upperThreshold: number;
+  private _active:Boolean;
   private _recommends: Action[];
 
   constructor(
@@ -21,6 +22,7 @@ export class Threshold {
     this._lowerThreshold = lowerThreshold;
     this._upperThreshold = upperThreshold;
     this._recommends = [];
+    this._active=true;
   }
 
   get id(): number {
@@ -62,7 +64,13 @@ export class Threshold {
   set upperThreshold(value: number) {
     this._upperThreshold = value;
   }
+  get active(): Boolean {
+    return this._active;
+  }
 
+  set active(value: Boolean) {
+    this._active = value;
+  }
   get recommends(): Action[] {
     return this._recommends;
   }
