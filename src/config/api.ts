@@ -3,12 +3,6 @@ import * as api from "../app/controller/controller-api";
 import * as rt from "../app/controller/page_contollers";
 
 export default function (app: Application) {
-  app.post("/api/del_deployment_resources/", api.del_deployment_resources);
-  app.post(
-    "/api/ask_deployment_resources_select/",
-    api.ask_deployment_resources_select
-  );
-  app.post("/api/ask_deployment_resources/", api.ask_deployment_resources);
   app.post("/api/ask_input_arguments/", api.ask_input_arguments);
 
   app.post("/api/save_subjects/", api.save_subjects);
@@ -18,10 +12,10 @@ export default function (app: Application) {
   app.get("/api/enumeracion/", api.enumeracion);
   //app.get("/api/measurement_units/", api.measurement_units);
   //app.post("/api/add_measurement_units/", api.add_measurement_units);
- // app.post("/api/del_measurement_units/", api.del_measurement_units);
- // app.post("/api/upd_measurement_units/", api.upd_measurement_units);
- // app.get("/api/escales/", api.escales);
- // app.post("/api/add_escales/", api.add_escales);
+  // app.post("/api/del_measurement_units/", api.del_measurement_units);
+  // app.post("/api/upd_measurement_units/", api.upd_measurement_units);
+  // app.get("/api/escales/", api.escales);
+  // app.post("/api/add_escales/", api.add_escales);
   //app.post("/api/del_escales/", api.del_escales);
   //app.post("/api/upd_escales/", api.upd_escales);
   //app.get("/api/escalas_select"), api.get_escales_select;
@@ -30,9 +24,9 @@ export default function (app: Application) {
   app.post("/api/del_decision_criteria/", api.del_decision_criteria);
   app.post("/api/upd_decision_criteria/", api.upd_decision_criteria);
   app.post("/api/umbral/", api.umbral);
- // app.post("/api/get_umbral/", api.get_umbral);
- // app.post("/api/add_umbral/", api.add_umbral);
- // app.post("/api/del_umbral/", api.del_umbral);
+  // app.post("/api/get_umbral/", api.get_umbral);
+  // app.post("/api/add_umbral/", api.add_umbral);
+  // app.post("/api/del_umbral/", api.del_umbral);
   //app.post("/api/upd_umbral/", api.upd_umbral);
   //app.post("/api/aspects/", api.aspects);
   //app.post("/api/add_aspects/", api.add_aspects);
@@ -83,6 +77,8 @@ export default function (app: Application) {
   app.post("/api/get_flujo_datos/", api.get_flujo_datos);
 
   //Rutas revisadas
+
+  //Sujetos
   app.get("/api/user_models/", rt.user_models);
   app.get("/api/subjects/", rt.subjects);
   app.post("/api/update_subjects/", rt.update_subjects);
@@ -93,9 +89,9 @@ export default function (app: Application) {
   app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
   //Aspectos
   app.route("/api/get_aspects/").get(rt.get_aspects);
-  app.post("/api/add_aspects/",rt.add_aspects);
-  app.post("/api/mod_aspects/",rt.mod_aspecs);
-  app.post("/api/del_aspects/",rt.del_aspects);
+  app.post("/api/add_aspects/", rt.add_aspects);
+  app.post("/api/mod_aspects/", rt.mod_aspecs);
+  app.post("/api/del_aspects/", rt.del_aspects);
   //Generales
   //=====================================================================
   //Metricas
@@ -114,7 +110,13 @@ export default function (app: Application) {
   app.post("/api/del_aspects/", rt.del_aspects);
   //Recursos de implementacion
   app.get("/api/deployment_resources/", rt.deployment_resources);
-  app.post("/api/add_deployment_resources/", api.add_deployment_resources);
+  app.post("/api/add_deployment_resources/", rt.add_deployment_resources);
+  app.post("/api/del_deployment_resources/", rt.del_deployment_resources);
+  app.post(
+    "/api/ask_deployment_resources_select/",
+    rt.ask_deployment_resources_select
+  );
+  app.post("/api/ask_deployment_resources/", api.ask_deployment_resources);
   //Unidades de Medida
   app.get("/api/get_measurement_units/", rt.get_measurement_units);
   app.post("/api/add_measurement_units/", rt.add_measurement_units);

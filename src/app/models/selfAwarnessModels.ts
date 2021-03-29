@@ -12,3 +12,6 @@ export { ActuatorQ } from "./selfAwarness/qwertyModels/ActuatorQ";
 export { NetworkQ } from "./selfAwarness/qwertyModels/NetworkQ";
 export { ImplementationResourceQ } from "./selfAwarness/qwertyModels/ImplementationResourceQ";
 export { FormulaQ } from "./selfAwarness/qwertyModels/FormulaQ";
+export { FunctionQ } from "./selfAwarness/qwertyModels/FunctionQ";
+export { WebServiceQ } from "./selfAwarness/qwertyModels/WebServiceQ";
+export { ParameterQ } from "./selfAwarness/qwertyModels/ParameterQ";

@@ -1,14 +1,16 @@
-import { Formula } from "../Formula";
+import { Function } from "../Function";
 import { SQL_Qwerty } from "../../SQL_Qwerty";
 
-export class FormulaQ extends Formula implements SQL_Qwerty {
+export class FunctionQ extends Function implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
-    var sql = `call formula(
+    var sql = `call funcion(
 	  		'${this.name}',
 	  		'${this.description}',
 	  		${this.returnDataType},
 	  		1,
-	  		'${this.expression}',
+	  		'${this.path}',
+	  		'${this.instrucctions}',
+	  		'${value[tag.indexOf('/@/P_EXIST/@/')]}',
 			@id
 		  )`;
     return sql;

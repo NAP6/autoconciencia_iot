@@ -1520,7 +1520,7 @@ function GuardareliminarEscala() {
         }
     });
     if (!!id) {
-        if (confirm("Esta seguro de que desea eliminar la escala");) {
+        if (confirm("Esta seguro de que desea eliminar la escala")) {
             post_api(
                 "http://alvapala.ddns.net:3000/api/del_scales/", { id: id },
                 mensaje_exitoEnvioEscalas,

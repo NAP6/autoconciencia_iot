@@ -50,7 +50,12 @@ export {
   del_scales,
   upd_scales,
 } from "./page_contollers/scales";
-export { deployment_resources } from "./page_contollers/deployment_resources";
+export {
+  deployment_resources,
+  add_deployment_resources,
+  del_deployment_resources,
+  ask_deployment_resources_select,
+} from "./page_contollers/deployment_resources";
 export {
   criteria,
   get_criteria,

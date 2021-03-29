@@ -1,14 +1,17 @@
-import { Formula } from "../Formula";
+import { WebService } from "../WebService";
 import { SQL_Qwerty } from "../../SQL_Qwerty";
 
-export class FormulaQ extends Formula implements SQL_Qwerty {
+export class WebServiceQ extends WebService implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
-    var sql = `call formula(
+    var sql = `call servicio(
 	  		'${this.name}',
 	  		'${this.description}',
 	  		${this.returnDataType},
 	  		1,
-	  		'${this.expression}',
+	  		'${this.endPoint}',
+	  		'${this.instrucctions}',
+	  		'${value[tag.indexOf('/@/P_EXIST/@/')]}',
+	  		'${this.DataFormatType}',
 			@id
 		  )`;
     return sql;
