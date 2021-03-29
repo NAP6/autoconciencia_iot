@@ -42,7 +42,7 @@ class GoalQ extends Goal_1.Goal {
 		obj_padre as padre  
 	     FROM 
 	     	objetivo `;
-        if (value.length == 1)
+        if (value.length > 0)
             sql += `WHERE 
 	  	suj_id = ${value[tag.indexOf('/@/SYSTEM/@/')]} AND ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} ORDER BY id`;
         return sql;

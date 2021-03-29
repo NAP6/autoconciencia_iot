@@ -8,6 +8,7 @@ class Scale {
         this._validValues = validValues;
         this._scaleType = scaleType;
         this._isUsedBy = [];
+        this._active = true;
     }
     get id() {
         return this._id;
@@ -38,6 +39,12 @@ class Scale {
     }
     set isUsedBy(value) {
         this._isUsedBy = value;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
     }
 }
 exports.Scale = Scale;

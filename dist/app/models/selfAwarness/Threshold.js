@@ -9,6 +9,7 @@ class Threshold {
         this._lowerThreshold = lowerThreshold;
         this._upperThreshold = upperThreshold;
         this._recommends = [];
+        this._active = true;
     }
     get id() {
         return this._id;
@@ -39,6 +40,12 @@ class Threshold {
     }
     set upperThreshold(value) {
         this._upperThreshold = value;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
     }
     get recommends() {
         return this._recommends;

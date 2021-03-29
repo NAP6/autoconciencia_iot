@@ -27,7 +27,7 @@ class MetricQ extends Metric_1.Metric {
             )`;
         return sql;
     }
-    toSqlSelect() {
+    toSqlSelect(tag, value) {
         var sql = `SELECT 
     met.met_id as id, 
     met.met_nombre as name,
@@ -39,6 +39,11 @@ class MetricQ extends Metric_1.Metric {
     met.esc_id as scale,
     met.um_id as unit,
     met.met_activo as active
+    `;
+        if (tag.indexOf('/@/ASPECTID/@/') != -1) {
+            sql += `,IF((SELECT COUNT(asp_me.met_id) FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=4 && asp_me.met_id=met.met_id )>0, True,false) as existe`;
+        }
+        sql += `
   FROM 
     metrica met,
     enumeracion enu

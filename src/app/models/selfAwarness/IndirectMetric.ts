@@ -9,9 +9,10 @@ export class IndirectMetric extends Metric {
     id: number,
     name: string,
     description: string,
-    abbreviation: string
+    abbreviation: string,
+    perspective: string
   ) {
-    super(id, name, description, abbreviation);
+    super(id, name, description, abbreviation, perspective);
     this._containsCalculatedIndirectMetric = [];
     this._isProducedBy = [];
   }

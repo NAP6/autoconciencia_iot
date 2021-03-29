@@ -6,6 +6,7 @@ class DecisionCriteria {
         this._id = id;
         this._name = name;
         this._description = description;
+        this._active = true;
         this._containsThreshold = [];
         this._isUded = [];
         this._interprets = [];
@@ -24,6 +25,12 @@ class DecisionCriteria {
     }
     get description() {
         return this._description;
+    }
+    set active(value) {
+        this._active = value;
+    }
+    get active() {
+        return this._active;
     }
     set description(value) {
         this._description = value;

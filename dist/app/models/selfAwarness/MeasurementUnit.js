@@ -8,6 +8,7 @@ class MeasurementUnit {
         this._description = description;
         this._acronym = acronym;
         this._isUsedBy = [];
+        this._active = true;
     }
     get id() {
         return this._id;
@@ -32,6 +33,12 @@ class MeasurementUnit {
     }
     set acronym(value) {
         this._acronym = value;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
     }
     get isUsedBy() {
         return this._isUsedBy;

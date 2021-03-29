@@ -26,7 +26,7 @@ aspectoautoconsciencia (
             )`;
         return sql;
     }
-    toSqlSelect() {
+    toSqlSelect(tag, value) {
         var sql = `SELECT 
     asp.aa_id as id, 
     asp.aa_nombre as name,

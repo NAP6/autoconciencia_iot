@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <button id="bt_add_metrics" class="btn btn-primary" onclick="agregarMetrica()">
+        Agregar
+      </button>
+            <button id="bd_mod_metrics" class="btn btn-primary" onclick="modificarMetrica()">
+        Modificar
+      </button>
+            <button id="bd_del_metricss" class="btn btn-primary" onclick="eliminarMetrica()">
+        Eliminar
+      </button>
+        </div>
+    </div>
+    <br />
+    <div class="row container">
+        <div class="col-12">
+            <table class="table table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Abreviación</th>
+                        <th scope="col">Perspectiva Indicador</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Activo</th>
+                    </tr>
+                </thead>
+                <tbody id="TableMetrics"></tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+</div>
+<%- include('../metrics/modal/add_metrics'); %>

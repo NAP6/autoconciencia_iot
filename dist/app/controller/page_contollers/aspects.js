@@ -26,7 +26,7 @@ function get_aspects(req, res) {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var db = new database2_1.database2();
             var aspects = new SelfAwarenessAspectQ_1.SelfAwarenessAspectQ(-1, "", "", -1, "");
-            var rows = yield db.qwerty(aspects.toSqlSelect());
+            var rows = yield db.qwerty(aspects.toSqlSelect([], []));
             res.json(rows);
         }
         else {

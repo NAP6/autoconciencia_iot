@@ -48,9 +48,7 @@ function default_1(app, upload) {
         .get(rt.loggedIn, rt.home)
         .post(rt.active_model, rt.loggedIn, rt.home);
     app.get("/logout", rt.logout);
-    app
-        .route("/models")
-        .get(rt.loggedIn, rt.models)
+    app.route("/models").get(rt.loggedIn, rt.models)
         .post(upload.single("file_modelo_xmi"), rt.save_new_model, rt.loggedIn, rt.models);
     app.post("/update_model", rt.loggedIn, rt.update_model);
     app.get("/subject", rt.loggedIn, rt.subject);

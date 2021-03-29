@@ -5,12 +5,14 @@ export class DirectMetric extends Metric {
   private _isProducedBy: CollectionMethod[];
 
   constructor(
-    id: number,
+
+id: number,
     name: string,
     description: string,
-    abbreviation: string
+    abbreviation: string,
+    perspective:string,
   ) {
-    super(id, name, description, abbreviation);
+    super(id, name, description, abbreviation, perspective);
     this._isProducedBy = [];
   }
 

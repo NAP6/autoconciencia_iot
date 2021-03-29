@@ -1,0 +1,19 @@
+<%- include('parts/before_the_body'); %>
+    <%- include('parts/sidebar_menu'); %>
+
+        <div id="layoutSidenav_content">
+            <main id="measurament_units_page" class="container-fluid">
+                <div class="row justify-content-between">
+                    <div class="col-12 shadow p-3 mb-5 bg-white rounded">
+                        <h4 class="text-right">Area de Trabajo:
+                            <%- session.active_model.nombre %>
+                        </h4>
+                    </div>
+                </div>
+                <h2 class="text-center">Métricas</h2>
+                <div id='alert-zone'></div>
+                <%- include('parts/metrics/table'); %>
+            </main>
+        </div>
+
+        <%- include('parts/after_the_body'); %>
