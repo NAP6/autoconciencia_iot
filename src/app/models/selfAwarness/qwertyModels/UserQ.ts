@@ -5,12 +5,10 @@ export class UserQ extends User implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
     var sql: string = `INSERT INTO usuario(
 				usr_nombre,
-				usr_descripcion,
 				usr_correo,
 				usr_password
 	    		) values (
 				'${this.name}',
-				'${this.description}',
 				'${this.mail}',
 				'${this.password}'
 	    		)`;
@@ -25,7 +23,6 @@ export class UserQ extends User implements SQL_Qwerty {
     var sql = `SELECT 
 	usr_id as id,
     usr_nombre as name,
-    usr_descripcion as description,
     usr_correo as mail,
     usr_password as password
 FROM 
@@ -54,7 +51,6 @@ WHERE `;
       var aux = new UserQ(
         element.id,
         element.name,
-        element.description,
         element.mail,
         element.password
       );

@@ -1,20 +1,17 @@
 export class User {
   private _id: number;
   private _name: string;
-  private _description: string;
   private _mail: string;
   private _password: string;
 
   constructor(
     id: number,
     name: string,
-    description: string,
     mail: string,
     password: string
   ) {
     this._id = id;
     this._name = name;
-    this._description = description;
     this._mail = mail;
     this._password = password;
   }
@@ -34,15 +31,6 @@ export class User {
   set name(value: string) {
     this._name = value;
   }
-
-  get description(): string {
-    return this._description;
-  }
-
-  set description(value: string) {
-    this._description = value;
-  }
-
   get mail(): string {
     return this._mail;
   }
