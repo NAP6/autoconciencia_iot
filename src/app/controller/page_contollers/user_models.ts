@@ -9,7 +9,7 @@ export async function user_models(req: Request, res: Response) {
     var model: SelfAwarnessQ = new SelfAwarnessQ(-1, "", "", "", "");
     console.log(req.session?.user);
     var rows = await db.qwerty(
-      model.toSqlSelect(["/@/USER/@/"], id.toString())
+      model.toSqlSelect(["/@/USER/@/"], [id.toString()])
     );
     console.log(model.toObjectArray(rows));
     res.json(model.toObjectArray(rows));
