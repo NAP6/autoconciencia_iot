@@ -7103,6 +7103,7 @@ function activarFormularioAspecto(elemento) {
     document.getElementById("descripcionAspecto").disabled = false;
     document.getElementById("pesoAspecto").disabled = false;
     document.getElementById("select_aspecto").disabled = false;
+    document.getElementById("select_objetivos").disabled = false;
     objeto_aspecto_id = elemento.dataset.puro_id;
 }
 
@@ -7191,7 +7192,7 @@ function guardarAspecto() {
         weigth: document.getElementById("pesoAspecto").value,
         type: document.getElementById("select_aspecto").value,
         suj_id: sujeto_aspecto_id,
-        obj_id: objeto_aspecto_id,
+        obj_id: document.getElementById("select_objetivos").value,
     };
     if (!!data.name &&
         !!data.description &&
@@ -7216,10 +7217,12 @@ function limpiarFomulario() {
     document.getElementById("descripcionAspecto").disabled = true;
     document.getElementById("pesoAspecto").disabled = true;
     document.getElementById("select_aspecto").disabled = true;
+    document.getElementById("select_objetivos").disabled = true;
     document.getElementById("nombreAspecto").value = "";
     document.getElementById("descripcionAspecto").value = "";
     document.getElementById("pesoAspecto").value = "";
     document.getElementById("select_aspecto").value = -6;
+    document.getElementById("select_objetivos").value = -6;
     document.getElementById("CategoriaEntidadesAspectos").value = -6;
     document.getElementById("lista_entidades_seleccionadas_aspectos").innerHTML =
         "";
