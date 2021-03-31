@@ -911,3 +911,20 @@ SELECT
 [0mGET /api/user_models [36m304[0m 36.871 ms - -[0m
 [0mGET /favicon.ico [36m304[0m 7.141 ms - -[0m
 [0mGET / [36m302[0m 9.354 ms - 28[0m
+
+> configurador_autoconciencia@1.0.0 start /home/nicolas/Documentos/autoconciencia_iot
+> node dist/app.js
+
+Server listen at port 3000
+[0mGET /subject [36m302[0m 36.880 ms - 56[0m
+[0mGET /login [36m304[0m 25.856 ms - -[0m
+[0mGET /js/scripts.js [32m200[0m 5.151 ms - 805[0m
+[0mGET /css/styles.css [32m200[0m 25.628 ms - 188597[0m
+[0mGET /css/bootstrap.css [32m200[0m 9.384 ms - 210235[0m
+[0mGET /favicon.ico [36m304[0m 14.627 ms - -[0m
+[0mGET /singup [32m200[0m 14.907 ms - 4442[0m
+[0mGET /css/styles.css [36m304[0m 8.592 ms - -[0m
+[0mGET /css/bootstrap.css [36m304[0m 2.281 ms - -[0m
+[0mGET /js/scripts.js [36m304[0m 1.971 ms - -[0m
+[0mGET /favicon.ico [36m304[0m 12.806 ms - -[0m
+[0mGET /api/user_models [32m200[0m 7.462 ms - 55[0m

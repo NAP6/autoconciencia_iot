@@ -22,7 +22,6 @@ export async function singup_save(req: Request, res: Response) {
       var usert = new UserQ(
         -1,
         req.body.inputName,
-        req.body.inputDescription,
         req.body.inputEmailAddress,
         req.body.inputPassword
       );
