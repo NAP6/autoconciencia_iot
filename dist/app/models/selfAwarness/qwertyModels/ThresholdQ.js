@@ -50,7 +50,7 @@ class ThresholdQ extends Threshold_1.Threshold {
     umb_interpretacion='${this.interpretation}',
     umb_inferior='${this.lowerThreshold}',
     umb_superior='${this.upperThreshold}',
-    umb_activo='${this.active ? 1 : 0}'
+    umb_activo=${this.active ? 1 : 0}
   WHERE 
     umb_id=${this.id}`;
         return sql;

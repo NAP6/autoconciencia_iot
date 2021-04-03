@@ -41,7 +41,7 @@ class MeasurementUnitQ extends MeasurementUnit_1.MeasurementUnit {
     um_nombre='${this.name}', 
     um_descripcion='${this.description}',
     um_acronimo='${this.acronym}',
-    met_activo='${this.active ? 1 : 0}'
+    um_activo=${this.active ? 1 : 0}
   WHERE 
     um_id=${this.id}`;
         return sql;

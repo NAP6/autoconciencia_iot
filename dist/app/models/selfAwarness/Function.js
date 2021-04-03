@@ -7,6 +7,7 @@ class Function extends ImplementationResource_1.ImplementationResource {
         super(id, name, description, returnDataType);
         this._path = path;
         this._instrucctions = instrucctions;
+        this._preexisting = false;
     }
     get path() {
         return this._path;
@@ -19,6 +20,12 @@ class Function extends ImplementationResource_1.ImplementationResource {
     }
     set instrucctions(value) {
         this._instrucctions = value;
+    }
+    get preexisting() {
+        return this._preexisting;
+    }
+    set preexisting(value) {
+        this._preexisting = value;
     }
 }
 exports.Function = Function;

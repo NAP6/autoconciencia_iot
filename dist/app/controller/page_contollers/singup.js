@@ -34,7 +34,7 @@ function singup_save(req, res) {
         }
         else {
             if (req.body.inputPassword == req.body.inputPassword2) {
-                var usert = new selfAwarnessModels_1.UserQ(-1, req.body.inputName, req.body.inputDescription, req.body.inputEmailAddress, req.body.inputPassword);
+                var usert = new selfAwarnessModels_1.UserQ(-1, req.body.inputName, req.body.inputEmailAddress, req.body.inputPassword);
                 var db = new database2_1.database2();
                 yield db.qwerty(usert.toSqlInsert([], []));
                 req.flash("succes", "Usuario creado correctamente");

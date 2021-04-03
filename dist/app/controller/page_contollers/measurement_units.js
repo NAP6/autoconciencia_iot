@@ -59,8 +59,8 @@ function upd_measurement_units(req, res) {
             var db = new database2_1.database2();
             var newMeasurement = req.body;
             var measurement = new MeasurementUnitQ_1.MeasurementUnitQ(newMeasurement.id, newMeasurement.name, newMeasurement.description, newMeasurement.acronym);
-            measurement.active = measurement.active;
-            yield db.qwerty(newMeasurement.toSqlUpdate([], []));
+            measurement.active = newMeasurement.active;
+            yield db.qwerty(measurement.toSqlUpdate([], []));
             res.json({ Mensaje: "Los datos se han enviado con exito" });
         }
         else {

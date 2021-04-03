@@ -41,10 +41,15 @@ function add_aspects(req, res) {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var db = new database2_1.database2();
             var newAspect = req.body;
+            console.log(newAspect);
             var modelID = req.session.active_model.modelID;
             var aspect = new SelfAwarenessAspectQ_1.SelfAwarenessAspectQ(-1, newAspect.name, newAspect.description, newAspect.weigth, newAspect.type);
             aspect.active = aspect.active;
-            yield db.qwerty(aspect.toSqlInsert(["/@/OBJECT/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"], [newAspect.obj_id, newAspect.suj_id, modelID]));
+            var rows = yield db.qwerty(aspect.toSqlInsert(["/@/OBJECT/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"], [newAspect.obj_id, newAspect.suj_id, modelID]));
+            aspect.id = rows.insertId;
+            for (var i = 0; i < newAspect.arr_entity.length; i++) {
+                yield db.qwerty(`INSERT INTO aspectoautoconsciencia_objeto (aa_id, obj_id, ma_id) values (${aspect.id}, ${newAspect.arr_entity[i]}, ${modelID})`);
+            }
             res.json({ Mensaje: "Los datos se han enviado con exito" });
         }
         else {
