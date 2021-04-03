@@ -3,7 +3,7 @@ import { ImplementationResource } from "./ImplementationResource";
 export class WebService extends ImplementationResource {
   private _endPoint: string;
   private _instrucctions: string;
-  private _DataFormatType: JSON;
+  private _DataFormatType: any;
   private _preexisting: boolean;
   constructor(
     id: number,
@@ -35,11 +35,11 @@ export class WebService extends ImplementationResource {
   set instrucctions(value: string) {
     this._instrucctions = value;
   }
-  get DataFormatType(): JSON {
+  get DataFormatType(): any {
     return this._DataFormatType;
   }
 
-  set DataFormatType(value: JSON) {
+  set DataFormatType(value: any) {
     this._DataFormatType = value;
   }
 

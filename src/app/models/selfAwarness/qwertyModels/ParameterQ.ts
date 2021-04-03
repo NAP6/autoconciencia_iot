@@ -2,6 +2,16 @@ import { Parameter } from "../Parameter";
 import { SQL_Qwerty } from "../../SQL_Qwerty";
 
 export class ParameterQ extends Parameter implements SQL_Qwerty {
+  private _active: boolean = false;
+
+  get active(): boolean {
+    return this._active;
+  }
+
+  set active(value: boolean) {
+    this._active = value;
+  }
+
   get id(): number {
     return this.ordinal;
   }
@@ -9,6 +19,7 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
   set id(value: number) {
     this.ordinal = value;
   }
+
   toSqlInsert(tag: string[], value: string[]): string {
     var sql = `INSERT INTO 
 	  		parametro (
@@ -57,8 +68,9 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
         rows[i].ordinal,
         rows[i].nombre,
         rows[i].tipo,
-        rows.opcional == 1 ? true : false
+        rows[i].opcional == 1 ? true : false
       );
+      par.active = rows[i].activo == 1 ? true : false;
       parameters.push(par);
     }
     return parameters;

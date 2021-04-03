@@ -88,13 +88,13 @@ export async function mod_aspecs(req: Request, res: Response) {
       newAspect.name,
       newAspect.description,
       newAspect.weigth,
-      newAspect.type
+      newAspect.tipo,
     );
-    aspect.active = aspect.active;
+    aspect.active = newAspect.active;
     await db.qwerty(
       aspect.toSqlUpdate(
-        ["/@/OBJECT/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"],
-        [newAspect.obj_id, newAspect.suj_id, modelID]
+        ["/@/OBJECT/@/","/@/MODEL/@/"],
+        [newAspect.objetivo, modelID]
       )
     );
     res.json({ Mensaje: "Los datos se han enviado con exito" });

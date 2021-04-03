@@ -203,17 +203,25 @@ function cargar_recurso_para_modificar(json) {
   console.log(json);
   var nombre = document.getElementById("input-name-resource-add");
   var descripcion = document.getElementById("input-descripton-resource-add");
-  var tipoRecurso = document.getElementById("select_tipo_recurso");
-  nombre.value = json.nombre;
-  descripcion.value = json.descripcion;
-  tipoRecurso.selectedIndex = (parseInt(json.tipoRecurso) + 1).toString();
-  visivilidad_tipo_recurso_form_add(json.tipoRecurso);
-  tipoRecurso.disabled = true;
+  var tipoRecursoSel = document.getElementById("select_tipo_recurso");
+  nombre.value = json._name;
+  descripcion.value = json._description;
+  var tipoRecurso = -1;
+  if (json._expression) {
+    tipoRecurso = 0;
+  } else if (json._endPoint) {
+    tipoRecurso = 2;
+  } else {
+    tipoRecurso = 1;
+  }
+  tipoRecursoSel.value = tipoRecurso;
+  visivilidad_tipo_recurso_form_add(tipoRecurso);
+  tipoRecursoSel.disabled = true;
   cargar_parametros_recursos_para_modificar(
-    json.tipoRecurso,
-    json.arregloParametros
+    tipoRecurso,
+    json._containsParameter
   );
-  cargar_datos_recursos_modificar(json.tipoRecurso, json.EspecificoTipo);
+  cargar_datos_recursos_modificar(tipoRecurso, json);
 }
 
 function modificarRecursoImplementacion() {
@@ -234,9 +242,9 @@ function modificarRecursoImplementacion() {
 function cargar_parametros_recursos_para_modificar(t, parametros) {
   idParametroCont = 0;
   var tipo = "";
-  if (t == "0") {
+  if (t == 0) {
     tipo = "parametro_formula";
-  } else if (t == "1") {
+  } else if (t == 1) {
     tipo = "parametro_funciones";
   } else {
     tipo = "parametro_servicios";
@@ -244,21 +252,21 @@ function cargar_parametros_recursos_para_modificar(t, parametros) {
   parametros.forEach((par) => {
     var seccion = document.createElement("li");
     seccion.classList.add("list-group-item", "li_parametros");
-    seccion.dataset.ordinal = par.ordinal;
-    seccion.dataset.nombre = par.nombre;
-    seccion.dataset.activo = par.activo == "1" ? "true" : "false";
-    seccion.dataset.opcional = par.opcional == "1" ? "true" : "false";
-    seccion.dataset.tipo = par.tipo;
+    seccion.dataset.ordinal = par._ordinal;
+    seccion.dataset.nombre = par._name;
+    seccion.dataset.activo = par._active;
+    seccion.dataset.opcional = par._optional;
+    seccion.dataset.tipo = par._dataType;
     seccion.dataset.tipoIndex = indexOfValueinSelect(
       "#tipo_dato_parametro",
-      par.tipo
+      par._dataType
     );
     seccion.id = `parameto_num_${idParametroCont++}`;
-    seccion.innerHTML = par.nombre;
+    seccion.innerHTML = par._name;
     if (tipo === "parametro_formula") {
       seccion.setAttribute(
         "ondblclick",
-        `agregar_a_formula('[${par.nombre}]');`
+        `agregar_a_formula('[${par._name}]');`
       );
     }
     seccion.setAttribute(
@@ -274,39 +282,37 @@ function cargar_parametros_recursos_para_modificar(t, parametros) {
 function cargar_datos_recursos_modificar(tipo, datos_especificos) {
   if (tipo == "0") {
     document.getElementById("area_de_nueva_formula").value =
-      datos_especificos.formula;
-    document.getElementById(
-      "selectTipoSalidaFormulaRecursoAdd"
-    ).selectedIndex = indexOfValueinSelect(
-      "#selectTipoSalidaFormulaRecursoAdd",
-      datos_especificos.datoSalida
-    );
+      datos_especificos._expression;
+    document.getElementById("selectTipoSalidaFormulaRecursoAdd").value =
+      datos_especificos._returnDataType[1];
   } else if (tipo == "1") {
     document.getElementById("area_de_nueva_istruccion_funcion").value =
-      datos_especificos.instrucciones;
-    document.getElementById(
-      "selectTipoSalidaFuncionesRecursoAdd"
-    ).selectedIndex = indexOfValueinSelect(
-      "#selectTipoSalidaFuncionesRecursoAdd",
-      datos_especificos.datoSalida
-    );
+      datos_especificos._instrucctions;
+    document.getElementById("selectTipoSalidaFuncionesRecursoAdd").value =
+      datos_especificos._returnDataType[1];
+    document.getElementById("pre_existente_funciones").checked =
+      datos_especificos._preexisting;
+    if (datos_especificos._preexisting) {
+      document.getElementById(
+        "area_de_nueva_istruccion_funcion"
+      ).disabled = true;
+    }
   } else {
     document.getElementById("input_endpoint_resource").value =
-      datos_especificos.endPoint;
+      datos_especificos._endPoint;
     document.getElementById("area_de_nueva_istruccion_servicios").value =
-      datos_especificos.instrucciones;
-    document.getElementById(
-      "selectTipoSalidaServiciosRecursoAdd"
-    ).selectedIndex = indexOfValueinSelect(
-      "#selectTipoSalidaServiciosRecursoAdd",
-      datos_especificos.datoSalida
-    );
-    document.getElementById(
-      "selectFormatodeSalida"
-    ).selectedIndex = indexOfValueinSelect(
-      "#selectFormatodeSalida",
-      datos_especificos.formatoSalida
-    );
+      datos_especificos._instrucctions;
+    document.getElementById("selectTipoSalidaServiciosRecursoAdd").value =
+      datos_especificos._returnDataType[1];
+    document.getElementById("selectFormatodeSalida").value =
+      datos_especificos._DataFormatType;
+    document.getElementById("pre_existente_servicios").checked =
+      datos_especificos._preexisting;
+    if (datos_especificos._preexisting) {
+      document.getElementById(
+        "area_de_nueva_istruccion_servicios"
+      ).disabled = true;
+    }
   }
 }
 
@@ -1234,12 +1240,6 @@ function eliminarObjeto() {
 */
 /*CARGAR TIPO PARA LA SECCION DE ESCALAS*/
 
-if (
-  document.getElementById("tipo_escalas") ||
-  document.getElementById("tipo_escalas2")
-) {
-  get_tipo_escalas_select();
-}
 function get_tipo_escalas_select() {
   post_api(
     "http://alvapala.ddns.net:3001/api/get_enumeracion",
@@ -1252,20 +1252,16 @@ function get_tipo_escalas_select() {
 }
 function cargar_select_tipo_escala(json) {
   var ope = document.getElementById("tipo_escalas");
-  var ope2 = document.getElementById("tipo_escalas2");
   ope.innerHTML = "";
-  ope2.innerHTML = "";
   var seleccione = document.createElement("option");
   seleccione.innerHTML = "Seleccione..";
   seleccione.value = "-6";
   ope.appendChild(seleccione);
-  ope2.appendChild(seleccione);
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
     option.innerHTML = element.nombre;
     ope.appendChild(option);
-    ope2.appendChild(option);
   });
 }
 
@@ -1273,6 +1269,35 @@ function error_cargar_enumeracion_select(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
 
+if (document.getElementById("tipo_escalas2")) {
+  get_tipo_escalas_modificar_select();
+}
+
+function get_tipo_escalas_modificar_select() {
+  post_api(
+    "http://alvapala.ddns.net:3001/api/get_enumeracion",
+    { tipo: "TIPO_ESCALA" },
+    cargar_select_tipo_escala_modificar,
+    (err) => {
+      alert(err);
+    }
+  );
+}
+
+function cargar_select_tipo_escala_modificar(json) {
+  var ope = document.getElementById("tipo_escalas2");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+}
 /* 
     SECCION GENERALES PARTE: UNIDADES DE MEDIDA
         Descripcion:
@@ -1481,6 +1506,7 @@ function error_cargar_escales_table(err) {
 
 function agregar_escala() {
   $("#modal_scales_add").modal("show");
+  get_tipo_escalas_select();
   document.getElementById("input-name-scale-add").value = "";
   document.getElementById("input-valor-add").value = "";
   document.getElementById("tipo_escalas").valie = "-6";
@@ -1635,6 +1661,7 @@ function get_criterios_table() {
 
 function cargar_criterios_table(json) {
   res = "";
+  document.getElementById("seccion_umbrales").innerHTML = "";
   json.forEach((cd) => {
     res += `<tr onClick="visibilidad_umbral('${cd.id}')" id='tr_umbral_${cd.id}' name='tr_umbral'>`;
     res += `<td><input type="radio" name="criterio_seleccionado" value="${
@@ -1670,6 +1697,8 @@ function error_cargar_criterios_table(err) {
 
 function agregar_criterio_decision() {
   $("#modal_criteria_add").modal("show");
+  document.getElementById("input-name-criteria-add").value = "";
+  document.getElementById("input-descripton-criteria-add").value = "";
 }
 
 function guardarNuevoCriterio() {
@@ -1684,8 +1713,8 @@ function guardarNuevoCriterio() {
       mensaje_exitoEnvioDecisionCriteria,
       mensaje_errorEnvioDecisionCriteria
     );
-    get_criterios_table();
-
+    document.getElementById("input-name-criteria-add").value = "";
+    document.getElementById("input-descripton-criteria-add").value = "";
     $("#modal_criteria_add").modal("hide");
   } else alert("Ingrese todos los campos del formulario");
 }
@@ -1729,6 +1758,9 @@ function guardar_eliminar_criterio_decision() {
         data = {
           id: id,
         };
+        if ((id = criterio_select)) {
+          criterio_select = undefined;
+        }
         post_api(
           "http://alvapala.ddns.net:3001/api/del_criteria/",
           data,
@@ -1736,7 +1768,6 @@ function guardar_eliminar_criterio_decision() {
           mensaje_errorEnvioDecisionCriteria
         );
       }
-      get_criterios_table();
     } else alert("Debe seleccionar un elemento para eliminar");
   } catch (error) {
     alert(error);
@@ -1755,11 +1786,10 @@ function modificar_criterio_decision() {
         id = elem.value;
         name = elem.dataset.name;
         description = elem.dataset.descripcion;
-        active = elem.dataset.activo;
+        active = elem.dataset.activo == "true";
         return;
       }
     });
-    console.log(active);
     if (!!id && !!name && !!description) {
       document.getElementById("input-id-criteria-update").value = id;
       document.getElementById("input-name-criteria-update").value = name;
@@ -1790,7 +1820,6 @@ function guardarModificacionCriterios() {
         mensaje_exitoEnvioDecisionCriteria,
         mensaje_errorEnvioDecisionCriteria
       );
-      get_criterios_table();
       $("#modal_modificar_criterios").modal("hide");
     } else alert("Debe debe completar todos los campos");
   } catch (error) {
@@ -1800,6 +1829,7 @@ function guardarModificacionCriterios() {
 
 function mensaje_exitoEnvioDecisionCriteria(json) {
   console.log("Criterio Guardado");
+  get_criterios_table();
 }
 
 function mensaje_errorEnvioDecisionCriteria(err) {
@@ -1879,6 +1909,58 @@ function cargar_umbral_table(json) {
   body.id += "_" + json.id_decicion;
   var tabla = templeate.querySelector(".table");
   tabla.id = "umbral_" + json.id_descicion;
+  tabla.style.display = "none";
+  seccion.appendChild(templeate);
+}
+function cargar_umbral_table_modificar(json) {
+  console.log(json);
+  var templeate = document
+    .getElementById("templeta_tabla_umbral")
+    .content.cloneNode(true);
+  var seccion = document.getElementById("seccion_umbrales");
+  var body = templeate.querySelector("tbody");
+  json.umbrales.forEach((um) => {
+    var fila = document.createElement("tr");
+    var dato = document.createElement("td");
+    var input = document.createElement("input");
+    input.type = "radio";
+    input.name = "umbral_seleccionado";
+    input.dataset.id = um.id;
+    input.dataset.nombre = um.name;
+    input.dataset.interpretacion = um.interpretacion;
+    input.dataset.inferior = um.inferior;
+    input.dataset.superior = um.superior;
+    input.dataset.activo = um.active;
+    input.dataset.id_crite = json.id_descicion;
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.id;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.name;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.interpretacion;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.inferior;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.superior;
+    fila.appendChild(dato);
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.disabled = true;
+    input.checked = um.active == 1;
+    dato = document.createElement("td");
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    body.appendChild(fila);
+  });
+  body.id += "_" + json.id_decicion;
+  var tabla = templeate.querySelector(".table");
+  tabla.id = "umbral_" + json.id_descicion;
   var tablaMod = document.getElementById(tabla.id);
   if (tablaMod) {
     seccion.replaceChild(tabla, tablaMod);
@@ -1887,9 +1969,12 @@ function cargar_umbral_table(json) {
     seccion.appendChild(templeate);
   }
 }
-
 function agregar_umbral() {
   $("#modal_umbral_add").modal("show");
+  document.getElementById("input-name-umbral-add").value = "";
+  document.getElementById("input-interpretacion-umbral-add").value = "";
+  document.getElementById("input-inferior-umbral-add").value = "";
+  document.getElementById("input-superior-umbral-add").value = "";
 }
 
 function guardarNuevoUmbral() {
@@ -1918,14 +2003,6 @@ function guardarNuevoUmbral() {
         mensaje_errorEnvioUmbral
       );
       $("#modal_umbral_add").modal("hide");
-      post_api(
-        "http://alvapala.ddns.net:3001/api/get_umbral/",
-        data2,
-        cargar_umbral_table,
-        (err) => {
-          console.log("Error");
-        }
-      );
     } else alert("Ingrese todos los campos del formulario");
   } catch (error) {
     alert(error);
@@ -2020,24 +2097,23 @@ function guardarModificacionUmbral() {
       mensaje_exitoEnvioUmbral,
       mensaje_errorEnvioUmbral
     );
-    var data2 = {
-      criterio: criterio_select,
-    };
-    post_api(
-      "http://alvapala.ddns.net:3001/api/get_umbral/",
-      data2,
-      cargar_umbral_table,
-      (err) => {
-        console.log("Error");
-      }
-    );
 
     $("#modal_modificar_umbral").modal("hide");
   } else alert("Debe debe completar todos los campos");
 }
 
 function mensaje_exitoEnvioUmbral(json) {
-  console.log("Se guardo correctamente el umbral");
+  var data = {
+    criterio: criterio_select,
+  };
+  post_api(
+    "http://alvapala.ddns.net:3001/api/get_umbral/",
+    data,
+    cargar_umbral_table_modificar,
+    (err) => {
+      console.log("Error");
+    }
+  );
 }
 
 function mensaje_errorEnvioUmbral(err) {
@@ -2522,39 +2598,37 @@ function abrirModalEntidadColor(id, nombre) {
 }
 
 function verificar_seleccion_hijo_padre_entidades(elemento, lado) {
-  try {
-    var padre_id = elemento.dataset.padre_id;
-    if (padre_id != "null" && elemento.checked) {
-      // Si es hijo y esta seleccionado
-      var padre = document.getElementById(`sujeto_${lado}_${padre_id}`);
+  var padre_id = elemento.dataset.padre_id;
+  if (padre_id != "null" && elemento.checked) {
+    // Si es hijo y esta seleccionado
+    var padre = document.getElementById(`sujeto_${lado}_${padre_id}`);
+    if (padre) {
       padre.checked = true;
       if (padre.dataset.padre_id != "null") {
         verificar_seleccion_hijo_padre_entidades(padre, lado);
       }
     }
-    var hijos = document.getElementsByClassName(
-      `hijo_entidad_de_${elemento.dataset.puro_id}_${lado}`
-    );
-    if (hijos.length > 0) {
-      // Si es padre
-      Array.from(hijos).forEach((e) => {
-        if (
-          document.getElementById(`li_ent_${lado}_${e.dataset.puro_id}`).style
-            .display == "list-item"
-        )
-          e.checked = elemento.checked;
-        var hijos2 = document.getElementsByClassName(
-          `hijo_entidad_de_${e.dataset.puro_id}_${lado}`
-        );
-        if (hijos2.length > 0) {
-          verificar_seleccion_hijo_padre_entidades(e, lado);
-        }
-      });
-    } else {
-      verificar_seleccion_hijo_padre_entidades_aux(elemento, lado);
-    }
-  } catch (error) {
-    alert(error);
+  }
+  var hijos = document.getElementsByClassName(
+    `hijo_entidad_de_${elemento.dataset.puro_id}_${lado}`
+  );
+  if (hijos.length > 0) {
+    // Si es padre
+    Array.from(hijos).forEach((e) => {
+      if (
+        document.getElementById(`li_ent_${lado}_${e.dataset.puro_id}`).style
+          .display == "list-item"
+      )
+        e.checked = elemento.checked;
+      var hijos2 = document.getElementsByClassName(
+        `hijo_entidad_de_${e.dataset.puro_id}_${lado}`
+      );
+      if (hijos2.length > 0) {
+        verificar_seleccion_hijo_padre_entidades(e, lado);
+      }
+    });
+  } else {
+    verificar_seleccion_hijo_padre_entidades_aux(elemento, lado);
   }
 }
 
@@ -2569,9 +2643,11 @@ function verificar_seleccion_hijo_padre_entidades_aux(elemento, lado) {
   var elemen = document.getElementById(
     `sujeto_${lado}_${elemento.dataset.padre_id}`
   );
-  elemen.checked = !deseleccion;
-  if (elemen.dataset.padre_id != "null") {
-    verificar_seleccion_hijo_padre_entidades_aux(elemen, lado);
+  if (elemen) {
+    elemen.checked = !deseleccion;
+    if (elemen.dataset.padre_id != "null") {
+      verificar_seleccion_hijo_padre_entidades_aux(elemen, lado);
+    }
   }
 }
 
@@ -6960,25 +7036,37 @@ function error_cargar_metrica_table(err) {
 }
 
 function modificarMetrica() {
-  var guardarButton = document.getElementById("agregarMetricaButton");
-  var modificarButton = document.getElementById("ModificarMetricaButton");
-  guardarButton.classList.replace("d-none", "d-inline-block");
-  modificarButton.classList.replace("d-inline-block", "d-none");
-  document.getElementById("escalas_seccion_entidad").value = "-6";
-  document.getElementById("unidad_medida_metrica").value = "-6";
-  document.getElementById("select_metrica").value = "-6";
-  document.getElementById("nombreMetrica").value = "";
-  document.getElementById("descripcionMetrica").value = "";
-  document.getElementById("abreviaturaMetrica").value = "";
-  document.getElementById("perspectiva_indicador").value = "";
-  $("#add_metrics").modal("show");
-  console.log("AGREGAR METRICAS ENTRO");
-  post_api(
-    "http://alvapala.ddns.net:3001/api/get_enumeracion",
-    { tipo: "TIPO_METRICA" },
-    cargar_tipo_metrica_select_modificar,
-    error_cargar_tipo_metrica_select
-  );
+  var radio = document.getElementsByName("metrica_seleccionado");
+  var id = false;
+  radio.forEach((elem) => {
+    if (elem.checked) {
+      id = elem.value;
+    }
+  });
+  console.log(id);
+  if (!!id) {
+    var guardarButton = document.getElementById("agregarMetricaButton");
+    var modificarButton = document.getElementById("ModificarMetricaButton");
+    guardarButton.classList.replace("d-none", "d-inline-block");
+    modificarButton.classList.replace("d-inline-block", "d-none");
+    document.getElementById("escalas_seccion_entidad").value = "-6";
+    document.getElementById("unidad_medida_metrica").value = "-6";
+    document.getElementById("select_metrica").value = "-6";
+    document.getElementById("nombreMetrica").value = "";
+    document.getElementById("descripcionMetrica").value = "";
+    document.getElementById("abreviaturaMetrica").value = "";
+    document.getElementById("perspectiva_indicador").value = "";
+    $("#add_metrics").modal("show");
+    console.log("AGREGAR METRICAS ENTRO");
+    post_api(
+      "http://alvapala.ddns.net:3001/api/get_enumeracion",
+      { tipo: "TIPO_METRICA" },
+      cargar_tipo_metrica_select_modificar,
+      error_cargar_tipo_metrica_select
+    );
+  } else {
+    alert("Debe seleccionar una Métrica para modificar");
+  }
 }
 
 function cargar_tipo_metrica_select_modificar(json) {
@@ -7041,7 +7129,7 @@ function cargar_tipo_metrica_select_modificar(json) {
     document.getElementById("activoMetrica").checked = active;
     $("#add_metrics").modal("show");
   } else {
-    alert("Debe seleccionar un elemento para modificar");
+    alert("ebe seleccionar un elemento para modificar");
   }
 }
 
@@ -7120,7 +7208,6 @@ function cargar_sujetos_activos_aspectos(json) {
       aux_visible_inactivo.add(elemento.father);
     }
   });
-  console.log(aux_visible_inactivo);
   json.forEach((elemento) => {
     var insertar;
     if (!elemento.father) {
@@ -7183,12 +7270,10 @@ function verificarSeleccionAspectos(elemento) {
   });
   elemento.checked = auxChecked;
   document.getElementById("CategoriaEntidadesAspectos").disabled = false;
-  console.log("LLama a la function");
   get_aspectos_objetivos(elemento.dataset.puro_id);
 }
 
 function get_aspectos_objetivos(id) {
-  console.log("llama a la api:");
   post_api(
     "http://alvapala.ddns.net:3001/api/subjects_objects",
     { id: id },
@@ -7201,7 +7286,6 @@ function get_aspectos_objetivos(id) {
 }
 
 function cargar_select_aspectos_objetivos(json) {
-  console.log("Empieza la carga");
   var listaPadres = [];
   var listaId = [];
   json.forEach((element) => {
@@ -7213,11 +7297,7 @@ function cargar_select_aspectos_objetivos(json) {
   listaPadres = new Set(listaPadres);
   listaId = new Set(listaId);
 
-  console.log(listaPadres);
-  console.log(listaId);
-
   let eliminacionId = [...listaId].filter((x) => !listaPadres.has(x));
-  console.log(eliminacionId);
   var ope = document.getElementById("select_objetivos");
   ope.innerHTML = "";
   var seleccione = document.createElement("option");
@@ -7255,6 +7335,7 @@ $("#CategoriaEntidadesAspectos").change(function () {
 });
 
 function cargar_posibles_entidades_modelo_aspecto(json) {
+  console.log(json);
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   json.forEach((elemento) => {
@@ -7277,6 +7358,10 @@ function cargar_posibles_entidades_modelo_aspecto(json) {
       );
       if (insertarAux) {
         insertarAux.appendChild(insertar);
+      } else {
+        insertar = document.getElementById(
+          "lista_entidades_seleccionadas_aspectos"
+        );
       }
     }
     li = document.createElement("li");
@@ -7491,9 +7576,11 @@ function cargar_aspectos_table(json) {
     }" data-name="${met.name}" data-description="${
       met.description
     }" data-peso="${met.weigth}" data-tipo="${met.tipo_id}"
-      data-activo="${met.active == 1}" data-objeto="${met.obj}" data-sujeto="${
-      met.suj
-    }" data-modelo="${met.model}" data-sujeto_nombre="${met.sujeto}"></td>`;
+      data-activo="${met.active == 1}" data-objetivo="${
+      met.obj
+    }" data-sujeto="${met.suj}" data-modelo="${
+      met.model
+    }" data-sujeto_nombre="${met.sujeto}"></td>`;
     res += `<td>${met.id}</td>`;
     res += `<td>${met.name}</td>`;
     res += `<td>${met.description}</td>`;
@@ -7516,7 +7603,7 @@ function eliminarAspectos() {
   var id;
   radio.forEach((rad) => {
     if (rad.checked) {
-      id = rad.value;
+      id = rad.dataset.id;
       return;
     }
   });
@@ -7527,9 +7614,7 @@ function eliminarAspectos() {
         {
           id: id,
         },
-        (res) => {
-          console.log(res);
-        },
+        cargar_tabla_aspectos,
         (res) => {
           console.log(res);
         }
@@ -7703,47 +7788,84 @@ function limpiarFomularioMod() {
   ).innerHTML = "";
   $("#mod_aspects").modal("hide");
 }
+//OBJETIVOS_ASPECTOS
+function get_aspectos_objetivos_modificar(id) {
+  post_api(
+    "http://alvapala.ddns.net:3001/api/subjects_objects",
+    { id: id },
+    cargar_select_aspectos_objetivos_modificar,
+    (res) => {
+      /*console.log(res);*/
+      console.log("Eroooooorrrrrrr Aqui ???????? ");
+    }
+  );
+}
 
-function modficarAspectos() {
+function cargar_select_aspectos_objetivos_modificar(json) {
+  var listaPadres = [];
+  var listaId = [];
+  json.forEach((element) => {
+    if (element.padre != null) {
+      listaPadres.push(element.padre);
+    }
+    listaId.push(element.id);
+  });
+  listaPadres = new Set(listaPadres);
+  listaId = new Set(listaId);
+
+  let eliminacionId = [...listaId].filter((x) => !listaPadres.has(x));
+  var ope = document.getElementById("select_objetivo_mod");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    if (eliminacionId.indexOf(element.id) != -1) {
+      var option = document.createElement("option");
+      option.value = element.id;
+      option.innerHTML = element.nombre;
+      ope.appendChild(option);
+    }
+  });
   var radio = document.getElementsByName("aspecto_seleccionado");
   var id;
   var name;
   var descripcion;
   var peso;
-  var tipo;
   var active;
-  var obj;
   var suj;
-  var categoria;
+  var objetivo;
+  var tipo;
   radio.forEach((elem) => {
     if (elem.checked) {
       id = elem.dataset.id;
       name = elem.dataset.name;
       descripcion = elem.dataset.description;
       peso = elem.dataset.peso;
-      tipo = elem.dataset.tipo;
       active = elem.dataset.activo == "true";
       suj = elem.dataset.sujeto_nombre;
+      objetivo = elem.dataset.objetivo;
+      tipo = elem.dataset.tipo;
       return;
     }
   });
-  console.log(obj);
-  console.log(categoria);
-  console.log(suj);
+  aspecto_seleccionado_mod = id;
   if (!!id && !!name && !!descripcion && !!peso) {
+    document.getElementById("nombreAspectoMod").disabled = false;
+    document.getElementById("descripcionAspectoMod").disabled = false;
+    document.getElementById("pesoAspectoMod").disabled = false;
+    document.getElementById("select_objetivo_mod").disabled = false;
+    document.getElementById("select_aspecto_mod").disabled = false;
     document.getElementById("activoAspectosMod").disabled = false;
     document.getElementById("id_aspecto").value = id;
     document.getElementById("nombreAspectoMod").value = name;
     document.getElementById("descripcionAspectoMod").value = descripcion;
     document.getElementById("pesoAspectoMod").value = peso;
-    document.getElementById("select_aspecto_mod").value = tipo;
-    document.getElementById("objeto_id_aspecto").value = obj;
     document.getElementById("sujeto_id_aspecto").value = suj;
     document.getElementById("activoAspectosMod").checked = active;
-    document.getElementById("nombreAspectoMod").disabled = false;
-    document.getElementById("descripcionAspectoMod").disabled = false;
-    document.getElementById("pesoAspectoMod").disabled = false;
-    document.getElementById("select_aspecto_mod").disabled = false;
+    document.getElementById("select_objetivo_mod").value = objetivo;
+    document.getElementById("select_aspecto_mod").value = tipo;
     var divSujeto = document.getElementById(
       "sujetos_Activos_aspectos_modificar"
     );
@@ -7763,11 +7885,52 @@ function modficarAspectos() {
     alert("Debe seleccionar un elemento para modificar");
   }
 }
+var aspecto_seleccionado_mod = undefined;
+function modificarAspectos() {
+  var radio = document.getElementsByName("aspecto_seleccionado");
+  radio.forEach((elem) => {
+    if (elem.checked) {
+      suj_id = elem.dataset.sujeto;
+      get_aspectos_objetivos_modificar(suj_id);
+    }
+  });
+}
+
+function GuardarmodificarAspecto() {
+  var data = {
+    id: aspecto_seleccionado_mod,
+    name: document.getElementById("nombreAspectoMod").value,
+    description: document.getElementById("descripcionAspectoMod").value,
+    weigth: document.getElementById("pesoAspectoMod").value,
+    objetivo: document.getElementById("select_objetivo_mod").value,
+    tipo: document.getElementById("select_aspecto_mod").value,
+    active: document.getElementById("activoAspectosMod").checked,
+  };
+  if (
+    !!data.name &&
+    !!data.description &&
+    !!data.weigth &&
+    !!data.objetivo &&
+    !!data.tipo
+  ) {
+    post_api(
+      "http://alvapala.ddns.net:3001/api/mod_aspects",
+      data,
+      cargar_tabla_aspectos,
+      (res) => {
+        console.log(res);
+      }
+    );
+    $("#mod_aspects").modal("hide");
+  } else {
+    alert("Debe completar todos los campos");
+  }
+}
 function cargar_objetos_seleccionados_aspectos(json) {
-  console.log(json);
   var ul = document.getElementById(
     "lista_entidades_seleccionadas_aspectos_mod"
   );
+  ul.innerHTML = "";
   var op = document.createElement("option");
   var seleccion = json[0].tipo;
   if (seleccion == "PhysicalEntity") {

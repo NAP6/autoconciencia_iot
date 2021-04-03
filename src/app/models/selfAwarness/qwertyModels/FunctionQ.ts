@@ -36,7 +36,7 @@ export class FunctionQ extends Function implements SQL_Qwerty {
         rows[i].path_funcion,
         rows[i].instrucciones
       );
-      func.preexisting = rows[i].pre_existente;
+      func.preexisting = rows[i].pre_existente == 1? true : false;
       functions.push(func);
     }
     return functions;

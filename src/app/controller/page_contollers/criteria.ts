@@ -52,7 +52,7 @@ export async function upd_criteria(req: Request, res: Response) {
       newCriteria.name,
       newCriteria.description,
     );
-    criteria.active = newCriteria.active==1;
+    criteria.active = newCriteria.activo;
     await db.qwerty(
         criteria.toSqlUpdate(
         [],

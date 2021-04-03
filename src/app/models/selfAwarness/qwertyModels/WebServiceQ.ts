@@ -38,7 +38,7 @@ export class WebServiceQ extends WebService implements SQL_Qwerty {
         rows[i].instrucciones,
         rows[i].tipo_formato_dato_salida
       );
-      service.preexisting = rows[i].pre_existente;
+      service.preexisting = rows[i].pre_existente == 1? true : false;
       services.push(service);
     }
     return services;

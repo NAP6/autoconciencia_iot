@@ -64,8 +64,7 @@ toSqlUpdate(tag: string[], value: string[]): string {
     aa_tipo='${this.aspectType}',
     obj_id='${value[tag.indexOf("/@/OBJECT/@/")]}',
     ma_id='${value[tag.indexOf("/@/MODEL/@/")]}',
-    suj_id='${value[tag.indexOf("/@/SUBJECT/@/")]}',
-    aa_activo='${this.active ? 1 : 0}'
+    aa_activo=${this.active ? 1 : 0}
   WHERE 
     aa_id=${this.id}`;
 return sql;
