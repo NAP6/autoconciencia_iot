@@ -37,7 +37,7 @@ class DecisionCriteriaQ extends DecisionCriteria_1.DecisionCriteria {
     SET
     cd_nombre='${this.name}', 
     cd_descripcion='${this.description}',
-    esc_activo='${this.active ? 1 : 0}'
+    cd_activo=${this.active ? 1 : 0}
   WHERE 
     cd_id=${this.id}`;
         return sql;

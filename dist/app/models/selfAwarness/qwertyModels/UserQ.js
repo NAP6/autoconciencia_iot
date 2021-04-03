@@ -6,12 +6,10 @@ class UserQ extends User_1.User {
     toSqlInsert(tag, value) {
         var sql = `INSERT INTO usuario(
 				usr_nombre,
-				usr_descripcion,
 				usr_correo,
 				usr_password
 	    		) values (
 				'${this.name}',
-				'${this.description}',
 				'${this.mail}',
 				'${this.password}'
 	    		)`;
@@ -25,7 +23,6 @@ class UserQ extends User_1.User {
         var sql = `SELECT 
 	usr_id as id,
     usr_nombre as name,
-    usr_descripcion as description,
     usr_correo as mail,
     usr_password as password
 FROM 
@@ -48,7 +45,7 @@ WHERE `;
     toObjectArray(rows) {
         var results = [];
         rows.forEach((element) => {
-            var aux = new UserQ(element.id, element.name, element.description, element.mail, element.password);
+            var aux = new UserQ(element.id, element.name, element.mail, element.password);
             results.push(aux);
         });
         return results;

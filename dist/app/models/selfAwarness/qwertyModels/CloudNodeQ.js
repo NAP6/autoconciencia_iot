@@ -20,6 +20,7 @@ class CloudNodeQ extends CloudNode_1.CloudNode {
                     WHERE 
                     o.obj_id = os.obj_id AND 
                     o.ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} AND 
+                    os.ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} AND 
                     o.obj_tipo = 'CloudNode' AND 
                     os.suj_id = ${value[tag.indexOf('/@/SYSTEM/@/')]}  
                     ORDER BY id`;

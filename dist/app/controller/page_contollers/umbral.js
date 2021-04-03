@@ -20,7 +20,7 @@ function get_umbral(req, res) {
             var criteria = req.body;
             var umbral = new ThresholdQ_1.ThresholdQ(-1, "", "", -1, -1);
             var rows = yield db.qwerty(umbral.toSqlSelect(['/@/CRITERIA/@/'], [criteria.criterio]));
-            res.json(rows);
+            res.json({ id_descicion: criteria.criterio, umbrales: rows });
         }
         else {
             res.json({ error: "debe iniciar session para poder usar la api" });
@@ -52,7 +52,7 @@ function upd_umbral(req, res) {
             var db = new database2_1.database2();
             var newUmbral = req.body;
             var umbral = new ThresholdQ_1.ThresholdQ(newUmbral.id, newUmbral.name, newUmbral.interpretacion, newUmbral.inferior, newUmbral.superior);
-            umbral.active = umbral.active;
+            umbral.active = newUmbral.active;
             yield db.qwerty(umbral.toSqlUpdate([], []));
             res.json({ Mensaje: "Los datos se han enviado con exito" });
         }

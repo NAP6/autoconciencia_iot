@@ -59,7 +59,7 @@ function upd_scales(req, res) {
             var db = new database2_1.database2();
             var newScale = req.body;
             var scale = new ScaleQ_1.ScaleQ(newScale.id, newScale.name, newScale.valid_values, newScale.type);
-            scale.active = scale.active;
+            scale.active = newScale.active == 1;
             yield db.qwerty(scale.toSqlUpdate([], []));
             res.json({ Mensaje: "Los datos se han enviado con exito" });
         }

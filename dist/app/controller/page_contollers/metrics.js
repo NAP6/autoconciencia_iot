@@ -42,7 +42,7 @@ function get_metrics_aspects(req, res) {
             var db = new database2_1.database2();
             var id = req.body.id;
             var metrics = new MetricQ_1.MetricQ(-1, "", "", "", "");
-            var rows = yield db.qwerty(metrics.toSqlSelect(['/@/ASPECTID/@/'], []));
+            var rows = yield db.qwerty(metrics.toSqlSelect(['/@/ASPECTID/@/'], [id]));
             res.json(rows);
         }
         else {
@@ -101,7 +101,7 @@ function mod_metrics(req, res) {
             var db = new database2_1.database2();
             var newMetric = req.body;
             var metric = new MetricQ_1.MetricQ(newMetric.id, newMetric.name, newMetric.description, newMetric.abbreviation, newMetric.perspective);
-            metric.active = newMetric.active.toString();
+            metric.active = newMetric.active == 1;
             yield db.qwerty(metric.toSqlUpdate(["/@/TYPE/@/", "/@/ESCALE/@/", "/@/UNIT/@/"], [newMetric.type_metric, newMetric.scale, newMetric.unit]));
             res.json({ Mensaje: "Los datos se han enviado con exito" });
         }

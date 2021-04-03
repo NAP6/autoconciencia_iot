@@ -8,6 +8,7 @@ class WebService extends ImplementationResource_1.ImplementationResource {
         this._endPoint = endPoint;
         this._instrucctions = instrucctions;
         this._DataFormatType = DataFormatType;
+        this._preexisting = false;
     }
     get endPoint() {
         return this._endPoint;
@@ -26,6 +27,12 @@ class WebService extends ImplementationResource_1.ImplementationResource {
     }
     set DataFormatType(value) {
         this._DataFormatType = value;
+    }
+    get preexisting() {
+        return this._preexisting;
+    }
+    set preexisting(value) {
+        this._preexisting = value;
     }
 }
 exports.WebService = WebService;
