@@ -27,7 +27,7 @@ export async function get_metrics_aspects(req: Request, res: Response) {
     var db = new database2();
     var id=req.body.id;
     var metrics:MetricQ=new MetricQ(-1,"","","","");
-    var rows= await db.qwerty(metrics.toSqlSelect(['/@/ASPECTID/@/'],[]));
+    var rows= await db.qwerty(metrics.toSqlSelect(['/@/ASPECTID/@/'],[id]));
     res.json(rows);
     
   } else {

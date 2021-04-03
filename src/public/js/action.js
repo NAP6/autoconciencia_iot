@@ -7578,7 +7578,7 @@ function llenar_listado_metricas(id) {
     { id: id },
     cargar_metricas_disponibles,
     (json) => {
-      console.log(json);
+      console.log(json+"ERROR");
     }
   );
 }
@@ -7677,7 +7677,7 @@ function remover_metrica_seleccionado() {
 }
 
 function cambiar_metrica_lado() {
-  llenar_listado_metricas();
+  llenar_listado_metricas(aspectoSeleccionadoMetricas);
 }
 
 function error_cambiar_metrica_lado(error) {
