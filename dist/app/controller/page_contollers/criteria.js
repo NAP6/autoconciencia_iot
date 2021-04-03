@@ -59,7 +59,7 @@ function upd_criteria(req, res) {
             var db = new database2_1.database2();
             var newCriteria = req.body;
             var criteria = new DecisionCriteriaQ_1.DecisionCriteriaQ(newCriteria.id, newCriteria.name, newCriteria.description);
-            criteria.active = newCriteria.active == 1;
+            criteria.active = newCriteria.activo;
             yield db.qwerty(criteria.toSqlUpdate([], []));
             res.json({ Mensaje: "Los datos se han enviado con exito" });
         }

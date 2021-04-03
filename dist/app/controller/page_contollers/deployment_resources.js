@@ -109,6 +109,7 @@ function ask_deployment_resources(req, res) {
                 var formula = new selfAwarnessModels_1.FormulaQ(-1, "", "", "", "");
                 formula = formula.toObjectArray(rows)[0];
                 formula.containsParameter = arr_Parameters;
+                console.log(formula);
                 res.json(formula);
             }
             else if (rows[0][0].tipo_recurso == 1) {
@@ -116,6 +117,7 @@ function ask_deployment_resources(req, res) {
                 var functio = new selfAwarnessModels_1.FunctionQ(-1, "", "", "", "", "");
                 functio = functio.toObjectArray(rows)[0];
                 functio.containsParameter = arr_Parameters;
+                console.log(functio);
                 res.json(functio);
             }
             else {
@@ -123,6 +125,7 @@ function ask_deployment_resources(req, res) {
                 var webService = new selfAwarnessModels_1.WebServiceQ(-1, "", "", "", "", "", "");
                 webService = webService.toObjectArray(rows)[0];
                 webService.containsParameter = arr_Parameters;
+                console.log(webService);
                 res.json(webService);
             }
         }

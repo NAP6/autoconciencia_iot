@@ -3,6 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParameterQ = void 0;
 const Parameter_1 = require("../Parameter");
 class ParameterQ extends Parameter_1.Parameter {
+    constructor() {
+        super(...arguments);
+        this._active = false;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
+    }
     get id() {
         return this.ordinal;
     }
@@ -51,7 +61,8 @@ class ParameterQ extends Parameter_1.Parameter {
     toObjectArray(rows) {
         var parameters = [];
         for (var i = 0; i < rows.length; i++) {
-            var par = new ParameterQ(rows[i].ordinal, rows[i].nombre, rows[i].tipo, rows.opcional == 1 ? true : false);
+            var par = new ParameterQ(rows[i].ordinal, rows[i].nombre, rows[i].tipo, rows[i].opcional == 1 ? true : false);
+            par.active = rows[i].activo == 1 ? true : false;
             parameters.push(par);
         }
         return parameters;
