@@ -93,6 +93,7 @@ export default function (app: Application) {
   app.post("/api/add_aspects/", rt.add_aspects);
   app.post("/api/mod_aspects/", rt.mod_aspecs);
   app.post("/api/del_aspects/", rt.del_aspects);
+  app.post("/api/get_aspects_subjects", rt.get_aspects_objects);
   //Generales
   //=====================================================================
   //Metricas

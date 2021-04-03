@@ -2597,11 +2597,12 @@ function agregar_entidad_seleccionado() {
         `li_ent_seleccionado_${e.dataset.puro_id}`
       ).style.display = "list-item";
     }
+    console.log(e);
     e.checked = false;
   });
   padres_visibles.forEach((e) => {
     var li = document.getElementById(`li_ent_para_seleccion_${e}`);
-    li.style.display = "list-item";
+    if (li) li.style.display = "list-item";
   });
   actualizar_activos_entidad();
 }

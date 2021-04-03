@@ -26,6 +26,7 @@ export {
   add_aspects,
   mod_aspecs,
   del_aspects,
+  get_aspects_objects,
 } from "./page_contollers/aspects";
 export {
   metrics,
