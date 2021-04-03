@@ -54,9 +54,9 @@ export async function upd_measurement_units(req: Request, res: Response) {
         newMeasurement.description,
         newMeasurement.acronym,
     );
-    measurement.active = measurement.active;
+    measurement.active = newMeasurement.active;
     await db.qwerty(
-        newMeasurement.toSqlUpdate(
+        measurement.toSqlUpdate(
         [],
         []
       )

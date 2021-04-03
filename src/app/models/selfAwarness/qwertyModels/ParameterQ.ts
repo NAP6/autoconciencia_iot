@@ -39,7 +39,9 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
 	  	FROM 	
 			parametro pa, 
 			enumeracion enu  
-		WHERE ri_id = '${this.id}' AND pa.par_tipo_dato=enu.enu_id`;
+		WHERE ri_id = '${
+      value[tag.indexOf("/@/RI_ID/@/")]
+    }' AND pa.par_tipo_dato=enu.enu_id`;
     return sql;
   }
   toSqlDelete(tag: string[], value: string[]): string {
@@ -49,6 +51,16 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
     throw new Error("Method not implemented.");
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var parameters: ParameterQ[] = [];
+    for (var i = 0; i < rows.length; i++) {
+      var par = new ParameterQ(
+        rows[i].ordinal,
+        rows[i].nombre,
+        rows[i].tipo,
+        rows.opcional == 1 ? true : false
+      );
+      parameters.push(par);
+    }
+    return parameters;
   }
 }

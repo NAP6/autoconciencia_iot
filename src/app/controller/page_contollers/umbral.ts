@@ -10,7 +10,7 @@ export async function get_umbral(req: Request, res: Response) {
     var criteria=req.body;
     var umbral:ThresholdQ=new ThresholdQ(-1,"","",-1,-1);
     var rows= await db.qwerty(umbral.toSqlSelect(['/@/CRITERIA/@/'],[criteria.criterio]));
-    res.json(rows);
+    res.json({id_descicion: criteria.criterio, umbrales: rows});
     
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -51,7 +51,7 @@ export async function upd_umbral(req: Request, res: Response) {
       newUmbral.inferior,
       newUmbral.superior,
     );
-    umbral.active = umbral.active;
+    umbral.active = newUmbral.active;
     await db.qwerty(
         umbral.toSqlUpdate(
         [],

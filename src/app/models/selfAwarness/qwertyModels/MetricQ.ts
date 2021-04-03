@@ -67,7 +67,7 @@ toSqlUpdate(tag: string[], value: string[]): string {
     met_tipo='${value[tag.indexOf("/@/TYPE/@/")]}',
     esc_id='${value[tag.indexOf("/@/ESCALE/@/")]}',
     um_id='${value[tag.indexOf("/@/UNIT/@/")]}',
-    met_activo='${this.active ? 1 : 0}'
+    met_activo=${this.active ? 1 : 0}
   WHERE 
     met_id=${this.id}`;
 return sql;

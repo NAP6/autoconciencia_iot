@@ -55,6 +55,7 @@ export {
   add_deployment_resources,
   del_deployment_resources,
   ask_deployment_resources_select,
+  ask_deployment_resources,
 } from "./page_contollers/deployment_resources";
 export {
   criteria,

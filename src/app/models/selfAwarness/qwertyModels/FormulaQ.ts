@@ -23,6 +23,18 @@ export class FormulaQ extends Formula implements SQL_Qwerty {
     throw new Error("Method not implemented.");
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var formulas: FormulaQ[] = [];
+    rows = rows[0];
+    for (var i = 0; i < rows.length; i++) {
+      var form = new FormulaQ(
+        rows[i].id,
+        rows[i].nombre,
+        rows[i].descripcion,
+        [rows[i].dato_salida, rows[i].dato_salida_id],
+        rows[i].expresion
+      );
+      formulas.push(form);
+    }
+    return formulas;
   }
 }

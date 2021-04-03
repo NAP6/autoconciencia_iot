@@ -91,7 +91,7 @@ export async function mod_metrics(req: Request, res: Response) {
       newMetric.perspective,
 
     );
-    metric.active = newMetric.active.toString();
+    metric.active = newMetric.active==1;
     await db.qwerty(
       metric.toSqlUpdate(
         ["/@/TYPE/@/", "/@/ESCALE/@/", "/@/UNIT/@/"],

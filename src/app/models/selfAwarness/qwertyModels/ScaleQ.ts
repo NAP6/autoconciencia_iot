@@ -12,7 +12,7 @@ var sql=`INSERT INTO
                 '${this.name}',
                 '${this.validValues}',
                 '${this.scaleType}',
-                '${this.active ? 1: 0}',
+                '${this.active ? 1: 0}'
 
             )`;
 return sql;
@@ -22,10 +22,14 @@ return sql;
     esc_id as id,
     esc_nombre as name,
     esc_valores_validos as valid_values,
-    esc_tipo as type,
-    um_activo as active
+    esc_tipo as type_id,
+    enu.enu_nombre_valor as type,
+    esc_activo as active
          FROM 
-         escala`;
+         escala es,
+	 enumeracion enu
+	 WHERE 
+	 es.esc_tipo=enu.enu_id`;
 return sql;
 }
 toSqlDelete(value: string[]): string {
@@ -40,7 +44,7 @@ toSqlUpdate(tag: string[], value: string[]): string {
     esc_nombre='${this.name}', 
     esc_valores_validos='${this.validValues}',
     esc_tipo='${this.scaleType}',
-    esc_activo='${this.active ? 1 : 0}'
+    esc_activo=${this.active ? 1 : 0}
   WHERE 
     esc_id=${this.id}`;
 return sql;

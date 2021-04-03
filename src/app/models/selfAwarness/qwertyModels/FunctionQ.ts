@@ -10,7 +10,7 @@ export class FunctionQ extends Function implements SQL_Qwerty {
 	  		1,
 	  		'${this.path}',
 	  		'${this.instrucctions}',
-	  		'${value[tag.indexOf('/@/P_EXIST/@/')]}',
+	  		'${value[tag.indexOf("/@/P_EXIST/@/")]}',
 			@id
 		  )`;
     return sql;
@@ -25,6 +25,20 @@ export class FunctionQ extends Function implements SQL_Qwerty {
     throw new Error("Method not implemented.");
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var functions: FunctionQ[] = [];
+    rows = rows[0];
+    for (var i = 0; i < rows.length; i++) {
+      var func = new FunctionQ(
+        rows[i].id,
+        rows[i].nombre,
+        rows[i].descripcion,
+        [rows[i].dato_salida, rows[i].dato_salida_id],
+        rows[i].path_funcion,
+        rows[i].instrucciones
+      );
+      func.preexisting = rows[i].pre_existente;
+      functions.push(func);
+    }
+    return functions;
   }
 }
