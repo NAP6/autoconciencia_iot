@@ -17,6 +17,7 @@ export {
   subjects_goals,
   save_subjects_goal,
   delete_subjects_goal,
+  subjects_aspects,
 } from "./page_contollers/subject";
 export { get_enumeracion } from "./page_contollers/enumeration";
 export { singup, singup_save } from "./page_contollers/singup";

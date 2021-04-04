@@ -3408,26 +3408,38 @@ function verificarSeleccionProceso(elemento) {
   var auxChecked = elemento.checked;
   SujetoGuardarProceso = elemento.dataset.puro_id;
   Array.from(checkbox).forEach((element) => {
-    post_api(
-      "http://alvapala.ddns.net:3001/api/objetivos_sujetos",
-      {
-        id: SujetoGuardarProceso,
-      },
-      cargar_objetivos_sujetos_select,
-      error_cargar_objetivos_sujetos_select
-    );
     element.checked = false;
     document.getElementById("CategoriaEntidadesProcesos").disabled = true;
-    document.getElementById("objetivos_alto_nivel").disabled = true;
   });
+  post_api(
+    "http://alvapala.ddns.net:3001/api/subjects_aspects",
+    { id: SujetoGuardarProceso },
+    agregar_aspectos_select,
+    (res) => {
+      console.log(res);
+    }
+  );
   elemento.checked = auxChecked;
   document.getElementById("CategoriaEntidadesProcesos").disabled = false;
-  document.getElementById("objetivos_alto_nivel").disabled = false;
 }
 
+function agregar_aspectos_select(json) {
+  var ope = document.getElementById("Aspectos_autoconsciencia");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+  document.getElementById("Aspectos_autoconsciencia").disabled = false;
+}
 function cargar_objetivos_sujetos_select(json) {
   console.log(json);
-  var ope = document.getElementById("objetivos_alto_nivel");
   var option = document.createElement("option");
   option.value = "-6";
   option.innerHTML = "Seleccione..";
@@ -4125,7 +4137,6 @@ function guardar_procesos_pre_reflexivos() {
   var objetoId = objIdProcesos;
   var sujetoId = SujetoGuardarProceso;
   var aspId = document.getElementById("Aspectos_autoconsciencia").value;
-  var objetivo = document.getElementById("objetivos_alto_nivel").value;
   if (
     !!nombre &&
     !!descripcion &&
@@ -4575,11 +4586,9 @@ function verificarSeleccionProceso_reflexivo(elemento) {
   document.getElementById(
     "CategoriaEntidadesProcesos_reflexivos"
   ).disabled = false;
-  document.getElementById("objetivos_alto_nivel_reflexivos").disabled = false;
 }
 
 function cargar_objetivos_sujetos_select_reflexivos(json) {
-  var ope = document.getElementById("objetivos_alto_nivel_reflexivos");
   var option = document.createElement("option");
   option.value = "-6";
   option.innerHTML = "Seleccione..";
@@ -4734,8 +4743,6 @@ function guardar_procesos_reflexivos() {
   var objetoId = obj_Id_reflexivos;
   var sujetoId = sujetoGuardarproceso_reflexivo;
   var aspId = document.getElementById("Aspectos_autoconsciencia_reflexivos")
-    .value;
-  var objetivo = document.getElementById("objetivos_alto_nivel_reflexivos")
     .value;
   if (!!nombre && !!descripcion && !!objetoId && !!sujetoId && aspId != "-6") {
     data = {

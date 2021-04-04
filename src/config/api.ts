@@ -87,6 +87,7 @@ export default function (app: Application) {
   app.post("/api/get_enumeracion/", rt.get_enumeracion);
   app.post("/api/save_subjects_objects/", rt.save_subjects_goal);
   app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
+	app.post("/api/subjects_aspects/",rt.subjects_aspects);
 
   //Aspectos
   app.route("/api/get_aspects/").get(rt.get_aspects);
