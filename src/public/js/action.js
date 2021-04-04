@@ -7032,7 +7032,7 @@ function verificarSeleccionAspectos(elemento) {
 
 function get_aspectos_objetivos(id) {
     post_api(
-        "http://alvapala.ddns.net:3001/api/subjects_objects", { Object_id, id },
+        "http://alvapala.ddns.net:3001/api/subjects_objects", { Object_id: id },
         cargar_select_aspectos_objetivos,
         (res) => {
             console.log(res);
@@ -7041,6 +7041,7 @@ function get_aspectos_objetivos(id) {
 }
 
 function cargar_select_aspectos_objetivos(json) {
+    console.log(json);
     var listaPadres = [];
     var listaId = [];
     json.forEach(element => {
@@ -7049,6 +7050,8 @@ function cargar_select_aspectos_objetivos(json) {
         }
         listaId.push(element.id);
     });
+    console.log(listaPadres);
+    console.log(listaId);
     let eliminacionId = new Set([listaPadres].filter(x => !listaId.has(x)));
     console.log(eliminacionId);
     var ope = document.getElementById("select_objetivos");
