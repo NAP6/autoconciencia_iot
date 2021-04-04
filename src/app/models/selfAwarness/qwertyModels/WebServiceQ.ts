@@ -10,7 +10,7 @@ export class WebServiceQ extends WebService implements SQL_Qwerty {
 	  		1,
 	  		'${this.endPoint}',
 	  		'${this.instrucctions}',
-	  		'${value[tag.indexOf('/@/P_EXIST/@/')]}',
+	  		'${value[tag.indexOf("/@/P_EXIST/@/")]}',
 	  		'${this.DataFormatType}',
 			@id
 		  )`;
@@ -26,6 +26,21 @@ export class WebServiceQ extends WebService implements SQL_Qwerty {
     throw new Error("Method not implemented.");
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var services: WebServiceQ[] = [];
+    rows = rows[0];
+    for (var i = 0; i < rows.length; i++) {
+      var service: WebServiceQ = new WebServiceQ(
+        rows[i].id,
+        rows[i].nombre,
+        rows[i].descripcion,
+        [rows[i].dato_salida, rows[i].dato_salida_id],
+        rows[i].punto_final,
+        rows[i].instrucciones,
+        rows[i].tipo_formato_dato_salida
+      );
+      service.preexisting = rows[i].pre_existente == 1? true : false;
+      services.push(service);
+    }
+    return services;
   }
 }

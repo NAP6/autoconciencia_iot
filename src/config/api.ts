@@ -87,12 +87,14 @@ export default function (app: Application) {
   app.post("/api/get_enumeracion/", rt.get_enumeracion);
   app.post("/api/save_subjects_objects/", rt.save_subjects_goal);
   app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
+	app.post("/api/subjects_aspects/",rt.subjects_aspects);
 
   //Aspectos
   app.route("/api/get_aspects/").get(rt.get_aspects);
   app.post("/api/add_aspects/", rt.add_aspects);
   app.post("/api/mod_aspects/", rt.mod_aspecs);
   app.post("/api/del_aspects/", rt.del_aspects);
+  app.post("/api/get_aspects_subjects", rt.get_aspects_objects);
   //Generales
   //=====================================================================
   //Metricas
@@ -105,10 +107,10 @@ export default function (app: Application) {
     .get(rt.get_metrics)
     .post(rt.get_metrics_aspects);
   //Aspectos
-  app.route("/api/get_aspects/").get(rt.get_aspects);
-  app.post("/api/add_aspects/", rt.add_aspects);
-  app.post("/api/mod_aspects/", rt.mod_aspecs);
-  app.post("/api/del_aspects/", rt.del_aspects);
+  //app.route("/api/get_aspects/").get(rt.get_aspects);
+  //app.post("/api/add_aspects/", rt.add_aspects);
+  //app.post("/api/mod_aspects/", rt.mod_aspecs);
+  //app.post("/api/del_aspects/", rt.del_aspects);
   //Recursos de implementacion
   app.get("/api/deployment_resources/", rt.deployment_resources);
   app.post("/api/add_deployment_resources/", rt.add_deployment_resources);
@@ -117,7 +119,7 @@ export default function (app: Application) {
     "/api/ask_deployment_resources_select/",
     rt.ask_deployment_resources_select
   );
-  app.post("/api/ask_deployment_resources/", api.ask_deployment_resources);
+  app.post("/api/ask_deployment_resources/", rt.ask_deployment_resources);
   //Unidades de Medida
   app.get("/api/get_measurement_units/", rt.get_measurement_units);
   app.post("/api/add_measurement_units/", rt.add_measurement_units);

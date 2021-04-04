@@ -54,7 +54,7 @@ export async function upd_scales(req: Request, res: Response) {
       newScale.valid_values,
       newScale.type,
     );
-    scale.active = scale.active;
+    scale.active = newScale.active==1 ;
     await db.qwerty(
         scale.toSqlUpdate(
         [],

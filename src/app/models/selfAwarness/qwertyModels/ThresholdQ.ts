@@ -42,6 +42,7 @@ toSqlDelete(value: string[]): string {
 }
 
 toSqlUpdate(tag: string[], value: string[]): string {
+
     var sql = `UPDATE 
     umbral
     SET
@@ -49,7 +50,7 @@ toSqlUpdate(tag: string[], value: string[]): string {
     umb_interpretacion='${this.interpretation}',
     umb_inferior='${this.lowerThreshold}',
     umb_superior='${this.upperThreshold}',
-    umb_activo='${this.active ? 1 : 0}'
+    umb_activo=${this.active ? 1 : 0}
   WHERE 
     umb_id=${this.id}`;
 return sql;

@@ -31,6 +31,7 @@ class NetworkQ extends Network_1.Network {
                     WHERE 
                     o.obj_id = os.obj_id AND 
                     o.ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} AND 
+                    os.ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} AND 
                     o.obj_tipo = 'Network' AND 
                     os.suj_id = ${value[tag.indexOf('/@/SYSTEM/@/')]}  
                     ORDER BY id`;

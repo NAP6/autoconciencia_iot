@@ -43,7 +43,7 @@ function start_session(req, res, next) {
         var db = new database2_1.database2();
         var email_user = req.body.email;
         var password_user = req.body.password;
-        var user = new selfAwarnessModels_2.UserQ(-1, "", "", "", "");
+        var user = new selfAwarnessModels_2.UserQ(-1, "", "", "");
         var rows = yield db.qwerty(user.toSqlSelect(["/@/MAIL/@/", "/@/PASSWRD/@/"], [email_user, password_user]));
         user = user.toObjectArray(rows);
         if (user.length == 1) {

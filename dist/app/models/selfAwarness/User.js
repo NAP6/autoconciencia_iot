@@ -2,10 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 class User {
-    constructor(id, name, description, mail, password) {
+    constructor(id, name, mail, password) {
         this._id = id;
         this._name = name;
-        this._description = description;
         this._mail = mail;
         this._password = password;
     }
@@ -20,12 +19,6 @@ class User {
     }
     set name(value) {
         this._name = value;
-    }
-    get description() {
-        return this._description;
-    }
-    set description(value) {
-        this._description = value;
     }
     get mail() {
         return this._mail;

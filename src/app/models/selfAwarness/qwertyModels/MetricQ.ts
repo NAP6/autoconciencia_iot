@@ -39,7 +39,7 @@ return sql;
     met.met_activo as active
     `
     if(tag.indexOf('/@/ASPECTID/@/')!=-1){
-        sql+=`,IF((SELECT COUNT(asp_me.met_id) FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=4 && asp_me.met_id=met.met_id )>0, True,false) as existe`
+        sql+=`,IF((SELECT COUNT(asp_me.met_id) FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=${value[tag.indexOf("/@/ASPECTID/@/")]} && asp_me.met_id=met.met_id )>0, True,false) as existe`
     }
   sql += `
   FROM 
@@ -67,7 +67,7 @@ toSqlUpdate(tag: string[], value: string[]): string {
     met_tipo='${value[tag.indexOf("/@/TYPE/@/")]}',
     esc_id='${value[tag.indexOf("/@/ESCALE/@/")]}',
     um_id='${value[tag.indexOf("/@/UNIT/@/")]}',
-    met_activo='${this.active ? 1 : 0}'
+    met_activo=${this.active ? 1 : 0}
   WHERE 
     met_id=${this.id}`;
 return sql;

@@ -17,6 +17,7 @@ export {
   subjects_goals,
   save_subjects_goal,
   delete_subjects_goal,
+  subjects_aspects,
 } from "./page_contollers/subject";
 export { get_enumeracion } from "./page_contollers/enumeration";
 export { singup, singup_save } from "./page_contollers/singup";
@@ -26,6 +27,7 @@ export {
   add_aspects,
   mod_aspecs,
   del_aspects,
+  get_aspects_objects,
 } from "./page_contollers/aspects";
 export {
   metrics,
@@ -55,6 +57,7 @@ export {
   add_deployment_resources,
   del_deployment_resources,
   ask_deployment_resources_select,
+  ask_deployment_resources,
 } from "./page_contollers/deployment_resources";
 export {
   criteria,

@@ -11,7 +11,7 @@ class WebServiceQ extends WebService_1.WebService {
 	  		1,
 	  		'${this.endPoint}',
 	  		'${this.instrucctions}',
-	  		'${value[tag.indexOf('/@/P_EXIST/@/')]}',
+	  		'${value[tag.indexOf("/@/P_EXIST/@/")]}',
 	  		'${this.DataFormatType}',
 			@id
 		  )`;
@@ -27,7 +27,14 @@ class WebServiceQ extends WebService_1.WebService {
         throw new Error("Method not implemented.");
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var services = [];
+        rows = rows[0];
+        for (var i = 0; i < rows.length; i++) {
+            var service = new WebServiceQ(rows[i].id, rows[i].nombre, rows[i].descripcion, [rows[i].dato_salida, rows[i].dato_salida_id], rows[i].punto_final, rows[i].instrucciones, rows[i].tipo_formato_dato_salida);
+            service.preexisting = rows[i].pre_existente == 1 ? true : false;
+            services.push(service);
+        }
+        return services;
     }
 }
 exports.WebServiceQ = WebServiceQ;

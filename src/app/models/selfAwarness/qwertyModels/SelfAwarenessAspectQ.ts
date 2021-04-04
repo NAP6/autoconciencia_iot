@@ -26,22 +26,27 @@ return sql;
     }
    toSqlSelect(tag:string[],value:string[]): string {
 
-    var sql = `SELECT 
-    asp.aa_id as id, 
-    asp.aa_nombre as name,
-    asp.aa_descripcion as description,
-    asp.aa_peso as weigth,
-    asp.aa_tipo as tipo_id,
-    enu.enu_nombre_valor as met_aspect,
-    asp.obj_id as obj,
-    asp.suj_id as suj,
-    asp.ma_id as model,
-    asp.aa_activo as active
-  FROM 
-  aspectoautoconsciencia asp,
-    enumeracion enu
-  WHERE 
-    enu.enu_id=asp.aa_tipo`;
+    var sql = ` SELECT
+	      asp.aa_id as id,
+	      asp.aa_nombre as name,
+              asp.aa_descripcion as description,
+	      asp.aa_peso as weigth,
+              asp.aa_tipo as tipo_id,
+              enu.enu_nombre_valor as met_aspect,
+              asp.obj_id as obj,
+              asp.suj_id as suj,
+              suj.suj_nombre as sujeto,
+              asp.ma_id as model,
+              asp.aa_activo as active
+	         FROM
+	      aspectoautoconsciencia asp,
+              enumeracion enu,
+              sujeto suj
+	         WHERE
+	      enu.enu_id=asp.aa_tipo AND
+	   	 asp.suj_id= suj.suj_id AND
+	        suj.ma_id = ${value[tag.indexOf("/@/MODEL/@/")]} AND
+	        asp.ma_id=${value[tag.indexOf("/@/MODEL/@/")]}`;
 return sql;
 }
 toSqlDelete(value: string[]): string {
@@ -59,8 +64,7 @@ toSqlUpdate(tag: string[], value: string[]): string {
     aa_tipo='${this.aspectType}',
     obj_id='${value[tag.indexOf("/@/OBJECT/@/")]}',
     ma_id='${value[tag.indexOf("/@/MODEL/@/")]}',
-    suj_id='${value[tag.indexOf("/@/SUBJECT/@/")]}',
-    aa_activo='${this.active ? 1 : 0}'
+    aa_activo=${this.active ? 1 : 0}
   WHERE 
     aa_id=${this.id}`;
 return sql;

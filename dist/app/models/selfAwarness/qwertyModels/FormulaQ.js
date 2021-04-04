@@ -24,7 +24,13 @@ class FormulaQ extends Formula_1.Formula {
         throw new Error("Method not implemented.");
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var formulas = [];
+        rows = rows[0];
+        for (var i = 0; i < rows.length; i++) {
+            var form = new FormulaQ(rows[i].id, rows[i].nombre, rows[i].descripcion, [rows[i].dato_salida, rows[i].dato_salida_id], rows[i].expresion);
+            formulas.push(form);
+        }
+        return formulas;
     }
 }
 exports.FormulaQ = FormulaQ;

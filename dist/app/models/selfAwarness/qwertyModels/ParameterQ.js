@@ -3,6 +3,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParameterQ = void 0;
 const Parameter_1 = require("../Parameter");
 class ParameterQ extends Parameter_1.Parameter {
+    constructor() {
+        super(...arguments);
+        this._active = false;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
+    }
     get id() {
         return this.ordinal;
     }
@@ -39,7 +49,7 @@ class ParameterQ extends Parameter_1.Parameter {
 	  	FROM 	
 			parametro pa, 
 			enumeracion enu  
-		WHERE ri_id = '${this.id}' AND pa.par_tipo_dato=enu.enu_id`;
+		WHERE ri_id = '${value[tag.indexOf("/@/RI_ID/@/")]}' AND pa.par_tipo_dato=enu.enu_id`;
         return sql;
     }
     toSqlDelete(tag, value) {
@@ -49,7 +59,13 @@ class ParameterQ extends Parameter_1.Parameter {
         throw new Error("Method not implemented.");
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var parameters = [];
+        for (var i = 0; i < rows.length; i++) {
+            var par = new ParameterQ(rows[i].ordinal, rows[i].nombre, rows[i].tipo, rows[i].opcional == 1 ? true : false);
+            par.active = rows[i].activo == 1 ? true : false;
+            parameters.push(par);
+        }
+        return parameters;
     }
 }
 exports.ParameterQ = ParameterQ;
