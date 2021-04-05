@@ -1591,3 +1591,11 @@ SELECT
 [0mGET /js/scripts.js [32m200[0m 12.104 ms - 805[0m
 [0mGET /css/styles.css [32m200[0m 9.454 ms - 188597[0m
 [0mGET /css/bootstrap.css [32m200[0m 7.224 ms - 210235[0m
+[0mGET /js/scripts.js [36m304[0m 6.514 ms - -[0m
+[0mGET /css/styles.css [36m304[0m 4.541 ms - -[0m
+[0mGET /css/bootstrap.css [36m304[0m 3.941 ms - -[0m
+[0mGET /favicon.ico [36m304[0m 11.300 ms - -[0m
+[0mGET /login [36m304[0m 13.800 ms - -[0m
+[0mGET /css/bootstrap.css [36m304[0m 5.290 ms - -[0m
+[0mGET /css/styles.css [36m304[0m 3.333 ms - -[0m
+[0mGET /js/scripts.js [36m304[0m 3.334 ms - -[0m

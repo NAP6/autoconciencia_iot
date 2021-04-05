@@ -9,7 +9,7 @@ export { user_models } from "./page_contollers/user_models";
 export { active_model, home } from "./page_contollers/home";
 export { logout } from "./page_contollers/logOut";
 export { models, update_model } from "./page_contollers/models";
-export { entity, entitys, update_entitys } from "./page_contollers/entity";
+export { entity, entitys, update_entitys, get_objects_aspects} from "./page_contollers/entity";
 export {
   subject,
   subjects,

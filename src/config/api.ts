@@ -87,7 +87,7 @@ export default function (app: Application) {
   app.post("/api/get_enumeracion/", rt.get_enumeracion);
   app.post("/api/save_subjects_objects/", rt.save_subjects_goal);
   app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
-	app.post("/api/subjects_aspects/",rt.subjects_aspects);
+  app.post("/api/subjects_aspects/", rt.subjects_aspects);
 
   //Aspectos
   app.route("/api/get_aspects/").get(rt.get_aspects);
@@ -140,4 +140,6 @@ export default function (app: Application) {
   app.post("/api/add_umbral/", rt.add_umbral);
   app.post("/api/del_umbral/", rt.del_umbral);
   app.post("/api/upd_umbral/", rt.upd_umbral);
+  //Apis usadas para los procesos Pre-reflexivos
+  app.post("/api/get_objects_aspects/", rt.get_objects_aspects);
 }

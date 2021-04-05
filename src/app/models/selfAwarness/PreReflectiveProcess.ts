@@ -1,16 +1,15 @@
 import { SelfAwarenessProcess } from "./SelfAwarenessProcess";
-import { Goal } from "./Goal";
 import { CollectionMethod } from "./CollectionMethod";
 import { AnalysisModel } from "./AnalysisModel";
 
-export class PreReflecriveProcess extends SelfAwarenessProcess {
+export class PreReflectiveProcess extends SelfAwarenessProcess {
   private _usesCollectionMethod: CollectionMethod;
   private _usesAnalysisModel: AnalysisModel;
-
   constructor(
     id: number,
     name: string,
     description: string,
+    type_process:number,
     executionPeriodStart: Date,
     executionPeriodEnd: Date,
     usesCollectionMehod: CollectionMethod,
@@ -20,6 +19,7 @@ export class PreReflecriveProcess extends SelfAwarenessProcess {
       id,
       name,
       description,
+      type_process,
       executionPeriodStart,
       executionPeriodEnd
     );

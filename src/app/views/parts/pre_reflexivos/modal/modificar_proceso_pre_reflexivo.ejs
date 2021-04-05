@@ -84,7 +84,16 @@
                                     } %>
                                     </select>
                 </div>
-                <h6>Objeto de autoconsciencia:</h6>
+        <h6 class="text-center">Aspectos de autoconsciencia</h6>
+        <div class="input-group col-11">
+            <select class="custom-select" name="Aspectos_autoconsciencia_modificar" id="Aspectos_autoconsciencia_modificar" disabled>
+                   <option value="<%= modificar.aspecto_id %>"><%= modificar.aspecto_nombre %></option>
+                 </select>
+        </div>        
+            </div>
+        </div>
+	
+	<h6>Objeto de autoconsciencia:</h6>
                 <div class="col-sm-11">
                     <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
                         <ul id="<%= modificar.objeto_id %>">
@@ -92,12 +101,4 @@
                         </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-        <h6 class="text-center">Aspectos de autoconsciencia</h6>
-        <div class="input-group col-11">
-            <select class="custom-select" name="Aspectos_autoconsciencia_modificar" id="Aspectos_autoconsciencia_modificar" disabled>
-                   <option value="<%= modificar.aspecto_id %>"><%= modificar.aspecto_nombre %></option>
-                 </select>
-        </div>
     </div>

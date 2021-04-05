@@ -3411,16 +3411,64 @@ function verificarSeleccionProceso(elemento) {
     element.checked = false;
     document.getElementById("CategoriaEntidadesProcesos").disabled = true;
   });
-  post_api(
-    "http://alvapala.ddns.net:3001/api/subjects_aspects",
-    { id: SujetoGuardarProceso },
-    agregar_aspectos_select,
-    (res) => {
-      console.log(res);
-    }
-  );
   elemento.checked = auxChecked;
-  document.getElementById("CategoriaEntidadesProcesos").disabled = false;
+  var seleccion = document.getElementById("CategoriaEntidadesProcesos");
+  seleccion.disabled = false;
+  verificar_seleccion_sujeto_categoria_procesos(SujetoGuardarProceso);
+}
+$("#CategoriaEntidadesProcesos").change(function () {
+  var limpiar = document.getElementById(
+    "lista_entidades_seleccionadas_procesos"
+  );
+  limpiar.innerHTML = "";
+  verificar_seleccion_sujeto_categoria_procesos(SujetoGuardarProceso);
+});
+
+function verificar_seleccion_sujeto_categoria_procesos(IdSujeto) {
+  var seleccion = document.getElementById("CategoriaEntidadesProcesos");
+  var categoria = seleccion.options[seleccion.selectedIndex].text;
+  var limpiar = document.getElementById(
+    "lista_entidades_seleccionadas_procesos"
+  );
+  limpiar.innerHTML = "";
+  if (IdSujeto && categoria != "Seleccione..") {
+    data = {
+      category: categoria,
+      systemID: IdSujeto,
+    };
+    post_api(
+      "http://alvapala.ddns.net:3001/api/get_aspects_subjects",
+      data,
+      cargar_posibles_entidades_proceso,
+      error_cargar_posibles_entidades_proceso
+    );
+  }
+}
+
+function cargar_posibles_entidades_proceso(json) {
+  console.log(json);
+  var select = document.getElementById("Aspectos_autoconsciencia");
+  select.innerHTML = "";
+  var opt = document.createElement("option");
+  opt.value = -6;
+  opt.innerHTML = "Seleccione ..";
+  select.appendChild(opt);
+  json.forEach((asp) => {
+    var opt = document.createElement("option");
+    opt.value = asp.idAspecto;
+    opt.innerHTML = asp.nombreAspecto;
+    select.appendChild(opt);
+  });
+
+  if (json.length > 0) {
+    select.disabled = false;
+  } else {
+    select.disabled = true;
+  }
+}
+
+function error_cargar_posibles_entidades_proceso(json) {
+  console.log(json);
 }
 
 function agregar_aspectos_select(json) {
@@ -3456,15 +3504,6 @@ function cargar_objetivos_sujetos_select(json) {
 function error_cargar_objetivos_sujetos_select(error) {
   console.log(error);
 }
-
-$("#CategoriaEntidadesProcesos").change(function () {
-  var limpiar2 = document.getElementById(
-    "lista_entidades_seleccionadas_procesos"
-  );
-  limpiar2.innerHTML = "";
-  var seleccion = document.getElementById("CategoriaEntidadesProcesos");
-  var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
-});
 
 function cargar_posibles_entidades_modelo_proceso(json) {
   var limpiar = document.getElementById("lista_entidades_para_cargar");
@@ -3579,19 +3618,23 @@ function error_cargar_propiedades_select(error) {
   alert("No se cargo las propiedades" + error);
 }
 
-function cargar_aspectos_select(json) {
-  res = `<option value="-6">Seleccione..</option>`;
-
-  json.forEach((as) => {
-    res += `<option value='${as.id}'>${as.nombre}</option>`;
-  });
-  document.getElementById("Aspectos_autoconsciencia").innerHTML = res;
-}
-
 function error_cargar_aspectos_select(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
 $("#Aspectos_autoconsciencia").change(function () {
+  data = {
+    categoria: document.getElementById("CategoriaEntidadesProcesos").value,
+    aspecto: document.getElementById("Aspectos_autoconsciencia").value,
+    sujeto: SujetoGuardarProceso,
+  };
+  post_api(
+    "http://alvapala.ddns.net:3001/api/get_objects_aspects",
+    data,
+    cargar_objetos_proceso,
+    (res) => {
+      console.log(res);
+    }
+  );
   document.getElementById("tipo_comunicacion").disabled = false;
   document.getElementById("alcance_recoleccion").disabled = false;
   document.getElementById("proiedad_recoleccion").disabled = false;
@@ -3632,7 +3675,15 @@ $("#Aspectos_autoconsciencia").change(function () {
     error_cargar_select_indicador_proceso
   );
 });
-
+function cargar_objetos_proceso(json) {
+  var ul = document.getElementById("lista_entidades_seleccionadas_procesos");
+  ul.innerHTML = "";
+  json.forEach((element) => {
+    var li = document.createElement("li");
+    li.innerHTML = element.nombre;
+    ul.appendChild(li);
+  });
+}
 function cargar_select_metrica_proceso(json) {
   var ope = document.getElementById("metrica_directa");
   var option = document.createElement("option");
@@ -4134,17 +4185,15 @@ function guardar_procesos_pre_reflexivos() {
   ).value;
   var inicioP = document.getElementById("inicio_del_periodo").value;
   var finP = document.getElementById("fin_del_periodo").value;
-  var objetoId = objIdProcesos;
   var sujetoId = SujetoGuardarProceso;
   var aspId = document.getElementById("Aspectos_autoconsciencia").value;
-  if (
-    !!nombre &&
-    !!descripcion &&
-    !!objetoId &&
-    !!sujetoId &&
-    aspId != "-6" &&
-    objetivo != "-6"
-  ) {
+  console.log(nombre);
+  console.log(descripcion);
+  console.log(inicioP);
+  console.log(finP);
+  console.log(sujetoId);
+  console.log(aspId);
+  if (!!nombre && !!descripcion && aspId != "-6") {
     data = {
       nombre: nombre,
       descripcion: descripcion,
@@ -4152,16 +4201,9 @@ function guardar_procesos_pre_reflexivos() {
       finP: finP,
       aspId: aspId,
       sujId: sujetoId,
-      objId: objetoId,
       paTipo: "17",
-      objetivo: objetivo,
     };
-    post_api(
-      "http://alvapala.ddns.net:3001/api/add_process_pre_reflexive/",
-      data,
-      mensaje_exitoEnvioproceso_pre_reflexivo,
-      mensaje_errorEnvioproceso_pre_reflexivo
-    );
+    //post
     document.getElementById("input-name-proceso-pre-reflexivo").disabled = true;
     document.getElementById(
       "input-descripcion-proceso-pre-reflexivo"
@@ -7869,6 +7911,7 @@ function get_aspectos_objetivos_modificar(id) {
 }
 
 function cargar_select_aspectos_objetivos_modificar(json) {
+  console.log(json);
   var listaPadres = [];
   var listaId = [];
   json.forEach((element) => {
@@ -7918,6 +7961,7 @@ function cargar_select_aspectos_objetivos_modificar(json) {
     }
   });
   aspecto_seleccionado_mod = id;
+
   if (!!id && !!name && !!descripcion && !!peso) {
     document.getElementById("nombreAspectoMod").disabled = false;
     document.getElementById("descripcionAspectoMod").disabled = false;
@@ -7994,6 +8038,7 @@ function GuardarmodificarAspecto() {
   }
 }
 function cargar_objetos_seleccionados_aspectos(json) {
+  console.log(json);
   var ul = document.getElementById(
     "lista_entidades_seleccionadas_aspectos_mod"
   );
