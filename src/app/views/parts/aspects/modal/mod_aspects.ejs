@@ -21,7 +21,33 @@
                         <input name="form_entidad_new" id="id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
                         <input name="form_entidad_new" id="objeto_id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
                         <input name="form_entidad_new" id="sujeto_id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        <div class="input-group mb-2">
+                        
+			 <h6 class="">
+                            Categoria Entidad:</h6>
+                        <div class="input-group">
+                            <select class="custom-select" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectosMod" disabled>
+                                <option value="-6">Seleccione..</option>
+                              <option id="EntidadFisica" value="1">Entidades Físicas</option>
+                              <option value="2">Nodos Cloud</option>
+                              <option value="3">Nodos Fog</option>
+                              <option value="4">Gateway IoT</option>
+                              <option value="5">Sensores</option>
+                              <option value="6">Tags</option>
+                              <option value="7">Actuadores</option>
+                              <option value="8">Red</option>
+                            </select>
+                        </div>
+                        <h6>Objetos de autoconsciencia:</h6>
+                        <div class="row px-3 pr-5" style="overflow-y: auto;height: 140px;">
+                            <div id="entidades_seleccionados_area_aspectos_mod" class="card col">
+                                <ul id="lista_entidades_seleccionadas_aspectos_mod"></ul>
+                            </div>
+                        </div>
+
+                        
+                    </div>
+                    <div class="col-6">
+			<div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Nombre:</span>
                             </div>
@@ -55,8 +81,7 @@
 
                             </select>
                         </div>
-			
-                        <div class="form-group row">
+<div class="form-group row">
                             <div class="col-sm-2">Activo:</div>
                             <div class="col-sm-8">
                                 <div class="form-check">
@@ -64,30 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <h6 class="">
-                            Categoria Entidad:</h6>
-                        <div class="input-group">
-                            <select class="custom-select" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectosMod" disabled>
-                                <option value="-6">Seleccione..</option>
-                              <option id="EntidadFisica" value="1">Entidades Físicas</option>
-                              <option value="2">Nodos Cloud</option>
-                              <option value="3">Nodos Fog</option>
-                              <option value="4">Gateway IoT</option>
-                              <option value="5">Sensores</option>
-                              <option value="6">Tags</option>
-                              <option value="7">Actuadores</option>
-                              <option value="8">Red</option>
-                            </select>
-                        </div>
-                        <h6>Objetos de autoconsciencia:</h6>
-                        <div class="row px-3 pr-5" style="overflow-y: auto;height: 200px;">
-                            <div id="entidades_seleccionados_area_aspectos_mod" class="card col">
-                                <ul id="lista_entidades_seleccionadas_aspectos_mod"></ul>
-                            </div>
-                        </div>
-                    </div>
+                                           </div>
                 </div>
 
             </div>

@@ -1599,3 +1599,29 @@ SELECT
 [0mGET /css/bootstrap.css [36m304[0m 5.290 ms - -[0m
 [0mGET /css/styles.css [36m304[0m 3.333 ms - -[0m
 [0mGET /js/scripts.js [36m304[0m 3.334 ms - -[0m
+
+> configurador_autoconciencia@1.0.0 dev /home/nicolas/Documentos/autoconciencia_iot
+> nodemon
+
+[33m[nodemon] 2.0.6[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): src/**/*[39m
+[33m[nodemon] watching extensions: ts[39m
+[32m[nodemon] starting `ts-node src/app.ts`[39m
+Server listen at port 3000
+[0mGET / [36m302[0m 59.297 ms - 56[0m
+[0mGET / [36m302[0m 60.992 ms - 56[0m
+[0mGET / [36m302[0m 61.000 ms - 56[0m
+[0mGET / [36m302[0m 60.110 ms - 56[0m
+[0mGET / [36m302[0m 59.306 ms - 56[0m
+[0mGET / [36m302[0m 59.806 ms - 56[0m
+[0mGET /login [36m304[0m 31.474 ms - -[0m
+[0mGET /login [36m304[0m 16.152 ms - -[0m
+[0mGET /css/bootstrap.css [36m304[0m 2.856 ms - -[0m
+[0mGET /css/styles.css [36m304[0m 4.180 ms - -[0m
+[0mGET /js/scripts.js [32m200[0m 6.248 ms - 805[0m
+[0mGET /js/scripts.js [36m304[0m 4.242 ms - -[0m
+[0mGET /css/styles.css [32m200[0m 24.756 ms - 188597[0m
+[0mGET /css/bootstrap.css [32m200[0m 21.919 ms - 210235[0m
+[0mGET /favicon.ico [36m304[0m 10.626 ms - -[0m
+[0mGET /favicon.ico [36m304[0m 5.614 ms - -[0m
