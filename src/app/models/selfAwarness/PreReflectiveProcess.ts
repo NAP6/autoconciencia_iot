@@ -3,8 +3,8 @@ import { CollectionMethod } from "./CollectionMethod";
 import { AnalysisModel } from "./AnalysisModel";
 
 export class PreReflectiveProcess extends SelfAwarenessProcess {
-  private _usesCollectionMethod: CollectionMethod;
-  private _usesAnalysisModel: AnalysisModel;
+  private _usesCollectionMethod: CollectionMethod | undefined;
+  private _usesAnalysisModel: AnalysisModel | undefined;
   constructor(
     id: number,
     name: string,
@@ -12,8 +12,6 @@ export class PreReflectiveProcess extends SelfAwarenessProcess {
     type_process:number,
     executionPeriodStart: Date,
     executionPeriodEnd: Date,
-    usesCollectionMehod: CollectionMethod,
-    usesAnalysisModel: AnalysisModel
   ) {
     super(
       id,
@@ -23,23 +21,21 @@ export class PreReflectiveProcess extends SelfAwarenessProcess {
       executionPeriodStart,
       executionPeriodEnd
     );
-    this._usesCollectionMethod = usesCollectionMehod;
-    this._usesAnalysisModel = usesAnalysisModel;
   }
 
-  get usesCollectionMehod(): CollectionMethod {
+  get usesCollectionMehod(): CollectionMethod | undefined {
     return this._usesCollectionMethod;
   }
 
-  set usesCollectionMehod(value: CollectionMethod) {
+  set usesCollectionMehod(value: CollectionMethod | undefined) {
     this._usesCollectionMethod = value;
   }
 
-  get usesAnalysisModel(): AnalysisModel {
+  get usesAnalysisModel(): AnalysisModel | undefined {
     return this._usesAnalysisModel;
   }
 
-  set usesAnalysisModel(value: AnalysisModel) {
+  set usesAnalysisModel(value: AnalysisModel | undefined) {
     this.usesAnalysisModel = value;
   }
 }
