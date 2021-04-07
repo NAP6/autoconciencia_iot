@@ -53,7 +53,8 @@ export class PreReflectiveProcessQ
 	  	  suj.ma_id=${value[tag.indexOf('/@/MODEL/@/')]} AND
 		  asp.ma_id=${value[tag.indexOf('/@/MODEL/@/')]} AND
 		  proceso.aa_id=asp.aa_id AND
-		  proceso.suj_id=suj.suj_id
+		  proceso.suj_id=suj.suj_id AND
+		  proceso.pa_tipo=17
 		  `;
     return sql;
   }

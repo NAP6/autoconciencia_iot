@@ -1,7 +1,6 @@
 import { AnalysisModel } from "./AnalysisModel";
 import { CalculationMethod } from "./CalculationMethod";
 import { SelfAwarenessProcess } from "./SelfAwarenessProcess";
-import { Goal } from "./Goal";
 
 export class ReflectiveProcess extends SelfAwarenessProcess {
   private _usesAnalysisModel: AnalysisModel | undefined;
@@ -11,10 +10,11 @@ export class ReflectiveProcess extends SelfAwarenessProcess {
     id: number,
     name: string,
     description: string,
+    type_process: number,
     executionPeriodStart: Date,
     executionPeriodEnd: Date
   ) {
-    super(id, name, description, executionPeriodStart, executionPeriodEnd);
+    super(id, name, description,type_process, executionPeriodStart, executionPeriodEnd);
   }
 
   get usesAnalysisModel(): AnalysisModel | undefined {
