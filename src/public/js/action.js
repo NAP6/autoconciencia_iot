@@ -3412,7 +3412,7 @@ function verificarSeleccionProceso(elemento) {
     document.getElementById("CategoriaEntidadesProcesos").disabled = true;
   });
   elemento.checked = auxChecked;
-  var seleccion = document.getElementById("CategoriaEntidadesProcesos");
+  var seleccion = document.getElementById("Aspectos_autoconsciencia");
   seleccion.disabled = false;
   verificar_seleccion_sujeto_categoria_procesos(SujetoGuardarProceso);
 }
@@ -3420,20 +3420,36 @@ $("#CategoriaEntidadesProcesos").change(function () {
   var limpiar = document.getElementById(
     "lista_entidades_seleccionadas_procesos"
   );
+
+  var seccion = document.getElementById("CategoriaEntidadesProcesos");
+  var categoria = seccion.options[seccion.selectedIndex].text;
   limpiar.innerHTML = "";
-  verificar_seleccion_sujeto_categoria_procesos(SujetoGuardarProceso);
+  data = {
+    categoria: categoria,
+    aspecto: document.getElementById("Aspectos_autoconsciencia").value,
+    sujeto: SujetoGuardarProceso,
+  };
+  if (data.categoria != -6 && data.aspecto != -6 && !!data.sujeto) {
+    post_api(
+      "http://alvapala.ddns.net:3000/api/get_objects_aspects",
+      data,
+      cargar_objetos_proceso,
+      (res) => {
+        console.log(res);
+      }
+    );
+  } else {
+    alert("Falta seleccionar campos");
+  }
 });
 
 function verificar_seleccion_sujeto_categoria_procesos(IdSujeto) {
-  var seleccion = document.getElementById("CategoriaEntidadesProcesos");
-  var categoria = seleccion.options[seleccion.selectedIndex].text;
   var limpiar = document.getElementById(
     "lista_entidades_seleccionadas_procesos"
   );
   limpiar.innerHTML = "";
-  if (IdSujeto && categoria != "Seleccione..") {
+  if (IdSujeto) {
     data = {
-      category: categoria,
       systemID: IdSujeto,
     };
     post_api(
@@ -3622,19 +3638,30 @@ function error_cargar_aspectos_select(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
 $("#Aspectos_autoconsciencia").change(function () {
+  document.getElementById("CategoriaEntidadesProcesos").disabled = false;
+  var limpiar = document.getElementById(
+    "lista_entidades_seleccionadas_procesos"
+  );
+  var seccion = document.getElementById("CategoriaEntidadesProcesos");
+  var categoria = seccion.options[seccion.selectedIndex].text;
+  limpiar.innerHTML = "";
   data = {
-    categoria: document.getElementById("CategoriaEntidadesProcesos").value,
+    categoria: categoria,
     aspecto: document.getElementById("Aspectos_autoconsciencia").value,
     sujeto: SujetoGuardarProceso,
   };
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_objects_aspects",
-    data,
-    cargar_objetos_proceso,
-    (res) => {
-      console.log(res);
-    }
-  );
+  if (data.categoria != -6 && data.aspecto != -6 && !!data.sujeto) {
+    post_api(
+      "http://alvapala.ddns.net:3000/api/get_objects_aspects",
+      data,
+      cargar_objetos_proceso,
+      (res) => {
+        console.log(res);
+      }
+    );
+  } else {
+    alert("Falta seleccionar campos");
+  }
   document.getElementById("tipo_comunicacion").disabled = false;
   document.getElementById("alcance_recoleccion").disabled = false;
   document.getElementById("proiedad_recoleccion").disabled = false;
@@ -4187,12 +4214,6 @@ function guardar_procesos_pre_reflexivos() {
   var finP = document.getElementById("fin_del_periodo").value;
   var sujetoId = SujetoGuardarProceso;
   var aspId = document.getElementById("Aspectos_autoconsciencia").value;
-  console.log(nombre);
-  console.log(descripcion);
-  console.log(inicioP);
-  console.log(finP);
-  console.log(sujetoId);
-  console.log(aspId);
   if (!!nombre && !!descripcion && aspId != "-6") {
     data = {
       nombre: nombre,
@@ -4201,9 +4222,17 @@ function guardar_procesos_pre_reflexivos() {
       finP: finP,
       aspId: aspId,
       sujId: sujetoId,
+      active: 1,
       paTipo: "17",
     };
-    //post
+    post_api(
+      "http://alvapala.ddns.net:3000/api/add_pre_reflective_process",
+      data,
+      procesos_reflexivos_guardados_exito,
+      (res) => {
+        console.log(res);
+      }
+    );
     document.getElementById("input-name-proceso-pre-reflexivo").disabled = true;
     document.getElementById(
       "input-descripcion-proceso-pre-reflexivo"
@@ -4235,7 +4264,9 @@ function guardar_procesos_pre_reflexivos() {
     return false;
   }
 }
-
+function procesos_reflexivos_guardados_exito(json) {
+  console.log("Exito");
+}
 function mensaje_exitoEnvioproceso_pre_reflexivo(json) {
   if (document.getElementById("id_proceso_pre_reflexivo")) {
     document.getElementById("id_proceso_pre_reflexivo").value = json.id;
@@ -4328,16 +4359,14 @@ function errormensajeCorrectoGuardarMetodos(error) {
 
 if (document.getElementById("tabla_proceso_pre_reflexivo"))
   consultar_api(
-    "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
+    "http://alvapala.ddns.net:3000/api/get_pre_reflective_process",
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
 
 function cargar_procesos_pre_reflexivos_table(json) {
   res = "";
-  json.procesos.forEach((pro) => {
-    var ini = pro.inicio.split("T");
-    var fin = pro.fin.split("T");
+  json.forEach((pro) => {
     res += "<tr>";
     res += `<td><input type="radio" form="modificar_proceso_form" name="proceso_seleccionado" value="${
       pro.id
@@ -4350,9 +4379,9 @@ function cargar_procesos_pre_reflexivos_table(json) {
     res += `<td>${pro.nombre}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
-    res += `<td>${ini[0]}</td>`;
-    res += `<td>${fin[0]}</td>`;
-    if (pro.activo == "true")
+    res += `<td>${pro.inicio}</td>`;
+    res += `<td>${pro.fin}</td>`;
+    if (pro.activo == 1)
       res += `<td><input type="checkbox" disabled checked></td>`;
     else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";

@@ -1,9 +1,6 @@
-import { json } from "body-parser";
-import { Console } from "console";
 import { Request, Response, NextFunction } from "express";
 import { database2 } from "../../data/database2";
 import { PreReflectiveProcessQ } from "../../models/selfAwarness/qwertyModels/PreReflectiveProcessQ";
-import { ScaleQ } from "../../models/selfAwarness/qwertyModels/ScaleQ";
 
 export function pre_reflective_process(req: Request, res: Response) {
   res.render("proceso_pre_reflexivo", {
@@ -15,6 +12,8 @@ export function pre_reflective_process(req: Request, res: Response) {
 export async function get_pre_reflective_process(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
+
+    var modeloID = req.session!.active_model.modelID;
     var pre_process: PreReflectiveProcessQ = new PreReflectiveProcessQ(
       -1,
       "",
@@ -23,7 +22,7 @@ export async function get_pre_reflective_process(req: Request, res: Response) {
       new Date(),
       new Date()
     );
-    var rows = await db.qwerty(pre_process.toSqlSelect([], []));
+    var rows = await db.qwerty(pre_process.toSqlSelect(["/@/MODEL/@/"], [modeloID]));
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -34,6 +33,8 @@ export async function add_pre_reflective_process(req: Request, res: Response) {
     var db = new database2();
     var newProcess = req.body;
     var tipo_proceso = 17;
+
+    var modeloID = req.session!.active_model.modelID;
     var process: PreReflectiveProcessQ = new PreReflectiveProcessQ(
       -1,
       newProcess.nombre,
@@ -43,13 +44,13 @@ export async function add_pre_reflective_process(req: Request, res: Response) {
       newProcess.finP
     );
     process.active = newProcess.active;
-    await db.qwerty(
+    var rows=await db.qwerty(
       process.toSqlInsert(
-        ["/@/ASPECTID/@/", "/@/SUBJECT/@/"],
-        [newProcess.aspId, newProcess.sujId]
+        ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"],
+        [newProcess.aspId, newProcess.sujId, modeloID]
       )
     );
-    res.json({ Mensaje: "Los datos se han enviado con exito" });
+    res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

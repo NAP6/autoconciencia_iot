@@ -72,3 +72,6 @@ export {
   del_umbral,
   upd_umbral,
 } from "./page_contollers/umbral";
+export{
+	add_pre_reflective_process,
+	get_pre_reflective_process}from"./page_contollers/pre_reflective_process";
