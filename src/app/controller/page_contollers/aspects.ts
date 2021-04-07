@@ -14,12 +14,11 @@ export async function get_aspects_objects(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var modeloID = req.session?.active_model.modelID;
-    var categoriT = req.body.category;
-
-    if (categoriT) {
+ var system=req.body.systemID;
+	  //   var categoriT = req.body.category;
+   /* if (categoriT) {
       var system = req.body.systemID;
       var newCat: string = "";
-
       if (categoriT == "Entidades Físicas") {
         newCat = "PhysicalEntity";
       } else if (categoriT == "Nodos Cloud") {
@@ -36,42 +35,21 @@ export async function get_aspects_objects(req: Request, res: Response) {
         newCat = "Actuator";
       } else if (categoriT == "Red") {
         newCat = "Network";
-      }
-
+      }*/
       var rows = await db.qwerty(`SELECT 
     					DISTINCT asp.aa_id as idAspecto,
 	    				asp.aa_nombre as nombreAspecto
 	    			FROM 
-					aspectoautoconsciencia_objeto as asp_obj,
 	     				aspectoautoconsciencia asp, 
-					objeto obj 
+					sujeto suj
 	    			WHERE   
-					asp_obj.ma_id=asp.ma_id AND 
-	    				asp_obj.aa_id=asp.aa_id AND 
-	                		obj.obj_id=asp_obj.obj_id AND 
-	                		obj.ma_id=asp_obj.ma_id AND 
-	                		asp.suj_id=${system} AND 
+	                		suj.suj_id=${system} AND 
 	                		asp.ma_id=${modeloID} AND
-	                		obj.obj_tipo="${newCat}";
-	    `);
+					suj.ma_id=${modeloID} AND
+					suj.suj_id=asp.suj_id`);
       res.json(rows);
-    } else {
-      var id = req.body.id;
-
-      var rows = await db.qwerty(`SELECT asp_obj.obj_id as id,
-	    	    			 obj.obj_nombre as nombre, 
-					 obj.obj_tipo as tipo
-				  FROM 
-				  	 aspectoautoconsciencia_objeto as asp_obj,
-				         objeto as obj 
-				  where 
-				         asp_obj.obj_id=obj.obj_id AND
-					 asp_obj.ma_id=obj.ma_id AND 
-					 asp_obj.aa_id=${id}`);
-      res.json(rows);
-    }
-  } else {
-    res.json({ error: "debe iniciar session para poder usar la api" });
+  }else{
+	res.json({error: "Debe iniciar sesion para poder usar la api"});
   }
 }
 export async function get_aspects(req: Request, res: Response) {

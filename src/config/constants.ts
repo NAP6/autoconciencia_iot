@@ -4,5 +4,5 @@ export default {
 	"db-user": "autoconsciencia",
 	"db-password": "configuradorIoT",
 	"db-schema": "db_autoconsciencia",
-	"server-port": 3001,
+	"server-port": 3000,
 }
