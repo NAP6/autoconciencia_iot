@@ -4576,27 +4576,27 @@ function cargar_sujetos_activos_procesos_reflexivos(json) {
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   json.forEach((elemento) => {
-    if (!!elemento.padre && elemento.activo == 1) {
-      aux_visible_activo.add(elemento.padre);
-    } else if (!!elemento.padre && elemento.activo == 0) {
-      aux_visible_inactivo.add(elemento.padre);
+    if (!!elemento.father && elemento.active == 1) {
+      aux_visible_activo.add(elemento.father);
+    } else if (!!elemento.father && elemento.active == 0) {
+      aux_visible_inactivo.add(elemento.father);
     }
   });
   json.forEach((elemento) => {
     var insertar;
-    if (!elemento.padre) {
+    if (!elemento.father) {
       insertar = document.getElementById(
         "lista_sujetos_activos_proceso_reflexivo"
       );
     } else {
       insertar = document.createElement("ul");
       document
-        .getElementById(`li_entidad_seleccionado_${elemento.padre}`)
+        .getElementById(`li_entidad_seleccionado_${elemento.father}`)
         .appendChild(insertar);
     }
     li = document.createElement("li");
     li.id = `li_entidad_seleccionado_${elemento.id}`;
-    if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+    if (elemento.active == 1 || aux_visible_activo.has(elemento.id)) {
       li.style.display = "list-item";
     } else {
       li.style.display = "none";
@@ -4607,9 +4607,9 @@ function cargar_sujetos_activos_procesos_reflexivos(json) {
     checkbox.type = "checkbox";
     checkbox.id = `sujeto_seleccionado_${elemento.id}`;
     checkbox.name = "checkbox_sujetos_procesos_reflexivos";
-    checkbox.dataset.padre_id = elemento.padre;
+    checkbox.dataset.padre_id = elemento.father;
     checkbox.dataset.puro_id = elemento.id;
-    checkbox.dataset.nombre = elemento.nombre;
+    checkbox.dataset.nombre = elemento.name;
     checkbox.setAttribute(
       "onclick",
       "verificarSeleccionProceso_reflexivo(this);"
@@ -4619,7 +4619,7 @@ function cargar_sujetos_activos_procesos_reflexivos(json) {
     labelChek.htmlFor = checkbox.id;
     var button = document.createElement("button");
     button.classList.add("btn", "py-0", "px-0");
-    button.innerHTML = elemento.nombre;
+    button.innerHTML = elemento.name;
     labelChek.appendChild(button);
     li.appendChild(divFormCheck);
     divFormCheck.appendChild(checkbox);
@@ -4644,19 +4644,54 @@ function verificarSeleccionProceso_reflexivo(elemento) {
     document.getElementById(
       "CategoriaEntidadesProcesos_reflexivos"
     ).disabled = true;
-    post_api(
-      "http://alvapala.ddns.net:3000/api/objetivos_sujetos",
-      {
-        id: sujetoGuardarproceso_reflexivo,
-      },
-      cargar_objetivos_sujetos_select_reflexivos,
-      error_cargar_objetivos_sujetos_select_reflexivos
-    );
   });
   elemento.checked = auxChecked;
-  document.getElementById(
-    "CategoriaEntidadesProcesos_reflexivos"
-  ).disabled = false;
+  var seleccion = document.getElementById(
+    "Aspectos_autoconsciencia_reflexivos"
+  );
+  seleccion.disabled = false;
+  cargar_aspectos_procesos_reflexivos(sujetoGuardarproceso_reflexivo);
+}
+
+function cargar_aspectos_procesos_reflexivos(IdSujeto) {
+  var limpiar = document.getElementById(
+    "lista_entidades_seleccionadas_procesos_reflexivos"
+  );
+  limpiar.innerHTML = "";
+  if (IdSujeto) {
+    data = {
+      systemID: IdSujeto,
+    };
+    post_api(
+      "http://alvapala.ddns.net:3000/api/get_aspects_subjects",
+      data,
+      cargar_posibles_entidades_proceso_reflexivo,
+      (res) => {
+        console.log(res);
+      }
+    );
+  }
+}
+
+function cargar_posibles_entidades_proceso_reflexivo(json) {
+  var select = document.getElementById("Aspectos_autoconsciencia_reflexivos");
+  select.innerHTML = "";
+  var opt = document.createElement("option");
+  opt.value = -6;
+  opt.innerHTML = "Seleccione ..";
+  select.appendChild(opt);
+  json.forEach((asp) => {
+    var opt = document.createElement("option");
+    opt.value = asp.idAspecto;
+    opt.innerHTML = asp.nombreAspecto;
+    select.appendChild(opt);
+  });
+
+  if (json.length > 0) {
+    select.disabled = false;
+  } else {
+    select.disabled = true;
+  }
 }
 
 function cargar_objetivos_sujetos_select_reflexivos(json) {
@@ -4811,11 +4846,10 @@ function guardar_procesos_reflexivos() {
     .value;
   var inicioP = document.getElementById("inicio_del_periodo_reflexivo").value;
   var finP = document.getElementById("fin_del_periodo_reflexivo").value;
-  var objetoId = obj_Id_reflexivos;
   var sujetoId = sujetoGuardarproceso_reflexivo;
   var aspId = document.getElementById("Aspectos_autoconsciencia_reflexivos")
     .value;
-  if (!!nombre && !!descripcion && !!objetoId && !!sujetoId && aspId != "-6") {
+  if (!!nombre && !!descripcion && !!sujetoId && aspId != "-6") {
     data = {
       nombre: nombre,
       descripcion: descripcion,
@@ -4823,13 +4857,11 @@ function guardar_procesos_reflexivos() {
       finP: finP,
       aspId: aspId,
       sujId: sujetoId,
-      objId: objetoId,
       paTipo: "18",
-      objetivo: objetivo,
     };
 
     post_api(
-      "http://alvapala.ddns.net:3000/api/add_process_pre_reflexive/",
+      "http://alvapala.ddns.net:3000/api/add_reflective_process/",
       data,
       mensaje_exitoEnvioproceso_pre_reflexivo,
       mensaje_errorEnvioproceso_pre_reflexivo
@@ -4873,7 +4905,7 @@ function guardar_procesos_reflexivos() {
 }
 if (document.getElementById("tabla_proceso_reflexivo"))
   consultar_api(
-    "http://alvapala.ddns.net:3000/api/procesos_reflexive",
+    "http://alvapala.ddns.net:3000/api/get_reflective_process",
     cargar_procesos_reflexivos_table,
     error_procesos_reflexivos_table
   );
@@ -4881,8 +4913,6 @@ if (document.getElementById("tabla_proceso_reflexivo"))
 function cargar_procesos_reflexivos_table(json) {
   res = "";
   json.procesos.forEach((pro) => {
-    var ini = pro.inicio.split("T");
-    var fin = pro.fin.split("T");
     res += "<tr>";
     res += `<td><input type="radio" form="modificar_proceso_reflexivo_form" name="proceso_reflexivo_seleccionado" value="${
       pro.id
@@ -4895,9 +4925,9 @@ function cargar_procesos_reflexivos_table(json) {
     res += `<td>${pro.nombre}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
-    res += `<td>${ini[0]}</td>`;
-    res += `<td>${fin[0]}</td>`;
-    if (pro.activo == "true")
+    res += `<td>${inicio}</td>`;
+    res += `<td>${fin}</td>`;
+    if (pro.activo == 1)
       res += `<td><input type="checkbox" disabled checked></td>`;
     else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";
