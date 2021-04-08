@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { database2 } from "../../data/database2";
 import { DataFlow } from "../../models/selfAwarness/DataFlow";
 import { DirectMetric } from "../../models/selfAwarness/DirectMetric";
-import {Indicator} from "../../models/selfAwarness/Indicator";
+import { Indicator } from "../../models/selfAwarness/Indicator";
 import { Property } from "../../models/selfAwarness/Property";
 import { ReflectiveProcessQ } from "../../models/selfAwarness/qwertyModels/ReflectiveProcessQ";
 import {
@@ -83,6 +83,7 @@ export async function del_reflective_process(req: Request, res: Response) {
   }
 }
 
+
 export async function add_metodo_modelo(req: Request, res: Response) {
   if (req.session?.user) {
     var data = req.body;
@@ -90,16 +91,19 @@ export async function add_metodo_modelo(req: Request, res: Response) {
     var db = new database2();
     var modeloID = req.session!.active_model.modelID;
     var coll = new CollectionMethodQ(-1, "");
-    coll.produces = new DirectMetric(-1, "", "", "", ""); //id
-    coll.isSupported = new DataFlow(-1, "", "", "", ""); //id, comunicationType
-    coll.collectsProperty = [new Property(-1, "")]; //id
+    coll.produces = new DirectMetric(data.m_recoleccion.met_id, "", "", "", "");
+    coll.isSupported = new DataFlow(data.m_recoleccion.flu_id, "", "",data.m_recoleccion.mr_tipo, "");
+    coll.collectsProperty = [new Property(data.m_recoleccion.pro_id, "")];
     var row1 = await db.qwerty(
-      coll.toSqlInsert(["/@/PROCES/@/", "/@/MODEL/@/", "/@/OBJECT/@/"], [])
+      coll.toSqlInsert(
+        ["/@/PROCES/@/", "/@/MODEL/@/", "/@/OBJECT/@/"],
+        [data.proceso_id, modeloID, '' /* Aqui falta un valor*/]
+      )
     );
-    var anali = new AnalysisModelQ(-1, ""); // implementation Type
-    anali.produces = new Indicator(-1, "", "", "", ""); //id
+    var anali = new AnalysisModelQ(data.m_modelo.ma_tipo, "");
+    anali.produces = new Indicator(data.m_modelo.met_id, "", "", "", ""); 
     var row2 = await db.qwerty(
-      anali.toSqlInsert(["/@/PROCES/@/", "/@/CRITERIA/@/"], [])
+      anali.toSqlInsert(["/@/PROCES/@/", "/@/CRITERIA/@/"], [data.proceso_id, data.m_modelo.criterio_id])
     );
     res.json([row1.insertId, row2.insertId]);
   } else {

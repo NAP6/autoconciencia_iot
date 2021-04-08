@@ -3223,7 +3223,7 @@ function generar_flujo_datos_select() {
   var comunicacion = seleccione.options[seleccione.selectedIndex].text;
   var porpiedadSeleccionada = document.getElementById("proiedad_recoleccion")
     .value;
-	console.log(comunicacion);
+  console.log(comunicacion);
   if (seleccione != "Seleccione.." && porpiedadSeleccionada != "-6") {
     post_api(
       "http://alvapala.ddns.net:3000/api/get_data_flow/",
@@ -3610,11 +3610,20 @@ function cargar_aspectos(elemento, lado) {
 }
 
 function cargar_propiedades_select(json) {
-  res = `<option value="-6">Seleccione..</option>`;
-  json.forEach((as) => {
-    res += `<option value='${as.id}'>${as.nombre}</option>`;
+  console.log(json);
+  var ope = document.getElementById("proiedad_recoleccion");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.nombre;
+    option.dataset.id_objeto = element.obj_id;
+    ope.appendChild(option);
   });
-  document.getElementById("proiedad_recoleccion").innerHTML = res;
 }
 function error_cargar_propiedades_select(error) {
   alert("No se cargo las propiedades" + error);
@@ -3656,10 +3665,11 @@ $("#Aspectos_autoconsciencia").change(function () {
   document.getElementById("criterio_de_decision").disabled = false;
   var limpiar = document.getElementById("metrica_directa");
   limpiar.innerHTML = "";
-  var aspecto_select = document.getElementById("Aspectos_autoconsciencia").value;
+  var aspecto_select = document.getElementById("Aspectos_autoconsciencia")
+    .value;
   tipoM = 10;
   data = {
-    id:aspecto_select,
+    id: aspecto_select,
     tipo: tipoM,
   };
   post_api(
@@ -4239,10 +4249,10 @@ function get_propiedades_procesos(id) {
   );
 }
 function procesos_pre_reflexivos_guardados_exito(json) {
-  console.log("Exito");
+  document.getElementById("id_proceso_pre_reflexivo").value = json.insertId;
 }
-function procesos_reflexivos_guardados_exito(json){
-	console.log("Exito");
+function procesos_reflexivos_guardados_exito(json) {
+  console.log("Exito");
 }
 
 function guardar_modelos_metodos() {
@@ -4253,12 +4263,14 @@ function guardar_modelos_metodos() {
   var criterio_id = document.getElementById("criterio_de_decision").value;
   var proceso_id = document.getElementById("id_proceso_pre_reflexivo").value;
   var indicador_id = document.getElementById("indicador_modelo").value;
+  var flujo_id = document.getElementById("flujo_de_datos").value;
   if (
     mr_tipo != "-6" &&
     ma_tipo != "-6" &&
     criterio_id != "-6" &&
     !!proceso_id &&
     met_id != "-6" &&
+    flujo_id != "-6" &&
     indicador_id != "-6"
   ) {
     var datos = {
@@ -4267,6 +4279,7 @@ function guardar_modelos_metodos() {
         mr_tipo: mr_tipo,
         pro_id: pro_id == "-6" ? undefined : pro_id,
         met_id: met_id == "-6" ? undefined : met_id,
+        flu_id: flujo_id,
       },
       m_modelo: {
         ma_tipo: ma_tipo,
@@ -4332,7 +4345,11 @@ function cargar_procesos_pre_reflexivos_table(json) {
     res += "<tr>";
     res += `<td><input type="radio" form="modificar_proceso_form" name="proceso_seleccionado" value="${
       pro.id
-    }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-sujeto_id="${pro.sujeto_id}" data-aspecto="${pro.aspecto}" data-aspecto_id="${pro.aspecto_id}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${
+    }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-sujeto_id="${
+      pro.sujeto_id
+    }" data-aspecto="${pro.aspecto}" data-aspecto_id="${
+      pro.aspecto_id
+    }" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${
       pro.activo == "true"
     }"></td>`;
     res += `<td>${pro.id}</td>`;
@@ -4401,7 +4418,7 @@ function elminarProcesoPreReflexivo() {
     if (confirm("Esta seguro de que desea eliminar el Proceso")) {
       post_api(
         "http://alvapala.ddns.net:3000/api/del_pre_reflective_process/",
-	      {id:id},
+        { id: id },
         mensaje_exitosBorrar_pre_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
       );
@@ -4835,7 +4852,11 @@ function guardar_procesos_reflexivos() {
     };
     post_api(
       "http://alvapala.ddns.net:3000/api/add_reflective_process/",
-      data,procesos_reflexivos_guardados_exito,(res)=>{console.log(res)}
+      data,
+      procesos_reflexivos_guardados_exito,
+      (res) => {
+        console.log(res);
+      }
     );
     document.getElementById("nombre_proceso_reflexivo").disabled = true;
     document.getElementById("descripcion_proceso_reflexivo").disabled = true;
@@ -5159,9 +5180,8 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
 
   var limpiar3 = document.getElementById("indicador_modelo_pre");
   limpiar3.innerHTML = "";
-  var seleccion = document.getElementById(
-    "Aspectos_autoconsciencia_reflexivos"
-  ).value;
+  var seleccion = document.getElementById("Aspectos_autoconsciencia_reflexivos")
+    .value;
   var tipoIndi = 12;
   data2 = {
     id: seleccion,

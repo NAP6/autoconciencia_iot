@@ -1,7 +1,7 @@
 import { LearningReasoningMethod } from "./LearningReasoningMethod";
 import { Property } from "./Property";
 import { DirectMetric } from "./DirectMetric";
-import {DataFlow} from "./DataFlow";
+import { DataFlow } from "./DataFlow";
 
 export class CollectionMethod extends LearningReasoningMethod {
   private _collectionScope;
@@ -39,10 +39,10 @@ export class CollectionMethod extends LearningReasoningMethod {
     this._produces = value;
   }
   get isSupported(): DataFlow | undefined {
-    return this._produces;
+    return this._isSupported;
   }
 
   set isSupported(value: DataFlow | undefined) {
-    this._produces = value;
+    this._isSupported = value;
   }
 }
