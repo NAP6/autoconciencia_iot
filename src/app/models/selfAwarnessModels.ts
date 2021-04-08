@@ -15,3 +15,5 @@ export { FormulaQ } from "./selfAwarness/qwertyModels/FormulaQ";
 export { FunctionQ } from "./selfAwarness/qwertyModels/FunctionQ";
 export { WebServiceQ } from "./selfAwarness/qwertyModels/WebServiceQ";
 export { ParameterQ } from "./selfAwarness/qwertyModels/ParameterQ";
+export { CollectionMethodQ } from "./selfAwarness/qwertyModels/CollectionMethodQ";
+
