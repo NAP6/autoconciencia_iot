@@ -3219,18 +3219,14 @@ function agregarProcesoPreReflexivo() {
 }
 
 function generar_flujo_datos_select() {
-  var tipoComununicacionSeleccionado = document.getElementById(
-    "tipo_comunicacion"
-  );
-  comunicacion =
-    tipoComununicacionSeleccionado.options[
-      tipoComununicacionSeleccionado.selectedIndex
-    ].text;
+  var seleccione = document.getElementById("tipo_comunicacion");
+  var comunicacion = seleccione.options[seleccione.selectedIndex].text;
   var porpiedadSeleccionada = document.getElementById("proiedad_recoleccion")
     .value;
-  if (comunicacion != "Seleccione.." && porpiedadSeleccionada != "-6") {
+	console.log(comunicacion);
+  if (seleccione != "Seleccione.." && porpiedadSeleccionada != "-6") {
     post_api(
-      "http://alvapala.ddns.net:3000/api/get_flujo_datos/",
+      "http://alvapala.ddns.net:3000/api/get_data_flow/",
       {
         comunicacion: comunicacion,
         propiedad: porpiedadSeleccionada,
@@ -3243,6 +3239,10 @@ function generar_flujo_datos_select() {
   } else {
     var ope = document.getElementById("flujo_de_datos");
     ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
   }
 }
 
@@ -3254,7 +3254,7 @@ function cargar_select_flujo_datos(json) {
   seleccione.value = "-6";
   ope.appendChild(seleccione);
   console.log(json);
-  json.procesos.forEach((element) => {
+  json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
     option.innerHTML = element.descripcion;
@@ -3656,16 +3656,14 @@ $("#Aspectos_autoconsciencia").change(function () {
   document.getElementById("criterio_de_decision").disabled = false;
   var limpiar = document.getElementById("metrica_directa");
   limpiar.innerHTML = "";
-  var seleccionIndicador = document.getElementById("Aspectos_autoconsciencia");
-  var tipo_valor =
-    seleccionIndicador.options[seleccionIndicador.selectedIndex].text;
-  tipoM = "DIRECTA";
+  var aspecto_select = document.getElementById("Aspectos_autoconsciencia").value;
+  tipoM = 10;
   data = {
-    nombre: tipo_valor,
+    id:aspecto_select,
     tipo: tipoM,
   };
   post_api(
-    "http://alvapala.ddns.net:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     data,
     cargar_select_metrica_proceso,
     error_cargar_select_metrica_proceso
@@ -3673,15 +3671,14 @@ $("#Aspectos_autoconsciencia").change(function () {
 
   var limpiar3 = document.getElementById("indicador_modelo");
   limpiar3.innerHTML = "";
-  var seleccion = document.getElementById("Aspectos_autoconsciencia");
-  var tipo_valor_Indicador = seleccion.options[seleccion.selectedIndex].text;
-  var tipoIndi = "INDICADOR";
+  var seleccion = document.getElementById("Aspectos_autoconsciencia").value;
+  var tipoIndi = "12";
   data2 = {
-    nombre: tipo_valor_Indicador,
+    id: seleccion,
     tipo: tipoIndi,
   };
   post_api(
-    "http://alvapala.ddns.net:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     data2,
     cargar_select_indicador_proceso,
     error_cargar_select_indicador_proceso
@@ -3706,7 +3703,7 @@ function cargar_select_metrica_proceso(json) {
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
-    option.innerHTML = element.nombre;
+    option.innerHTML = element.name;
     ope.appendChild(option);
   });
 }
@@ -3725,7 +3722,7 @@ function cargar_select_indicador_proceso(json) {
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
-    option.innerHTML = element.nombre;
+    option.innerHTML = element.name;
     ope.appendChild(option);
   });
 }
@@ -4194,7 +4191,7 @@ function guardar_procesos_pre_reflexivos() {
     post_api(
       "http://alvapala.ddns.net:3000/api/add_pre_reflective_process",
       data,
-      procesos_reflexivos_guardados_exito,
+      procesos_pre_reflexivos_guardados_exito,
       (res) => {
         console.log(res);
       }
@@ -4241,19 +4238,11 @@ function get_propiedades_procesos(id) {
     error_cargar_propiedades_select
   );
 }
-function procesos_reflexivos_guardados_exito(json) {
+function procesos_pre_reflexivos_guardados_exito(json) {
   console.log("Exito");
 }
-function mensaje_exitoEnvioproceso_pre_reflexivo(json) {
-  if (document.getElementById("id_proceso_pre_reflexivo")) {
-    document.getElementById("id_proceso_pre_reflexivo").value = json.id;
-  } else if (document.getElementById("id_proceso_reflexivo")) {
-    document.getElementById("id_proceso_reflexivo").value = json.id;
-  }
-}
-
-function mensaje_errorEnvioproceso_pre_reflexivo(error) {
-  alert(err);
+function procesos_reflexivos_guardados_exito(json){
+	console.log("Exito");
 }
 
 function guardar_modelos_metodos() {
@@ -4343,9 +4332,7 @@ function cargar_procesos_pre_reflexivos_table(json) {
     res += "<tr>";
     res += `<td><input type="radio" form="modificar_proceso_form" name="proceso_seleccionado" value="${
       pro.id
-    }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-aspecto="${
-      pro.aspecto
-    }" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${
+    }" data-name="${pro.nombre}" data-sujeto="${pro.sujeto}" data-sujeto_id="${pro.sujeto_id}" data-aspecto="${pro.aspecto}" data-aspecto_id="${pro.aspecto_id}" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${
       pro.activo == "true"
     }"></td>`;
     res += `<td>${pro.id}</td>`;
@@ -4412,12 +4399,9 @@ function elminarProcesoPreReflexivo() {
   });
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el Proceso")) {
-      data = {
-        id: id,
-      };
       post_api(
-        "http://alvapala.ddns.net:3000/api/del_process_pre_reflexive/",
-        data,
+        "http://alvapala.ddns.net:3000/api/del_pre_reflective_process/",
+	      {id:id},
         mensaje_exitosBorrar_pre_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
       );
@@ -4427,7 +4411,7 @@ function elminarProcesoPreReflexivo() {
 
 function mensaje_exitosBorrar_pre_reflexivo(json) {
   consultar_api(
-    "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
+    "http://alvapala.ddns.net:3000/api/get_pre_reflective_process",
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
@@ -4848,14 +4832,10 @@ function guardar_procesos_reflexivos() {
       finP: finP,
       aspId: aspId,
       sujId: sujetoId,
-      paTipo: "18",
     };
-
     post_api(
       "http://alvapala.ddns.net:3000/api/add_reflective_process/",
-      data,
-      mensaje_exitoEnvioproceso_pre_reflexivo,
-      mensaje_errorEnvioproceso_pre_reflexivo
+      data,procesos_reflexivos_guardados_exito,(res)=>{console.log(res)}
     );
     document.getElementById("nombre_proceso_reflexivo").disabled = true;
     document.getElementById("descripcion_proceso_reflexivo").disabled = true;
@@ -4903,7 +4883,7 @@ if (document.getElementById("tabla_proceso_reflexivo"))
 
 function cargar_procesos_reflexivos_table(json) {
   res = "";
-  json.procesos.forEach((pro) => {
+  json.forEach((pro) => {
     res += "<tr>";
     res += `<td><input type="radio" form="modificar_proceso_reflexivo_form" name="proceso_reflexivo_seleccionado" value="${
       pro.id
@@ -4916,8 +4896,8 @@ function cargar_procesos_reflexivos_table(json) {
     res += `<td>${pro.nombre}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
-    res += `<td>${inicio}</td>`;
-    res += `<td>${fin}</td>`;
+    res += `<td>${pro.inicio}</td>`;
+    res += `<td>${pro.fin}</td>`;
     if (pro.activo == 1)
       res += `<td><input type="checkbox" disabled checked></td>`;
     else res += `<td><input type="checkbox" disabled></td>`;
@@ -5162,18 +5142,16 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
 
   var limpiar = document.getElementById("metrica_indirecta_reflexivos");
   limpiar.innerHTML = "";
-  var seleccionIndicador = document.getElementById(
+  var selecci_Aspecto = document.getElementById(
     "Aspectos_autoconsciencia_reflexivos"
-  );
-  var tipo_valor =
-    seleccionIndicador.options[seleccionIndicador.selectedIndex].text;
-  tipoM = "INDIRECTA";
+  ).value;
+  tipoM = "11";
   data = {
-    nombre: tipo_valor,
+    id: selecci_Aspecto,
     tipo: tipoM,
   };
   post_api(
-    "http://alvapala.ddns.net:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     data,
     cargar_select_metrica_proceso_reflexivo,
     error_cargar_select_metrica_proceso_reflexivo
@@ -5183,15 +5161,14 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
   limpiar3.innerHTML = "";
   var seleccion = document.getElementById(
     "Aspectos_autoconsciencia_reflexivos"
-  );
-  var tipo_valor_Indicador = seleccion.options[seleccion.selectedIndex].text;
-  var tipoIndi = "INDICADOR";
+  ).value;
+  var tipoIndi = 12;
   data2 = {
-    nombre: tipo_valor_Indicador,
+    id: seleccion,
     tipo: tipoIndi,
   };
   post_api(
-    "http://alvapala.ddns.net:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     data2,
     cargar_select_indicador_proceso_reflexivo,
     error_cargar_select_indicador_proceso_reflexivo
@@ -5208,7 +5185,7 @@ function cargar_select_metrica_proceso_reflexivo(json) {
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
-    option.innerHTML = element.nombre;
+    option.innerHTML = element.name;
     ope.appendChild(option);
   });
 }
@@ -5231,7 +5208,7 @@ function cargar_select_indicador_proceso_reflexivo(json) {
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
-    option.innerHTML = element.nombre;
+    option.innerHTML = element.name;
     ope.appendChild(option);
   });
 }
@@ -6900,7 +6877,7 @@ function elminarProcesoReflexivo() {
         id: id,
       };
       post_api(
-        "http://alvapala.ddns.net:3000/api/del_process_pre_reflexive/",
+        "http://alvapala.ddns.net:3000/api/del_reflective_process/",
         data,
         mensaje_exitosBorrar_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
@@ -6912,7 +6889,7 @@ function elminarProcesoReflexivo() {
 
 function mensaje_exitosBorrar_reflexivo(json) {
   consultar_api(
-    "http://alvapala.ddns.net:3000/api/procesos_reflexive",
+    "http://alvapala.ddns.net:3000/api/get_reflective_process",
     cargar_procesos_reflexivos_table,
     mensaje_errorBorrar_reflexivo
   );

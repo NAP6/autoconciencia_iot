@@ -58,7 +58,7 @@ export class PreReflectiveProcessQ
     return sql;
   }
   toSqlDelete(value: string[]): string {
-    var sql = ` `;
+  var sql = `DELETE FROM procesoautoconsciencia WHERE pa_id=${this.id}`;
     return sql;
   }
 

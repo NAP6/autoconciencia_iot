@@ -34,6 +34,20 @@ export async function get_metrics_aspects(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+
+export async function get_metrics_type(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var id=req.body.id;
+	  var tipo=req.body.tipo;
+    var metrics:MetricQ=new MetricQ(-1,"","","","");
+    var rows= await db.qwerty(metrics.toSqlSelect(['/@/ASPECTID/@/','/@/TYPE/@/'],[id,tipo]));
+    res.json(rows);
+    
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export async function add_metrics(req: Request, res: Response) {
   if(req.session?.user){
     var db = new database2();
