@@ -18,11 +18,11 @@ export async function get_pre_reflective_process(req: Request, res: Response) {
       -1,
       "",
       "",
-      -1,
-      new Date(),
-      new Date()
+      -1
     );
-    var rows = await db.qwerty(pre_process.toSqlSelect(["/@/MODEL/@/"], [modeloID]));
+    var rows = await db.qwerty(
+      pre_process.toSqlSelect(["/@/MODEL/@/"], [modeloID])
+    );
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -39,12 +39,16 @@ export async function add_pre_reflective_process(req: Request, res: Response) {
       -1,
       newProcess.nombre,
       newProcess.descripcion,
-      tipo_proceso,
-      newProcess.inicioP,
-      newProcess.finP
+      tipo_proceso
     );
+    if (newProcess.inicioP) {
+      process.executionPeriodStart = newProcess.inicioP;
+    }
+    if (newProcess.finP) {
+      process.executionPeriodEnd = newProcess.finP;
+    }
     process.active = newProcess.active;
-    var rows=await db.qwerty(
+    var rows = await db.qwerty(
       process.toSqlInsert(
         ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"],
         [newProcess.aspId, newProcess.sujId, modeloID]

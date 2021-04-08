@@ -18,8 +18,6 @@ export async function get_reflective_process(req: Request, res: Response) {
       "",
       "",
       -1,
-      new Date(),
-      new Date()
     );
     var rows = await db.qwerty(
       process_reflec.toSqlSelect(["/@/MODEL/@/"], [modeloID])
@@ -41,9 +39,14 @@ export async function add_reflective_process(req: Request, res: Response) {
       newProcess.nombre,
       newProcess.descripcion,
       tipo_proceso,
-      newProcess.inicioP,
-      newProcess.finP
     );
+	  if(newProcess.inicioP){
+		  process.executionPeriodStart=newProcess.inicioP;
+
+	  }
+	  if(newProcess.finP){
+		  process.executionPeriodEnd=newProcess.finP;
+	  }
     process.active = newProcess.active;
     var rows = await db.qwerty(
       process.toSqlInsert(

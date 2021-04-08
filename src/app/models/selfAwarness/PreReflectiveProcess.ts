@@ -11,10 +11,16 @@ export class PreReflecriveProcess extends SelfAwarenessProcess {
     id: number,
     name: string,
     description: string,
+<<<<<<< HEAD
     executionPeriodStart: Date,
     executionPeriodEnd: Date,
     usesCollectionMehod: CollectionMethod,
     usesAnalysisModel: AnalysisModel
+=======
+    type_process:number,
+    executionPeriodStart?: Date,
+    executionPeriodEnd?: Date,
+>>>>>>> f7eb99d5341fe9d727cfc1bf416fac600c69b3b4
   ) {
     super(
       id,
