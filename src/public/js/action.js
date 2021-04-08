@@ -3215,16 +3215,6 @@ function agregarProcesoPreReflexivo() {
     cargar_select_criterios_proceso,
     error_cargar_select_criterios_proceso
   );
-  var tipoComunicacion = "TIPO_COMUNICACION";
-  data2 = {
-    tipo: "TIPO_RECOLECCION",
-  };
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_enumeracion",
-    data2,
-    cargar_select_tipo_recoleccion,
-    error_cargar_select_tipo_recoleccion
-  );
   Abrir_limpiar_modal_proceso_pre_reflexivo();
 }
 
@@ -3297,7 +3287,6 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
   document.getElementById("CategoriaEntidadesProcesos").selectedIndex = "0";
   document.getElementById("Aspectos_autoconsciencia").selectedIndex = "0";
   document.getElementById("tipo_comunicacion").selectedIndex = "0";
-  document.getElementById("alcance_recoleccion").selectedIndex = "0";
   document.getElementById("metrica_directa").selectedIndex = "0";
   document.getElementById("tipo_recurso").selectedIndex = "0";
   document.getElementById("recurso").selectedIndex = "0";
@@ -3308,7 +3297,6 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
   document.getElementById("tabla_umbrales_procesos").innerHTML = "";
   document.getElementById("Aspectos_autoconsciencia").disabled = true;
   document.getElementById("tipo_comunicacion").disabled = true;
-  document.getElementById("alcance_recoleccion").disabled = true;
   document.getElementById("proiedad_recoleccion").disabled = true;
   document.getElementById("metrica_directa").disabled = true;
   document.getElementById("tipo_recurso").disabled = true;
@@ -3623,13 +3611,11 @@ function cargar_aspectos(elemento, lado) {
 
 function cargar_propiedades_select(json) {
   res = `<option value="-6">Seleccione..</option>`;
-
   json.forEach((as) => {
     res += `<option value='${as.id}'>${as.nombre}</option>`;
   });
   document.getElementById("proiedad_recoleccion").innerHTML = res;
 }
-
 function error_cargar_propiedades_select(error) {
   alert("No se cargo las propiedades" + error);
 }
@@ -3663,7 +3649,6 @@ $("#Aspectos_autoconsciencia").change(function () {
     alert("Falta seleccionar campos");
   }
   document.getElementById("tipo_comunicacion").disabled = false;
-  document.getElementById("alcance_recoleccion").disabled = false;
   document.getElementById("proiedad_recoleccion").disabled = false;
   document.getElementById("metrica_directa").disabled = false;
   document.getElementById("tipo_recurso").disabled = false;
@@ -3784,25 +3769,6 @@ function cargar_select_tipo_comunicacion(json) {
 }
 
 function error_cargar_select_tipo_comunicacion() {
-  alert("No se cargo el select tipo comunicacion");
-}
-
-function cargar_select_tipo_recoleccion(json) {
-  var ope = document.getElementById("alcance_recoleccion");
-  var opcion = document.createElement("option");
-  opcion.innerHTML = "Seleccione..";
-  opcion.value = "-6";
-  ope.innerHTML = "";
-  ope.appendChild(opcion);
-  json.forEach((element) => {
-    var option = document.createElement("option");
-    option.value = element.id;
-    option.innerHTML = element.nombre;
-    ope.appendChild(option);
-  });
-}
-
-function error_cargar_select_tipo_recoleccion() {
   alert("No se cargo el select tipo comunicacion");
 }
 
@@ -4259,10 +4225,21 @@ function guardar_procesos_pre_reflexivos() {
     document
       .getElementById("modal_metodo_add")
       .classList.replace("d-none", "d-block");
+    get_propiedades_procesos(aspId);
     return true;
   } else {
     return false;
   }
+}
+function get_propiedades_procesos(id) {
+  post_api(
+    "http://alvapala.ddns.net:3000/api/get_properties",
+    {
+      aspectoID: id,
+    },
+    cargar_propiedades_select,
+    error_cargar_propiedades_select
+  );
 }
 function procesos_reflexivos_guardados_exito(json) {
   console.log("Exito");
@@ -4281,7 +4258,6 @@ function mensaje_errorEnvioproceso_pre_reflexivo(error) {
 
 function guardar_modelos_metodos() {
   var mr_tipo = document.getElementById("tipo_comunicacion").value;
-  var pro_alcance = document.getElementById("alcance_recoleccion").value;
   var pro_id = document.getElementById("proiedad_recoleccion").value;
   var met_id = document.getElementById("metrica_directa").value;
   var ma_tipo = document.getElementById("tipo_recurso").value;
@@ -4290,7 +4266,6 @@ function guardar_modelos_metodos() {
   var indicador_id = document.getElementById("indicador_modelo").value;
   if (
     mr_tipo != "-6" &&
-    pro_alcance != "-6" &&
     ma_tipo != "-6" &&
     criterio_id != "-6" &&
     !!proceso_id &&
@@ -4302,7 +4277,6 @@ function guardar_modelos_metodos() {
       m_recoleccion: {
         mr_tipo: mr_tipo,
         pro_id: pro_id == "-6" ? undefined : pro_id,
-        pro_alcance: pro_alcance,
         met_id: met_id == "-6" ? undefined : met_id,
       },
       m_modelo: {
@@ -4338,7 +4312,6 @@ function guardar_modelos_metodos() {
 
 function mensajeCorrectoGuardarMetodos(json) {
   document.getElementById("tipo_comunicacion").disabled = true;
-  document.getElementById("alcance_recoleccion").disabled = true;
   document.getElementById("proiedad_recoleccion").disabled = true;
   document.getElementById("metrica_directa").disabled = true;
   document.getElementById("tipo_recurso").disabled = true;
@@ -4721,15 +4694,33 @@ $("#CategoriaEntidadesProcesos_reflexivos").change(function () {
   );
   var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
   data = {
-    valorS: tipo_valor,
+    categoria: tipo_valor,
+    aspecto: document.getElementById("Aspectos_autoconsciencia_reflexivos")
+      .value,
+    sujeto: sujetoGuardarproceso_reflexivo,
   };
-  post_api(
-    "http://alvapala.ddns.net:3000/api/entitys",
-    data,
-    cargar_posibles_entidades_modelo_proceso_reflexivo,
-    error_cargar_posibles_entidades_modelo_proceso_reflexivo
-  );
+  if (data.categoria != -6 && data.aspeco != -6 && !!data.sujeto) {
+    post_api(
+      "http://alvapala.ddns.net:3000/api/get_objects_aspects",
+      data,
+      cargar_objetos_proceso_reflexivo,
+      (res) => {
+        console.log("ERROROS");
+      }
+    );
+  }
 });
+function cargar_objetos_proceso_reflexivo(json) {
+  var ul = document.getElementById(
+    "lista_entidades_seleccionadas_procesos_reflexivos"
+  );
+  ul.innerHTML = "";
+  json.forEach((element) => {
+    var li = document.createElement("li");
+    li.innerHTML = element.nombre;
+    ul.appendChild(li);
+  });
+}
 
 function cargar_posibles_entidades_modelo_proceso_reflexivo(json) {
   var aux_visible_activo = new Set();
@@ -5143,6 +5134,32 @@ function error_cargar_select_metodos_reflexivos(error) {
   alert("Error cargadon select criterios reflexivos");
 }
 $("#Aspectos_autoconsciencia_reflexivos").change(function () {
+  var seleccion = document.getElementById(
+    "CategoriaEntidadesProcesos_reflexivos"
+  );
+  seleccion.disabled = false;
+  var categoria = seleccion.options[seleccion.selectedIndex].text;
+  var limpiar_objetos = document.getElementById(
+    "lista_entidades_seleccionadas_procesos_reflexivos"
+  );
+  limpiar_objetos.innerHTML = "";
+  data = {
+    categoria: categoria,
+    aspecto: document.getElementById("Aspectos_autoconsciencia_reflexivos")
+      .value,
+    sujeto: sujetoGuardarproceso_reflexivo,
+  };
+  if (data.categoria != -6 && data.aspecto != -6 && !!data.sujeto) {
+    post_api(
+      "http://alvapala.ddns.net:3000/api/get_objects_aspects",
+      data,
+      cargar_objetos_proceso_reflexivo,
+      (res) => {
+        console.log(res);
+      }
+    );
+  }
+
   var limpiar = document.getElementById("metrica_indirecta_reflexivos");
   limpiar.innerHTML = "";
   var seleccionIndicador = document.getElementById(
@@ -5649,7 +5666,6 @@ function modificar_proceso_pre_reflexivo_boton() {
       cont_paso_modificar++;
       saltar_paso_pre;
       cargar_select_tipo_comunicacion_modificar();
-      cargar_select_alcance_recoleccion_modificar();
       cargar_select_propiedades_pre_reflexivos();
     } else {
       alert("No se ha podido guardar, verifique todos los campos");
@@ -5689,7 +5705,6 @@ function saltar_proceso_pre_reflexivo_boton() {
     saltar_paso_pre++;
     cont_paso_modificar_reflexivos++;
     cargar_select_tipo_comunicacion_modificar();
-    cargar_select_alcance_recoleccion_modificar();
     cargar_select_propiedades_pre_reflexivos();
     document
       .getElementById("modal_metodo_mod")
@@ -5901,42 +5916,6 @@ function cargar_select_tipo_comunicacion_modificar_pre_reflexivos(json) {
 
 function error_cargar_select_tipo_comunicacion_modificar_pre_reflexivos(error) {
   console.log(error);
-}
-
-function cargar_select_alcance_recoleccion_modificar() {
-  data2 = {
-    tipo: "TIPO_RECOLECCION",
-  };
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_enumeracion",
-    data2,
-    cargar_select_tipo_recoleccion_metodos_modificar,
-    error_cargar_select_tipo_recoleccion_metodos_modificar
-  );
-}
-
-function cargar_select_tipo_recoleccion_metodos_modificar(json) {
-  var ope = document.getElementById("alcance_recoleccion_modificar");
-  var opcion = document.createElement("option");
-  var seleccionTipo = document.getElementById("alcance_recoleccion_modificar")
-    .value;
-  opcion.innerHTML = "Seleccione..";
-  opcion.value = "-6";
-  ope.innerHTML = "";
-  ope.appendChild(opcion);
-  json.forEach((element) => {
-    var option = document.createElement("option");
-    option.value = element.id;
-    if (seleccionTipo == option.value) {
-      option.selected = true;
-    }
-    option.innerHTML = element.nombre;
-    ope.appendChild(option);
-  });
-}
-
-function error_cargar_select_tipo_recoleccion_metodos_modificar() {
-  alert("No se cargo el select tipo comunicacion");
 }
 
 function cargar_select_propiedades_pre_reflexivos() {

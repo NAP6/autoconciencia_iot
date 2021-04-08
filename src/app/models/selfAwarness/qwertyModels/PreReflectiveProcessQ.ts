@@ -18,13 +18,12 @@ export class PreReflectiveProcessQ
 	       values (
 	      '${this.name}',
 	      '${this.description}',
-	      '${
+	      ${
           this.executionPeriodStart == undefined
-            ? "NULL" : ""+this.executionPeriodStart+""
-        }',
-	     '${
-         this.executionPeriodEnd == undefined ? "NULL" : this.executionPeriodEnd
-       }',
+            ? "NULL":"'"+this.executionPeriodStart + "'"},
+	     ${
+         this.executionPeriodEnd == undefined ? "NULL" : "'"+this.executionPeriodEnd
+       +"'"},
 		${this.active},
 		${value[tag.indexOf("/@/ASPECTID/@/")]},
 		${value[tag.indexOf("/@/SUBJECT/@/")]},

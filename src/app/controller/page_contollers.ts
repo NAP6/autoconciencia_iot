@@ -85,3 +85,4 @@ export{
 add_reflective_process,
 get_reflective_process,
 } from "./page_contollers/reflective_process";
+export{get_properties} from"./page_contollers/property"
