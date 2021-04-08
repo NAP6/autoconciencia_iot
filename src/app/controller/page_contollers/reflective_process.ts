@@ -47,7 +47,7 @@ export async function add_reflective_process(req: Request, res: Response) {
 	  if(newProcess.finP){
 		  process.executionPeriodEnd=newProcess.finP;
 	  }
-    process.active = newProcess.active;
+    process.active =true;
     var rows = await db.qwerty(
       process.toSqlInsert(
         ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"],
@@ -55,6 +55,22 @@ export async function add_reflective_process(req: Request, res: Response) {
       )
     );
     res.json(rows);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function del_reflective_process(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var newProcess = req.body;
+    var process_pre: ReflectiveProcessQ = new ReflectiveProcessQ(
+      newProcess.id,
+      "",
+      "",
+      -1
+    );
+    await db.qwerty(process_pre.toSqlDelete([]));
+    res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

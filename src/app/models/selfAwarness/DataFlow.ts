@@ -7,8 +7,8 @@ export class DataFlow{
     private _dataFlowType;
     private _communicationtType;
     private _unitOfTime;
-    private _executionTimeInterval: number;
-    private _flowExecutionTime: Date;
+    private _executionTimeInterval: number|undefined;
+    private _flowExecutionTime: Date|undefined;
     private _support:CollectionMethod[];
     constructor(
       id: number,
@@ -16,8 +16,8 @@ export class DataFlow{
       dataFlowType,
       communicationtType,
       unitOfTime,
-      executionTimeInterval:number,
-      flowExecutionTime:Date,
+      executionTimeInterval?:number,
+      flowExecutionTime?:Date,
     ) {
       this._id = id; 
       this._description=description;

@@ -75,15 +75,20 @@ export async function add_pre_reflective_process(req: Request, res: Response) {
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
-}
-export async function del_scales(req: Request, res: Response) {
+}*/
+export async function del_pre_reflective_process(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var newScale = req.body;
-    var scale: ScaleQ = new ScaleQ(newScale.id, "", "", "");
-    await db.qwerty(scale.toSqlDelete([]));
+    var newProcess = req.body;
+    var process_pre: PreReflectiveProcessQ = new PreReflectiveProcessQ(
+      newProcess.id,
+      "",
+      "",
+      -1
+    );
+    await db.qwerty(process_pre.toSqlDelete([]));
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
-}*/
+}

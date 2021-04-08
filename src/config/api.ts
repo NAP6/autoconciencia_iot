@@ -106,6 +106,7 @@ export default function (app: Application) {
     .route("/api/get_metrics/")
     .get(rt.get_metrics)
     .post(rt.get_metrics_aspects);
+	app.post("/api/get_metrics_type",rt.get_metrics_type);
   //Aspectos
   //app.route("/api/get_aspects/").get(rt.get_aspects);
   //app.post("/api/add_aspects/", rt.add_aspects);
@@ -144,9 +145,13 @@ export default function (app: Application) {
   app.post("/api/get_objects_aspects/", rt.get_objects_aspects);
   app.post("/api/add_pre_reflective_process", rt.add_pre_reflective_process);
   app.get("/api/get_pre_reflective_process",rt.get_pre_reflective_process);
+	app.post("/api/del_pre_reflective_process",rt.del_pre_reflective_process);
 	//API PROPIEDADES
   app.post("/api/get_properties",rt.get_properties);
+	//API FLUJO DATOS
+  app.post("/api/get_data_flow",rt.get_data_flow);
 	//Apis usadas para los procesos reflexivos
   app.post("/api/add_reflective_process",rt.add_reflective_process);
 	app.get("/api/get_reflective_process",rt.get_reflective_process);
+	app.post("/api/del_reflective_process",rt.del_reflective_process);
 }

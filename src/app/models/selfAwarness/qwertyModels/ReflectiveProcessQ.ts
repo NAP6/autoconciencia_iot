@@ -18,9 +18,9 @@ export class ReflectiveProcessQ
     values (
     '${this.name}',
     '${this.description}',
-    '${this.executionPeriodStart == undefined? "NULL": "'" + this.executionPeriodStart + "'"}',
-    '${this.executionPeriodEnd == undefined? "NULL":"'"+ this.executionPeriodEnd+"'"}',
-    ${this.active},			
+    ${this.executionPeriodStart == undefined? "NULL": "'" + this.executionPeriodStart + "'"},
+    ${this.executionPeriodEnd == undefined? "NULL":"'"+ this.executionPeriodEnd+"'"},
+    ${this.active?1:0},			
     ${value[tag.indexOf("/@/ASPECTID/@/")]},
     ${value[tag.indexOf("/@/SUBJECT/@/")]},
     ${this.type_process},
@@ -54,7 +54,7 @@ ${value[tag.indexOf("/@/MODEL/@/")]})`;
     return sql;
   }
   toSqlDelete(value: string[]): string {
-    var sql = ` `;
+    var sql = `DELETE FROM procesoautoconsciencia WHERE pa_id=${this.id}`;
     return sql;
   }
 
