@@ -8,7 +8,8 @@ export class PropertyQ extends Property implements SQL_Qwerty {
   toSqlSelect(tag: string[], value: string[]): string {
     var sql = `SELECT
     	pro.pro_id as id,
-	pro.pro_nombre as nombre
+	pro.pro_nombre as nombre,
+	pro.obj_id as obj_id
 	  FROM
 	  propiedad pro,
 	  objeto obj,
