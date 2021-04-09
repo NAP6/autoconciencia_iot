@@ -33,6 +33,7 @@ export async function add_deployment_resources(req: Request, res: Response) {
         data.EspecificoTipo.formula
       );
       var rows = await db.qwerty(formula.toSqlInsert([], []));
+console.log("ADD"+rows);
       id = rows[0][0].id;
     } else if (data.tipoRecurso == "1") {
       var funcion = new FunctionQ(

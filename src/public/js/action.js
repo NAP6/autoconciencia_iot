@@ -5097,9 +5097,11 @@ function guardar_modelos_metodos_reflexivos() {
     return false;
   }
 }
-
+var metodo_calculo = undefined;
+var modelo_analisis_reflexivos = undefined;
 function mensajeCorrectoGuardarMetodosReflexivos(json) {
-	console.log(json);
+  metodo_calculo = json[0];
+  modelo_analisis_reflexivos = json[1];
   document.getElementById("inicio_metodos_reflexivos").disabled = true;
   document.getElementById("fin_metodos_reflexivos").disabled = true;
   document.getElementById("tipo_recurso_metodos_reflexivo").disabled = true;
@@ -6587,12 +6589,11 @@ function error_cargar_sujetos_activos_procesos_modificar_reflexivos(error) {
 }
 
 $("#criterio_de_decision_modelo").change(function () {
-  var seleccionCriterio = document.getElementById(
-    "criterio_de_decision_modelo"
-  ).value;
+  var seleccionCriterio = document.getElementById("criterio_de_decision_modelo")
+    .value;
   post_api(
     "http://alvapala.ddns.net:3000/api/get_umbral",
-	  {criterio:seleccionCriterio},
+    { criterio: seleccionCriterio },
     cargar_lista_umbrales_proceso_reflexivo,
     error_cargar_lista_umbrales_proceso_reflexivo
   );
@@ -6669,24 +6670,13 @@ function recomendaciones_procesos_reflexivos() {
 
 function AbrirModalAgregarVariablesSimulacion() {
   $("#modal_variables_simulacion").modal("show");
-  recuperar_ultimo_metodo_aprendizaje();
+consultar_tabla_varibles();
 }
 
-function recuperar_ultimo_metodo_aprendizaje() {
+function consultar_tabla_varibles() {
   post_api(
-    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
-    { id: 23 },
-    consultar_tabla_varibles,
-    (res) => {
-      console.log(res);
-    }
-  );
-}
-
-function consultar_tabla_varibles(json) {
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_variable_simulacion/",
-    { mea_id: json.id },
+    "http://alvapala.ddns.net:3000/api/get_simulation_variable/",
+    { mea_id: metodo_calculo },
     cargar_tabla_variables_simulacion,
     (res) => {
       console.log(res);
@@ -6699,15 +6689,16 @@ function cerrar_modal_variables_simulacion() {
 }
 
 function cargar_tabla_variables_simulacion(json) {
+	console.log(json);
   res = "";
-  json.procesos.forEach((as) => {
+  json.forEach((as) => {
     res += "<tr>";
     res += `<td><input type="radio" name="variable_simulacion_seleccionada" value="${
       as.id
-    }" data-name="${as.nombre}" data-activo="${as.activo == "true"}"></td>`;
+    }" data-name="${as.name}" data-active="${as.active == 1}"></td>`;
     res += `<td>${as.id}</td>`;
-    res += `<td>${as.nombre}</td>`;
-    if (as.activo == "true")
+    res += `<td>${as.name}</td>`;
+    if (as.active == 1)
       res += `<td><input type="checkbox" disabled checked></td>`;
     else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";
@@ -6722,23 +6713,12 @@ function agregar_variables_simulacion() {
 }
 
 function guardarVariableSimulacion() {
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
-    {
-      id: 23,
-    },
-    enviarDatos_variables_simulacion,
-    errorenviarDatos_variables_simulacion
-  );
-}
-
-function enviarDatos_variables_simulacion(json) {
   var nombre = document.getElementById("nombre_variable_simulacion").value;
   post_api(
-    "http://alvapala.ddns.net:3000/api/add_variable_simulacion/",
+    "http://alvapala.ddns.net:3000/api/add_simulation_variable/",
     {
-      nombre: nombre,
-      mea_id: json.id,
+      name: nombre,
+      mea_id: metodo_calculo,
     },
     variables_guardadas_correctamente,
     error_guardando_variables
@@ -6749,16 +6729,15 @@ function enviarDatos_variables_simulacion(json) {
 function errorenviarDatos_variables_simulacion(error) {
   console.log(error);
 }
-
-function cerrar_agregar_variables_simulacion() {
-  $("#modal_variables_simulacion").modal("show");
-  $("#modal_agregar_variables_simulacion").modal("hide");
-}
-
 function variables_guardadas_correctamente(json) {
   $("#modal_variables_simulacion").modal("show");
   $("#modal_agregar_variables_simulacion").modal("hide");
-  setTimeout(recuperar_ultimo_metodo_aprendizaje, 100);
+  setTimeout(consultar_tabla_varibles, 100);
+}
+function cerrar_agregar_variables_simulacion() {
+  $("#modal_variables_simulacion").modal("show");
+  $("#modal_agregar_variables_simulacion").modal("hide");
+  setTimeout(consultar_tabla_varibles, 100);
 }
 
 function error_guardando_variables(error) {
@@ -6775,8 +6754,9 @@ function eliminar_variables_simulacion() {
     }
   });
   if (!!id) {
+	  if(confirm("Esta seguro de que desea eliminar la variable")){
     post_api(
-      "http://alvapala.ddns.net:3000/api/del_variable_simulacion/",
+      "http://alvapala.ddns.net:3000/api/del_simulation_variable/",
       {
         id: id,
       },
@@ -6787,7 +6767,8 @@ function eliminar_variables_simulacion() {
         console.log(res);
       }
     );
-    setTimeout(recuperar_ultimo_metodo_aprendizaje, 100);
+	  }
+    setTimeout(consultar_tabla_varibles, 100);
   } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -6800,7 +6781,7 @@ function modificar_variables_simulacion() {
     if (elem.checked) {
       id = elem.value;
       name = elem.dataset.name;
-      activo = elem.dataset.activo == "true";
+      activo = elem.dataset.active == "true";
       return;
     }
   });
@@ -6820,13 +6801,12 @@ function modificar_variables_simulacion() {
 function ModificarVariableSimulacions() {
   var data = {
     id: document.getElementById("id_variable_simulacion").value,
-    nombre: document.getElementById("nombre_variable_simulacion_modificar")
-      .value,
-    activo: document.getElementById("activoVariableSimulacion_modificar")
+    name: document.getElementById("nombre_variable_simulacion_modificar").value,
+    active: document.getElementById("activoVariableSimulacion_modificar")
       .checked,
   };
   post_api(
-    "http://alvapala.ddns.net:3000/api/upd_variable_simulacion/",
+    "http://alvapala.ddns.net:3000/api/upd_simulation_variable/",
     data,
     (res) => {
       console.log(res);
@@ -6835,7 +6815,7 @@ function ModificarVariableSimulacions() {
       console.log(res);
     }
   );
-  setTimeout(recuperar_ultimo_metodo_aprendizaje, 100);
+  setTimeout(consultar_tabla_varibles, 100);
   $("#modal_modificar_variable_simulacion").modal("hide");
   $("#modal_variables_simulacion").modal("show");
 }
