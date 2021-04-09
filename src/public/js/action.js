@@ -3621,7 +3621,7 @@ function cargar_propiedades_select(json) {
     var option = document.createElement("option");
     option.value = element.id;
     option.innerHTML = element.nombre;
-    option.dataset.id_objeto = element.obj_id;
+    option.dataset.obj = element.obj_id;
     ope.appendChild(option);
   });
 }
@@ -3780,18 +3780,11 @@ function error_cargar_select_tipo_comunicacion() {
 }
 
 $("#criterio_de_decision").change(function () {
-  var seleccionCriterio = document.getElementById("criterio_de_decision");
-  var tipo_criterio =
-    seleccionCriterio.options[seleccionCriterio.selectedIndex].text;
-
-  data = {
-    nombre: tipo_criterio,
-  };
+  var seleccionCriterio = document.getElementById("criterio_de_decision").value;
   post_api(
     "http://alvapala.ddns.net:3000/api/get_umbral",
-    data,
-    cargar_lista_umbrales_proceso,
-    error_cargar_lista_umbrales_proceso
+	  {criterio:seleccionCriterio},
+    cargar_lista_umbrales_proceso,(res)=>{console.log(res)}
   );
 });
 
@@ -3800,7 +3793,7 @@ function cargar_lista_umbrales_proceso(json) {
   json.umbrales.forEach((cd) => {
     res += `<tr onClick="visibilidad_acciones_umbral('${cd.id}')">`;
     res += `<td>${cd.id}</td>`;
-    res += `<td>${cd.nombre}</td>`;
+    res += `<td>${cd.name}</td>`;
     res += `<td>${cd.inferior}</td>`;
     res += `<td>${cd.superior}</td>`;
     res += "</tr>";
@@ -4264,6 +4257,7 @@ function guardar_modelos_metodos() {
   var proceso_id = document.getElementById("id_proceso_pre_reflexivo").value;
   var indicador_id = document.getElementById("indicador_modelo").value;
   var flujo_id = document.getElementById("flujo_de_datos").value;
+	var obj_id=$('option:selected',document.getElementById("proiedad_recoleccion")).attr('data-obj');
   if (
     mr_tipo != "-6" &&
     ma_tipo != "-6" &&
@@ -4280,6 +4274,8 @@ function guardar_modelos_metodos() {
         pro_id: pro_id == "-6" ? undefined : pro_id,
         met_id: met_id == "-6" ? undefined : met_id,
         flu_id: flujo_id,
+	      obj_id:obj_id,
+
       },
       m_modelo: {
         ma_tipo: ma_tipo,
@@ -4315,6 +4311,7 @@ function guardar_modelos_metodos() {
 function mensajeCorrectoGuardarMetodos(json) {
   document.getElementById("tipo_comunicacion").disabled = true;
   document.getElementById("proiedad_recoleccion").disabled = true;
+  document.getElementById("flujo_de_datos").disabled = true;
   document.getElementById("metrica_directa").disabled = true;
   document.getElementById("tipo_recurso").disabled = true;
   document.getElementById("indicador_modelo").disabled = true;
@@ -4972,7 +4969,7 @@ function guardar_proceso_pre_reflexivo_boton() {
   } else if (cont_paso == 3) {
     history.back();
     consultar_api(
-      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/get_pre_reflective_process",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );

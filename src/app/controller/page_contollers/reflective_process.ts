@@ -83,7 +83,6 @@ export async function del_reflective_process(req: Request, res: Response) {
   }
 }
 
-
 export async function add_metodo_modelo(req: Request, res: Response) {
   if (req.session?.user) {
     var data = req.body;
@@ -92,18 +91,28 @@ export async function add_metodo_modelo(req: Request, res: Response) {
     var modeloID = req.session!.active_model.modelID;
     var coll = new CollectionMethodQ(-1, "");
     coll.produces = new DirectMetric(data.m_recoleccion.met_id, "", "", "", "");
-    coll.isSupported = new DataFlow(data.m_recoleccion.flu_id, "", "",data.m_recoleccion.mr_tipo, "");
+    coll.isSupported = new DataFlow(
+      data.m_recoleccion.flu_id,
+      "",
+      "",
+      data.m_recoleccion.mr_tipo,
+      ""
+    );
     coll.collectsProperty = [new Property(data.m_recoleccion.pro_id, "")];
     var row1 = await db.qwerty(
       coll.toSqlInsert(
         ["/@/PROCES/@/", "/@/MODEL/@/", "/@/OBJECT/@/"],
-        [data.proceso_id, modeloID, '' /* Aqui falta un valor*/]
+        [data.proceso_id, modeloID, data.m_recoleccion.obj_id]
       )
     );
-    var anali = new AnalysisModelQ(data.m_modelo.ma_tipo, "");
-    anali.produces = new Indicator(data.m_modelo.met_id, "", "", "", ""); 
+	  console.log(data.m_modelo.ma_tipo);
+    var anali = new AnalysisModelQ(-1,data.m_modelo.ma_tipo);
+    anali.produces = new Indicator(data.m_modelo.met_id, "", "", "", "");
     var row2 = await db.qwerty(
-      anali.toSqlInsert(["/@/PROCES/@/", "/@/CRITERIA/@/"], [data.proceso_id, data.m_modelo.criterio_id])
+      anali.toSqlInsert(
+        ["/@/PROCES/@/", "/@/CRITERIA/@/"],
+        [data.proceso_id, data.m_modelo.criterio_id]
+      )
     );
     res.json([row1.insertId, row2.insertId]);
   } else {
