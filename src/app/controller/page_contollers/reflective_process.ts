@@ -108,8 +108,7 @@ calc.calculationPeriodEnd=data.m_calculo.fin;
         [data.proceso_id, data.modelo.criterio_id]
       )
     );
-	  console.log(row1);
-    res.json([row1.insertId, row2.insertId]);
+    res.json([row1[0][0].id, row2[0][0].id]);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

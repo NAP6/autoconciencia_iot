@@ -159,8 +159,8 @@ export default function (app: Application) {
   //Metodo de aprendizaje
   app.post("/api/add_metodo_modelo2", rt.add_metodo_modelo2);
 	//Variables de simulacion para el metodo de procesos reflexivos
- app.post("/api/",rt.get_simulation_variable);
- app.post("/api/",rt.add_simulation_variable);
- app.post("/api/",rt.upd_simulation_variable);
- app.post("/api/",rt.del_simulation_variable);
+ app.post("/api/get_simulation_variable",rt.get_simulation_variable);
+ app.post("/api/add_simulation_variable",rt.add_simulation_variable);
+ app.post("/api/upd_simulation_variable",rt.upd_simulation_variable);
+ app.post("/api/del_simulation_variable",rt.del_simulation_variable);
 }
