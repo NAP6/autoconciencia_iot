@@ -3783,8 +3783,11 @@ $("#criterio_de_decision").change(function () {
   var seleccionCriterio = document.getElementById("criterio_de_decision").value;
   post_api(
     "http://alvapala.ddns.net:3000/api/get_umbral",
-	  {criterio:seleccionCriterio},
-    cargar_lista_umbrales_proceso,(res)=>{console.log(res)}
+    { criterio: seleccionCriterio },
+    cargar_lista_umbrales_proceso,
+    (res) => {
+      console.log(res);
+    }
   );
 });
 
@@ -4246,6 +4249,7 @@ function procesos_pre_reflexivos_guardados_exito(json) {
 }
 function procesos_reflexivos_guardados_exito(json) {
   console.log("Exito");
+  document.getElementById("id_proceso_reflexivo").value = json.insertId;
 }
 
 function guardar_modelos_metodos() {
@@ -4257,7 +4261,10 @@ function guardar_modelos_metodos() {
   var proceso_id = document.getElementById("id_proceso_pre_reflexivo").value;
   var indicador_id = document.getElementById("indicador_modelo").value;
   var flujo_id = document.getElementById("flujo_de_datos").value;
-	var obj_id=$('option:selected',document.getElementById("proiedad_recoleccion")).attr('data-obj');
+  var obj_id = $(
+    "option:selected",
+    document.getElementById("proiedad_recoleccion")
+  ).attr("data-obj");
   if (
     mr_tipo != "-6" &&
     ma_tipo != "-6" &&
@@ -4274,8 +4281,7 @@ function guardar_modelos_metodos() {
         pro_id: pro_id == "-6" ? undefined : pro_id,
         met_id: met_id == "-6" ? undefined : met_id,
         flu_id: flujo_id,
-	      obj_id:obj_id,
-
+        obj_id: obj_id,
       },
       m_modelo: {
         ma_tipo: ma_tipo,
@@ -5057,17 +5063,17 @@ function guardar_modelos_metodos_reflexivos() {
       m_calculo: {
         inicio: inicio_periodo,
         fin: fin_periodo,
-        tipo_recurso: tipo_recurso_metodo,
+        ma_tipo: tipo_recurso_metodo,
         met_id: metricaIndirecta,
       },
       modelo: {
+        ma_tipo: tipo_recurso_modelos,
         criterio_id: criterioD,
-        modeloTipo: tipo_recurso_modelos,
         met_id: metricaIndicador,
       },
     };
     post_api(
-      "http://alvapala.ddns.net:3000/api/add_metodo_modelo_reflexivos",
+      "http://alvapala.ddns.net:3000/api/add_metodo_modelo2",
       datos,
       mensajeCorrectoGuardarMetodosReflexivos,
       errormensajeCorrectoGuardarMetodosReflexivos
@@ -5093,6 +5099,7 @@ function guardar_modelos_metodos_reflexivos() {
 }
 
 function mensajeCorrectoGuardarMetodosReflexivos(json) {
+	console.log(json);
   document.getElementById("inicio_metodos_reflexivos").disabled = true;
   document.getElementById("fin_metodos_reflexivos").disabled = true;
   document.getElementById("tipo_recurso_metodos_reflexivo").disabled = true;
@@ -6582,15 +6589,10 @@ function error_cargar_sujetos_activos_procesos_modificar_reflexivos(error) {
 $("#criterio_de_decision_modelo").change(function () {
   var seleccionCriterio = document.getElementById(
     "criterio_de_decision_modelo"
-  );
-  var tipo_criterio =
-    seleccionCriterio.options[seleccionCriterio.selectedIndex].text;
-  data = {
-    nombre: tipo_criterio,
-  };
+  ).value;
   post_api(
     "http://alvapala.ddns.net:3000/api/get_umbral",
-    data,
+	  {criterio:seleccionCriterio},
     cargar_lista_umbrales_proceso_reflexivo,
     error_cargar_lista_umbrales_proceso_reflexivo
   );
@@ -6601,7 +6603,7 @@ function cargar_lista_umbrales_proceso_reflexivo(json) {
   json.umbrales.forEach((cd) => {
     res += `<tr onClick="visibilidad_acciones_umbral_reflexivo('${cd.id}')">`;
     res += `<td>${cd.id}</td>`;
-    res += `<td>${cd.nombre}</td>`;
+    res += `<td>${cd.name}</td>`;
     res += `<td>${cd.inferior}</td>`;
     res += `<td>${cd.superior}</td>`;
     res += "</tr>";

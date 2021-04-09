@@ -7,8 +7,8 @@ import { IndirectMetric } from "./IndirectMetric";
 
 export class CalculationMethod extends LearningReasoningMethod {
   private _implementationResourceType;
-  private _calculationPeriodStart: Date;
-  private _calculationPeriodEnd: Date;
+  private _calculationPeriodStart: Date | undefined;
+  private _calculationPeriodEnd: Date | undefined;
   private _containsSimulationScenario: SimulationScenario[];
   private _isImplmentedBy: ImplementationResource | undefined;
   private _containsArgumentToParameterMapping: ArgumentToParameterMapping[];
@@ -18,8 +18,8 @@ export class CalculationMethod extends LearningReasoningMethod {
   constructor(
     id: number,
     implementationResourceType,
-    calculationPeriodStart: Date,
-    calculationPeriodEnd: Date
+    calculationPeriodStart?: Date,
+    calculationPeriodEnd?: Date
   ) {
     super(id);
     this._implementationResourceType = implementationResourceType;
@@ -38,19 +38,19 @@ export class CalculationMethod extends LearningReasoningMethod {
     this._implementationResourceType = value;
   }
 
-  get calculationPeriodStart(): Date {
+  get calculationPeriodStart(): Date |undefined {
     return this._calculationPeriodStart;
   }
 
-  set calculationPeriodStart(value: Date) {
+  set calculationPeriodStart(value: Date | undefined) {
     this._calculationPeriodStart = value;
   }
 
-  get calculationPeriodEnd(): Date {
+  get calculationPeriodEnd(): Date|undefined {
     return this._calculationPeriodEnd;
   }
 
-  set calculationPeriodEnd(value: Date) {
+  set calculationPeriodEnd(value: Date|undefined) {
     this._calculationPeriodEnd = value;
   }
 
