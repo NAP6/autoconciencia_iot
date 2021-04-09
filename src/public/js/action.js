@@ -6177,20 +6177,13 @@ function cargar_variables_valor_table(json) {
 function agregar_variables_valor() {
   $("#modal_escenarios_simulacion").modal("hide");
   $("#modal_agregar_variables_valores_simulacion").modal("show");
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
-    { id: 23 },
-    consultar_variables_select,
-    (res) => {
-      console.log(res);
-    }
-  );
+    consultar_variables_select(metodo_calculo);
 }
 
-function consultar_variables_select(json) {
+function consultar_variables_select(mea_id) {
   post_api(
-    "http://alvapala.ddns.net:3000/api/get_variable_simulacion/",
-    { mea_id: json.id },
+    "http://alvapala.ddns.net:3000/api/get_simulation_variable/",
+    { mea_id: mea_id },
     cargar_variables_simulacion_select,
     (res) => {
       console.log(res);
@@ -6820,10 +6813,10 @@ function cargar_variables_simulacion_select(json) {
   opcion.value = "-6";
   ope.innerHTML = "";
   ope.appendChild(opcion);
-  json.procesos.forEach((element) => {
+  json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
-    option.innerHTML = element.nombre;
+    option.innerHTML = element.name;
     ope.appendChild(option);
   });
 }
