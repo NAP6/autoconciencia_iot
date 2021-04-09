@@ -8,7 +8,7 @@ export async function get_simulation_scenario(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var mea_id = req.body.mea_id;
-    var escenario: SimulationScenarioQ = new SimulationScenarioQ(-1, "");
+    var escenario: SimulationScenarioQ = new SimulationScenarioQ(-1, "","");
     var rows = await db.qwerty(
       escenario.toSqlSelect(["/@/METHOD/@/"], [mea_id])
     );
@@ -17,44 +17,46 @@ export async function get_simulation_scenario(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export async function add_simulation_sce(req: Request, res: Response) {
+export async function add_simulation_scenario(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var newVariable = req.body;
-    var variable: SimulationVariableQ = new SimulationVariableQ(
+    var newEscenario = req.body;
+    var escenario: SimulationScenarioQ = new SimulationScenarioQ(
       -1,
-      newVariable.name
+      newEscenario.name,
+	    newEscenario.description,
     );
-    variable.active = variable.active;
+    escenario.active = escenario.active;
     await db.qwerty(
-      variable.toSqlInsert(["/@/METHOD/@/"], [newVariable.mea_id])
+      escenario.toSqlInsert(["/@/METHOD/@/"], [newEscenario.mea_id])
     );
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export async function upd_simulation_variable(req: Request, res: Response) {
+export async function upd_simulation_scenario(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var newVariable = req.body;
-    var variable: SimulationVariableQ = new SimulationVariableQ(
-      newVariable.id,
-      newVariable.name
+    var newEscenario = req.body;
+    var escenario: SimulationScenarioQ = new SimulationScenarioQ(
+      newEscenario.id,
+      newEscenario.name,
+	    newEscenario.description
     );
-    variable.active = newVariable.active == 1;
-    await db.qwerty(variable.toSqlUpdate([], []));
+    escenario.active = newEscenario.active == 1;
+    await db.qwerty(escenario.toSqlUpdate([], []));
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export async function del_simulation_variable(req: Request, res: Response) {
+export async function del_simulation_scenario(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var newVariable = req.body;
-    var variable: SimulationVariableQ = new SimulationVariableQ(newVariable.id,"");
-    await db.qwerty(variable.toSqlDelete([]));
+    var newEscenario = req.body;
+    var escenario: SimulationScenarioQ = new SimulationScenarioQ(newEscenario.id,"","");
+    await db.qwerty(escenario.toSqlDelete([]));
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

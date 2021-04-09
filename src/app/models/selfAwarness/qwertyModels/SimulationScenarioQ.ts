@@ -34,7 +34,7 @@ export class SimulationScenarioQ
 	  	SET
 	  	es_nombre='${this.name}',
 		  es_descripcion='${this.description}',
-		  es_activo='${this.active}'
+		  es_activo='${this.active ? 1 : 0}'
 		  WHERE
 	 	es_id=${this.id}
 		  `;

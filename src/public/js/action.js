@@ -5970,13 +5970,13 @@ function recuperar_ultimo_metodo_aprendizaje_escenario() {
 
 function abrirModalEscenarioSimulacion() {
   $("#modal_escenarios_simulacion").modal("show");
-  recuperar_ultimo_metodo_aprendizaje_escenario();
+  consultar_tabla_escenarios();
 }
 
-function consultar_tabla_escenarios(json) {
+function consultar_tabla_escenarios() {
   post_api(
-    "http://alvapala.ddns.net:3000/api/ascenario_simulacion",
-    { mea_id: json.id },
+    "http://alvapala.ddns.net:3000/api/get_simulation_scenario",
+    { mea_id: metodo_calculo },
     cargar_tabla_escenarios_simulacion,
     error_cargar_tabla_escenarios_simulacion
   );
@@ -5984,17 +5984,17 @@ function consultar_tabla_escenarios(json) {
 
 function cargar_tabla_escenarios_simulacion(json) {
   res = "";
-  json.procesos.forEach((es) => {
+  json.forEach((es) => {
     res += `<tr onClick="visibilidad_variables_valores('${es.id}');"> `;
     res += `<td><input type="radio" name="escenario_seleccionado" value="${
       es.id
-    }" data-name="${es.nombre}" data-descripcion="${
-      es.descripcion
-    }" data-activo="${es.activo == "true"}"></td>`;
+    }" data-name="${es.name}" data-description="${
+      es.description
+    }" data-active="${es.active == 1}"></td>`;
     res += `<td>${es.id}</td>`;
-    res += `<td>${es.nombre}</td>`;
-    res += `<td>${es.descripcion}</td>`;
-    if (es.activo == "true")
+    res += `<td>${es.name}</td>`;
+    res += `<td>${es.description}</td>`;
+    if (es.active == 1)
       res += `<td><input type="checkbox" disabled checked></td>`;
     else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";
@@ -6016,33 +6016,24 @@ function agregar_escenario_simulacion() {
 }
 
 function guardarEscenarioSimulacions() {
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
-    {
-      id: 23,
-    },
-    enviarDatos_escenarios_simulacion,
-    errorenviarDatos_escenarios_simulacion
-  );
-}
-
-function enviarDatos_escenarios_simulacion(json) {
   var data = {
-    nombre: document.getElementById("nombre_escenario_simulacion").value,
-    descripcion: document.getElementById("descripcion_escenario_simulacion")
+    name: document.getElementById("nombre_escenario_simulacion").value,
+    description: document.getElementById("descripcion_escenario_simulacion")
       .value,
-    mea_id: json.id,
+    mea_id: metodo_calculo,
   };
   post_api(
-    "http://alvapala.ddns.net:3000/api/add_escenario_simulacion",
+    "http://alvapala.ddns.net:3000/api/add_simulation_scenario",
     data,
+    consultar_tabla_escenarios,
+
     error_guardar_escenarios_simulacion
   );
   document.getElementById("nombre_escenario_simulacion").value = "";
   document.getElementById("descripcion_escenario_simulacion").value = "";
 
   $("#modal_agregar_escenario_simulacion").modal("hide");
-  setTimeout(recuperar_ultimo_metodo_aprendizaje_escenario, 200);
+  setTimeout(consultar_tabla_escenarios, 100);
   $("#modal_escenarios_simulacion").modal("show");
 }
 
@@ -6064,19 +6055,21 @@ function eliminar_escenario_simulacion() {
     }
   });
   if (!!id) {
-    post_api(
-      "http://alvapala.ddns.net:3000/api/del_escenario_simulacion/",
-      {
-        id: id,
-      },
-      (res) => {
-        console.log(res);
-      },
-      (res) => {
-        console.log(res);
-      }
-    );
-    setTimeout(recuperar_ultimo_metodo_aprendizaje_escenario, 200);
+    if (confirm("Esta seguro que desea eliminar el Escenario")) {
+      post_api(
+        "http://alvapala.ddns.net:3000/api/del_escenario_simulacion/",
+        {
+          id: id,
+        },
+        (res) => {
+          console.log(res);
+        },
+        (res) => {
+          console.log(res);
+        }
+      );
+    }
+    setTimeout(consultar_tabla_escenarios, 100);
   } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -6090,8 +6083,8 @@ function modificar_escenario_simulacion() {
     if (elem.checked) {
       id = elem.value;
       name = elem.dataset.name;
-      descripcion = elem.dataset.descripcion;
-      activo = elem.dataset.activo == "true";
+      descripcion = elem.dataset.description;
+      activo = elem.dataset.active == "true";
       return;
     }
   });
@@ -6114,16 +6107,16 @@ function modificar_escenario_simulacion() {
 function ModificarEscenarioSimulacions() {
   var data = {
     id: document.getElementById("id_escenario_simulacion").value,
-    nombre: document.getElementById("nombre_escenario_simulacion_modificar")
+    name: document.getElementById("nombre_escenario_simulacion_modificar")
       .value,
-    descripcion: document.getElementById(
+    description: document.getElementById(
       "descripcion_escenario_simulacion_modificar"
     ).value,
-    activo: document.getElementById("activoEscenarioSimulacion_modificar")
+    active: document.getElementById("activoEscenarioSimulacion_modificar")
       .checked,
   };
   post_api(
-    "http://alvapala.ddns.net:3000/api/upd_escenario_simulacion/",
+    "http://alvapala.ddns.net:3000/api/upd_simulation_scenario/",
     data,
     (res) => {
       console.log(res);
@@ -6132,7 +6125,7 @@ function ModificarEscenarioSimulacions() {
       console.log(res);
     }
   );
-  setTimeout(recuperar_ultimo_metodo_aprendizaje_escenario, 200);
+  setTimeout(consultar_tabla_escenarios, 100);
   $("#modal_modificar_escenario_simulacion").modal("hide");
   $("#modal_escenarios_simulacion").modal("show");
 }
@@ -6670,7 +6663,7 @@ function recomendaciones_procesos_reflexivos() {
 
 function AbrirModalAgregarVariablesSimulacion() {
   $("#modal_variables_simulacion").modal("show");
-consultar_tabla_varibles();
+  consultar_tabla_varibles();
 }
 
 function consultar_tabla_varibles() {
@@ -6689,7 +6682,7 @@ function cerrar_modal_variables_simulacion() {
 }
 
 function cargar_tabla_variables_simulacion(json) {
-	console.log(json);
+  console.log(json);
   res = "";
   json.forEach((as) => {
     res += "<tr>";
@@ -6754,20 +6747,20 @@ function eliminar_variables_simulacion() {
     }
   });
   if (!!id) {
-	  if(confirm("Esta seguro de que desea eliminar la variable")){
-    post_api(
-      "http://alvapala.ddns.net:3000/api/del_simulation_variable/",
-      {
-        id: id,
-      },
-      (res) => {
-        console.log(res);
-      },
-      (res) => {
-        console.log(res);
-      }
-    );
-	  }
+    if (confirm("Esta seguro de que desea eliminar la variable")) {
+      post_api(
+        "http://alvapala.ddns.net:3000/api/del_simulation_variable/",
+        {
+          id: id,
+        },
+        (res) => {
+          console.log(res);
+        },
+        (res) => {
+          console.log(res);
+        }
+      );
+    }
     setTimeout(consultar_tabla_varibles, 100);
   } else alert("Debe seleccionar un elemento para eliminar");
 }

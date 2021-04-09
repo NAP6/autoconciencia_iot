@@ -92,4 +92,15 @@ export {
 } from "./page_contollers/reflective_process";
 export { get_properties } from "./page_contollers/property";
 export { get_data_flow } from "./page_contollers/data_flow";
-export{get_simulation_variable,add_simulation_variable,upd_simulation_variable,del_simulation_variable}from "./page_contollers/simulation_variable"
+export {
+  get_simulation_variable,
+  add_simulation_variable,
+  upd_simulation_variable,
+  del_simulation_variable,
+} from "./page_contollers/simulation_variable";
+export {
+  get_simulation_scenario,
+  add_simulation_scenario,
+  upd_simulation_scenario,
+  del_simulation_scenario,
+} from "./page_contollers/simulation_scenario";

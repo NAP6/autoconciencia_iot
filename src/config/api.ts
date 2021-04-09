@@ -163,4 +163,10 @@ export default function (app: Application) {
  app.post("/api/add_simulation_variable",rt.add_simulation_variable);
  app.post("/api/upd_simulation_variable",rt.upd_simulation_variable);
  app.post("/api/del_simulation_variable",rt.del_simulation_variable);
+	//Escenarios de simulacion para el metodo de procesos reflexivos
+ app.post("/api/get_simulation_scenario",rt.get_simulation_scenario);
+ app.post("/api/add_simulation_scenario",rt.add_simulation_scenario);
+ app.post("/api/upd_simulation_scenario",rt.upd_simulation_scenario);
+ app.post("/api/del_simulation_scenario",rt.del_simulation_scenario);
+
 }
