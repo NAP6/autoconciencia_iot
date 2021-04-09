@@ -64,9 +64,9 @@ export default function (app: Application) {
   app.post("/api/ascenario_simulacion/", api.escenario_simulacion);
   app.post("/api/del_escenario_simulacion/", api.del_escenario_simulacion);
   app.post("/api/upd_escenario_simulacion/", api.upd_escenario_simulacion);
-  app.post("/api/get_variables_valor/", api.get_variables_valor);
-  app.post("/api/add_variables_valor/", api.add_variables_valor);
-  app.post("/api/del_variables_valor/", api.del_variables_valor);
+  //app.post("/api/get_variables_valor/", api.get_variables_valor);
+  //app.post("/api/add_variables_valor/", api.add_variables_valor);
+  //pp.post("/api/del_variables_valor/", api.del_variables_valor);
   app.post("/api/upd_variables_valor/", api.upd_variables_valor);
   app.post("/api/get_variable_simulacion/", api.get_variable_simulacion);
   app.get("/api/get_variable_simulacion_id/", api.get_variable_simulacion_id);
@@ -145,6 +145,9 @@ export default function (app: Application) {
   app.post("/api/add_pre_reflective_process", rt.add_pre_reflective_process);
   app.get("/api/get_pre_reflective_process", rt.get_pre_reflective_process);
   app.post("/api/del_pre_reflective_process", rt.del_pre_reflective_process);
+  //Metodo de aprendizaje procesos pre relfexivos
+
+  app.post("/api/add_metodo_modelo", rt.add_metodo_modelo);
   //API PROPIEDADES
   app.post("/api/get_properties", rt.get_properties);
   //API FLUJO DATOS
@@ -154,5 +157,10 @@ export default function (app: Application) {
   app.get("/api/get_reflective_process", rt.get_reflective_process);
   app.post("/api/del_reflective_process", rt.del_reflective_process);
   //Metodo de aprendizaje
-  app.post("/api/add_metodo_modelo", rt.add_metodo_modelo);
+  app.post("/api/add_metodo_modelo2", rt.add_metodo_modelo2);
+	//Variables de simulacion para el metodo de procesos reflexivos
+ app.post("/api/",rt.get_simulation_variable);
+ app.post("/api/",rt.add_simulation_variable);
+ app.post("/api/",rt.upd_simulation_variable);
+ app.post("/api/",rt.del_simulation_variable);
 }

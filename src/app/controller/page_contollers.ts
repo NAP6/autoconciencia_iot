@@ -82,12 +82,14 @@ export {
   add_pre_reflective_process,
   get_pre_reflective_process,
   del_pre_reflective_process,
+  add_metodo_modelo,
 } from "./page_contollers/pre_reflective_process";
 export {
   add_reflective_process,
   get_reflective_process,
   del_reflective_process,
-  add_metodo_modelo,
+  add_metodo_modelo2,
 } from "./page_contollers/reflective_process";
 export { get_properties } from "./page_contollers/property";
 export { get_data_flow } from "./page_contollers/data_flow";
+export{get_simulation_variable,add_simulation_variable,upd_simulation_variable,del_simulation_variable}from "./page_contollers/simulation_variable"
