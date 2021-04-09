@@ -3,12 +3,12 @@ import { SQL_Qwerty } from "../../SQL_Qwerty";
 
 export class AnalysisModelQ extends AnalysisModel implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
-    var sql = `ModeloAnalisis(
-	         '${value[tag.indexOf('/@/PROCES/@/')]}',
-		 '${this.produces?.id}',
-                 '${this.implementationResourceType}',
-	         '${value[tag.indexOf('/@/CRITERIA/@/')]}',
-                  'id'`;
+    var sql = `call ModeloAnalisis(
+	         ${value[tag.indexOf('/@/PROCES/@/')]},
+		 ${this.produces?.id},
+                 ${this.implementationResourceType},
+	         ${value[tag.indexOf('/@/CRITERIA/@/')]},
+                  @id)`;
     return sql;
   }
   toSqlSelect(tag: string[], value: string[]): string {
