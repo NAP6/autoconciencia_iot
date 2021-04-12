@@ -12,7 +12,7 @@ export async function get_action(req: Request, res: Response) {
     var action: ActionQ = new ActionQ(-1, "", "");
 	action.isRecommendedln=req.body.umbral;
     var rows = await db.qwerty(action.toSqlSelect(["/@/METHOD/@/"], [metodo]));
-    res.json(rows);
+    res.json({umbral_id:req.body.umbral,acciones:rows});
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

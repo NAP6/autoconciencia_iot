@@ -3799,8 +3799,8 @@ function cargar_lista_umbrales_proceso(json) {
         mea_id: modelo_analisis_pre_reflexivos,
       },
       cargar_accion_table,
-      () => {
-        console.log("Error al cargar la tabla accion");
+      (res) => {
+        console.log("Error al cargar la tabla accion"+res);
       }
     );
   });
@@ -4181,23 +4181,21 @@ function agregarAccionesUmbrales() {
 function cargar_accion_table(json) {
   console.log(json);
   var templeate = document
-    .getElementById("templeta_tabla_accion")
+    .getElementById("templeate_tabla_accion")
     .content.cloneNode(true);
-  var seccion = document.getElementById("seccion_umbrales");
+  var seccion = document.getElementById("seccion_acciones");
   var body = templeate.querySelector("tbody");
-  json.umbrales.forEach((um) => {
+  json.acciones.forEach((um) => {
     var fila = document.createElement("tr");
     var dato = document.createElement("td");
     var input = document.createElement("input");
     input.type = "radio";
-    input.name = "umbral_seleccionado";
+    input.name = "accion_seleccionado";
     input.dataset.id = um.id;
     input.dataset.nombre = um.name;
-    input.dataset.interpretacion = um.interpretacion;
-    input.dataset.inferior = um.inferior;
-    input.dataset.superior = um.superior;
+    input.dataset.description = um.description;
     input.dataset.activo = um.active;
-    input.dataset.id_crite = json.id_descicion;
+    input.dataset.id_umbra = json.umbral_id;
     dato.appendChild(input);
     fila.appendChild(dato);
     dato = document.createElement("td");
@@ -4207,13 +4205,7 @@ function cargar_accion_table(json) {
     dato.innerHTML = um.name;
     fila.appendChild(dato);
     dato = document.createElement("td");
-    dato.innerHTML = um.interpretacion;
-    fila.appendChild(dato);
-    dato = document.createElement("td");
-    dato.innerHTML = um.inferior;
-    fila.appendChild(dato);
-    dato = document.createElement("td");
-    dato.innerHTML = um.superior;
+    dato.innerHTML = um.description;
     fila.appendChild(dato);
     input = document.createElement("input");
     input.type = "checkbox";
@@ -4224,9 +4216,9 @@ function cargar_accion_table(json) {
     fila.appendChild(dato);
     body.appendChild(fila);
   });
-  body.id += "_" + json.id_decicion;
+  body.id += "_" + json.umbral_id;
   var tabla = templeate.querySelector(".table");
-  tabla.id = "umbral_" + json.id_descicion;
+  tabla.id = "umbral_" + json.umbral_id;
   tabla.style.display = "none";
   seccion.appendChild(templeate);
 }
