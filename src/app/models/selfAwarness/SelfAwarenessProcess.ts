@@ -1,4 +1,3 @@
-
 import { Goal } from "./Goal";
 import { SelfAwarenessAspect } from "./SelfAwarenessAspect";
 
@@ -6,34 +5,25 @@ export class SelfAwarenessProcess {
   private _id: number;
   private _name: string;
   private _description: string;
-<<<<<<< HEAD
-  private _executionPeriodStart: Date;
-  private _executionPeriodEnd: Date;
-=======
   private _type_process:number;
   private _active:boolean;
   private _executionPeriodStart: Date|undefined;
   private _executionPeriodEnd: Date|undefined;
->>>>>>> f7eb99d5341fe9d727cfc1bf416fac600c69b3b4
   private _supports: Goal | undefined;
   private _captures: SelfAwarenessAspect | undefined;
-
   constructor(
     id: number,
     name: string,
     description: string,
-<<<<<<< HEAD
-    executionPeriodStart: Date,
-    executionPeriodEnd: Date
-=======
     type_process:number,
     executionPeriodStart?: Date,
     executionPeriodEnd?: Date
->>>>>>> f7eb99d5341fe9d727cfc1bf416fac600c69b3b4
   ) {
     this._id = id;
     this._name = name;
     this._description = description;
+    this._type_process=type_process;
+    this._active=true;
     this._executionPeriodStart = executionPeriodStart;
     this._executionPeriodEnd = executionPeriodEnd;
   }
@@ -62,9 +52,6 @@ export class SelfAwarenessProcess {
     this._description = value;
   }
 
-<<<<<<< HEAD
-  get executionPeriodStart(): Date {
-=======
   get type_process(): number {
     return this._type_process;
   }
@@ -80,7 +67,6 @@ export class SelfAwarenessProcess {
     this._active = value;
   }
   get executionPeriodStart(): Date|undefined {
->>>>>>> f7eb99d5341fe9d727cfc1bf416fac600c69b3b4
     return this._executionPeriodStart;
   }
 
