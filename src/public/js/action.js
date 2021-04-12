@@ -7426,6 +7426,65 @@ function verificarSeleccionAspectos(elemento) {
 }
 
 function get_aspectos_objetivos(id) {
+<<<<<<< HEAD
+    post_api(
+        "http://alvapala.ddns.net:3001/api/subjects_objects", { Object_id: id },
+        cargar_select_aspectos_objetivos,
+        (res) => {
+            console.log(res);
+        }
+    );
+}
+
+function cargar_select_aspectos_objetivos(json) {
+    console.log(json);
+    var listaPadres = [];
+    var listaId = [];
+    json.forEach(element => {
+        if (element.padre != null) {
+            listaPadres.push(element.padre);
+        }
+        listaId.push(element.id);
+    });
+    console.log(listaPadres);
+    console.log(listaId);
+    let eliminacionId = new Set([listaPadres].filter(x => !listaId.has(x)));
+    console.log(eliminacionId);
+    var ope = document.getElementById("select_objetivos");
+    ope.innerHTML = "";
+    var seleccione = document.createElement("option");
+    seleccione.innerHTML = "Seleccione..";
+    seleccione.value = "-6";
+    ope.appendChild(seleccione);
+    json.forEach((element) => {
+        if (eliminacionId.indexOf(element.id) != -1) {
+            var option = document.createElement("option");
+            option.value = element.id;
+            option.innerHTML = element.nombre;
+            ope.appendChild(option);
+        }
+    });
+}
+
+$("#CategoriaEntidadesAspectos").change(function() {
+    var limpiar2 = document.getElementById(
+        "lista_entidades_seleccionadas_aspectos"
+    );
+    limpiar2.innerHTML = "";
+    var seleccion = document.getElementById("CategoriaEntidadesAspectos");
+    var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
+    data = {
+        valorS: tipo_valor,
+        systemID: systemID,
+    };
+
+    post_api(
+        "http://alvapala.ddns.net:3001/api/entitys",
+        data,
+        cargar_posibles_entidades_modelo_aspecto,
+        error_cargar_posibles_entidades_modelo_aspecto
+    );
+=======
   post_api(
     "http://alvapala.ddns.net:3000/api/subjects_objects",
     { id: id },
@@ -7484,6 +7543,7 @@ $("#CategoriaEntidadesAspectos").change(function () {
     cargar_posibles_entidades_modelo_aspecto,
     error_cargar_posibles_entidades_modelo_aspecto
   );
+>>>>>>> f7058286a203196a70ff6d9a2046b9abe6cddc19
 });
 
 function cargar_posibles_entidades_modelo_aspecto(json) {

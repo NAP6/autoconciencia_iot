@@ -1,70 +1,66 @@
 <div class="modal fade" id="modal_activos_procesos" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog  modal-lg" role="document">
-            <div class="modal-content">
-	                <div class="modal-header">
-			                <h5 class="modal-title text-center" style="width: 100%;" id="exampleModalLabel">
-					                    Acciones
-							                    </h5>
-									                    <button type="button" class="close" onclick="cerrar_modal_activos()" aria-label="Close">
-											    												              <span aria-hidden="true">&times;</span>
-																								      													              </button>
-																																						                  </div>
-																																								              <div class="modal-body">
-																																									                      <h6>Umbrales</h6>
-																																											                      <div>
-																																													                          <table class="table table-hover">
-																																																                          <thead>
-																																																			                              <tr>
-																																																						                                      <th scope="col">Id</th>
-																																																										                                      <th scope="col">Nombre</th>
-																																																														                                      <th scope="col">Interpretación</th>
-																																																																		                                      <th scope="col">Inferior</th>
-																																																																						                                      <th scope="col">Superior</th>
-																																																																										                                  </tr>
-																																																																														                          </thead>
-																																																																																	                          <tbody>
-																																																																																				                              <tbody id="tabla_umbrales_procesos">
-																																																																																							                                  </tbody>
-																																																																																											                          </tbody>
-																																																																																														                      </table>
-																																																																																																                      </div>
-																																																																																																		                      <div class="row">
-																																																																																																				                          <div class="col-md-12 mb-2">
-																																																																																																							                          <button id="bt_add_activo" class="btn btn-primary d-none" onclick="agregarAccionesUmbrales()">
-																																																																																																										  						 Agregar
-																																																																																																																 						                        </button>
-																																																																																																																									                        <button id="bd_mod_activo" class="btn btn-primary d-none" onclick="modificarAccionesUmbrales()">
-																																																																																																																																												                    Modificar
-																																																																																																																																														    																                      </button>
-																																																																																																																																																																                              <button id="bd_del_activo" class="btn btn-primary d-none" onclick="eliminarAccionesUmbrales()">																																																																																						                          Eliminar																																																																																					                    </button>
-																																																																																																																																																																			                          </div>
-																																																																																																																																																																						                      <div class="row container">
-																																																																																																																																																																								                              <div class="col-12" id="seccion_acciones">
-																																																																																																																																																																											                              </div>
-																																																																																																																																																																														                          </div>
-																																																																																																																																																																																	                  </div>
-																																																																																																																																																																																			                  <div class="row">
-																																																																																																																																																																																					                      <template id="templeate_tabla_accion">
-																																																																																																																																																																																							                                  <table class="table table-hover">
-																																																																																																																																																																																											                                  <thead class="thead-dark">
-																																																																																																																																																																																															                                      <tr>
-																																																																																																																																																																																																			                                              <th scope="col">#</th>
-																																																																																																																																																																																																								                                              <th scope="col">Id</th>
-																																																																																																																																																																																																													                                              <th scope="col">Nombre</th>
-																																																																																																																																																																																																																		                                              <th scope="col">Descripción</th>
-																																																																																																																																																																																																																							                                              <th scope="col">Activo</th>
-																																																																																																																																																																																																																												                                          </tr>
-																																																																																																																																																																																																																																	                                  </thead>
-																																																																																																																																																																																																																																					                                  <tbody id="tabla_accion">
-																																																																																																																																																																																																																																									                                  </tbody>
-																																																																																																																																																																																																																																													                              </table>
-																																																																																																																																																																																																																																																                              </template>
-																																																																																																																																																																																																																																																			                      </div>
-																																																																																																																																																																																																																																																					                  </div>
-																																																																																																																																																																																																																																																							              <div class="modal-footer">
-																																																																																																																																																																																																																																																								                      <button type="button" class="btn btn-secondary" onclick="cerrar_modal_activos()">
-																																																																																																																																																																																																																																																										      																																																																																																																																																																															              Cancelar
-																																																																																																																																																																																																																																																																																																																																																																																																																																										      																																																																																																																																																																															              </button>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																													                  </div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																												          </div>																																																																																																																																																																																																																																																																																																																																																																																																																																	      </div>
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																													  <%- include('modal_accion'); %><%- include('modal_modificar_acciones_umbrales'); %>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" style="width: 100%;" id="exampleModalLabel">
+                    Acciones
+                </h5>
+                <button type="button" class="close" onclick="cerrar_modal_activos()" aria-label="Close">
+												              <span aria-hidden="true">&times;</span>
+													              </button>
+            </div>
+            <div class="modal-body">
+                <h6>Umbrales</h6>
+                <div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Interpretación</th>
+                                <th scope="col">Inferior</th>
+                                <th scope="col">Superior</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla_umbrales_procesos">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <button id="bt_add_activo" class="btn btn-primary d-none" onclick="agregarAccionesUmbrales()">
+						 Agregar </button>
+                        <button id="bd_mod_activo" class="btn btn-primary d-none" onclick="modificarAccionesUmbrales()">  Modificar  </button>
+                        <button id="bd_del_activo" class="btn btn-primary d-none" onclick="eliminarAccionesUmbrales()"> Eliminar </button>   
+			</div>
+                    <div class="row container">
+                        <div class="col-12" id="seccion_acciones">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <template id="templeate_tabla_accion">
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Activo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_accion">
+                                </tbody>
+                            </table>
+                        </template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="cerrar_modal_activos()"> Cancelar </button>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('modal_accion'); %>
+    <%- include('modal_modificar_acciones_umbrales'); %>

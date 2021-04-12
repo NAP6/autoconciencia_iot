@@ -48,7 +48,7 @@ export async function subjects_goals(req: Request, res: Response) {
     var modelID = req.session!.active_model.modelID;
     var goal: GoalQ = new GoalQ(-1, "", "", 0, "");
     var rows = await db.qwerty(
-      goal.toSqlSelect(["/@/SYSTEM/@/", "/@/MODEL/@/"], [systemID, modelID])
+      goal.toSqlSelect(["/@/SYSTEiM/@/", "/@/MODEL/@/"], [systemID, modelID])
     );
     res.json(rows);
     
