@@ -3,8 +3,6 @@ import * as api from "../app/controller/controller-api";
 import * as rt from "../app/controller/page_contollers";
 
 export default function (app: Application) {
-  app.post("/api/ask_input_arguments/", api.ask_input_arguments);
-
   app.post("/api/save_subjects/", api.save_subjects);
   app.post("/api/save_entity/", api.save_entity);
   app.post("/api/update_entity/", api.update_entity);
@@ -52,7 +50,6 @@ export default function (app: Application) {
   app.post("/api/del_process_pre_reflexive/", api.del_process_pre_reflexive);
   app.post("/api/mod_process_pre_reflexive", api.mod_process_pre_reflexive);
   app.post("/api/properties/", api.properties);
-  app.post("/api/add_mapeo_parametros", api.add_mapeo_parametros);
   app.get("/api/procesos_reflexive/", api.procesos_reflexive);
   app.post(
     "/api/add_metodo_modelo_reflexivos",
@@ -158,15 +155,22 @@ export default function (app: Application) {
   app.post("/api/del_reflective_process", rt.del_reflective_process);
   //Metodo de aprendizaje
   app.post("/api/add_metodo_modelo2", rt.add_metodo_modelo2);
-	//Variables de simulacion para el metodo de procesos reflexivos
- app.post("/api/get_simulation_variable",rt.get_simulation_variable);
- app.post("/api/add_simulation_variable",rt.add_simulation_variable);
- app.post("/api/upd_simulation_variable",rt.upd_simulation_variable);
- app.post("/api/del_simulation_variable",rt.del_simulation_variable);
-	//Escenarios de simulacion para el metodo de procesos reflexivos
- app.post("/api/get_simulation_scenario",rt.get_simulation_scenario);
- app.post("/api/add_simulation_scenario",rt.add_simulation_scenario);
- app.post("/api/upd_simulation_scenario",rt.upd_simulation_scenario);
- app.post("/api/del_simulation_scenario",rt.del_simulation_scenario);
-
+  //	Variables de simulacion para el metodo de procesos reflexivos
+  app.post("/api/get_simulation_variable", rt.get_simulation_variable);
+  app.post("/api/add_simulation_variable", rt.add_simulation_variable);
+  app.post("/api/upd_simulation_variable", rt.upd_simulation_variable);
+  app.post("/api/del_simulation_variable", rt.del_simulation_variable);
+  //	Escenarios de simulacion para el metodo de procesos reflexivos
+  app.post("/api/get_simulation_scenario", rt.get_simulation_scenario);
+  app.post("/api/add_simulation_scenario", rt.add_simulation_scenario);
+  app.post("/api/upd_simulation_scenario", rt.upd_simulation_scenario);
+  app.post("/api/del_simulation_scenario", rt.del_simulation_scenario);
+  //	Valor de simulacion para el metodod de procesos reflexivos
+  app.post("/api/get_simulation_value", rt.get_simulation_value);
+  app.post("/api/add_simulation_value", rt.add_simulation_value);
+  app.post("/api/upd_simulation_value", rt.upd_simulation_value);
+  app.post("/api/del_simulation_value", rt.del_simulation_value);
+  //	Mapo de parametros
+  app.post("/api/ask_input_arguments/", rt.ask_input_arguments);
+  app.post("/api/add_mapeo_parametros", rt.add_mapeo_parametros);
 }

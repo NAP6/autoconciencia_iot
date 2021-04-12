@@ -14,19 +14,19 @@ export class SimulationValueQ extends SimulationValue implements SQL_Qwerty {
   }
   toSqlSelect(tag: string[], value: string[]): string {
     var sql = `SELECT
-		  		vs_id as variable_id,
-			  	vas_valor as valor
+		  		vs.vs_id as variable_id,
+			  	vs.vas_valor as valor,
+				var.vs_nombre as nombre_variable
 		  		FROM
 		  		valorsimulacion vs,
 				escenariosimulacion es,
 				variablesimulacion var
 		  		WHERE
 				es.mea_id=${value[tag.indexOf("/@/METHOD/@/")]} AND
-				var.mea_id=${value[tag.indexOf("/@/METHOD/@/")]} AND
+				var.vs_id=vs.vs_id AND
 				es.es_id=${this.isUsed} AND 
-		  		es.es_id=vs.es_id AND
-		  		var.vs_id=${value[tag.indexOf("/@/VARIABLE/@/")]} AND
-		  		var.vs_id=vs.vs_id`;
+		  		es.es_id=vs.es_id`;
+	  
     return sql;
   }
   toSqlDelete(tag: string[], value: string[]): string {

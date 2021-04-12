@@ -4003,13 +4003,13 @@ function abrirModalMapeoParametros() {
 }
 
 function cargar_modal_mapeo_parametros(json) {
-  document.getElementById("nombre_temporal_mapeo").innerHTML = json.nombre;
+  document.getElementById("nombre_temporal_mapeo").innerHTML = json._name;
   document.getElementById("tipo_dato_salida_mapeo").innerHTML =
-    json.EspecificoTipo.nombre_datoSalida;
-  document.getElementById("descripcion_mapeo").innerHTML = json.descripcion;
+    json._returnDataType[0];
+  document.getElementById("descripcion_mapeo").innerHTML = json._description;
   var tbody = document.getElementById("tabla_mapeo_parametros");
-  json.arregloParametros.forEach((element) => {
-    if (element.activo == "1") {
+  json._containsParameter.forEach((element) => {
+    if (element._active) {
       var tr = document.createElement("tr");
       tr.setAttribute("name", "tr_fila_parametros");
       console.log("llega al tr xd");
@@ -4031,15 +4031,15 @@ function cargar_modal_mapeo_parametros(json) {
       var argumentoEntrada = document.createElement("td");
       argumentoEntrada.id = "argumento_entrada_fila_parametros";
       tr.appendChild(argumentoEntrada);
-      id.innerHTML = element.ordinal;
-      nombre.innerHTML = element.nombre;
-      tipoDato.innerHTML = element.tipoNombre;
-      tipoDato.dataset.id = element.tipo;
-      opcional.innerHTML = element.opcional == "1";
+      id.innerHTML = element._ordinal;
+      nombre.innerHTML = element._name;
+      tipoDato.innerHTML = element._dataType[1];
+      tipoDato.dataset.id = element._dataType[0];
+      opcional.innerHTML = element._optional;
       var select = document.createElement("select");
-      select.id = `tipo_mapeo_select_${element.ordinal}`;
+      select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select`;
-      select.dataset.ordinal = element.ordinal;
+      select.dataset.ordinal = element._ordinal;
       select.style.border = "transparent";
       select.setAttribute("onChange", `cargar_metricas_tipo_mapeo(this);`);
       var optionSeleccione = document.createElement("option");
@@ -4048,7 +4048,7 @@ function cargar_modal_mapeo_parametros(json) {
       select.appendChild(optionSeleccione);
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
-      selectMetricas.id = `tipo_argumento_select_${element.ordinal}`;
+      selectMetricas.id = `tipo_argumento_select_${element._ordinal}`;
       selectMetricas.appendChild(optionSeleccione.cloneNode(true));
       argumentoEntrada.appendChild(selectMetricas);
       tipoMapeo.appendChild(select);
@@ -4475,6 +4475,7 @@ function Guagar_nuevo_Mapeo() {
       met_id: aux2.met_id,
       mea_id: mea_id_rec[1],
     };
+    console.log(aux2);
     aux.push(aux2);
     aux.push(aux3);
   });
@@ -5330,14 +5331,14 @@ function abrirMapeoParametros_metodos() {
 
 function cargar_modal_mapeo_parametros_metodos(json) {
   document.getElementById("nombre_temporal_mapeo_metodos").innerHTML =
-    json.nombre;
+    json._name;
   document.getElementById("tipo_dato_salida_mapeo_metodos").innerHTML =
-    json.EspecificoTipo.nombre_datoSalida;
+    json._returnDataType[0];
   document.getElementById("descripcion_mapeo_metodos").innerHTML =
-    json.descripcion;
+    json._description;
   var tbody = document.getElementById("tabla_mapeo_parametros_metodos");
-  json.arregloParametros.forEach((element) => {
-    if (element.activo == "1") {
+  json._containsParameter.forEach((element) => {
+    if (element._active) {
       var tr = document.createElement("tr");
       tr.setAttribute("name", "tr_fila_parametros");
       var id = document.createElement("td");
@@ -5358,15 +5359,15 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       var argumentoEntrada = document.createElement("td");
       argumentoEntrada.id = "argumento_entrada_fila_parametros_metodos";
       tr.appendChild(argumentoEntrada);
-      id.innerHTML = element.ordinal;
-      nombre.innerHTML = element.nombre;
-      tipoDato.innerHTML = element.tipoNombre;
-      tipoDato.dataset.id = element.tipo;
-      opcional.innerHTML = element.opcional == "1";
+      id.innerHTML = element._ordinal;
+      nombre.innerHTML = element._name;
+      tipoDato.innerHTML = element._dataType[1];
+      tipoDato.dataset.id = element._dataType[0];
+      opcional.innerHTML = element._optional;
       var select = document.createElement("select");
-      select.id = `tipo_mapeo_select_${element.ordinal}`;
+      select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select_metodos`;
-      select.dataset.ordinal = element.ordinal;
+      select.dataset.ordinal = element._ordinal;
       select.style.border = "transparent";
       select.setAttribute(
         "onChange",
@@ -5378,7 +5379,7 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       select.appendChild(optionSeleccione);
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
-      selectMetricas.id = `tipo_argumento_select_metodo_${element.ordinal}`;
+      selectMetricas.id = `tipo_argumento_select_metodo_${element._ordinal}`;
       selectMetricas.appendChild(optionSeleccione.cloneNode(true));
       argumentoEntrada.appendChild(selectMetricas);
       tipoMapeo.appendChild(select);
@@ -5434,14 +5435,8 @@ function cargar_select_mapeo_tipo_metodos_2(json) {
 function cargar_metricas_tipo_mapeo_metodo(elemento) {
   console.log(elemento.value);
   if (elemento.value == 24) {
-    post_api(
-      "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
-      {
-        id: 23,
-      },
-      cargar_select_mapeo_variables_simulacion,
-      error_cargar_select_mapeo_variables_simulacion
-    );
+	  cargar_select_mapeo_variables_simulacion();
+   
     OrdinalGeneral = elemento.dataset.ordinal;
   } else {
     data = {
@@ -5474,10 +5469,9 @@ function cargar_select_argumento_entrada_metodos(json) {
   });
 }
 
-function cargar_select_mapeo_variables_simulacion(json) {
-  console.log(json);
-  consultar_api(
-    "http://alvapala.ddns.net:3000/api/get_variable_simulacion",
+function cargar_select_mapeo_variables_simulacion() {
+  post_api(
+    "http://alvapala.ddns.net:3000/api/get_simulation_variable",{mea_id:metodo_calculo},
     cargar_variables_simulacion_select_modal_mapeo,
     (res) => {
       console.log(res);
@@ -5486,15 +5480,14 @@ function cargar_select_mapeo_variables_simulacion(json) {
 }
 
 function cargar_variables_simulacion_select_modal_mapeo(json) {
-  console.log(json);
   var select = document.getElementById(
     `tipo_argumento_select_metodo_${OrdinalGeneral}`
   );
   select.innerHTML = "<option value='-6'>Seleccione</option>";
-  json.procesos.forEach((ele) => {
+  json.forEach((ele) => {
     var option = document.createElement("option");
     option.value = ele.id;
-    option.innerHTML = ele.nombre;
+    option.innerHTML = ele.name;
     select.appendChild(option);
   });
 }
@@ -5531,14 +5524,14 @@ function abrirMapeoParametros_modelos() {
 
 function cargar_modal_mapeo_parametros_modelos(json) {
   document.getElementById("nombre_temporal_mapeo_modelos").innerHTML =
-    json.nombre;
+    json._name;
   document.getElementById("tipo_dato_salida_mapeo_modelos").innerHTML =
-    json.EspecificoTipo.nombre_datoSalida;
+    json._returnDataType[0];
   document.getElementById("descripcion_mapeo_modelos").innerHTML =
-    json.descripcion;
+    json._description;
   var tbody = document.getElementById("tabla_mapeo_parametros_modelos");
-  json.arregloParametros.forEach((element) => {
-    if (element.activo == "1") {
+  json._containsParameter.forEach((element) => {
+    if (element._active) {
       var tr = document.createElement("tr");
       tr.setAttribute("name", "tr_fila_parametros");
       console.log("llega al tr xd");
@@ -5560,15 +5553,15 @@ function cargar_modal_mapeo_parametros_modelos(json) {
       var argumentoEntrada = document.createElement("td");
       argumentoEntrada.id = "argumento_entrada_fila_parametros_modelos";
       tr.appendChild(argumentoEntrada);
-      id.innerHTML = element.ordinal;
-      nombre.innerHTML = element.nombre;
-      tipoDato.innerHTML = element.tipoNombre;
-      tipoDato.dataset.id = element.tipo;
-      opcional.innerHTML = element.opcional == "1";
+      id.innerHTML = element._ordinal;
+      nombre.innerHTML = element._name;
+      tipoDato.innerHTML = element._dataType[1];
+      tipoDato.dataset.id = element._dataType[0];
+      opcional.innerHTML = element._optional;
       var select = document.createElement("select");
-      select.id = `tipo_mapeo_select_${element.ordinal}`;
+      select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select_modelos`;
-      select.dataset.ordinal = element.ordinal;
+      select.dataset.ordinal = element._ordinal;
       select.style.border = "transparent";
       select.setAttribute(
         "onChange",
@@ -5580,7 +5573,7 @@ function cargar_modal_mapeo_parametros_modelos(json) {
       select.appendChild(optionSeleccione);
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
-      selectMetricas.id = `tipo_argumento_select_modelo_${element.ordinal}`;
+      selectMetricas.id = `tipo_argumento_select_modelo_${element._ordinal}`;
       selectMetricas.appendChild(optionSeleccione.cloneNode(true));
       argumentoEntrada.appendChild(selectMetricas);
       tipoMapeo.appendChild(select);
@@ -6150,9 +6143,10 @@ function visibilidad_variables_valores(id) {
 
 function consultar_tabla_valores_variables(id) {
   post_api(
-    "http://alvapala.ddns.net:3000/api/get_variables_valor/",
+    "http://alvapala.ddns.net:3000/api/get_simulation_value/",
     {
-      id: id,
+      escenario: id,
+      mea_id: metodo_calculo,
     },
     cargar_variables_valor_table,
     (res) => {
@@ -6162,12 +6156,11 @@ function consultar_tabla_valores_variables(id) {
 }
 
 function cargar_variables_valor_table(json) {
-  console.log(json);
   res = "";
-  json.procesos.forEach((as) => {
+  json.forEach((as) => {
     res += "<tr>";
     res += `<td><input type="radio" name="variable_valor_seleccionado" data-name="${as.nombre}"></td>`;
-    res += `<td>${as.nombre}</td>`;
+    res += `<td>${as.nombre_variable}</td>`;
     res += `<td>${as.valor}</td>`;
     res += "</tr>";
   });
@@ -6177,7 +6170,7 @@ function cargar_variables_valor_table(json) {
 function agregar_variables_valor() {
   $("#modal_escenarios_simulacion").modal("hide");
   $("#modal_agregar_variables_valores_simulacion").modal("show");
-    consultar_variables_select(metodo_calculo);
+  consultar_variables_select(metodo_calculo);
 }
 
 function consultar_variables_select(mea_id) {
@@ -6675,7 +6668,6 @@ function cerrar_modal_variables_simulacion() {
 }
 
 function cargar_tabla_variables_simulacion(json) {
-  console.log(json);
   res = "";
   json.forEach((as) => {
     res += "<tr>";
@@ -6824,12 +6816,13 @@ function cargar_variables_simulacion_select(json) {
 function guardarvariables_valor() {
   var vs_id = document.getElementById("seleccionar_variable_simulacion").value;
   var data = {
-    es_id: escenarioSeleccionado,
-    vs_id: vs_id,
-    vas_valor: document.getElementById("agregar_valor_simulacion").value,
+    escenario: escenarioSeleccionado,
+    variable: vs_id,
+    valor: document.getElementById("agregar_valor_simulacion").value,
   };
+
   post_api(
-    "http://alvapala.ddns.net:3000/api/add_variables_valor/",
+    "http://alvapala.ddns.net:3000/api/add_simulation_value/",
     data,
     correcto_guardado_variables_valor,
     (res) => {
@@ -6843,7 +6836,6 @@ function correcto_guardado_variables_valor(json) {
   document.getElementById("agregar_valor_simulacion").value = "";
   $("#modal_agregar_variables_valores_simulacion").modal("hide");
   $("#modal_escenarios_simulacion").modal("show");
-  agregar_variables_valor();
   setTimeout(consultar_tabla_valores_variables(escenarioSeleccionado), 100);
 }
 
