@@ -173,4 +173,10 @@ export default function (app: Application) {
   //	Mapo de parametros
   app.post("/api/ask_input_arguments/", rt.ask_input_arguments);
   app.post("/api/add_mapeo_parametros", rt.add_mapeo_parametros);
+	//Acciones Procesos
+  app.post("/api/get_action", rt.get_action);
+  app.post("/api/add_action", rt.add_action);
+  app.post("/api/upd_action", rt.upd_action);
+  app.post("/api/del_action", rt.del_action);
+
 }

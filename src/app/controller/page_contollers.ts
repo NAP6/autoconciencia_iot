@@ -112,3 +112,9 @@ export {
   upd_simulation_value,
   del_simulation_value,
 } from "./page_contollers/simulation_value";
+export {
+  get_action,
+  add_action,
+  upd_action,
+  del_action,
+} from "./page_contollers/action";
