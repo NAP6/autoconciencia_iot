@@ -3902,7 +3902,7 @@ function cargar_accion_table_modificar(json) {
     .content.cloneNode(true);
   var seccion = document.getElementById("seccion_acciones");
   var body = templeate.querySelector("tbody");
-  json.forEach((um) => {
+  json.acciones.forEach((um) => {
     var fila = document.createElement("tr");
     var dato = document.createElement("td");
     var input = document.createElement("input");
