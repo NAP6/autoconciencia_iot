@@ -6,8 +6,8 @@
                     Acciones
                 </h5>
                 <button type="button" class="close" onclick="cerrar_modal_activos()" aria-label="Close">
-											              <span aria-hidden="true">&times;</span>
-												              </button>
+												              <span aria-hidden="true">&times;</span>
+													              </button>
             </div>
             <div class="modal-body">
                 <h6>Umbrales</h6>
@@ -31,11 +31,11 @@
                 <div class="row">
                     <div class="col-md-12 mb-2">
                         <button id="bt_add_activo" class="btn btn-primary d-none" onclick="agregarAccionesUmbrales()">
-																																																																													                      Agregar
-																																																																															                        </button>
+																																																																														                      Agregar
+																																																																																                        </button>
                         <button id="bd_mod_activo" class="btn btn-primary d-none" onclick="modificarAccionesUmbrales()">
-																																																																																					                    Modificar
-																																																																																							                      </button>
+																																																																																						                    Modificar
+																																																																																								                      </button>
                         <button id="bd_del_activo" class="btn btn-primary d-none" onclick="eliminarAccionesUmbrales()">																																																																																						                          Eliminar																																																																																					                    </button>
                     </div>
                     <div class="row container">
@@ -45,33 +45,30 @@
                 </div>
                 <div class="row">
                     <template id="templeate_tabla_accion">
-    <div class="col-sm">
-        <table id="tabla_acciones_umbral" class="table table-hover d-none">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Id</th>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col">Activo</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tbody id="tabla_accion">
-                </tbody>
-            </tbody>
-        </table>
-    </div>
-</template>
+                            <table class="table table-hover">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Id</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Descripción</th>
+                                        <th scope="col">Activo</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla_accion">
+                                </tbody>
+                            </table>
+                        </template>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="cerrar_modal_activos()">
-																																																																																																																																																																														              Cancelar
-																																																																																																																																																																														              </button>
+																																																																																																																																																																															              Cancelar
+																																																																																																																																																																															              </button>
             </div>
         </div>
     </div>
 </div>
 <%- include('modal_accion'); %>
     <%- include('modal_modificar_acciones_umbrales'); %>
+        <%- include('modal_modificar_acciones_umbrales'); %>
