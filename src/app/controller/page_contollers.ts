@@ -64,6 +64,8 @@ export {
   del_deployment_resources,
   ask_deployment_resources_select,
   ask_deployment_resources,
+  ask_input_arguments,
+  add_mapeo_parametros,
 } from "./page_contollers/deployment_resources";
 export {
   criteria,
@@ -104,3 +106,9 @@ export {
   upd_simulation_scenario,
   del_simulation_scenario,
 } from "./page_contollers/simulation_scenario";
+export {
+  get_simulation_value,
+  add_simulation_value,
+  upd_simulation_value,
+  del_simulation_value,
+} from "./page_contollers/simulation_value";

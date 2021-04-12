@@ -33,7 +33,7 @@ export async function add_deployment_resources(req: Request, res: Response) {
         data.EspecificoTipo.formula
       );
       var rows = await db.qwerty(formula.toSqlInsert([], []));
-console.log("ADD"+rows);
+      console.log("ADD" + rows);
       id = rows[0][0].id;
     } else if (data.tipoRecurso == "1") {
       var funcion = new FunctionQ(
@@ -151,6 +151,48 @@ export async function ask_deployment_resources(req: Request, res: Response) {
       console.log(webService);
       res.json(webService);
     }
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export async function ask_input_arguments(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var rows = await db.qwerty(
+      `SELECT me.met_id as id, me.met_nombre as nombre 
+	     FROM metrica me, aspectoautoconsciencia_metrica aa_me 
+	     WHERE me.met_id=aa_me.met_id AND me.met_activo=1 AND aa_me.aa_id=${req.body.aspectoId} AND me.met_tipo=${req.body.metricaId};`
+    );
+    res.json(rows);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export async function add_mapeo_parametros(req: Request, res: Response) {
+  if (req.session?.user) {
+    var data = req.body;
+    console.log(data);
+    var stryaux = "";
+    data.forEach((element) => {
+      console.log(element.mea_id);
+      stryaux += `(
+	      		'${element.par_ordinal}', 
+	      		'${element.mea_id}',
+	      		'${element.mp_tipo_entrada}',
+	      		'${element.met_id}',
+	      		${element.tipoMapeo == undefined ? "NULL" : "'" + element.tipoMapeo + "'"},
+	      		${element.md_id == undefined ? "NULL" : "'" + element.md_id + "'"}),`;
+    });
+    var sql =`INSERT INTO 
+    		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
+		VALUES ` + stryaux.substring(0, stryaux.length - 1);
+    console.log(sql);
+
+    var db = new database2();
+    db.qwerty(sql);
+    res.json({ mensaje: "La accion fue realizada con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

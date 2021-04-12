@@ -28,7 +28,7 @@ export async function singup_save(req: Request, res: Response) {
       var db = new database2();
       await db.qwerty(usert.toSqlInsert([], []));
       req.flash("succes", "Usuario creado correctamente");
-      res.redirect("/singup");
+      res.redirect("/login");
     } else {
       req.flash("error", "La claves ingresadas no conciden");
       res.redirect("/singup");

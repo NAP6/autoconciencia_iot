@@ -4,8 +4,8 @@ import { PreReflectiveProcessQ } from "../../models/selfAwarness/qwertyModels/Pr
 import { Indicator } from "../../models/selfAwarness/Indicator";
 import { Property } from "../../models/selfAwarness/Property";
 import {
-	  AnalysisModelQ,
-	  CollectionMethodQ,
+  AnalysisModelQ,
+  CollectionMethodQ,
 } from "../../models/selfAwarnessModels";
 import { DataFlow } from "../../models/selfAwarness/DataFlow";
 import { DirectMetric } from "../../models/selfAwarness/DirectMetric";
@@ -38,7 +38,7 @@ export async function add_metodo_modelo(req: Request, res: Response) {
         [data.proceso_id, modeloID, data.m_recoleccion.obj_id]
       )
     );
-    var anali = new AnalysisModelQ(-1,data.m_modelo.ma_tipo);
+    var anali = new AnalysisModelQ(-1, data.m_modelo.ma_tipo);
     anali.produces = new Indicator(data.m_modelo.met_id, "", "", "", "");
     var row2 = await db.qwerty(
       anali.toSqlInsert(
@@ -46,9 +46,9 @@ export async function add_metodo_modelo(req: Request, res: Response) {
         [data.proceso_id, data.m_modelo.criterio_id]
       )
     );
-console.log(row1);
-    res.json([row1, row2]);
-
+    var resp = [row1[0][0].id, row2[0][0].id];
+    console.log(resp);
+    res.json(resp);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -58,12 +58,8 @@ export async function get_pre_reflective_process(req: Request, res: Response) {
     var db = new database2();
 
     var modeloID = req.session!.active_model.modelID;
-    var pre_process: PreReflectiveProcessQ = new PreReflectiveProcessQ(
-      -1,
-      "",
-      "",
-      -1
-    );
+    var pre_process: PreReflectiveProcessQ;
+    pre_process = new PreReflectiveProcessQ(-1, "", "", -1);
     var rows = await db.qwerty(
       pre_process.toSqlSelect(["/@/MODEL/@/"], [modeloID])
     );
