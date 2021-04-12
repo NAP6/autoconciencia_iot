@@ -3879,6 +3879,7 @@ function mensajeExitosoAgregarAccionesUmbrales(json) {
 }
 
 function cargar_accion_table_modificar(json) {
+<<<<<<< HEAD
     console.log(json);
     var templeate = document
         .getElementById("templeate_tabla_accion")
@@ -3925,6 +3926,54 @@ function cargar_accion_table_modificar(json) {
         tabla.style.display = "none";
         seccion.appendChild(templeate);
     }
+=======
+  console.log(json);
+  var templeate = document
+    .getElementById("templeate_tabla_accion")
+    .content.cloneNode(true);
+  var seccion = document.getElementById("seccion_acciones");
+  var body = templeate.querySelector("tbody");
+  json.acciones.forEach((um) => {
+    var fila = document.createElement("tr");
+    var dato = document.createElement("td");
+    var input = document.createElement("input");
+    input.type = "radio";
+    input.name = "accion_seleccionada";
+    input.dataset.id = um.id;
+    input.dataset.name = um.name;
+    input.dataset.description = um.description;
+    input.dataset.active = um.active;
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.id;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.name;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.description;
+    fila.appendChild(dato);
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.disabled = true;
+    input.checked = um.active == 1;
+    dato = document.createElement("td");
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    body.appendChild(fila);
+  });
+  body.id += "_" + json.umbral_id;
+  var tabla = templeate.querySelector(".table");
+  tabla.id = "accion_" + json.umbral_id;
+  var tablaMod = document.getElementById(tabla.id);
+  if (tablaMod) {
+    seccion.replaceChild(tabla, tablaMod);
+  } else {
+    tabla.style.display = "none";
+    seccion.appendChild(templeate);
+  }
+>>>>>>> d0574a75704e9db1fb4945028ade0afd7c420bbb
 }
 
 function mensajeErrorAgregarAccionesUmbrales(error) {
