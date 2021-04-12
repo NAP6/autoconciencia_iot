@@ -1,51 +1,41 @@
 import { SelfAwarenessProcess } from "./SelfAwarenessProcess";
-import { Goal } from "./Goal";
 import { CollectionMethod } from "./CollectionMethod";
 import { AnalysisModel } from "./AnalysisModel";
 
-export class PreReflecriveProcess extends SelfAwarenessProcess {
-  private _usesCollectionMethod: CollectionMethod;
-  private _usesAnalysisModel: AnalysisModel;
-
+export class PreReflectiveProcess extends SelfAwarenessProcess {
+  private _usesCollectionMethod: CollectionMethod | undefined;
+  private _usesAnalysisModel: AnalysisModel | undefined;
   constructor(
     id: number,
     name: string,
     description: string,
-<<<<<<< HEAD
-    executionPeriodStart: Date,
-    executionPeriodEnd: Date,
-    usesCollectionMehod: CollectionMethod,
-    usesAnalysisModel: AnalysisModel
-=======
-    type_process:number,
+    type_process: number,
     executionPeriodStart?: Date,
-    executionPeriodEnd?: Date,
->>>>>>> f7eb99d5341fe9d727cfc1bf416fac600c69b3b4
+    executionPeriodEnd?: Date
   ) {
     super(
       id,
       name,
       description,
+      type_process,
       executionPeriodStart,
       executionPeriodEnd
     );
-    this._usesCollectionMethod = usesCollectionMehod;
-    this._usesAnalysisModel = usesAnalysisModel;
   }
 
-  get usesCollectionMehod(): CollectionMethod {
+  get usesCollectionMehod(): CollectionMethod | undefined {
     return this._usesCollectionMethod;
   }
 
-  set usesCollectionMehod(value: CollectionMethod) {
+  set usesCollectionMehod(value: CollectionMethod | undefined) {
     this._usesCollectionMethod = value;
   }
 
-  get usesAnalysisModel(): AnalysisModel {
+  get usesAnalysisModel(): AnalysisModel | undefined {
     return this._usesAnalysisModel;
   }
 
-  set usesAnalysisModel(value: AnalysisModel) {
+  set usesAnalysisModel(value: AnalysisModel | undefined) {
     this.usesAnalysisModel = value;
   }
 }

@@ -85,7 +85,7 @@ export async function add_aspects(req: Request, res: Response) {
     );
     aspect.active = aspect.active;
     var rows = await db.qwerty(
-      aspect.toSqilInsert(
+      aspect.toSqlInsert(
         ["/@/OBJECT/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"],
         [newAspect.obj_id, newAspect.suj_id, modelID]
       )
