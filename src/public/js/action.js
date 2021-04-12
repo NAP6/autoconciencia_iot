@@ -3779,27 +3779,30 @@ function error_cargar_select_tipo_comunicacion() {
   alert("No se cargo el select tipo comunicacion");
 }
 
-$("#criterio_de_decision").change(function () {
-  var seleccionCriterio = document.getElementById("criterio_de_decision").value;
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_umbral",
-    { criterio: seleccionCriterio },
-    cargar_lista_umbrales_proceso,
-    (res) => {
-      console.log(res);
-    }
-  );
-});
-
 function cargar_lista_umbrales_proceso(json) {
+  console.log(modelo_analisis_pre_reflexivos);
   res = "";
+  document.getElementById("seccion_acciones").innerHTML = "";
   json.umbrales.forEach((cd) => {
-    res += `<tr onClick="visibilidad_acciones_umbral('${cd.id}')">`;
+    res += `<tr onClick="visibilidad_acciones_umbral('${cd.id}')" id='tr_accion_${cd.id}' name='tr_accion_'>`;
+    res += `<td><input type="radio" name="umbral_seleccionado" value="${cd.id}" data-name="${cd.name}" data-descripcion="${cd.interpretacion}"></td>`;
     res += `<td>${cd.id}</td>`;
     res += `<td>${cd.name}</td>`;
+    res += `<td>${cd.interpretacion}</td>`;
     res += `<td>${cd.inferior}</td>`;
     res += `<td>${cd.superior}</td>`;
     res += "</tr>";
+    post_api(
+      "http://alvapala.ddns.net:3000/api/get_action",
+      {
+        umbral: cd.id,
+        mea_id: modelo_analisis_pre_reflexivos,
+      },
+      cargar_accion_table,
+      () => {
+        console.log("Error al cargar la tabla accion");
+      }
+    );
   });
   document.getElementById("tabla_umbrales_procesos").innerHTML = res;
 }
@@ -3823,16 +3826,21 @@ function visibilidad_acciones_umbral(id) {
   document
     .getElementById("tabla_acciones_umbral")
     .classList.replace("d-none", "inline-block");
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_accion/",
-    {
-      id: id,
-    },
-    cargar_accion_table,
-    (res) => {
-      console.log(res);
+  var tabla = document.getElementsByName("tr_accion_");
+  tabla.forEach((tr) => {
+    tr.style.backgroundColor = "rgba(0,0,0,0)";
+  });
+  document.getElementById(`tr_accion_${id}`).style.backgroundColor =
+    "rgba(0,0,0,0.15)";
+  var dato = document.getElementById("accion_" + id);
+  if (dato && UmbralId != id) {
+    dato.style.display = "table";
+    if (UmbralId) {
+      dato = document.getElementById("accion_" + UmbralId);
+      dato.style.display = "none";
     }
-  );
+  }
+  UmbralId = id;
 }
 
 function error_cargar_lista_umbrales_proceso(err) {
@@ -3840,6 +3848,15 @@ function error_cargar_lista_umbrales_proceso(err) {
 }
 
 function cargar_activos_umbrales() {
+  var seleccionCriterio = document.getElementById("criterio_de_decision").value;
+  post_api(
+    "http://alvapala.ddns.net:3000/api/get_umbral",
+    { criterio: seleccionCriterio },
+    cargar_lista_umbrales_proceso,
+    (res) => {
+      console.log(res);
+    }
+  );
   $("#modal_activos_procesos").modal("show");
 }
 
@@ -3848,37 +3865,86 @@ function cerrar_modal_activos() {
 }
 
 function guardarAccionUmbral() {
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
-    {
-      id: 22,
-    },
-    enviarDatos_acciones_umbrales,
-    errorenviarDatos_acciones_umbrales
-  );
-}
-
-function enviarDatos_acciones_umbrales(json) {
-  console.log(json);
   var data = {
-    nombre: document.getElementById("nombre_accion_umbral").value,
-    descripcion: document.getElementById("descripcion_accion_umbral").value,
-    UmbralId: UmbralId,
-    meaId: json.id,
+    name: document.getElementById("nombre_accion_umbral").value,
+    description: document.getElementById("descripcion_accion_umbral").value,
+    umbral: UmbralId,
+    mea_id: modelo_analisis_pre_reflexivos,
   };
-  post_api(
-    "http://alvapala.ddns.net:3000/api/add_accion",
-    data,
-    mensajeExitosoAgregarAccionesUmbrales,
-    mensajeErrorAgregarAccionesUmbrales
-  );
+  if (!!data.name && !!data.description) {
+    post_api(
+      "http://alvapala.ddns.net:3000/api/add_action",
+      data,
+      mensajeExitosoAgregarAccionesUmbrales,
+      mensajeErrorAgregarAccionesUmbrales
+    );
+    $("#modal_agregar_accion_proceso").modal("hide");
+    $("#modal_activos_procesos").modal("show");
+  }
 }
 
 function mensajeExitosoAgregarAccionesUmbrales(json) {
   alert("Datos guardados con exito");
-  $("#modal_agregar_accion_proceso").modal("hide");
-  cargarDespuesdeEliminarAcciones();
-  $("#modal_activos_procesos").modal("show");
+  post_api(
+    "http://alvapala.ddns.net:3000/api/get_action",
+    {
+      umbral: UmbralId,
+      mea_id: modelo_analisis_pre_reflexivos,
+    },
+    cargar_accion_table_modificar,
+    () => {
+      console.log("Error al cargar la tabla accion");
+    }
+  );
+}
+
+function cargar_accion_table_modificar(json) {
+  console.log(json);
+  var templeate = document
+    .getElementById("templeate_tabla_accion")
+    .content.cloneNode(true);
+  var seccion = document.getElementById("seccion_acciones");
+  var body = templeate.querySelector("tbody");
+  json.forEach((um) => {
+    var fila = document.createElement("tr");
+    var dato = document.createElement("td");
+    var input = document.createElement("input");
+    input.type = "radio";
+    input.name = "accion_seleccionada";
+    input.dataset.id = um.id;
+    input.dataset.name = um.name;
+    input.dataset.description = um.description;
+    input.dataset.active = um.active;
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.id;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.name;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.description;
+    fila.appendChild(dato);
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.disabled = true;
+    input.checked = um.active == 1;
+    dato = document.createElement("td");
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    body.appendChild(fila);
+  });
+  body.id += "_" + json.umbral_id;
+  var tabla = templeate.querySelector(".table");
+  tabla.id = "accion_" + json.umbral_id;
+  var tablaMod = document.getElementById(tabla.id);
+  if (tablaMod) {
+    seccion.replaceChild(tabla, tablaMod);
+  } else {
+    tabla.style.display = "none";
+    seccion.appendChild(templeate);
+  }
 }
 
 function mensajeErrorAgregarAccionesUmbrales(error) {
@@ -4313,8 +4379,12 @@ function guardar_modelos_metodos() {
     return false;
   }
 }
-
+var modelo_analisis_pre_reflexivos = undefined;
+var metodo_recoleccion = undefined;
 function mensajeCorrectoGuardarMetodos(json) {
+  console.log(json);
+  modelo_analisis_pre_reflexivos = json[1];
+  metodo_recoleccion = json[0];
   document.getElementById("tipo_comunicacion").disabled = true;
   document.getElementById("proiedad_recoleccion").disabled = true;
   document.getElementById("flujo_de_datos").disabled = true;
@@ -5435,8 +5505,8 @@ function cargar_select_mapeo_tipo_metodos_2(json) {
 function cargar_metricas_tipo_mapeo_metodo(elemento) {
   console.log(elemento.value);
   if (elemento.value == 24) {
-	  cargar_select_mapeo_variables_simulacion();
-   
+    cargar_select_mapeo_variables_simulacion();
+
     OrdinalGeneral = elemento.dataset.ordinal;
   } else {
     data = {
@@ -5471,7 +5541,8 @@ function cargar_select_argumento_entrada_metodos(json) {
 
 function cargar_select_mapeo_variables_simulacion() {
   post_api(
-    "http://alvapala.ddns.net:3000/api/get_simulation_variable",{mea_id:metodo_calculo},
+    "http://alvapala.ddns.net:3000/api/get_simulation_variable",
+    { mea_id: metodo_calculo },
     cargar_variables_simulacion_select_modal_mapeo,
     (res) => {
       console.log(res);

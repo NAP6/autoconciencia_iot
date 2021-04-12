@@ -3,50 +3,49 @@ import{ SQL_Qwerty } from "../../SQL_Qwerty";
 export class ActionQ extends Action implements SQL_Qwerty{
     toSqlInsert(tag:string[],value:string[]):string{
 var sql=`INSERT INTO
-        action (
-                esc_nombre,
-                esc_valores_validos,
-                esc_tipo,
-                esc_activo
+        accion (
+                acc_nombre,
+                acc_descripcion,
+                acc_activo,
+                mea_id,
+		umb_id
             ) VALUES (
                 '${this.name}',
-                '${this.validValues}',
-                '${this.scaleType}',
-                '${this.active ? 1: 0}'
-
+                '${this.description}',
+                ${this.active ? 1: 0},
+		${value[tag.indexOf("/@/METHOD/@/")]},
+		${this.isRecommendedln}
             )`;
 return sql;
     }
    toSqlSelect(tag:string[],value:string[]): string {
     var sql = `SELECT 
-    esc_id as id,
-    esc_nombre as name,
-    esc_valores_validos as valid_values,
-    esc_tipo as type_id,
-    enu.enu_nombre_valor as type,
-    esc_activo as active
+    acc_id as id,
+    acc_nombre as name,
+    acc_descripcion as description,
+    acc_activo as active,
+    umb_id as umbral_id
          FROM 
-         escala es,
-	 enumeracion enu
+         accion
 	 WHERE 
-	 es.esc_tipo=enu.enu_id`;
+	 mea_id=${value[tag.indexOf("/@/METHOD/@/")]} AND
+	 umb_id=${this.isRecommendedln}`;
 return sql;
 }
 toSqlDelete(value: string[]): string {
-    var sql=`DELETE FROM escala WHERE esc_id=${this.id} `;
+    var sql=`DELETE FROM accion WHERE acc_id=${this.id} `;
     return sql;
 }
 
 toSqlUpdate(tag: string[], value: string[]): string {
     var sql = `UPDATE 
-    escala
+    accion
     SET
-    esc_nombre='${this.name}', 
-    esc_valores_validos='${this.validValues}',
-    esc_tipo='${this.scaleType}',
-    esc_activo=${this.active ? 1 : 0}
+    acc_nombre='${this.name}', 
+    acc_descripcion='${this.description}',
+    acc_activo=${this.active ? 1 : 0}
   WHERE 
-    esc_id=${this.id}`;
+    acc_id=${this.id}`;
 return sql;
 }
 toObjectArray(rows: any): any[] {
