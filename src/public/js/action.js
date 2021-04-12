@@ -3823,9 +3823,6 @@ function visibilidad_acciones_umbral(id) {
   document
     .getElementById("bd_del_activo")
     .classList.replace("d-none", "inline-block");
-  document
-    .getElementById("tabla_acciones_umbral")
-    .classList.replace("d-none", "inline-block");
   var tabla = document.getElementsByName("tr_accion_");
   tabla.forEach((tr) => {
     tr.style.backgroundColor = "rgba(0,0,0,0)";
@@ -4181,8 +4178,59 @@ function agregarAccionesUmbrales() {
   $("#modal_agregar_accion_proceso").modal("show");
   $("#modal_activos_procesos").modal("hide");
 }
-
 function cargar_accion_table(json) {
+  console.log(json);
+  var templeate = document
+    .getElementById("templeta_tabla_accion")
+    .content.cloneNode(true);
+  var seccion = document.getElementById("seccion_umbrales");
+  var body = templeate.querySelector("tbody");
+  json.umbrales.forEach((um) => {
+    var fila = document.createElement("tr");
+    var dato = document.createElement("td");
+    var input = document.createElement("input");
+    input.type = "radio";
+    input.name = "umbral_seleccionado";
+    input.dataset.id = um.id;
+    input.dataset.nombre = um.name;
+    input.dataset.interpretacion = um.interpretacion;
+    input.dataset.inferior = um.inferior;
+    input.dataset.superior = um.superior;
+    input.dataset.activo = um.active;
+    input.dataset.id_crite = json.id_descicion;
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.id;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.name;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.interpretacion;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.inferior;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.superior;
+    fila.appendChild(dato);
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.disabled = true;
+    input.checked = um.active == 1;
+    dato = document.createElement("td");
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    body.appendChild(fila);
+  });
+  body.id += "_" + json.id_decicion;
+  var tabla = templeate.querySelector(".table");
+  tabla.id = "umbral_" + json.id_descicion;
+  tabla.style.display = "none";
+  seccion.appendChild(templeate);
+}
+/*function cargar_accion_table(json) {
   console.log(json);
   res = "";
   json.forEach((as) => {
@@ -4201,7 +4249,7 @@ function cargar_accion_table(json) {
     res += "</tr>";
   });
   document.getElementById("tabla_accion").innerHTML = res;
-}
+}*/
 
 function error_cargar_accion_table(err) {
   alert("Error al cargar los datos del modelo: " + err);
