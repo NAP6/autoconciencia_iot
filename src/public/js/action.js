@@ -6693,30 +6693,166 @@ function cargar_sujetos_activos_procesos_modificar_reflexivos(json) {
   });
 }
 
+function agregarAccionesUmbralesReflexivos() {
+  $("#modal_agregar_accion_proceso_reflexivo").modal("show");
+  $("#modal_activos_procesos_reflexivos").modal("hide");
+  document.getElementById("nombre_accion_umbral_reflexivo").value = "";
+  document.getElementById("descripcion_accion_umbral_reflexivo").value = "";
+}
+
+function guardarAccionUmbralReflexivos() {
+  data = {
+    name: document.getElementById("nombre_accion_umbral_reflexivo").value,
+    description: document.getElementById("descripcion_accion_umbral_reflexivo")
+      .value,
+    umbral: UmbralId,
+    mea_id: modelo_analisis_reflexivos,
+  };
+  if (!!data.name && !!data.description) {
+    post_api(
+      "http://alvapala.ddns.net:3000/api/add_action",
+      data,
+      mensajeExitosoAgregarAccionesUmbralesReflexivos,
+      (res) => {
+        console.log(res);
+      }
+    );
+    $("#modal_agregar_accion_proceso").modal("hide");
+    $("#modal_activos_procesos").modal("show");
+  }
+}
+
+function modificarAccionesUmbralesReflexivos() {
+  var radio = document.getElementsByName("accion_seleccionada_reflexivos");
+  var id;
+  var name;
+  var descripcion;
+  var activo;
+  radio.forEach((elem) => {
+    if (elem.checked) {
+      id = elem.dataset.id;
+      name = elem.dataset.name;
+      descripcion = elem.dataset.description;
+      activo = elem.dataset.active == 1;
+      return;
+    }
+  });
+  if (!!id && !!name && !!descripcion) {
+    $("#modal_activos_procesos_reflexivo").modal("hide");
+    document.getElementById("id_accion_umbral_modificar_reflexivo").value = id;
+    document.getElementById(
+      "nombre_accion_umbral_modificar_reflexivo"
+    ).value = name;
+    document.getElementById(
+      "descripcion_accion_umbral_modificar_reflexivo"
+    ).value = descripcion;
+    document.getElementById(
+      "activo_accion_umbral_modificar_reflexivo"
+    ).checked = activo;
+
+    $("#modal_modificar_accion_umbral_reflexivos").modal("show");
+  } else alert("Debe seleccionar un elemento para modificar");
+}
+
+function guardarModificacionAccionesUmbralesReflexivos() {
+  var data = {
+    id: document.getElementById("id_accion_umbral_modificar_reflexivo").value,
+    name: document.getElementById("nombre_accion_umbral_modificar_reflexivo")
+      .value,
+    description: document.getElementById(
+      "descripcion_accion_umbral_modificar_reflexivo"
+    ).value,
+    active: document.getElementById("activo_accion_umbral_modificar_reflexivo")
+      .checked,
+  };
+  post_api(
+    "http://alvapala.ddns.net:3000/api/upd_action/",
+    data,
+    mensajeExitosoAgregarAccionesUmbralesReflexivos,
+    (res) => {
+      console.log(res);
+    }
+  );
+  $("#modal_modificar_accion_umbral_reflexivos").modal("hide");
+  $("#modal_activos_procesos_reflexivos").modal("show");
+}
+
+function eliminarAccionesUmbralesReflexivos() {
+  var radio = document.getElementsByName("accion_seleccionada_reflexivos");
+  var id;
+  radio.forEach((elem) => {
+    if (elem.checked) {
+      id = elem.dataset.id;
+      return;
+    }
+  });
+  if (!!id) {
+    if (confirm("Esta seguro que desea eliminar esta accion")) {
+      data = {
+        id: id,
+      };
+      post_api(
+        "http://alvapala.ddns.net:3000/api/del_action/",
+        data,
+        mensajeExitosoAgregarAccionesUmbralesReflexivos,
+        (res) => {
+          console.log(res);
+        }
+      );
+    }
+  } else alert("Debe seleccionar un elemento para eliminar");
+}
+
+function mensajeExitosoAgregarAccionesUmbralesReflexivos(json) {
+  post_api(
+    "http://alvapala.ddns.net:3000/api/get_action",
+    {
+      umbral: UmbralId,
+      mea_id: modelo_analisis_reflexivos,
+    },
+    cargar_accion_table_reflexivos_modificar,
+    () => {
+      console.log("Error al cargar la tabla accion");
+    }
+  );
+}
+
 function error_cargar_sujetos_activos_procesos_modificar_reflexivos(error) {
   alert("Error al cargar los datos del modelo: " + error);
 }
 
-$("#criterio_de_decision_modelo").change(function () {
-  var seleccionCriterio = document.getElementById("criterio_de_decision_modelo")
-    .value;
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_umbral",
-    { criterio: seleccionCriterio },
-    cargar_lista_umbrales_proceso_reflexivo,
-    error_cargar_lista_umbrales_proceso_reflexivo
-  );
-});
-
 function cargar_lista_umbrales_proceso_reflexivo(json) {
+  document
+    .getElementById("bt_add_activo_reflexivos")
+    .classList.replace("inline-block", "d-none");
+  document
+    .getElementById("bd_mod_activo_reflexivos")
+    .classList.replace("inline-block", "d-none");
+  document
+    .getElementById("bd_del_activo_reflexivos")
+    .classList.replace("inline-block", "d-none");
+
   res = "";
+  document.getElementById("seccion_acciones_reflexivos").innerHTML = "";
   json.umbrales.forEach((cd) => {
-    res += `<tr onClick="visibilidad_acciones_umbral_reflexivo('${cd.id}')">`;
+    res += `<tr onClick="visibilidad_acciones_umbral_reflexivo('${cd.id}')" id='tr_accion_reflexivo_${cd.id}' name='tr_accion_reflexivo_'>`;
     res += `<td>${cd.id}</td>`;
     res += `<td>${cd.name}</td>`;
+    res += `<td>${cd.interpretacion}</td>`;
     res += `<td>${cd.inferior}</td>`;
     res += `<td>${cd.superior}</td>`;
     res += "</tr>";
+    post_api(
+      "http://alvapala.ddns.net:3000/api/get_action",
+      {
+        umbral: cd.id,
+        mea_id: modelo_analisis_reflexivos,
+      },
+      cargar_accion_table_reflexivos,
+      (res) => {
+        console.log("Error al cargar la tabla accion" + res);
+      }
+    );
   });
   document.getElementById("tabla_umbrales_procesos_reflexivos").innerHTML = res;
 }
@@ -6734,9 +6870,6 @@ function visibilidad_acciones_umbral_reflexivo(id) {
   document
     .getElementById("bd_del_activo_reflexivos")
     .classList.replace("d-none", "inline-block");
-  document
-    .getElementById("tabla_acciones_umbral_reflexivos")
-    .classList.replace("d-none", "inline-block");
   post_api(
     "http://alvapala.ddns.net:3000/api/get_accion/",
     {
@@ -6747,6 +6880,21 @@ function visibilidad_acciones_umbral_reflexivo(id) {
       console.log(res);
     }
   );
+  var tabla = document.getElementsByName("tr_accion_reflexivo_");
+  tabla.forEach((tr) => {
+    tr.style.backgroundColor = "rgba(0,0,0,0)";
+  });
+  document.getElementById(`tr_accion_reflexivo_${id}`).style.backgroundColor =
+    "rgba(0,0,0,0.15)";
+  var dato = document.getElementById("umbral_reflexivos_" + id);
+  if (dato && UmbralId != id) {
+    dato.style.display = "table";
+    if (UmbralId) {
+      dato = document.getElementById("umbral_reflexivos_" + UmbralId);
+      dato.style.display = "none";
+    }
+  }
+  UmbralId = id;
 }
 
 function error_cargar_lista_umbrales_proceso_reflexivo(err) {
@@ -6754,26 +6902,107 @@ function error_cargar_lista_umbrales_proceso_reflexivo(err) {
 }
 
 function cargar_accion_table_reflexivos(json) {
-  res = "";
-  json.forEach((as) => {
-    res += "<tr>";
-    res += `<td><input type="radio" name="accion_seleccionada_reflexivos" value="${
-      as.id
-    }" data-name="${as.nombre}" data-descripcion="${
-      as.descripcion
-    }" data-activo="${as.activo == "true"}"></td>`;
-    res += `<td>${as.id}</td>`;
-    res += `<td>${as.nombre}</td>`;
-    res += `<td>${as.descripcion}</td>`;
-    if (as.activo == "true")
-      res += `<td><input type="checkbox" disabled checked></td>`;
-    else res += `<td><input type="checkbox" disabled></td>`;
-    res += "</tr>";
+  console.log(json);
+  var templeate = document
+    .getElementById("templeate_tabla_accion_reflexivos")
+    .content.cloneNode(true);
+  var seccion = document.getElementById("seccion_acciones_reflexivos");
+  var body = templeate.querySelector("tbody");
+  json.acciones.forEach((um) => {
+    var fila = document.createElement("tr");
+    var dato = document.createElement("td");
+    var input = document.createElement("input");
+    input.type = "radio";
+    input.name = "accion_seleccionada_reflexivos";
+    input.dataset.id = um.id;
+    input.dataset.nombre = um.name;
+    input.dataset.description = um.description;
+    input.dataset.activo = um.active;
+    input.dataset.id_umbra = json.umbral_id;
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.id;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.name;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.description;
+    fila.appendChild(dato);
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.disabled = true;
+    input.checked = um.active == 1;
+    dato = document.createElement("td");
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    body.appendChild(fila);
   });
-  document.getElementById("tabla_accion_reflexivos").innerHTML = res;
+  body.id += "_" + json.umbral_id;
+  var tabla = templeate.querySelector(".table");
+  tabla.id = "umbral_reflexivos_" + json.umbral_id;
+  tabla.style.display = "none";
+  seccion.appendChild(templeate);
+}
+function cargar_accion_table_reflexivos_modificar(json) {
+  var templeate = document
+    .getElementById("templeate_tabla_accion_reflexivos")
+    .content.cloneNode(true);
+  var seccion = document.getElementById("seccion_acciones_reflexivos");
+  var body = templeate.querySelector("tbody");
+  json.acciones.forEach((um) => {
+    var fila = document.createElement("tr");
+    var dato = document.createElement("td");
+    var input = document.createElement("input");
+    input.type = "radio";
+    input.name = "accion_seleccionada_reflexivos";
+    input.dataset.id = um.id;
+    input.dataset.name = um.name;
+    input.dataset.description = um.description;
+    input.dataset.active = um.active;
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.id;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.name;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.description;
+    fila.appendChild(dato);
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.disabled = true;
+    input.checked = um.active == 1;
+    dato = document.createElement("td");
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    body.appendChild(fila);
+  });
+  body.id += "_" + json.umbral_id;
+  var tabla = templeate.querySelector(".table");
+  tabla.id = "umbral_reflexivos_" + json.umbral_id;
+  var tablaMod = document.getElementById(tabla.id);
+  if (tablaMod) {
+    seccion.replaceChild(tabla, tablaMod);
+  } else {
+    tabla.style.display = "none";
+    seccion.appendChild(templeate);
+  }
 }
 
 function recomendaciones_procesos_reflexivos() {
+  var criterio = document.getElementById("criterio_de_decision_modelo").value;
+  post_api(
+    "http://alvapala.ddns.net:3000/api/get_umbral",
+    { criterio: criterio },
+    cargar_lista_umbrales_proceso_reflexivo,
+    (res) => {
+      console.log(res);
+    }
+  );
   $("#modal_activos_procesos_reflexivos").modal("show");
 }
 
