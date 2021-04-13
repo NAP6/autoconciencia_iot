@@ -39,3 +39,4 @@ export class PreReflectiveProcess extends SelfAwarenessProcess {
     this.usesAnalysisModel = value;
   }
 }
+

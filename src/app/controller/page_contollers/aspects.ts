@@ -14,9 +14,9 @@ export async function get_aspects_objects(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var modeloID = req.session?.active_model.modelID;
- var system=req.body.systemID;
-	  //   var categoriT = req.body.category;
-   /* if (categoriT) {
+    var system = req.body.systemID;
+    //   var categoriT = req.body.category;
+    /* if (categoriT) {
       var system = req.body.systemID;
       var newCat: string = "";
       if (categoriT == "Entidades Físicas") {
@@ -36,22 +36,65 @@ export async function get_aspects_objects(req: Request, res: Response) {
       } else if (categoriT == "Red") {
         newCat = "Network";
       }*/
-      var rows = await db.qwerty(`SELECT 
-    					DISTINCT asp.aa_id as idAspecto,
-	    				asp.aa_nombre as nombreAspecto
-	    			FROM 
-	     				aspectoautoconsciencia asp, 
-					sujeto suj
-	    			WHERE   
-	                		suj.suj_id=${system} AND 
-	                		asp.ma_id=${modeloID} AND
-					suj.ma_id=${modeloID} AND
-					suj.suj_id=asp.suj_id`);
-      res.json(rows);
-  }else{
-	res.json({error: "Debe iniciar sesion para poder usar la api"});
+    var rows = await db.qwerty(`SELECT asp_obj.obj_id as id,
+	      	    			       obj.obj_nombre as nombre, 
+	      	                                obj.obj_tipo as tipo
+	      					FROM 
+	      				     aspectoautoconsciencia_objeto as asp_obj,
+	      	                             objeto as obj 
+	      	                        where 
+	      	                             asp_obj.obj_id=obj.obj_id AND
+	      	                             asp_obj.ma_id=obj.ma_id AND 
+	      	                             asp_obj.aa_id=${system}`);
+    res.json(rows);
+  } else {
+    res.json({ error: "Debe iniciar sesion para poder usar la api" });
   }
 }
+export async function get_aspects_objects_process(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var modeloID = req.session?.active_model.modelID;
+    var system = req.body.systemID;
+    //   var categoriT = req.body.category;
+    /* if (categoriT) {
+      var system = req.body.systemID;
+      var newCat: string = "";
+      if (categoriT == "Entidades Físicas") {
+        newCat = "PhysicalEntity";
+      } else if (categoriT == "Nodos Cloud") {
+        newCat = "CloudNode";
+      } else if (categoriT == "Nodos Fog") {
+        newCat = "FogNode";
+      } else if (categoriT == "Gateway IoT") {
+        newCat = "IoTGateway";
+      } else if (categoriT == "Sensores") {
+        newCat = "Sensor";
+      } else if (categoriT == "Tags") {
+        newCat = "Tag";
+      } else if (categoriT == "Actuadores") {
+        newCat = "Actuator";
+      } else if (categoriT == "Red") {
+        newCat = "Network";
+      }*/
+    var rows = await db.qwerty(`SELECT 
+	          					DISTINCT asp.aa_id as idAspecto,
+	      	    				asp.aa_nombre as nombreAspecto
+	      	    			FROM 
+	      	     				aspectoautoconsciencia asp, 
+	      					sujeto suj
+	      	    			WHERE   
+	      	                		suj.suj_id=${system} AND 
+	      	                		asp.ma_id=${modeloID} AND
+	      					suj.ma_id=${modeloID} AND
+	      					suj.suj_id=asp.suj_id`);
+
+    res.json(rows);
+  } else {
+    res.json({ error: "Debe iniciar sesion para poder usar la api" });
+  }
+}
+
 export async function get_aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();

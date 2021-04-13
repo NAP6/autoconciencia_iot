@@ -33,6 +33,7 @@ export {
   mod_aspecs,
   del_aspects,
   get_aspects_objects,
+	get_aspects_objects_process,
 } from "./page_contollers/aspects";
 export {
   metrics,

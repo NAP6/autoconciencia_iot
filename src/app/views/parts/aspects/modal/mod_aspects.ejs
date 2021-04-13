@@ -1,132 +1,105 @@
 <div class="modal fade" id="mod_aspects" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="modal_resource_addLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="tituloAspectos" style="width: 100%;">
-                    Modificar Aspecto Autoconsciencia
-                </h5>
-                <button type="button" class="close" onclick="limpiarFomularioMod();">
-          <span aria-hidden="true">&times;</span>
-        </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="col-12 col-lg-12">
-                            <h6>Sujeto de autoconsciencia:</h6>
-                            <div id="sujetos_Activos_aspectos_modificar" style="overflow-y:auto;height:50px" class="card col mb-4">
-                                <ul id="lista_sujetos_activos_aspectos_mod"></ul>
-                            </div>
-                        </div>
-                        <input name="form_entidad_new" id="id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        <input name="form_entidad_new" id="objeto_id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        <input name="form_entidad_new" id="sujeto_id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
+            <div class="modal-content">
+	                <div class="modal-header">
+			                <h5 class="modal-title text-center" id="tituloAspectos" style="width: 100%;">
+					                    Modificar Aspecto Autoconsciencia
+							                    </h5>
+									                    <button type="button" class="close" onclick="limpiarFomularioMod();">
+											              <span aria-hidden="true">&times;</span>
+												              </button>
+													                  </div>
+															              <div class="modal-body">
+																                      <div class="row">
+																		                          <div class="col-6">
+																					                          <div class="col-12 col-lg-12">
+																								                              <h6>Sujeto de autoconsciencia:</h6>
+																											                                      <div id="sujetos_Activos_aspectos_modificar" style="overflow-y:auto;height:50px" class="card col mb-4">
+																															                                          <ul id="lista_sujetos_activos_aspectos_mod"></ul>
+																																				                                  </div>
+																																								                          </div>
+																																											                          <input name="form_entidad_new" id="id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
+																																														                          <input name="form_entidad_new" id="objeto_id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
+																																																	                          <input name="form_entidad_new" id="sujeto_id_aspecto" type="text" class="form-control d-none" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
+																																																				                          
+																																																							  			 <h6 class="">
+																																																										                             Categoria Entidad:</h6>
+																																																													                             <div class="input-group">
+																																																																                                 <select class="custom-select" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectosMod" disabled>
+																																																																				                                 <option value="-6">Seleccione..</option>
+																																																																								                               <option id="EntidadFisica" value="1">Entidades Físicas</option>
+																																																																											                                     <option value="2">Nodos Cloud</option>
+																																																																															                                   <option value="3">Nodos Fog</option>
+																																																																																			                                 <option value="4">Gateway IoT</option>
+																																																																																							                               <option value="5">Sensores</option>
+																																																																																										                                     <option value="6">Tags</option>
+																																																																																														                                   <option value="7">Actuadores</option>
+																																																																																																		                                 <option value="8">Red</option>
+																																																																																																						                             </select>
+																																																																																																									                             </div>
+																																																																																																												                             <h6>Objetos de autoconsciencia:</h6>
+																																																																																																															                             <div class="row px-3 pr-5" style="overflow-y: auto;height: 140px;">
+																																																																																																																		                                 <div id="entidades_seleccionados_area_aspectos_mod" class="card col">
+																																																																																																																						                                 <ul id="lista_entidades_seleccionadas_aspectos_mod"></ul>
+																																																																																																																										                             </div>
+																																																																																																																													                             </div>
 
-                        <h6 class="">
-                            Categoria Entidad:</h6>
-                        <div class="input-group">
-                            <select class="custom-select" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectosMod" disabled>
-                                <option value="-6">Seleccione..</option>
-                              <option id="EntidadFisica" value="1">Entidades Físicas</option>
-                              <option value="2">Nodos Cloud</option>
-                              <option value="3">Nodos Fog</option>
-                              <option value="4">Gateway IoT</option>
-                              <option value="5">Sensores</option>
-                              <option value="6">Tags</option>
-                              <option value="7">Actuadores</option>
-                              <option value="8">Red</option>
-                            </select>
-                        </div>
-                        <h6>Objetos de autoconsciencia:</h6>
-                        <div class="row px-3 pr-5" style="overflow-y: auto;height: 140px;">
-                            <div id="entidades_seleccionados_area_aspectos_mod" class="card col">
-                                <ul id="lista_entidades_seleccionadas_aspectos_mod"></ul>
-                            </div>
-                        </div>
+																																																																																																																																                             
+																																																																																																																																			                         </div>
+																																																																																																																																						                     <div class="col-6">
+																																																																																																																																								     			<div class="input-group mb-2">
+																																																																																																																																											                            <div class="input-group-prepend">
+																																																																																																																																														                                    <span class="input-group-text" id="inputGroup-sizing-default">Nombre:</span>
+																																																																																																																																																		                                </div>
+																																																																																																																																																						                            <input name="form_entidad_new" id="nombreAspectoMod" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
+																																																																																																																																																									                            </div>
+																																																																																																																																																												                            <div class="input-group mb-2">
+																																																																																																																																																															                                <div class="input-group-prepend">
+																																																																																																																																																																			                                <span class="input-group-text" id="inputGroup-sizing-default">Descripción:</span>
+																																																																																																																																																																							                            </div>
+																																																																																																																																																																										                                <textarea type="text" name="form_entidad_new" id="descripcionAspectoMod" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+																																																																																																																																																																														                        </div>
+																																																																																																																																																																																	                        <div class="input-group mb-2">
+																																																																																																																																																																																				                            <div class="input-group-prepend">
+																																																																																																																																																																																							                                    <span class="input-group-text" id="inputGroup-sizing-default">Peso:</span>
+																																																																																																																																																																																											                                </div>
+																																																																																																																																																																																															                            <input name="form_entidad_new" id="pesoAspectoMod" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
+																																																																																																																																																																																																		                            </div>
+																																																																																																																																																																																																					    			<div class="input-group mb-2">
+																																																																																																																																																																																																								                            <div class="input-group-prepend">
+																																																																																																																																																																																																											                                    <label class="input-group-text" for="inputGroupSelect01">Objetivos:</label>
+																																																																																																																																																																																																															                                </div>
+																																																																																																																																																																																																																			                            <select class="custom-select" name="form_entidad_new" disabled id="select_objetivo_mod"></select>
 
+																																																																																																																																																																																																																						                                </select>
+																																																																																																																																																																																																																										                        </div>
+																																																																																																																																																																																																																													                        <div class="input-group mb-2">
+																																																																																																																																																																																																																																                            <div class="input-group-prepend">
+																																																																																																																																																																																																																																			                                    <label class="input-group-text" for="inputGroupSelect01">Tipo:</label>
+																																																																																																																																																																																																																																							                                </div>
+																																																																																																																																																																																																																																											                            <select class="custom-select" name="form_entidad_new" disabled id="select_aspecto_mod"></select>
 
-                    </div>
-                    <div class="col-6">
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Nombre:</span>
-                            </div>
-                            <input name="form_entidad_new" id="nombreAspectoMod" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Descripción:</span>
-                            </div>
-                            <textarea type="text" name="form_entidad_new" id="descripcionAspectoMod" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Peso:</span>
-                            </div>
-                            <input name="form_entidad_new" id="pesoAspectoMod" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Objetivos:</label>
-                            </div>
-                            <select class="custom-select" name="form_entidad_new" disabled id="select_objetivo_mod"></select>
+																																																																																																																																																																																																																																														                                </select>
+																																																																																																																																																																																																																																																		                        </div>
+																																																																																																																																																																																																																																																					<div class="form-group row">
+																																																																																																																																																																																																																																																					                            <div class="col-sm-2">Activo:</div>
+																																																																																																																																																																																																																																																								                                <div class="col-sm-8">
+																																																																																																																																																																																																																																																												                                <div class="form-check">
+																																																																																																																																																																																																																																																																                                    <input class="form-check-input" type="checkbox" id="activoAspectosMod" disabled checked>
+																																																																																																																																																																																																																																																																				                                    </div>
+																																																																																																																																																																																																																																																																								                                </div>
+																																																																																																																																																																																																																																																																												                        </div>
+																																																																																																																																																																																																																																																																															                                           </div>
+																																																																																																																																																																																																																																																																																				                   </div>
 
-                            </select>
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Tipo:</label>
-                            </div>
-                            <select class="custom-select" name="form_entidad_new" disabled id="select_aspecto_mod"></select>
-
-                            </select>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-sm-2">Activo:</div>
-                            <div class="col-sm-8">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="activoAspectosMod" disabled checked>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <h6 class="">
-                            Categoria Entidad:</h6>
-                        <div class="input-group">
-                            <select class="custom-select" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectosMod" disabled>
-                                <option value="-6">Seleccione..</option>
-                              <option id="EntidadFisica" value="1">Entidades Físicas</option>
-                              <option value="2">Nodos Cloud</option>
-                              <option value="3">Nodos Fog</option>
-                              <option value="4">Gateway IoT</option>
-                              <option value="5">Sensores</option>
-                              <option value="6">Tags</option>
-                              <option value="7">Actuadores</option>
-                              <option value="8">Red</option>
-                            </select>
-                        </div>
-                        <h6>Objetos de autoconsciencia:</h6>
-                        <div class="row px-3 pr-5" style="overflow-y: auto;height: 200px;">
-                            <div id="entidades_seleccionados_area_aspectos_mod" class="card col">
-                                <ul id="lista_entidades_seleccionadas_aspectos_mod"></ul>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="modificarAspectoButtom" class="btn btn-primary" onclick="GuardarmodificarAspecto()">
-        Modificar
-      </button>
-                <button type="button" class="btn btn-secondary" onclick="limpiarFomularioMod()">
-          Cancelar
-        </button>
-            </div>
-        </div>
-    </div>
-</div>
+																																																																																																																																																																																																																																																																																						               </div>
+																																																																																																																																																																																																																																																																																							                   <div class="modal-footer">
+																																																																																																																																																																																																																																																																																									                   <button type="button" id="modificarAspectoButtom" class="btn btn-primary" onclick="GuardarmodificarAspecto()">
+																																																																																																																																																																																																																																																																																											           Modificar
+																																																																																																																																																																																																																																																																																												         </button>
+																																																																																																																																																																																																																																																																																													                 <button type="button" class="btn btn-secondary" onclick="limpiarFomularioMod()">
+																																																																																																																																																																																																																																																																																															           Cancelar
+																																																																																																																																																																																																																																																																																																           </button>
+																																																																																																																																																																																																																																																																																																	               </div>
+																																																																																																																																																																																																																																																																																																		               </div>
+																																																																																																																																																																																																																																																																																																			           </div>																																																																																																																																																																																																																																																																																																				   </div>

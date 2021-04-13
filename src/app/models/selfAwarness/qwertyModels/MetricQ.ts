@@ -50,6 +50,7 @@ aspectoautoconsciencia_metrica asp_met
     met.met_descripcion as description,
     met.met_abreviacion as abbreviation,
     met.met_perspectivaindicador as perspectiva,
+    enu2.enu_nombre_valor as perspectiva_nombre,
     met.met_tipo as tipo_id,
     enu.enu_nombre_valor as met_type,
     met.esc_id as scale,
@@ -69,9 +70,10 @@ aspectoautoconsciencia_metrica asp_met
       sql += `
   FROM 
     metrica met,
-    enumeracion enu
+    enumeracion enu,
+    enumeracion enu2
   WHERE 
-    enu.enu_id=met.met_tipo`;
+    enu.enu_id=met.met_tipo AND enu2.enu_id=met.met_perspectivaindicador`;
       return sql;
     }
   }

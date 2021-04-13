@@ -30,13 +30,15 @@
                         </div>
                         <input type="text" name="form_entidad_new" id="abreviaturaMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
                     </div>
-                    <div class="input-group mb-3">
+		    <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Perspectiva Indicador:</span>
+                            <label class="input-group-text" for="inputGroupSelect01">Indicador:</label>
                         </div>
-                        <input name="form_entidad_new" id="perspectiva_indicador" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" />
+                        <select class="custom-select" name="form_entidad_new" id="tipo_perspectiva_select"></select>
+
+                        </select>
                     </div>
-                    <div class="input-group mb-3">
+                                        <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">Escala:</label>
                         </div>

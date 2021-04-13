@@ -98,3 +98,4 @@ export class SelfAwarenessProcess {
     this._captures = value;
   }
 }
+

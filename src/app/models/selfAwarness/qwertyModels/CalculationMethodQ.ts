@@ -10,13 +10,11 @@ export class CalculationMethodQ
 		${this.produces?.id},
 		${this.implementationResourceType},
 		${
-      this.calculationPeriodStart == undefined
-        ? "NULL"
+      this.calculationPeriodStart == undefined? "NULL"
         : "'" + this.calculationPeriodStart + "'"
     },
 		${
-      this.calculationPeriodEnd == undefined
-        ? "NULL"
+      this.calculationPeriodEnd == undefined? "NULL"
         : "'" + this.calculationPeriodEnd + "'"
     },
 		  @id)`;
