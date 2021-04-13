@@ -3633,19 +3633,15 @@ function error_cargar_aspectos_select(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
 $("#Aspectos_autoconsciencia").change(function () {
-  document.getElementById("CategoriaEntidadesProcesos").disabled = false;
   var limpiar = document.getElementById(
     "lista_entidades_seleccionadas_procesos"
   );
-  var seccion = document.getElementById("CategoriaEntidadesProcesos");
-  var categoria = seccion.options[seccion.selectedIndex].text;
   limpiar.innerHTML = "";
   data = {
-    categoria: categoria,
     aspecto: document.getElementById("Aspectos_autoconsciencia").value,
     sujeto: SujetoGuardarProceso,
   };
-  if (data.categoria != -6 && data.aspecto != -6 && !!data.sujeto) {
+  if (data.aspecto != -6 && !!data.sujeto) {
     post_api(
       "http://alvapala.ddns.net:3000/api/get_objects_aspects",
       data,
@@ -3697,6 +3693,28 @@ $("#Aspectos_autoconsciencia").change(function () {
 function cargar_objetos_proceso(json) {
   var ul = document.getElementById("lista_entidades_seleccionadas_procesos");
   ul.innerHTML = "";
+  var op = document.createElement("option");
+  var seleccion = json[0].tipo;
+  if (seleccion == "PhysicalEntity") {
+    op.innerHTML = "Entidades Físicas";
+  } else if (seleccion == "CloudNode") {
+    op.innerHTML = "Nodos Cloud";
+  } else if (seleccion == "FogNode") {
+    op.innerHTML = "Nodos Fog";
+  } else if (seleccion == "IoTGateway") {
+    op.innerHTML = "Gateway IoT";
+  } else if (seleccion == "Sensor") {
+    op.innerHTML = "Sensores";
+  } else if (seleccion == "Tag") {
+    op.innerHTML = "Tags";
+  } else if (seleccion == "Actuator") {
+    op.innerHTML = "Actuadores";
+  } else if (seleccion == "Network") {
+    op.innerHTML = "Red";
+  }
+  var sel = document.getElementById("CategoriaEntidadesProcesos");
+  sel.innerHTML = "";
+  sel.appendChild(op);
   json.forEach((element) => {
     var li = document.createElement("li");
     li.innerHTML = element.nombre;
@@ -4836,6 +4854,29 @@ function cargar_objetos_proceso_reflexivo(json) {
     "lista_entidades_seleccionadas_procesos_reflexivos"
   );
   ul.innerHTML = "";
+var op = document.createElement("option");
+  var seleccion = json[0].tipo;
+  if (seleccion == "PhysicalEntity") {
+    op.innerHTML = "Entidades Físicas";
+  } else if (seleccion == "CloudNode") {
+    op.innerHTML = "Nodos Cloud";
+  } else if (seleccion == "FogNode") {
+    op.innerHTML = "Nodos Fog";
+  } else if (seleccion == "IoTGateway") {
+    op.innerHTML = "Gateway IoT";
+  } else if (seleccion == "Sensor") {
+    op.innerHTML = "Sensores";
+  } else if (seleccion == "Tag") {
+    op.innerHTML = "Tags";
+  } else if (seleccion == "Actuator") {
+    op.innerHTML = "Actuadores";
+  } else if (seleccion == "Network") {
+    op.innerHTML = "Red";
+  }
+  var sel = document.getElementById("CategoriaEntidadesProcesos_reflexivos");
+  sel.innerHTML = "";
+  sel.appendChild(op);
+
   json.forEach((element) => {
     var li = document.createElement("li");
     li.innerHTML = element.nombre;
@@ -5258,22 +5299,16 @@ function error_cargar_select_metodos_reflexivos(error) {
   alert("Error cargadon select criterios reflexivos");
 }
 $("#Aspectos_autoconsciencia_reflexivos").change(function () {
-  var seleccion = document.getElementById(
-    "CategoriaEntidadesProcesos_reflexivos"
-  );
-  seleccion.disabled = false;
-  var categoria = seleccion.options[seleccion.selectedIndex].text;
   var limpiar_objetos = document.getElementById(
     "lista_entidades_seleccionadas_procesos_reflexivos"
   );
   limpiar_objetos.innerHTML = "";
   data = {
-    categoria: categoria,
     aspecto: document.getElementById("Aspectos_autoconsciencia_reflexivos")
       .value,
     sujeto: sujetoGuardarproceso_reflexivo,
   };
-  if (data.categoria != -6 && data.aspecto != -6 && !!data.sujeto) {
+  if ( data.aspecto != -6 && !!data.sujeto) {
     post_api(
       "http://alvapala.ddns.net:3000/api/get_objects_aspects",
       data,
@@ -6860,7 +6895,6 @@ function cargar_lista_umbrales_proceso_reflexivo(json) {
 var UmbralId = undefined;
 
 function visibilidad_acciones_umbral_reflexivo(id) {
-  UmbralId = id;
   document
     .getElementById("bt_add_activo_reflexivos")
     .classList.replace("d-none", "inline-block");
@@ -6870,27 +6904,17 @@ function visibilidad_acciones_umbral_reflexivo(id) {
   document
     .getElementById("bd_del_activo_reflexivos")
     .classList.replace("d-none", "inline-block");
-  post_api(
-    "http://alvapala.ddns.net:3000/api/get_accion/",
-    {
-      id: id,
-    },
-    cargar_accion_table_reflexivos,
-    (res) => {
-      console.log(res);
-    }
-  );
   var tabla = document.getElementsByName("tr_accion_reflexivo_");
   tabla.forEach((tr) => {
     tr.style.backgroundColor = "rgba(0,0,0,0)";
   });
   document.getElementById(`tr_accion_reflexivo_${id}`).style.backgroundColor =
     "rgba(0,0,0,0.15)";
-  var dato = document.getElementById("umbral_reflexivos_" + id);
+  var dato = document.getElementById("umbral_reflexivo_" + id);
   if (dato && UmbralId != id) {
     dato.style.display = "table";
     if (UmbralId) {
-      dato = document.getElementById("umbral_reflexivos_" + UmbralId);
+      dato = document.getElementById("umbral_reflexivo_" + UmbralId);
       dato.style.display = "none";
     }
   }
@@ -6904,7 +6928,7 @@ function error_cargar_lista_umbrales_proceso_reflexivo(err) {
 function cargar_accion_table_reflexivos(json) {
   console.log(json);
   var templeate = document
-    .getElementById("templeate_tabla_accion_reflexivos")
+    .getElementById("template_tabla_accion_reflexivos")
     .content.cloneNode(true);
   var seccion = document.getElementById("seccion_acciones_reflexivos");
   var body = templeate.querySelector("tbody");
@@ -6941,7 +6965,7 @@ function cargar_accion_table_reflexivos(json) {
   });
   body.id += "_" + json.umbral_id;
   var tabla = templeate.querySelector(".table");
-  tabla.id = "umbral_reflexivos_" + json.umbral_id;
+  tabla.id = "umbral_reflexivo_" + json.umbral_id;
   tabla.style.display = "none";
   seccion.appendChild(templeate);
 }
@@ -6983,7 +7007,7 @@ function cargar_accion_table_reflexivos_modificar(json) {
   });
   body.id += "_" + json.umbral_id;
   var tabla = templeate.querySelector(".table");
-  tabla.id = "umbral_reflexivos_" + json.umbral_id;
+  tabla.id = "umbral_reflexivo_" + json.umbral_id;
   var tablaMod = document.getElementById(tabla.id);
   if (tablaMod) {
     seccion.replaceChild(tabla, tablaMod);

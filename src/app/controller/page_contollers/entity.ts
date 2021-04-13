@@ -129,7 +129,8 @@ export async function get_objects_aspects(req: Request, res: Response) {
     }
     var rows = await db.qwerty(`SELECT 
     obj.obj_id as id,
-    obj.obj_nombre as nombre
+    obj.obj_nombre as nombre,
+    obj.obj_tipo as tipo
 	 FROM
     objeto obj, 
     aspectoautoconsciencia_objeto asp_obj,
@@ -147,8 +148,7 @@ export async function get_objects_aspects(req: Request, res: Response) {
     suj_obj.obj_id=obj.obj_id AND
     asp.aa_id=${idA} AND
     asp_obj.aa_id=asp.aa_id AND															
-    asp_obj.obj_id=obj.obj_id AND
-    obj.obj_tipo="${newCat}"`);
+    asp_obj.obj_id=obj.obj_id`);
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
