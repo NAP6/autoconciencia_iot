@@ -8,6 +8,14 @@ import {
   ParameterQ,
 } from "../../models/selfAwarnessModels";
 
+export function deployment_resources_page(req: Request, res: Response) {
+  res.render("deployment_resources", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
+
 export async function deployment_resources(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();

@@ -46,7 +46,9 @@ export class GoalQ extends Goal implements SQL_Qwerty {
 	     	objetivo `;
     if (value.length > 0)
       sql += `WHERE 
-	  	suj_id = ${value[tag.indexOf('/@/SYSTEM/@/')]} AND ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} ORDER BY id`;
+	  	suj_id = ${value[tag.indexOf("/@/SYSTEM/@/")]} AND ma_id = ${
+        value[tag.indexOf("/@/MODEL/@/")]
+      } ORDER BY id`;
     return sql;
   }
   toSqlDelete(tag: string[], value: string[]): string {
@@ -56,6 +58,17 @@ export class GoalQ extends Goal implements SQL_Qwerty {
     throw new Error("Method not implemented.");
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var goals: Goal[] = [];
+    for (var i = 0; i < rows.length; i++) {
+      var goal: Goal = new Goal(
+        rows[i].id,
+        rows[i].nombre,
+        rows[i].descripcion,
+        rows[i].peso,
+        rows[i].asignacion
+      );
+      goals.push(goal);
+    }
+    return goals;
   }
 }

@@ -5,7 +5,7 @@ export class FormulaQ extends Formula implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
     var sql = `call formula(
 	  		'${this.name}',
-	  		'${this.description}',
+	  		"${this.description}",
 	  		${this.returnDataType},
 	  		1,
 	  		'${this.expression}',

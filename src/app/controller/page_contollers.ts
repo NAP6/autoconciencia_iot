@@ -33,7 +33,7 @@ export {
   mod_aspecs,
   del_aspects,
   get_aspects_objects,
-	get_aspects_objects_process,
+  get_aspects_objects_process,
 } from "./page_contollers/aspects";
 export {
   metrics,
@@ -60,6 +60,7 @@ export {
   upd_scales,
 } from "./page_contollers/scales";
 export {
+  deployment_resources_page,
   deployment_resources,
   add_deployment_resources,
   del_deployment_resources,
@@ -119,3 +120,4 @@ export {
   upd_action,
   del_action,
 } from "./page_contollers/action";
+export { generate_model } from "./page_contollers/generate_model";
