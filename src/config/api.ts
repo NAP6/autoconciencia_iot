@@ -143,6 +143,7 @@ export default function (app: Application) {
   app.post("/api/add_pre_reflective_process", rt.add_pre_reflective_process);
   app.get("/api/get_pre_reflective_process", rt.get_pre_reflective_process);
   app.post("/api/del_pre_reflective_process", rt.del_pre_reflective_process);
+	app.post("/api/get_pre_reflective_process_mod",rt.get_pre_reflective_process_mod);
   //Metodo de aprendizaje procesos pre relfexivos
 
   app.post("/api/add_metodo_modelo", rt.add_metodo_modelo);

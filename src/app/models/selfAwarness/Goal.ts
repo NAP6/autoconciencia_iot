@@ -100,4 +100,18 @@ export class Goal {
   set isInterpretedBy(value: DecisionCriteria | undefined) {
     this._isInterpretedBy = value;
   }
+
+  public toObjectG(): any {
+    var res: any = {};
+    res.$ = {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      weight: this.weight,
+      aggregationOperator: this.aggregationOperator,
+    };
+    if (this.containsSubGoal.length > 0)
+      res.containsSubGoal = this.containsSubGoal;
+    return res;
+  }
 }

@@ -2357,7 +2357,6 @@ if (document.getElementById("select_modelo_para_activar_trabajo"))
   );
 
 function cargar_modelos_trabajo_actual(json) {
-	console.log(json);
   res = "<option value=''>Seleccione un modelo para trabajar</option>";
   json.forEach((md) => {
     res += `<option value="${md._id}">${md._name}</option>`;
@@ -3631,7 +3630,7 @@ function error_cargar_propiedades_select(error) {
 }
 
 function error_cargar_aspectos_select(err) {
-  alert("Error al cargar los datos del modelo:" + err);
+  alert("Error al cargar los datos del modelo: " + err);
 }
 $("#Aspectos_autoconsciencia").change(function () {
   var limpiar = document.getElementById(

@@ -19,7 +19,7 @@ export default function (app: Application, upload: Multer) {
   app.post(
     "/modificar_pre_reflexivos",
     nv.loggedIn,
-    nv.modificar_pre_reflexivos
+    rt.get_pre_reflective_process_mod
   );
   app.get("/procesos_reflexivos", nv.loggedIn, nv.procesos_reflexivos);
   app.post("/modificar_reflexivos", nv.loggedIn, nv.modificar_reflexivos);

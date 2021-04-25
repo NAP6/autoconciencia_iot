@@ -86,7 +86,7 @@ export {
   add_pre_reflective_process,
   get_pre_reflective_process,
   del_pre_reflective_process,
-  add_metodo_modelo,
+  add_metodo_modelo,get_pre_reflective_process_mod
 } from "./page_contollers/pre_reflective_process";
 export {
   add_reflective_process,

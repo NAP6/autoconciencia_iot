@@ -16,7 +16,6 @@ export async function generate_model(req: Request, res: Response) {
   modelo = modelo.toObjectArray(rows)[0];
   var modeloA = JSON.parse(modelo.architectureModel);
   await add_span(modeloA[Object.keys(modeloA)[0]]);
-  console.log(modeloA);
 
   res.render("generate_model", {
     error: req.flash("error"),
@@ -25,31 +24,30 @@ export async function generate_model(req: Request, res: Response) {
     model: JSON.stringify(modeloA, null, "  "),
   });
 }
-
 async function add_span(model: any) {
   if (model["containsIoTSystem"]) {
     var principa_system = model["containsIoTSystem"][0];
-    await add_goal(principa_system.$);
+    await add_goal(principa_system);
     if (principa_system.containsIoTSubSystem) {
       await recursive_span(principa_system.containsIoTSubSystem);
     }
   }
+  model["containsIoTSystem"][0] = principa_system;
 }
 
 async function recursive_span(system) {
-  await system.forEach(async (subSystem) => {
-    await add_goal(subSystem.$);
-    if (subSystem.containsIoTSubSystem) {
-      await recursive_span(subSystem.containsIoTSubSystem);
-    }
-  });
+  for (var i = 0; i < system.length; i++) {
+    await add_goal(system[i]);
+    if (system[i].containsIoTSubSystem)
+      await recursive_span(system[i].containsIoTSubSystem);
+  }
 }
 
 async function add_goal(span) {
   var db = new database2();
   var goal: GoalQ = new GoalQ(-1, "", "", 0, "");
   var rows = await db.qwerty(
-    goal.toSqlSelect(["/@/SYSTEM/@/", "/@/MODEL/@/"], [span.id, modelID])
+    goal.toSqlSelect(["/@/SYSTEM/@/", "/@/MODEL/@/"], [span.$.id, modelID])
   );
   var id_hierarchical = rows.map((row) => {
     return { id: row.id, padre: row.padre };
@@ -68,7 +66,6 @@ function order_goals_hierarchical(
   id_f
 ): Goal[] {
   //Lista de pares seleccionados
-  console.log(typeof id_hierarchical[0].padre);
   var selected_goals_id = id_hierarchical.filter((goal) => goal.padre == id_f);
   //Lista de pares no seleccionados
   var not_selected_goals_id = id_hierarchical.filter(
@@ -86,15 +83,20 @@ function order_goals_hierarchical(
   var unselected_goals = list_of_goals.filter(
     (goal) => ids.indexOf(goal.id) == -1
   );
+  var result_goals: any[] = [];
   selected_goals.forEach((goal) => {
-    goal.containsSubGoal = order_goals_hierarchical(
+    var aux_subGoal = order_goals_hierarchical(
       unselected_goals,
       not_selected_goals_id,
       goal.id
     );
+    if (aux_subGoal.length > 0) goal.containsSubGoal = aux_subGoal;
+    result_goals.push(goal.toObjectG());
   });
-  return selected_goals;
+  return result_goals;
 }
 
 function add_calculatedGoalIndicator() {}
+
+function add_SelfAwarenessProcess(){}
 function add_scope() {}
