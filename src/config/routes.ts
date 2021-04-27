@@ -22,7 +22,7 @@ export default function (app: Application, upload: Multer) {
     rt.get_pre_reflective_process_mod
   );
   app.get("/procesos_reflexivos", nv.loggedIn, nv.procesos_reflexivos);
-  app.post("/modificar_reflexivos", nv.loggedIn, nv.modificar_reflexivos);
+  app.post("/modificar_reflexivos", nv.loggedIn, rt.get_reflective_process_mod);
 
   //Rutas Revisadas
   app.get("/login", rt.login);

@@ -2357,7 +2357,7 @@ if (document.getElementById("select_modelo_para_activar_trabajo"))
   );
 
 function cargar_modelos_trabajo_actual(json) {
-	console.log(json);
+  console.log(json);
   res = "<option value=''>Seleccione un modelo para trabajar</option>";
   json.forEach((md) => {
     res += `<option value="${md._id}">${md._name}</option>`;
@@ -4537,9 +4537,7 @@ function modificarProcesoPreReflexivo() {
   }
 }
 
-function cargar_modificar_procesos_pre(json) {
-
-}
+function cargar_modificar_procesos_pre(json) {}
 
 function mensaje_error_cargar_modificar_procesos_pre(error) {
   alert(error);
@@ -4857,7 +4855,7 @@ function cargar_objetos_proceso_reflexivo(json) {
     "lista_entidades_seleccionadas_procesos_reflexivos"
   );
   ul.innerHTML = "";
-var op = document.createElement("option");
+  var op = document.createElement("option");
   var seleccion = json[0].tipo;
   if (seleccion == "PhysicalEntity") {
     op.innerHTML = "Entidades Físicas";
@@ -5311,7 +5309,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
       .value,
     sujeto: sujetoGuardarproceso_reflexivo,
   };
-  if ( data.aspecto != -6 && !!data.sujeto) {
+  if (data.aspecto != -6 && !!data.sujeto) {
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
       data,
@@ -8397,4 +8395,22 @@ function cargar_objetos_seleccionados_aspectos(json) {
 }
 function error_cargar_sujetos_activos_aspectos_modificar(error) {
   alert("Error al cargar los datos del modelo: " + error);
+}
+
+var proceso_pre_seleccionado_id= undefined;
+//Es una parte de prueba para modificar procesos
+if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
+console.log(proceso_pre_seleccionado_id);
+}
+function cargar_pre_reflexivos_modificar(){
+	var id;
+ var radio = document.getElementsByName("proceso_seleccionado");
+  radio.forEach((elemn) => {
+    if (elemn.checked) {
+      id = elemn.value;
+	    return;
+    }
+  });
+	proceso_pre_seleccionado_id=id;
+	console.log(proceso_pre_seleccionado_id);
 }

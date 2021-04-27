@@ -3,11 +3,12 @@ import { database2 } from "../../data/database2";
 import { DataFlow } from "../../models/selfAwarness/DataFlow";
 import { DirectMetric } from "../../models/selfAwarness/DirectMetric";
 import { Indicator } from "../../models/selfAwarness/Indicator";
-import {IndirectMetric} from "../../models/selfAwarness/IndirectMetric";
+import { IndirectMetric } from "../../models/selfAwarness/IndirectMetric";
 import { Property } from "../../models/selfAwarness/Property";
 import { ReflectiveProcessQ } from "../../models/selfAwarness/qwertyModels/ReflectiveProcessQ";
 import {
-  AnalysisModelQ,CalculationMethodQ
+  AnalysisModelQ,
+  CalculationMethodQ,
 } from "../../models/selfAwarnessModels";
 
 export function reflective_process(req: Request, res: Response) {
@@ -89,16 +90,13 @@ export async function add_metodo_modelo2(req: Request, res: Response) {
     console.log(data);
     var db = new database2();
     var modeloID = req.session!.active_model.modelID;
-    var calc = new CalculationMethodQ(-1, "",);
-    calc.produces = new IndirectMetric (data.m_calculo.met_id, "", "", "", "");
-calc.implementationResourceType=data.m_calculo.ma_tipo;
-calc.calculationPeriodStart=data.m_calculo.inicio;
-calc.calculationPeriodEnd=data.m_calculo.fin;
+    var calc = new CalculationMethodQ(-1, "");
+    calc.produces = new IndirectMetric(data.m_calculo.met_id, "", "", "", "");
+    calc.implementationResourceType = data.m_calculo.ma_tipo;
+    calc.calculationPeriodStart = data.m_calculo.inicio;
+    calc.calculationPeriodEnd = data.m_calculo.fin;
     var row1 = await db.qwerty(
-      calc.toSqlInsert(
-        ["/@/PROCES/@/", ],
-        [data.proceso_id,]
-      )
+      calc.toSqlInsert(["/@/PROCES/@/"], [data.proceso_id])
     );
     var anali = new AnalysisModelQ(-1, data.modelo.ma_tipo);
     anali.produces = new Indicator(data.modelo.met_id, "", "", "", "");
@@ -109,6 +107,30 @@ calc.calculationPeriodEnd=data.m_calculo.fin;
       )
     );
     res.json([row1[0][0].id, row2[0][0].id]);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export async function get_reflective_process_mod(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var newProcess = req.body;
+    var modificar = await db.qwerty(`SELECT pa_id as id, pa_nombre as nombre,
+		    	    pa_descripcion as descripcion,
+	  	  	    pa_inicio_periodo_ejecucion as inicio,
+		    	    pa_fin_periodo_ejecucion as fin,
+			    aa_id as aspecto_id,
+			    suj_id as sujeto_id
+			    FROM procesoautoconsciencia 
+	    		    WHERE pa_id=${newProcess.proceso_reflexivo_seleccionado}`);
+    res.render("modificar_reflexivos", {
+      error: req.flash("error"),
+      succes: req.flash("succes"),
+      modificar: modificar,
+      session: req.session,
+    });
+    console.log(modificar);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

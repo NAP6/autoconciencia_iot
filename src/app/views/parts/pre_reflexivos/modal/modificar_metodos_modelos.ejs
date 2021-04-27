@@ -6,7 +6,7 @@
         </div>
     </nav>
     <div class="tab-content" id="nav-tabContent">
-        <input type="text" class="d-none" id="id_objeto_seleccionado" value="<%= modificar.objeto_id %>">
+        <input type="text" class="d-none" id="id_objeto_seleccionado">
         <div class="tab-pane fade show active" id="nav-recoleccion" role="tabpanel" aria-labelledby="nav-recoleccion-tab">
             <div class="row mt-3" id="formularios_divididos">
                 <div class="col-6">
@@ -15,7 +15,6 @@
                             <label class="input-group-text" id="tipo_comunicacion_metodos_modificar">Tipo de comunicación: </label>
                         </div>
                         <select class="custom-select" name="tipo_comunicacion_modificar" id="tipo_comunicacion_modificar">
-                            <option value="<%= modificar.tipo_comunicacion_id%>"><%= modificar.tipoComunicacion %></option>
                   </select>
                     </div>
                     <div class="input-group mb-2">
@@ -23,7 +22,6 @@
                             <label class="input-group-text" id="alcance_recoleccion_metodos">Alcance de la recolección: </label>
                         </div>
                         <select class="custom-select" name="alcance_recoleccion_modificar" id="alcance_recoleccion_modificar">
-                            <option value="<%= modificar.alcance_id %>"><%= modificar.alcance %></option>
                   </select>
                     </div>
                     <div class="input-group mb-2">
@@ -31,7 +29,6 @@
                             <label class="input-group-text" id="propiedad_recoleccion_metodos">Propiedad: </label>
                         </div>
                         <select class="custom-select" name="proiedad_recoleccion_modificar" id="proiedad_recoleccion_modificar">
-                            <option value="<%= modificar.propiedad_id %>"><%= modificar.propiedad %></option>
                   </select>
                     </div>
                     <div class="input-group mb-2">
@@ -46,7 +43,6 @@
                             <label class="input-group-text" id="metrica_metodos">Métrica directa: </label>
                         </div>
                         <select class="custom-select" name="metrica_directa_modificar" id="metrica_directa_modificar" disabled>
-                            <option value="<%= modificar.metrica_id%>"><%= modificar.metrica %></option>
                   </select>
                     </div>
                 </div>
@@ -60,9 +56,9 @@
                             <label class="input-group-text" id="tiporecursoModelo">Tipo de recurso: </label>
                         </div>
                         <select class="custom-select" name="tipo_recurso_modificar" id="tipo_recurso_modificar" onchange="SeleccionaRecursoSelect(this);" disabled>
-                        <option value="0"  <% if(modificar.recurso==0){ %>selected<% } %>>Fórmula</option>
-                        <option value="1"  <% if(modificar.recurso==1){ %>selected<% } %>>Función</option>
-                        <option value="2"  <% if(modificar.recurso==2){ %>selected<% } %>>Servicio</option>
+                        <option value="0">Fórmula</option>
+                        <option value="1">Función</option>
+                        <option value="2">Servicio</option>
                   </select>
                     </div>
 
@@ -82,7 +78,6 @@
                             <label class="input-group-text" id="indicadorModelo">Indicador: </label>
                         </div>
                         <select class="custom-select" name="indicador_modelo_modificar" id="indicador_modelo_modificar" disabled>
-                            <option value="<%= modificar.indicador_id%>"><%= modificar.indicador%></option>
                   </select>
                     </div>
                     <div class="input-group mb-2">
@@ -90,7 +85,6 @@
                             <label class="input-group-text" for="criterio_de_decision">Criterio de decisión:</label>
                         </div>
                         <select class="custom-select" name="criterio_de_decision_modificar" id="criterio_de_decision_modificar" disabled>
-                        <option value="<%= modificar.criterio_id%>"><%= modificar.criterio%></option>
                   </select>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" id="btn-recomendaciones_model_modificar" type="button" onclick="" disabled>Recomendaciones prescriptivas</button>

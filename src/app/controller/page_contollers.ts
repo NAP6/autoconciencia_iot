@@ -93,6 +93,7 @@ export {
   get_reflective_process,
   del_reflective_process,
   add_metodo_modelo2,
+	get_reflective_process_mod,
 } from "./page_contollers/reflective_process";
 export { get_properties } from "./page_contollers/property";
 export { get_data_flow } from "./page_contollers/data_flow";
