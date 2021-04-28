@@ -14,10 +14,9 @@ export function metrics(req: Request, res: Response) {
 export async function get_metrics(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var metrics:MetricQ=new MetricQ(-1,"","","","");
-    var rows= await db.qwerty(metrics.toSqlSelect([],[]));
+    var metrics: MetricQ = new MetricQ(-1, "", "", "", "");
+    var rows = await db.qwerty(metrics.toSqlSelect([], []));
     res.json(rows);
-    
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -25,11 +24,10 @@ export async function get_metrics(req: Request, res: Response) {
 export async function get_metrics_aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var id=req.body.id;
-    var metrics:MetricQ=new MetricQ(-1,"","","","");
-    var rows= await db.qwerty(metrics.toSqlSelect(['/@/ASPECTID/@/'],[id]));
+    var id = req.body.id;
+    var metrics: MetricQ = new MetricQ(-1, "", "", "", "");
+    var rows = await db.qwerty(metrics.toSqlSelect(["/@/ASPECTID/@/"], [id]));
     res.json(rows);
-    
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -38,18 +36,40 @@ export async function get_metrics_aspects(req: Request, res: Response) {
 export async function get_metrics_type(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var id=req.body.id;
-	  var tipo=req.body.tipo;
-    var metrics:MetricQ=new MetricQ(-1,"","","","");
-    var rows= await db.qwerty(metrics.toSqlSelect(['/@/ASPECTID/@/','/@/TYPE/@/'],[id,tipo]));
+    var id = req.body.id;
+    var tipo = req.body.tipo;
+    var metrics: MetricQ = new MetricQ(-1, "", "", "", "");
+    var rows = await db.qwerty(
+      metrics.toSqlSelect(["/@/ASPECTID/@/", "/@/TYPE/@/"], [id, tipo])
+    );
     res.json(rows);
-    
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function get_metrics_type_aspects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var id = req.body.id;
+    var tipo = req.body.tipo;
+    var metrics: MetricQ = new MetricQ(-1, "", "", "", "");
+    var rows = await db.qwerty(`SELECT 
+	    met.met_id as id, 
+	    met.met_nombre as name, 
+	    IF((SELECT COUNT(asp_me.met_id)
+	    FROM aspectoautoconsciencia_metrica as asp_me 
+	    WHERE asp_me.aa_id=${id} && asp_me.met_id=met.met_id)>0,True,false) as existe
+	    FROM 
+	    metrica met
+	    WHERE
+	    met.met_tipo=${tipo}`);
+    res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
 export async function add_metrics(req: Request, res: Response) {
-  if(req.session?.user){
+  if (req.session?.user) {
     var db = new database2();
     var newMetric = req.body;
     var metric: MetricQ = new MetricQ(
@@ -57,8 +77,7 @@ export async function add_metrics(req: Request, res: Response) {
       newMetric.name,
       newMetric.description,
       newMetric.abbreviation,
-      newMetric.perspective,
-
+      newMetric.perspective
     );
     metric.active = newMetric.active;
     await db.qwerty(
@@ -75,17 +94,23 @@ export async function add_metrics(req: Request, res: Response) {
 
 export async function add_metrics_aspects(req: Request, res: Response) {
   console.log(req.body);
-  if(req.session?.user){
+  if (req.session?.user) {
     var db = new database2();
-    var element=req.body;
-    for(var i=0;i<element.length;i++){
-      var cont=await db.qwerty(`SELECT COUNT(asp_me.met_id) cont FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=${element[i].aa_id} && asp_me.met_id=${element[i].met_id}`);
+    var element = req.body;
+    for (var i = 0; i < element.length; i++) {
+      var cont = await db.qwerty(
+        `SELECT COUNT(asp_me.met_id) cont FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=${element[i].aa_id} && asp_me.met_id=${element[i].met_id}`
+      );
       cont = cont[0]["cont"];
       console.log(cont);
-      if(cont>0&& element[i].existe=='0'){
-      await db.qwerty(`DELETE FROM aspectoautoconsciencia_metrica WHERE met_id=${element[i].met_id} AND aa_id=${element[i].aa_id}`);
-      }else if(cont==0 && element[i].existe=='1'){
-        await db.qwerty(`INSERT INTO aspectoautoconsciencia_metrica(met_id, aa_id) VALUES (${element[i].met_id},${element[i].aa_id})`);
+      if (cont > 0 && element[i].existe == "0") {
+        await db.qwerty(
+          `DELETE FROM aspectoautoconsciencia_metrica WHERE met_id=${element[i].met_id} AND aa_id=${element[i].aa_id}`
+        );
+      } else if (cont == 0 && element[i].existe == "1") {
+        await db.qwerty(
+          `INSERT INTO aspectoautoconsciencia_metrica(met_id, aa_id) VALUES (${element[i].met_id},${element[i].aa_id})`
+        );
       }
     }
     res.json({ Mensaje: "Los datos se han enviado con exito" });
@@ -94,7 +119,7 @@ export async function add_metrics_aspects(req: Request, res: Response) {
   }
 }
 export async function mod_metrics(req: Request, res: Response) {
-  if(req.session?.user){
+  if (req.session?.user) {
     var db = new database2();
     var newMetric = req.body;
     var metric: MetricQ = new MetricQ(
@@ -102,10 +127,9 @@ export async function mod_metrics(req: Request, res: Response) {
       newMetric.name,
       newMetric.description,
       newMetric.abbreviation,
-      newMetric.perspective,
-
+      newMetric.perspective
     );
-    metric.active = newMetric.active==1;
+    metric.active = newMetric.active == 1;
     await db.qwerty(
       metric.toSqlUpdate(
         ["/@/TYPE/@/", "/@/ESCALE/@/", "/@/UNIT/@/"],
@@ -118,21 +142,11 @@ export async function mod_metrics(req: Request, res: Response) {
   }
 }
 export async function del_metrics(req: Request, res: Response) {
-  if(req.session?.user){
+  if (req.session?.user) {
     var db = new database2();
     var newMetric = req.body;
-    var metric: MetricQ = new MetricQ(
-      newMetric.id,
-      "",
-      "",
-      "",
-      "",
-    );
-    await db.qwerty(
-      metric.toSqlDelete(
-       ["","",""]
-      )
-    );
+    var metric: MetricQ = new MetricQ(newMetric.id, "", "", "", "");
+    await db.qwerty(metric.toSqlDelete(["", "", ""]));
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

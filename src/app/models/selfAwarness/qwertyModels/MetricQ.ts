@@ -17,7 +17,7 @@ export class MetricQ extends Metric implements SQL_Qwerty {
                 '${this.description}',
                 '${this.abbreviation}',
                 '${value[tag.indexOf("/@/TYPE/@/")]}',
-                '${this.perspective}',
+                ${this.perspective == undefined? null:+this.perspective},
                 '${this.active ? 1 : 0}',
                 '${value[tag.indexOf("/@/ESCALE/@/")]}',
                 '${value[tag.indexOf("/@/UNIT/@/")]}'

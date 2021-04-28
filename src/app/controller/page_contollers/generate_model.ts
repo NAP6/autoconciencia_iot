@@ -24,6 +24,7 @@ export async function generate_model(req: Request, res: Response) {
     model: JSON.stringify(modeloA, null, "  "),
   });
 }
+
 async function add_span(model: any) {
   if (model["containsIoTSystem"]) {
     var principa_system = model["containsIoTSystem"][0];
@@ -96,7 +97,12 @@ function order_goals_hierarchical(
   return result_goals;
 }
 
-function add_calculatedGoalIndicator() {}
+function add_calculatedGoalIndicator(span) {
+	
+}
 
-function add_SelfAwarenessProcess(){}
+function add_SelfAwarenessProcess(span){
+//  var SelfAwarness = new SelfAwarenessProcess();
+}
+
 function add_scope() {}

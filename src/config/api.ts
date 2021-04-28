@@ -104,6 +104,7 @@ export default function (app: Application) {
     .get(rt.get_metrics)
     .post(rt.get_metrics_aspects);
   app.post("/api/get_metrics_type", rt.get_metrics_type);
+  app.post("/api/get_metrics_type_aspects", rt.get_metrics_type_aspects);
   //Aspectos
   //app.route("/api/get_aspects/").get(rt.get_aspects);
   //app.post("/api/add_aspects/", rt.add_aspects);
@@ -143,7 +144,11 @@ export default function (app: Application) {
   app.post("/api/add_pre_reflective_process", rt.add_pre_reflective_process);
   app.get("/api/get_pre_reflective_process", rt.get_pre_reflective_process);
   app.post("/api/del_pre_reflective_process", rt.del_pre_reflective_process);
-	app.post("/api/get_pre_reflective_process_mod",rt.get_pre_reflective_process_mod);
+  app.post(
+    "/api/get_pre_reflective_process_mod",
+    rt.get_pre_reflective_process_mod
+  );
+  app.get("/api/get_last_insert_process", rt.get_last_insert_process);
   //Metodo de aprendizaje procesos pre relfexivos
 
   app.post("/api/add_metodo_modelo", rt.add_metodo_modelo);
@@ -175,10 +180,9 @@ export default function (app: Application) {
   //	Mapo de parametros
   app.post("/api/ask_input_arguments/", rt.ask_input_arguments);
   app.post("/api/add_mapeo_parametros", rt.add_mapeo_parametros);
-	//Acciones Procesos
+  //Acciones Procesos
   app.post("/api/get_action", rt.get_action);
   app.post("/api/add_action", rt.add_action);
   app.post("/api/upd_action", rt.upd_action);
   app.post("/api/del_action", rt.del_action);
-
 }

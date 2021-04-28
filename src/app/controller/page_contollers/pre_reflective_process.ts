@@ -132,15 +132,29 @@ export async function del_pre_reflective_process(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export async function get_pre_reflective_process_mod(req: Request, res: Response) {
+export async function get_pre_reflective_process_mod(
+  req: Request,
+  res: Response
+) {
   if (req.session?.user) {
     var db = new database2();
-	  var id=req.body.proceso_seleccionado;
-    res.render("modificar_pre_reflexivos",{
-	    error:req.flash("error"),
-	    succes:req.flash("succes"),
-	    session:req.session,
+    var id = req.body.proceso_seleccionado;
+    res.render("modificar_pre_reflexivos", {
+      error: req.flash("error"),
+      succes: req.flash("succes"),
+      session: req.session,
     });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function get_last_insert_process(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var rows = await db.qwerty(
+      `SELECT MAX(pa_id) as id FROM procesoautoconsciencia`
+    );
+    res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

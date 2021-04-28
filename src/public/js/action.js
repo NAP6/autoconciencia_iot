@@ -485,7 +485,8 @@ function modificar_parametro(tipo) {
       elegido.dataset.opcional == "true";
     document.querySelector(`#${tipo} #activo_parametro`).checked =
       elegido.dataset.activo == "true";
-    document.querySelector(`#${tipo} #tipo_dato_parametro`).selectedIndex =
+    console.log(elegido.dataset.tipoIndex);
+    document.querySelector(`#${tipo} #tipo_dato_parametro`).value =
       elegido.dataset.tipoIndex;
     agregar_parametro(tipo);
     var botonAgregar = document.querySelector(`#${tipo} #btn-agregarParametro`);
@@ -3267,7 +3268,6 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
   document
     .getElementById("modal_metodo_add")
     .classList.replace("d-block", "d-none");
-  document.getElementById("input-name-proceso-pre-reflexivo").disabled = false;
   document.getElementById(
     "input-descripcion-proceso-pre-reflexivo"
   ).disabled = false;
@@ -3279,11 +3279,9 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
     "entidades_seleccionados_area_procesos"
   ).disabled = false;
   document.getElementById("Aspectos_autoconsciencia").disabled = false;
-  document.getElementById("input-name-proceso-pre-reflexivo").value = "";
   document.getElementById("input-descripcion-proceso-pre-reflexivo").value = "";
   document.getElementById("inicio_del_periodo").value = "";
   document.getElementById("fin_del_periodo").value = "";
-  document.getElementById("input-name-proceso-pre-reflexivo").value = "";
   document.getElementById("id_proceso_pre_reflexivo").value = "";
   document.getElementById("CategoriaEntidadesProcesos").selectedIndex = "0";
   document.getElementById("Aspectos_autoconsciencia").selectedIndex = "0";
@@ -4305,8 +4303,9 @@ function cargar_select_recurso_proceso(json) {
 }
 
 function guardar_procesos_pre_reflexivos() {
-  var nombre = document.getElementById("input-name-proceso-pre-reflexivo")
-    .value;
+  var nombre = document.getElementById("nombre_proceso_id").value;
+  nombre = "PID"+nombre;
+  console.log(nombre);
   var descripcion = document.getElementById(
     "input-descripcion-proceso-pre-reflexivo"
   ).value;
@@ -4333,7 +4332,6 @@ function guardar_procesos_pre_reflexivos() {
         console.log(res);
       }
     );
-    document.getElementById("input-name-proceso-pre-reflexivo").disabled = true;
     document.getElementById(
       "input-descripcion-proceso-pre-reflexivo"
     ).disabled = true;
@@ -4490,7 +4488,6 @@ function cargar_procesos_pre_reflexivos_table(json) {
     }" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${
       pro.activo == "true"
     }"></td>`;
-    res += `<td>${pro.id}</td>`;
     res += `<td>${pro.nombre}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
@@ -7378,11 +7375,15 @@ function GuardarMetrica() {
   var escala = document.getElementById("escalas_seccion_entidad").value;
   var unidad = document.getElementById("unidad_medida_metrica").value;
   var tipo = document.getElementById("select_metrica").value;
+  var perspective = document.getElementById("tipo_perspectiva_select").value;
+  if (perspective == "-6") {
+    perspective = 48;
+  }
   var data = {
     name: document.getElementById("nombreMetrica").value,
     description: document.getElementById("descripcionMetrica").value,
     abbreviation: document.getElementById("abreviaturaMetrica").value,
-    perspective: document.getElementById("tipo_perspectiva_select").value,
+    perspective: perspective,
     scale: escala,
     unit: unidad,
     type_metric: tipo,
@@ -7392,7 +7393,6 @@ function GuardarMetrica() {
     !!data.name &&
     !!data.description &&
     !!data.abbreviation &&
-    !!data.perspective &&
     data.scale != -6 &&
     data.unit != -6 &&
     data.type_metric != -6
@@ -7416,7 +7416,6 @@ function CancelarGuardarMetrica() {
   document.getElementById("nombreMetrica").value = "";
   document.getElementById("descripcionMetrica").value = "";
   document.getElementById("abreviaturaMetrica").value = "";
-  document.getElementById("tipo_perspectiva_select").value = "-6";
   $("#add_metrics").modal("hide");
 }
 
@@ -7466,7 +7465,16 @@ function cargar_metrica_table(json) {
 function error_cargar_metrica_table(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
-
+function get_tipo_perspectiva_select() {
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    { tipo: "TIPO_PERSPECTIVA" },
+    cargar_select_tipo_perspectiva,
+    (json) => {
+      console.log(json);
+    }
+  );
+}
 function modificarMetrica() {
   var radio = document.getElementsByName("metrica_seleccionado");
   var id = false;
@@ -7475,8 +7483,8 @@ function modificarMetrica() {
       id = elem.value;
     }
   });
-  console.log(id);
   if (!!id) {
+    get_tipo_perspectiva_select();
     var guardarButton = document.getElementById("agregarMetricaButton");
     var modificarButton = document.getElementById("ModificarMetricaButton");
     guardarButton.classList.replace("d-none", "d-inline-block");
@@ -7487,7 +7495,6 @@ function modificarMetrica() {
     document.getElementById("nombreMetrica").value = "";
     document.getElementById("descripcionMetrica").value = "";
     document.getElementById("abreviaturaMetrica").value = "";
-    document.getElementById("tipo_perspectiva_select").value = "-6";
     $("#add_metrics").modal("show");
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
@@ -7550,11 +7557,17 @@ function cargar_tipo_metrica_select_modificar(json) {
     document.getElementById("nombreMetrica").value = name;
     document.getElementById("descripcionMetrica").value = descripcion;
     document.getElementById("abreviaturaMetrica").value = abbreviation;
-    document.getElementById("tipo_perspectiva_select").value = perspective;
+    if (perspective == "48") {
+      document.getElementById("tipo_perspectiva_select").disabled = true;
+      document.getElementById("tipo_perspectiva_select").value = -6;
+    } else {
+      console.log(perspective);
+      document.getElementById("tipo_perspectiva_select").value = perspective;
+      document.getElementById("tipo_perspectiva_select").disabled = false;
+    }
     document.getElementById("escalas_seccion_entidad").value = escale;
     document.getElementById("unidad_medida_metrica").value = unidad;
     document.getElementById("select_metrica").value = tipo_metrica;
-    console.log(`selected_metrica_${tipo_metrica}`);
     document.getElementById(`selected_metrica_${tipo_metrica}`).selected = true;
     document.getElementById("activoMetrica").checked = active;
     $("#add_metrics").modal("show");
@@ -7564,12 +7577,16 @@ function cargar_tipo_metrica_select_modificar(json) {
 }
 
 function Guardar_Modificacion_Metrica() {
+  var perspective = document.getElementById("tipo_perspectiva_select").value;
+  if (perspective == -6) {
+    perspective = 48;
+  }
   var data = {
     id: document.getElementById("id_metrica_nueva").value,
     name: document.getElementById("nombreMetrica").value,
     description: document.getElementById("descripcionMetrica").value,
     abbreviation: document.getElementById("abreviaturaMetrica").value,
-    perspective: document.getElementById("tipo_perspectiva_select").value,
+    perspective: perspective,
     scale: document.getElementById("escalas_seccion_entidad").value,
     unit: document.getElementById("unidad_medida_metrica").value,
     type_metric: document.getElementById("select_metrica").value,
@@ -7930,15 +7947,20 @@ function guardarAspecto() {
       selectedEntitys.push(entitys[i].dataset.puro_id);
     }
   }
-  var data = {
-    name: document.getElementById("nombreAspecto").value,
-    description: document.getElementById("descripcionAspecto").value,
-    weigth: document.getElementById("pesoAspecto").value,
-    type: document.getElementById("select_aspecto").value,
-    suj_id: sujeto_aspecto_id,
-    obj_id: document.getElementById("select_objetivos").value,
-    arr_entity: selectedEntitys,
-  };
+  weigth = document.getElementById("pesoAspecto").value;
+  if (parseFloat(weigth) > 1) {
+    alert("Peso debe estar entre 0 y 1");
+  } else {
+    var data = {
+      name: document.getElementById("nombreAspecto").value,
+      description: document.getElementById("descripcionAspecto").value,
+      weigth: document.getElementById("pesoAspecto").value,
+      type: document.getElementById("select_aspecto").value,
+      suj_id: sujeto_aspecto_id,
+      obj_id: document.getElementById("select_objetivos").value,
+      arr_entity: selectedEntitys,
+    };
+  }
   if (
     !!data.name &&
     !!data.description &&
@@ -8076,28 +8098,41 @@ function administrarMetrics() {
     document.getElementById(
       "descripcionAspecto_admin_metricas"
     ).innerHTML = descripcion;
-    llenar_listado_metricas(id);
+    document.getElementById("lista_metricas_disponibles").innerHTML = "";
+    document.getElementById("lista_metricas_seleccionadas").innerHTML = "";
     $("#admin_metrics").modal("show");
   } else {
     alert("No se ha seleccionado ningun recurso");
   }
+  get_select_metricas_aspectos();
 }
-
-function SalirAdministrarMetricas() {
-  $("#admin_metrics").modal("hide");
-}
-
-function llenar_listado_metricas(id) {
+function get_select_metricas_aspectos() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics",
-    { id: id },
-    cargar_metricas_disponibles,
+    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    { tipo: "TIPO_METRICA" },
+    cargar_select_metricas_aspectos,
     (json) => {
-      console.log(json + "ERROR");
+      console.log(json);
     }
   );
 }
-
+function cargar_select_metricas_aspectos(json) {
+  var op = document.getElementById("tipo_metrica_aspectos_metrica");
+  op.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  op.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.nombre;
+    op.appendChild(option);
+  });
+}
+function SalirAdministrarMetricas() {
+  $("#admin_metrics").modal("hide");
+}
 function cargar_metricas_disponibles(json) {
   console.log(json);
   var lista = document.getElementById("lista_metricas_disponibles");
@@ -8193,7 +8228,7 @@ function remover_metrica_seleccionado() {
 }
 
 function cambiar_metrica_lado() {
-  llenar_listado_metricas(aspectoSeleccionadoMetricas);
+  tipo_metrica_change();
 }
 
 function error_cambiar_metrica_lado(error) {
@@ -8397,20 +8432,45 @@ function error_cargar_sujetos_activos_aspectos_modificar(error) {
   alert("Error al cargar los datos del modelo: " + error);
 }
 
-var proceso_pre_seleccionado_id= undefined;
+var proceso_pre_seleccionado_id = undefined;
 //Es una parte de prueba para modificar procesos
 if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
-console.log(proceso_pre_seleccionado_id);
+  console.log(proceso_pre_seleccionado_id);
 }
-function cargar_pre_reflexivos_modificar(){
-	var id;
- var radio = document.getElementsByName("proceso_seleccionado");
-  radio.forEach((elemn) => {
-    if (elemn.checked) {
-      id = elemn.value;
-	    return;
+
+function habilitar_perspectiva() {
+  var tipo = document.getElementById("select_metrica").value;
+  console.log(tipo);
+  if (tipo == 12) {
+    document.getElementById("tipo_perspectiva_select").disabled = false;
+  } else {
+    document.getElementById("tipo_perspectiva_select").disabled = true;
+
+    document.getElementById("tipo_perspectiva_select").value = "-6";
+  }
+}
+
+function tipo_metrica_change() {
+  var metrica = document.getElementById("tipo_metrica_aspectos_metrica").value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type_aspects",
+    { id: aspectoSeleccionadoMetricas, tipo: metrica },
+    cargar_metricas_disponibles,
+    (json) => {
+      console.log(json);
     }
-  });
-	proceso_pre_seleccionado_id=id;
-	console.log(proceso_pre_seleccionado_id);
+  );
+}
+
+if (document.getElementById("id_proceso_pre_reflexivo")) {
+  consultar_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+    get_nombre_proceso,
+    (json) => {
+      console.log(json);
+    }
+  );
+}
+function get_nombre_proceso(json) {
+  document.getElementById("nombre_proceso_id").value = parseInt(json[0].id)+1;
 }

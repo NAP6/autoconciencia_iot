@@ -40,6 +40,7 @@ export {
   get_metrics,
   get_metrics_aspects,
   get_metrics_type,
+  get_metrics_type_aspects,
   add_metrics,
   mod_metrics,
   del_metrics,
@@ -86,14 +87,16 @@ export {
   add_pre_reflective_process,
   get_pre_reflective_process,
   del_pre_reflective_process,
-  add_metodo_modelo,get_pre_reflective_process_mod
+  add_metodo_modelo,
+  get_pre_reflective_process_mod,
+  get_last_insert_process,
 } from "./page_contollers/pre_reflective_process";
 export {
   add_reflective_process,
   get_reflective_process,
   del_reflective_process,
   add_metodo_modelo2,
-	get_reflective_process_mod,
+  get_reflective_process_mod,
 } from "./page_contollers/reflective_process";
 export { get_properties } from "./page_contollers/property";
 export { get_data_flow } from "./page_contollers/data_flow";
