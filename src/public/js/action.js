@@ -2374,7 +2374,6 @@ var entidades_aux = {};
 var System = undefined;
 
 function cargar_sujetos_activos(json) {
-  console.log(json);
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   json.forEach((elemento) => {
@@ -2384,7 +2383,6 @@ function cargar_sujetos_activos(json) {
       aux_visible_inactivo.add(elemento.father);
     }
   });
-  console.log(aux_visible_inactivo);
   json.forEach((elemento) => {
     var insertar;
     if (!elemento.father) {
@@ -2461,7 +2459,6 @@ $("#CategoriaEntidades").change(function () {
 });
 
 function cargar_posibles_entidades_modelo(json) {
-  console.log(json);
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   var padreList = [];
@@ -2667,7 +2664,8 @@ function agregar_entidad_seleccionado() {
       para_seleccion.style.display != "none" &&
       !e.checked
     ) {
-      padres_visibles.add(e.dataset.padre_id);
+      if (document.getElementById(`li_ent_seleccionado_${e.dataset.padre_id}`))
+        padres_visibles.add(e.dataset.padre_id);
     }
     if (e.checked) {
       para_seleccion.style.display = "none";
@@ -2698,7 +2696,8 @@ function remover_entidad_seleccionado() {
       para_seleccion.style.display != "none" &&
       !e.checked
     ) {
-      padres_visibles.add(e.dataset.padre_id);
+      if (document.getElementById(`li_ent_seleccionado_${e.dataset.padre_id}`))
+        padres_visibles.add(e.dataset.padre_id);
     }
     if (e.checked) {
       para_seleccion.style.display = "none";
@@ -8504,13 +8503,20 @@ function cargar_aspectos_procesos_modificar(json) {
   select.value = document.getElementById("id_aspecto").value;
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
-    { aspecto: document.getElementById("id_aspecto").value,sujeto:document.getElementById("id_sujeto").value },
+    {
+      aspecto: document.getElementById("id_aspecto").value,
+      sujeto: document.getElementById("id_sujeto").value,
+    },
     cargar_objetos_procesos_modificar,
-    (res)=>{console.log(res);}
+    (res) => {
+      console.log(res);
+    }
   );
 }
 function cargar_objetos_procesos_modificar(json) {
-  var ul = document.getElementById("lista_entidades_seleccionadas_procesos_modificar");
+  var ul = document.getElementById(
+    "lista_entidades_seleccionadas_procesos_modificar"
+  );
   ul.innerHTML = "";
   var op = document.createElement("option");
   var seleccion = json[0].tipo;
@@ -8554,7 +8560,9 @@ if (document.getElementById("id_proceso_reflexivo_modificar")) {
 }
 function cargar_aspectos_procesos_reflexivos_modificar(json) {
   console.log(json);
-  var select = document.getElementById("Aspectos_autoconsciencia_modificar_reflexivos");
+  var select = document.getElementById(
+    "Aspectos_autoconsciencia_modificar_reflexivos"
+  );
   select.innerHTML = "";
   var op = document.createElement("option");
   op.value = "-6";
@@ -8569,13 +8577,20 @@ function cargar_aspectos_procesos_reflexivos_modificar(json) {
   select.value = document.getElementById("id_aspecto_reflexivo").value;
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
-    { aspecto: document.getElementById("id_aspecto_reflexivo").value,sujeto:document.getElementById("id_sujeto_reflexivo").value },
+    {
+      aspecto: document.getElementById("id_aspecto_reflexivo").value,
+      sujeto: document.getElementById("id_sujeto_reflexivo").value,
+    },
     cargar_objetos_procesos_reflexivos_modificar,
-    (res)=>{console.log(res);}
+    (res) => {
+      console.log(res);
+    }
   );
 }
 function cargar_objetos_procesos_reflexivos_modificar(json) {
-  var ul = document.getElementById("lista_objetos_procesos_reflexivos_modificar");
+  var ul = document.getElementById(
+    "lista_objetos_procesos_reflexivos_modificar"
+  );
   ul.innerHTML = "";
   var op = document.createElement("option");
   var seleccion = json[0].tipo;
@@ -8596,7 +8611,9 @@ function cargar_objetos_procesos_reflexivos_modificar(json) {
   } else if (seleccion == "Network") {
     op.innerHTML = "Red";
   }
-  var sel = document.getElementById("CategoriaEntidadesProcesosReflexivosModificar");
+  var sel = document.getElementById(
+    "CategoriaEntidadesProcesosReflexivosModificar"
+  );
   sel.innerHTML = "";
   sel.appendChild(op);
   json.forEach((element) => {
@@ -8605,4 +8622,3 @@ function cargar_objetos_procesos_reflexivos_modificar(json) {
     ul.appendChild(li);
   });
 }
-
