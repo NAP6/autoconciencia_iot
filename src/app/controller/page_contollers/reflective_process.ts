@@ -111,27 +111,35 @@ export async function add_metodo_modelo2(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-
-export async function get_reflective_process_mod(req: Request, res: Response) {
+export async function get_reflective_process_mod(
+  req: Request,
+  res: Response
+) {
   if (req.session?.user) {
     var db = new database2();
-    var newProcess = req.body;
-    var modificar = await db.qwerty(`SELECT pa_id as id, pa_nombre as nombre,
-		    	    pa_descripcion as descripcion,
-	  	  	    pa_inicio_periodo_ejecucion as inicio,
-		    	    pa_fin_periodo_ejecucion as fin,
-			    aa_id as aspecto_id,
-			    suj_id as sujeto_id
-			    FROM procesoautoconsciencia 
-	    		    WHERE pa_id=${newProcess.proceso_reflexivo_seleccionado}`);
+    var id = req.body.proceso_reflexivo_seleccionado;
+	var rows= await db.qwerty(`SELECT 
+		  pa.pa_id as id,
+		  pa.pa_nombre as nombre, 
+		  pa.pa_descripcion as descripcion, 
+		  DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, 
+		  DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
+		  pa.aa_id as aspecto,
+		  pa.suj_id as sujeto,
+		  suj.suj_nombre as sujeto_nombre
+		  FROM
+		  sujeto suj,
+		  procesoautoconsciencia pa
+		  WHERE pa_id=${id} AND pa.suj_id=suj.suj_id`);
     res.render("modificar_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
-      modificar: modificar,
+	    modificar:rows,
       session: req.session,
     });
-    console.log(modificar);
+	  console.log(rows[0]);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+

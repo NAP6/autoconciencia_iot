@@ -3891,7 +3891,7 @@ function guardarAccionUmbral() {
     umbral: UmbralId,
     mea_id: modelo_analisis_pre_reflexivos,
   };
-  if ( !!data.description) {
+  if (!!data.description) {
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/add_action",
       data,
@@ -8423,11 +8423,7 @@ function error_cargar_sujetos_activos_aspectos_modificar(error) {
   alert("Error al cargar los datos del modelo: " + error);
 }
 
-var proceso_pre_seleccionado_id = undefined;
-//Es una parte de prueba para modificar procesos
-if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
-  console.log(proceso_pre_seleccionado_id);
-}
+//Colocar bien
 
 function habilitar_perspectiva() {
   var tipo = document.getElementById("select_metrica").value;
@@ -8479,5 +8475,134 @@ function get_nombre_proceso_reflexivo(json) {
   document.getElementById("nombre_proceso_reflexivo").value =
     "PID" + (parseInt(json[0].id) + 1);
 }
-if(document.getElementById("id_proceso_pre_reflexivo_modificar")){
+if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
+  var sujeto = document.getElementById("id_sujeto").value;
+  console.log(sujeto);
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+    { systemID: sujeto },
+    cargar_aspectos_procesos_modificar,
+    (res) => {
+      console.log(res);
+    }
+  );
 }
+function cargar_aspectos_procesos_modificar(json) {
+  console.log(json);
+  var select = document.getElementById("Aspectos_autoconsciencia_modificar");
+  select.innerHTML = "";
+  var op = document.createElement("option");
+  op.value = "-6";
+  op.innerHTML = "Seleccione ..";
+  select.appendChild(op);
+  json.forEach((asp) => {
+    var op = document.createElement("option");
+    op.value = asp.idAspecto;
+    op.innerHTML = asp.nombreAspecto;
+    select.appendChild(op);
+  });
+  select.value = document.getElementById("id_aspecto").value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+    { aspecto: document.getElementById("id_aspecto").value,sujeto:document.getElementById("id_sujeto").value },
+    cargar_objetos_procesos_modificar,
+    (res)=>{console.log(res);}
+  );
+}
+function cargar_objetos_procesos_modificar(json) {
+  var ul = document.getElementById("lista_entidades_seleccionadas_procesos_modificar");
+  ul.innerHTML = "";
+  var op = document.createElement("option");
+  var seleccion = json[0].tipo;
+  if (seleccion == "PhysicalEntity") {
+    op.innerHTML = "Entidades Físicas";
+  } else if (seleccion == "CloudNode") {
+    op.innerHTML = "Nodos Cloud";
+  } else if (seleccion == "FogNode") {
+    op.innerHTML = "Nodos Fog";
+  } else if (seleccion == "IoTGateway") {
+    op.innerHTML = "Gateway IoT";
+  } else if (seleccion == "Sensor") {
+    op.innerHTML = "Sensores";
+  } else if (seleccion == "Tag") {
+    op.innerHTML = "Tags";
+  } else if (seleccion == "Actuator") {
+    op.innerHTML = "Actuadores";
+  } else if (seleccion == "Network") {
+    op.innerHTML = "Red";
+  }
+  var sel = document.getElementById("CategoriaEntidadesProcesosModificar");
+  sel.innerHTML = "";
+  sel.appendChild(op);
+  json.forEach((element) => {
+    var li = document.createElement("li");
+    li.innerHTML = element.nombre;
+    ul.appendChild(li);
+  });
+}
+if (document.getElementById("id_proceso_reflexivo_modificar")) {
+  var sujeto = document.getElementById("id_sujeto_reflexivo").value;
+  console.log(sujeto);
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+    { systemID: sujeto },
+    cargar_aspectos_procesos_reflexivos_modificar,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+function cargar_aspectos_procesos_reflexivos_modificar(json) {
+  console.log(json);
+  var select = document.getElementById("Aspectos_autoconsciencia_modificar_reflexivos");
+  select.innerHTML = "";
+  var op = document.createElement("option");
+  op.value = "-6";
+  op.innerHTML = "Seleccione ..";
+  select.appendChild(op);
+  json.forEach((asp) => {
+    var op = document.createElement("option");
+    op.value = asp.idAspecto;
+    op.innerHTML = asp.nombreAspecto;
+    select.appendChild(op);
+  });
+  select.value = document.getElementById("id_aspecto_reflexivo").value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+    { aspecto: document.getElementById("id_aspecto_reflexivo").value,sujeto:document.getElementById("id_sujeto_reflexivo").value },
+    cargar_objetos_procesos_reflexivos_modificar,
+    (res)=>{console.log(res);}
+  );
+}
+function cargar_objetos_procesos_reflexivos_modificar(json) {
+  var ul = document.getElementById("lista_objetos_procesos_reflexivos_modificar");
+  ul.innerHTML = "";
+  var op = document.createElement("option");
+  var seleccion = json[0].tipo;
+  if (seleccion == "PhysicalEntity") {
+    op.innerHTML = "Entidades Físicas";
+  } else if (seleccion == "CloudNode") {
+    op.innerHTML = "Nodos Cloud";
+  } else if (seleccion == "FogNode") {
+    op.innerHTML = "Nodos Fog";
+  } else if (seleccion == "IoTGateway") {
+    op.innerHTML = "Gateway IoT";
+  } else if (seleccion == "Sensor") {
+    op.innerHTML = "Sensores";
+  } else if (seleccion == "Tag") {
+    op.innerHTML = "Tags";
+  } else if (seleccion == "Actuator") {
+    op.innerHTML = "Actuadores";
+  } else if (seleccion == "Network") {
+    op.innerHTML = "Red";
+  }
+  var sel = document.getElementById("CategoriaEntidadesProcesosReflexivosModificar");
+  sel.innerHTML = "";
+  sel.appendChild(op);
+  json.forEach((element) => {
+    var li = document.createElement("li");
+    li.innerHTML = element.nombre;
+    ul.appendChild(li);
+  });
+}
+

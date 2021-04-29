@@ -140,15 +140,18 @@ export async function get_pre_reflective_process_mod(
     var db = new database2();
     var id = req.body.proceso_seleccionado;
 	var rows= await db.qwerty(`SELECT 
-		  pa_id as id, pa_nombre as nombre, 
-		  pa_descripcion as descripcion, 
-		  DATE_FORMAT(pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, 
-		  DATE_FORMAT(pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
-		  aa_id as aspecto,
-		  suj_id as sujeto
+		  pa.pa_id as id,
+		  pa.pa_nombre as nombre, 
+		  pa.pa_descripcion as descripcion, 
+		  DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, 
+		  DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
+		  pa.aa_id as aspecto,
+		  pa.suj_id as sujeto,
+		  suj.suj_nombre as sujeto_nombre
 		  FROM
-		  procesoautoconsciencia
-		  WHERE pa_id=${id}`);
+		  sujeto suj,
+		  procesoautoconsciencia pa
+		  WHERE pa_id=${id} AND pa.suj_id=suj.suj_id`);
     res.render("modificar_pre_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),

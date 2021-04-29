@@ -2,8 +2,8 @@
     <div class="row">
         <div class="col">
             <input type="text" class="d-none" id="id_proceso_pre_reflexivo_modificar" value="<%=modificar[0].id%>">
-            <input type="text" class="d-none" id="id_sujeto" value="<%=modificar[0].sujeto>">
-            <input type="text" class="d-none" id="id_aspecto" value="<%=modificar[0].aspecto>">
+            <input type="text" class="d-none" id="id_sujeto" value="<%=modificar[0].sujeto%>">
+            <input type="text" class="d-none" id="id_aspecto" value="<%=modificar[0].aspecto%>">
             <div class="form-group mt-4 row">
                 <label for="" class="col-sm-3 col-form-label">ID:</label>
                 <div class="col-sm-7">
@@ -40,20 +40,21 @@
         <div class="col-6">
             <h6>Sujetos de autoconsciencia:</h6>
             <div id="sujetos_activos_proceso_modificar" class="card col-12 col-lg-10" style="overflow-y: auto;height: 166px;">
-                <ul id="lista_sujetos_activos_proceso_modificar"></ul>
+                <h5 class=""><%=modificar[0].sujeto_nombre%></h5>
             </div>
         </div>
         <div class="col-6">
             <div class="mt-2">
                 <h6>Categoría de objetos:</h6>
                 <div class="form-group col-12">
-                    <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
+                    <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesosModificar" disabled>
                                   </select>
                 </div>
                     </div>
 	<h6>Objeto de autoconsciencia:</h6>
                 <div class="col-sm-11">
                     <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
+		    <ul id="lista_entidades_seleccionadas_procesos_modificar"></ul>
                     </div>
                 </div>
 
