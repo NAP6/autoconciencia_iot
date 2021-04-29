@@ -3887,12 +3887,11 @@ function cerrar_modal_activos() {
 
 function guardarAccionUmbral() {
   var data = {
-    name: document.getElementById("nombre_accion_umbral").value,
     description: document.getElementById("descripcion_accion_umbral").value,
     umbral: UmbralId,
     mea_id: modelo_analisis_pre_reflexivos,
   };
-  if (!!data.name && !!data.description) {
+  if ( !!data.description) {
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/add_action",
       data,
@@ -3931,16 +3930,12 @@ function cargar_accion_table_modificar(json) {
     input.type = "radio";
     input.name = "accion_seleccionada";
     input.dataset.id = um.id;
-    input.dataset.name = um.name;
     input.dataset.description = um.description;
     input.dataset.active = um.active;
     dato.appendChild(input);
     fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.id;
-    fila.appendChild(dato);
-    dato = document.createElement("td");
-    dato.innerHTML = um.name;
     fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.description;
@@ -4198,7 +4193,6 @@ function cargar_select_argumento_entrada(json) {
 function agregarAccionesUmbrales() {
   $("#modal_agregar_accion_proceso").modal("show");
   $("#modal_activos_procesos").modal("hide");
-  document.getElementById("nombre_accion_umbral").value = "";
   document.getElementById("descripcion_accion_umbral").value = "";
 }
 function cargar_accion_table(json) {
@@ -4303,9 +4297,7 @@ function cargar_select_recurso_proceso(json) {
 }
 
 function guardar_procesos_pre_reflexivos() {
-  var nombre = document.getElementById("nombre_proceso_id").value;
-  nombre = "PID"+nombre;
-  console.log(nombre);
+  var nombre = document.getElementById("nombre_proceso_pre_reflexivo").value;
   var descripcion = document.getElementById(
     "input-descripcion-proceso-pre-reflexivo"
   ).value;
@@ -4425,7 +4417,7 @@ function guardar_modelos_metodos() {
       errormensajeCorrectoGuardarMetodos
     );
 
-    var metodo = document.getElementById("nav-recoleccion-tab");
+    /*var metodo = document.getElementById("nav-recoleccion-tab");
     var modelo = document.getElementById("nav-modelo-tab");
     modelo.classList.remove("active");
     metodo.classList.add("active");
@@ -4436,7 +4428,7 @@ function guardar_modelos_metodos() {
     metodo_ventana.classList.add("active");
     metodo_ventana.classList.add("show");
     modelo_ventana.classList.remove("active");
-    modelo_ventana.classList.remove("show");
+    modelo_ventana.classList.remove("show");*/
     return true;
   } else {
     return false;
@@ -5072,7 +5064,6 @@ function cargar_procesos_reflexivos_table(json) {
     }" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${
       pro.activo == "true"
     }"></td>`;
-    res += `<td>${pro.id}</td>`;
     res += `<td>${pro.nombre}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
@@ -8472,5 +8463,21 @@ if (document.getElementById("id_proceso_pre_reflexivo")) {
   );
 }
 function get_nombre_proceso(json) {
-  document.getElementById("nombre_proceso_id").value = parseInt(json[0].id)+1;
+  document.getElementById("nombre_proceso_pre_reflexivo").value =
+    "PID" + (parseInt(json[0].id) + 1);
+}
+if (document.getElementById("nombre_proceso_reflexivo")) {
+  consultar_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+    get_nombre_proceso_reflexivo,
+    (json) => {
+      console.log(json);
+    }
+  );
+}
+function get_nombre_proceso_reflexivo(json) {
+  document.getElementById("nombre_proceso_reflexivo").value =
+    "PID" + (parseInt(json[0].id) + 1);
+}
+if(document.getElementById("id_proceso_pre_reflexivo_modificar")){
 }

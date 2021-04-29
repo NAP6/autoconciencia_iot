@@ -1,8 +1,10 @@
-import{SelfAwarenessAspect} from "../SelfAwarenessAspect";
-import{ SQL_Qwerty } from "../../SQL_Qwerty";
-export class SelfAwarenessAspectQ extends SelfAwarenessAspect implements SQL_Qwerty{
-    toSqlInsert(tag:string[],value:string[]):string{
-var sql=`INSERT INTO
+import { SelfAwarenessAspect } from "../SelfAwarenessAspect";
+import { SQL_Qwerty } from "../../SQL_Qwerty";
+export class SelfAwarenessAspectQ
+  extends SelfAwarenessAspect
+  implements SQL_Qwerty {
+  toSqlInsert(tag: string[], value: string[]): string {
+    var sql = `INSERT INTO
 aspectoautoconsciencia (
                 aa_nombre,
                 aa_descripcion,
@@ -17,15 +19,14 @@ aspectoautoconsciencia (
                 '${this.description}',
                 '${this.weight}',
                 '${this.aspectType}',
-                '${this.active ? 1: 0}',
+                '${this.active ? 1 : 0}',
                 '${value[tag.indexOf("/@/OBJECT/@/")]}',
                 '${value[tag.indexOf("/@/SUBJECT/@/")]}',
                 '${value[tag.indexOf("/@/MODEL/@/")]}'
             )`;
-return sql;
-    }
-   toSqlSelect(tag:string[],value:string[]): string {
-
+    return sql;
+  }
+  toSqlSelect(tag: string[], value: string[]): string {
     var sql = ` SELECT
 	      asp.aa_id as id,
 	      asp.aa_nombre as name,
@@ -47,14 +48,14 @@ return sql;
 	   	 asp.suj_id= suj.suj_id AND
 	        suj.ma_id = ${value[tag.indexOf("/@/MODEL/@/")]} AND
 	        asp.ma_id=${value[tag.indexOf("/@/MODEL/@/")]}`;
-return sql;
-}
-toSqlDelete(value: string[]): string {
-    var sql=`DELETE FROM aspectoautoconsciencia WHERE aa_id=${this.id} `;
     return sql;
-}
+  }
+  toSqlDelete(value: string[]): string {
+    var sql = `DELETE FROM aspectoautoconsciencia WHERE aa_id=${this.id} `;
+    return sql;
+  }
 
-toSqlUpdate(tag: string[], value: string[]): string {
+  toSqlUpdate(tag: string[], value: string[]): string {
     var sql = `UPDATE 
     aspectoautoconsciencia
     SET
@@ -67,9 +68,9 @@ toSqlUpdate(tag: string[], value: string[]): string {
     aa_activo=${this.active ? 1 : 0}
   WHERE 
     aa_id=${this.id}`;
-return sql;
-}
-toObjectArray(rows: any): any[] {
+    return sql;
+  }
+  toObjectArray(rows: any): any[] {
     throw new Error("Method not implemented.");
-}
+  }
 }

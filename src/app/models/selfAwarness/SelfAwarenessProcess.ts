@@ -97,5 +97,14 @@ export class SelfAwarenessProcess {
   set captures(value: SelfAwarenessAspect | undefined) {
     this._captures = value;
   }
-}
 
+  public toObjectG(): any {
+    var res: any = {};
+    res.$ = {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+    };
+    return res;
+  }
+}

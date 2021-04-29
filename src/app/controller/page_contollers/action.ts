@@ -9,7 +9,7 @@ export async function get_action(req: Request, res: Response) {
     var db = new database2();
     var metodo = req.body.mea_id;
     console.log(metodo);
-    var action: ActionQ = new ActionQ(-1, "", "");
+    var action: ActionQ = new ActionQ(-1, "");
     action.isRecommendedln = req.body.umbral;
     var rows = await db.qwerty(action.toSqlSelect(["/@/METHOD/@/"], [metodo]));
     res.json({ umbral_id: req.body.umbral, acciones: rows });
@@ -24,7 +24,6 @@ export async function add_action(req: Request, res: Response) {
     var action: ActionQ = new ActionQ(
       -1,
       newAction.description,
-      newAction.name,
     );
     action.active = action.active;
     action.isRecommendedln = newAction.umbral;
@@ -40,8 +39,7 @@ export async function upd_action(req: Request, res: Response) {
     var newAction = req.body;
     var action: ActionQ = new ActionQ(
       newAction.id,
-      newAction.description,
-      newAction.name
+      newAction.description
     );
     action.active = newAction.active == 1;
     await db.qwerty(action.toSqlUpdate([], []));
@@ -54,7 +52,7 @@ export async function del_action(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var newAction = req.body;
-    var action: ActionQ = new ActionQ(newAction.id, "", "");
+    var action: ActionQ = new ActionQ(newAction.id, "");
     await db.qwerty(action.toSqlDelete([]));
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {

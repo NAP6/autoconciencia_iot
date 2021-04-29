@@ -4,13 +4,11 @@ export class ActionQ extends Action implements SQL_Qwerty{
     toSqlInsert(tag:string[],value:string[]):string{
 var sql=`INSERT INTO
         accion (
-                acc_nombre,
                 acc_descripcion,
                 acc_activo,
                 mea_id,
 		umb_id
             ) VALUES (
-                '${this.name}',
                 '${this.description}',
                 ${this.active ? 1: 0},
 		${value[tag.indexOf("/@/METHOD/@/")]},
@@ -21,7 +19,6 @@ return sql;
    toSqlSelect(tag:string[],value:string[]): string {
     var sql = `SELECT 
     acc_id as id,
-    acc_nombre as name,
     acc_descripcion as description,
     acc_activo as active,
     umb_id as umbral_id
@@ -41,7 +38,6 @@ toSqlUpdate(tag: string[], value: string[]): string {
     var sql = `UPDATE 
     accion
     SET
-    acc_nombre='${this.name}', 
     acc_descripcion='${this.description}',
     acc_activo=${this.active ? 1 : 0}
   WHERE 

@@ -1,5 +1,6 @@
 export { UserQ } from "./selfAwarness/qwertyModels/UserQ";
 export { SelfAwarnessQ } from "./selfAwarness/qwertyModels/SelfAwarnessQ";
+export { SelfAwarenessProcessQ } from "./selfAwarness/qwertyModels/SelfAwarenessProcessQ";
 export { IoTSystemQ } from "./selfAwarness/qwertyModels/IoTSystemQ";
 export { GoalQ } from "./selfAwarness/qwertyModels/GoalQ";
 export { PhysicalEntityQ } from "./selfAwarness/qwertyModels/PhysicalEntityQ";

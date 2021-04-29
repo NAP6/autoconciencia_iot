@@ -1,19 +1,19 @@
 <div class="" id="pagina_proceso_modificar">
     <div class="row">
         <div class="col">
-            <input type="text" class="d-none" id="id_proceso_pre_reflexivo_modificar">
-            <input type="text" class="d-none" id="id_sujeto">
-            <input type="text" class="d-none" id="id_aspecto">
+            <input type="text" class="d-none" id="id_proceso_pre_reflexivo_modificar" value="<%=modificar[0].id%>">
+            <input type="text" class="d-none" id="id_sujeto" value="<%=modificar[0].sujeto>">
+            <input type="text" class="d-none" id="id_aspecto" value="<%=modificar[0].aspecto>">
             <div class="form-group mt-4 row">
-                <label for="" class="col-sm-3 col-form-label">Nombre:</label>
+                <label for="" class="col-sm-3 col-form-label">ID:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" id="input-name-proceso-pre-reflexivo_modificar" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+                    <input type="text" class="form-control" id="input-name-proceso-pre-reflexivo_modificar" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" disabled value="<%=modificar[0].nombre%>"/>
                 </div>
             </div>
             <div class="form-group row ">
                 <label for=" " class="col-sm-3 col-form-label ">Descripción:</label>
                 <div class="col-sm-7">
-                    <textarea type="text " class="form-control " id="input-descripcion-proceso-pre-reflexivo_modificar" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                    <textarea type="text " class="form-control " id="input-descripcion-proceso-pre-reflexivo_modificar" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();"><%=modificar[0].descripcion%></textarea>
                 </div>
             </div>
         </div>
@@ -22,9 +22,9 @@
             <div class="col card" style="height: 55px;">
                 <div class="form-group mt-2 row">
                     <label for="" class="col-sm-2 col-form-label">Inicio:</label>
-                    <input type="date" id="inicio_del_periodo_modificar" name="inicio_del_periodo_modificar"min="2020-01-01" max="2050-01-01">
+                    <input type="date" id="inicio_del_periodo_modificar" name="inicio_del_periodo_modificar"min="2020-01-01" max="2050-01-01" value="<%=modificar[0].inicio%>">
                     <label for="" class="col-sm-2 col-form-label">Fin:</label>
-                    <input type="date" id="fin_del_periodo_modificar" name="fin_del_periodo_modificar" min="2020-01-01" max="2050-01-01">
+                    <input type="date" id="fin_del_periodo_modificar" name="fin_del_periodo_modificar" min="2020-01-01" max="2050-01-01" value="<%=modificar[0].fin%>">
                 </div>
                 <div class="row">
 <h6 class="text-center">Aspectos de autoconsciencia</h6>

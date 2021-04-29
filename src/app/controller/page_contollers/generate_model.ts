@@ -1,7 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { database2 } from "../../data/database2";
 import { Goal } from "../../models/selfAwarness/Goal";
-import { GoalQ, SelfAwarnessQ } from "../../models/selfAwarnessModels";
+import {
+  GoalQ,
+  SelfAwarenessProcessQ,
+  SelfAwarnessQ,
+} from "../../models/selfAwarnessModels";
 
 var modelID;
 
@@ -97,12 +101,19 @@ function order_goals_hierarchical(
   return result_goals;
 }
 
-function add_calculatedGoalIndicator(span) {
-	
-}
+function add_calculatedGoalIndicator(span) {}
 
-function add_SelfAwarenessProcess(span){
-//  var SelfAwarness = new SelfAwarenessProcess();
+async function add_SelfAwarenessProcess(span) {
+  var db = new database2();
+  var SelfAwarness: SelfAwarenessProcessQ;
+  SelfAwarness = new SelfAwarenessProcessQ(-1, "", "", 0, undefined, undefined);
+  var sql = SelfAwarness.toSqlSelect(
+    ["/@/SYSTEM/@/", "/@/MODEL/@/"],
+    [span, modelID]
+  );
+  var rows = await db.qwerty(sql);
+  var process = SelfAwarness.toObjectArray(rows);
+  for (var i = 0; i < process.length; i++) {}
 }
 
 function add_scope() {}

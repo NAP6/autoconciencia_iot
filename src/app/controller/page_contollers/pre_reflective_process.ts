@@ -139,11 +139,23 @@ export async function get_pre_reflective_process_mod(
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.proceso_seleccionado;
+	var rows= await db.qwerty(`SELECT 
+		  pa_id as id, pa_nombre as nombre, 
+		  pa_descripcion as descripcion, 
+		  DATE_FORMAT(pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, 
+		  DATE_FORMAT(pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
+		  aa_id as aspecto,
+		  suj_id as sujeto
+		  FROM
+		  procesoautoconsciencia
+		  WHERE pa_id=${id}`);
     res.render("modificar_pre_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
+	    modificar:rows,
       session: req.session,
     });
+	  console.log(rows[0]);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
