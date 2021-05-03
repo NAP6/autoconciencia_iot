@@ -91,6 +91,8 @@ export default function (app: Application) {
   app.post("/api/del_aspects/", rt.del_aspects);
   app.post("/api/get_aspects_subjects", rt.get_aspects_objects);
   app.post("/api/get_aspects_objects_process", rt.get_aspects_objects_process);
+  app.post("/api/del_aspects_objects", rt.del_aspects_objects);
+  app.post("/api/add_relation_objects_aspects", rt.add_relation_objects_aspects);
   //Generales
   //=====================================================================
   //Metricas
@@ -104,11 +106,6 @@ export default function (app: Application) {
     .post(rt.get_metrics_aspects);
   app.post("/api/get_metrics_type", rt.get_metrics_type);
   app.post("/api/get_metrics_type_aspects", rt.get_metrics_type_aspects);
-  //Aspectos
-  //app.route("/api/get_aspects/").get(rt.get_aspects);
-  //app.post("/api/add_aspects/", rt.add_aspects);
-  //app.post("/api/mod_aspects/", rt.mod_aspecs);
-  //app.post("/api/del_aspects/", rt.del_aspects);
   //Recursos de implementacion
   app.get("/api/deployment_resources/", rt.deployment_resources);
   app.post("/api/add_deployment_resources/", rt.add_deployment_resources);

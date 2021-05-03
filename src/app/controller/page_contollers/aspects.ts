@@ -134,14 +134,42 @@ export async function add_aspects(req: Request, res: Response) {
       )
     );
     aspect.id = rows.insertId;
-    for (var i = 0; i < newAspect.arr_entity.length; i++) {
-      await db.qwerty(
-        `INSERT INTO aspectoautoconsciencia_objeto (aa_id, obj_id, ma_id) values (${aspect.id}, ${newAspect.arr_entity[i]}, ${modelID})`
-      );
-    }
+    await add_relation_objects_aspects_intern(
+      aspect.id,
+      modelID,
+      newAspect.arr_entity
+    );
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export async function add_relation_objects_aspects(
+  req: Request,
+  res: Response
+) {
+  if (req.session?.user) {
+    await add_relation_objects_aspects_intern(
+      req.body.aa_id,
+      req.session!.active_model.modelID,
+      req.body.arr_entity
+    );
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+async function add_relation_objects_aspects_intern(
+  aa_id: number,
+  modelID: number,
+  arr_obj: any[]
+) {
+  var db = new database2();
+  for (var i = 0; i < arr_obj.length; i++) {
+    await db.qwerty(
+      `INSERT INTO aspectoautoconsciencia_objeto (aa_id, obj_id, ma_id) values (${aa_id}, ${arr_obj[i]}, ${modelID})`
+    );
   }
 }
 
@@ -181,6 +209,18 @@ export async function del_aspects(req: Request, res: Response) {
       ""
     );
     await db.qwerty(aspect.toSqlDelete(["", "", ""]));
+    res.json({ Mensaje: "Los datos se han enviado con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function del_aspects_objects(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var newAspect = req.body;
+    await db.qwerty(
+      `DELETE FROM aspectoautoconsciencia_objeto WHERE aa_id=${newAspect.aa_id} `
+    );
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

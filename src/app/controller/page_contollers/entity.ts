@@ -109,6 +109,7 @@ export async function entitys(req: Request, res: Response) {
             ]
           )
         );
+        rows = rows.concat(rows2);
       }
     }
     res.json(rows);

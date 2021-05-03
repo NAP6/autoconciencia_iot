@@ -8274,7 +8274,6 @@ function cargar_select_aspectos_objetivos_modificar(json) {
   });
   listaPadres = new Set(listaPadres);
   listaId = new Set(listaId);
-
   let eliminacionId = [...listaId].filter((x) => !listaPadres.has(x));
   var ope = document.getElementById("select_objetivo_mod");
   ope.innerHTML = "";
@@ -8354,6 +8353,7 @@ function modificarAspectos() {
   radio.forEach((elem) => {
     if (elem.checked) {
       suj_id = elem.dataset.sujeto;
+      systemID = elem.dataset.sujeto;
       get_aspectos_objetivos_modificar(suj_id);
     }
   });
@@ -8384,13 +8384,39 @@ function GuardarmodificarAspecto() {
         console.log(res);
       }
     );
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/del_aspects_objects",
+      { aa_id: aspecto_seleccionado_mod },
+      eliminar_relacion_aspectos,
+      (res) => {
+        console.log(res);
+      }
+    );
     $("#mod_aspects").modal("hide");
   } else {
     alert("Debe completar todos los campos");
   }
 }
+function eliminar_relacion_aspectos() {
+  var entitys = document.getElementsByName("checkbox_entidades_aspectos_mod");
+  var selectedEntitys = [];
+  for (var i = 0; i < entitys.length; i++) {
+    if (entitys[i].checked) {
+      selectedEntitys.push(entitys[i].dataset.puro_id);
+    }
+  }
+  data = { aa_id: aspecto_seleccionado_mod, arr_entity: selectedEntitys };
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/add_relation_objects_aspects",
+    data,
+    (res)=>{console.log(res);},
+    (res)=>{console.log(res)},
+  );
+}
+var seleccionadas = undefined;
 function cargar_objetos_seleccionados_aspectos(json) {
   console.log(json);
+  seleccionadas = json;
   var ul = document.getElementById(
     "lista_entidades_seleccionadas_aspectos_mod"
   );
@@ -8417,14 +8443,95 @@ function cargar_objetos_seleccionados_aspectos(json) {
   var sel = document.getElementById("CategoriaEntidadesAspectosMod");
   sel.innerHTML = "";
   sel.appendChild(op);
-  json.forEach((elment) => {
-    var li = document.createElement("li");
-    li.innerHTML = elment.nombre;
-    ul.appendChild(li);
-  });
+  var seleccion = document.getElementById("CategoriaEntidadesAspectosMod")
+    .value;
+  console.log(seleccion);
+  data = {
+    valorS: seleccion,
+    systemID: systemID,
+  };
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/entitys",
+    data,
+    cargar_entidades_modelo_aspecto,
+    (res) => {
+      console.log(res);
+    }
+  );
 }
 function error_cargar_sujetos_activos_aspectos_modificar(error) {
   alert("Error al cargar los datos del modelo: " + error);
+}
+
+function cargar_entidades_modelo_aspecto(json) {
+  console.log(json);
+  var aux_visible_activo = new Set();
+  var aux_visible_inactivo = new Set();
+  json.forEach((elemento) => {
+    if (!!elemento.padre && elemento.activo == 1) {
+      aux_visible_activo.add(elemento.padre);
+    } else if (!!elemento.padre && elemento.activo == 0) {
+      aux_visible_inactivo.add(elemento.padre);
+    }
+  });
+  json.forEach((elemento) => {
+    var insertar;
+    if (!elemento.padre) {
+      insertar = document.getElementById(
+        "lista_entidades_seleccionadas_aspectos_mod"
+      );
+    } else {
+      insertar = document.createElement("ul");
+      var insertarAux = document.getElementById(
+        `li_ent_seleccionado_mod_${elemento.padre}`
+      );
+      if (insertarAux) {
+        insertarAux.appendChild(insertar);
+      } else {
+        insertar = document.getElementById(
+          "lista_entidades_seleccionadas_aspectos_mod"
+        );
+      }
+    }
+    li = document.createElement("li");
+    li.id = `li_ent_seleccionado_mod_${elemento.id}`;
+    if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+      li.style.display = "list-item";
+    } else {
+      li.style.display = "none";
+    }
+    divFormCheck = document.createElement("div");
+    divFormCheck.classList.add("form-check");
+    checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.classList.add(
+      "form-check-input",
+      `hijo_entidad_de_${elemento.padre}_seleccionado`,
+      "checkbox_seleccionado_entidad"
+    );
+    checkbox.id = `sujeto_seleccionado_aspectos_mod_${elemento.id}`;
+    checkbox.name = "checkbox_entidades_aspectos_mod";
+    checkbox.dataset.padre_id = elemento.padre;
+    checkbox.dataset.puro_id = elemento.id;
+    checkbox.dataset.nombre = elemento.nombre;
+    labelChek = document.createElement("label");
+    labelChek.classList.add("form-check-label");
+    labelChek.htmlFor = checkbox.id;
+    var button = document.createElement("button");
+    button.classList.add("btn", "py-0", "px-0");
+    button.innerHTML = elemento.nombre;
+    labelChek.appendChild(button);
+    li.appendChild(divFormCheck);
+    divFormCheck.appendChild(checkbox);
+    divFormCheck.appendChild(labelChek);
+    insertar.appendChild(li);
+  });
+  seleccionadas.forEach((elment) => {
+    var check = document.getElementById(
+      `sujeto_seleccionado_aspectos_mod_${elment.id}`
+    );
+    check.checked = true;
+  });
 }
 
 //Colocar bien
