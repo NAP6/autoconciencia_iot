@@ -256,7 +256,7 @@ function cargar_parametros_recursos_para_modificar(t, parametros) {
     seccion.dataset.nombre = par._name;
     seccion.dataset.activo = par._active;
     seccion.dataset.opcional = par._optional;
-    seccion.dataset.tipo = par._dataType;
+    seccion.dataset.tipo = par._dataType[0];
     seccion.dataset.tipoIndex = indexOfValueinSelect(
       "#tipo_dato_parametro",
       par._dataType
@@ -264,10 +264,7 @@ function cargar_parametros_recursos_para_modificar(t, parametros) {
     seccion.id = `parameto_num_${idParametroCont++}`;
     seccion.innerHTML = par._name;
     if (tipo === "parametro_formula") {
-      seccion.setAttribute(
-        "ondblclick",
-        `agregar_a_formula('[${par._name}]');`
-      );
+      seccion.setAttribute("ondblclick", `agregar_a_formula(this);`);
     }
     seccion.setAttribute(
       "onclick",
@@ -423,7 +420,7 @@ function guardar_parametro(tipo) {
   seccion.id = `parameto_num_${idParametroCont++}`;
   seccion.innerHTML = nombre;
   if (tipo === "parametro_formula") {
-    seccion.setAttribute("ondblclick", `agregar_a_formula('[${nombre}]');`);
+    seccion.setAttribute("ondblclick", `agregar_a_formula(this);`);
   }
   seccion.setAttribute(
     "onclick",
@@ -485,9 +482,12 @@ function modificar_parametro(tipo) {
       elegido.dataset.opcional == "true";
     document.querySelector(`#${tipo} #activo_parametro`).checked =
       elegido.dataset.activo == "true";
-    console.log(elegido.dataset.tipoIndex);
+    console.log("#######################################");
+    console.log(elegido);
+    console.log(document.querySelector(`#${tipo} #tipo_dato_parametro`));
+    console.log(elegido.dataset.tipo);
     document.querySelector(`#${tipo} #tipo_dato_parametro`).value =
-      elegido.dataset.tipoIndex;
+      elegido.dataset.tipo;
     agregar_parametro(tipo);
     var botonAgregar = document.querySelector(`#${tipo} #btn-agregarParametro`);
     var botonModificar = document.querySelector(
@@ -509,6 +509,9 @@ function guardar_modificar_parametro(tipo) {
   ).value;
   elegido.dataset.nombre = document.querySelector(
     `#${tipo} #nombreParametro`
+  ).value;
+  elegido.dataset.tipo = document.querySelector(
+    `#${tipo} #tipo_dato_parametro`
   ).value;
   elegido.dataset.opcional = document.querySelector(
     `#${tipo} #opcional_parametro`
@@ -536,8 +539,9 @@ function eliminar_parametro(tipo) {
 }
 
 function agregar_a_formula(nuevo) {
+  nuevo = nuevo.dataset.nombre;
   var text = document.getElementById("area_de_nueva_formula");
-  text.value += nuevo;
+  text.value += "[" + nuevo + "]";
   text.focus();
 }
 
@@ -2459,6 +2463,7 @@ $("#CategoriaEntidades").change(function () {
 });
 
 function cargar_posibles_entidades_modelo(json) {
+  console.log(json);
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   var padreList = [];
@@ -5995,7 +6000,7 @@ function modificar_proceso_pre_reflexivo() {
       id: id,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_process_pre_reflexive/",
+      "http://autoconsciencia.ddns.net:3000/api/mod_pre_reflective_process/",
       data,
       mensaje_exitoModificarproceso_pre_reflexivo,
       mensaje_errorModificarproceso_pre_reflexivo

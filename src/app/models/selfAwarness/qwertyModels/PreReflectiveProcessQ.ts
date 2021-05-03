@@ -20,15 +20,19 @@ export class PreReflectiveProcessQ
 	      '${this.description}',
 	      ${
           this.executionPeriodStart == undefined
-            ? "NULL":"'"+this.executionPeriodStart + "'"},
+            ? "NULL"
+            : "'" + this.executionPeriodStart + "'"
+        },
 	     ${
-         this.executionPeriodEnd == undefined ? "NULL" : "'"+this.executionPeriodEnd
-       +"'"},
+         this.executionPeriodEnd == undefined
+           ? "NULL"
+           : "'" + this.executionPeriodEnd + "'"
+       },
 		${this.active},
 		${value[tag.indexOf("/@/ASPECTID/@/")]},
 		${value[tag.indexOf("/@/SUBJECT/@/")]},
 		${this.type_process},
-		${value[tag.indexOf('/@/MODEL/@/')]})`;
+		${value[tag.indexOf("/@/MODEL/@/")]})`;
     return sql;
   }
   toSqlSelect(tag: string[], value: string[]): string {
@@ -48,9 +52,9 @@ export class PreReflectiveProcessQ
 		  aspectoautoconsciencia asp, 
 		  sujeto suj 
 	  	  WHERE
-	          proceso.ma_id=${value[tag.indexOf('/@/MODEL/@/')]} AND
-	  	  suj.ma_id=${value[tag.indexOf('/@/MODEL/@/')]} AND
-		  asp.ma_id=${value[tag.indexOf('/@/MODEL/@/')]} AND
+	          proceso.ma_id=${value[tag.indexOf("/@/MODEL/@/")]} AND
+	  	  suj.ma_id=${value[tag.indexOf("/@/MODEL/@/")]} AND
+		  asp.ma_id=${value[tag.indexOf("/@/MODEL/@/")]} AND
 		  proceso.aa_id=asp.aa_id AND
 		  proceso.suj_id=suj.suj_id AND
 		  proceso.pa_tipo=17
@@ -58,14 +62,19 @@ export class PreReflectiveProcessQ
     return sql;
   }
   toSqlDelete(value: string[]): string {
-  var sql = `DELETE FROM procesoautoconsciencia WHERE pa_id=${this.id}`;
+    var sql = `DELETE FROM procesoautoconsciencia WHERE pa_id=${this.id}`;
     return sql;
   }
 
   toSqlUpdate(tag: string[], value: string[]): string {
-    var activo;
-
-    var sql = ``;
+    var sql = `UPDATE
+	  procesoautoconsciencia
+	  SET
+	  pa_descripcion='${this.description}',
+		  pa_inicio_periodo_ejecucion='${this.executionPeriodStart}',
+		  pa_fin_periodo_ejecucion='${this.executionPeriodEnd}' 
+	  WHERE
+	  pa_id=${this.id}`;
     return sql;
   }
   toObjectArray(rows: any): any[] {

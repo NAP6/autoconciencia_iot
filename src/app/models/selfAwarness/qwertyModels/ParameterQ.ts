@@ -21,6 +21,7 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
   }
 
   toSqlInsert(tag: string[], value: string[]): string {
+    console.log(this.dataType);
     var sql = `INSERT INTO 
 	  		parametro (
 	  			par_ordinal, 

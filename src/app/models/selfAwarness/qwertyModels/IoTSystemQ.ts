@@ -49,11 +49,12 @@ export class IoTSystemQ extends IoTSystem implements SQL_Qwerty {
       if (aux) sql += ", ";
       sql += `suj_activo = '${this.active ? 1 : 0}'`;
     }
-    sql += ` WHERE suj_id = '${this.id}' AND ${
+    sql += ` WHERE suj_id = '${this.id}' AND ma_id= ${
       value[tag.indexOf("/@/MODEL/@/")]
     }`;
     return sql;
   }
+
 
   toObjectArray(rows): IoTSystem[] {
     var results: IoTSystem[] = [];

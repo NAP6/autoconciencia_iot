@@ -48,7 +48,6 @@ export default function (app: Application) {
   app.post("/api/procesos_pre_reflexive_id/", api.process_pre_reflexive_id);
   app.post("/api/add_process_pre_reflexive/", api.add_process_pre_reflexive);
   app.post("/api/del_process_pre_reflexive/", api.del_process_pre_reflexive);
-  app.post("/api/mod_process_pre_reflexive", api.mod_process_pre_reflexive);
   app.post("/api/properties/", api.properties);
   app.get("/api/procesos_reflexive/", api.procesos_reflexive);
   app.post(
@@ -148,6 +147,8 @@ export default function (app: Application) {
     "/api/get_pre_reflective_process_mod",
     rt.get_pre_reflective_process_mod
   );
+
+  app.post("/api/mod_pre_reflective_process", rt.mod_pre_reflective_process);
   app.get("/api/get_last_insert_process", rt.get_last_insert_process);
   //Metodo de aprendizaje procesos pre relfexivos
 

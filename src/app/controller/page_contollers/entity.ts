@@ -11,6 +11,7 @@ import {
   TagQ,
   ActuatorQ,
   NetworkQ,
+  EntityQ,
 } from "../../models/selfAwarnessModels";
 
 export function entity(req: Request, res: Response) {
@@ -28,6 +29,7 @@ export async function entitys(req: Request, res: Response) {
     var seleccion = req.body.valorS;
     var system = req.body.systemID;
     var rows: any;
+    var flag = false;
 
     if (seleccion == "Entidades Físicas") {
       rows = await db.qwerty(
@@ -43,6 +45,7 @@ export async function entitys(req: Request, res: Response) {
           [id, system]
         )
       );
+      flag = true;
     } else if (seleccion == "Nodos Fog") {
       rows = await db.qwerty(
         new FogNodeQ(-1, "", "").toSqlSelect(
@@ -50,6 +53,7 @@ export async function entitys(req: Request, res: Response) {
           [id, system]
         )
       );
+      flag = true;
     } else if (seleccion == "Gateway IoT") {
       rows = await db.qwerty(
         new IoTGatewayQ(-1, "", "").toSqlSelect(
@@ -57,6 +61,7 @@ export async function entitys(req: Request, res: Response) {
           [id, system]
         )
       );
+      flag = true;
     } else if (seleccion == "Sensores") {
       rows = await db.qwerty(
         new SensorQ(-1, "", "").toSqlSelect(
@@ -64,6 +69,7 @@ export async function entitys(req: Request, res: Response) {
           [id, system]
         )
       );
+      flag = true;
     } else if (seleccion == "Tags") {
       rows = await db.qwerty(
         new TagQ(-1, "", "").toSqlSelect(
@@ -71,6 +77,7 @@ export async function entitys(req: Request, res: Response) {
           [id, system]
         )
       );
+      flag = true;
     } else if (seleccion == "Actuadores") {
       rows = await db.qwerty(
         new ActuatorQ(-1, "", "").toSqlSelect(
@@ -78,6 +85,7 @@ export async function entitys(req: Request, res: Response) {
           [id, system]
         )
       );
+      flag = true;
     } else if (seleccion == "Red") {
       rows = await db.qwerty(
         new NetworkQ(-1, "", "").toSqlSelect(
@@ -86,9 +94,23 @@ export async function entitys(req: Request, res: Response) {
         )
       );
     }
-
-    //var rows = await db.qwerty(objeto.toSqlSelect(["/@/MODEL/@/"], [id, seleccion]));
-    //console.log(rows)
+    if (flag) {
+      var aux = rows;
+      var obj = new EntityQ(-1, "", "");
+      for (var i = 0; i < aux.length; i++) {
+        var rows2 = await db.qwerty(
+          obj.toSqlSelect(
+            ["/@/MODEL/@/", "/@/SYSTEM/@/", "/@/TYPE/@/", "/@/OBJECT/@/"],
+            [
+              id,
+              system,
+              "'DataBase','Middleware','NetworkInterface','Broker','Application','API'",
+              aux[i].id,
+            ]
+          )
+        );
+      }
+    }
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

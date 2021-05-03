@@ -14,7 +14,7 @@ export class CloudNodeQ extends CloudNode implements SQL_Qwerty {
                     o.obj_activo as activo, 
                     o.obj_padre as padre 
                     FROM 
-                    objeto as o, 
+                    objeto as o,
                     sujeto_objeto as os 
                     WHERE 
                     o.obj_id = os.obj_id AND 

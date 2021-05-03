@@ -19,3 +19,4 @@ export { ParameterQ } from "./selfAwarness/qwertyModels/ParameterQ";
 export { CollectionMethodQ } from "./selfAwarness/qwertyModels/CollectionMethodQ";
 export { AnalysisModelQ } from "./selfAwarness/qwertyModels/AnalysisModelQ";
 export { CalculationMethodQ } from "./selfAwarness/qwertyModels/CalculationMethodQ";
+export { EntityQ } from "./selfAwarness/qwertyModels/EntityQ";

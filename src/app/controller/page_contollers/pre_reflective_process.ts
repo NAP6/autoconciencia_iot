@@ -6,6 +6,7 @@ import { Property } from "../../models/selfAwarness/Property";
 import {
   AnalysisModelQ,
   CollectionMethodQ,
+  SelfAwarnessQ,
 } from "../../models/selfAwarnessModels";
 import { DataFlow } from "../../models/selfAwarness/DataFlow";
 import { DirectMetric } from "../../models/selfAwarness/DirectMetric";
@@ -99,23 +100,28 @@ export async function add_pre_reflective_process(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-/*export async function upd_pre_reflexivos(req: Request, res: Response) {
+export async function mod_pre_reflective_process(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var newScale = req.body;
-    var scale: ScaleQ = new ScaleQ(
-      newScale.id,
-      newScale.name,
-      newScale.valid_values,
-      newScale.type
+    var newProcess = req.body;
+    var process: PreReflectiveProcessQ = new PreReflectiveProcessQ(
+      newProcess.id,
+      newProcess.name,
+      newProcess.description,
+      newProcess.type,
     );
-    scale.active = newScale.active == 1;
-    await db.qwerty(scale.toSqlUpdate([], []));
+	  if(newProcess.inicioP){
+	process.executionPeriodStart=newProcess.inicioP;
+	  }
+	  if(newProcess.finP){
+	process.executionPeriodEnd=newProcess.finP;
+	  }
+    await db.qwerty(process.toSqlUpdate([], []));
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
-}*/
+}
 export async function del_pre_reflective_process(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
