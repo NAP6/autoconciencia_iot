@@ -7,6 +7,7 @@ class SimulationScenario {
         this._name = name;
         this._description = description;
         this._uses = [];
+        this._active = true;
     }
     get id() {
         return this._id;
@@ -31,6 +32,12 @@ class SimulationScenario {
     }
     set uses(value) {
         this._uses = value;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
     }
 }
 exports.SimulationScenario = SimulationScenario;

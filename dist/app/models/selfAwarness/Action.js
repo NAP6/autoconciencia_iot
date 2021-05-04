@@ -5,6 +5,7 @@ class Action {
     constructor(id, description) {
         this._id = id;
         this._description = description;
+        this._active = true;
     }
     get id() {
         return this._id;
@@ -18,11 +19,17 @@ class Action {
     set description(value) {
         this._description = value;
     }
-    get sRecommendedln() {
-        return this._sRecommendedln;
+    get active() {
+        return this._active;
     }
-    set sRecommendedln(value) {
-        this._sRecommendedln = value;
+    set active(value) {
+        this._active = value;
+    }
+    get isRecommendedln() {
+        return this._isRecommendedln;
+    }
+    set isRecommendedln(value) {
+        this._isRecommendedln = value;
     }
 }
 exports.Action = Action;

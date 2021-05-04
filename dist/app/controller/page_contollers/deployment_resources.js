@@ -9,9 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ask_deployment_resources = exports.ask_deployment_resources_select = exports.del_deployment_resources = exports.add_deployment_resources = exports.deployment_resources = void 0;
+exports.add_mapeo_parametros = exports.ask_input_arguments = exports.ask_deployment_resources = exports.ask_deployment_resources_select = exports.del_deployment_resources = exports.add_deployment_resources = exports.deployment_resources = exports.deployment_resources_page = void 0;
 const database2_1 = require("../../data/database2");
 const selfAwarnessModels_1 = require("../../models/selfAwarnessModels");
+function deployment_resources_page(req, res) {
+    res.render("deployment_resources", {
+        error: req.flash("error"),
+        succes: req.flash("succes"),
+        session: req.session,
+    });
+}
+exports.deployment_resources_page = deployment_resources_page;
 function deployment_resources(req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -37,6 +45,7 @@ function add_deployment_resources(req, res) {
             if (data.tipoRecurso == "0") {
                 var formula = new selfAwarnessModels_1.FormulaQ(-1, data.nombre, data.descripcion.replace("'", "\\'"), data.EspecificoTipo.datoSalida, data.EspecificoTipo.formula);
                 var rows = yield db.qwerty(formula.toSqlInsert([], []));
+                console.log("ADD" + rows);
                 id = rows[0][0].id;
             }
             else if (data.tipoRecurso == "1") {
@@ -135,3 +144,50 @@ function ask_deployment_resources(req, res) {
     });
 }
 exports.ask_deployment_resources = ask_deployment_resources;
+function ask_input_arguments(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var rows = yield db.qwerty(`SELECT me.met_id as id, me.met_nombre as nombre 
+	     FROM metrica me, aspectoautoconsciencia_metrica aa_me 
+	     WHERE me.met_id=aa_me.met_id AND me.met_activo=1 AND aa_me.aa_id=${req.body.aspectoId} AND me.met_tipo=${req.body.metricaId};`);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.ask_input_arguments = ask_input_arguments;
+function add_mapeo_parametros(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var data = req.body;
+            console.log(data);
+            var stryaux = "";
+            data.forEach((element) => {
+                console.log(element.mea_id);
+                stryaux += `(
+	      		'${element.par_ordinal}', 
+	      		'${element.mea_id}',
+	      		'${element.mp_tipo_entrada}',
+	      		'${element.met_id}',
+	      		${element.tipoMapeo == undefined ? "NULL" : "'" + element.tipoMapeo + "'"},
+	      		${element.md_id == undefined ? "NULL" : "'" + element.md_id + "'"}),`;
+            });
+            var sql = `INSERT INTO 
+    		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
+		VALUES ` + stryaux.substring(0, stryaux.length - 1);
+            console.log(sql);
+            var db = new database2_1.database2();
+            db.qwerty(sql);
+            res.json({ mensaje: "La accion fue realizada con exito" });
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.add_mapeo_parametros = add_mapeo_parametros;

@@ -2,10 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SelfAwarenessProcess = void 0;
 class SelfAwarenessProcess {
-    constructor(id, name, description, executionPeriodStart, executionPeriodEnd) {
+    constructor(id, name, description, type_process, executionPeriodStart, executionPeriodEnd) {
         this._id = id;
         this._name = name;
         this._description = description;
+        this._type_process = type_process;
+        this._active = true;
         this._executionPeriodStart = executionPeriodStart;
         this._executionPeriodEnd = executionPeriodEnd;
     }
@@ -26,6 +28,18 @@ class SelfAwarenessProcess {
     }
     set description(value) {
         this._description = value;
+    }
+    get type_process() {
+        return this._type_process;
+    }
+    set type_process(value) {
+        this._type_process = value;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
     }
     get executionPeriodStart() {
         return this._executionPeriodStart;
@@ -50,6 +64,15 @@ class SelfAwarenessProcess {
     }
     set captures(value) {
         this._captures = value;
+    }
+    toObjectG() {
+        var res = {};
+        res.$ = {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+        };
+        return res;
     }
 }
 exports.SelfAwarenessProcess = SelfAwarenessProcess;

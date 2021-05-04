@@ -19,7 +19,7 @@ class MetricQ extends Metric_1.Metric {
                 '${this.description}',
                 '${this.abbreviation}',
                 '${value[tag.indexOf("/@/TYPE/@/")]}',
-                '${this.perspective}',
+                ${this.perspective == undefined ? null : +this.perspective},
                 '${this.active ? 1 : 0}',
                 '${value[tag.indexOf("/@/ESCALE/@/")]}',
                 '${value[tag.indexOf("/@/UNIT/@/")]}'
@@ -28,28 +28,48 @@ class MetricQ extends Metric_1.Metric {
         return sql;
     }
     toSqlSelect(tag, value) {
-        var sql = `SELECT 
+        if (tag.indexOf("/@/ASPECTID/@/") != -1 &&
+            tag.indexOf("/@/TYPE/@/") != -1) {
+            var sql = `SELECT 
+    met.met_id as id, 
+    met.met_nombre as name
+  FROM 
+    metrica met,
+aspectoautoconsciencia_metrica asp_met
+  WHERE 
+     asp_met.aa_id=${value[tag.indexOf("/@/ASPECTID/@/")]} AND asp_met.met_id=met.met_id AND met.met_tipo=${value[tag.indexOf("/@/TYPE/@/")]}`;
+            return sql;
+        }
+        else {
+            var sql = `SELECT 
     met.met_id as id, 
     met.met_nombre as name,
     met.met_descripcion as description,
     met.met_abreviacion as abbreviation,
     met.met_perspectivaindicador as perspectiva,
+    enu2.enu_nombre_valor as perspectiva_nombre,
     met.met_tipo as tipo_id,
     enu.enu_nombre_valor as met_type,
     met.esc_id as scale,
     met.um_id as unit,
     met.met_activo as active
     `;
-        if (tag.indexOf('/@/ASPECTID/@/') != -1) {
-            sql += `,IF((SELECT COUNT(asp_me.met_id) FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=${value[tag.indexOf("/@/ASPECTID/@/")]} && asp_me.met_id=met.met_id )>0, True,false) as existe`;
-        }
-        sql += `
+            if (tag.indexOf("/@/ASPECTID/@/") != -1) {
+                sql += `,IF((SELECT COUNT(asp_me.met_id) FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=${value[tag.indexOf("/@/ASPECTID/@/")]} && asp_me.met_id=met.met_id )>0, True,false) as existe`;
+            }
+            else if (tag.indexOf("/@/ASPECTID/@/") != -1 &&
+                tag.indexOf("/@/TYPE/@/") != -1) {
+                sql += ``;
+            }
+            sql += `
   FROM 
     metrica met,
-    enumeracion enu
+    enumeracion enu,
+    enumeracion enu2
   WHERE 
-    enu.enu_id=met.met_tipo`;
-        return sql;
+    enu.enu_id=met.met_tipo AND enu2.enu_id=met.met_perspectivaindicador`;
+            return sql;
+        }
     }
     toSqlDelete(value) {
         var sql = `DELETE FROM metrica WHERE met_id=${this.id} `;

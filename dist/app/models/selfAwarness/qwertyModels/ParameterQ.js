@@ -20,6 +20,7 @@ class ParameterQ extends Parameter_1.Parameter {
         this.ordinal = value;
     }
     toSqlInsert(tag, value) {
+        console.log(this.dataType);
         var sql = `INSERT INTO 
 	  		parametro (
 	  			par_ordinal, 
@@ -48,8 +49,10 @@ class ParameterQ extends Parameter_1.Parameter {
 		  	enu.enu_nombre_valor as nombre_salida 
 	  	FROM 	
 			parametro pa, 
-			enumeracion enu  
-		WHERE ri_id = '${value[tag.indexOf("/@/RI_ID/@/")]}' AND pa.par_tipo_dato=enu.enu_id`;
+			enumeracion enu
+		WHERE 
+	  		ri_id = '${value[tag.indexOf("/@/RI_ID/@/")]}' AND 
+			pa.par_tipo_dato=enu.enu_id`;
         return sql;
     }
     toSqlDelete(tag, value) {
@@ -61,7 +64,7 @@ class ParameterQ extends Parameter_1.Parameter {
     toObjectArray(rows) {
         var parameters = [];
         for (var i = 0; i < rows.length; i++) {
-            var par = new ParameterQ(rows[i].ordinal, rows[i].nombre, rows[i].tipo, rows[i].opcional == 1 ? true : false);
+            var par = new ParameterQ(rows[i].ordinal, rows[i].nombre, [rows[i].tipo, rows[i].nombre_salida], rows[i].opcional == 1 ? true : false);
             par.active = rows[i].activo == 1 ? true : false;
             parameters.push(par);
         }

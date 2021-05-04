@@ -44,7 +44,7 @@ class GoalQ extends Goal_1.Goal {
 	     	objetivo `;
         if (value.length > 0)
             sql += `WHERE 
-	  	suj_id = ${value[tag.indexOf('/@/SYSTEM/@/')]} AND ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} ORDER BY id`;
+	  	suj_id = ${value[tag.indexOf("/@/SYSTEM/@/")]} AND ma_id = ${value[tag.indexOf("/@/MODEL/@/")]} ORDER BY id`;
         return sql;
     }
     toSqlDelete(tag, value) {
@@ -54,7 +54,12 @@ class GoalQ extends Goal_1.Goal {
         throw new Error("Method not implemented.");
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var goals = [];
+        for (var i = 0; i < rows.length; i++) {
+            var goal = new Goal_1.Goal(rows[i].id, rows[i].nombre, rows[i].descripcion, rows[i].peso, rows[i].asignacion);
+            goals.push(goal);
+        }
+        return goals;
     }
 }
 exports.GoalQ = GoalQ;

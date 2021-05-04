@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delete_subjects_goal = exports.save_subjects_goal = exports.subjects_goals = exports.update_subjects = exports.subjects = exports.subject = void 0;
+exports.subjects_aspects = exports.delete_subjects_goal = exports.save_subjects_goal = exports.subjects_goals = exports.update_subjects = exports.subjects = exports.subject = void 0;
 const database2_1 = require("../../data/database2");
 const selfAwarnessModels_1 = require("../../models/selfAwarnessModels");
 function subject(req, res) {
@@ -107,3 +107,20 @@ function delete_subjects_goal(req, res) {
     });
 }
 exports.delete_subjects_goal = delete_subjects_goal;
+function subjects_aspects(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var id = req.body.id;
+            console.log(id);
+            var modelID = req.session.active_model.modelID;
+            var rows = yield db.qwerty(`SELECT aa_id as id, aa_nombre as nombre FROM aspectoautoconsciencia WHERE suj_id=${id} AND ma_id=${modelID} `);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.subjects_aspects = subjects_aspects;

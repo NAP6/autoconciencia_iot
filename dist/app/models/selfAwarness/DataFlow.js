@@ -58,7 +58,7 @@ class DataFlow {
         return this._support;
     }
     set support(value) {
-        this._support;
+        this._support = value;
     }
 }
 exports.DataFlow = DataFlow;

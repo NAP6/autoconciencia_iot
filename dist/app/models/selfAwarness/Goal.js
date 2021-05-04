@@ -66,5 +66,18 @@ class Goal {
     set isInterpretedBy(value) {
         this._isInterpretedBy = value;
     }
+    toObjectG() {
+        var res = {};
+        res.$ = {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            weight: this.weight,
+            aggregationOperator: this.aggregationOperator,
+        };
+        if (this.containsSubGoal.length > 0)
+            res.containsSubGoal = this.containsSubGoal;
+        return res;
+    }
 }
 exports.Goal = Goal;

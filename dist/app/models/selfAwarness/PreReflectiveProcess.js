@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PreReflecriveProcess = void 0;
+exports.PreReflectiveProcess = void 0;
 const SelfAwarenessProcess_1 = require("./SelfAwarenessProcess");
-class PreReflecriveProcess extends SelfAwarenessProcess_1.SelfAwarenessProcess {
-    constructor(id, name, description, executionPeriodStart, executionPeriodEnd, usesCollectionMehod, usesAnalysisModel) {
-        super(id, name, description, executionPeriodStart, executionPeriodEnd);
-        this._usesCollectionMethod = usesCollectionMehod;
-        this._usesAnalysisModel = usesAnalysisModel;
+class PreReflectiveProcess extends SelfAwarenessProcess_1.SelfAwarenessProcess {
+    constructor(id, name, description, type_process, executionPeriodStart, executionPeriodEnd) {
+        super(id, name, description, type_process, executionPeriodStart, executionPeriodEnd);
     }
     get usesCollectionMehod() {
         return this._usesCollectionMethod;
@@ -21,4 +19,4 @@ class PreReflecriveProcess extends SelfAwarenessProcess_1.SelfAwarenessProcess {
         this.usesAnalysisModel = value;
     }
 }
-exports.PreReflecriveProcess = PreReflecriveProcess;
+exports.PreReflectiveProcess = PreReflectiveProcess;

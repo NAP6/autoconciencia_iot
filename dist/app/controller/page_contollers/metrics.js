@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.del_metrics = exports.mod_metrics = exports.add_metrics_aspects = exports.add_metrics = exports.get_metrics_aspects = exports.get_metrics = exports.metrics = void 0;
+exports.del_metrics = exports.mod_metrics = exports.add_metrics_aspects = exports.add_metrics = exports.get_metrics_type_aspects = exports.get_metrics_type = exports.get_metrics_aspects = exports.get_metrics = exports.metrics = void 0;
 const database2_1 = require("../../data/database2");
 const MetricQ_1 = require("../../models/selfAwarness/qwertyModels/MetricQ");
 function metrics(req, res) {
@@ -42,7 +42,7 @@ function get_metrics_aspects(req, res) {
             var db = new database2_1.database2();
             var id = req.body.id;
             var metrics = new MetricQ_1.MetricQ(-1, "", "", "", "");
-            var rows = yield db.qwerty(metrics.toSqlSelect(['/@/ASPECTID/@/'], [id]));
+            var rows = yield db.qwerty(metrics.toSqlSelect(["/@/ASPECTID/@/"], [id]));
             res.json(rows);
         }
         else {
@@ -51,6 +51,49 @@ function get_metrics_aspects(req, res) {
     });
 }
 exports.get_metrics_aspects = get_metrics_aspects;
+function get_metrics_type(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var id = req.body.id;
+            var tipo = req.body.tipo;
+            var metrics = new MetricQ_1.MetricQ(-1, "", "", "", "");
+            var rows = yield db.qwerty(metrics.toSqlSelect(["/@/ASPECTID/@/", "/@/TYPE/@/"], [id, tipo]));
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.get_metrics_type = get_metrics_type;
+function get_metrics_type_aspects(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var id = req.body.id;
+            var tipo = req.body.tipo;
+            var metrics = new MetricQ_1.MetricQ(-1, "", "", "", "");
+            var rows = yield db.qwerty(`SELECT 
+	    met.met_id as id, 
+	    met.met_nombre as name, 
+	    IF((SELECT COUNT(asp_me.met_id)
+	    FROM aspectoautoconsciencia_metrica as asp_me 
+	    WHERE asp_me.aa_id=${id} && asp_me.met_id=met.met_id)>0,True,false) as existe
+	    FROM 
+	    metrica met
+	    WHERE
+	    met.met_tipo=${tipo}`);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.get_metrics_type_aspects = get_metrics_type_aspects;
 function add_metrics(req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -79,10 +122,10 @@ function add_metrics_aspects(req, res) {
                 var cont = yield db.qwerty(`SELECT COUNT(asp_me.met_id) cont FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=${element[i].aa_id} && asp_me.met_id=${element[i].met_id}`);
                 cont = cont[0]["cont"];
                 console.log(cont);
-                if (cont > 0 && element[i].existe == '0') {
+                if (cont > 0 && element[i].existe == "0") {
                     yield db.qwerty(`DELETE FROM aspectoautoconsciencia_metrica WHERE met_id=${element[i].met_id} AND aa_id=${element[i].aa_id}`);
                 }
-                else if (cont == 0 && element[i].existe == '1') {
+                else if (cont == 0 && element[i].existe == "1") {
                     yield db.qwerty(`INSERT INTO aspectoautoconsciencia_metrica(met_id, aa_id) VALUES (${element[i].met_id},${element[i].aa_id})`);
                 }
             }

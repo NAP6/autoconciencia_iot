@@ -26,5 +26,11 @@ class CollectionMethod extends LearningReasoningMethod_1.LearningReasoningMethod
     set produces(value) {
         this._produces = value;
     }
+    get isSupported() {
+        return this._isSupported;
+    }
+    set isSupported(value) {
+        this._isSupported = value;
+    }
 }
 exports.CollectionMethod = CollectionMethod;

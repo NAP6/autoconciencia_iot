@@ -47,7 +47,7 @@ class IoTSystemQ extends IoTSystem_1.IoTSystem {
                 sql += ", ";
             sql += `suj_activo = '${this.active ? 1 : 0}'`;
         }
-        sql += ` WHERE suj_id = '${this.id}' AND ${value[tag.indexOf("/@/MODEL/@/")]}`;
+        sql += ` WHERE suj_id = '${this.id}' AND ma_id= ${value[tag.indexOf("/@/MODEL/@/")]}`;
         return sql;
     }
     toObjectArray(rows) {

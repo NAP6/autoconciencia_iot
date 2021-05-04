@@ -22,7 +22,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const api = __importStar(require("../app/controller/controller-api"));
 const rt = __importStar(require("../app/controller/page_contollers"));
 function default_1(app) {
-    app.post("/api/ask_input_arguments/", api.ask_input_arguments);
     app.post("/api/save_subjects/", api.save_subjects);
     app.post("/api/save_entity/", api.save_entity);
     app.post("/api/update_entity/", api.update_entity);
@@ -68,10 +67,7 @@ function default_1(app) {
     app.post("/api/procesos_pre_reflexive_id/", api.process_pre_reflexive_id);
     app.post("/api/add_process_pre_reflexive/", api.add_process_pre_reflexive);
     app.post("/api/del_process_pre_reflexive/", api.del_process_pre_reflexive);
-    app.post("/api/mod_process_pre_reflexive", api.mod_process_pre_reflexive);
     app.post("/api/properties/", api.properties);
-    app.post("/api/add_metodo_modelo", api.add_metodo_modelo);
-    app.post("/api/add_mapeo_parametros", api.add_mapeo_parametros);
     app.get("/api/procesos_reflexive/", api.procesos_reflexive);
     app.post("/api/add_metodo_modelo_reflexivos", api.add_metodo_modelo_reflexivos);
     app.post("/api/objetivos_sujetos", api.objetivos_sujetos);
@@ -80,9 +76,9 @@ function default_1(app) {
     app.post("/api/ascenario_simulacion/", api.escenario_simulacion);
     app.post("/api/del_escenario_simulacion/", api.del_escenario_simulacion);
     app.post("/api/upd_escenario_simulacion/", api.upd_escenario_simulacion);
-    app.post("/api/get_variables_valor/", api.get_variables_valor);
-    app.post("/api/add_variables_valor/", api.add_variables_valor);
-    app.post("/api/del_variables_valor/", api.del_variables_valor);
+    //app.post("/api/get_variables_valor/", api.get_variables_valor);
+    //app.post("/api/add_variables_valor/", api.add_variables_valor);
+    //pp.post("/api/del_variables_valor/", api.del_variables_valor);
     app.post("/api/upd_variables_valor/", api.upd_variables_valor);
     app.post("/api/get_variable_simulacion/", api.get_variable_simulacion);
     app.get("/api/get_variable_simulacion_id/", api.get_variable_simulacion_id);
@@ -100,12 +96,16 @@ function default_1(app) {
     app.post("/api/get_enumeracion/", rt.get_enumeracion);
     app.post("/api/save_subjects_objects/", rt.save_subjects_goal);
     app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
+    app.post("/api/subjects_aspects/", rt.subjects_aspects);
     //Aspectos
     app.route("/api/get_aspects/").get(rt.get_aspects);
     app.post("/api/add_aspects/", rt.add_aspects);
     app.post("/api/mod_aspects/", rt.mod_aspecs);
     app.post("/api/del_aspects/", rt.del_aspects);
     app.post("/api/get_aspects_subjects", rt.get_aspects_objects);
+    app.post("/api/get_aspects_objects_process", rt.get_aspects_objects_process);
+    app.post("/api/del_aspects_objects", rt.del_aspects_objects);
+    app.post("/api/add_relation_objects_aspects", rt.add_relation_objects_aspects);
     //Generales
     //=====================================================================
     //Metricas
@@ -117,11 +117,8 @@ function default_1(app) {
         .route("/api/get_metrics/")
         .get(rt.get_metrics)
         .post(rt.get_metrics_aspects);
-    //Aspectos
-    //app.route("/api/get_aspects/").get(rt.get_aspects);
-    //app.post("/api/add_aspects/", rt.add_aspects);
-    //app.post("/api/mod_aspects/", rt.mod_aspecs);
-    //app.post("/api/del_aspects/", rt.del_aspects);
+    app.post("/api/get_metrics_type", rt.get_metrics_type);
+    app.post("/api/get_metrics_type_aspects", rt.get_metrics_type_aspects);
     //Recursos de implementacion
     app.get("/api/deployment_resources/", rt.deployment_resources);
     app.post("/api/add_deployment_resources/", rt.add_deployment_resources);
@@ -148,5 +145,48 @@ function default_1(app) {
     app.post("/api/add_umbral/", rt.add_umbral);
     app.post("/api/del_umbral/", rt.del_umbral);
     app.post("/api/upd_umbral/", rt.upd_umbral);
+    //Apis usadas para los procesos Pre-reflexivos
+    app.post("/api/get_objects_aspects/", rt.get_objects_aspects);
+    app.post("/api/add_pre_reflective_process", rt.add_pre_reflective_process);
+    app.get("/api/get_pre_reflective_process", rt.get_pre_reflective_process);
+    app.post("/api/del_pre_reflective_process", rt.del_pre_reflective_process);
+    app.post("/api/get_pre_reflective_process_mod", rt.get_pre_reflective_process_mod);
+    app.post("/api/mod_pre_reflective_process", rt.mod_pre_reflective_process);
+    app.get("/api/get_last_insert_process", rt.get_last_insert_process);
+    //Metodo de aprendizaje procesos pre relfexivos
+    app.post("/api/add_metodo_modelo", rt.add_metodo_modelo);
+    //API PROPIEDADES
+    app.post("/api/get_properties", rt.get_properties);
+    //API FLUJO DATOS
+    app.post("/api/get_data_flow", rt.get_data_flow);
+    //Apis usadas para los procesos reflexivos
+    app.post("/api/add_reflective_process", rt.add_reflective_process);
+    app.get("/api/get_reflective_process", rt.get_reflective_process);
+    app.post("/api/del_reflective_process", rt.del_reflective_process);
+    //Metodo de aprendizaje
+    app.post("/api/add_metodo_modelo2", rt.add_metodo_modelo2);
+    //	Variables de simulacion para el metodo de procesos reflexivos
+    app.post("/api/get_simulation_variable", rt.get_simulation_variable);
+    app.post("/api/add_simulation_variable", rt.add_simulation_variable);
+    app.post("/api/upd_simulation_variable", rt.upd_simulation_variable);
+    app.post("/api/del_simulation_variable", rt.del_simulation_variable);
+    //	Escenarios de simulacion para el metodo de procesos reflexivos
+    app.post("/api/get_simulation_scenario", rt.get_simulation_scenario);
+    app.post("/api/add_simulation_scenario", rt.add_simulation_scenario);
+    app.post("/api/upd_simulation_scenario", rt.upd_simulation_scenario);
+    app.post("/api/del_simulation_scenario", rt.del_simulation_scenario);
+    //	Valor de simulacion para el metodod de procesos reflexivos
+    app.post("/api/get_simulation_value", rt.get_simulation_value);
+    app.post("/api/add_simulation_value", rt.add_simulation_value);
+    app.post("/api/upd_simulation_value", rt.upd_simulation_value);
+    app.post("/api/del_simulation_value", rt.del_simulation_value);
+    //	Mapo de parametros
+    app.post("/api/ask_input_arguments/", rt.ask_input_arguments);
+    app.post("/api/add_mapeo_parametros", rt.add_mapeo_parametros);
+    //Acciones Procesos
+    app.post("/api/get_action", rt.get_action);
+    app.post("/api/add_action", rt.add_action);
+    app.post("/api/upd_action", rt.upd_action);
+    app.post("/api/del_action", rt.del_action);
 }
 exports.default = default_1;

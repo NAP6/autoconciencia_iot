@@ -29,12 +29,10 @@ function default_1(app, upload) {
     app.get("/measurement_units", nv.loggedIn, nv.measurement_units);
     app.get("/scales", nv.loggedIn, nv.scales);
     app.get("/decision_criteria", nv.loggedIn, nv.decision_criteria);
-    app.get("/deployment_resources", nv.loggedIn, nv.deployment_resources);
-    app.get("/generate_model", nv.loggedIn, nv.generate_model);
     app.get("/proceso_pre_reflexivo", nv.loggedIn, nv.proceso_pre_reflexivo);
-    app.post("/modificar_pre_reflexivos", nv.loggedIn, nv.modificar_pre_reflexivos);
+    app.post("/modificar_pre_reflexivos", nv.loggedIn, rt.get_pre_reflective_process_mod);
     app.get("/procesos_reflexivos", nv.loggedIn, nv.procesos_reflexivos);
-    app.post("/modificar_reflexivos", nv.loggedIn, nv.modificar_reflexivos);
+    app.post("/modificar_reflexivos", nv.loggedIn, rt.get_reflective_process_mod);
     //Rutas Revisadas
     app.get("/login", rt.login);
     app.route("/singup").get(rt.singup).post(rt.singup_save);
@@ -48,12 +46,16 @@ function default_1(app, upload) {
         .get(rt.loggedIn, rt.home)
         .post(rt.active_model, rt.loggedIn, rt.home);
     app.get("/logout", rt.logout);
-    app.route("/models").get(rt.loggedIn, rt.models)
+    app
+        .route("/models")
+        .get(rt.loggedIn, rt.models)
         .post(upload.single("file_modelo_xmi"), rt.save_new_model, rt.loggedIn, rt.models);
     app.post("/update_model", rt.loggedIn, rt.update_model);
     app.get("/subject", rt.loggedIn, rt.subject);
     //Nuevos Cambioooos Profe
     app.get("/aspects", rt.loggedIn, rt.aspects);
     app.get("/metrics", rt.loggedIn, rt.metrics);
+    app.get("/deployment_resources", rt.loggedIn, rt.deployment_resources_page);
+    app.get("/generate_model", rt.loggedIn, rt.generate_model);
 }
 exports.default = default_1;

@@ -6,7 +6,7 @@ class FormulaQ extends Formula_1.Formula {
     toSqlInsert(tag, value) {
         var sql = `call formula(
 	  		'${this.name}',
-	  		'${this.description}',
+	  		"${this.description}",
 	  		${this.returnDataType},
 	  		1,
 	  		'${this.expression}',

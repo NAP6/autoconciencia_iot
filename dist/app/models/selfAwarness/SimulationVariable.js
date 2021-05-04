@@ -5,6 +5,7 @@ class SimulationVariable {
     constructor(id, name) {
         this._id = id;
         this._name = name;
+        this._active = true;
         this._isUsedIn = [];
         this._containsSimulationValue = [];
     }
@@ -19,6 +20,12 @@ class SimulationVariable {
     }
     set name(value) {
         this._name = value;
+    }
+    get active() {
+        return this._active;
+    }
+    set active(value) {
+        this._active = value;
     }
     get isUsedIn() {
         return this._isUsedIn;
