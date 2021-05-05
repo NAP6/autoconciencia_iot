@@ -3,7 +3,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-center" style="width: 100%;">
-                    Agregar Métricas-Aspecto
+                    Agregar Métricas - Aspecto Autoconsciencia
                 </h5>
                 <button type="button" class="close" onclick="SalirAdministrarMetricas();">
           <span aria-hidden="true">&times;</span>
@@ -12,7 +12,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col">
-                        <div class="card" style="height: 160px; width: 1080px;">
+                        <div class="card" style="height: 220px; width: 1080px;">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="row">
@@ -20,14 +20,18 @@
                                             <h6>Aspecto:</h6>
                                             <p id="nombreAspecto_admin_metricas"></p>
                                         </div>
-
-                                    </div>
+				                                    </div>
                                     <h6>Descripcion:</h6>
                                     <p id="descripcionAspecto_admin_metricas"></p>
 
                                 </div>
                             </div>
+                                	<h6>Tipo:</h6>
+					<div class="col-4">
+				<select class="custom-select" id="tipo_metrica_aspectos_metrica" onchange="tipo_metrica_change()" ></select>	
+</div>
                         </div>
+
                         <div class="row px-3">
 
                             <div id="sujetos_para_seleccion_area" class="col-12 col-lg-5">
@@ -55,7 +59,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="SalirAdministrarMetricas()">
-          Cancelar
+          Cerrar
         </button>
             </div>
         </div>

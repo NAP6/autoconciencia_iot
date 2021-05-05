@@ -3,13 +3,15 @@
         <div class="col">
             <input type="text" class="d-none" id="id_proceso_pre_reflexivo">
             <input type="text" class="d-none" id="id_metodo_aprendizaje_directo">
-            <div class="form-group mt-4 row">
-                <label for="" class="col-sm-3 col-form-label">Nombre:</label>
+	    <input type="text" class="d-none" id="nombre_proceso_id">
+                     <div class="form-group row ">
+                <label for=" " class="col-sm-3 col-form-label ">ID:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" id="input-name-proceso-pre-reflexivo" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" disabled />
+                    <input type="text " class="form-control " id="nombre_proceso_pre_reflexivo" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase(); " disabled/>
                 </div>
             </div>
-            <div class="form-group row ">
+ 
+	  <div class="form-group row ">
                 <label for=" " class="col-sm-3 col-form-label ">Descripción:</label>
                 <div class="col-sm-7">
                     <textarea type="text " class="form-control " id="input-descripcion-proceso-pre-reflexivo" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase(); "></textarea>
@@ -25,13 +27,12 @@
                     <label for="" class="col-sm-2 col-form-label">Fin:</label>
                     <input type="date" id="fin_del_periodo" name="fin_del_periodo" value="" min="2020-01-01" max="2050-01-01">
                 </div>
-                <div class="row">
-                    <h6>Objetivo de alto nivel:</h6>
-                    <div class="col-12">
-                        <select class="custom-select" name="objetivos_alto_nivel" id="objetivos_alto_nivel" disabled></select>
-                    </div>
-                </div>
+                
             </div>
+		 <h6>Aspectos de autoconsciencia</h6>
+        <div class="input-group col-12">
+            <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia" disabled>       </select>
+        </div>        
         </div>
     </div>
     <div class="row">
@@ -46,7 +47,7 @@
                 <h6>Categoría de objetos:</h6>
                 <div class="form-group mt-1 col-12">
                     <select class="custom-select" name="CategoriaEntidadesProcesos" id="CategoriaEntidadesProcesos" disabled>
-                                        <option>Seleccione..</option>
+                                        <option value="-6">Seleccione..</option>
                                       <option id="1" value="1">Entidades Físicas</option>
                                       <option value="2">Nodos Cloud</option>
                                       <option value="3">Nodos Fog</option>
@@ -57,17 +58,13 @@
                                       <option value="8">Red</option>
                                     </select>
                 </div>
-                <h6>Objeto de autoconsciencia:</h6>
+           </div>
+<h6 class="">Objeto de autoconsciencia:</h6>
                 <div class="col-sm-11">
                     <div id="entidades_seleccionados_area_procesos" class="card col-lg-12" style="overflow-y: auto;height: 90px;">
                         <ul id="lista_entidades_seleccionadas_procesos"></ul>
                     </div>
                 </div>
-            </div>
         </div>
-        <h6 class="text-center">Aspectos de autoconsciencia</h6>
-        <div class="input-group col-11">
-            <select class="custom-select" name="Aspectos_autoconsciencia" id="Aspectos_autoconsciencia" disabled>
-                    </select>
-        </div>
+		
     </div>

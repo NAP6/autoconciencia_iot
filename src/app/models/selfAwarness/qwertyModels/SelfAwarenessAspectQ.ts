@@ -48,6 +48,10 @@ aspectoautoconsciencia (
 	   	 asp.suj_id= suj.suj_id AND
 	        suj.ma_id = ${value[tag.indexOf("/@/MODEL/@/")]} AND
 	        asp.ma_id=${value[tag.indexOf("/@/MODEL/@/")]}`;
+    if (tag.indexOf("/@/SYSTEM/@/") != -1) {
+      sql += ` AND
+		suj.suj_id=${value[tag.indexOf("/@/SYSTEM/@/")]}`;
+    }
     return sql;
   }
   toSqlDelete(value: string[]): string {
@@ -71,6 +75,19 @@ aspectoautoconsciencia (
     return sql;
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    rows = rows;
+    var res: SelfAwarenessAspectQ[];
+    res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var aux = new SelfAwarenessAspectQ(
+	      rows[i].id,
+	      rows[i].name,
+	      rows[i].description,
+	      rows[i].weight,
+	      rows[i].met_aspect
+      );
+      res.push(aux);
+    }
+    return res;
   }
 }

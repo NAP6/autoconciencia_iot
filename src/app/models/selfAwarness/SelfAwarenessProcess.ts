@@ -104,6 +104,8 @@ export class SelfAwarenessProcess {
       id: this.id,
       name: this.name,
       description: this.description,
+      executionPeriodStart: this.executionPeriodStart,
+      executionPeriodEnd: this.executionPeriodEnd,
     };
     return res;
   }

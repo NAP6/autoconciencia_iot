@@ -33,10 +33,10 @@ export class SelfAwarenessProcessQ
     throw new Error("Method not implemented.");
   }
   toObjectArray(rows: any): any[] {
+    rows = rows;
     var res: SelfAwarenessProcessQ[];
     res = [];
-    for (var i = 0; i < rows; i++) {
-      console.log(rows[i]);
+    for (var i = 0; i < rows.length; i++) {
       var aux = new SelfAwarenessProcessQ(
         rows[i].id,
         rows[i].nombre,

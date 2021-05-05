@@ -1,9 +1,9 @@
-<div class="modal fade" id="add_aspects" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="modal_resource_addLabel" aria-hidden="true">
+<d iv class="modal fade" id="add_aspects" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="modal_resource_addLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-center" id="tituloAspectos" style="width: 100%;">
-                    Agregar Aspecto
+                    Agregar Aspecto Autoconsciencia
                 </h5>
                 <button type="button" class="close" onclick="limpiarFomulario();">
           <span aria-hidden="true">&times;</span>
@@ -12,15 +12,36 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-6">
-                        <div class="input-group mb-2">
-                            <h6>Seleccionar sujeto de autoconsciencia:</h6>
-                            <div class="" style="height: 100px;">
-                                <div id="sujetos_Activos_aspectos" class="card col">
+                        <div class="input-group mb">
+                            <h6>Sujeto de autoconsciencia:</h6>
+                            <div class="" style="">
+                                <div id="sujetos_Activos_aspectos" class="card col-12" style="width:430px">
                                     <ul id="lista_sujetos_activos_aspectos"></ul>
                                 </div>
                             </div>
                         </div>
-
+		<h6 class="">  Categoria Entidad:</h6>
+                        <div class="input-group col-10">
+                            <select class="custom-select mb-2" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectos" disabled>
+                                <option value="-6">Seleccione..</option>
+                              <option id="EntidadFisica" value="1">Entidades Físicas</option>
+                              <option value="2">Nodos Cloud</option>
+                              <option value="3">Nodos Fog</option>
+                              <option value="4">Gateway IoT</option>
+                              <option value="5">Sensores</option>
+                              <option value="6">Tags</option>
+                              <option value="7">Actuadores</option>
+                              <option value="8">Red</option>
+                            </select>
+                        </div>
+                        <h6>Objetos de autoconsciencia:</h6>
+                        <div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 140px;">
+                            <div id="entidades_seleccionados_area_aspectos" class="card col">
+                                <ul id="lista_entidades_seleccionadas_aspectos"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 aling-self-center">
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Nombre:</span>
@@ -67,29 +88,6 @@
 
 
                     </div>
-                    <div class="col-6">
-                        <h6 class="">
-                            Categoria Entidad:</h6>
-                        <div class="input-group">
-                            <select class="custom-select" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectos" disabled>
-                                <option value="-6">Seleccione..</option>
-                              <option id="EntidadFisica" value="1">Entidades Físicas</option>
-                              <option value="2">Nodos Cloud</option>
-                              <option value="3">Nodos Fog</option>
-                              <option value="4">Gateway IoT</option>
-                              <option value="5">Sensores</option>
-                              <option value="6">Tags</option>
-                              <option value="7">Actuadores</option>
-                              <option value="8">Red</option>
-                            </select>
-                        </div>
-                        <h6>Seleccionar sujeto de autoconsciencia:</h6>
-                        <div class="row px-3 pr-5" style="overflow-y: auto;height: 200px;">
-                            <div id="entidades_seleccionados_area_aspectos" class="card col">
-                                <ul id="lista_entidades_seleccionadas_aspectos"></ul>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -103,4 +101,4 @@
             </div>
         </div>
     </div>
-</div>
+    </div>

@@ -17,31 +17,33 @@
                             <tr>
                                 <th scope="col">Id</th>
                                 <th scope="col">Nombre</th>
+				<th scope="col">Interpretación</th>
                                 <th scope="col">Inferior</th>
                                 <th scope="col">Superior</th>
                             </tr>
                         </thead>
-                        <tbody>
                             <tbody id="tabla_umbrales_procesos_reflexivos">
                             </tbody>
-                        </tbody>
                     </table>
                 </div>
                 <div class="row">
                     <div class="col-md-12 mb-2">
-                        <button id="bt_add_activo_reflexivos" class="btn btn-primary d-none" onclick="agregarAccionesUmbrales()">
+                        <button id="bt_add_activo_reflexivos" class="btn btn-primary d-none" onclick="agregarAccionesUmbralesReflexivos()">
                     Agregar
                   </button>
-                        <button id="bd_mod_activo_reflexivos" class="btn btn-primary d-none" onclick="modificarAccionesUmbrales()">
+                        <button id="bd_mod_activo_reflexivos" class="btn btn-primary d-none" onclick="modificarAccionesUmbralesReflexivos()">
                     Modificar
                   </button>
-                        <button id="bd_del_activo_reflexivos" class="btn btn-primary d-none" onclick="eliminarAccionesUmbrales()">
+                        <button id="bd_del_activo_reflexivos" class="btn btn-primary d-none" onclick="eliminarAccionesUmbralesReflexivos()">
                     Eliminar
                   </button>
                     </div>
                 </div>
+		<div class="row_container">
+		<div class="col-12" id="seccion_acciones_reflexivos"></div>
+		</div>
                 <div class="row">
-                    <div class="col-sm">
+		    <template id="template_tabla_accion_reflexivos">
                         <table id="tabla_acciones_umbral_reflexivos" class="table table-hover d-none">
                             <thead>
                                 <tr>
@@ -52,13 +54,11 @@
                                     <th scope="col">Activo</th>
                                 </tr>
                             </thead>
-                            <tbody>
                                 <tbody id="tabla_accion_reflexivos">
                                 </tbody>
-                            </tbody>
                         </table>
+			</template>
                     </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="cerrar_modal_activos()">

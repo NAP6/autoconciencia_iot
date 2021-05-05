@@ -71,8 +71,16 @@ export class PreReflectiveProcessQ
 	  procesoautoconsciencia
 	  SET
 	  pa_descripcion='${this.description}',
-		  pa_inicio_periodo_ejecucion='${this.executionPeriodStart}',
-		  pa_fin_periodo_ejecucion='${this.executionPeriodEnd}' 
+		  pa_inicio_periodo_ejecucion=${
+        this.executionPeriodStart == undefined
+          ? "NULL"
+          : "'" + this.executionPeriodStart + "'"
+      },
+		  pa_fin_periodo_ejecucion=${
+        this.executionPeriodEnd == undefined
+          ? "NULL"
+          : "'" + this.executionPeriodEnd + "'"
+      }
 	  WHERE
 	  pa_id=${this.id}`;
     return sql;

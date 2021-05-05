@@ -1,5 +1,5 @@
 <div class="modal fade" id="add_metrics" tabindex="-1" aria-labelledby="add_metricsLable" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 id="Titulos_metricas" class="modal-title text-center" style="width: 100%;">
@@ -30,13 +30,7 @@
                         </div>
                         <input type="text" name="form_entidad_new" id="abreviaturaMetrica" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
                     </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-default">Perspectiva Indicador:</span>
-                        </div>
-                        <input name="form_entidad_new" id="perspectiva_indicador" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" />
-                    </div>
-                    <div class="input-group mb-3">
+		                                            <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">Escala:</label>
                         </div>
@@ -52,10 +46,19 @@
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">Tipo:</label>
                         </div>
-                        <select class="custom-select" name="form_entidad_new" id="select_metrica"></select>
+                        <select class="custom-select" name="form_entidad_new" id="select_metrica" onchange="habilitar_perspectiva()"></select>
 
                         </select>
                     </div>
+		    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Perspectiva:</label>
+                        </div>
+                        <select class="custom-select" name="form_entidad_new" id="tipo_perspectiva_select" disabled></select>
+
+                        </select>
+                    </div>
+
                     <div class="form-group row">
                         <div class="col-sm-2">Activo:</div>
                         <div class="col-sm-10">

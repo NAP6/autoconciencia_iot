@@ -256,7 +256,7 @@ function cargar_parametros_recursos_para_modificar(t, parametros) {
     seccion.dataset.nombre = par._name;
     seccion.dataset.activo = par._active;
     seccion.dataset.opcional = par._optional;
-    seccion.dataset.tipo = par._dataType;
+    seccion.dataset.tipo = par._dataType[0];
     seccion.dataset.tipoIndex = indexOfValueinSelect(
       "#tipo_dato_parametro",
       par._dataType
@@ -264,10 +264,7 @@ function cargar_parametros_recursos_para_modificar(t, parametros) {
     seccion.id = `parameto_num_${idParametroCont++}`;
     seccion.innerHTML = par._name;
     if (tipo === "parametro_formula") {
-      seccion.setAttribute(
-        "ondblclick",
-        `agregar_a_formula('[${par._name}]');`
-      );
+      seccion.setAttribute("ondblclick", `agregar_a_formula(this);`);
     }
     seccion.setAttribute(
       "onclick",
@@ -423,7 +420,7 @@ function guardar_parametro(tipo) {
   seccion.id = `parameto_num_${idParametroCont++}`;
   seccion.innerHTML = nombre;
   if (tipo === "parametro_formula") {
-    seccion.setAttribute("ondblclick", `agregar_a_formula('[${nombre}]');`);
+    seccion.setAttribute("ondblclick", `agregar_a_formula(this);`);
   }
   seccion.setAttribute(
     "onclick",
@@ -485,8 +482,12 @@ function modificar_parametro(tipo) {
       elegido.dataset.opcional == "true";
     document.querySelector(`#${tipo} #activo_parametro`).checked =
       elegido.dataset.activo == "true";
-    document.querySelector(`#${tipo} #tipo_dato_parametro`).selectedIndex =
-      elegido.dataset.tipoIndex;
+    console.log("#######################################");
+    console.log(elegido);
+    console.log(document.querySelector(`#${tipo} #tipo_dato_parametro`));
+    console.log(elegido.dataset.tipo);
+    document.querySelector(`#${tipo} #tipo_dato_parametro`).value =
+      elegido.dataset.tipo;
     agregar_parametro(tipo);
     var botonAgregar = document.querySelector(`#${tipo} #btn-agregarParametro`);
     var botonModificar = document.querySelector(
@@ -508,6 +509,9 @@ function guardar_modificar_parametro(tipo) {
   ).value;
   elegido.dataset.nombre = document.querySelector(
     `#${tipo} #nombreParametro`
+  ).value;
+  elegido.dataset.tipo = document.querySelector(
+    `#${tipo} #tipo_dato_parametro`
   ).value;
   elegido.dataset.opcional = document.querySelector(
     `#${tipo} #opcional_parametro`
@@ -535,8 +539,9 @@ function eliminar_parametro(tipo) {
 }
 
 function agregar_a_formula(nuevo) {
+  nuevo = nuevo.dataset.nombre;
   var text = document.getElementById("area_de_nueva_formula");
-  text.value += nuevo;
+  text.value += "[" + nuevo + "]";
   text.focus();
 }
 
@@ -2357,6 +2362,7 @@ if (document.getElementById("select_modelo_para_activar_trabajo"))
   );
 
 function cargar_modelos_trabajo_actual(json) {
+  console.log(json);
   res = "<option value=''>Seleccione un modelo para trabajar</option>";
   json.forEach((md) => {
     res += `<option value="${md._id}">${md._name}</option>`;
@@ -2372,7 +2378,6 @@ var entidades_aux = {};
 var System = undefined;
 
 function cargar_sujetos_activos(json) {
-  console.log(json);
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   json.forEach((elemento) => {
@@ -2382,7 +2387,6 @@ function cargar_sujetos_activos(json) {
       aux_visible_inactivo.add(elemento.father);
     }
   });
-  console.log(aux_visible_inactivo);
   json.forEach((elemento) => {
     var insertar;
     if (!elemento.father) {
@@ -2665,7 +2669,8 @@ function agregar_entidad_seleccionado() {
       para_seleccion.style.display != "none" &&
       !e.checked
     ) {
-      padres_visibles.add(e.dataset.padre_id);
+      if (document.getElementById(`li_ent_seleccionado_${e.dataset.padre_id}`))
+        padres_visibles.add(e.dataset.padre_id);
     }
     if (e.checked) {
       para_seleccion.style.display = "none";
@@ -2696,7 +2701,8 @@ function remover_entidad_seleccionado() {
       para_seleccion.style.display != "none" &&
       !e.checked
     ) {
-      padres_visibles.add(e.dataset.padre_id);
+      if (document.getElementById(`li_ent_seleccionado_${e.dataset.padre_id}`))
+        padres_visibles.add(e.dataset.padre_id);
     }
     if (e.checked) {
       para_seleccion.style.display = "none";
@@ -3266,7 +3272,6 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
   document
     .getElementById("modal_metodo_add")
     .classList.replace("d-block", "d-none");
-  document.getElementById("input-name-proceso-pre-reflexivo").disabled = false;
   document.getElementById(
     "input-descripcion-proceso-pre-reflexivo"
   ).disabled = false;
@@ -3278,11 +3283,9 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
     "entidades_seleccionados_area_procesos"
   ).disabled = false;
   document.getElementById("Aspectos_autoconsciencia").disabled = false;
-  document.getElementById("input-name-proceso-pre-reflexivo").value = "";
   document.getElementById("input-descripcion-proceso-pre-reflexivo").value = "";
   document.getElementById("inicio_del_periodo").value = "";
   document.getElementById("fin_del_periodo").value = "";
-  document.getElementById("input-name-proceso-pre-reflexivo").value = "";
   document.getElementById("id_proceso_pre_reflexivo").value = "";
   document.getElementById("CategoriaEntidadesProcesos").selectedIndex = "0";
   document.getElementById("Aspectos_autoconsciencia").selectedIndex = "0";
@@ -3630,7 +3633,7 @@ function error_cargar_propiedades_select(error) {
 }
 
 function error_cargar_aspectos_select(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  alert("Error al cargar los datos del modelo:" + err);
 }
 $("#Aspectos_autoconsciencia").change(function () {
   var limpiar = document.getElementById(
@@ -3888,12 +3891,11 @@ function cerrar_modal_activos() {
 
 function guardarAccionUmbral() {
   var data = {
-    name: document.getElementById("nombre_accion_umbral").value,
     description: document.getElementById("descripcion_accion_umbral").value,
     umbral: UmbralId,
     mea_id: modelo_analisis_pre_reflexivos,
   };
-  if (!!data.name && !!data.description) {
+  if (!!data.description) {
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/add_action",
       data,
@@ -3932,16 +3934,12 @@ function cargar_accion_table_modificar(json) {
     input.type = "radio";
     input.name = "accion_seleccionada";
     input.dataset.id = um.id;
-    input.dataset.name = um.name;
     input.dataset.description = um.description;
     input.dataset.active = um.active;
     dato.appendChild(input);
     fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.id;
-    fila.appendChild(dato);
-    dato = document.createElement("td");
-    dato.innerHTML = um.name;
     fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.description;
@@ -4199,7 +4197,6 @@ function cargar_select_argumento_entrada(json) {
 function agregarAccionesUmbrales() {
   $("#modal_agregar_accion_proceso").modal("show");
   $("#modal_activos_procesos").modal("hide");
-  document.getElementById("nombre_accion_umbral").value = "";
   document.getElementById("descripcion_accion_umbral").value = "";
 }
 function cargar_accion_table(json) {
@@ -4304,8 +4301,7 @@ function cargar_select_recurso_proceso(json) {
 }
 
 function guardar_procesos_pre_reflexivos() {
-  var nombre = document.getElementById("input-name-proceso-pre-reflexivo")
-    .value;
+  var nombre = document.getElementById("nombre_proceso_pre_reflexivo").value;
   var descripcion = document.getElementById(
     "input-descripcion-proceso-pre-reflexivo"
   ).value;
@@ -4332,7 +4328,6 @@ function guardar_procesos_pre_reflexivos() {
         console.log(res);
       }
     );
-    document.getElementById("input-name-proceso-pre-reflexivo").disabled = true;
     document.getElementById(
       "input-descripcion-proceso-pre-reflexivo"
     ).disabled = true;
@@ -4426,7 +4421,7 @@ function guardar_modelos_metodos() {
       errormensajeCorrectoGuardarMetodos
     );
 
-    var metodo = document.getElementById("nav-recoleccion-tab");
+    /*var metodo = document.getElementById("nav-recoleccion-tab");
     var modelo = document.getElementById("nav-modelo-tab");
     modelo.classList.remove("active");
     metodo.classList.add("active");
@@ -4437,7 +4432,7 @@ function guardar_modelos_metodos() {
     metodo_ventana.classList.add("active");
     metodo_ventana.classList.add("show");
     modelo_ventana.classList.remove("active");
-    modelo_ventana.classList.remove("show");
+    modelo_ventana.classList.remove("show");*/
     return true;
   } else {
     return false;
@@ -4489,8 +4484,8 @@ function cargar_procesos_pre_reflexivos_table(json) {
     }" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${
       pro.activo == "true"
     }"></td>`;
-    res += `<td>${pro.id}</td>`;
     res += `<td>${pro.nombre}</td>`;
+    res += `<td>${pro.descripcion}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
     res += `<td>${pro.inicio}</td>`;
@@ -4536,9 +4531,7 @@ function modificarProcesoPreReflexivo() {
   }
 }
 
-function cargar_modificar_procesos_pre(json) {
-
-}
+function cargar_modificar_procesos_pre(json) {}
 
 function mensaje_error_cargar_modificar_procesos_pre(error) {
   alert(error);
@@ -4856,7 +4849,7 @@ function cargar_objetos_proceso_reflexivo(json) {
     "lista_entidades_seleccionadas_procesos_reflexivos"
   );
   ul.innerHTML = "";
-var op = document.createElement("option");
+  var op = document.createElement("option");
   var seleccion = json[0].tipo;
   if (seleccion == "PhysicalEntity") {
     op.innerHTML = "Entidades Físicas";
@@ -5076,7 +5069,6 @@ function cargar_procesos_reflexivos_table(json) {
     }" data-inicio="${pro.inicio}" data-fin="${pro.fin}" data-activo="${
       pro.activo == "true"
     }"></td>`;
-    res += `<td>${pro.id}</td>`;
     res += `<td>${pro.nombre}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
@@ -5310,7 +5302,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
       .value,
     sujeto: sujetoGuardarproceso_reflexivo,
   };
-  if ( data.aspecto != -6 && !!data.sujeto) {
+  if (data.aspecto != -6 && !!data.sujeto) {
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
       data,
@@ -6000,16 +5992,17 @@ function modificar_proceso_pre_reflexivo() {
   var inicio = document.getElementById("inicio_del_periodo_modificar").value;
   var fin = document.getElementById("fin_del_periodo_modificar").value;
   var id = document.getElementById("id_proceso_pre_reflexivo_modificar").value;
-  if (!!nombre && !!descripcion && !!inicio && !!fin) {
+  if (!!nombre && !!descripcion) {
     data = {
-      nombre: nombre,
-      descripcion: descripcion,
-      inicio: inicio,
-      fin: fin,
+      name: nombre,
+      description: descripcion,
+      inicioP: inicio,
+      finP: fin,
       id: id,
+      type: 17,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_process_pre_reflexive/",
+      "http://autoconsciencia.ddns.net:3000/api/mod_pre_reflective_process/",
       data,
       mensaje_exitoModificarproceso_pre_reflexivo,
       mensaje_errorModificarproceso_pre_reflexivo
@@ -6033,7 +6026,6 @@ function modificar_proceso_pre_reflexivo() {
 
 function mensaje_exitoModificarproceso_pre_reflexivo(json) {
   console.log(json);
-  document.getElementById("id_proceso_pre_reflexivo_modificar").value = json.id;
 }
 
 function mensaje_errorModificarproceso_pre_reflexivo(error) {
@@ -7379,11 +7371,15 @@ function GuardarMetrica() {
   var escala = document.getElementById("escalas_seccion_entidad").value;
   var unidad = document.getElementById("unidad_medida_metrica").value;
   var tipo = document.getElementById("select_metrica").value;
+  var perspective = document.getElementById("tipo_perspectiva_select").value;
+  if (perspective == "-6") {
+    perspective = 48;
+  }
   var data = {
     name: document.getElementById("nombreMetrica").value,
     description: document.getElementById("descripcionMetrica").value,
     abbreviation: document.getElementById("abreviaturaMetrica").value,
-    perspective: document.getElementById("tipo_perspectiva_select").value,
+    perspective: perspective,
     scale: escala,
     unit: unidad,
     type_metric: tipo,
@@ -7393,7 +7389,6 @@ function GuardarMetrica() {
     !!data.name &&
     !!data.description &&
     !!data.abbreviation &&
-    !!data.perspective &&
     data.scale != -6 &&
     data.unit != -6 &&
     data.type_metric != -6
@@ -7417,7 +7412,6 @@ function CancelarGuardarMetrica() {
   document.getElementById("nombreMetrica").value = "";
   document.getElementById("descripcionMetrica").value = "";
   document.getElementById("abreviaturaMetrica").value = "";
-  document.getElementById("tipo_perspectiva_select").value = "-6";
   $("#add_metrics").modal("hide");
 }
 
@@ -7467,7 +7461,16 @@ function cargar_metrica_table(json) {
 function error_cargar_metrica_table(err) {
   alert("Error al cargar los datos del modelo: " + err);
 }
-
+function get_tipo_perspectiva_select() {
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    { tipo: "TIPO_PERSPECTIVA" },
+    cargar_select_tipo_perspectiva,
+    (json) => {
+      console.log(json);
+    }
+  );
+}
 function modificarMetrica() {
   var radio = document.getElementsByName("metrica_seleccionado");
   var id = false;
@@ -7476,8 +7479,8 @@ function modificarMetrica() {
       id = elem.value;
     }
   });
-  console.log(id);
   if (!!id) {
+    get_tipo_perspectiva_select();
     var guardarButton = document.getElementById("agregarMetricaButton");
     var modificarButton = document.getElementById("ModificarMetricaButton");
     guardarButton.classList.replace("d-none", "d-inline-block");
@@ -7488,7 +7491,6 @@ function modificarMetrica() {
     document.getElementById("nombreMetrica").value = "";
     document.getElementById("descripcionMetrica").value = "";
     document.getElementById("abreviaturaMetrica").value = "";
-    document.getElementById("tipo_perspectiva_select").value = "-6";
     $("#add_metrics").modal("show");
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
@@ -7551,11 +7553,17 @@ function cargar_tipo_metrica_select_modificar(json) {
     document.getElementById("nombreMetrica").value = name;
     document.getElementById("descripcionMetrica").value = descripcion;
     document.getElementById("abreviaturaMetrica").value = abbreviation;
-    document.getElementById("tipo_perspectiva_select").value = perspective;
+    if (perspective == "48") {
+      document.getElementById("tipo_perspectiva_select").disabled = true;
+      document.getElementById("tipo_perspectiva_select").value = -6;
+    } else {
+      console.log(perspective);
+      document.getElementById("tipo_perspectiva_select").value = perspective;
+      document.getElementById("tipo_perspectiva_select").disabled = false;
+    }
     document.getElementById("escalas_seccion_entidad").value = escale;
     document.getElementById("unidad_medida_metrica").value = unidad;
     document.getElementById("select_metrica").value = tipo_metrica;
-    console.log(`selected_metrica_${tipo_metrica}`);
     document.getElementById(`selected_metrica_${tipo_metrica}`).selected = true;
     document.getElementById("activoMetrica").checked = active;
     $("#add_metrics").modal("show");
@@ -7565,12 +7573,16 @@ function cargar_tipo_metrica_select_modificar(json) {
 }
 
 function Guardar_Modificacion_Metrica() {
+  var perspective = document.getElementById("tipo_perspectiva_select").value;
+  if (perspective == -6) {
+    perspective = 48;
+  }
   var data = {
     id: document.getElementById("id_metrica_nueva").value,
     name: document.getElementById("nombreMetrica").value,
     description: document.getElementById("descripcionMetrica").value,
     abbreviation: document.getElementById("abreviaturaMetrica").value,
-    perspective: document.getElementById("tipo_perspectiva_select").value,
+    perspective: perspective,
     scale: document.getElementById("escalas_seccion_entidad").value,
     unit: document.getElementById("unidad_medida_metrica").value,
     type_metric: document.getElementById("select_metrica").value,
@@ -7931,15 +7943,20 @@ function guardarAspecto() {
       selectedEntitys.push(entitys[i].dataset.puro_id);
     }
   }
-  var data = {
-    name: document.getElementById("nombreAspecto").value,
-    description: document.getElementById("descripcionAspecto").value,
-    weigth: document.getElementById("pesoAspecto").value,
-    type: document.getElementById("select_aspecto").value,
-    suj_id: sujeto_aspecto_id,
-    obj_id: document.getElementById("select_objetivos").value,
-    arr_entity: selectedEntitys,
-  };
+  weigth = document.getElementById("pesoAspecto").value;
+  if (parseFloat(weigth) > 1) {
+    alert("Peso debe estar entre 0 y 1");
+  } else {
+    var data = {
+      name: document.getElementById("nombreAspecto").value,
+      description: document.getElementById("descripcionAspecto").value,
+      weigth: document.getElementById("pesoAspecto").value,
+      type: document.getElementById("select_aspecto").value,
+      suj_id: sujeto_aspecto_id,
+      obj_id: document.getElementById("select_objetivos").value,
+      arr_entity: selectedEntitys,
+    };
+  }
   if (
     !!data.name &&
     !!data.description &&
@@ -8077,28 +8094,41 @@ function administrarMetrics() {
     document.getElementById(
       "descripcionAspecto_admin_metricas"
     ).innerHTML = descripcion;
-    llenar_listado_metricas(id);
+    document.getElementById("lista_metricas_disponibles").innerHTML = "";
+    document.getElementById("lista_metricas_seleccionadas").innerHTML = "";
     $("#admin_metrics").modal("show");
   } else {
     alert("No se ha seleccionado ningun recurso");
   }
+  get_select_metricas_aspectos();
 }
-
-function SalirAdministrarMetricas() {
-  $("#admin_metrics").modal("hide");
-}
-
-function llenar_listado_metricas(id) {
+function get_select_metricas_aspectos() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics",
-    { id: id },
-    cargar_metricas_disponibles,
+    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    { tipo: "TIPO_METRICA" },
+    cargar_select_metricas_aspectos,
     (json) => {
-      console.log(json + "ERROR");
+      console.log(json);
     }
   );
 }
-
+function cargar_select_metricas_aspectos(json) {
+  var op = document.getElementById("tipo_metrica_aspectos_metrica");
+  op.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  op.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.nombre;
+    op.appendChild(option);
+  });
+}
+function SalirAdministrarMetricas() {
+  $("#admin_metrics").modal("hide");
+}
 function cargar_metricas_disponibles(json) {
   console.log(json);
   var lista = document.getElementById("lista_metricas_disponibles");
@@ -8194,7 +8224,7 @@ function remover_metrica_seleccionado() {
 }
 
 function cambiar_metrica_lado() {
-  llenar_listado_metricas(aspectoSeleccionadoMetricas);
+  tipo_metrica_change();
 }
 
 function error_cambiar_metrica_lado(error) {
@@ -8245,7 +8275,6 @@ function cargar_select_aspectos_objetivos_modificar(json) {
   });
   listaPadres = new Set(listaPadres);
   listaId = new Set(listaId);
-
   let eliminacionId = [...listaId].filter((x) => !listaPadres.has(x));
   var ope = document.getElementById("select_objetivo_mod");
   ope.innerHTML = "";
@@ -8325,6 +8354,7 @@ function modificarAspectos() {
   radio.forEach((elem) => {
     if (elem.checked) {
       suj_id = elem.dataset.sujeto;
+      systemID = elem.dataset.sujeto;
       get_aspectos_objetivos_modificar(suj_id);
     }
   });
@@ -8355,13 +8385,43 @@ function GuardarmodificarAspecto() {
         console.log(res);
       }
     );
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/del_aspects_objects",
+      { aa_id: aspecto_seleccionado_mod },
+      eliminar_relacion_aspectos,
+      (res) => {
+        console.log(res);
+      }
+    );
     $("#mod_aspects").modal("hide");
   } else {
     alert("Debe completar todos los campos");
   }
 }
+function eliminar_relacion_aspectos() {
+  var entitys = document.getElementsByName("checkbox_entidades_aspectos_mod");
+  var selectedEntitys = [];
+  for (var i = 0; i < entitys.length; i++) {
+    if (entitys[i].checked) {
+      selectedEntitys.push(entitys[i].dataset.puro_id);
+    }
+  }
+  data = { aa_id: aspecto_seleccionado_mod, arr_entity: selectedEntitys };
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/add_relation_objects_aspects",
+    data,
+    (res) => {
+      console.log(res);
+    },
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+var seleccionadas = undefined;
 function cargar_objetos_seleccionados_aspectos(json) {
   console.log(json);
+  seleccionadas = json;
   var ul = document.getElementById(
     "lista_entidades_seleccionadas_aspectos_mod"
   );
@@ -8388,12 +8448,294 @@ function cargar_objetos_seleccionados_aspectos(json) {
   var sel = document.getElementById("CategoriaEntidadesAspectosMod");
   sel.innerHTML = "";
   sel.appendChild(op);
-  json.forEach((elment) => {
-    var li = document.createElement("li");
-    li.innerHTML = elment.nombre;
-    ul.appendChild(li);
-  });
+  var seleccion = document.getElementById("CategoriaEntidadesAspectosMod")
+    .value;
+  console.log(seleccion);
+  data = {
+    valorS: seleccion,
+    systemID: systemID,
+  };
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/entitys",
+    data,
+    cargar_entidades_modelo_aspecto,
+    (res) => {
+      console.log(res);
+    }
+  );
 }
 function error_cargar_sujetos_activos_aspectos_modificar(error) {
   alert("Error al cargar los datos del modelo: " + error);
+}
+
+function cargar_entidades_modelo_aspecto(json) {
+  console.log(json);
+  var aux_visible_activo = new Set();
+  var aux_visible_inactivo = new Set();
+  json.forEach((elemento) => {
+    if (!!elemento.padre && elemento.activo == 1) {
+      aux_visible_activo.add(elemento.padre);
+    } else if (!!elemento.padre && elemento.activo == 0) {
+      aux_visible_inactivo.add(elemento.padre);
+    }
+  });
+  json.forEach((elemento) => {
+    var insertar;
+    if (!elemento.padre) {
+      insertar = document.getElementById(
+        "lista_entidades_seleccionadas_aspectos_mod"
+      );
+    } else {
+      insertar = document.createElement("ul");
+      var insertarAux = document.getElementById(
+        `li_ent_seleccionado_mod_${elemento.padre}`
+      );
+      if (insertarAux) {
+        insertarAux.appendChild(insertar);
+      } else {
+        insertar = document.getElementById(
+          "lista_entidades_seleccionadas_aspectos_mod"
+        );
+      }
+    }
+    li = document.createElement("li");
+    li.id = `li_ent_seleccionado_mod_${elemento.id}`;
+    if (elemento.activo == 1 || aux_visible_activo.has(elemento.id)) {
+      li.style.display = "list-item";
+    } else {
+      li.style.display = "none";
+    }
+    divFormCheck = document.createElement("div");
+    divFormCheck.classList.add("form-check");
+    checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.classList.add(
+      "form-check-input",
+      `hijo_entidad_de_${elemento.padre}_seleccionado`,
+      "checkbox_seleccionado_entidad"
+    );
+    checkbox.id = `sujeto_seleccionado_aspectos_mod_${elemento.id}`;
+    checkbox.name = "checkbox_entidades_aspectos_mod";
+    checkbox.dataset.padre_id = elemento.padre;
+    checkbox.dataset.puro_id = elemento.id;
+    checkbox.dataset.nombre = elemento.nombre;
+    labelChek = document.createElement("label");
+    labelChek.classList.add("form-check-label");
+    labelChek.htmlFor = checkbox.id;
+    var button = document.createElement("button");
+    button.classList.add("btn", "py-0", "px-0");
+    button.innerHTML = elemento.nombre;
+    labelChek.appendChild(button);
+    li.appendChild(divFormCheck);
+    divFormCheck.appendChild(checkbox);
+    divFormCheck.appendChild(labelChek);
+    insertar.appendChild(li);
+  });
+  seleccionadas.forEach((elment) => {
+    var check = document.getElementById(
+      `sujeto_seleccionado_aspectos_mod_${elment.id}`
+    );
+    check.checked = true;
+  });
+}
+
+//Colocar bien
+
+function habilitar_perspectiva() {
+  var tipo = document.getElementById("select_metrica").value;
+  console.log(tipo);
+  if (tipo == 12) {
+    document.getElementById("tipo_perspectiva_select").disabled = false;
+  } else {
+    document.getElementById("tipo_perspectiva_select").disabled = true;
+
+    document.getElementById("tipo_perspectiva_select").value = "-6";
+  }
+}
+
+function tipo_metrica_change() {
+  var metrica = document.getElementById("tipo_metrica_aspectos_metrica").value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type_aspects",
+    { id: aspectoSeleccionadoMetricas, tipo: metrica },
+    cargar_metricas_disponibles,
+    (json) => {
+      console.log(json);
+    }
+  );
+}
+
+if (document.getElementById("id_proceso_pre_reflexivo")) {
+  consultar_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+    get_nombre_proceso,
+    (json) => {
+      console.log(json);
+    }
+  );
+}
+function get_nombre_proceso(json) {
+  document.getElementById("nombre_proceso_pre_reflexivo").value =
+    "PID" + (parseInt(json[0].id) + 1);
+}
+if (document.getElementById("nombre_proceso_reflexivo")) {
+  consultar_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+    get_nombre_proceso_reflexivo,
+    (json) => {
+      console.log(json);
+    }
+  );
+}
+function get_nombre_proceso_reflexivo(json) {
+  document.getElementById("nombre_proceso_reflexivo").value =
+    "PID" + (parseInt(json[0].id) + 1);
+}
+if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
+  var sujeto = document.getElementById("id_sujeto").value;
+  console.log(sujeto);
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+    { systemID: sujeto },
+    cargar_aspectos_procesos_modificar,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+function cargar_aspectos_procesos_modificar(json) {
+  console.log(json);
+  var select = document.getElementById("Aspectos_autoconsciencia_modificar");
+  select.innerHTML = "";
+  var op = document.createElement("option");
+  op.value = "-6";
+  op.innerHTML = "Seleccione ..";
+  select.appendChild(op);
+  json.forEach((asp) => {
+    var op = document.createElement("option");
+    op.value = asp.idAspecto;
+    op.innerHTML = asp.nombreAspecto;
+    select.appendChild(op);
+  });
+  select.value = document.getElementById("id_aspecto").value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+    {
+      aspecto: document.getElementById("id_aspecto").value,
+      sujeto: document.getElementById("id_sujeto").value,
+    },
+    cargar_objetos_procesos_modificar,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+function cargar_objetos_procesos_modificar(json) {
+  var ul = document.getElementById(
+    "lista_entidades_seleccionadas_procesos_modificar"
+  );
+  ul.innerHTML = "";
+  var op = document.createElement("option");
+  var seleccion = json[0].tipo;
+  if (seleccion == "PhysicalEntity") {
+    op.innerHTML = "Entidades Físicas";
+  } else if (seleccion == "CloudNode") {
+    op.innerHTML = "Nodos Cloud";
+  } else if (seleccion == "FogNode") {
+    op.innerHTML = "Nodos Fog";
+  } else if (seleccion == "IoTGateway") {
+    op.innerHTML = "Gateway IoT";
+  } else if (seleccion == "Sensor") {
+    op.innerHTML = "Sensores";
+  } else if (seleccion == "Tag") {
+    op.innerHTML = "Tags";
+  } else if (seleccion == "Actuator") {
+    op.innerHTML = "Actuadores";
+  } else if (seleccion == "Network") {
+    op.innerHTML = "Red";
+  }
+  var sel = document.getElementById("CategoriaEntidadesProcesosModificar");
+  sel.innerHTML = "";
+  sel.appendChild(op);
+  json.forEach((element) => {
+    var li = document.createElement("li");
+    li.innerHTML = element.nombre;
+    ul.appendChild(li);
+  });
+}
+if (document.getElementById("id_proceso_reflexivo_modificar")) {
+  var sujeto = document.getElementById("id_sujeto_reflexivo").value;
+  console.log(sujeto);
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+    { systemID: sujeto },
+    cargar_aspectos_procesos_reflexivos_modificar,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+function cargar_aspectos_procesos_reflexivos_modificar(json) {
+  console.log(json);
+  var select = document.getElementById(
+    "Aspectos_autoconsciencia_modificar_reflexivos"
+  );
+  select.innerHTML = "";
+  var op = document.createElement("option");
+  op.value = "-6";
+  op.innerHTML = "Seleccione ..";
+  select.appendChild(op);
+  json.forEach((asp) => {
+    var op = document.createElement("option");
+    op.value = asp.idAspecto;
+    op.innerHTML = asp.nombreAspecto;
+    select.appendChild(op);
+  });
+  select.value = document.getElementById("id_aspecto_reflexivo").value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+    {
+      aspecto: document.getElementById("id_aspecto_reflexivo").value,
+      sujeto: document.getElementById("id_sujeto_reflexivo").value,
+    },
+    cargar_objetos_procesos_reflexivos_modificar,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+function cargar_objetos_procesos_reflexivos_modificar(json) {
+  var ul = document.getElementById(
+    "lista_objetos_procesos_reflexivos_modificar"
+  );
+  ul.innerHTML = "";
+  var op = document.createElement("option");
+  var seleccion = json[0].tipo;
+  if (seleccion == "PhysicalEntity") {
+    op.innerHTML = "Entidades Físicas";
+  } else if (seleccion == "CloudNode") {
+    op.innerHTML = "Nodos Cloud";
+  } else if (seleccion == "FogNode") {
+    op.innerHTML = "Nodos Fog";
+  } else if (seleccion == "IoTGateway") {
+    op.innerHTML = "Gateway IoT";
+  } else if (seleccion == "Sensor") {
+    op.innerHTML = "Sensores";
+  } else if (seleccion == "Tag") {
+    op.innerHTML = "Tags";
+  } else if (seleccion == "Actuator") {
+    op.innerHTML = "Actuadores";
+  } else if (seleccion == "Network") {
+    op.innerHTML = "Red";
+  }
+  var sel = document.getElementById(
+    "CategoriaEntidadesProcesosReflexivosModificar"
+  );
+  sel.innerHTML = "";
+  sel.appendChild(op);
+  json.forEach((element) => {
+    var li = document.createElement("li");
+    li.innerHTML = element.nombre;
+    ul.appendChild(li);
+  });
 }
