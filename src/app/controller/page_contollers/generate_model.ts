@@ -9,7 +9,7 @@ import {
 } from "../../models/selfAwarnessModels";
 
 var modelID: any;
-//var routes: any;
+var routes: any = {};
 
 export async function generate_model(req: Request, res: Response) {
   modelID = req.session?.active_model.modelID;
@@ -214,7 +214,9 @@ async function add_relation_SelfAweranesAspect_Goals(
         list_of_goals[
           i
         ].isCalculatedBy = `${path}/@constainsSelfAwarenessAspect.${aspect_inx}`;
-      //routes['aspect'][`${aspect.$.id}`] = list_of_goals[i].isCalculatedBy;
+      routes[
+        `${aspect.$.id}`
+      ] = `${path}/@constainsSelfAwarenessAspect.${aspect_inx}`;
     }
   }
 }
@@ -226,36 +228,43 @@ async function add_scale(model: any) {
 async function add_scope(model: any) {
   if (model["containsEntity"]) {
     var containsEntity = model["containsEntity"];
-    recursive_scope(containsEntity, "//@containsEntity");
+    await recursive_scope(containsEntity, "//@containsEntity", model);
   }
 }
 
-async function recursive_scope(scope_list, path) {
+async function recursive_scope(scope_list, path, model) {
   for (var i = 0; i < scope_list.length; i++) {
     var actual_path = `${path}.${i}`;
-    await add_relation_scope_selfAweranessAspect(scope_list[i], actual_path);
+    await add_relation_scope_selfAweranessAspect(
+      scope_list[i],
+      actual_path,
+      model
+    );
     if (scope_list[i].containsSubPhysicalEntity) {
       await recursive_scope(
         scope_list[i].containsSubPhysicalEntity,
-        `${actual_path}/@containsSubPhysicalEntity`
+        `${actual_path}/@containsSubPhysicalEntity`,
+        model
       );
     }
     if (scope_list[i].containsComputingNode) {
       await recursive_scope(
         scope_list[i].containsComputingNode,
-        `${actual_path}/@containsComputingNode`
+        `${actual_path}/@containsComputingNode`,
+        model
       );
     }
     if (scope_list[i].containsResource) {
       await recursive_scope(
         scope_list[i].containsResource,
-        `${actual_path}/@containsResource`
+        `${actual_path}/@containsResource`,
+        model
       );
     }
   }
 }
 
-async function add_relation_scope_selfAweranessAspect(scope, path) {
+async function add_relation_scope_selfAweranessAspect(scope, path, model) {
   var db = new database2();
   var rows = await db.qwerty(
     `select aa_id from aspectoautoconsciencia_objeto where obj_id=${scope.$.id} and ma_id=${modelID}`
@@ -265,7 +274,8 @@ async function add_relation_scope_selfAweranessAspect(scope, path) {
     await recursive_relation_scope_selfAweranessAspect(
       rows[i].aa_id,
       scope,
-      path
+      path,
+      model
     );
   }
 }
@@ -273,12 +283,24 @@ async function add_relation_scope_selfAweranessAspect(scope, path) {
 async function recursive_relation_scope_selfAweranessAspect(
   aspect_id,
   scope,
-  scope_path
+  scope_path,
+  model
 ) {
-  console.log("\n\n################################\n\tElementos");
-  console.log(`ID del Aspecto: ${aspect_id}`);
-  //console.log(`Path del Aspecto: ${routes['aspect'][`${aspect_id}`]}`);
-  console.log(`Path del Objeto: ${scope_path}`);
-  console.log(`El objeto ${scope.$.id} tiene de nombre ${scope.$.name}`);
+  var route = routes[`${aspect_id}`];
+  route = route.substring(3, route.length);
+  route = route.split("/@").reverse();
+  var aspect_obj = recursive_element(route, model);
+  aspect_obj.belongsTo = scope_path;
+  if (scope.has) scope.has += " " + routes[`${aspect_id}`];
+  else scope.has = routes[`${aspect_id}`];
+}
 
+function recursive_element(arr_path, sub_model) {
+  if (arr_path.length > 0) {
+    var redireccion = arr_path.pop();
+    redireccion = redireccion.split(".");
+    var sub_elemento = sub_model[redireccion[0]][parseInt(redireccion[1])];
+    return recursive_element(arr_path, sub_elemento);
+  }
+  return sub_model;
 }
