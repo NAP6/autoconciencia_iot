@@ -9,6 +9,7 @@ import {
 } from "../../models/selfAwarnessModels";
 
 var modelID: any;
+//var routes: any;
 
 export async function generate_model(req: Request, res: Response) {
   modelID = req.session?.active_model.modelID;
@@ -213,6 +214,7 @@ async function add_relation_SelfAweranesAspect_Goals(
         list_of_goals[
           i
         ].isCalculatedBy = `${path}/@constainsSelfAwarenessAspect.${aspect_inx}`;
+      //routes['aspect'][`${aspect.$.id}`] = list_of_goals[i].isCalculatedBy;
     }
   }
 }
@@ -275,6 +277,8 @@ async function recursive_relation_scope_selfAweranessAspect(
 ) {
   console.log("\n\n################################\n\tElementos");
   console.log(`ID del Aspecto: ${aspect_id}`);
+  //console.log(`Path del Aspecto: ${routes['aspect'][`${aspect_id}`]}`);
   console.log(`Path del Objeto: ${scope_path}`);
   console.log(`El objeto ${scope.$.id} tiene de nombre ${scope.$.name}`);
+
 }
