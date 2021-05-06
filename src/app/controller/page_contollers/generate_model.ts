@@ -3,6 +3,7 @@ import { database2 } from "../../data/database2";
 import { Goal } from "../../models/selfAwarness/Goal";
 import { SelfAwarenessAspectQ } from "../../models/selfAwarness/qwertyModels/SelfAwarenessAspectQ";
 import {
+  CollectionMethodQ,
   GoalQ,
   SelfAwarenessProcessQ,
   SelfAwarnessQ,
@@ -129,15 +130,24 @@ async function add_SelfAwarenessProcess(span: any) {
   var process: SelfAwarenessProcessQ[] = SelfAwarness.toObjectArray(rows);
   var arr_insert_process: any[] = [];
   for (var i = 0; i < process.length; i++) {
-    arr_insert_process.push(process[i].toObjectG());
-    //si es pre o re /flexivo
-    //	agregar para pre
-    //si o
-    //	agregar para re
+    var new_process = process[i].toObjectG();
+    arr_insert_process.push(new_process);
+    if (process[i].type_process == 17)
+      await add_PreReflectiveProcess_extras(new_process);
+    else await add_ReflectiveProcess_extras();
   }
   if (arr_insert_process.length > 0)
     span.constainsSelfAwarenessProcess = arr_insert_process;
 }
+
+async function add_PreReflectiveProcess_extras(process) {
+  var db = new database2();
+  var CollectionMethod: CollectionMethodQ;
+  CollectionMethod = new CollectionMethodQ(-1, "");
+  var sql = CollectionMethod.toSqlSelect(["/@/PROCES/@/"], [process.$.id]);
+	console.log(sql);
+}
+async function add_ReflectiveProcess_extras() {}
 
 async function add_SelfAwarenessAspect(span: any, span_path: any) {
   var db = new database2();

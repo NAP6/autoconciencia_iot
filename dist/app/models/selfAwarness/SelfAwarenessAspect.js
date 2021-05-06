@@ -60,5 +60,16 @@ class SelfAwarenessAspect {
     set isCaptured(value) {
         this._isCaptured = value;
     }
+    toObjectG() {
+        var res = {};
+        res.$ = {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            type: this.aspectType,
+            weight: this.weight,
+        };
+        return res;
+    }
 }
 exports.SelfAwarenessAspect = SelfAwarenessAspect;

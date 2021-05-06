@@ -33,10 +33,10 @@ class SelfAwarenessProcessQ extends SelfAwarenessProcess_1.SelfAwarenessProcess 
         throw new Error("Method not implemented.");
     }
     toObjectArray(rows) {
+        rows = rows;
         var res;
         res = [];
-        for (var i = 0; i < rows; i++) {
-            console.log(rows[i]);
+        for (var i = 0; i < rows.length; i++) {
             var aux = new SelfAwarenessProcessQ(rows[i].id, rows[i].nombre, rows[i].descripcion, rows[i].tipo, rows[i].periodo_ini, rows[i].periodo_fin);
             res.push(aux);
         }
