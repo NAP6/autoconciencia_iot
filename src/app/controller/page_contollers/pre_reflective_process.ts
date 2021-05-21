@@ -108,14 +108,14 @@ export async function mod_pre_reflective_process(req: Request, res: Response) {
       newProcess.id,
       newProcess.name,
       newProcess.description,
-      newProcess.type,
+      newProcess.type
     );
-	  if(newProcess.inicioP){
-	process.executionPeriodStart=newProcess.inicioP;
-	  }
-	  if(newProcess.finP){
-	process.executionPeriodEnd=newProcess.finP;
-	  }
+    if (newProcess.inicioP) {
+      process.executionPeriodStart = newProcess.inicioP;
+    }
+    if (newProcess.finP) {
+      process.executionPeriodEnd = newProcess.finP;
+    }
     await db.qwerty(process.toSqlUpdate([], []));
     res.json({ Mensaje: "Los datos se han enviado con exito" });
   } else {
@@ -145,7 +145,7 @@ export async function get_pre_reflective_process_mod(
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.proceso_seleccionado;
-	var rows= await db.qwerty(`SELECT 
+    var rows = await db.qwerty(`SELECT 
 		  pa.pa_id as id,
 		  pa.pa_nombre as nombre, 
 		  pa.pa_descripcion as descripcion, 
@@ -161,10 +161,10 @@ export async function get_pre_reflective_process_mod(
     res.render("modificar_pre_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
-	    modificar:rows,
+      modificar: rows,
       session: req.session,
     });
-	  console.log(rows[0]);
+    console.log(rows[0]);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
@@ -175,6 +175,62 @@ export async function get_last_insert_process(req: Request, res: Response) {
     var rows = await db.qwerty(
       `SELECT MAX(pa_id) as id FROM procesoautoconsciencia`
     );
+    res.json(rows);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function get_metodos_recoleccion_analisis(
+  req: Request,
+  res: Response
+) {
+  if (req.session?.user) {
+    var db = new database2();
+    var id = req.body.id;
+    var rows = await db.qwerty(`SELECT 
+		  mea_id as metodo_id,
+		  met_id as metrica_id,
+		  mea_tipo as tipo
+		  FROM
+		   metodoaprendizajerazonamiento
+		  WHERE pa_id=${id}`);
+    res.json(rows);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function get_recoleccion_datos(
+  req: Request,
+  res: Response
+) {
+  if (req.session?.user) {
+    var db = new database2();
+    var id = req.body.mea_id;
+    var rows = await db.qwerty(`SELECT 
+		  mr_tipo_comunicacion as comunicacion,
+		  pro_id as propiedad,
+		  flu_id as flujo
+		  FROM
+		   metodorecoleccion
+		  WHERE mea_id=${id}`);
+    res.json(rows);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function get_model_analisis(
+  req: Request,
+  res: Response
+) {
+  if (req.session?.user) {
+    var db = new database2();
+    var id = req.body.mea_id;
+    var rows = await db.qwerty(`SELECT 
+		  ma_tipo_recurso as recurso,
+		  cd_id as criterio
+		  FROM
+		   modeloanalisis
+		  WHERE mea_id=${id}`);
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

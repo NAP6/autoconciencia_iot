@@ -132,15 +132,15 @@ async function add_SelfAwarenessProcess(span: any) {
   for (var i = 0; i < process.length; i++) {
     var new_process = process[i].toObjectG();
     arr_insert_process.push(new_process);
-    if (process[i].type_process == 17)
-      await add_PreReflectiveProcess_extras(new_process);
-    else await add_ReflectiveProcess_extras();
+    // if (process[i].type_process == 17)
+    //  await add_PreReflectiveProcess_extras(new_process);
+    //else await add_ReflectiveProcess_extras();
   }
   if (arr_insert_process.length > 0)
     span.constainsSelfAwarenessProcess = arr_insert_process;
 }
 
-async function add_PreReflectiveProcess_extras(process) {
+/*async function add_PreReflectiveProcess_extras(process) {
   var db = new database2();
   var CollectionMethod: CollectionMethodQ;
   CollectionMethod = new CollectionMethodQ(-1, "");
@@ -148,7 +148,7 @@ async function add_PreReflectiveProcess_extras(process) {
 	console.log(sql);
 }
 async function add_ReflectiveProcess_extras() {}
-
+*/
 async function add_SelfAwarenessAspect(span: any, span_path: any) {
   var db = new database2();
   var SelfAwarness: SelfAwarenessAspectQ;
@@ -297,6 +297,9 @@ async function recursive_relation_scope_selfAweranessAspect(
   model
 ) {
   var route = routes[`${aspect_id}`];
+  console.log(routes);
+  console.log(aspect_id);
+  console.log(route);
   route = route.substring(3, route.length);
   route = route.split("/@").reverse();
   var aspect_obj = recursive_element(route, model);

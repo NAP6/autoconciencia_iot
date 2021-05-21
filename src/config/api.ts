@@ -92,7 +92,10 @@ export default function (app: Application) {
   app.post("/api/get_aspects_subjects", rt.get_aspects_objects);
   app.post("/api/get_aspects_objects_process", rt.get_aspects_objects_process);
   app.post("/api/del_aspects_objects", rt.del_aspects_objects);
-  app.post("/api/add_relation_objects_aspects", rt.add_relation_objects_aspects);
+  app.post(
+    "/api/add_relation_objects_aspects",
+    rt.add_relation_objects_aspects
+  );
   //Generales
   //=====================================================================
   //Metricas
@@ -144,7 +147,12 @@ export default function (app: Application) {
     "/api/get_pre_reflective_process_mod",
     rt.get_pre_reflective_process_mod
   );
-
+  app.post(
+    "/api/get_metodos_recoleccion_analisis/",
+    rt.get_metodos_recoleccion_analisis
+  );
+  app.post("/api/get_recoleccion_datos", rt.get_recoleccion_datos);
+	app.post("/api/get_model_analisis",rt.get_model_analisis);
   app.post("/api/mod_pre_reflective_process", rt.mod_pre_reflective_process);
   app.get("/api/get_last_insert_process", rt.get_last_insert_process);
   //Metodo de aprendizaje procesos pre relfexivos
