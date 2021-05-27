@@ -46,4 +46,13 @@ export class AnalysisModel extends LearningReasoningMethod {
   set produces(value: Indicator | undefined) {
     this._produces = value;
   }
+
+  public toObjectG() {
+    return {
+      $: {
+        id: this.id,
+        implementationResourceType: this.implementationResourceType,
+      },
+    };
+  }
 }

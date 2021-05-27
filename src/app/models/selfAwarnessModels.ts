@@ -1,6 +1,7 @@
 export { UserQ } from "./selfAwarness/qwertyModels/UserQ";
 export { SelfAwarnessQ } from "./selfAwarness/qwertyModels/SelfAwarnessQ";
 export { SelfAwarenessProcessQ } from "./selfAwarness/qwertyModels/SelfAwarenessProcessQ";
+export { SelfAwarenessAspectQ } from "./selfAwarness/qwertyModels/SelfAwarenessAspectQ";
 export { IoTSystemQ } from "./selfAwarness/qwertyModels/IoTSystemQ";
 export { GoalQ } from "./selfAwarness/qwertyModels/GoalQ";
 export { PhysicalEntityQ } from "./selfAwarness/qwertyModels/PhysicalEntityQ";
@@ -20,3 +21,5 @@ export { CollectionMethodQ } from "./selfAwarness/qwertyModels/CollectionMethodQ
 export { AnalysisModelQ } from "./selfAwarness/qwertyModels/AnalysisModelQ";
 export { CalculationMethodQ } from "./selfAwarness/qwertyModels/CalculationMethodQ";
 export { EntityQ } from "./selfAwarness/qwertyModels/EntityQ";
+export { ReflectiveProcessQ } from "./selfAwarness/qwertyModels/ReflectiveProcessQ";
+export { DecisionCriteriaQ } from "./selfAwarness/qwertyModels/DecisionCriteriaQ";

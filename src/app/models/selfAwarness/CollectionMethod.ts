@@ -45,4 +45,13 @@ export class CollectionMethod extends LearningReasoningMethod {
   set isSupported(value: DataFlow | undefined) {
     this._isSupported = value;
   }
+
+  public toObjectG(): any {
+    return {
+      $: {
+        id: this.id,
+        collectionScope: this.collectionScope,
+      },
+    };
+  }
 }

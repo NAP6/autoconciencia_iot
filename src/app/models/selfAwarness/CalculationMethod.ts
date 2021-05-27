@@ -12,7 +12,7 @@ export class CalculationMethod extends LearningReasoningMethod {
   private _containsSimulationScenario: SimulationScenario[];
   private _isImplmentedBy: ImplementationResource | undefined;
   private _containsArgumentToParameterMapping: ArgumentToParameterMapping[];
-  private _containsSimulationVariable:SimulationVariable[];
+  private _containsSimulationVariable: SimulationVariable[];
   private _produces: IndirectMetric | undefined;
 
   constructor(
@@ -38,7 +38,7 @@ export class CalculationMethod extends LearningReasoningMethod {
     this._implementationResourceType = value;
   }
 
-  get calculationPeriodStart(): Date |undefined {
+  get calculationPeriodStart(): Date | undefined {
     return this._calculationPeriodStart;
   }
 
@@ -46,11 +46,11 @@ export class CalculationMethod extends LearningReasoningMethod {
     this._calculationPeriodStart = value;
   }
 
-  get calculationPeriodEnd(): Date|undefined {
+  get calculationPeriodEnd(): Date | undefined {
     return this._calculationPeriodEnd;
   }
 
-  set calculationPeriodEnd(value: Date|undefined) {
+  set calculationPeriodEnd(value: Date | undefined) {
     this._calculationPeriodEnd = value;
   }
 
@@ -84,12 +84,22 @@ export class CalculationMethod extends LearningReasoningMethod {
   set containsSimulationVariable(value: SimulationVariable[]) {
     this._containsSimulationVariable = value;
   }
-  
+
   get produces(): IndirectMetric | undefined {
     return this._produces;
   }
 
   set produces(value: IndirectMetric | undefined) {
     this._produces = value;
+  }
+  public toObjectG(): any {
+    return {
+      $: {
+        id: this.id,
+        implementationResourceType: this.implementationResourceType,
+        calculationPeriodStart: this.calculationPeriodStart,
+        calculationPeriodEnd: this.calculationPeriodEnd,
+      },
+    };
   }
 }

@@ -1,16 +1,26 @@
+import { Decipher } from "crypto";
 import { Request, Response } from "express";
 import { database2 } from "../../data/database2";
 import { Goal } from "../../models/selfAwarness/Goal";
-import { SelfAwarenessAspectQ } from "../../models/selfAwarness/qwertyModels/SelfAwarenessAspectQ";
 import {
   CollectionMethodQ,
   GoalQ,
   SelfAwarenessProcessQ,
   SelfAwarnessQ,
+  ReflectiveProcessQ,
+  AnalysisModelQ,
+  CalculationMethodQ,
+  DecisionCriteriaQ,
+  SelfAwarenessAspectQ,
 } from "../../models/selfAwarnessModels";
 
 var modelID: any;
-var routes: any = {};
+var routes: any = {
+  aspect: {},
+  goal: {},
+  analisisModel: {},
+  decisionCriteria: {},
+};
 
 export async function generate_model(req: Request, res: Response) {
   modelID = req.session?.active_model.modelID;
@@ -24,6 +34,7 @@ export async function generate_model(req: Request, res: Response) {
   var modeloA = JSON.parse(modelo.architectureModel);
   await add_span(modeloA[Object.keys(modeloA)[0]]);
   await add_scope(modeloA[Object.keys(modeloA)[0]]);
+  await add_decision_criteria(modeloA[Object.keys(modeloA)[0]]);
   await add_scale(modeloA[Object.keys(modeloA)[0]]);
 
   res.render("generate_model", {
@@ -37,9 +48,10 @@ export async function generate_model(req: Request, res: Response) {
 async function add_span(model: any) {
   if (model["containsIoTSystem"]) {
     var principa_system = model["containsIoTSystem"][0];
-    await add_goal(principa_system);
-    await add_SelfAwarenessProcess(principa_system);
-    await add_SelfAwarenessAspect(principa_system, "//@containsIoTSystem.0");
+    var path = "//@containsIoTSystem.0";
+    await add_goal(principa_system, path);
+    await add_SelfAwarenessProcess(principa_system, path);
+    await add_SelfAwarenessAspect(principa_system, path);
     if (principa_system.containsIoTSubSystem) {
       await recursive_span(
         principa_system.containsIoTSubSystem,
@@ -53,15 +65,15 @@ async function add_span(model: any) {
 async function recursive_span(system: any, path: any) {
   for (var i = 0; i < system.length; i++) {
     var actual_path = path + `/@containsIoTSubSystem.${i}`;
-    await add_goal(system[i]);
-    await add_SelfAwarenessProcess(system[i]);
+    await add_goal(system[i], actual_path);
+    await add_SelfAwarenessProcess(system[i], actual_path);
     await add_SelfAwarenessAspect(system[i], actual_path);
     if (system[i].containsIoTSubSystem)
       await recursive_span(system[i].containsIoTSubSystem, actual_path);
   }
 }
 
-async function add_goal(span: any) {
+async function add_goal(span: any, path: string) {
   var db = new database2();
   var goal: GoalQ = new GoalQ(-1, "", "", 0, "");
   var rows = await db.qwerty(
@@ -118,7 +130,7 @@ function add_calculatedGoalIndicator(span: any) {
   console.log(span);
 }
 
-async function add_SelfAwarenessProcess(span: any) {
+async function add_SelfAwarenessProcess(span: any, path_span: string) {
   var db = new database2();
   var SelfAwarness: SelfAwarenessProcessQ;
   SelfAwarness = new SelfAwarenessProcessQ(-1, "", "", 0, undefined, undefined);
@@ -131,24 +143,66 @@ async function add_SelfAwarenessProcess(span: any) {
   var arr_insert_process: any[] = [];
   for (var i = 0; i < process.length; i++) {
     var new_process = process[i].toObjectG();
+    var path_process = `${path_span}/@constainsSelfAwarenessProcess.${i}`;
     arr_insert_process.push(new_process);
-    // if (process[i].type_process == 17)
-    //  await add_PreReflectiveProcess_extras(new_process);
-    //else await add_ReflectiveProcess_extras();
+    if (process[i].type_process == 17)
+      await add_PreReflectiveProcess_extras(new_process, path_process);
+    else await add_ReflectiveProcess_extras(new_process, path_process);
   }
   if (arr_insert_process.length > 0)
     span.constainsSelfAwarenessProcess = arr_insert_process;
 }
 
-/*async function add_PreReflectiveProcess_extras(process) {
+async function add_PreReflectiveProcess_extras(process, path_process) {
   var db = new database2();
   var CollectionMethod: CollectionMethodQ;
   CollectionMethod = new CollectionMethodQ(-1, "");
   var sql = CollectionMethod.toSqlSelect(["/@/PROCES/@/"], [process.$.id]);
-	console.log(sql);
+  var rows = await db.qwerty(sql);
+  var methods: CollectionMethodQ[] = CollectionMethod.toObjectArray(rows);
+  if (methods.length > 0) {
+    process.usesCollectionMethod = [];
+    for (var i = 0; i < methods.length; i++) {
+      process.usesCollectionMethod.push(methods[i].toObjectG());
+    }
+  }
+  await add_analisisModel(process, path_process);
 }
-async function add_ReflectiveProcess_extras() {}
-*/
+
+async function add_ReflectiveProcess_extras(process, path_process) {
+  await add_analisisModel(process, path_process);
+  var db = new database2();
+  var calculationMethod: CalculationMethodQ;
+  calculationMethod = new CalculationMethodQ(-1, "", undefined, undefined);
+  var sql = calculationMethod.toSqlSelect(["/@/PROCES/@/"], [process.$.id]);
+  var rows2 = await db.qwerty(sql);
+  var methods: CalculationMethodQ[] = calculationMethod.toObjectArray(rows2);
+  if (methods.length > 0) {
+    process.usesCalculationMethod = [];
+    for (var i = 0; i < methods.length; i++) {
+      process.usesCalculationMethod.push(methods[i].toObjectG());
+    }
+  }
+}
+
+async function add_analisisModel(process, path_process) {
+  var db = new database2();
+  var analisisModel: AnalysisModelQ;
+  analisisModel = new AnalysisModelQ(-1, "");
+  var sql = analisisModel.toSqlSelect(["/@/PROCES/@/"], [process.$.id]);
+  var rows = await db.qwerty(sql);
+  var model: AnalysisModelQ[] = analisisModel.toObjectArray(rows);
+  if (model.length > 0) {
+    process.usesAnalysisModel = [];
+    for (var i = 0; i < model.length; i++) {
+      routes["analisisModel"][
+        `${model[i].id}`
+      ] = `${path_process}/@usesAnalysisModel.${i}`;
+      process.usesAnalysisModel.push(model[i].toObjectG());
+    }
+  }
+}
+
 async function add_SelfAwarenessAspect(span: any, span_path: any) {
   var db = new database2();
   var SelfAwarness: SelfAwarenessAspectQ;
@@ -171,9 +225,11 @@ async function add_SelfAwarenessAspect(span: any, span_path: any) {
     );
     await add_relation_SelfAweranesAspect_Goals(
       new_aspect,
-      arr_insert_aspects.length - 1,
       span.containsGoal,
-      span_path
+      span_path,
+      `${span_path}/@constainsSelfAwarenessAspect.${
+        arr_insert_aspects.length - 1
+      }`
     );
   }
   if (arr_insert_aspects.length > 0)
@@ -204,31 +260,39 @@ async function add_relation_Aspect_Process_SelfAweranes(
 }
 async function add_relation_SelfAweranesAspect_Goals(
   aspect: any,
-  aspect_inx: any,
   list_of_goals: any,
-  path: any
+  path_goals: any,
+  path_aspect: any
 ) {
   var db = new database2();
   var rows = await db.qwerty(
     `SELECT obj_id from aspectoautoconsciencia where aa_id=${aspect.$.id}`
   );
   rows = rows[0];
+  var goal_tag = "";
+  if (path_goals.indexOf("containsGoal") === -1) goal_tag = "containsGoal";
+  else goal_tag = "containsSubGoal";
   for (var i = 0; i < list_of_goals.length; i++) {
+    var actual_goal_path = `${path_goals}/@${goal_tag}.${i}`;
     if (rows.obj_id == list_of_goals[i].$.id) {
-      aspect.isUsedToCalculate = `${path}/@containsGoal.${i}`;
-      if (list_of_goals[i].isCalculatedBy)
-        list_of_goals[
-          i
-        ].isCalculatedBy += ` ${path}/@constainsSelfAwarenessAspect.${aspect_inx}`;
-      else
-        list_of_goals[
-          i
-        ].isCalculatedBy = `${path}/@constainsSelfAwarenessAspect.${aspect_inx}`;
-      routes[
-        `${aspect.$.id}`
-      ] = `${path}/@constainsSelfAwarenessAspect.${aspect_inx}`;
+      aspect.isUsedToCalculate = actual_goal_path;
+      if (list_of_goals[i].isCalculatedBy) {
+        list_of_goals[i].isCalculatedBy += ` ${path_aspect}`;
+      } else {
+        list_of_goals[i].isCalculatedBy = path_aspect;
+      }
+    }
+    routes["goal"][`${list_of_goals[i].$.id}`] = actual_goal_path;
+    if (list_of_goals[i].containsSubGoal) {
+      await add_relation_SelfAweranesAspect_Goals(
+        aspect,
+        list_of_goals[i].containsSubGoal,
+        actual_goal_path,
+        path_aspect
+      );
     }
   }
+  routes["aspect"][`${aspect.$.id}`] = path_aspect;
 }
 
 async function add_scale(model: any) {
@@ -296,16 +360,13 @@ async function recursive_relation_scope_selfAweranessAspect(
   scope_path,
   model
 ) {
-  var route = routes[`${aspect_id}`];
-  console.log(routes);
-  console.log(aspect_id);
-  console.log(route);
+  var route = routes["aspect"][`${aspect_id}`];
   route = route.substring(3, route.length);
   route = route.split("/@").reverse();
   var aspect_obj = recursive_element(route, model);
   aspect_obj.belongsTo = scope_path;
-  if (scope.has) scope.has += " " + routes[`${aspect_id}`];
-  else scope.has = routes[`${aspect_id}`];
+  if (scope.has) scope.has += " " + routes["aspect"][`${aspect_id}`];
+  else scope.has = routes["aspect"][`${aspect_id}`];
 }
 
 function recursive_element(arr_path, sub_model) {
@@ -317,3 +378,69 @@ function recursive_element(arr_path, sub_model) {
   }
   return sub_model;
 }
+
+async function add_decision_criteria(model: any) {
+  await add_decision_criteria_relationed_goal(model);
+  await add_decision_criteria_relationed_analysisModel();
+}
+
+async function add_decision_criteria_relationed_goal(model: any) {
+  if (!model.containsDecisionCriteria) model.containsDecisionCriteria = [];
+  var db = new database2();
+  var list_id_goals = Object.keys(routes["goal"]);
+  var decisionCriteria: DecisionCriteriaQ = new DecisionCriteriaQ(-1, "", "");
+  for (var i = 0; i < list_id_goals.length; i++) {
+    var sql = decisionCriteria.toSqlSelect(
+      ["/@/OBJECT/@/"],
+      [list_id_goals[i]]
+    );
+    var rows = await db.qwerty(sql);
+    var criteria: DecisionCriteriaQ[] = decisionCriteria.toObjectArray(rows);
+    if (criteria.length > 0) {
+      if (routes["decisionCriteria"][criteria[0].id.toString()]) {
+        var indx_criteria = parseInt(
+          routes["decisionCriteria"][criteria[0].id.toString()].split(".")[1]
+        );
+        model.containsDecisionCriteria[indx_criteria].interprets +=
+          " " + routes["goal"][list_id_goals[i]];
+      } else {
+        model.containsDecisionCriteria.push(criteria[0].toObjectG());
+        var indx_criteria = model.containsDecisionCriteria.length - 1;
+        routes["decisionCriteria"][
+          criteria[0].id.toString()
+        ] = `//@containsDecisionCriteria.${indx_criteria}`;
+        model.containsDecisionCriteria[indx_criteria].interprets =
+          routes["goal"][list_id_goals[i]];
+      }
+      var path_goals_list = routes["goal"][list_id_goals[i]]
+        .replace("//@", "")
+        .split("/@")
+        .reverse();
+      add_relation_goal_decisionCriteria(
+        model,
+        path_goals_list,
+        routes["decisionCriteria"][criteria[0].id.toString()]
+      );
+    }
+  }
+}
+
+function add_relation_goal_decisionCriteria(
+  model: any,
+  path_goals: string[],
+  path_criteria: string
+) {
+  var next_path = path_goals.pop();
+  if (next_path) {
+    var next_path_l: any[] = next_path.split(".");
+    add_relation_goal_decisionCriteria(
+      model[next_path_l[0]][parseInt(next_path_l[1])],
+      path_goals,
+      path_criteria
+    );
+  } else {
+    model.isInterpretedBy = path_criteria;
+  }
+}
+
+async function add_decision_criteria_relationed_analysisModel() {}

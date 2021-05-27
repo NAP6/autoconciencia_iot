@@ -6,7 +6,7 @@ export class DecisionCriteria {
   private _id: number;
   private _name: string;
   private _description: string;
-  private _active :Boolean;
+  private _active: Boolean;
   private _containsThreshold: Threshold[];
   private _isUded: AnalysisModel[];
   private _interprets: Goal[];
@@ -15,11 +15,10 @@ export class DecisionCriteria {
     this._id = id;
     this._name = name;
     this._description = description;
-    this._active=true;
+    this._active = true;
     this._containsThreshold = [];
     this._isUded = [];
     this._interprets = [];
-
   }
 
   get id(): number {
@@ -75,5 +74,15 @@ export class DecisionCriteria {
 
   set interprets(value: Goal[]) {
     this._interprets = value;
+  }
+
+  public toObjectG() {
+    return {
+      $: {
+        id: this.id,
+        name: this.name,
+        description: this.description,
+      },
+    };
   }
 }
