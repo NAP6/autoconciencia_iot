@@ -1,8 +1,8 @@
-import{Threshold} from "../Threshold";
-import{ SQL_Qwerty } from "../../SQL_Qwerty";
-export class ThresholdQ extends Threshold implements SQL_Qwerty{
-    toSqlInsert(tag:string[],value:string[]):string{
-var sql=`INSERT INTO
+import { Threshold } from "../Threshold";
+import { SQL_Qwerty } from "../../SQL_Qwerty";
+export class ThresholdQ extends Threshold implements SQL_Qwerty {
+  toSqlInsert(tag: string[], value: string[]): string {
+    var sql = `INSERT INTO
             umbral (
                 umb_nombre,
                 umb_interpretacion,
@@ -15,14 +15,24 @@ var sql=`INSERT INTO
                 '${this.interpretation}',
                 '${this.lowerThreshold}',
                 '${this.upperThreshold}',
-                '${this.active ? 1: 0}',
-                '${value[tag.indexOf('/@/CRITERIA/@/')]}'
+                '${this.active ? 1 : 0}',
+                '${value[tag.indexOf("/@/CRITERIA/@/")]}'
 
             )`;
-return sql;
-    }
-   toSqlSelect(tag:string[],value:string[]): string {
-    var sql = `SELECT 
+    return sql;
+  }
+  toSqlSelect(tag: string[], value: string[]): string {
+    var sql = "";
+    if (tag.indexOf("/@/RELATION_ACTION/@/") != -1) {
+      sql = `	SELECT
+      		aa.acc_id id
+	    	FROM
+		accion aa
+		WHERE
+		aa.umb_id=${this.id}
+	    `;
+    } else {
+      sql = `SELECT 
     umb_id as id,
     umb_nombre as name,
     umb_interpretacion as interpretacion,
@@ -33,16 +43,16 @@ return sql;
             FROM 
             umbral
             WHERE
-            cd_id=${value[tag.indexOf('/@/CRITERIA/@/')]}`;
-return sql;
-}
-toSqlDelete(value: string[]): string {
-    var sql=`DELETE FROM umbral WHERE umb_id=${this.id} `;
+            cd_id=${value[tag.indexOf("/@/CRITERIA/@/")]}`;
+    }
     return sql;
-}
+  }
+  toSqlDelete(value: string[]): string {
+    var sql = `DELETE FROM umbral WHERE umb_id=${this.id} `;
+    return sql;
+  }
 
-toSqlUpdate(tag: string[], value: string[]): string {
-
+  toSqlUpdate(tag: string[], value: string[]): string {
     var sql = `UPDATE 
     umbral
     SET
@@ -53,9 +63,20 @@ toSqlUpdate(tag: string[], value: string[]): string {
     umb_activo=${this.active ? 1 : 0}
   WHERE 
     umb_id=${this.id}`;
-return sql;
-}
-toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
-}
+    return sql;
+  }
+  toObjectArray(rows: any): any[] {
+    var threshold: ThresholdQ[] = [];
+    for (var i = 0; i < rows.length; i++) {
+      var aux: ThresholdQ = new ThresholdQ(
+        rows[i].id,
+        rows[i].name,
+        rows[i].interpretacion,
+        rows[i].inferior,
+        rows[i].superior
+      );
+      threshold.push(aux);
+    }
+    return threshold;
+  }
 }

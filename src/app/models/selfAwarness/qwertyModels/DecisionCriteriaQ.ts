@@ -30,6 +30,20 @@ export class DecisionCriteriaQ extends DecisionCriteria implements SQL_Qwerty {
 	    	obj.cd_id=cri.cd_id AND
 	    	obj.obj_id = ${value[tag.indexOf("/@/OBJECT/@/")]}`;
       return sql;
+    }else if(tag.indexOf("/@/METHOD/@/")!=-1){
+      sql = `SELECT 
+	    	cri.cd_id as id,
+		cri.cd_nombre as name,
+		cri.cd_descripcion as description,
+		cri.cd_activo as active
+	     FROM 
+		criteriodecision cri,
+		modeloanalisis modelo 
+	     WHERE  
+	    	modelo.cd_id=cri.cd_id AND
+	    	modelo.mea_id = ${value[tag.indexOf("/@/METHOD/@/")]}`;
+      return sql;
+
     }
 
     sql = `SELECT 

@@ -5,7 +5,7 @@ export class Action {
   private _description: string;
   private _active: boolean;
   private _isRecommendedln: Threshold | undefined;
-  constructor(id: number, description: string,) {
+  constructor(id: number, description: string) {
     this._id = id;
     this._description = description;
     this._active = true;
@@ -18,7 +18,6 @@ export class Action {
   set id(value: number) {
     this._id = value;
   }
-  
 
   get description(): string {
     return this._description;
@@ -41,5 +40,14 @@ export class Action {
 
   set isRecommendedln(value: Threshold | undefined) {
     this._isRecommendedln = value;
+  }
+
+  public toObjectG() {
+    return {
+      $: {
+        id: this.id,
+        description: this.description,
+      },
+    };
   }
 }

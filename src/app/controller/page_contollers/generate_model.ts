@@ -2,6 +2,8 @@ import { Decipher } from "crypto";
 import { Request, Response } from "express";
 import { database2 } from "../../data/database2";
 import { Goal } from "../../models/selfAwarness/Goal";
+import { ActionQ } from "../../models/selfAwarness/qwertyModels/ActionQ";
+import { ThresholdQ } from "../../models/selfAwarness/qwertyModels/ThresholdQ";
 import {
   CollectionMethodQ,
   GoalQ,
@@ -20,6 +22,10 @@ var routes: any = {
   goal: {},
   analisisModel: {},
   decisionCriteria: {},
+  action: {},
+  //aqui lo raro
+  action_r: {},
+  //aqui lo raro
 };
 
 export async function generate_model(req: Request, res: Response) {
@@ -29,6 +35,17 @@ export async function generate_model(req: Request, res: Response) {
   var rows = await db.qwerty(
     modelo.toSqlSelect(["/@/MODEL/@/"], [modelID.toString()])
   );
+
+  routes = {
+    aspect: {},
+    goal: {},
+    analisisModel: {},
+    decisionCriteria: {},
+    action: {},
+    //aqui lo raro
+    action_r: {},
+    //aqui lo raro
+  };
 
   modelo = modelo.toObjectArray(rows)[0];
   var modeloA = JSON.parse(modelo.architectureModel);
@@ -195,10 +212,33 @@ async function add_analisisModel(process, path_process) {
   if (model.length > 0) {
     process.usesAnalysisModel = [];
     for (var i = 0; i < model.length; i++) {
-      routes["analisisModel"][
-        `${model[i].id}`
-      ] = `${path_process}/@usesAnalysisModel.${i}`;
-      process.usesAnalysisModel.push(model[i].toObjectG());
+      var new_path = `${path_process}/@usesAnalysisModel.${i}`;
+      routes["analisisModel"][`${model[i].id}`] = new_path;
+      var modelG = model[i].toObjectG();
+      await add_action(modelG, new_path);
+      process.usesAnalysisModel.push(modelG);
+    }
+  }
+}
+
+async function add_action(analisisModel, path_model) {
+  var db = new database2();
+  var action: ActionQ = new ActionQ(-1, "");
+  var sql = action.toSqlSelect(["/@/MODEL/@/"], [analisisModel.$.id]);
+  var rows = await db.qwerty(sql);
+  var action_list: ActionQ[] = action.toObjectArray(rows);
+  if (action_list.length > 0) {
+    if (!analisisModel.containsAction) analisisModel.containsAction = [];
+    for (var i = 0; i < action_list.length; i++) {
+      var ac = action_list[i].toObjectG();
+      routes["action"][
+        `${action_list[i].id}`
+      ] = `${path_model}/@containsAction.${i}`;
+      //Esto es lo raro
+      routes["action_r"][`${action_list[i].id}`] = ac;
+      //Esto es lo raro
+      analisisModel.containsAction.push(ac);
+      analisisModel.containsAction.push(ac);
     }
   }
 }
@@ -381,7 +421,10 @@ function recursive_element(arr_path, sub_model) {
 
 async function add_decision_criteria(model: any) {
   await add_decision_criteria_relationed_goal(model);
-  await add_decision_criteria_relationed_analysisModel();
+  await add_decision_criteria_relationed_analysisModel(model);
+  for (var i = 0; i < model.containsDecisionCriteria.length; i++) {
+    await add_threshold(model.containsDecisionCriteria[i]);
+  }
 }
 
 async function add_decision_criteria_relationed_goal(model: any) {
@@ -443,4 +486,104 @@ function add_relation_goal_decisionCriteria(
   }
 }
 
-async function add_decision_criteria_relationed_analysisModel() {}
+async function add_decision_criteria_relationed_analysisModel(model: any) {
+  if (!model.containsDecisionCriteria) model.containsDecisionCriteria = [];
+  var db = new database2();
+  var list_id_models = Object.keys(routes["analisisModel"]);
+  var decisionCriteria: DecisionCriteriaQ = new DecisionCriteriaQ(-1, "", "");
+  for (var i = 0; i < list_id_models.length; i++) {
+    var sql = decisionCriteria.toSqlSelect(
+      ["/@/METHOD/@/"],
+      [list_id_models[i]]
+    );
+    var rows = await db.qwerty(sql);
+    var criteria: DecisionCriteriaQ[] = decisionCriteria.toObjectArray(rows);
+    if (criteria.length > 0) {
+      if (routes["decisionCriteria"][criteria[0].id.toString()]) {
+        var indx_criteria = parseInt(
+          routes["decisionCriteria"][criteria[0].id.toString()].split(".")[1]
+        );
+        if (model.containsDecisionCriteria[indx_criteria].isUsedBy) {
+          model.containsDecisionCriteria[indx_criteria].isUsedBy +=
+            " " + routes["analisisModel"][list_id_models[i]];
+        } else {
+          model.containsDecisionCriteria[indx_criteria].isUsedBy =
+            " " + routes["analisisModel"][list_id_models[i]];
+        }
+      } else {
+        model.containsDecisionCriteria.push(criteria[0].toObjectG());
+        var indx_criteria = model.containsDecisionCriteria.length - 1;
+        routes["decisionCriteria"][
+          criteria[0].id.toString()
+        ] = `//@containsDecisionCriteria.${indx_criteria}`;
+        model.containsDecisionCriteria[indx_criteria].isUsedBy =
+          routes["analisisModel"][list_id_models[i]];
+      }
+      var path_model_list = routes["analisisModel"][list_id_models[i]]
+        .replace("//@", "")
+        .split("/@")
+        .reverse();
+      add_relation_model_analysis_decisionCriteria(
+        model,
+        path_model_list,
+        routes["decisionCriteria"][criteria[0].id.toString()]
+      );
+    }
+  }
+}
+function add_relation_model_analysis_decisionCriteria(
+  model: any,
+  path_model: string[],
+  path_criteria: string
+) {
+  var next_path = path_model.pop();
+  if (next_path) {
+    var next_path_l: any[] = next_path.split(".");
+    add_relation_model_analysis_decisionCriteria(
+      model[next_path_l[0]][parseInt(next_path_l[1])],
+      path_model,
+      path_criteria
+    );
+  } else {
+    model.uses = path_criteria;
+  }
+}
+
+async function add_threshold(decisionCriteria) {
+  var db = new database2();
+  var thres: ThresholdQ = new ThresholdQ(-1, "", "", -1, -1);
+  var sql = thres.toSqlSelect(["/@/CRITERIA/@/"], [decisionCriteria.$.id]);
+  var rows = await db.qwerty(sql);
+  var thres_list: ThresholdQ[] = thres.toObjectArray(rows); // arreglar to object
+  if (!decisionCriteria.containsThreshold)
+    decisionCriteria.containsThreshold = [];
+  for (var i = 0; i < thres_list.length; i++) {
+    var th = thres_list[i].toObjectG();
+    await add_relation_threshold_action(
+      th,
+      `${
+        routes["decisionCriteria"][decisionCriteria.$.id]
+      }/@containsThreshold.${i}`
+    );
+    decisionCriteria.containsThreshold.push(th);
+  }
+}
+
+async function add_relation_threshold_action(threshold, path_threshold) {
+  var db = new database2();
+  var thres: ThresholdQ = new ThresholdQ(
+    threshold.$.id,
+    threshold.$.name,
+    threshold.$.interpretation,
+    threshold.$.lowerThreshold,
+    threshold.$.upperThreshold
+  );
+  var sql = thres.toSqlSelect(["/@/RELATION_ACTION/@/"], []);
+  var rows = await db.qwerty(sql);
+  for (var i = 0; i < rows.length; i++) {
+    var path_action = routes["action"][rows[i].id.toString()];
+    threshold.recommends = path_action;
+    var obj: any = routes["action_r"][rows[i].id.toString()];
+    obj.isRecommendedIn= path_threshold;
+  }
+}
