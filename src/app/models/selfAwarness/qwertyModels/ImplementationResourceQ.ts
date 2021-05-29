@@ -9,6 +9,25 @@ export class ImplementationResourceQ
   }
   toSqlSelect(tag: string[], value: string[]): string {
     if (tag.indexOf("/@/ALL/@/") != -1) return `call get_recurso(${this.id})`;
+    else if (tag.indexOf("/@/PARAMETER/@/") != -1) {
+      var sql = `SELECT
+      			ri.ri_id as id,
+			ri.ri_nombre as nombre,
+			ri.ri_descripcion as descripcion,
+			ri.ri_tipo_recurso as tipo_recurso,
+			ri.ri_tipo_dato_salida as tipo_salida,
+			enu.enu_nombre_valor as tipo_salida_nombre
+	    	 FROM
+	    		recursoimplementacion ri,
+	    		parametro par,
+			enumeracion enu
+	    WHERE
+	    par.par_ordinal=${value[tag.indexOf("/@/PARAMETER/@/")]} AND
+	    par.ri_id=ri.ri_id AND
+	    enu.enu_id=ri.ri_tipo_dato_salida`;
+
+      return sql;
+    }
     var sql = `SELECT 
 				ri_id as id, 
 				ri_nombre as nombre, 
@@ -34,6 +53,16 @@ export class ImplementationResourceQ
     throw new Error("Method not implemented.");
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var implementsResource: ImplementationResourceQ[] = [];
+    for (var i = 0; i < rows.length; i++) {
+      var aux: ImplementationResourceQ = new ImplementationResourceQ(
+        rows[i].id,
+        rows[i].nombre,
+        rows[i].descripcion,
+        rows[i].tipo_salida_nombre
+      );
+      implementsResource.push(aux);
+    }
+    return implementsResource;
   }
 }

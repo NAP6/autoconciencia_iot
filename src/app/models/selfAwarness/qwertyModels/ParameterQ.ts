@@ -41,7 +41,25 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
     return sql;
   }
   toSqlSelect(tag: string[], value: string[]): string {
-    var sql = `SELECT 
+    var sql = "";
+    if (tag.indexOf("/@/MAPPING/@/") != -1) {
+      sql = `SELECT 
+	  		pa.par_ordinal as ordinal,
+		  	pa.par_nombre as nombre, 
+		  	pa.par_opcional as opcional, 
+		  	pa.par_activo as activo,
+		  	pa.par_tipo_dato as tipo,
+		  	enu.enu_nombre_valor as nombre_salida 
+	  	FROM 	
+			parametro pa, 
+			enumeracion enu,
+			mapeoparametros map
+		WHERE 
+	  		map.md_id=${value[tag.indexOf("/@/MAPPING/@/")]} AND 
+			map.par_ordinal=pa.par_ordinal AND
+			pa.par_tipo_dato=enu.enu_id`;
+    } else {
+      sql = `SELECT 
 	  		pa.par_ordinal as ordinal,
 		  	pa.par_nombre as nombre, 
 		  	pa.par_opcional as opcional, 
@@ -54,6 +72,7 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
 		WHERE 
 	  		ri_id = '${value[tag.indexOf("/@/RI_ID/@/")]}' AND 
 			pa.par_tipo_dato=enu.enu_id`;
+    }
     return sql;
   }
   toSqlDelete(tag: string[], value: string[]): string {

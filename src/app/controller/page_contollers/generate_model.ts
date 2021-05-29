@@ -16,6 +16,8 @@ import {
   SimulationValueQ,
   SimulationVariableQ,
   ArgumentToParameterMappingQ,
+  ImplementationResourceQ,
+  ParameterQ,
 } from "../../models/selfAwarnessModels";
 
 var modelID: any;
@@ -28,6 +30,8 @@ var routes: any = {
   simulationscenario: { p: {}, r: {} },
   simulationvariable: { p: {}, r: {} },
   argumentToParameterMapping: { p: {}, r: {} },
+  parameter: { p: {}, r: {} },
+  implementationResource: { p: {}, r: {}, i: [] },
 };
 
 export async function generate_model(req: Request, res: Response) {
@@ -47,6 +51,8 @@ export async function generate_model(req: Request, res: Response) {
     simulationscenario: { p: {}, r: {} },
     simulationvariable: { p: {}, r: {} },
     argumentToParameterMapping: { p: {}, r: {} },
+    parameter: { p: {}, r: {} },
+    implementationResource: { p: {}, r: {}, i: [] },
   };
 
   modelo = modelo.toObjectArray(rows)[0];
@@ -54,6 +60,7 @@ export async function generate_model(req: Request, res: Response) {
   await add_span(modeloA[Object.keys(modeloA)[0]]);
   await add_scope(modeloA[Object.keys(modeloA)[0]]);
   await add_decision_criteria(modeloA[Object.keys(modeloA)[0]]);
+  await add_ImplementationResource(modeloA[Object.keys(modeloA)[0]]);
   await add_scale(modeloA[Object.keys(modeloA)[0]]);
 
   res.render("generate_model", {
@@ -326,11 +333,17 @@ async function add_argumentToParameterMapping(container, path_container) {
     if (!container.containsArgumentToParameterMapping)
       container.containsArgumentToParameterMapping = [];
     for (var i = 0; i < mapping_list.length; i++) {
-      var mp = mapping_list[i].toObjectG();
+      var mp: any = mapping_list[i].toObjectG();
+      var path_maping = `${path_container}/@containsArgumentToParameterMapping.${i}`;
       routes["argumentToParameterMapping"]["p"][
         `${mapping_list[i].id}`
-      ] = `${path_container}/@containsArgumentToParameterMapping.${i}`;
+      ] = path_maping;
       routes["argumentToParameterMapping"]["r"][`${mapping_list[i].id}`] = mp;
+      var path_parameter = await save_and_generate_parameter_route(
+        mp,
+        path_maping
+      );
+      mp.relatesParameter = path_parameter;
       container.containsArgumentToParameterMapping.push(mp);
     }
   }
@@ -679,4 +692,69 @@ async function add_relation_threshold_action(threshold, path_threshold) {
     var obj: any = routes["action"]["r"][rows[i].id.toString()];
     obj.isRecommendedIn = path_threshold;
   }
+}
+
+async function save_and_generate_parameter_route(
+  mapping,
+  path_maping
+): Promise<string> {
+  var db = new database2();
+  var parameter: ParameterQ = new ParameterQ(-1, "", "", false);
+  var sql = parameter.toSqlSelect(["/@/MAPPING/@/"], [mapping.$.id]);
+  var rows = await db.qwerty(sql);
+  var parameter_element: ParameterQ = parameter.toObjectArray(rows)[0];
+  var the_paremeter = routes["parameter"]["r"][parameter_element.id.toString()];
+  if (the_paremeter) {
+    console.log("El parametro ya existe");
+    the_paremeter.isUsedIn += ` ${path_maping}`;
+  } else {
+    console.log("El parametro no existe aun");
+    routes["parameter"]["r"][
+      parameter_element.id.toString()
+    ] = parameter_element.toObjectG();
+    the_paremeter = routes["parameter"]["r"][parameter_element.id.toString()];
+    the_paremeter.isUsedIn = `${path_maping}`;
+  }
+  console.log(the_paremeter);
+  return await save_and_generate_resource_route(the_paremeter);
+}
+
+async function save_and_generate_resource_route(parameter): Promise<string> {
+  var db = new database2();
+  var resource: ImplementationResourceQ;
+  resource = new ImplementationResourceQ(-1, "", "", "");
+  console.log(parameter.$.ordinal);
+  var sql = resource.toSqlSelect(["/@/PARAMETER/@/"], [parameter.$.ordinal]);
+  var rows = await db.qwerty(sql);
+  var resource_element: ImplementationResourceQ;
+  resource_element = resource.toObjectArray(rows)[0];
+  var the_resource = routes["parameter"]["r"][resource_element.id.toString()];
+  var indx_parameter = -1;
+  if (the_resource) {
+    the_resource.containsParameter.push(parameter);
+  } else {
+    routes["implementationResource"]["r"][
+      resource_element.id.toString()
+    ] = resource_element.toObjectG();
+    the_resource =
+      routes["implementationResource"]["r"][resource_element.id.toString()];
+    routes["implementationResource"]["i"].push(resource_element.id.toString());
+    the_resource.containsParameter = [];
+    the_resource.containsParameter.push(parameter);
+    indx_parameter = the_resource.containsParameter.length - 1;
+  }
+  var indx = routes["implementationResource"]["i"].indexOf(
+    resource_element.id.toString()
+  );
+  return `//@containsImplementationResource.${indx}/@containsParameter.${indx_parameter}`;
+}
+
+async function add_ImplementationResource(model) {
+  var indx_l: any[] = routes["implementationResource"]["i"];
+  if (indx_l.length > 0) model.containsImplementationResource = [];
+  for (var i = 0; i < indx_l.length; i++) {
+    var ip = routes["implementationResource"]["r"][indx_l[i]];
+    model.containsImplementationResource.push(ip);
+  }
+  console.log(model.containsImplementationResource);
 }
