@@ -29,7 +29,7 @@ export class SimulationVariable {
   set name(value: string) {
     this._name = value;
   }
-get active(): boolean {
+  get active(): boolean {
     return this._active;
   }
 
@@ -51,5 +51,13 @@ get active(): boolean {
   set containsSimulationValue(value: SimulationValue[]) {
     this._containsSimulationValue = value;
   }
-}
 
+  public toObjectG() {
+    return {
+      $: {
+        id: this.id,
+        name: this.name,
+      },
+    };
+  }
+}

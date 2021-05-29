@@ -12,8 +12,20 @@ export class SimulationValueQ extends SimulationValue implements SQL_Qwerty {
 	  				)`;
     return sql;
   }
+
   toSqlSelect(tag: string[], value: string[]): string {
-    var sql = `SELECT
+    var sql = "";
+    if (tag.indexOf("/@/VARIABLE/@/") != -1) {
+      sql = `SELECT
+			vs_id,
+			es_id,
+	    		vas_valor
+	    		FROM
+	    		valorsimulacion
+			WHERE
+	    		vs_id=${value[tag.indexOf("/@/VARIABLE/@/")]}`;
+    } else {
+      sql = `SELECT
 		  		vs.vs_id as variable_id,
 			  	vs.vas_valor as valor,
 				var.vs_nombre as nombre_variable
@@ -26,7 +38,7 @@ export class SimulationValueQ extends SimulationValue implements SQL_Qwerty {
 				var.vs_id=vs.vs_id AND
 				es.es_id=${this.isUsed} AND 
 		  		es.es_id=vs.es_id`;
-	  
+    }
     return sql;
   }
   toSqlDelete(tag: string[], value: string[]): string {
@@ -47,6 +59,13 @@ export class SimulationValueQ extends SimulationValue implements SQL_Qwerty {
     return sql;
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var simulation: SimulationValueQ[] = [];
+    for (var i = 0; i < rows.length; i++) {
+      var aux: SimulationValueQ = new SimulationValueQ(rows[i].vas_valor);
+      aux.scenario_id = rows[i].es_id;
+      aux.variable_id = rows[i].vs_id;
+      simulation.push(aux);
+    }
+    return simulation;
   }
 }

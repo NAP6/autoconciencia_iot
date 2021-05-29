@@ -4,7 +4,7 @@ export class SimulationScenario {
   private _id: number;
   private _name: string;
   private _description: string;
-	private _active:boolean;
+  private _active: boolean;
   private _uses: SimulationValue[];
 
   constructor(id: number, name: string, description: string) {
@@ -12,7 +12,7 @@ export class SimulationScenario {
     this._name = name;
     this._description = description;
     this._uses = [];
-	  this._active=true;
+    this._active = true;
   }
 
   get id(): number {
@@ -46,11 +46,21 @@ export class SimulationScenario {
   set uses(value: SimulationValue[]) {
     this._uses = value;
   }
-get active(): boolean {
+  get active(): boolean {
     return this._active;
   }
 
   set active(value: boolean) {
     this._active = value;
+  }
+
+  public toObjectG() {
+    return {
+      $: {
+        id: this.id,
+        name: this.name,
+        description: this.description,
+      },
+    };
   }
 }

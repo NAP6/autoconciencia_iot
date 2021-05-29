@@ -41,6 +41,15 @@ export class SimulationScenarioQ
     return sql;
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var scenario: SimulationScenarioQ[] = [];
+    for (var i = 0; i < rows.length; i++) {
+      var aux: SimulationScenarioQ = new SimulationScenarioQ(
+        rows[i].id,
+        rows[i].name,
+        rows[i].description
+      );
+      scenario.push(aux);
+    }
+    return scenario;
   }
 }

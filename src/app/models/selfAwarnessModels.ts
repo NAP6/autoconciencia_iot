@@ -23,3 +23,9 @@ export { CalculationMethodQ } from "./selfAwarness/qwertyModels/CalculationMetho
 export { EntityQ } from "./selfAwarness/qwertyModels/EntityQ";
 export { ReflectiveProcessQ } from "./selfAwarness/qwertyModels/ReflectiveProcessQ";
 export { DecisionCriteriaQ } from "./selfAwarness/qwertyModels/DecisionCriteriaQ";
+export { ActionQ } from "./selfAwarness/qwertyModels/ActionQ";
+export { ThresholdQ } from "./selfAwarness/qwertyModels/ThresholdQ";
+export { SimulationScenarioQ } from "./selfAwarness/qwertyModels/SimulationScenarioQ";
+export { SimulationVariableQ } from "./selfAwarness/qwertyModels/SimulationVariableQ";
+export { SimulationValueQ } from "./selfAwarness/qwertyModels/SimulationValueQ";
+export { ArgumentToParameterMappingQ } from "./selfAwarness/qwertyModels/ArgumentToParameterMappingQ";

@@ -1,6 +1,8 @@
 import { SimulationVariable } from "../SimulationVariable";
 import { SQL_Qwerty } from "../../SQL_Qwerty";
-export class SimulationVariableQ extends SimulationVariable implements SQL_Qwerty {
+export class SimulationVariableQ
+  extends SimulationVariable
+  implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
     var sql = `INSERT INTO
 	  	variablesimulacion (
@@ -9,7 +11,7 @@ export class SimulationVariableQ extends SimulationVariable implements SQL_Qwert
 		mea_id)
 	  	VALUES(
   		'${this.name}',
-  		${this.active ? 1:0},
+  		${this.active ? 1 : 0},
 		${value[tag.indexOf("/@/METHOD/@/")]})`;
     return sql;
   }
@@ -40,6 +42,14 @@ export class SimulationVariableQ extends SimulationVariable implements SQL_Qwert
     return sql;
   }
   toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
+    var simulation: SimulationVariableQ[] = [];
+    for (var i = 0; i < rows.length; i++) {
+      var aux: SimulationVariableQ = new SimulationVariableQ(
+        rows[i].id,
+        rows[i].name
+      );
+      simulation.push(aux);
+    }
+    return simulation;
   }
 }

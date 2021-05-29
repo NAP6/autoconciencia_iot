@@ -1,19 +1,21 @@
-import { Decipher } from "crypto";
 import { Request, Response } from "express";
 import { database2 } from "../../data/database2";
 import { Goal } from "../../models/selfAwarness/Goal";
-import { ActionQ } from "../../models/selfAwarness/qwertyModels/ActionQ";
-import { ThresholdQ } from "../../models/selfAwarness/qwertyModels/ThresholdQ";
 import {
   CollectionMethodQ,
   GoalQ,
   SelfAwarenessProcessQ,
   SelfAwarnessQ,
-  ReflectiveProcessQ,
   AnalysisModelQ,
   CalculationMethodQ,
   DecisionCriteriaQ,
   SelfAwarenessAspectQ,
+  ActionQ,
+  ThresholdQ,
+  SimulationScenarioQ,
+  SimulationValueQ,
+  SimulationVariableQ,
+  ArgumentToParameterMappingQ,
 } from "../../models/selfAwarnessModels";
 
 var modelID: any;
@@ -22,10 +24,10 @@ var routes: any = {
   goal: {},
   analisisModel: {},
   decisionCriteria: {},
-  action: {},
-  //aqui lo raro
-  action_r: {},
-  //aqui lo raro
+  action: { p: {}, r: {} },
+  simulationscenario: { p: {}, r: {} },
+  simulationvariable: { p: {}, r: {} },
+  argumentToParameterMapping: { p: {}, r: {} },
 };
 
 export async function generate_model(req: Request, res: Response) {
@@ -41,10 +43,10 @@ export async function generate_model(req: Request, res: Response) {
     goal: {},
     analisisModel: {},
     decisionCriteria: {},
-    action: {},
-    //aqui lo raro
-    action_r: {},
-    //aqui lo raro
+    action: { p: {}, r: {} },
+    simulationscenario: { p: {}, r: {} },
+    simulationvariable: { p: {}, r: {} },
+    argumentToParameterMapping: { p: {}, r: {} },
   };
 
   modelo = modelo.toObjectArray(rows)[0];
@@ -197,7 +199,12 @@ async function add_ReflectiveProcess_extras(process, path_process) {
   if (methods.length > 0) {
     process.usesCalculationMethod = [];
     for (var i = 0; i < methods.length; i++) {
-      process.usesCalculationMethod.push(methods[i].toObjectG());
+      var methodG = methods[i].toObjectG();
+      var path_method = `${path_process}/@usesCalculationMethod.${i}`;
+      await add_SimulationScenario(methodG, path_method);
+      await add_SimulationVarible(methodG, path_method);
+      await add_argumentToParameterMapping(methodG, path_method);
+      process.usesCalculationMethod.push(methodG);
     }
   }
 }
@@ -216,8 +223,75 @@ async function add_analisisModel(process, path_process) {
       routes["analisisModel"][`${model[i].id}`] = new_path;
       var modelG = model[i].toObjectG();
       await add_action(modelG, new_path);
+      await add_argumentToParameterMapping(modelG, new_path);
       process.usesAnalysisModel.push(modelG);
     }
+  }
+}
+
+async function add_SimulationScenario(calculationMethod, path_calculation) {
+  var db = new database2();
+  var simulation: SimulationScenarioQ = new SimulationScenarioQ(-1, "", "");
+  var sql = simulation.toSqlSelect(["/@/METHOD/@/"], [calculationMethod.$.id]);
+  var rows = await db.qwerty(sql);
+  var simula_list: SimulationScenarioQ[] = simulation.toObjectArray(rows);
+  if (!calculationMethod.containsSimulationScenario)
+    calculationMethod.containsSimulationScenario = [];
+  for (var i = 0; i < simula_list.length; i++) {
+    var sm = simula_list[i].toObjectG();
+    routes["simulationscenario"]["p"][
+      `${simula_list[i].id}`
+    ] = `${path_calculation}/@containsSimulationScenario.${i}`;
+    routes["simulationscenario"]["r"][`${simula_list[i].id}`] = sm;
+    calculationMethod.containsSimulationScenario.push(sm);
+  }
+}
+
+async function add_SimulationVarible(calculationMethod, path_calculation) {
+  var db = new database2();
+  var simulationVar: SimulationVariableQ = new SimulationVariableQ(-1, "");
+  var sql = simulationVar.toSqlSelect(
+    ["/@/METHOD/@/"],
+    [calculationMethod.$.id]
+  );
+  var rows = await db.qwerty(sql);
+  var simula_list: SimulationVariableQ[] = simulationVar.toObjectArray(rows);
+  if (!calculationMethod.containsSimulationVariable)
+    calculationMethod.containsSimulationVariable = [];
+  for (var i = 0; i < simula_list.length; i++) {
+    var sm = simula_list[i].toObjectG();
+    routes["simulationvariable"]["p"][
+      `${simula_list[i].id}`
+    ] = `${path_calculation}/@containsSimulationVariable.${i}`;
+    routes["simulationvariable"]["r"][`${simula_list[i].id}`] = sm;
+    await add_SimulationValue(
+      sm,
+      `${path_calculation}/@containsSimulationVariable.${i}`
+    );
+    calculationMethod.containsSimulationVariable.push(sm);
+  }
+}
+
+async function add_SimulationValue(simulationVariable, path_variable) {
+  var db = new database2();
+  var simulationValue: SimulationValueQ = new SimulationValueQ(-1);
+  var sql = simulationValue.toSqlSelect(
+    ["/@/VARIABLE/@/"],
+    [simulationVariable.$.id]
+  );
+  var rows = await db.qwerty(sql);
+  var simula_list: SimulationValueQ[] = simulationValue.toObjectArray(rows);
+  if (!simulationVariable.containsSimulationValue)
+    simulationVariable.containsSimulationValue = [];
+  for (var i = 0; i < simula_list.length; i++) {
+    var sm: any = simula_list[i].toObjectG();
+    sm.isUsed =
+      routes["simulationscenario"]["p"][simula_list[i].scenario_id!.toString()];
+    var obj: any =
+      routes["simulationscenario"]["r"][simula_list[i].scenario_id!.toString()];
+    if (obj.uses) obj.uses += ` ${path_variable}/@containsSimulationValue.${i}`;
+    else obj.uses = `${path_variable}/@containsSimulationValue.${i}`;
+    simulationVariable.containsSimulationValue.push(sm);
   }
 }
 
@@ -231,14 +305,33 @@ async function add_action(analisisModel, path_model) {
     if (!analisisModel.containsAction) analisisModel.containsAction = [];
     for (var i = 0; i < action_list.length; i++) {
       var ac = action_list[i].toObjectG();
-      routes["action"][
+      routes["action"]["p"][
         `${action_list[i].id}`
       ] = `${path_model}/@containsAction.${i}`;
-      //Esto es lo raro
-      routes["action_r"][`${action_list[i].id}`] = ac;
-      //Esto es lo raro
+      routes["action"]["r"][`${action_list[i].id}`] = ac;
       analisisModel.containsAction.push(ac);
-      analisisModel.containsAction.push(ac);
+    }
+  }
+}
+
+async function add_argumentToParameterMapping(container, path_container) {
+  var db = new database2();
+  var mapping: ArgumentToParameterMappingQ = new ArgumentToParameterMappingQ(
+    -1
+  );
+  var sql = mapping.toSqlSelect(["/@/METHOD/@/"], [container.$.id]);
+  var rows = await db.qwerty(sql);
+  var mapping_list: ArgumentToParameterMappingQ[] = mapping.toObjectArray(rows);
+  if (mapping_list.length > 0) {
+    if (!container.containsArgumentToParameterMapping)
+      container.containsArgumentToParameterMapping = [];
+    for (var i = 0; i < mapping_list.length; i++) {
+      var mp = mapping_list[i].toObjectG();
+      routes["argumentToParameterMapping"]["p"][
+        `${mapping_list[i].id}`
+      ] = `${path_container}/@containsArgumentToParameterMapping.${i}`;
+      routes["argumentToParameterMapping"]["r"][`${mapping_list[i].id}`] = mp;
+      container.containsArgumentToParameterMapping.push(mp);
     }
   }
 }
@@ -581,9 +674,9 @@ async function add_relation_threshold_action(threshold, path_threshold) {
   var sql = thres.toSqlSelect(["/@/RELATION_ACTION/@/"], []);
   var rows = await db.qwerty(sql);
   for (var i = 0; i < rows.length; i++) {
-    var path_action = routes["action"][rows[i].id.toString()];
+    var path_action = routes["action"]["p"][rows[i].id.toString()];
     threshold.recommends = path_action;
-    var obj: any = routes["action_r"][rows[i].id.toString()];
-    obj.isRecommendedIn= path_threshold;
+    var obj: any = routes["action"]["r"][rows[i].id.toString()];
+    obj.isRecommendedIn = path_threshold;
   }
 }
