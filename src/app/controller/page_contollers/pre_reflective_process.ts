@@ -24,7 +24,7 @@ export async function add_metodo_modelo(req: Request, res: Response) {
     var db = new database2();
     var modeloID = req.session!.active_model.modelID;
     var coll = new CollectionMethodQ(-1, "");
-    coll.produces = new DirectMetric(data.m_recoleccion.met_id, "", "", "", "");
+    coll.produces = new DirectMetric(data.m_recoleccion.met_id, "", "", "");
     coll.isSupported = new DataFlow(
       data.m_recoleccion.flu_id,
       "",
@@ -199,10 +199,7 @@ export async function get_metodos_recoleccion_analisis(
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export async function get_recoleccion_datos(
-  req: Request,
-  res: Response
-) {
+export async function get_recoleccion_datos(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.mea_id;
@@ -218,10 +215,7 @@ export async function get_recoleccion_datos(
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export async function get_model_analisis(
-  req: Request,
-  res: Response
-) {
+export async function get_model_analisis(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.mea_id;

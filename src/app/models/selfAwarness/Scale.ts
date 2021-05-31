@@ -14,7 +14,7 @@ export class Scale {
     this._validValues = validValues;
     this._scaleType = scaleType;
     this._isUsedBy = [];
-    this._active=true;
+    this._active = true;
   }
 
   get id(): number {
@@ -62,5 +62,16 @@ export class Scale {
 
   set active(value: Boolean) {
     this._active = value;
+  }
+
+  public toObjectG() {
+    return {
+      $: {
+        id: this.id,
+        name: this.name,
+        validValues: this.validValues,
+        type: this.scaleType,
+      },
+    };
   }
 }

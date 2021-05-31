@@ -29,3 +29,8 @@ export { SimulationScenarioQ } from "./selfAwarness/qwertyModels/SimulationScena
 export { SimulationVariableQ } from "./selfAwarness/qwertyModels/SimulationVariableQ";
 export { SimulationValueQ } from "./selfAwarness/qwertyModels/SimulationValueQ";
 export { ArgumentToParameterMappingQ } from "./selfAwarness/qwertyModels/ArgumentToParameterMappingQ";
+export { DirectMetricQ } from "./selfAwarness/qwertyModels/DirectMetricQ";
+export { IndicatorQ } from "./selfAwarness/qwertyModels/IndicatorQ";
+export { IndirectMetricQ } from "./selfAwarness/qwertyModels/IndirectMetricQ";
+export { ScaleQ } from "./selfAwarness/qwertyModels/ScaleQ";
+export { MeasurementUnitQ } from "./selfAwarness/qwertyModels/MeasurementUnitQ";

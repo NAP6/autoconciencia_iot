@@ -91,7 +91,7 @@ export async function add_metodo_modelo2(req: Request, res: Response) {
     var db = new database2();
     var modeloID = req.session!.active_model.modelID;
     var calc = new CalculationMethodQ(-1, "");
-    calc.produces = new IndirectMetric(data.m_calculo.met_id, "", "", "", "");
+    calc.produces = new IndirectMetric(data.m_calculo.met_id, "", "", "");
     calc.implementationResourceType = data.m_calculo.ma_tipo;
     calc.calculationPeriodStart = data.m_calculo.inicio;
     calc.calculationPeriodEnd = data.m_calculo.fin;

@@ -33,4 +33,16 @@ export class Indicator extends Metric {
   set isProducedBy(value: AnalysisModel[]) {
     this._isProducedBy = value;
   }
+
+  public toObjectG() {
+    return {
+      $: {
+        id: this.id,
+        name: this.name,
+        description: this.description,
+        abbreviation: this.abbreviation,
+        perspective: this.perspective,
+      },
+    };
+  }
 }

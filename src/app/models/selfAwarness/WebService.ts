@@ -50,4 +50,18 @@ export class WebService extends ImplementationResource {
   set preexisting(value: boolean) {
     this._preexisting = value;
   }
+
+  public toObjectG() {
+    return {
+      $: {
+        id: this.id,
+        name: this.name,
+        description: this.description,
+        returnDataType: this.returnDataType,
+        endPoint: this.endPoint,
+        instrucctions: this.instrucctions,
+        DataFormatType: this.DataFormatType,
+      },
+    };
+  }
 }

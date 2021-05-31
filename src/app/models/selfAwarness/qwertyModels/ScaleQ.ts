@@ -1,8 +1,8 @@
-import{Scale} from "../Scale";
-import{ SQL_Qwerty } from "../../SQL_Qwerty";
-export class ScaleQ extends Scale implements SQL_Qwerty{
-    toSqlInsert(tag:string[],value:string[]):string{
-var sql=`INSERT INTO
+import { Scale } from "../Scale";
+import { SQL_Qwerty } from "../../SQL_Qwerty";
+export class ScaleQ extends Scale implements SQL_Qwerty {
+  toSqlInsert(tag: string[], value: string[]): string {
+    var sql = `INSERT INTO
         escala (
                 esc_nombre,
                 esc_valores_validos,
@@ -12,13 +12,28 @@ var sql=`INSERT INTO
                 '${this.name}',
                 '${this.validValues}',
                 '${this.scaleType}',
-                '${this.active ? 1: 0}'
+                '${this.active ? 1 : 0}'
 
             )`;
-return sql;
-    }
-   toSqlSelect(tag:string[],value:string[]): string {
-    var sql = `SELECT 
+    return sql;
+  }
+  toSqlSelect(tag: string[], value: string[]): string {
+    var sql = "";
+    if (tag.indexOf("/@/METRIC/@/") != -1) {
+      sql = `	SELECT
+      			es.esc_id as id,
+			es.esc_nombre as name,
+			es.esc_valores_validos as valid_values,
+			es.esc_tipo as tipo
+
+	    	FROM 
+	    		escala es,
+		    	metrica met 
+	    	WHERE
+	    		met.met_id=${value[tag.indexOf("/@/METRIC/@/")]} AND
+	    		met.esc_id=es.esc_id`;
+    } else {
+      sql = `SELECT 
     esc_id as id,
     esc_nombre as name,
     esc_valores_validos as valid_values,
@@ -30,14 +45,15 @@ return sql;
 	 enumeracion enu
 	 WHERE 
 	 es.esc_tipo=enu.enu_id`;
-return sql;
-}
-toSqlDelete(value: string[]): string {
-    var sql=`DELETE FROM escala WHERE esc_id=${this.id} `;
+    }
     return sql;
-}
+  }
+  toSqlDelete(value: string[]): string {
+    var sql = `DELETE FROM escala WHERE esc_id=${this.id} `;
+    return sql;
+  }
 
-toSqlUpdate(tag: string[], value: string[]): string {
+  toSqlUpdate(tag: string[], value: string[]): string {
     var sql = `UPDATE 
     escala
     SET
@@ -47,9 +63,19 @@ toSqlUpdate(tag: string[], value: string[]): string {
     esc_activo=${this.active ? 1 : 0}
   WHERE 
     esc_id=${this.id}`;
-return sql;
-}
-toObjectArray(rows: any): any[] {
-    throw new Error("Method not implemented.");
-}
+    return sql;
+  }
+  toObjectArray(rows: any): any[] {
+    var scale: ScaleQ[] = [];
+    for (var i = 0; i < rows.length; i++) {
+      var aux: ScaleQ = new ScaleQ(
+        rows[i].id,
+        rows[i].name,
+        rows[i].valid_values,
+        rows[i].tipo
+      );
+      scale.push(aux);
+    }
+    return scale;
+  }
 }

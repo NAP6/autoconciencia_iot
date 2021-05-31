@@ -18,13 +18,19 @@ import {
   ArgumentToParameterMappingQ,
   ImplementationResourceQ,
   ParameterQ,
+  DirectMetricQ,
+  IndicatorQ,
+  IndirectMetricQ,
+  ScaleQ,
+  MeasurementUnitQ,
 } from "../../models/selfAwarnessModels";
 
 var modelID: any;
 var routes: any = {
   aspect: {},
   goal: {},
-  analisisModel: {},
+  analisisModel: { p: {}, r: {} },
+  calculationMethod: { p: {}, r: {} },
   decisionCriteria: {},
   action: { p: {}, r: {} },
   simulationscenario: { p: {}, r: {} },
@@ -32,6 +38,9 @@ var routes: any = {
   argumentToParameterMapping: { p: {}, r: {} },
   parameter: { p: {}, r: {} },
   implementationResource: { p: {}, r: {}, i: [] },
+  metric: { p: {}, r: {}, i: [] },
+  scale: { p: {}, r: {}, i: [] },
+  units: { p: {}, r: {}, i: [] },
 };
 
 export async function generate_model(req: Request, res: Response) {
@@ -45,7 +54,8 @@ export async function generate_model(req: Request, res: Response) {
   routes = {
     aspect: {},
     goal: {},
-    analisisModel: {},
+    analisisModel: { p: {}, r: {} },
+    calculationMethod: { p: {}, r: {} },
     decisionCriteria: {},
     action: { p: {}, r: {} },
     simulationscenario: { p: {}, r: {} },
@@ -53,6 +63,9 @@ export async function generate_model(req: Request, res: Response) {
     argumentToParameterMapping: { p: {}, r: {} },
     parameter: { p: {}, r: {} },
     implementationResource: { p: {}, r: {}, i: [] },
+    metric: { p: {}, r: {}, i: [] },
+    scale: { p: {}, r: {}, i: [] },
+    units: { p: {}, r: {}, i: [] },
   };
 
   modelo = modelo.toObjectArray(rows)[0];
@@ -61,7 +74,9 @@ export async function generate_model(req: Request, res: Response) {
   await add_scope(modeloA[Object.keys(modeloA)[0]]);
   await add_decision_criteria(modeloA[Object.keys(modeloA)[0]]);
   await add_ImplementationResource(modeloA[Object.keys(modeloA)[0]]);
+  await add_metric(modeloA[Object.keys(modeloA)[0]]);
   await add_scale(modeloA[Object.keys(modeloA)[0]]);
+  await add_MeasurementUnit(modeloA[Object.keys(modeloA)[0]]);
 
   res.render("generate_model", {
     error: req.flash("error"),
@@ -189,10 +204,40 @@ async function add_PreReflectiveProcess_extras(process, path_process) {
   if (methods.length > 0) {
     process.usesCollectionMethod = [];
     for (var i = 0; i < methods.length; i++) {
-      process.usesCollectionMethod.push(methods[i].toObjectG());
+      var methodG = methods[i].toObjectG();
+      await add_directMetric(
+        methodG,
+        `${path_process}/@usesCollectionMethod.${i}`
+      );
+      process.usesCollectionMethod.push(methodG);
     }
   }
   await add_analisisModel(process, path_process);
+}
+
+async function add_directMetric(method, path_method) {
+  var db = new database2();
+  var metric: DirectMetricQ = new DirectMetricQ(-1, "", "", "");
+  var sql = metric.toSqlSelect(["/@/METHOD/@/"], [method.$.id]);
+  var rows = await db.qwerty(sql);
+  var metric_list: DirectMetricQ[] = metric.toObjectArray(rows);
+  for (var i = 0; i < metric_list.length; i++) {
+    var the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
+    if (the_metric) {
+      the_metric.isProducedBy += ` ${path_method}`;
+    } else {
+      routes["metric"]["r"][metric_list[i].id.toString()] = metric_list[
+        i
+      ].toObjectG();
+      the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
+      the_metric.isProducedBy = `${path_method}`;
+      routes["metric"]["i"].push(the_metric.$.id.toString());
+    }
+    var indx = routes["metric"]["i"].indexOf(the_metric.$.id.toString());
+    var path_metric = `//@containsMetric.${indx}`;
+    routes["metric"]["p"][metric_list[i].id.toString()] = path_metric;
+    method.produces = path_metric;
+  }
 }
 
 async function add_ReflectiveProcess_extras(process, path_process) {
@@ -208,11 +253,38 @@ async function add_ReflectiveProcess_extras(process, path_process) {
     for (var i = 0; i < methods.length; i++) {
       var methodG = methods[i].toObjectG();
       var path_method = `${path_process}/@usesCalculationMethod.${i}`;
+      routes["calculationMethod"]["p"][`${methods[i].id}`] = path_method;
       await add_SimulationScenario(methodG, path_method);
       await add_SimulationVarible(methodG, path_method);
       await add_argumentToParameterMapping(methodG, path_method);
+      await add_IndirectMetric(methodG, path_method);
       process.usesCalculationMethod.push(methodG);
     }
+  }
+}
+
+async function add_IndirectMetric(method, path_method) {
+  var db = new database2();
+  var metric: IndirectMetricQ = new IndirectMetricQ(-1, "", "", "");
+  var sql = metric.toSqlSelect(["/@/METHOD/@/"], [method.$.id]);
+  var rows = await db.qwerty(sql);
+  var metric_list: IndirectMetricQ[] = metric.toObjectArray(rows);
+  for (var i = 0; i < metric_list.length; i++) {
+    var the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
+    if (the_metric) {
+      the_metric.isProducedBy += ` ${path_method}`;
+    } else {
+      routes["metric"]["r"][metric_list[i].id.toString()] = metric_list[
+        i
+      ].toObjectG();
+      the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
+      the_metric.isProducedBy = `${path_method}`;
+      routes["metric"]["i"].push(the_metric.$.id.toString());
+    }
+    var indx = routes["metric"]["i"].indexOf(the_metric.$.id.toString());
+    var path_metric = `//@containsMetric.${indx}`;
+    routes["metric"]["p"][metric_list[i].id.toString()] = path_metric;
+    method.produces = path_metric;
   }
 }
 
@@ -227,12 +299,38 @@ async function add_analisisModel(process, path_process) {
     process.usesAnalysisModel = [];
     for (var i = 0; i < model.length; i++) {
       var new_path = `${path_process}/@usesAnalysisModel.${i}`;
-      routes["analisisModel"][`${model[i].id}`] = new_path;
+      routes["analisisModel"]["p"][`${model[i].id}`] = new_path;
       var modelG = model[i].toObjectG();
       await add_action(modelG, new_path);
       await add_argumentToParameterMapping(modelG, new_path);
+      await add_Indicator(modelG, new_path);
       process.usesAnalysisModel.push(modelG);
     }
+  }
+}
+
+async function add_Indicator(method, path_method) {
+  var db = new database2();
+  var metric: IndicatorQ = new IndicatorQ(-1, "", "", "", "");
+  var sql = metric.toSqlSelect(["/@/METHOD/@/"], [method.$.id]);
+  var rows = await db.qwerty(sql);
+  var metric_list: IndicatorQ[] = metric.toObjectArray(rows);
+  for (var i = 0; i < metric_list.length; i++) {
+    var the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
+    if (the_metric) {
+      the_metric.isProducedBy += ` ${path_method}`;
+    } else {
+      routes["metric"]["r"][metric_list[i].id.toString()] = metric_list[
+        i
+      ].toObjectG();
+      the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
+      the_metric.isProducedBy = `${path_method}`;
+      routes["metric"]["i"].push(the_metric.$.id.toString());
+    }
+    var indx = routes["metric"]["i"].indexOf(the_metric.$.id.toString());
+    var path_metric = `//@containsMetric.${indx}`;
+    routes["metric"]["p"][metric_list[i].id.toString()] = path_metric;
+    method.produces = path_metric;
   }
 }
 
@@ -341,9 +439,11 @@ async function add_argumentToParameterMapping(container, path_container) {
       routes["argumentToParameterMapping"]["r"][`${mapping_list[i].id}`] = mp;
       var path_parameter = await save_and_generate_parameter_route(
         mp,
-        path_maping
+        path_maping,
+        container
       );
       mp.relatesParameter = path_parameter;
+      container.isImplementedBy = path_parameter.split("/@containsP")[0];
       container.containsArgumentToParameterMapping.push(mp);
     }
   }
@@ -439,10 +539,6 @@ async function add_relation_SelfAweranesAspect_Goals(
     }
   }
   routes["aspect"][`${aspect.$.id}`] = path_aspect;
-}
-
-async function add_scale(model: any) {
-  var db = new database2();
 }
 
 async function add_scope(model: any) {
@@ -595,7 +691,7 @@ function add_relation_goal_decisionCriteria(
 async function add_decision_criteria_relationed_analysisModel(model: any) {
   if (!model.containsDecisionCriteria) model.containsDecisionCriteria = [];
   var db = new database2();
-  var list_id_models = Object.keys(routes["analisisModel"]);
+  var list_id_models = Object.keys(routes["analisisModel"]["p"]);
   var decisionCriteria: DecisionCriteriaQ = new DecisionCriteriaQ(-1, "", "");
   for (var i = 0; i < list_id_models.length; i++) {
     var sql = decisionCriteria.toSqlSelect(
@@ -611,10 +707,10 @@ async function add_decision_criteria_relationed_analysisModel(model: any) {
         );
         if (model.containsDecisionCriteria[indx_criteria].isUsedBy) {
           model.containsDecisionCriteria[indx_criteria].isUsedBy +=
-            " " + routes["analisisModel"][list_id_models[i]];
+            " " + routes["analisisModel"]["p"][list_id_models[i]];
         } else {
           model.containsDecisionCriteria[indx_criteria].isUsedBy =
-            " " + routes["analisisModel"][list_id_models[i]];
+            " " + routes["analisisModel"]["p"][list_id_models[i]];
         }
       } else {
         model.containsDecisionCriteria.push(criteria[0].toObjectG());
@@ -623,9 +719,9 @@ async function add_decision_criteria_relationed_analysisModel(model: any) {
           criteria[0].id.toString()
         ] = `//@containsDecisionCriteria.${indx_criteria}`;
         model.containsDecisionCriteria[indx_criteria].isUsedBy =
-          routes["analisisModel"][list_id_models[i]];
+          routes["analisisModel"]["p"][list_id_models[i]];
       }
-      var path_model_list = routes["analisisModel"][list_id_models[i]]
+      var path_model_list = routes["analisisModel"]["p"][list_id_models[i]]
         .replace("//@", "")
         .split("/@")
         .reverse();
@@ -696,7 +792,8 @@ async function add_relation_threshold_action(threshold, path_threshold) {
 
 async function save_and_generate_parameter_route(
   mapping,
-  path_maping
+  path_maping,
+  method
 ): Promise<string> {
   var db = new database2();
   var parameter: ParameterQ = new ParameterQ(-1, "", "", false);
@@ -705,25 +802,24 @@ async function save_and_generate_parameter_route(
   var parameter_element: ParameterQ = parameter.toObjectArray(rows)[0];
   var the_paremeter = routes["parameter"]["r"][parameter_element.id.toString()];
   if (the_paremeter) {
-    console.log("El parametro ya existe");
     the_paremeter.isUsedIn += ` ${path_maping}`;
   } else {
-    console.log("El parametro no existe aun");
     routes["parameter"]["r"][
       parameter_element.id.toString()
     ] = parameter_element.toObjectG();
     the_paremeter = routes["parameter"]["r"][parameter_element.id.toString()];
     the_paremeter.isUsedIn = `${path_maping}`;
   }
-  console.log(the_paremeter);
-  return await save_and_generate_resource_route(the_paremeter);
+  return await save_and_generate_resource_route(the_paremeter, method);
 }
 
-async function save_and_generate_resource_route(parameter): Promise<string> {
+async function save_and_generate_resource_route(
+  parameter,
+  method
+): Promise<string> {
   var db = new database2();
   var resource: ImplementationResourceQ;
   resource = new ImplementationResourceQ(-1, "", "", "");
-  console.log(parameter.$.ordinal);
   var sql = resource.toSqlSelect(["/@/PARAMETER/@/"], [parameter.$.ordinal]);
   var rows = await db.qwerty(sql);
   var resource_element: ImplementationResourceQ;
@@ -746,7 +842,28 @@ async function save_and_generate_resource_route(parameter): Promise<string> {
   var indx = routes["implementationResource"]["i"].indexOf(
     resource_element.id.toString()
   );
-  return `//@containsImplementationResource.${indx}/@containsParameter.${indx_parameter}`;
+  var path_resource = `//@containsImplementationResource.${indx}`;
+  if (method.calculationPeriodStart) {
+    if (the_resource.implementsCalculationMethod) {
+      the_resource.implementsCalculationMethod += ` ${
+        routes["calculationMethod"]["p"][method.$.id]
+      }`;
+    } else {
+      the_resource.implementsCalculationMethod =
+        routes["calculationMethod"]["p"][method.$.id];
+    }
+  } else {
+    if (the_resource.implementsAnalysisModel) {
+      the_resource.implementsAnalysisModel += ` ${
+        routes["analisisModel"]["p"][method.$.id]
+      }`;
+    } else {
+      the_resource.implementsAnalysisModel =
+        routes["analisisModel"]["p"][method.$.id];
+    }
+  }
+
+  return `${path_resource}/@containsParameter.${indx_parameter}`;
 }
 
 async function add_ImplementationResource(model) {
@@ -756,5 +873,87 @@ async function add_ImplementationResource(model) {
     var ip = routes["implementationResource"]["r"][indx_l[i]];
     model.containsImplementationResource.push(ip);
   }
-  console.log(model.containsImplementationResource);
+}
+
+async function add_metric(model) {
+  var indx_l: any[] = routes["metric"]["i"];
+  if (indx_l.length > 0) model.containsMetric = [];
+  for (var i = 0; i < indx_l.length; i++) {
+    var met = routes["metric"]["r"][indx_l[i]];
+    await add_Scale_metric(model, met, routes["metric"]["p"][indx_l[i]]);
+    await add_MeasurementUnit_metric(
+      model,
+      met,
+      routes["metric"]["p"][indx_l[i]]
+    );
+    model.containsMetric.push(met);
+  }
+}
+
+async function add_Scale_metric(model, metric, path_metric) {
+  var db = new database2();
+  var scale: ScaleQ = new ScaleQ(-1, "", "", "");
+  var sql = scale.toSqlSelect(["/@/METRIC/@/"], [metric.$.id]);
+  var rows = await db.qwerty(sql);
+  var scale_list: ScaleQ[] = scale.toObjectArray(rows);
+  for (var i = 0; i < scale_list.length; i++) {
+    var the_scale = routes["scale"]["r"][scale_list[i].id.toString()];
+    if (the_scale) {
+      the_scale.isUsedBy += ` ${path_metric}`;
+    } else {
+      routes["scale"]["r"][scale_list[i].id.toString()] = scale_list[
+        i
+      ].toObjectG();
+      the_scale = routes["scale"]["r"][scale_list[i].id.toString()];
+      the_scale.isUsedBy = `${path_metric}`;
+      routes["scale"]["i"].push(the_scale.$.id.toString());
+    }
+    var indx = routes["scale"]["i"].indexOf(the_scale.$.id.toString());
+    var path_scale = `//@containsScale.${indx}`;
+    routes["scale"]["p"][scale_list[i].id.toString()] = path_scale;
+    metric.isValidatedBy = path_scale;
+  }
+}
+
+async function add_scale(model) {
+  var indx_l: any[] = routes["scale"]["i"];
+  if (indx_l.length > 0) model.containsScale = [];
+  for (var i = 0; i < indx_l.length; i++) {
+    var scal = routes["scale"]["r"][indx_l[i]];
+    model.containsScale.push(scal);
+  }
+}
+
+async function add_MeasurementUnit_metric(model, metric, path_metric) {
+  var db = new database2();
+  var uni: MeasurementUnitQ = new MeasurementUnitQ(-1, "", "", "");
+  var sql = uni.toSqlSelect(["/@/METRIC/@/"], [metric.$.id]);
+  var rows = await db.qwerty(sql);
+  var units_list: MeasurementUnitQ[] = uni.toObjectArray(rows);
+  for (var i = 0; i < units_list.length; i++) {
+    var the_units = routes["units"]["r"][units_list[i].id.toString()];
+    if (the_units) {
+      the_units.isUsedBy += ` ${path_metric}`;
+    } else {
+      routes["units"]["r"][units_list[i].id.toString()] = units_list[
+        i
+      ].toObjectG();
+      the_units = routes["units"]["r"][units_list[i].id.toString()];
+      the_units.isUsedBy = `${path_metric}`;
+      routes["units"]["i"].push(the_units.$.id.toString());
+    }
+    var indx = routes["units"]["i"].indexOf(the_units.$.id.toString());
+    var path_units = `//@containsMeasurementUnit.${indx}`;
+    routes["units"]["p"][units_list[i].id.toString()] = path_units;
+    metric.isValidatedBy = path_units;
+  }
+}
+
+async function add_MeasurementUnit(model) {
+  var indx_l: any[] = routes["units"]["i"];
+  if (indx_l.length > 0) model.containsMeasurementUnit = [];
+  for (var i = 0; i < indx_l.length; i++) {
+    var units = routes["units"]["r"][indx_l[i]];
+    model.containsMeasurementUnit.push(units);
+  }
 }

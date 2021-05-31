@@ -1,5 +1,8 @@
 import { ImplementationResource } from "../ImplementationResource";
 import { SQL_Qwerty } from "../../SQL_Qwerty";
+import { FormulaQ } from "./FormulaQ";
+import { FunctionQ } from "./FunctionQ";
+import { WebServiceQ } from "./WebServiceQ";
 
 export class ImplementationResourceQ
   extends ImplementationResource
@@ -10,22 +13,15 @@ export class ImplementationResourceQ
   toSqlSelect(tag: string[], value: string[]): string {
     if (tag.indexOf("/@/ALL/@/") != -1) return `call get_recurso(${this.id})`;
     else if (tag.indexOf("/@/PARAMETER/@/") != -1) {
-      var sql = `SELECT
-      			ri.ri_id as id,
-			ri.ri_nombre as nombre,
-			ri.ri_descripcion as descripcion,
-			ri.ri_tipo_recurso as tipo_recurso,
-			ri.ri_tipo_dato_salida as tipo_salida,
-			enu.enu_nombre_valor as tipo_salida_nombre
-	    	 FROM
-	    		recursoimplementacion ri,
-	    		parametro par,
-			enumeracion enu
-	    WHERE
-	    par.par_ordinal=${value[tag.indexOf("/@/PARAMETER/@/")]} AND
-	    par.ri_id=ri.ri_id AND
-	    enu.enu_id=ri.ri_tipo_dato_salida`;
-
+      var sql = `call get_recurso((SELECT
+      ri.ri_id as id
+	     FROM
+	     recursoimplementacion ri,
+		     parametro par
+	     WHERE
+	      par.par_ordinal=${value[tag.indexOf("/@/PARAMETER/@/")]} AND
+	       par.ri_id=ri.ri_id))
+	    `;
       return sql;
     }
     var sql = `SELECT 
@@ -54,14 +50,39 @@ export class ImplementationResourceQ
   }
   toObjectArray(rows: any): any[] {
     var implementsResource: ImplementationResourceQ[] = [];
+    rows = rows[0];
     for (var i = 0; i < rows.length; i++) {
-      var aux: ImplementationResourceQ = new ImplementationResourceQ(
-        rows[i].id,
-        rows[i].nombre,
-        rows[i].descripcion,
-        rows[i].tipo_salida_nombre
-      );
-      implementsResource.push(aux);
+      if (rows[i].tipo_recurso == 0) {
+        var aux: FormulaQ = new FormulaQ(
+          rows[i].id,
+          rows[i].nombre,
+          rows[i].descripcion,
+          rows[i].dato_salida,
+          rows[i].expresion
+        );
+        implementsResource.push(aux);
+      } else if (rows[i].tipo_recurso == 1) {
+        var aux2: FunctionQ = new FunctionQ(
+          rows[i].id,
+          rows[i].nombre,
+          rows[i].descripcion,
+          rows[i].dato_salida,
+          rows[i].path_funcion,
+          rows[i].instrucciones
+        );
+        implementsResource.push(aux2);
+      } else {
+        var aux3: WebServiceQ = new WebServiceQ(
+          rows[i].id,
+          rows[i].nombre,
+          rows[i].descripcion,
+          rows[i].dato_salida,
+          rows[i].punto_final,
+          rows[i].instrucciones,
+          rows[i].tipo_formato_dato_salida
+        );
+        implementsResource.push(aux3);
+      }
     }
     return implementsResource;
   }
