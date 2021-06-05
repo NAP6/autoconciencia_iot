@@ -122,6 +122,48 @@ export async function mod_pre_reflective_process(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export async function mod_metodos_modelos(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var comunicacion = req.body.comunicacion;
+    var propiedad = req.body.propiedad;
+    var flujo = req.body.flujo_datos;
+    var metricaDirecta = req.body.metrica_directa;
+    var metricaIndicador = req.body.indicador;
+    var recurso = req.body.recurso;
+    var metodo_recoleccion = req.body.mea_id_reco;
+    var metodo_analisis = req.body.mea_id_anali;
+    var rows = await db.qwerty(`
+		
+		UPDATE
+			metodoaprendizajerazonamiento mea
+	    		SET
+			mea.met_id=${metricaIndicador}
+	    		WHERE
+	    		mea.mea_id=${metodo_analisis};
+						`);
+    /*
+	   *
+	UPDATE
+			metodorecoleccion mr
+	    		SET
+			mr.mr_tipo_comunicacion=${comunicacion},
+			mr.pro_id=${propiedad},
+			mr.flu_id=${flujo}
+	    		WHERE
+	    		mr.mea_id=${metodo_recoleccion};
+UPDATE
+			metodoaprendizajerazonamiento mea
+	    		SET
+			mea.met_id=${metricaDirecta}
+	    		WHERE
+	    		mea.mea_id=${metodo_recoleccion};
+	   * */
+    res.json({ Mensaje: "Se modifico con exito la recoleccion de datos" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 export async function del_pre_reflective_process(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
@@ -187,13 +229,15 @@ export async function get_metodos_recoleccion_analisis(
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.id;
-    var rows = await db.qwerty(`SELECT 
+    var sql = `SELECT 
 		  mea_id as metodo_id,
 		  met_id as metrica_id,
 		  mea_tipo as tipo
 		  FROM
 		   metodoaprendizajerazonamiento
-		  WHERE pa_id=${id}`);
+		  WHERE pa_id=${id}`;
+    var rows = await db.qwerty(sql);
+
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -225,6 +269,26 @@ export async function get_model_analisis(req: Request, res: Response) {
 		  FROM
 		   modeloanalisis
 		  WHERE mea_id=${id}`);
+    res.json(rows);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function get_select_cargar_recurso(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var id = req.body.mea_id;
+    var rows = await db.qwerty(`SELECT
+		rec.ri_id as id,
+		rec.ri_nombre as name
+		FROM
+			mapeoparametros map,
+			parametro par,
+			recursoimplementacion rec
+		WHERE 
+	    		map.mea_id=${id} AND
+	    		par.par_ordinal=map.par_ordinal AND
+	    		rec.ri_id=par.ri_id`);
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

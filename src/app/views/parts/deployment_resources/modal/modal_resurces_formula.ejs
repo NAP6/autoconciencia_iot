@@ -43,10 +43,10 @@
           aria-labelledby="function-tab"
         >
           <ul id="lista_funciones_recursos" class="list-group" style="overflow-y: auto; height: 200px;">
-            <li class="list-group-item"><a onclick="agregar_a_formula('sumar(');">Sumar</a></li>
-                <li class="list-group-item"><a onclick="agregar_a_formula('contar(');">Contar</a></li>
-                <li class="list-group-item"><a onclick="agregar_a_formula('promedio(');">Promedio</a></li>
-                <li class="list-group-item"><a onclick="agregar_a_formula('maximo(');">Maximo</a></li>
+            <li class="list-group-item"><a data-nombre='sumar(' onclick="agregar_a_formula(this, false);">Sumar</a></li>
+                <li class="list-group-item"><a data-nombre='contar(' onclick="agregar_a_formula(this, false);">Contar</a></li>
+                <li class="list-group-item"><a data-nombre='promedio(' onclick="agregar_a_formula(this, false);">Promedio</a></li>
+                <li class="list-group-item"><a data-nombre='maximo(' onclick="agregar_a_formula(this, false);">Maximo</a></li>
             </ul>
         </div>
     </div>

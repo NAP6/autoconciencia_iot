@@ -93,9 +93,11 @@ export {
   get_pre_reflective_process_mod,
   get_last_insert_process,
   mod_pre_reflective_process,
+  mod_metodos_modelos,
   get_metodos_recoleccion_analisis,
   get_recoleccion_datos,
   get_model_analisis,
+  get_select_cargar_recurso,
 } from "./page_contollers/pre_reflective_process";
 export {
   add_reflective_process,

@@ -19,7 +19,7 @@ export class MeasurementUnitQ extends MeasurementUnit implements SQL_Qwerty {
   }
   toSqlSelect(tag: string[], value: string[]): string {
     var sql = "";
-    if (tag.indexOf("/@/METRIC/@/")) {
+    if (tag.indexOf("/@/METRIC/@/")!=-1) {
       sql = `SELECT
 		un.um_id as id,
 		un.um_nombre as name,

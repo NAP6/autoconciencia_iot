@@ -17,7 +17,7 @@ export class MetricQ extends Metric implements SQL_Qwerty {
                 '${this.description}',
                 '${this.abbreviation}',
                 '${value[tag.indexOf("/@/TYPE/@/")]}',
-                ${this.perspective == undefined? null:+this.perspective},
+                ${this.perspective == undefined ? null : +this.perspective},
                 '${this.active ? 1 : 0}',
                 '${value[tag.indexOf("/@/ESCALE/@/")]}',
                 '${value[tag.indexOf("/@/UNIT/@/")]}'
@@ -26,7 +26,19 @@ export class MetricQ extends Metric implements SQL_Qwerty {
     return sql;
   }
   toSqlSelect(tag: string[], value: string[]): string {
-	  if (
+    if (tag.indexOf("/@/METRIC/@/") != -1) {
+      var sql = `SELECT
+		map.md_id as id
+		FROM
+		metrica met,
+		mapeoparametros map
+		WHERE
+		met.met_id=${value[tag.indexOf("/@/METRIC/@/")]} AND
+	    	map.met_id=met.met_id`;
+      console.log(sql);
+	    return sql;
+    }
+    if (
       tag.indexOf("/@/ASPECTID/@/") != -1 &&
       tag.indexOf("/@/TYPE/@/") != -1
     ) {
@@ -38,8 +50,8 @@ export class MetricQ extends Metric implements SQL_Qwerty {
 aspectoautoconsciencia_metrica asp_met
   WHERE 
      asp_met.aa_id=${
-      value[tag.indexOf("/@/ASPECTID/@/")]
-    } AND asp_met.met_id=met.met_id AND met.met_tipo=${
+       value[tag.indexOf("/@/ASPECTID/@/")]
+     } AND asp_met.met_id=met.met_id AND met.met_tipo=${
         value[tag.indexOf("/@/TYPE/@/")]
       }`;
       return sql;

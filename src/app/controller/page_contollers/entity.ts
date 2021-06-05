@@ -31,7 +31,7 @@ export async function entitys(req: Request, res: Response) {
     var rows: any;
     var flag = false;
 
-    if (seleccion == "Entidades Físicas") {
+    if (seleccion == "Entidades Fisicas") {
       rows = await db.qwerty(
         new PhysicalEntityQ(-1, "", "").toSqlSelect(
           ["/@/MODEL/@/", "/@/SYSTEM/@/"],

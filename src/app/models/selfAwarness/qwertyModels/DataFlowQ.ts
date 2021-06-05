@@ -1,4 +1,4 @@
-import {DataFlow } from "../DataFlow";
+import { DataFlow } from "../DataFlow";
 import { SQL_Qwerty } from "../../SQL_Qwerty";
 export class DataFlowQ extends DataFlow implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {

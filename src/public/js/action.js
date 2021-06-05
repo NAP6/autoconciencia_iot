@@ -10,7 +10,7 @@ function post_api(url = "", data, fun1, fun2) {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
-      "Content-type": "application/json; charset=UTF-8",
+      "Content-type": "application/json; charset=UTF-7",
     },
   })
     .then((response) => response.json())
@@ -538,10 +538,11 @@ function eliminar_parametro(tipo) {
   }
 }
 
-function agregar_a_formula(nuevo) {
+function agregar_a_formula(nuevo, parametro = true) {
   nuevo = nuevo.dataset.nombre;
   var text = document.getElementById("area_de_nueva_formula");
-  text.value += "[" + nuevo + "]";
+  if (parametro) text.value += "[" + nuevo + "]";
+  else text.value += nuevo;
   text.focus();
 }
 
@@ -3229,10 +3230,12 @@ function generar_flujo_datos_select() {
   var comunicacion = seleccione.options[seleccione.selectedIndex].text;
   var porpiedadSeleccionada = document.getElementById("proiedad_recoleccion")
     .value;
-  console.log(comunicacion);
+  if (comunicacion == "SÍNCRONA") {
+    comunicacion = "SINCRONA";
+  }
   if (seleccione != "Seleccione.." && porpiedadSeleccionada != "-6") {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_data_flow/",
+      "http://autoconsciencia.ddns.net:3000/api/get_data_flow",
       {
         comunicacion: comunicacion,
         propiedad: porpiedadSeleccionada,
@@ -3381,6 +3384,7 @@ function verificar_seleccion_sujeto_categoria(categoria, IdSujeto) {
   var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
 
   if (IdSujeto && categoria != "Seleccione..") {
+    categoria = sin_tilde(categoria);
     data = {
       valorS: categoria,
       systemID: IdSujeto,
@@ -5051,12 +5055,16 @@ function guardar_procesos_reflexivos() {
     return false;
   }
 }
-if (document.getElementById("tabla_proceso_reflexivo"))
+function cargar_tabla_procesos_reflexivos() {
   consultar_api(
     "http://autoconsciencia.ddns.net:3000/api/get_reflective_process",
     cargar_procesos_reflexivos_table,
     error_procesos_reflexivos_table
   );
+}
+if (document.getElementById("tabla_proceso_reflexivo")) {
+  cargar_tabla_procesos_reflexivos();
+}
 
 function cargar_procesos_reflexivos_table(json) {
   res = "";
@@ -5178,12 +5186,8 @@ function guardar_proceso_reflexivo_boton() {
       alert("No se ha podido guardar, verifique todos los campos");
     }
   } else if (cont_paso_reflexivos == 3) {
+    cargar_tabla_procesos_reflexivos();
     history.back();
-    consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_reflexive",
-      cargar_procesos_reflexivos_table,
-      error_procesos_reflexivos_table
-    );
   }
 }
 
@@ -5947,7 +5951,11 @@ function cargar_select_criterios_proceso_modificar(json) {
     ope.appendChild(option);
   });
 }
+var metodo_recoleccion_modificar_id = undefined;
+var modelo_analisis_modificar_id = undefined;
 function cargar_selects_metodo_analisis_recoleccion(json) {
+  metodo_recoleccion_modificar_id = json[0].metodo_id;
+  modelo_analisis_modificar_id = json[1].metodo_id;
   document.getElementById("metrica_directa_modificar").value =
     json[0].metrica_id;
   document.getElementById("indicador_modelo_modificar").value =
@@ -5968,27 +5976,84 @@ function cargar_selects_metodo_analisis_recoleccion(json) {
       console.log(res);
     }
   );
+  cargar_nombre_recurso_select(json[1].metodo_id);
 }
-var flujo=undefined;
+function cargar_nombre_recurso_select(mea_id) {
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_select_cargar_recurso",
+    { mea_id: mea_id },
+    llenar_select_nombre_recurso,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+function llenar_select_nombre_recurso(json) {
+  if (json.length == 0) {
+    var recurso = document.getElementById("tipo_recurso_modificar").value;
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      {
+        tipo: recurso,
+      },
+      cargar_select_recurso_modificar,
+      (json) => {
+        console.log(json);
+      }
+    );
+  } else {
+    console.log(json[0].name);
+    añadir_select_recurso_modificar(json);
+  }
+}
+function cargar_select_recurso_modificar(json) {
+  var ope = document.createElement("select");
+  var opcion = document.createElement("option");
+  opcion.innerHTML = "Seleccione ..";
+  ope.innerHTML = "";
+  ope.appendChild(opcion);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+  document.getElementById("recurso_modificar").disabled = false;
+  document.getElementById("recurso_modificar").innerHTML = ope.innerHTML;
+}
+function añadir_select_recurso_modificar(json) {
+  var ope = document.createElement("select");
+  var opcion = document.createElement("option");
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.name;
+    ope.appendChild(option);
+  });
+  document.getElementById("recurso_modificar").innerHTML = ope.innerHTML;
+}
+var flujo = undefined;
 function get_select_recoleccion_datos(json) {
   document.getElementById("tipo_comunicacion_modificar").value =
     json[0].comunicacion;
   document.getElementById("proiedad_recoleccion_modificar").value =
     json[0].propiedad;
-	flujo=json[0].flujo;
+  flujo = json[0].flujo;
   cargar_flujo_datos_modificar();
 }
 function get_select_modelo_analisis(json) {
   console.log(json);
-  //document.getElementById("").value=json[0].;
+  document.getElementById("criterio_de_decision_modificar").value =
+    json[0].criterio;
 }
 function cargar_flujo_datos_modificar() {
   document.getElementById("flujo_de_datos_modificar").disabled = false;
   var pro = document.getElementById("proiedad_recoleccion_modificar").value;
   var comunicacion = document.getElementById("tipo_comunicacion_modificar");
   var seleccion = comunicacion.options[comunicacion.selectedIndex].text;
-	console.log(seleccion);
-	console.log(pro);
+  if (seleccion == "SÍNCRONA") {
+    seleccion = "SINCRONA";
+  }
   if (seleccion != "Seleccione.." && pro != "-6") {
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_data_flow/",
@@ -6017,19 +6082,18 @@ function cargar_select_flujo_datos_modificar(json) {
   seleccione.innerHTML = "Seleccione..";
   seleccione.value = "-6";
   ope.appendChild(seleccione);
-  console.log(json);
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
     option.innerHTML = element.descripcion;
     ope.appendChild(option);
   });
-	if(flujo==undefined){
-	ope.value=-6;
-	}else{
-	ope.value=flujo;
-	}
-	}
+  if (flujo == undefined) {
+    ope.value = -6;
+  } else {
+    ope.value = flujo;
+  }
+}
 var saltar_paso_pre = 1;
 
 function saltar_proceso_pre_reflexivo_boton() {
@@ -6217,7 +6281,92 @@ function mensaje_errorModificarproceso_pre_reflexivo(error) {
 }
 
 function modificar_modelos_metodos() {
-  return true;
+  var comunicacion = document.getElementById("tipo_comunicacion_modificar")
+    .value;
+  var propiedad = document.getElementById("proiedad_recoleccion_modificar")
+    .value;
+  var flujo_datos = document.getElementById("flujo_de_datos_modificar").value;
+  var metrica_directa = document.getElementById("metrica_directa_modificar")
+    .value;
+  var indicador = document.getElementById("indicador_modelo_modificar").value;
+  var recurso = document.getElementById("recurso_modificar").value;
+  if (
+    comunicacion != -6 &&
+    propiedad != -6 &&
+    flujo_datos != -6 &&
+    metrica_directa != -6 &&
+    indicador != -6 &&
+    recurso != -6
+  ) {
+    var data = {
+      comunicacion: comunicacion,
+      propiedad: propiedad,
+      flujo_datos: flujo_datos,
+      metrica_directa: metrica_directa,
+      indicador: indicador,
+      recurso: recurso,
+      mea_id_reco: metodo_recoleccion_modificar_id,
+      mea_id_anali: modelo_analisis_modificar_id,
+    };
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/mod_metodos_modelos",
+      data,
+      metodos_modelos_modificados_exito,
+      (res) => {
+        console.log(res);
+      }
+    );
+    return true;
+  } else {
+    alert("Debe seleccionar todos los campos");
+    return false;
+  }
+}
+
+function metodos_modelos_modificados_exito(json) {
+  document.getElementById("tipo_comunicacion_modificar").disabled = true;
+  document.getElementById("proiedad_recoleccion_modificar").disabled = true;
+  document.getElementById("flujo_de_datos_modificar").disabled = true;
+  document.getElementById("metrica_directa_modificar").disabled = true;
+  document.getElementById("indicador_modelo_modificar").disabled = true;
+  document.getElementById("recurso_modificar").disabled = true;
+  document.getElementById("mapeo_parametros_btn_modificar").disabled = false;
+  document.getElementById(
+    "btn-recomendaciones_model_modificar"
+  ).disabled = false;
+}
+function abrirModalMapeoParametros_modificar() {
+  document.getElementById("tabla_mapeo_parametros").innerHTML = "";
+  var id = document.getElementById("recurso_modificar").value;
+  if (id) {
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+      {
+        id: id,
+      },
+      cargar_modal_mapeo_parametros,
+      (res) => {
+        console.log(res);
+      }
+    );
+    $("#modal_mapeo_parametros").modal("show");
+  } else {
+    alert("Debe seleccionar un recurso");
+  }
+}
+function abrirModalRecomendaciones_modificar() {
+  var seleccionCriterio = document.getElementById(
+    "criterio_de_decision_modificar"
+  ).value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    { criterio: seleccionCriterio },
+    cargar_lista_umbrales_proceso,
+    (res) => {
+      console.log(res);
+    }
+  );
+  $("#modal_activos_procesos").modal("show");
 }
 
 function cargar_select_tipo_comunicacion_modificar() {
@@ -6485,10 +6634,11 @@ function visibilidad_variables_valores(id) {
 }
 
 function consultar_tabla_valores_variables(id) {
-  post_api(
+  console.log(metodo_calculo);
+	post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_simulation_value/",
     {
-      escenario: id,
+      variable: id,
       mea_id: metodo_calculo,
     },
     cargar_variables_valor_table,
@@ -7906,8 +8056,7 @@ function get_aspectos_objetivos(id) {
     { id: id },
     cargar_select_aspectos_objetivos,
     (res) => {
-      /*console.log(res);*/
-      console.log("Eroooooorrrrrrr Aqui ???????? ");
+      console.log(res);
     }
   );
 }
@@ -7948,6 +8097,8 @@ $("#CategoriaEntidadesAspectos").change(function () {
   limpiar2.innerHTML = "";
   var seleccion = document.getElementById("CategoriaEntidadesAspectos");
   var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
+
+	tipo_valor=sin_tilde(tipo_valor);
   data = {
     valorS: tipo_valor,
     systemID: systemID,
@@ -8922,4 +9073,13 @@ function cargar_objetos_procesos_reflexivos_modificar(json) {
     li.innerHTML = element.nombre;
     ul.appendChild(li);
   });
+}
+
+function sin_tilde(texto) {
+  texto = texto.replace("á", "a");
+  texto = texto.replace("é", "e");
+  texto = texto.replace("í", "i");
+  texto = texto.replace("ó", "o");
+  texto = texto.replace("ú", "u");
+  return texto;
 }

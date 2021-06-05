@@ -151,9 +151,11 @@ export default function (app: Application) {
     "/api/get_metodos_recoleccion_analisis/",
     rt.get_metodos_recoleccion_analisis
   );
+  app.post("/api/get_select_cargar_recurso", rt.get_select_cargar_recurso);
   app.post("/api/get_recoleccion_datos", rt.get_recoleccion_datos);
-	app.post("/api/get_model_analisis",rt.get_model_analisis);
+  app.post("/api/get_model_analisis", rt.get_model_analisis);
   app.post("/api/mod_pre_reflective_process", rt.mod_pre_reflective_process);
+  app.post("/api/mod_metodos_modelos", rt.mod_metodos_modelos);
   app.get("/api/get_last_insert_process", rt.get_last_insert_process);
   //Metodo de aprendizaje procesos pre relfexivos
 

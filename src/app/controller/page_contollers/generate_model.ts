@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { database2 } from "../../data/database2";
 import { Goal } from "../../models/selfAwarness/Goal";
+import { DataFlowQ } from "../../models/selfAwarness/qwertyModels/DataFlowQ";
+import { MetricQ } from "../../models/selfAwarness/qwertyModels/MetricQ";
 import {
   CollectionMethodQ,
   GoalQ,
@@ -27,8 +29,9 @@ import {
 
 var modelID: any;
 var routes: any = {
-  aspect: {},
+  aspect: { p: {}, r: {} },
   goal: {},
+  collection: { p: {}, r: {} },
   analisisModel: { p: {}, r: {} },
   calculationMethod: { p: {}, r: {} },
   decisionCriteria: {},
@@ -52,8 +55,9 @@ export async function generate_model(req: Request, res: Response) {
   );
 
   routes = {
-    aspect: {},
+    aspect: { p: {}, r: {} },
     goal: {},
+    collection: { p: {}, r: {} },
     analisisModel: { p: {}, r: {} },
     calculationMethod: { p: {}, r: {} },
     decisionCriteria: {},
@@ -77,6 +81,7 @@ export async function generate_model(req: Request, res: Response) {
   await add_metric(modeloA[Object.keys(modeloA)[0]]);
   await add_scale(modeloA[Object.keys(modeloA)[0]]);
   await add_MeasurementUnit(modeloA[Object.keys(modeloA)[0]]);
+  await add_dataFlow_relation(modeloA[Object.keys(modeloA)[0]]);
 
   res.render("generate_model", {
     error: req.flash("error"),
@@ -205,6 +210,10 @@ async function add_PreReflectiveProcess_extras(process, path_process) {
     process.usesCollectionMethod = [];
     for (var i = 0; i < methods.length; i++) {
       var methodG = methods[i].toObjectG();
+      routes["collection"]["p"][
+        methods[i].id.toString()
+      ] = `${path_process}/@usesCollectionMethod.${i}`;
+      routes["collection"]["r"][methods[i].id.toString()] = methodG;
       await add_directMetric(
         methodG,
         `${path_process}/@usesCollectionMethod.${i}`
@@ -213,6 +222,35 @@ async function add_PreReflectiveProcess_extras(process, path_process) {
     }
   }
   await add_analisisModel(process, path_process);
+}
+
+async function add_relation_method_property(property, path_property) {
+  var db = new database2();
+  var sql = `SELECT
+		mea.mea_id as id
+		FROM
+		propiedad pro,
+		metodorecoleccion mea
+		WHERE
+		pro.pro_id=${property.$.id} AND
+		mea.pro_id=pro.pro_id`;
+  var rows = await db.qwerty(sql);
+  for (var i = 0; i < rows.length; i++) {
+    if (property.isCollectedBy) {
+      property.isCollectedBy +=
+        " " + routes["collection"]["p"][rows[i].id.toString()];
+    } else {
+      property.isCollectedBy = routes["collection"]["p"][rows[i].id.toString()];
+    }
+    if (routes["collection"]["r"][rows[i].id.toString()].collectsProperty) {
+      routes["property"]["r"][rows[i].id.toString()].collectsProperty +=
+        " " + path_property;
+    } else {
+      routes["collection"]["r"][
+        rows[i].id.toString()
+      ].collectsProperty = path_property;
+    }
+  }
 }
 
 async function add_directMetric(method, path_method) {
@@ -538,7 +576,8 @@ async function add_relation_SelfAweranesAspect_Goals(
       );
     }
   }
-  routes["aspect"][`${aspect.$.id}`] = path_aspect;
+  routes["aspect"]["p"][`${aspect.$.id}`] = path_aspect;
+  routes["aspect"]["r"][`${aspect.$.id}`] = aspect;
 }
 
 async function add_scope(model: any) {
@@ -556,6 +595,19 @@ async function recursive_scope(scope_list, path, model) {
       actual_path,
       model
     );
+    if (scope_list[i].$.id == "25") {
+      console.log(scope_list[i]);
+    }
+    if (scope_list[i].hasProperty) {
+      console.log("#### ENTRAAAAAAA");
+      var propertys = scope_list[i].hasProperty;
+      for (var j = 0; j < propertys.length; j++) {
+        await add_relation_method_property(
+          propertys[j],
+          `${actual_path}/@hasProperty.${j}`
+        );
+      }
+    }
     if (scope_list[i].containsSubPhysicalEntity) {
       await recursive_scope(
         scope_list[i].containsSubPhysicalEntity,
@@ -602,13 +654,13 @@ async function recursive_relation_scope_selfAweranessAspect(
   scope_path,
   model
 ) {
-  var route = routes["aspect"][`${aspect_id}`];
+  var route = routes["aspect"]["p"][`${aspect_id}`];
   route = route.substring(3, route.length);
   route = route.split("/@").reverse();
   var aspect_obj = recursive_element(route, model);
   aspect_obj.belongsTo = scope_path;
-  if (scope.has) scope.has += " " + routes["aspect"][`${aspect_id}`];
-  else scope.has = routes["aspect"][`${aspect_id}`];
+  if (scope.has) scope.has += " " + routes["aspect"]["p"][`${aspect_id}`];
+  else scope.has = routes["aspect"]["p"][`${aspect_id}`];
 }
 
 function recursive_element(arr_path, sub_model) {
@@ -886,6 +938,11 @@ async function add_metric(model) {
       met,
       routes["metric"]["p"][indx_l[i]]
     );
+    await add_relation_metric_mapping(met, routes["metric"]["p"][indx_l[i]]);
+    await add_metric_relation_selfAwarenessAspect(
+      met,
+      routes["metric"]["p"][indx_l[i]]
+    );
     model.containsMetric.push(met);
   }
 }
@@ -955,5 +1012,83 @@ async function add_MeasurementUnit(model) {
   for (var i = 0; i < indx_l.length; i++) {
     var units = routes["units"]["r"][indx_l[i]];
     model.containsMeasurementUnit.push(units);
+  }
+}
+
+async function add_relation_metric_mapping(metric, path_metric) {
+  var db = new database2();
+  var met: MetricQ = new MetricQ(-1, "", "", "", "");
+  var sql = met.toSqlSelect(["/@/METRIC/@/"], [metric.$.id]);
+  var rows = await db.qwerty(sql);
+  for (var i = 0; i < rows.length; i++) {
+    if (routes["argumentToParameterMapping"]["r"][rows[i].id]) {
+      if (metric.isUsedIn)
+        metric.isUsedIn +=
+          " " + routes["argumentToParameterMapping"]["p"][rows[i].id];
+      else
+        metric.isUsedIn = routes["argumentToParameterMapping"]["p"][rows[i].id];
+      routes["argumentToParameterMapping"]["r"][
+        rows[i].id
+      ].relatesMetric = path_metric;
+    } else
+      console.log(
+        `El mapeo con id ${rows[i].id}, no esta guardado, y por lo tanto no se puede establecer la relacion con la metrica de id ${metric.$.id}`
+      );
+  }
+}
+
+async function add_dataFlow_relation(model) {
+  var db = new database2();
+  for (var i = 0; i < model.containsDataFlow.length; i++) {
+    var sql = `Select 
+    		met.mea_id as id
+	       FROM
+	       metodorecoleccion met,
+	       flujodatos flu
+	       WHERE
+	       flu.flu_id = ${model.containsDataFlow[i].$.id} AND
+		met.flu_id=flu.flu_id`;
+    var rows = await db.qwerty(sql);
+    for (var j = 0; j < rows.length; j++) {
+      if (model.containsDataFlow[i].support) {
+        model.containsDataFlow[i].support +=
+          " " + routes["collection"]["p"][rows[j].id.toString()];
+      } else {
+        model.containsDataFlow[i].support =
+          routes["collection"]["p"][rows[j].id.toString()];
+      }
+      if (routes["collection"]["r"][rows[j].id.toString()].isSupported) {
+        routes["collection"]["r"][
+          rows[j].id.toString()
+        ].isSupported += ` //@containsDataFlow.${i}`;
+      } else {
+        routes["collection"]["r"][
+          rows[j].id.toString()
+        ].isSupported = `//@containsDataFlow.${i}`;
+      }
+    }
+  }
+}
+async function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
+  var db = new database2();
+  var sql = `SELECT
+		asp.aa_id as id
+		FROM
+		aspectoautoconsciencia_metrica asp
+		WHERE
+		asp.met_id=${metric.$.id}`;
+  var rows = await db.qwerty(sql);
+  for (var i = 0; i < rows.length; i++) {
+    if (metric.evaluates) {
+      metric.evaluates += " " + routes["aspect"]["p"][rows[i].id.toString()];
+    } else {
+      metric.evaluates = routes["aspect"]["p"][rows[i].id.toString()];
+    }
+    if (routes["aspect"]["r"][rows[i].id.toString()].isEvaluated) {
+      routes["aspect"]["r"][rows[i].id.toString()].isEvaluated +=
+        " " + path_metric;
+    } else {
+      routes["aspect"]["r"][rows[i].id.toString()].isEvaluated = path_metric;
+    }
   }
 }
