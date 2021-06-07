@@ -187,14 +187,15 @@ export async function add_mapeo_parametros(req: Request, res: Response) {
 	      		'${element.par_ordinal}', 
 	      		'${element.mea_id}',
 	      		'${element.mp_tipo_entrada}',
-	      		'${element.met_id}',
-	      		${element.vs_id == undefined? "NULL": "'" + element.vs_id + "'"},
+	      		${element.met_id == undefined ? "NULL" : element.met_id},
+	      		${element.vs_id == undefined ? "NULL" : element.vs_id},
 	      		${element.md_id == undefined ? "NULL" : "'" + element.md_id + "'"}),`;
     });
     var sql =
       `INSERT INTO 
     		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
 		VALUES ` + stryaux.substring(0, stryaux.length - 1);
+	  console.log(sql);
 
     var db = new database2();
     db.qwerty(sql);

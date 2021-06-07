@@ -4377,7 +4377,6 @@ function procesos_pre_reflexivos_guardados_exito(json) {
   document.getElementById("id_proceso_pre_reflexivo").value = json.insertId;
 }
 function procesos_reflexivos_guardados_exito(json) {
-  console.log("Exito");
   document.getElementById("id_proceso_reflexivo").value = json.insertId;
 }
 
@@ -4597,20 +4596,9 @@ function Guagar_nuevo_Mapeo() {
       met_id: element.querySelector(
         "td#argumento_entrada_fila_parametros select"
       ).value,
-      mea_id: mea_id_rec[0],
-    };
-    var aux3 = {
-      nombre: aux2.nombre,
-      par_ordinal: aux2.par_ordinal,
-      mp_tipo_entrada: aux2.mp_tipo_entrada,
-      opcional: aux2.opcional,
-      tipoMapeo: aux2.tipoMapeo,
-      met_id: aux2.met_id,
       mea_id: mea_id_rec[1],
     };
-    console.log(aux2);
     aux.push(aux2);
-    aux.push(aux3);
   });
 
   post_api(
@@ -4656,7 +4644,6 @@ function Abrir_limpiar_modal_proceso_reflexivo() {
   document.getElementById("tipo_recurso_modelos_reflexivos").selectedIndex =
     "0";
 
-  document.getElementById("nombre_proceso_reflexivo").disabled = false;
   document.getElementById("descripcion_proceso_reflexivo").disabled = false;
   document.getElementById("inicio_del_periodo_reflexivo").disabled = false;
   document.getElementById("fin_del_periodo_reflexivo").disabled = false;
@@ -5272,6 +5259,9 @@ function mensajeCorrectoGuardarMetodosReflexivos(json) {
   document.getElementById("mapeo_parametros_modelo").disabled = false;
   document.getElementById("btn-recomendaciones_model").disabled = false;
   document.getElementById("variables_simulacion").disabled = false;
+  document.getElementById("id_metodo_aprendizaje_modelos").value = json.join(
+    "-"
+  );
 }
 
 function errormensajeCorrectoGuardarMetodosReflexivos(error) {
@@ -5595,7 +5585,6 @@ function cargar_select_mapeo_tipo_metodos_2(json) {
 }
 
 function cargar_metricas_tipo_mapeo_metodo(elemento) {
-  console.log(elemento.value);
   if (elemento.value == 24) {
     cargar_select_mapeo_variables_simulacion();
 
@@ -5658,11 +5647,60 @@ function cargar_variables_simulacion_select_modal_mapeo(json) {
 function error_cargar_select_mapeo_variables_simulacion(error) {
   console.log(error);
 }
+function Guadar_nuevo_mapeo_metodos() {
+  var nombreP = document.getElementsByName("tr_fila_parametros");
+  var aux = [];
+  var mea_id_rec = document
+    .getElementById("id_metodo_aprendizaje_modelos")
+    .value.split("-");
+  Array.from(nombreP).forEach((element) => {
+    var aux2 = {
+      nombre: element.querySelector("td#nombre_fila_parametros_metodos")
+        .innerHTML,
+      par_ordinal: element.querySelector("td#id_fila_parametros_metodos")
+        .innerHTML,
+      mp_tipo_entrada: element.querySelector(
+        "td#tipo_dato_fila_parametros_metodos"
+      ).dataset.id,
+      opcional: element.querySelector("td#opcional_fila_parametros_metodos")
+        .innerHTML,
+      tipoMapeo: element.querySelector(
+        "td#tipo_mapeo_fila_parametros_metodos select"
+      ).value,
+      met_id: element.querySelector(
+        "td#argumento_entrada_fila_parametros_metodos select"
+      ).value,
+      mea_id: mea_id_rec[0],
+      vs_id: undefined,
+    };
+    aux.push(aux2);
+  });
+  console.log(aux[0].par_ordinal);
+  for (var i = 0; i < aux.length; i++) {
+    if (
+      document.getElementById("tipo_mapeo_select_" + aux[i].par_ordinal)
+        .value == 24
+    ) {
+      aux[i].vs_id = aux[i].met_id;
+      aux[i].met_id = undefined;
+    }
+  }
 
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/add_mapeo_parametros/",
+    aux,
+    mensaje_correcto_envio_mapeo_metodos,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
 function cancelar_mapeo_parametros_metodos() {
   $("#modal_mapeo_parametros_metodos").modal("hide");
 }
-
+function mensaje_correcto_envio_mapeo_metodos() {
+  $("#modal_mapeo_parametros_metodos").modal("hide");
+}
 //Mapeo Parametros Modelos
 
 function abrirMapeoParametros_modelos() {
@@ -5697,7 +5735,6 @@ function cargar_modal_mapeo_parametros_modelos(json) {
     if (element._active) {
       var tr = document.createElement("tr");
       tr.setAttribute("name", "tr_fila_parametros");
-      console.log("llega al tr xd");
       var id = document.createElement("td");
       id.id = "id_fila_parametros_modelos";
       tr.appendChild(id);
@@ -5757,7 +5794,6 @@ function cargar_modal_mapeo_parametros_modelos(json) {
 
 function cargar_select_mapeo_tipo_modelos(json) {
   var select = document.getElementsByName("tipo_mapeo_select_modelos");
-  console.log(select);
   Array.from(select).forEach((element) => {
     json.forEach((ele) => {
       var option = document.createElement("option");
@@ -5797,11 +5833,51 @@ function cargar_select_argumento_entrada_modelos(json) {
     select.appendChild(option);
   });
 }
+function Guadar_nuevo_mapeo_modelos() {
+  var nombreP = document.getElementsByName("tr_fila_parametros");
+  var aux = [];
+  var mea_id_rec = document
+    .getElementById("id_metodo_aprendizaje_modelos")
+    .value.split("-");
+  Array.from(nombreP).forEach((element) => {
+    var aux2 = {
+      nombre: element.querySelector("td#nombre_fila_parametros_modelos")
+        .innerHTML,
+      par_ordinal: element.querySelector("td#id_fila_parametros_modelos")
+        .innerHTML,
+      mp_tipo_entrada: element.querySelector(
+        "td#tipo_dato_fila_parametros_modelos"
+      ).dataset.id,
+      opcional: element.querySelector("td#opcional_fila_parametros_modelos")
+        .innerHTML,
+      tipoMapeo: element.querySelector(
+        "td#tipo_mapeo_fila_parametros_modelos select"
+      ).value,
+      met_id: element.querySelector(
+        "td#argumento_entrada_fila_parametros_modelos select"
+      ).value,
+      mea_id: mea_id_rec[1],
+    };
+    aux.push(aux2);
+  });
+  console.log(aux);
 
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/add_mapeo_parametros/",
+    aux,
+    mensaje_correcto_envio_mapeo_modelos,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
 function cancelar_mapeo_parametros_modelos() {
   $("#modal_mapeo_parametros_modelos").modal("hide");
 }
-
+function mensaje_correcto_envio_mapeo_modelos(json) {
+  $("#modal_mapeo_parametros_modelos").modal("hide");
+  document.getElementById("mapeo_parametros_modelo").disabled = true;
+}
 //Modificar procesos
 
 function modificar_informacion_boton(id) {
@@ -6635,7 +6711,7 @@ function visibilidad_variables_valores(id) {
 
 function consultar_tabla_valores_variables(id) {
   console.log(metodo_calculo);
-	post_api(
+  post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_simulation_value/",
     {
       variable: id,
@@ -8098,7 +8174,7 @@ $("#CategoriaEntidadesAspectos").change(function () {
   var seleccion = document.getElementById("CategoriaEntidadesAspectos");
   var tipo_valor = seleccion.options[seleccion.selectedIndex].text;
 
-	tipo_valor=sin_tilde(tipo_valor);
+  tipo_valor = sin_tilde(tipo_valor);
   data = {
     valorS: tipo_valor,
     systemID: systemID,
