@@ -4024,27 +4024,23 @@ function cargarDespuesdeEliminarAcciones() {
 function modificarAccionesUmbrales() {
   var radio = document.getElementsByName("accion_seleccionada");
   var id;
-  var name;
   var descripcion;
   var activo;
   radio.forEach((elem) => {
     if (elem.checked) {
       id = elem.dataset.id;
-      name = elem.dataset.name;
       descripcion = elem.dataset.description;
       activo = elem.dataset.active == 1;
       return;
     }
   });
-  if (!!id && !!name && !!descripcion) {
+  if (!!id && !!descripcion) {
     $("#modal_activos_procesos").modal("hide");
     document.getElementById("id_accion_umbral_modificar").value = id;
-    document.getElementById("nombre_accion_umbral_modificar").value = name;
     document.getElementById(
       "descripcion_accion_umbral_modificar"
     ).value = descripcion;
     document.getElementById("activo_accion_umbral_modificar").checked = activo;
-
     $("#modal_modificar_accion_umbral").modal("show");
   } else alert("Debe seleccionar un elemento para modificar");
 }
@@ -4052,7 +4048,6 @@ function modificarAccionesUmbrales() {
 function guardarModificacionAccionesUmbrales() {
   var data = {
     id: document.getElementById("id_accion_umbral_modificar").value,
-    name: document.getElementById("nombre_accion_umbral_modificar").value,
     description: document.getElementById("descripcion_accion_umbral_modificar")
       .value,
     active: document.getElementById("activo_accion_umbral_modificar").checked,
@@ -4643,7 +4638,6 @@ function Abrir_limpiar_modal_proceso_reflexivo() {
   document.getElementById("metrica_indirecta_reflexivos").selectedIndex = "0";
   document.getElementById("tipo_recurso_modelos_reflexivos").selectedIndex =
     "0";
-
   document.getElementById("descripcion_proceso_reflexivo").disabled = false;
   document.getElementById("inicio_del_periodo_reflexivo").disabled = false;
   document.getElementById("fin_del_periodo_reflexivo").disabled = false;
@@ -7135,19 +7129,18 @@ function cargar_sujetos_activos_procesos_modificar_reflexivos(json) {
 function agregarAccionesUmbralesReflexivos() {
   $("#modal_agregar_accion_proceso_reflexivo").modal("show");
   $("#modal_activos_procesos_reflexivos").modal("hide");
-  document.getElementById("nombre_accion_umbral_reflexivo").value = "";
   document.getElementById("descripcion_accion_umbral_reflexivo").value = "";
 }
 
 function guardarAccionUmbralReflexivos() {
   data = {
-    name: document.getElementById("nombre_accion_umbral_reflexivo").value,
     description: document.getElementById("descripcion_accion_umbral_reflexivo")
       .value,
     umbral: UmbralId,
     mea_id: modelo_analisis_reflexivos,
   };
-  if (!!data.name && !!data.description) {
+  console.log(data);
+  if (!!data.description) {
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/add_action",
       data,
@@ -7156,32 +7149,28 @@ function guardarAccionUmbralReflexivos() {
         console.log(res);
       }
     );
-    $("#modal_agregar_accion_proceso").modal("hide");
-    $("#modal_activos_procesos").modal("show");
+    $("#modal_agregar_accion_proceso_reflexivo").modal("hide");
+    $("#modal_activos_procesos_reflexivos").modal("show");
   }
 }
 
 function modificarAccionesUmbralesReflexivos() {
   var radio = document.getElementsByName("accion_seleccionada_reflexivos");
   var id;
-  var name;
   var descripcion;
   var activo;
   radio.forEach((elem) => {
     if (elem.checked) {
       id = elem.dataset.id;
-      name = elem.dataset.name;
       descripcion = elem.dataset.description;
       activo = elem.dataset.active == 1;
       return;
     }
   });
-  if (!!id && !!name && !!descripcion) {
+  if (!!id && !!descripcion) {
     $("#modal_activos_procesos_reflexivo").modal("hide");
     document.getElementById("id_accion_umbral_modificar_reflexivo").value = id;
-    document.getElementById(
-      "nombre_accion_umbral_modificar_reflexivo"
-    ).value = name;
+
     document.getElementById(
       "descripcion_accion_umbral_modificar_reflexivo"
     ).value = descripcion;
@@ -7196,8 +7185,6 @@ function modificarAccionesUmbralesReflexivos() {
 function guardarModificacionAccionesUmbralesReflexivos() {
   var data = {
     id: document.getElementById("id_accion_umbral_modificar_reflexivo").value,
-    name: document.getElementById("nombre_accion_umbral_modificar_reflexivo")
-      .value,
     description: document.getElementById(
       "descripcion_accion_umbral_modificar_reflexivo"
     ).value,
@@ -7250,8 +7237,8 @@ function mensajeExitosoAgregarAccionesUmbralesReflexivos(json) {
       mea_id: modelo_analisis_reflexivos,
     },
     cargar_accion_table_reflexivos_modificar,
-    () => {
-      console.log("Error al cargar la tabla accion");
+    (res) => {
+      console.log(res);
     }
   );
 }
@@ -7332,7 +7319,7 @@ function error_cargar_lista_umbrales_proceso_reflexivo(err) {
 function cargar_accion_table_reflexivos(json) {
   console.log(json);
   var templeate = document
-    .getElementById("template_tabla_accion_reflexivos")
+    .getElementById("templeate_tabla_accion_reflexivos")
     .content.cloneNode(true);
   var seccion = document.getElementById("seccion_acciones_reflexivos");
   var body = templeate.querySelector("tbody");
@@ -7343,7 +7330,6 @@ function cargar_accion_table_reflexivos(json) {
     input.type = "radio";
     input.name = "accion_seleccionada_reflexivos";
     input.dataset.id = um.id;
-    input.dataset.nombre = um.name;
     input.dataset.description = um.description;
     input.dataset.activo = um.active;
     input.dataset.id_umbra = json.umbral_id;
@@ -7351,9 +7337,6 @@ function cargar_accion_table_reflexivos(json) {
     fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.id;
-    fila.appendChild(dato);
-    dato = document.createElement("td");
-    dato.innerHTML = um.name;
     fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.description;
@@ -7374,6 +7357,7 @@ function cargar_accion_table_reflexivos(json) {
   seccion.appendChild(templeate);
 }
 function cargar_accion_table_reflexivos_modificar(json) {
+  console.log(json);
   var templeate = document
     .getElementById("templeate_tabla_accion_reflexivos")
     .content.cloneNode(true);
@@ -7386,16 +7370,12 @@ function cargar_accion_table_reflexivos_modificar(json) {
     input.type = "radio";
     input.name = "accion_seleccionada_reflexivos";
     input.dataset.id = um.id;
-    input.dataset.name = um.name;
     input.dataset.description = um.description;
     input.dataset.active = um.active;
     dato.appendChild(input);
     fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.id;
-    fila.appendChild(dato);
-    dato = document.createElement("td");
-    dato.innerHTML = um.name;
     fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.description;
