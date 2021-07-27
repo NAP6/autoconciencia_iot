@@ -7139,7 +7139,6 @@ function guardarAccionUmbralReflexivos() {
     umbral: UmbralId,
     mea_id: modelo_analisis_reflexivos,
   };
-  console.log(data);
   if (!!data.description) {
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/add_action",
@@ -7165,6 +7164,8 @@ function modificarAccionesUmbralesReflexivos() {
       descripcion = elem.dataset.description;
       activo = elem.dataset.active == 1;
       return;
+    }else{
+console.log("No llega");
     }
   });
   if (!!id && !!descripcion) {
@@ -7357,7 +7358,6 @@ function cargar_accion_table_reflexivos(json) {
   seccion.appendChild(templeate);
 }
 function cargar_accion_table_reflexivos_modificar(json) {
-  console.log(json);
   var templeate = document
     .getElementById("templeate_tabla_accion_reflexivos")
     .content.cloneNode(true);
