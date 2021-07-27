@@ -17,5 +17,8 @@ class ArgumentToParameterMapping {
     set relatesParameter(value) {
         this._relatesParameter;
     }
+    toObjectG() {
+        return { $: { id: this.id } };
+    }
 }
 exports.ArgumentToParameterMapping = ArgumentToParameterMapping;

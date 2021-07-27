@@ -46,5 +46,15 @@ class MeasurementUnit {
     set isUsedBy(value) {
         this._isUsedBy = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+                acronym: this.acronym,
+            },
+        };
+    }
 }
 exports.MeasurementUnit = MeasurementUnit;

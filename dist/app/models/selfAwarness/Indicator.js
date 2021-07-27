@@ -20,5 +20,16 @@ class Indicator extends Metric_1.Metric {
     set isProducedBy(value) {
         this._isProducedBy = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+                abbreviation: this.abbreviation,
+                perspective: this.perspective,
+            },
+        };
+    }
 }
 exports.Indicator = Indicator;

@@ -21,7 +21,7 @@ function get_data_flow(req, res) {
             var modeloID = req.session.active_model.modelID;
             var comunicacion = req.body.comunicacion;
             var comu;
-            if (comunicacion == "SÍNCRONA") {
+            if (comunicacion == "SINCRONA") {
                 comu = "Synchronous";
             }
             else if (comunicacion == "ASÍNCRONA") {

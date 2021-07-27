@@ -15,7 +15,19 @@ class SimulationValueQ extends SimulationValue_1.SimulationValue {
         return sql;
     }
     toSqlSelect(tag, value) {
-        var sql = `SELECT
+        var sql = "";
+        if (tag.indexOf("/@/VARIABLE/@/") != -1) {
+            sql = `SELECT
+			vs_id,
+			es_id,
+	    		vas_valor
+	    		FROM
+	    		valorsimulacion
+			WHERE
+	    		vs_id=${value[tag.indexOf("/@/VARIABLE/@/")]}`;
+        }
+        else {
+            sql = `SELECT
 		  		vs.vs_id as variable_id,
 			  	vs.vas_valor as valor,
 				var.vs_nombre as nombre_variable
@@ -28,6 +40,7 @@ class SimulationValueQ extends SimulationValue_1.SimulationValue {
 				var.vs_id=vs.vs_id AND
 				es.es_id=${this.isUsed} AND 
 		  		es.es_id=vs.es_id`;
+        }
         return sql;
     }
     toSqlDelete(tag, value) {
@@ -45,7 +58,14 @@ class SimulationValueQ extends SimulationValue_1.SimulationValue {
         return sql;
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var simulation = [];
+        for (var i = 0; i < rows.length; i++) {
+            var aux = new SimulationValueQ(rows[i].vas_valor);
+            aux.scenario_id = rows[i].es_id;
+            aux.variable_id = rows[i].vs_id;
+            simulation.push(aux);
+        }
+        return simulation;
     }
 }
 exports.SimulationValueQ = SimulationValueQ;

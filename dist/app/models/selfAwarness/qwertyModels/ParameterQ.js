@@ -40,7 +40,26 @@ class ParameterQ extends Parameter_1.Parameter {
         return sql;
     }
     toSqlSelect(tag, value) {
-        var sql = `SELECT 
+        var sql = "";
+        if (tag.indexOf("/@/MAPPING/@/") != -1) {
+            sql = `SELECT 
+	  		pa.par_ordinal as ordinal,
+		  	pa.par_nombre as nombre, 
+		  	pa.par_opcional as opcional, 
+		  	pa.par_activo as activo,
+		  	pa.par_tipo_dato as tipo,
+		  	enu.enu_nombre_valor as nombre_salida 
+	  	FROM 	
+			parametro pa, 
+			enumeracion enu,
+			mapeoparametros map
+		WHERE 
+	  		map.md_id=${value[tag.indexOf("/@/MAPPING/@/")]} AND 
+			map.par_ordinal=pa.par_ordinal AND
+			pa.par_tipo_dato=enu.enu_id`;
+        }
+        else {
+            sql = `SELECT 
 	  		pa.par_ordinal as ordinal,
 		  	pa.par_nombre as nombre, 
 		  	pa.par_opcional as opcional, 
@@ -53,6 +72,7 @@ class ParameterQ extends Parameter_1.Parameter {
 		WHERE 
 	  		ri_id = '${value[tag.indexOf("/@/RI_ID/@/")]}' AND 
 			pa.par_tipo_dato=enu.enu_id`;
+        }
         return sql;
     }
     toSqlDelete(tag, value) {

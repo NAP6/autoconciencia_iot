@@ -39,5 +39,14 @@ class SimulationScenario {
     set active(value) {
         this._active = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+            },
+        };
+    }
 }
 exports.SimulationScenario = SimulationScenario;

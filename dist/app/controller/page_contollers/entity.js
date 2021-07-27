@@ -30,7 +30,7 @@ function entitys(req, res) {
             var system = req.body.systemID;
             var rows;
             var flag = false;
-            if (seleccion == "Entidades Físicas") {
+            if (seleccion == "Entidades Fisicas") {
                 rows = yield db.qwerty(new selfAwarnessModels_1.PhysicalEntityQ(-1, "", "").toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/"], [id, system]));
             }
             else if (seleccion == "Nodos Cloud") {

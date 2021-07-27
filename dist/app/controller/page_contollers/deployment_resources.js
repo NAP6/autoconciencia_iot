@@ -165,16 +165,14 @@ function add_mapeo_parametros(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var data = req.body;
-            console.log(data);
             var stryaux = "";
             data.forEach((element) => {
-                console.log(element.mea_id);
                 stryaux += `(
 	      		'${element.par_ordinal}', 
 	      		'${element.mea_id}',
 	      		'${element.mp_tipo_entrada}',
-	      		'${element.met_id}',
-	      		${element.tipoMapeo == undefined ? "NULL" : "'" + element.tipoMapeo + "'"},
+	      		${element.met_id == undefined ? "NULL" : element.met_id},
+	      		${element.vs_id == undefined ? "NULL" : element.vs_id},
 	      		${element.md_id == undefined ? "NULL" : "'" + element.md_id + "'"}),`;
             });
             var sql = `INSERT INTO 

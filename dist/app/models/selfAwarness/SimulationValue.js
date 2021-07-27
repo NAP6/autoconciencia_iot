@@ -17,5 +17,24 @@ class SimulationValue {
     set isUsed(value) {
         this._isUsed = value;
     }
+    get variable_id() {
+        return this._variable_id;
+    }
+    set variable_id(value) {
+        this._variable_id = value;
+    }
+    get scenario_id() {
+        return this._scenario_id;
+    }
+    set scenario_id(value) {
+        this._scenario_id = value;
+    }
+    toObjectG() {
+        return {
+            $: {
+                value: this.value,
+            },
+        };
+    }
 }
 exports.SimulationValue = SimulationValue;

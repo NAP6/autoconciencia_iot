@@ -32,5 +32,13 @@ class CollectionMethod extends LearningReasoningMethod_1.LearningReasoningMethod
     set isSupported(value) {
         this._isSupported = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                collectionScope: this.collectionScope,
+            },
+        };
+    }
 }
 exports.CollectionMethod = CollectionMethod;

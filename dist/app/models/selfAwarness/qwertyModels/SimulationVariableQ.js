@@ -41,7 +41,12 @@ class SimulationVariableQ extends SimulationVariable_1.SimulationVariable {
         return sql;
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var simulation = [];
+        for (var i = 0; i < rows.length; i++) {
+            var aux = new SimulationVariableQ(rows[i].id, rows[i].name);
+            simulation.push(aux);
+        }
+        return simulation;
     }
 }
 exports.SimulationVariableQ = SimulationVariableQ;

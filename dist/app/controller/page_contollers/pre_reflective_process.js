@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_last_insert_process = exports.get_pre_reflective_process_mod = exports.del_pre_reflective_process = exports.mod_pre_reflective_process = exports.add_pre_reflective_process = exports.get_pre_reflective_process = exports.add_metodo_modelo = exports.pre_reflective_process = void 0;
+exports.get_select_cargar_recurso = exports.get_model_analisis = exports.get_recoleccion_datos = exports.get_metodos_recoleccion_analisis = exports.get_last_insert_process = exports.get_pre_reflective_process_mod = exports.del_pre_reflective_process = exports.mod_metodos_modelos = exports.mod_pre_reflective_process = exports.add_pre_reflective_process = exports.get_pre_reflective_process = exports.add_metodo_modelo = exports.pre_reflective_process = void 0;
 const database2_1 = require("../../data/database2");
 const PreReflectiveProcessQ_1 = require("../../models/selfAwarness/qwertyModels/PreReflectiveProcessQ");
 const Indicator_1 = require("../../models/selfAwarness/Indicator");
@@ -34,7 +34,7 @@ function add_metodo_modelo(req, res) {
             var db = new database2_1.database2();
             var modeloID = req.session.active_model.modelID;
             var coll = new selfAwarnessModels_1.CollectionMethodQ(-1, "");
-            coll.produces = new DirectMetric_1.DirectMetric(data.m_recoleccion.met_id, "", "", "", "");
+            coll.produces = new DirectMetric_1.DirectMetric(data.m_recoleccion.met_id, "", "", "");
             coll.isSupported = new DataFlow_1.DataFlow(data.m_recoleccion.flu_id, "", "", data.m_recoleccion.mr_tipo, "");
             coll.collectsProperty = [new Property_1.Property(data.m_recoleccion.pro_id, "")];
             var row1 = yield db.qwerty(coll.toSqlInsert(["/@/PROCES/@/", "/@/MODEL/@/", "/@/OBJECT/@/"], [data.proceso_id, modeloID, data.m_recoleccion.obj_id]));
@@ -115,6 +115,53 @@ function mod_pre_reflective_process(req, res) {
     });
 }
 exports.mod_pre_reflective_process = mod_pre_reflective_process;
+function mod_metodos_modelos(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var comunicacion = req.body.comunicacion;
+            var propiedad = req.body.propiedad;
+            var flujo = req.body.flujo_datos;
+            var metricaDirecta = req.body.metrica_directa;
+            var metricaIndicador = req.body.indicador;
+            var recurso = req.body.recurso;
+            var metodo_recoleccion = req.body.mea_id_reco;
+            var metodo_analisis = req.body.mea_id_anali;
+            var rows = yield db.qwerty(`
+		
+		UPDATE
+			metodoaprendizajerazonamiento mea
+	    		SET
+			mea.met_id=${metricaIndicador}
+	    		WHERE
+	    		mea.mea_id=${metodo_analisis};
+						`);
+            /*
+               *
+            UPDATE
+                    metodorecoleccion mr
+                        SET
+                    mr.mr_tipo_comunicacion=${comunicacion},
+                    mr.pro_id=${propiedad},
+                    mr.flu_id=${flujo}
+                        WHERE
+                        mr.mea_id=${metodo_recoleccion};
+        UPDATE
+                    metodoaprendizajerazonamiento mea
+                        SET
+                    mea.met_id=${metricaDirecta}
+                        WHERE
+                        mea.mea_id=${metodo_recoleccion};
+               * */
+            res.json({ Mensaje: "Se modifico con exito la recoleccion de datos" });
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.mod_metodos_modelos = mod_metodos_modelos;
 function del_pre_reflective_process(req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
@@ -178,3 +225,91 @@ function get_last_insert_process(req, res) {
     });
 }
 exports.get_last_insert_process = get_last_insert_process;
+function get_metodos_recoleccion_analisis(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var id = req.body.id;
+            var sql = `SELECT 
+		  mea_id as metodo_id,
+		  met_id as metrica_id,
+		  mea_tipo as tipo
+		  FROM
+		   metodoaprendizajerazonamiento
+		  WHERE pa_id=${id}`;
+            var rows = yield db.qwerty(sql);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.get_metodos_recoleccion_analisis = get_metodos_recoleccion_analisis;
+function get_recoleccion_datos(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var id = req.body.mea_id;
+            var rows = yield db.qwerty(`SELECT 
+		  mr_tipo_comunicacion as comunicacion,
+		  pro_id as propiedad,
+		  flu_id as flujo
+		  FROM
+		   metodorecoleccion
+		  WHERE mea_id=${id}`);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.get_recoleccion_datos = get_recoleccion_datos;
+function get_model_analisis(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var id = req.body.mea_id;
+            var rows = yield db.qwerty(`SELECT 
+		  ma_tipo_recurso as recurso,
+		  cd_id as criterio
+		  FROM
+		   modeloanalisis
+		  WHERE mea_id=${id}`);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.get_model_analisis = get_model_analisis;
+function get_select_cargar_recurso(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var id = req.body.mea_id;
+            var rows = yield db.qwerty(`SELECT
+		rec.ri_id as id,
+		rec.ri_nombre as name
+		FROM
+			mapeoparametros map,
+			parametro par,
+			recursoimplementacion rec
+		WHERE 
+	    		map.mea_id=${id} AND
+	    		par.par_ordinal=map.par_ordinal AND
+	    		rec.ri_id=par.ri_id`);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.get_select_cargar_recurso = get_select_cargar_recurso;

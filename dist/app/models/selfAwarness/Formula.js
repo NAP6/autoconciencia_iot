@@ -13,5 +13,16 @@ class Formula extends ImplementationResource_1.ImplementationResource {
     set expression(value) {
         this._expression = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+                returnDataType: this.returnDataType,
+                expression: this.expression,
+            },
+        };
+    }
 }
 exports.Formula = Formula;

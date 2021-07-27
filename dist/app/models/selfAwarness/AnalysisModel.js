@@ -32,5 +32,13 @@ class AnalysisModel extends LearningReasoningMethod_1.LearningReasoningMethod {
     set produces(value) {
         this._produces = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                implementationResourceType: this.implementationResourceType,
+            },
+        };
+    }
 }
 exports.AnalysisModel = AnalysisModel;

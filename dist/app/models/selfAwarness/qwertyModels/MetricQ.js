@@ -28,6 +28,18 @@ class MetricQ extends Metric_1.Metric {
         return sql;
     }
     toSqlSelect(tag, value) {
+        if (tag.indexOf("/@/METRIC/@/") != -1) {
+            var sql = `SELECT
+		map.md_id as id
+		FROM
+		metrica met,
+		mapeoparametros map
+		WHERE
+		met.met_id=${value[tag.indexOf("/@/METRIC/@/")]} AND
+	    	map.met_id=met.met_id`;
+            console.log(sql);
+            return sql;
+        }
         if (tag.indexOf("/@/ASPECTID/@/") != -1 &&
             tag.indexOf("/@/TYPE/@/") != -1) {
             var sql = `SELECT 

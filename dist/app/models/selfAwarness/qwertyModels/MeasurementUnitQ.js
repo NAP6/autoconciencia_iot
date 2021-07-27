@@ -20,7 +20,22 @@ class MeasurementUnitQ extends MeasurementUnit_1.MeasurementUnit {
         return sql;
     }
     toSqlSelect(tag, value) {
-        var sql = `SELECT 
+        var sql = "";
+        if (tag.indexOf("/@/METRIC/@/") != -1) {
+            sql = `SELECT
+		un.um_id as id,
+		un.um_nombre as name,
+		un.um_descripcion as descripcion,
+		un.um_acronimo as acronimo
+	   	FROM
+		unidadmedicion un,
+		metrica met
+	   	WHERE
+	   	met.met_id=${value[tag.indexOf("/@/METRIC/@/")]} AND
+	   	met.um_id=un.um_id`;
+        }
+        else {
+            var sql = `SELECT 
     um_id as id,
     um_nombre as name,
     um_descripcion as description,
@@ -28,6 +43,7 @@ class MeasurementUnitQ extends MeasurementUnit_1.MeasurementUnit {
     um_activo as active
          FROM 
          unidadmedicion`;
+        }
         return sql;
     }
     toSqlDelete(value) {
@@ -47,7 +63,12 @@ class MeasurementUnitQ extends MeasurementUnit_1.MeasurementUnit {
         return sql;
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var unidad = [];
+        for (var i = 0; i < rows.length; i++) {
+            var aux = new MeasurementUnitQ(rows[i].id, rows[i].name, rows[i].descripcion, rows[i].acronimo);
+            unidad.push(aux);
+        }
+        return unidad;
     }
 }
 exports.MeasurementUnitQ = MeasurementUnitQ;

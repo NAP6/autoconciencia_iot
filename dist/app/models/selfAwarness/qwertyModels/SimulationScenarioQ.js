@@ -38,7 +38,12 @@ class SimulationScenarioQ extends SimulationScenario_1.SimulationScenario {
         return sql;
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var scenario = [];
+        for (var i = 0; i < rows.length; i++) {
+            var aux = new SimulationScenarioQ(rows[i].id, rows[i].name, rows[i].description);
+            scenario.push(aux);
+        }
+        return scenario;
     }
 }
 exports.SimulationScenarioQ = SimulationScenarioQ;

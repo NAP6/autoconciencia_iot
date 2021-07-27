@@ -89,7 +89,7 @@ function add_metodo_modelo2(req, res) {
             var db = new database2_1.database2();
             var modeloID = req.session.active_model.modelID;
             var calc = new selfAwarnessModels_1.CalculationMethodQ(-1, "");
-            calc.produces = new IndirectMetric_1.IndirectMetric(data.m_calculo.met_id, "", "", "", "");
+            calc.produces = new IndirectMetric_1.IndirectMetric(data.m_calculo.met_id, "", "", "");
             calc.implementationResourceType = data.m_calculo.ma_tipo;
             calc.calculationPeriodStart = data.m_calculo.inicio;
             calc.calculationPeriodEnd = data.m_calculo.fin;

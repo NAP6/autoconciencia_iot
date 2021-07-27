@@ -53,5 +53,14 @@ class DecisionCriteria {
     set interprets(value) {
         this._interprets = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+            },
+        };
+    }
 }
 exports.DecisionCriteria = DecisionCriteria;

@@ -39,5 +39,15 @@ class Parameter {
     set isUsedIn(value) {
         this._isUsedIn = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                ordinal: this.ordinal,
+                name: this.name,
+                dataType: this.dataType[1],
+                optional: this.optional,
+            },
+        };
+    }
 }
 exports.Parameter = Parameter;

@@ -39,5 +39,13 @@ class SimulationVariable {
     set containsSimulationValue(value) {
         this._containsSimulationValue = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+            },
+        };
+    }
 }
 exports.SimulationVariable = SimulationVariable;

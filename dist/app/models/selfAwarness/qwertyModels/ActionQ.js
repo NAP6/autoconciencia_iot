@@ -19,16 +19,30 @@ class ActionQ extends Action_1.Action {
         return sql;
     }
     toSqlSelect(tag, value) {
-        var sql = `SELECT 
-    acc_id as id,
-    acc_descripcion as description,
-    acc_activo as active,
-    umb_id as umbral_id
-         FROM 
-         accion
-	 WHERE 
-	 mea_id=${value[tag.indexOf("/@/METHOD/@/")]} AND
-	 umb_id=${this.isRecommendedln}`;
+        var sql = "";
+        if (tag.indexOf("/@/MODEL/@/") != -1) {
+            sql = `SELECT 
+    		acc_id as id,
+    		acc_descripcion as description,
+    		acc_activo as active,
+    		umb_id as umbral_id
+             FROM 
+         	accion
+	     WHERE 
+	        mea_id=${value[tag.indexOf("/@/MODEL/@/")]}`;
+        }
+        else {
+            sql = `SELECT 
+    		acc_id as id,
+    		acc_descripcion as description,
+    		acc_activo as active,
+    		umb_id as umbral_id
+             FROM 
+         	accion
+	     WHERE 
+	 	mea_id=${value[tag.indexOf("/@/METHOD/@/")]} AND
+	 	umb_id=${this.isRecommendedln}`;
+        }
         return sql;
     }
     toSqlDelete(value) {
@@ -46,7 +60,12 @@ class ActionQ extends Action_1.Action {
         return sql;
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var action = [];
+        for (var i = 0; i < rows.length; i++) {
+            var aux = new ActionQ(rows[i].id, rows[i].description);
+            action.push(aux);
+        }
+        return action;
     }
 }
 exports.ActionQ = ActionQ;

@@ -46,5 +46,15 @@ class Scale {
     set active(value) {
         this._active = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                validValues: this.validValues,
+                type: this.scaleType,
+            },
+        };
+    }
 }
 exports.Scale = Scale;

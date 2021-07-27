@@ -20,7 +20,23 @@ class ScaleQ extends Scale_1.Scale {
         return sql;
     }
     toSqlSelect(tag, value) {
-        var sql = `SELECT 
+        var sql = "";
+        if (tag.indexOf("/@/METRIC/@/") != -1) {
+            sql = `	SELECT
+      			es.esc_id as id,
+			es.esc_nombre as name,
+			es.esc_valores_validos as valid_values,
+			es.esc_tipo as tipo
+
+	    	FROM 
+	    		escala es,
+		    	metrica met 
+	    	WHERE
+	    		met.met_id=${value[tag.indexOf("/@/METRIC/@/")]} AND
+	    		met.esc_id=es.esc_id`;
+        }
+        else {
+            sql = `SELECT 
     esc_id as id,
     esc_nombre as name,
     esc_valores_validos as valid_values,
@@ -32,6 +48,7 @@ class ScaleQ extends Scale_1.Scale {
 	 enumeracion enu
 	 WHERE 
 	 es.esc_tipo=enu.enu_id`;
+        }
         return sql;
     }
     toSqlDelete(value) {
@@ -51,7 +68,12 @@ class ScaleQ extends Scale_1.Scale {
         return sql;
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var scale = [];
+        for (var i = 0; i < rows.length; i++) {
+            var aux = new ScaleQ(rows[i].id, rows[i].name, rows[i].valid_values, rows[i].tipo);
+            scale.push(aux);
+        }
+        return scale;
     }
 }
 exports.ScaleQ = ScaleQ;

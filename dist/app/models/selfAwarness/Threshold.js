@@ -53,5 +53,16 @@ class Threshold {
     set recommends(value) {
         this._recommends = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                interpretation: this.interpretation,
+                lowerThreshold: this.lowerThreshold,
+                upperThreshold: this.upperThreshold,
+            },
+        };
+    }
 }
 exports.Threshold = Threshold;

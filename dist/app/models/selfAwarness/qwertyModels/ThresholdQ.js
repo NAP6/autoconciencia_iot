@@ -18,13 +18,24 @@ class ThresholdQ extends Threshold_1.Threshold {
                 '${this.lowerThreshold}',
                 '${this.upperThreshold}',
                 '${this.active ? 1 : 0}',
-                '${value[tag.indexOf('/@/CRITERIA/@/')]}'
+                '${value[tag.indexOf("/@/CRITERIA/@/")]}'
 
             )`;
         return sql;
     }
     toSqlSelect(tag, value) {
-        var sql = `SELECT 
+        var sql = "";
+        if (tag.indexOf("/@/RELATION_ACTION/@/") != -1) {
+            sql = `	SELECT
+      		aa.acc_id id
+	    	FROM
+		accion aa
+		WHERE
+		aa.umb_id=${this.id}
+	    `;
+        }
+        else {
+            sql = `SELECT 
     umb_id as id,
     umb_nombre as name,
     umb_interpretacion as interpretacion,
@@ -35,7 +46,8 @@ class ThresholdQ extends Threshold_1.Threshold {
             FROM 
             umbral
             WHERE
-            cd_id=${value[tag.indexOf('/@/CRITERIA/@/')]}`;
+            cd_id=${value[tag.indexOf("/@/CRITERIA/@/")]}`;
+        }
         return sql;
     }
     toSqlDelete(value) {
@@ -56,7 +68,12 @@ class ThresholdQ extends Threshold_1.Threshold {
         return sql;
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var threshold = [];
+        for (var i = 0; i < rows.length; i++) {
+            var aux = new ThresholdQ(rows[i].id, rows[i].name, rows[i].interpretacion, rows[i].inferior, rows[i].superior);
+            threshold.push(aux);
+        }
+        return threshold;
     }
 }
 exports.ThresholdQ = ThresholdQ;

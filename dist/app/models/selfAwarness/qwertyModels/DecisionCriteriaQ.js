@@ -18,7 +18,36 @@ class DecisionCriteriaQ extends DecisionCriteria_1.DecisionCriteria {
         return sql;
     }
     toSqlSelect(tag, value) {
-        var sql = `SELECT 
+        var sql = "";
+        if (tag.indexOf("/@/OBJECT/@/") != -1) {
+            sql = `SELECT 
+	    	cri.cd_id as id,
+		cri.cd_nombre as name,
+		cri.cd_descripcion as description,
+		cri.cd_activo as active
+	     FROM 
+		criteriodecision cri,
+		objetivo obj 
+	     WHERE  
+	    	obj.cd_id=cri.cd_id AND
+	    	obj.obj_id = ${value[tag.indexOf("/@/OBJECT/@/")]}`;
+            return sql;
+        }
+        else if (tag.indexOf("/@/METHOD/@/") != -1) {
+            sql = `SELECT 
+	    	cri.cd_id as id,
+		cri.cd_nombre as name,
+		cri.cd_descripcion as description,
+		cri.cd_activo as active
+	     FROM 
+		criteriodecision cri,
+		modeloanalisis modelo 
+	     WHERE  
+	    	modelo.cd_id=cri.cd_id AND
+	    	modelo.mea_id = ${value[tag.indexOf("/@/METHOD/@/")]}`;
+            return sql;
+        }
+        sql = `SELECT 
     cd_id as id,
     cd_nombre as name,
     cd_descripcion as description,
@@ -43,7 +72,12 @@ class DecisionCriteriaQ extends DecisionCriteria_1.DecisionCriteria {
         return sql;
     }
     toObjectArray(rows) {
-        throw new Error("Method not implemented.");
+        var criteria = [];
+        for (var i = 0; i < rows.length; i++) {
+            var aux = new DecisionCriteriaQ(rows[i].id, rows[i].name, rows[i].description);
+            criteria.push(aux);
+        }
+        return criteria;
     }
 }
 exports.DecisionCriteriaQ = DecisionCriteriaQ;

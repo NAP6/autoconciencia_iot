@@ -27,5 +27,17 @@ class Function extends ImplementationResource_1.ImplementationResource {
     set preexisting(value) {
         this._preexisting = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+                returnDataType: this.returnDataType,
+                path: this.path,
+                instrucctions: this.instrucctions,
+            },
+        };
+    }
 }
 exports.Function = Function;

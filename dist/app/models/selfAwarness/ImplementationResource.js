@@ -53,5 +53,15 @@ class ImplementationResource {
     set containsParameter(value) {
         this._containsParameter = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+                returnDataType: this.returnDataType,
+            },
+        };
+    }
 }
 exports.ImplementationResource = ImplementationResource;

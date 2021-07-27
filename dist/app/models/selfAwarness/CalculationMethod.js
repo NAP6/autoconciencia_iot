@@ -60,5 +60,15 @@ class CalculationMethod extends LearningReasoningMethod_1.LearningReasoningMetho
     set produces(value) {
         this._produces = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                implementationResourceType: this.implementationResourceType,
+                calculationPeriodStart: this.calculationPeriodStart,
+                calculationPeriodEnd: this.calculationPeriodEnd,
+            },
+        };
+    }
 }
 exports.CalculationMethod = CalculationMethod;

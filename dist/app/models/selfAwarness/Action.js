@@ -31,5 +31,13 @@ class Action {
     set isRecommendedln(value) {
         this._isRecommendedln = value;
     }
+    toObjectG() {
+        return {
+            $: {
+                id: this.id,
+                description: this.description,
+            },
+        };
+    }
 }
 exports.Action = Action;
