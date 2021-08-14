@@ -1,75 +1,166 @@
 <div class="" id="pagina_proceso_reflexivo">
-    <div class="row">
-        <div class="col">
-            <div class="col">
-                <input type="text" class="d-none" id="id_proceso_reflexivo">
-		 <input type="text" class="d-none" id="id_metodo_aprendizaje_modelos">
-                <div class="form-group mt-4 row">
-                    <label for="" class="col-sm-3 col-form-label">ID:</label>
-                    <div class="col-sm-7">
-                        <input type="text" class="form-control" id="nombre_proceso_reflexivo" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase(); " disabled />
-                    </div>
-                </div>
-
-                <div class="form-group row ">
-                    <label for=" " class="col-sm-3 col-form-label ">Descripción:</label>
-                    <div class="col-sm-7 ">
-                        <textarea type="text " class="form-control " id="descripcion_proceso_reflexivo" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase(); "></textarea>
-                    </div>
-                </div>
-
-            </div>
-
+  <div class="row">
+    <div class="col">
+      <div class="col">
+        <input type="text" class="d-none" id="id_proceso_reflexivo" />
+        <input type="text" class="d-none" id="id_metodo_aprendizaje_modelos" />
+        <div class="form-group mt-4 row">
+          <label for="" class="col-sm-3 col-form-label">ID:</label>
+          <div class="col-sm-7">
+            <input
+              type="text"
+              class="form-control"
+              id="nombre_proceso_reflexivo"
+              style="text-transform: uppercase"
+              onkeyup="javascript:this.value=this.value.toUpperCase(); "
+              disabled
+            />
+          </div>
         </div>
-        <div class="col">
-            <h6>Periodo de ejecución:</h6>
-            <div class="col card" style="height: 55px;">
-                <div class="form-group mt-2 row">
-                    <label for="" class="col-sm-2 col-form-label">Inicio:</label>
-                    <input type="date" id="inicio_del_periodo_reflexivo" name="inicio_del_periodo_reflexivo" value="" min="2020-01-01" max="2050-01-01">
-                    <label for="" class="col-sm-2 col-form-label">Fin:</label>
-                    <input type="date" id="fin_del_periodo_reflexivo" name="fin_del_periodo_reflexivo" value="" min="2020-01-01" max="2050-01-01">
-                </div>
-            </div>
-    <h6 class="">Aspectos de autoconsciencia</h6>
-    <div class="input-group col-11">
-        <select class="custom-select" name="Aspectos_autoconsciencia_reflexivos" id="Aspectos_autoconsciencia_reflexivos" disabled>
-                    </select>
-    </div>        
+
+        <div class="form-group row">
+          <label for=" " class="col-sm-3 col-form-label">Descripción:</label>
+          <div class="col-sm-7">
+            <textarea
+              type="text "
+              class="form-control"
+              id="descripcion_proceso_reflexivo"
+              style="text-transform: uppercase"
+              onkeyup="javascript:this.value=this.value.toUpperCase(); "
+            ></textarea>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="row">
-        <div class="col-6">
-            <h6>Sujetos de autoconsciencia:</h6>
-            <div id="sujetos_activos_proceso_reflexivos" class="card col-12 col-lg-10" style="overflow-y: auto;height: 166px;">
-                <ul id="lista_sujetos_activos_proceso_reflexivo"></ul>
-            </div>
+    <div class="col">
+      <h6>Periodo de ejecución:</h6>
+      <div class="col card" style="height: 55px">
+        <div class="form-group mt-2 row">
+          <label for="" class="col-sm-2 col-form-label">Inicio:</label>
+          <input
+            type="date"
+            id="inicio_del_periodo_reflexivo"
+            name="inicio_del_periodo_reflexivo"
+            value=""
+            min="2020-01-01"
+            max="2050-01-01"
+          />
+          <label for="" class="col-sm-2 col-form-label">Fin:</label>
+          <input
+            type="date"
+            id="fin_del_periodo_reflexivo"
+            name="fin_del_periodo_reflexivo"
+            value=""
+            min="2020-01-01"
+            max="2050-01-01"
+          />
         </div>
-        <div class="col-6">
-            <div class="mt-2">
-                <h6>Categoría de objetos:</h6>
-                <div class="input-group mt-1 col-12">
-                    <select class="custom-select" name="CategoriaEntidadesProcesos_reflexivos" id="CategoriaEntidadesProcesos_reflexivos" disabled>
-                                        <option>Seleccione..</option>
-                                      <option id="1" value="1">Entidades Físicas</option>
-                                      <option value="2">Nodos Cloud</option>
-                                      <option value="3">Nodos Fog</option>
-                                      <option value="4">Gateway IoT</option>
-                                      <option value="5">Sensores</option>
-                                      <option value="6">Tags</option>
-                                      <option value="7">Actuadores</option>
-                                      <option value="8">Red</option>
-                                    </select>
-                </div>
-            </div>
-
-            <h6>Objeto de autoconsciencia:</h6>
-            <div class="col-sm-11">
-                <div id="entidades_seleccionados_area_procesos_reflexivos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
-                    <ul id="lista_entidades_seleccionadas_procesos_reflexivos"></ul>
-                </div>
-            </div>
-        </div>
+      </div>
+      <h6 class="">Aspectos de autoconsciencia</h6>
+      <div class="input-group col-11">
+        <select
+          class="custom-select"
+          name="Aspectos_autoconsciencia_reflexivos"
+          id="Aspectos_autoconsciencia_reflexivos"
+          disabled
+        ></select>
+      </div>
     </div>
-    
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <h6>Sujetos de autoconsciencia:</h6>
+      <div
+        id="sujetos_activos_proceso_reflexivos"
+        class="card col-12 col-lg-10"
+        style="overflow-y: auto; height: 166px"
+      >
+        <ul id="lista_sujetos_activos_proceso_reflexivo"></ul>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="mt-2">
+        <h6>Categoría de objetos:</h6>
+        <div class="input-group mt-1 col-12">
+          <select
+            class="custom-select"
+            name="CategoriaEntidadesProcesos_reflexivos"
+            id="CategoriaEntidadesProcesos_reflexivos"
+            disabled
+          >
+            <option>Seleccione..</option>
+            <option id="1" value="1">Entidades Físicas</option>
+            <option value="2">Nodos Cloud</option>
+            <option value="3">Nodos Fog</option>
+            <option value="4">Gateway IoT</option>
+            <option value="5">Sensores</option>
+            <option value="6">Tags</option>
+            <option value="7">Actuadores</option>
+            <option value="8">Red</option>
+          </select>
+        </div>
+      </div>
+
+      <h6>Objeto de autoconsciencia:</h6>
+      <div class="col-sm-11">
+        <div
+          id="entidades_seleccionados_area_procesos_reflexivos"
+          class="card col-lg-12"
+          style="overflow-y: auto; height: 100px"
+        >
+          <ul id="lista_entidades_seleccionadas_procesos_reflexivos"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mt-2">
+        <h6>Unidad de Tiempo:</h6>
+        <div class="form-group mt-1 col-12">
+          <select
+            class="custom-select"
+            name="unidad_tiempo_ref"
+            id="unidad_tiempo_ref"
+          >
+            <option value="-6">Seleccione..</option>
+          </select>
+        </div>
+      </div>
+      <h6>Intervalo de ejecución:</h6>
+      <div class="input-group col-12">
+        <input
+          type="number"
+          class="form-control"
+          name="intervalo_ejecucion_ref"
+          id="intervalo_ejecucion_ref"
+        />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mt-2">
+        <h6>Hora ejecución:</h6>
+        <div class="form-group mt-1 col-12">
+          <input
+	  `  type="time"
+            class="form-control"
+            name="hora_ejecucion_ref"
+            id="hora_ejecucion_ref"
+         />
+        </div>
+      </div>
+      <div class="mt-2">
+        <h6>Tipo ejecución:</h6>
+        <div class="form-group mt-1 col-12">
+          <select
+            class="custom-select"
+            name="tipo_ejecucion_ref"
+            id="tipo_ejecucion_ref"
+          >
+            <option value="-6">Seleccione..</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

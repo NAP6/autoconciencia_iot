@@ -55,11 +55,20 @@ export async function add_reflective_process(req: Request, res: Response) {
     if (newProcess.finP) {
       process.executionPeriodEnd = newProcess.finP;
     }
+    if (newProcess.intervaloE) {
+      process.executionTimeInterval = newProcess.intervaloE;
+    }
+    if (newProcess.tipoE) {
+      process.executionType = newProcess.tipoE;
+    }
+	  if (newProcess.horaE) {
+      process.executionTime = newProcess.horaE;
+    }
     process.active = true;
     var rows = await db.qwerty(
       process.toSqlInsert(
-        ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"],
-        [newProcess.aspId, newProcess.sujId, modeloID]
+        ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/","/@/HORA/@/"],
+        [newProcess.aspId, newProcess.sujId, modeloID,newProcess.unidadT]
       )
     );
     res.json(rows);
@@ -111,14 +120,11 @@ export async function add_metodo_modelo2(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-export async function get_reflective_process_mod(
-  req: Request,
-  res: Response
-) {
+export async function get_reflective_process_mod(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.proceso_reflexivo_seleccionado;
-	var rows= await db.qwerty(`SELECT 
+    var rows = await db.qwerty(`SELECT 
 		  pa.pa_id as id,
 		  pa.pa_nombre as nombre, 
 		  pa.pa_descripcion as descripcion, 
@@ -134,12 +140,11 @@ export async function get_reflective_process_mod(
     res.render("modificar_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
-	    modificar:rows,
+      modificar: rows,
       session: req.session,
     });
-	  console.log(rows[0]);
+    console.log(rows[0]);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
-

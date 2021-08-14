@@ -14,7 +14,11 @@ export class PreReflectiveProcessQ
 	       aa_id,
 	       suj_id,
                pa_tipo,
-	       ma_id) 
+	       ma_id,
+	       pa_tipo_ejecucion,
+	       pa_unidad_tiempo,
+	       pa_intervalo_ejecucion,
+	       pa_hora_ejecucion) 
 	       values (
 	      '${this.name}',
 	      '${this.description}',
@@ -32,7 +36,11 @@ export class PreReflectiveProcessQ
 		${value[tag.indexOf("/@/ASPECTID/@/")]},
 		${value[tag.indexOf("/@/SUBJECT/@/")]},
 		${this.type_process},
-		${value[tag.indexOf("/@/MODEL/@/")]})`;
+		${value[tag.indexOf("/@/MODEL/@/")]},
+		${this.executionType},
+		${value[tag.indexOf("/@/HORA/@/")]},
+		${this.executionTimeInterval},
+		'${this.executionTime}')`;
     return sql;
   }
   toSqlSelect(tag: string[], value: string[]): string {

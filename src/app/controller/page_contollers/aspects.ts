@@ -10,6 +10,14 @@ export function aspects(req: Request, res: Response) {
     session: req.session,
   });
 }
+
+export function aspects_collective(req: Request, res: Response) {
+  res.render("aspects_collective", {
+    error: req.flash("error"),
+    succes: req.flash("succes"),
+    session: req.session,
+  });
+}
 export async function get_aspects_objects(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
@@ -129,8 +137,8 @@ export async function add_aspects(req: Request, res: Response) {
     aspect.active = aspect.active;
     var rows = await db.qwerty(
       aspect.toSqlInsert(
-        ["/@/OBJECT/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"],
-        [newAspect.obj_id, newAspect.suj_id, modelID]
+        ["/@/SUBJECT/@/", "/@/MODEL/@/","/@/ALCANCE/@/"],
+        [newAspect.suj_id, modelID,newAspect.aa_alcance]
       )
     );
     aspect.id = rows.insertId;

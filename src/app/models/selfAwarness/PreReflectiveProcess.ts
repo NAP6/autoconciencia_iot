@@ -11,7 +11,10 @@ export class PreReflectiveProcess extends SelfAwarenessProcess {
     description: string,
     type_process: number,
     executionPeriodStart?: Date,
-    executionPeriodEnd?: Date
+    executionPeriodEnd?: Date,
+    executionType?: string,
+    executionTime?: number,
+    executionTimeInterval?: number
   ) {
     super(
       id,
@@ -19,7 +22,10 @@ export class PreReflectiveProcess extends SelfAwarenessProcess {
       description,
       type_process,
       executionPeriodStart,
-      executionPeriodEnd
+      executionPeriodEnd,
+      executionType,
+      executionTime,
+      executionTimeInterval
     );
   }
 
@@ -39,4 +45,3 @@ export class PreReflectiveProcess extends SelfAwarenessProcess {
     this.usesAnalysisModel = value;
   }
 }
-

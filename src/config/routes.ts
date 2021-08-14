@@ -56,6 +56,7 @@ export default function (app: Application, upload: Multer) {
   app.get("/subject", rt.loggedIn, rt.subject);
   //Nuevos Cambioooos Profe
   app.get("/aspects", rt.loggedIn, rt.aspects);
+  app.get("/aspects_collective", rt.loggedIn, rt.aspects_collective);
   app.get("/metrics", rt.loggedIn, rt.metrics);
   app.get("/deployment_resources", rt.loggedIn, rt.deployment_resources_page);
   app.get("/generate_model", rt.loggedIn, rt.generate_model);

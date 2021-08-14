@@ -88,11 +88,20 @@ export async function add_pre_reflective_process(req: Request, res: Response) {
     if (newProcess.finP) {
       process.executionPeriodEnd = newProcess.finP;
     }
+	if (newProcess.tipoE) {
+      process.executionType = newProcess.tipoE;
+    }
+	  if (newProcess.intervaloE) {
+      process.executionTimeInterval = newProcess.intervaloE;
+    }
+	  if (newProcess.horaE) {
+      process.executionTime = newProcess.horaE;
+    }
     process.active = newProcess.active;
     var rows = await db.qwerty(
       process.toSqlInsert(
-        ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"],
-        [newProcess.aspId, newProcess.sujId, modeloID]
+        ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/","/@/HORA/@/"],
+        [newProcess.aspId, newProcess.sujId, modeloID,newProcess.unidadT]
       )
     );
     res.json(rows);

@@ -9,6 +9,9 @@ export class SelfAwarenessProcess {
   private _active: boolean;
   private _executionPeriodStart: Date | undefined;
   private _executionPeriodEnd: Date | undefined;
+  private _executionType: string | undefined;
+  private _executionTimeInterval: number | undefined;
+  private _executionTime: number | undefined;
   private _supports: Goal | undefined;
   private _captures: SelfAwarenessAspect | undefined;
   constructor(
@@ -17,7 +20,10 @@ export class SelfAwarenessProcess {
     description: string,
     type_process: number,
     executionPeriodStart?: Date,
-    executionPeriodEnd?: Date
+    executionPeriodEnd?: Date,
+    executionType?: string,
+    executionTimeInterval?: number,
+    executionTime?: number
   ) {
     this._id = id;
     this._name = name;
@@ -26,6 +32,9 @@ export class SelfAwarenessProcess {
     this._active = true;
     this._executionPeriodStart = executionPeriodStart;
     this._executionPeriodEnd = executionPeriodEnd;
+    this._executionType = executionType;
+    this._executionTimeInterval = executionTimeInterval;
+    this._executionTime = executionTime;
   }
 
   get id(): number {
@@ -80,6 +89,28 @@ export class SelfAwarenessProcess {
 
   set executionPeriodEnd(value: Date | undefined) {
     this._executionPeriodEnd = value;
+  }
+
+  get executionType(): string | undefined {
+    return this._executionType;
+  }
+
+  set executionType(value: string | undefined) {
+    this._executionType = value;
+  }
+  get executionTime(): number | undefined {
+    return this._executionTime;
+  }
+
+  set executionTime(value: number | undefined) {
+    this._executionTime = value;
+  }
+  get executionTimeInterval(): number | undefined {
+    return this._executionTimeInterval;
+  }
+
+  set executionTimeInterval(value: number | undefined) {
+    this._executionTimeInterval = value;
   }
 
   get supports(): Goal | undefined {

@@ -12,9 +12,22 @@ export class ReflectiveProcess extends SelfAwarenessProcess {
     description: string,
     type_process: number,
     executionPeriodStart?: Date,
-    executionPeriodEnd?: Date
+    executionPeriodEnd?: Date,
+    executionType?: string,
+    executionTime?: number,
+    executionTimeInterval?: number
   ) {
-    super(id, name, description,type_process, executionPeriodStart, executionPeriodEnd);
+    super(
+      id,
+      name,
+      description,
+      type_process,
+      executionPeriodStart,
+      executionPeriodEnd,
+      executionType,
+      executionTime,
+      executionTimeInterval
+    );
   }
 
   get usesAnalysisModel(): AnalysisModel | undefined {

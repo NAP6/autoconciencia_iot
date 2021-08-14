@@ -112,6 +112,7 @@ export async function entitys(req: Request, res: Response) {
         rows = rows.concat(rows2);
       }
     }
+
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });

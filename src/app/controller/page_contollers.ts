@@ -28,6 +28,7 @@ export { get_enumeracion } from "./page_contollers/enumeration";
 export { singup, singup_save } from "./page_contollers/singup";
 export {
   aspects,
+  aspects_collective,
   get_aspects,
   add_aspects,
   mod_aspecs,

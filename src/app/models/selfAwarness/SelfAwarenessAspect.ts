@@ -1,5 +1,6 @@
 import { Metric } from "./Metric";
 import { SelfAwarenessProcess } from "./SelfAwarenessProcess";
+import { CollectiveSelfawarenessAspect } from "./CollectiveSelfawarenessAspect";
 
 export class SelfAwarenessAspect {
   private _id: number;
@@ -9,7 +10,7 @@ export class SelfAwarenessAspect {
   private _weight: number;
   private _active: boolean;
   private _isEvaluated: Metric[];
-  private _isCaptured: SelfAwarenessProcess[];
+  private _derives: CollectiveSelfawarenessAspect[];
 
   constructor(
     id: number,
@@ -25,7 +26,7 @@ export class SelfAwarenessAspect {
     this._aspectType = aspectType;
     this._active = true;
     this._isEvaluated = [];
-    this._isCaptured = [];
+    this._derives = [];
   }
 
   get id(): number {
@@ -80,14 +81,6 @@ export class SelfAwarenessAspect {
 
   set isEvaluated(value: Metric[]) {
     this._isEvaluated = value;
-  }
-
-  get isCaptured(): SelfAwarenessProcess[] {
-    return this._isCaptured;
-  }
-
-  set isCaptured(value: SelfAwarenessProcess[]) {
-    this._isCaptured = value;
   }
 
   public toObjectG(): any {

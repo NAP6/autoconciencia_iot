@@ -1,16 +1,16 @@
-import { SelfAwarenessAspect } from "./SelfAwarenessAspect";
+import { IndividualSelfAwarenessAspect } from "./IndividualSelfAwarenessAspect";
 
 export class Scope {
-  private _containsSelfAwarenessAspect: SelfAwarenessAspect[];
+  private _has: IndividualSelfAwarenessAspect[];
   constructor() {
-    this._containsSelfAwarenessAspect = [];
+    this._has = [];
   }
 
-  get containsSelfAwarenessAspect(): SelfAwarenessAspect[] {
-    return this._containsSelfAwarenessAspect;
+  get containsSelfAwarenessAspect(): IndividualSelfAwarenessAspect[] {
+    return this._has;
   }
 
-  set containsSelfAwarenessAspect(value: SelfAwarenessAspect[]) {
-    this._containsSelfAwarenessAspect = value;
+  set containsSelfAwarenessAspect(value: IndividualSelfAwarenessAspect[]) {
+    this._has = value;
   }
 }
