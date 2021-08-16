@@ -37,6 +37,7 @@ export {
   get_aspects_objects_process,
   add_relation_objects_aspects,
   del_aspects_objects,
+  get_aspects_individuales,
 } from "./page_contollers/aspects";
 export {
   metrics,

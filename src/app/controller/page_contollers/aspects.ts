@@ -137,8 +137,8 @@ export async function add_aspects(req: Request, res: Response) {
     aspect.active = aspect.active;
     var rows = await db.qwerty(
       aspect.toSqlInsert(
-        ["/@/SUBJECT/@/", "/@/MODEL/@/","/@/ALCANCE/@/"],
-        [newAspect.suj_id, modelID,newAspect.aa_alcance]
+        ["/@/SUBJECT/@/", "/@/MODEL/@/", "/@/ALCANCE/@/"],
+        [newAspect.suj_id, modelID, newAspect.aa_alcance]
       )
     );
     aspect.id = rows.insertId;
@@ -230,6 +230,19 @@ export async function del_aspects_objects(req: Request, res: Response) {
       `DELETE FROM aspectoautoconsciencia_objeto WHERE aa_id=${newAspect.aa_id} `
     );
     res.json({ Mensaje: "Los datos se han enviado con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export async function get_aspects_individuales(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var id = req.body.id;
+    var rows = await db.qwerty(
+      `SELECT aa_id as id, aa_nombre as name, aa_descripcion as description FROM aspectoautoconsciencia WHERE suj_id=${id} AND aa_alcance=53`
+    );
+    res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

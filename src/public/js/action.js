@@ -8757,7 +8757,7 @@ function GuardarmodificarAspecto() {
     !!data.name &&
     !!data.description &&
     !!data.weigth &&
-   /* !!data.objetivo &&*/
+    /* !!data.objetivo &&*/
     !!data.tipo
   ) {
     post_api(
@@ -9337,10 +9337,131 @@ function verificarSeleccionAspectosColectivos(elemento) {
     element.checked = false;
   });
   elemento.checked = auxChecked;
-  // get_aspectos_objetivos(elemento.dataset.puro_id);
+  get_aspectos_individuales(elemento.dataset.puro_id);
 }
 
 function agregarAspectosColectivos() {
   agregar_sujetos_activos_aspectos();
   $("#add_aspects_colective").modal("show");
 }
+
+function limpiarFomularioColectivo() {
+  document.getElementById("nombreAspectoColectivo").disabled = true;
+  document.getElementById("descripcionAspectoColectivo").disabled = true;
+  document.getElementById("pesoAspectoColectivo").disabled = true;
+  document.getElementById("select_operadoreAgregacion").disabled = true;
+  document.getElementById("select_aspectoColectivo").disabled = true;
+  document.getElementById("nombreAspectoColectivo").value = "";
+  document.getElementById("descripcionAspectoColectivo").value = "";
+  document.getElementById("pesoAspectoColectivo").value = "";
+  document.getElementById("select_operadoreAgregacion").value = -6;
+  document.getElementById("select_aspectoColectivo").value = -6;
+  document.getElementById("lista_aspectos_individuales").innerHTML = "";
+  $("#add_aspects_colective").modal("hide");
+}
+function get_aspectos_individuales(id) {
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_aspects_individuales",
+    { id: id },
+    llenarAspectosIndividuales,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+function llenarAspectosIndividuales(json) {
+  console.log(json);
+  var ul = document.getElementById("lista_aspectos_individuales");
+  ul.innerHTML = "";
+  json.forEach((aspect) => {
+    var li = document.createElement("li");
+    var divFormCheck = document.createElement("div");
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    var labelChek = document.createElement("label");
+    labelChek.classList.add("form-check-label");
+    li.appendChild(divFormCheck);
+    divFormCheck.appendChild(checkbox);
+    divFormCheck.appendChild(labelChek);
+    ul.appendChild(li);
+
+    checkbox.dataset.id = aspect.id;
+    labelChek.htmlFor = checkbox.id;
+    labelChek.innerHTML = aspect.name;
+
+    checkbox.setAttribute(
+      "onclick",
+      "ActivarFormularioAspectosColectivos(this, 'parametro');"
+    );
+  });
+}
+function ActivarFormularioAspectosColectivos() {
+  document.getElementById("nombreAspectoColectivo").disabled = false;
+  document.getElementById("descripcionAspectoColectivo").disabled = false;
+  document.getElementById("pesoAspectoColectivo").disabled = false;
+  document.getElementById("select_operadoreAgregacion").disabled = false;
+  document.getElementById("select_aspectoColectivo").disabled = false;
+  cargar_select_operador_agregacion_colectivos();
+  cargar_select_tipo_aspecto_colectivo();
+}
+function cargar_select_operador_agregacion_colectivos() {
+  var nombre = "TIPO_OPERADOR_ASIGNACION";
+  var data = {
+    tipo: nombre,
+  };
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    data,
+    cargar_operador_asignacion_select_colectivos,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+
+function cargar_operador_asignacion_select_colectivos(json) {
+  var ope = document.getElementById("select_operadoreAgregacion");
+  ope.innerHTML = "";
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+}
+
+function cargar_select_tipo_aspecto_colectivo() {
+  var tipo = "TIPO_ASPECTO";
+  var data = {
+    tipo: tipo,
+  };
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    data,
+    cargar_select_tipo_aspecto_col,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+
+function cargar_select_tipo_aspecto_col(json) {
+	console.log(json);
+  var ope = document.getElementById("select_aspectoColectivo");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.value = element.id;
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+}
+
+//Funciones para modificar los aspectos Colectivos
+function modificarAspectosColectivos(){
+  $("#mod_aspects_colective").modal("show");
+} 
