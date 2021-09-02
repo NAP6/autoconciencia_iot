@@ -12,52 +12,36 @@
             <div class="modal-body">              
  		<div class="row">
                     <div class="col-6">
-                        <div class="input-group mb">
-            		<h6>Sujeto de autoconsciencia</h6>
-			<div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 125px;">
-                            <div id="sujetos_aspectos_colectivos" class="card col">
-                                <ul id="lista_sujetos_aspectos_colectivos"></ul>
-                            </div>
-                        </div>
-                      </div>
-	                        <h6>Aspectos Individuales:</h6>
-                        <div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 125px;">
-                            <div id="aspectos_indiviaduales" class="card col">
-                                <ul id="lista_aspectos_individuales"></ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 aling-self-center">
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Nombre:</span>
                             </div>
-                            <input name="form_entidad_new" id="nombreAspectoColectivo" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                            <input name="form_entidad_new" id="nombreAspectoColectivo" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Descripción:</span>
                             </div>
-                            <textarea type="text" name="form_entidad_new" id="descripcionAspectoColectivo" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                            <textarea type="text" name="form_entidad_new" id="descripcionAspectoColectivo" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-default">Peso:</span>
                             </div>
-                            <input name="form_entidad_new" id="pesoAspectoColectivo" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled onkeyup="javascript:this.value=this.value.toUpperCase();" />
+                            <input name="form_entidad_new" id="pesoAspectoColectivo" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Operador Agregación:</label>
                             </div>
-                            <select class="custom-select" name="form_entidad_new" disabled id="select_operadoreAgregacion"></select>
+                            <select class="custom-select" name="form_entidad_new" id="select_operadoreAgregacion"></select>
                             </select>
                         </div>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <label class="input-group-text" for="inputGroupSelect01">Tipo:</label>
                             </div>
-                            <select class="custom-select" name="form_entidad_new" disabled id="select_aspectoColectivo"></select>
+                            <select class="custom-select" name="form_entidad_new" id="select_aspectoColectivo"></select>
 
                             </select>
                         </div>
@@ -65,8 +49,25 @@
                             <div class="col-sm-2">Activo:</div>
                             <div class="col-sm-8">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="activoAspectosColectivos" disabled checked>
+                                    <input class="form-check-input" type="checkbox" id="activoAspectosColectivos" checked>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 aling-self-center">
+                       
+		 <div class="input-group mb">
+            		<h6>Sujeto de autoconsciencia</h6>
+			<div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 125px;">
+                            <div id="sujetos_aspectos_colectivos" class="card col">
+                                <ul id="lista_sujetos_aspectos_colectivos"></ul>
+                            </div>
+                        </div>
+                      </div>
+	                        <h6>Aspectos:</h6>
+                        <div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 125px;">
+                            <div id="aspectos_indiviaduales" class="card col">
+                                <ul id="lista_aspectos_individuales"></ul>
                             </div>
                         </div>
                     </div>

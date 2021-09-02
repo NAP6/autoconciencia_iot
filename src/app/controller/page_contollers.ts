@@ -30,6 +30,7 @@ export {
   aspects,
   aspects_collective,
   get_aspects,
+  get_aspects_ind,
   add_aspects,
   mod_aspecs,
   del_aspects,
@@ -38,6 +39,12 @@ export {
   add_relation_objects_aspects,
   del_aspects_objects,
   get_aspects_individuales,
+  add_aspects_colective,
+  get_aspects_colective,
+  get_aspects_padres,
+  mod_aspects_colective,
+get_aspects_hijos,
+get_aspects_hijos_seleccionados,
 } from "./page_contollers/aspects";
 export {
   metrics,

@@ -65,8 +65,9 @@ export default function (app: Application) {
   app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
   app.post("/api/subjects_aspects/", rt.subjects_aspects);
 
-  //Aspectos 
-  app.route("/api/get_aspects/").get(rt.get_aspects);
+  //Aspectos
+  app.route("/api/get_aspects/").post(rt.get_aspects);
+  app.route("/api/get_aspects_ind/").get(rt.get_aspects_ind);
   app.post("/api/add_aspects/", rt.add_aspects);
   app.post("/api/mod_aspects/", rt.mod_aspecs);
   app.post("/api/del_aspects/", rt.del_aspects);
@@ -77,8 +78,17 @@ export default function (app: Application) {
     "/api/add_relation_objects_aspects",
     rt.add_relation_objects_aspects
   );
+  //Aspectos Colectivos
   app.post("/api/get_aspects_individuales", rt.get_aspects_individuales);
-
+  app.post("/api/add_aspects_colective", rt.add_aspects_colective);
+  app.route("/api/get_aspects_colective").get(rt.get_aspects_colective);
+  app.post("/api/get_aspects_padres", rt.get_aspects_padres);
+  app.post("/api/mod_aspects_colective", rt.mod_aspects_colective);
+  app.post("/api/get_aspects_hijos", rt.get_aspects_hijos);
+  app.post(
+    "/api/get_aspects_hijos_seleccionados",
+    rt.get_aspects_hijos_seleccionados
+  );
   //Generales
   //=====================================================================
   //Metricas

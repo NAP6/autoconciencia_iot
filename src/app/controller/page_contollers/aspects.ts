@@ -104,6 +104,20 @@ export async function get_aspects_objects_process(req: Request, res: Response) {
 }
 
 export async function get_aspects(req: Request, res: Response) {
+  console.log("entra en get_aspects");
+  if (req.session?.user) {
+    var db = new database2();
+    var id = req.body.id;
+    var rows = await db.qwerty(
+      `SELECT aa_id as id, aa_nombre as name, aa_descripcion as description FROM aspectoautoconsciencia WHERE suj_id=${id}`
+    );
+    res.json(rows);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export async function get_aspects_ind(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var modelID = req.session!.active_model.modelID;
@@ -137,8 +151,8 @@ export async function add_aspects(req: Request, res: Response) {
     aspect.active = aspect.active;
     var rows = await db.qwerty(
       aspect.toSqlInsert(
-        ["/@/SUBJECT/@/", "/@/MODEL/@/", "/@/ALCANCE/@/"],
-        [newAspect.suj_id, modelID, newAspect.aa_alcance]
+        ["/@/OBJECT/@/", "/@/SUBJECT/@/", "/@/MODEL/@/", "/@/ALCANCE/@/"],
+        [newAspect.obj_id, newAspect.suj_id, modelID, newAspect.aa_alcance]
       )
     );
     aspect.id = rows.insertId;
@@ -245,5 +259,190 @@ export async function get_aspects_individuales(req: Request, res: Response) {
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export async function add_aspects_colective(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var newAspect = req.body;
+    var modelID = req.session!.active_model.modelID;
+    var aspect: SelfAwarenessAspectQ = new SelfAwarenessAspectQ(
+      -1,
+      newAspect.name,
+      newAspect.description,
+      newAspect.weigth,
+      newAspect.type
+    );
+    aspect.active = aspect.active;
+    var rows = await db.qwerty(
+      `INSERT INTO
+aspectoautoconsciencia (
+                aa_nombre,
+                aa_descripcion,
+                aa_peso,
+                aa_tipo,
+                aa_activo,
+		aa_alcance,
+		aa_operador,
+                suj_id,
+                ma_id
+            ) VALUES (
+                '${newAspect.name}',
+                '${newAspect.description}',
+                '${newAspect.weigth}',
+                '${newAspect.type}',
+                '${newAspect.active ? 1 : 0}',
+                '${newAspect.aa_alcance}',
+		${newAspect.operador},
+		'${newAspect.suj_id}',
+                '${modelID}'
+            )`
+    );
+    aspect.id = rows.insertId;
+    await add_relation_aspects_indi_aspects_colec(
+      aspect.id,
+      modelID,
+      newAspect.arr_aspects
+    );
+    res.json({ Mensaje: "Los datos se han enviado con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function add_relation_aspects_indi_aspects_colec(
+  aa_id: number,
+  modelID: number,
+  arr_asp: any[]
+) {
+  var db = new database2();
+  for (var i = 0; i < arr_asp.length; i++) {
+    await db.qwerty(
+      `INSERT INTO aspectoautoconsciencia_derivado (aad_padre,aad_hijo) values (${aa_id},${arr_asp[i]})`
+    );
+  }
+}
+
+export async function get_aspects_colective(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var modelID = req.session!.active_model.modelID;
+    var aspects: SelfAwarenessAspectQ = new SelfAwarenessAspectQ(
+      -1,
+      "",
+      "",
+      -1,
+      ""
+    );
+    var rows = await db.qwerty(`
+		SELECT
+	      asp.aa_id as id,
+	      asp.aa_nombre as name,
+              asp.aa_descripcion as description,
+	      asp.aa_peso as weigth,
+              asp.aa_tipo as tipo_id,
+              enu.enu_nombre_valor as met_aspect,
+              asp.suj_id as suj,
+              suj.suj_nombre as sujeto,
+              asp.ma_id as model,
+              asp.aa_activo as active,
+	      asp.aa_operador as operador
+	         FROM
+	      aspectoautoconsciencia asp,
+              enumeracion enu,
+              sujeto suj
+	         WHERE
+		 asp.aa_alcance=54 AND
+	      enu.enu_id=asp.aa_tipo AND
+	   	 asp.suj_id= suj.suj_id AND
+	        suj.ma_id = ${modelID} AND
+	        asp.ma_id=${modelID}`);
+    res.json(rows);
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+
+export async function get_aspects_padres(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var modeloID = req.session?.active_model.modelID;
+    var system = req.body.systemID;
+    var rows = await db.qwerty(`SELECT 
+	    asp_dev.aad_padre as id_padre
+	    FROM 
+	     aspectoautoconsciencia_derivado asp_dev,
+	      aspectoautoconsciencia asp
+	    WHERE
+	     asp_dev.aad_hijo=${system} AND asp.aa_id=asp_dev.aad_hijo`);
+    res.json(rows);
+  } else {
+    res.json({ error: "Debe iniciar sesion para poder usar la api" });
+  }
+}
+
+export async function mod_aspects_colective(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var newAspect = req.body;
+    var modelID = req.session!.active_model.modelID;
+    var aspect: SelfAwarenessAspectQ = new SelfAwarenessAspectQ(
+      -1,
+      newAspect.name,
+      newAspect.description,
+      newAspect.weigth,
+      newAspect.type
+    );
+    aspect.active = aspect.active;
+    var rows = await db.qwerty(
+      `UPDATE
+aspectoautoconsciencia 
+SET	
+                aa_nombre= '${newAspect.name}',
+                aa_descripcion='${newAspect.description}',
+                aa_peso= '${newAspect.weigth}',
+                aa_tipo= '${newAspect.type}',
+                aa_activo='${newAspect.active ? 1 : 0}',
+		aa_operador=${newAspect.operador}
+             WHERE 
+		aa_id='${newAspect.id}'
+	    `
+    );
+    res.json({ Mensaje: "Los datos se han enviado con exito" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function get_aspects_hijos(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var modeloID = req.session?.active_model.modelID;
+    var id = req.body.id;
+    var rows = await db.qwerty(`SELECT asp.aa_id as id, asp.aa_nombre as name, asp.aa_descripcion as description 
+	    FROM aspectoautoconsciencia asp INNER JOIN aspectoautoconsciencia_derivado asp_dev ON asp.aa_id=asp_dev.aad_hijo 
+	    WHERE asp_dev.aad_padre=${id}`);
+    res.json(rows);
+  } else {
+    res.json({ error: "Debe iniciar sesion para poder usar la api" });
+  }
+}
+export async function get_aspects_hijos_seleccionados(
+  req: Request,
+  res: Response
+) {
+  if (req.session?.user) {
+    var db = new database2();
+    var modeloID = req.session?.active_model.modelID;
+    var id = req.body.id;
+    var rows = await db.qwerty(`
+	    SELECT 
+	    aad.aad_hijo as hijos
+	    FROM 
+	    aspectoautoconsciencia_derivado aad 
+	    WHERE
+	    aad.aad_padre=${id}`);
+    res.json(rows);
+  } else {
+    res.json({ error: "Debe iniciar sesion para poder usar la api" });
   }
 }
