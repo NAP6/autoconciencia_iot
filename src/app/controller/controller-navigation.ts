@@ -224,7 +224,6 @@ export async function generate_model(req: Request, res: Response) {
     modelo.toSqlInsert(["/@/MODEL/@/"], [modeloID.toString()])
   );
   modelo = modelo.toObjectArray(rows)[0];
-  console.log(modelo);
   res.render("generate_model", {
     error: req.flash("error"),
     succes: req.flash("succes"),
@@ -276,7 +275,6 @@ export async function save_new_model(
       descripcion: modelo.description,
       modelID: rows.insertId.toString(),
     };
-    console.log(req.session!.active_model);
     //#####################################################
     next();
   } else {

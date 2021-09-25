@@ -104,7 +104,6 @@ export async function get_aspects_objects_process(req: Request, res: Response) {
 }
 
 export async function get_aspects(req: Request, res: Response) {
-  console.log("entra en get_aspects");
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.id;
@@ -139,7 +138,6 @@ export async function add_aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var newAspect = req.body;
-    console.log(newAspect);
     var modelID = req.session!.active_model.modelID;
     var aspect: SelfAwarenessAspectQ = new SelfAwarenessAspectQ(
       -1,

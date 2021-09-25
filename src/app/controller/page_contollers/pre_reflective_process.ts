@@ -20,7 +20,6 @@ export function pre_reflective_process(req: Request, res: Response) {
 export async function add_metodo_modelo(req: Request, res: Response) {
   if (req.session?.user) {
     var data = req.body;
-    console.log(data);
     var db = new database2();
     var modeloID = req.session!.active_model.modelID;
     var coll = new CollectionMethodQ(-1, "");
@@ -48,7 +47,6 @@ export async function add_metodo_modelo(req: Request, res: Response) {
       )
     );
     var resp = [row1[0][0].id, row2[0][0].id];
-    console.log(resp);
     res.json(resp);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -215,7 +213,6 @@ export async function get_pre_reflective_process_mod(
       modificar: rows,
       session: req.session,
     });
-    console.log(rows[0]);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

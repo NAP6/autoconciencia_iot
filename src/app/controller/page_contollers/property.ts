@@ -1,5 +1,4 @@
 import { json } from "body-parser";
-import { Console } from "console";
 import { Request, Response, NextFunction } from "express";
 import { database2 } from "../../data/database2";
 import { PropertyQ } from "../../models/selfAwarness/qwertyModels/PropertyQ";

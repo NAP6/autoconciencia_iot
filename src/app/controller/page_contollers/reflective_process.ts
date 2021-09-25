@@ -96,7 +96,6 @@ export async function del_reflective_process(req: Request, res: Response) {
 export async function add_metodo_modelo2(req: Request, res: Response) {
   if (req.session?.user) {
     var data = req.body;
-    console.log(data);
     var db = new database2();
     var modeloID = req.session!.active_model.modelID;
     var calc = new CalculationMethodQ(-1, "");
@@ -143,7 +142,6 @@ export async function get_reflective_process_mod(req: Request, res: Response) {
       modificar: rows,
       session: req.session,
     });
-    console.log(rows[0]);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

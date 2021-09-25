@@ -41,7 +41,6 @@ export async function add_deployment_resources(req: Request, res: Response) {
         data.EspecificoTipo.formula
       );
       var rows = await db.qwerty(formula.toSqlInsert([], []));
-      console.log("ADD" + rows);
       id = rows[0][0].id;
     } else if (data.tipoRecurso == "1") {
       var funcion = new FunctionQ(
@@ -138,25 +137,19 @@ export async function ask_deployment_resources(req: Request, res: Response) {
     var arr_Parameters = parameter.toObjectArray(rowsP);
 
     if (rows[0][0].tipo_recurso == 0) {
-      console.log("Es una formula");
       var formula: FormulaQ = new FormulaQ(-1, "", "", "", "");
       formula = formula.toObjectArray(rows)[0];
       formula.containsParameter = arr_Parameters;
-      console.log(formula);
       res.json(formula);
     } else if (rows[0][0].tipo_recurso == 1) {
-      console.log("Es una funcion");
       var functio: FunctionQ = new FunctionQ(-1, "", "", "", "", "");
       functio = functio.toObjectArray(rows)[0];
       functio.containsParameter = arr_Parameters;
-      console.log(functio);
       res.json(functio);
     } else {
-      console.log("Es un servicio");
       var webService = new WebServiceQ(-1, "", "", "", "", "", "");
       webService = webService.toObjectArray(rows)[0];
       webService.containsParameter = arr_Parameters;
-      console.log(webService);
       res.json(webService);
     }
   } else {
@@ -195,7 +188,6 @@ export async function add_mapeo_parametros(req: Request, res: Response) {
       `INSERT INTO 
     		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
 		VALUES ` + stryaux.substring(0, stryaux.length - 1);
-	  console.log(sql);
 
     var db = new database2();
     db.qwerty(sql);

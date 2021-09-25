@@ -1,5 +1,4 @@
 import { json } from "body-parser";
-import { Console } from "console";
 import { Request, Response, NextFunction } from "express";
 import { database2 } from "../../data/database2";
 import { MetricQ } from "../../models/selfAwarness/qwertyModels/MetricQ";
@@ -93,7 +92,6 @@ export async function add_metrics(req: Request, res: Response) {
 }
 
 export async function add_metrics_aspects(req: Request, res: Response) {
-  console.log(req.body);
   if (req.session?.user) {
     var db = new database2();
     var element = req.body;
@@ -102,7 +100,6 @@ export async function add_metrics_aspects(req: Request, res: Response) {
         `SELECT COUNT(asp_me.met_id) cont FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=${element[i].aa_id} && asp_me.met_id=${element[i].met_id}`
       );
       cont = cont[0]["cont"];
-      console.log(cont);
       if (cont > 0 && element[i].existe == "0") {
         await db.qwerty(
           `DELETE FROM aspectoautoconsciencia_metrica WHERE met_id=${element[i].met_id} AND aa_id=${element[i].aa_id}`

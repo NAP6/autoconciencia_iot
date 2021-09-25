@@ -16,7 +16,6 @@ export async function subjects(req: Request, res: Response) {
     var db = new database2();
     var system: IoTSystemQ = new IoTSystemQ(-1, "");
     var rows = await db.qwerty(system.toSqlSelect(["/@/MODEL/@/"], [id]));
-    //console.log(rows)
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
@@ -97,7 +96,6 @@ export async function subjects_aspects(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.id;
-	  console.log(id);
 	  var modelID=req.session!.active_model.modelID;
     var rows = await db.qwerty(`SELECT aa_id as id, aa_nombre as nombre FROM aspectoautoconsciencia WHERE suj_id=${id} AND ma_id=${modelID} `)
     res.json(rows);

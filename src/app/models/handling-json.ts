@@ -68,7 +68,6 @@ export class json {
             var nameModel: string = Object.keys(this.json)[0];
             var ob = this.json[nameModel]["containsDataFlow"];
             var dataF = this.extracDataFlow(element2.$.hasRulePropertyToDataColumn, ob);
-            console.log(dataF);
             aux2.dataFlow = dataF;
           }
           hasAux.push(aux2);
@@ -119,7 +118,6 @@ export class json {
             var nameModel: string = Object.keys(this.json)[0];
             var ob = this.json[nameModel]["containsDataFlow"];
             var dataF = this.extracDataFlow(element2.$.hasRulePropertyToDataColumn, ob);
-            console.log(dataF);
             aux2.dataFlow = dataF;
           }
           hasAux.push(aux2);

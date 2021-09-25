@@ -599,7 +599,6 @@ async function recursive_scope(scope_list, path, model) {
       console.log(scope_list[i]);
     }
     if (scope_list[i].hasProperty) {
-      console.log("#### ENTRAAAAAAA");
       var propertys = scope_list[i].hasProperty;
       for (var j = 0; j < propertys.length; j++) {
         await add_relation_method_property(

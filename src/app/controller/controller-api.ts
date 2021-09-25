@@ -246,7 +246,7 @@ export function upd_measurement_units(req: Request, res: Response) {
     var acronym = req.body.acronym;
     var activo = req.body.activo.toString();
 
-    console.log(activo);
+    
     var db = new database();
     db.updUser_measurementUnit(idUser, id, name, descripcion, acronym, activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
@@ -363,7 +363,7 @@ export function upd_decision_criteria(req: Request, res: Response) {
     var name = req.body.nombre;
     var descripcion = req.body.descripcion;
     var activo = req.body.activo.toString();
-    console.log(activo);
+ 
     var db = new database();
     db.updUser_criteriaDecision(idUser, id, name, descripcion, activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
@@ -403,7 +403,7 @@ export function add_umbral(req: Request, res: Response) {
     var Interpretacion = req.body.interpretacion;
     var inferior = req.body.inferior;
     var superior = req.body.superior;
-    console.log(superior);
+
     var db = new database();
     db.addUser_umbral(idUser, name, Interpretacion, inferior, superior, id);
     res.json({ mensaje: "La accion fue realizada con exito" });
@@ -471,7 +471,7 @@ export function add_aspects(req: Request, res: Response) {
     var peso = req.body.peso;
     var idP = req.body.id;
     var activo = req.body.activo;
-    console.log(tipo);
+
     var db = new database();
     db.addUser_aspects(idUser, name, descripcion, tipo, peso, idP, activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
@@ -600,7 +600,6 @@ export function upd_acciones_umbrales(req: Request, res: Response) {
     var nombre = req.body.nombre;
     var descripcion = req.body.descripcion;
     var activo = req.body.activo.toString();
-    console.log(activo);
     var db = new database();
     db.upd_acciones_umbrales(idUser, idaccion, nombre, descripcion, activo);
     res.json({ mensaje: "La accion fue realizada con exito" });
@@ -817,7 +816,6 @@ export function mod_process_pre_reflexive(req: Request, res: Response) {
 export function add_metodo_modelo(req: Request, res: Response) {
   if (req.session?.user) {
     var data: metodo_modelo_proceso = req.body;
-    console.log(data);
     var db = new database();
     db.add_metodo_modelo(data, (resp) => {
       res.json(resp);
@@ -861,7 +859,6 @@ export function properties(req: Request, res: Response) {
 export function add_metodo_modelo_reflexivos(req: Request, res: Response) {
   if (req.session?.user) {
     var data: metodo_modelo_proceso_reflexivos = req.body;
-    console.log(data);
     var db = new database();
     db.add_metodo_modelo_reflexivos(data, (resp) => {
       res.json(resp);

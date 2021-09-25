@@ -218,9 +218,6 @@ export class JSON2Architecture {
       entity.iotSystem.push(system2);
       system2.entity.push(entity);
     });
-    console.log(
-      `Antes de salir de la funcion de unir tiene ${entity.iotSystem.length}`
-    );
   }
 
   private extractPropertys(propertys: any): PropertyQ[] {

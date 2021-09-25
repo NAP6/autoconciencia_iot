@@ -35,7 +35,6 @@ export class MetricQ extends Metric implements SQL_Qwerty {
 		WHERE
 		met.met_id=${value[tag.indexOf("/@/METRIC/@/")]} AND
 	    	map.met_id=met.met_id`;
-      console.log(sql);
 	    return sql;
     }
     if (

@@ -56,7 +56,6 @@ api(app);  // load our api routes and pass in our app
 routes(app, upload); // load our routes and pass in our app and Upload multer
 //launch ======================================================================
 app.listen(constants["server-port"], () => {
-    console.log('Server listen at port ' + constants["server-port"]);
 });
 
 //catch 404 and forward to error handler

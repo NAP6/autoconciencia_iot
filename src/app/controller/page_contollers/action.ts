@@ -1,5 +1,4 @@
 import { json } from "body-parser";
-import { Console } from "console";
 import { Request, Response, NextFunction } from "express";
 import { database2 } from "../../data/database2";
 import { ActionQ } from "../../models/selfAwarness/qwertyModels/ActionQ";
@@ -8,7 +7,6 @@ export async function get_action(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var metodo = req.body.mea_id;
-    console.log(metodo);
     var action: ActionQ = new ActionQ(-1, "");
     action.isRecommendedln = req.body.umbral;
     var rows = await db.qwerty(action.toSqlSelect(["/@/METHOD/@/"], [metodo]));
