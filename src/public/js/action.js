@@ -18,7 +18,7 @@ function post_api(url = "", data, fun1, fun2) {
     .catch((error) => fun2(error));
 }
 
-function alert(txt) {
+/*function alert(txt) {
   div = document.createElement("div");
   div.classList.add("alert", "alert-danger");
   div.setAttribute("role", "alert");
@@ -26,7 +26,7 @@ function alert(txt) {
     txt +
     `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
   document.getElementById("alert-zone").appendChild(div);
-}
+}*/
 
 /* 
     SECCION RECURSOS DE IMPLEMENTACION
@@ -8740,6 +8740,8 @@ function modificarAspectos() {
         systemID = elem.dataset.sujeto;
         //get_aspectos_objetivos_modificar(suj_id);
         cargar_datos_del_modal_modificar_aspectos_individuales();
+      }else{
+	alert("Debe seleccionar un aspecto individual");
       }
     });
   } catch (error) {
