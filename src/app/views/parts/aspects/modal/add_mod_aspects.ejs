@@ -11,53 +11,43 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                        		<div class="col-6">
-<div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Nombre:</span>
-                            </div>
-                            <input name="form_entidad_new" id="nombreAspecto" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Descripción:</span>
-                            </div>
-                            <textarea type="text" name="form_entidad_new" id="descripcionAspecto" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Peso:</span>
-                            </div>
-                            <input name="form_entidad_new" id="pesoAspecto" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Tipo:</label>
-                            </div>
-                            <select class="custom-select" name="form_entidad_new" id="select_aspecto"></select>
+                	<div class="col-6">
+				<div>
+				<label for="nombre_aspecto">Nombre: </label>
+		<textarea type="text" class="form-control" id="nombreAspecto" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+				</div>
+	<div class="form-group">
+				<label for="descripcion_aspecto">Descripción: </label>
+		<textarea type="text" class="form-control" id="descripcionAspecto" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+				</div>
+			<div>
+			<label for="descripcion_aspecto">Peso: </label>
+		<input type="number" class="form-control" id="pesoAspecto"/>
+				</div>
 
-                            </select>
-                        </div>
-                        <div class="form-group row">
+		<div>
+			<label for="select_aspecto">Tipo: </label>
+		<select type="number" class="custom-select" id="select_aspecto"></select>
+				</div>
+                     <div>
                             <div class="col-sm-2">Activo:</div>
                             <div class="col-sm-8">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="activoAspecto" checked>
+                                    <input class="form-check-input" type="checkbox" id="activoAspecto" checked disabled>
                                 </div>
                             </div>
                         </div>
 			</div>
-
 			<div class="col-6 aling-self-center">
                         <div class="input-group mb">
-                            <h6>Sujeto de autoconsciencia:</h6>
+                            <label>Sujeto que captura el aspecto:</label>
                             <div class="" style="">
                                 <div id="sujetos_Activos_aspectos" class="card col-12" style="width:430px">
                                     <ul id="lista_sujetos_activos_aspectos"></ul>
                                 </div>
                             </div>
                         </div>
-		<h6 class="">  Categoria Entidad:</h6>
+		<label class="">  Categoría de objetos:</label>
                         <div class="input-group col-10">
                             <select class="custom-select mb-2" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectos" disabled>
                                 <option value="-6">Seleccione..</option>
@@ -71,7 +61,7 @@
                               <option value="8">Red</option>
                             </select>
                         </div>
-                        <h6>Objetos de autoconsciencia:</h6>
+				<label>Objetos sobre los que se captura el aspecto:</label>
                         <div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 130px;">
                             <div id="entidades_seleccionados_area_aspectos" class="card col">
                                 <ul id="lista_entidades_seleccionadas_aspectos"></ul>

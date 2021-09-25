@@ -1,16 +1,16 @@
-<div class="" id="pagina_proceso_reflexivo">
+<div class="" id="pagina_proceso">
   <div class="row">
     <div class="col">
-      <input type="text" class="d-none" id="id_proceso_reflexivo" />
-      <input type="text" class="d-none" id="id_metodo_aprendizaje_modelos" />
-      <input type="text" class="d-none" id="nombre_proceso_reflexivo" />
+      <input type="text" class="d-none" id="id_proceso_pre_reflexivo" />
+      <input type="text" class="d-none" id="id_metodo_aprendizaje_directo" />
+      <input type="text" class="d-none" id="nombre_proceso_id" />
       <div class="form-group row">
         <label for=" " class="col-sm-3 col-form-label">ID:</label>
         <div class="col-sm-7">
           <input
             type="text "
             class="form-control"
-            id="nombre_proceso_reflexivo"
+            id="nombre_proceso_pre_reflexivo"
             style="text-transform: uppercase"
             onkeyup="javascript:this.value=this.value.toUpperCase(); "
             disabled
@@ -24,7 +24,7 @@
           <textarea
             type="text "
             class="form-control"
-            id="descripcion_proceso_reflexivo"
+            id="input-descripcion-proceso-pre-reflexivo"
             style="text-transform: uppercase"
             onkeyup="javascript:this.value=this.value.toUpperCase(); "
           ></textarea>
@@ -35,8 +35,8 @@
         <div class="form-group col-7">
           <select
             class="custom-select"
-            name="tipo_ejecucion_ref"
-            id="tipo_ejecucion_ref"
+            name="tipo_ejecucion"
+            id="tipo_ejecucion"
           >
             <option value="-6">Seleccione..</option>
           </select>
@@ -48,8 +48,8 @@
           <label for="" class="col-sm-2 col-form-label">Inicio:</label>
           <input
             type="date"
-            id="inicio_del_periodo_reflexivo"
-            name="inicio_del_periodoi_reflexivo"
+            id="inicio_del_periodo"
+            name="inicio_del_periodo"
             value=""
             min="2020-01-01"
             max="2050-01-01"
@@ -57,8 +57,8 @@
           <label for="" class="col-sm-2 col-form-label">Fin:</label>
           <input
             type="date"
-            id="fin_del_periodo_reflexivo"
-            name="fin_del_periodo_reflexivo"
+            id="fin_del_periodo"
+            name="fin_del_periodo"
             value=""
             min="2020-01-01"
             max="2050-01-01"
@@ -66,76 +66,36 @@
         </div>
       </div>
       <h6>Frecuencia de ejecución</h6>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="mt-2">
-            <h6>Unidad de Tiempo:</h6>
-            <div class="form-group mt-1 col-12">
-              <select
-                class="custom-select"
-                name="unidad_tiempo_ref"
-                id="unidad_tiempo_ref"
-              >
-                <option value="-6">Seleccione..</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="mt-2">
-            <h6>Intervalo de ejecución:</h6>
-            <div class="input-group col-12">
-              <input
-                type="number"
-                min="0"
-                class="form-control"
-                name="intervalo_ejecucion_ref"
-                id="intervalo_ejecucion_ref"
-              />
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="mt-2">
-            <h6>Hora ejecución:</h6>
-            <div class="form-group mt-1 col-12">
-              <input
-                `
-                type="time"
-                class="form-control"
-                name="hora_ejecucion_ref"
-                id="hora_ejecucion_ref"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
     <div class="col-6">
       <h6>Sujeto que ejecuta el proceso:</h6>
       <div
-        id="sujetos_activos_proceso_reflexivos"
+        id="sujetos_activos_proceso"
         class="card col-12 col-lg-10"
-        style="overflow-y: auto; height: 130px"
+        style="overflow-y: auto; height: 166px"
       >
-        <ul id="lista_sujetos_activos_proceso_reflexivo"></ul>
+        <ul id="lista_sujetos_activos_proceso"></ul>
       </div>
       <h6>Aspecto de autoconsciencia a capturar:</h6>
       <div class="input-group col-12">
         <select
           class="custom-select"
-          name="Aspectos_autoconsciencia_reflexivos"
-          id="Aspectos_autoconsciencia_reflexivos"
+          name="Aspectos_autoconsciencia"
+          id="Aspectos_autoconsciencia"
           disabled
         ></select>
       </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-6">
       <div class="mt-2">
         <h6>Categoría de objetos:</h6>
         <div class="form-group mt-1 col-12">
           <select
             class="custom-select"
-            name="CategoriaEntidadesProcesos_reflexivos"
-            id="CategoriaEntidadesProcesos_reflexivos"
+            name="CategoriaEntidadesProcesos"
+            id="CategoriaEntidadesProcesos"
             disabled
           >
             <option value="-6">Seleccione..</option>
@@ -155,11 +115,51 @@
       </h6>
       <div class="col-sm-11">
         <div
-          id="entidades_seleccionados_area_procesos_reflexivos"
+          id="entidades_seleccionados_area_procesos"
           class="card col-lg-12"
           style="overflow-y: auto; height: 90px"
         >
-          <ul id="lista_entidades_seleccionadas_procesos_reflexivos"></ul>
+          <ul id="lista_entidades_seleccionadas_procesos"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="mt-2">
+        <h6>Unidad de Tiempo:</h6>
+        <div class="form-group mt-1 col-12">
+          <select class="custom-select" name="unidad_tiempo" id="unidad_tiempo">
+            <option value="-6">Seleccione..</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mt-2">
+        <h6>Intervalo de ejecución:</h6>
+        <div class="input-group col-12">
+          <input
+            type="number"
+            min="0"
+            class="form-control"
+            name="intervalo_ejecucion"
+            id="intervalo_ejecucion"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mt-2">
+        <h6>Hora ejecución:</h6>
+        <div class="form-group mt-1 col-12">
+          <input
+            `
+            type="time"
+            class="form-control"
+            name="hora_ejecucion"
+            id="hora_ejecucion"
+          />
         </div>
       </div>
     </div>

@@ -11,7 +11,7 @@ export class JSON2Architecture {
 
   constructor(json: any) {
     this._json = json[Object.keys(json)[0]];
-    if (this._json == undefined) this._json = {}
+    if (this._json == undefined) this._json = {};
     this._modelEntity = [];
     this._modelDataFlow = [];
     this._modelIoTSystem = new IoTSystemQ(-1, "");
@@ -55,7 +55,10 @@ export class JSON2Architecture {
   private extractSystems() {
     if (this._json["containsIoTSystem"]) {
       var containsIoTSystem = this._json["containsIoTSystem"][0];
-      var system = new IoTSystemQ(containsIoTSystem.$.id, containsIoTSystem.$.name);
+      var system = new IoTSystemQ(
+        containsIoTSystem.$.id,
+        containsIoTSystem.$.name
+      );
       if (containsIoTSystem.containsIoTSubSystem) {
         system.IoTSubSystem = this.extractSystems_recursive(
           containsIoTSystem.containsIoTSubSystem
@@ -110,6 +113,17 @@ export class JSON2Architecture {
 
       if (entity.$.isPartOf) {
         this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
+        console.log(
+          `despues de salir de la funcion de unir tiene ${newEntity.iotSystem.length}`
+        );
+      }
+
+      if (entity.containsService) {
+        for (var i = 0; i < entity.containsService.length; i++) {
+          var service = entity.containsService[i].$;
+          var serviceEntity = new EntityQ(service.id, service.name, "Service");
+          newEntity.subEntity.push(serviceEntity);
+        }
       }
 
       // Inicio: Extraer de PhysicalEntity
@@ -196,13 +210,17 @@ export class JSON2Architecture {
       var system: IoTSystemQ = this._modelIoTSystem;
       var routeAux: string[] = route.substring(1, route.length).split("/@");
       routeAux = routeAux.splice(2, routeAux.length);
+      var system2 = new IoTSystemQ(-1, "");
       routeAux.forEach((stop) => {
         var index: number = parseInt(stop.split(".")[1]);
-        system = system.IoTSubSystem[index];
+        system2 = system.IoTSubSystem[index];
       });
-      entity.iotSystem.push(system);
-      system.entity.push(entity);
+      entity.iotSystem.push(system2);
+      system2.entity.push(entity);
     });
+    console.log(
+      `Antes de salir de la funcion de unir tiene ${entity.iotSystem.length}`
+    );
   }
 
   private extractPropertys(propertys: any): PropertyQ[] {

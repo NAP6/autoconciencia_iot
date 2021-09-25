@@ -1,87 +1,132 @@
-<div class="modal fade" id="add_aspects_colective" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="modal_resource_addLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="tituloAspectos" style="width: 100%;">
-                    Agregar Aspecto Autoconsciencia Colectivo
-                </h5>
-                <button type="button" class="close" onclick="limpiarFomularioColectivo();">
+<div
+  class="modal fade"
+  id="add_aspects_colective"
+  tabindex="-1"
+  role="dialog"
+  data-backdrop="static"
+  aria-labelledby="modal_resource_addLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title text-center"
+          id="tituloAspectos"
+          style="width: 100%"
+        >
+          Agregar Aspecto Autoconsciencia Colectivo
+        </h5>
+        <button
+          type="button"
+          class="close"
+          onclick="limpiarFomularioColectivo();"
+        >
           <span aria-hidden="true">&times;</span>
         </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-6">
+            <div>
+              <label for="nombre_aspecto">Nombre:</label>
+              <textarea
+                id="nombreAspectoColectivo"
+                class="form-control"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                onkeyup="javascript:this.value=this.value.toUpperCase();"
+              ></textarea>
             </div>
-            <div class="modal-body">              
- 		<div class="row">
-                    <div class="col-6">
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Nombre:</span>
-                            </div>
-                            <input name="form_entidad_new" id="nombreAspectoColectivo" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Descripción:</span>
-                            </div>
-                            <textarea type="text" name="form_entidad_new" id="descripcionAspectoColectivo" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">Peso:</span>
-                            </div>
-                            <input name="form_entidad_new" id="pesoAspectoColectivo" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();" />
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Operador Agregación:</label>
-                            </div>
-                            <select class="custom-select" name="form_entidad_new" id="select_operadoreAgregacion"></select>
-                            </select>
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Tipo:</label>
-                            </div>
-                            <select class="custom-select" name="form_entidad_new" id="select_aspectoColectivo"></select>
 
-                            </select>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-2">Activo:</div>
-                            <div class="col-sm-8">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="activoAspectosColectivos" checked>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 aling-self-center">
-                       
-		 <div class="input-group mb">
-            		<h6>Sujeto de autoconsciencia</h6>
-			<div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 125px;">
-                            <div id="sujetos_aspectos_colectivos" class="card col">
-                                <ul id="lista_sujetos_aspectos_colectivos"></ul>
-                            </div>
-                        </div>
-                      </div>
-	                        <h6>Aspectos:</h6>
-                        <div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 125px;">
-                            <div id="aspectos_indiviaduales" class="card col">
-                                <ul id="lista_aspectos_individuales"></ul>
-                            </div>
-                        </div>
-                    </div>
+            <div>
+              <label for="descripcion">Descripción:</label>
+              <textarea
+                id="descripcionAspectoColectivo"
+                class="form-control"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                onkeyup="javascript:this.value=this.value.toUpperCase();"
+              ></textarea>
+            </div>
+            <div >
+              <label for="nombre_aspecto">Peso:</label>
+              <input
+                id="pesoAspectoColectivo"
+                class="form-control"
+                type="number"
+              />
+            </div>
+            <div>
+              <label for="tipo">Operador Agregación:</label>
+              <select
+                class="custom-select"
+                id="select_operadoreAgregacion"
+              ></select>
+            </div>
+ 		<div>
+              <label for="tipo">Tipo:</label>
+              <select
+                class="custom-select"
+                id="select_aspectoColectivo"
+              ></select>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2">Activo:</div>
+              <div class="col-sm-8">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    disabled
+                    type="checkbox"
+                    id="activoAspectosColectivos"
+                    checked
+                  />
                 </div>
-
+              </div>
             </div>
-                   <div class="modal-footer">
-                <button id="guardarAspectoColectivoButton" type="button" class="btn btn-primary" onclick="guardarAspectoColectivo()">
+          </div>
+          <div class="col-6 aling-self-center">
+            <div class="input-group mb">
+              <label>Sujeto que captura el aspecto:</label>
+              <div
+                class="row px-3 pr-5 col-11"
+                style="overflow-y: auto; height: 125px"
+              >
+                <div id="sujetos_aspectos_colectivos" class="card col">
+                  <ul id="lista_sujetos_aspectos_colectivos"></ul>
+                </div>
+              </div>
+            </div>
+            <label>Aspectos de autoconsciencia de bajo nivel:</label>
+            <div
+              class="row px-3 pr-5 col-11"
+              style="overflow-y: auto; height: 125px"
+            >
+              <div id="aspectos_indiviaduales" class="card col">
+                <ul id="lista_aspectos_individuales"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="guardarAspectoColectivoButton"
+          type="button"
+          class="btn btn-primary"
+          onclick="guardarAspectoColectivo()"
+        >
           Guardar
         </button>
-                <button type="button" class="btn btn-secondary" onclick="limpiarFomularioColectivo()">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="limpiarFomularioColectivo()"
+        >
           Cancelar
         </button>
-            </div>
-        </div>
+      </div>
     </div>
-    </div>
+  </div>
+</div>

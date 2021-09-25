@@ -7844,6 +7844,9 @@ function mensaje_errorEnvioMetrica(err) {
 function cargar_metrica_table(json) {
   res = "";
   json.forEach((met) => {
+	  if(met.perspectiva_nombre=="NULL"){
+		  met.perspectiva_nombre=" ";
+	  }
     res += "<tr>";
     res += `<td><input type="radio" name="metrica_seleccionado" value="${
       met.id
@@ -8241,6 +8244,7 @@ function agregarAspectos() {
   var modificarButton = document.getElementById("modificarAspectoButtom");
   guardarButton.classList.replace("d-none", "inline-block");
   modificarButton.classList.replace("inline-block", "d-none");
+  limpiarFomulario();
   $("#add_aspects").modal("show");
 }
 
@@ -8346,10 +8350,6 @@ function guardarAspecto() {
 }
 
 function limpiarFomulario() {
-  document.getElementById("nombreAspecto").disabled = true;
-  document.getElementById("descripcionAspecto").disabled = true;
-  document.getElementById("pesoAspecto").disabled = true;
-  document.getElementById("select_aspecto").disabled = true;
   document.getElementById("nombreAspecto").value = "";
   document.getElementById("descripcionAspecto").value = "";
   document.getElementById("pesoAspecto").value = "";
@@ -8664,6 +8664,7 @@ function cargar_select_aspectos_objetivos_modificar(json) {
 function cargar_datos_del_modal_modificar_aspectos_individuales() {
   //obtener los datos del radio (aspecto seleccionado)
   try {
+    document.getElementById("sujetos_Activos_aspectos_modificar").innerHTML = "";
     var radio = document.getElementsByName("aspecto_seleccionado");
     var aspect_id;
     var name;
@@ -8708,7 +8709,7 @@ function cargar_datos_del_modal_modificar_aspectos_individuales() {
       var divSujeto = document.getElementById(
         "sujetos_Activos_aspectos_modificar"
       );
-      var hr = document.createElement("h5");
+      var hr = document.createElement("h6");
       hr.innerHTML = suj;
       divSujeto.appendChild(hr);
       post_api(
@@ -9959,4 +9960,11 @@ function eliminarAspectosColectivos() {
   } else {
     alert("No se ha seleccionado ningun recurso");
   }
+}
+//Arreglos
+function LimpiarFormularioModelos() {
+  document.getElementById("nombre_modelo").value = "";
+  document.getElementById("descripcion_esenario").value = "";
+  document.getElementById("autor_modelo").value = "";
+  $("#crear_modelo_modal").modal("hide");
 }
