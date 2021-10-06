@@ -34,3 +34,4 @@ export { IndicatorQ } from "./selfAwarness/qwertyModels/IndicatorQ";
 export { IndirectMetricQ } from "./selfAwarness/qwertyModels/IndirectMetricQ";
 export { ScaleQ } from "./selfAwarness/qwertyModels/ScaleQ";
 export { MeasurementUnitQ } from "./selfAwarness/qwertyModels/MeasurementUnitQ";
+export { ServiceQ } from "./selfAwarness/qwertyModels/ServiceQ";

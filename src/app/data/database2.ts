@@ -21,6 +21,7 @@ export class database2 {
   }
 
   public async qwerty(sql: string): Promise<any> {
+    //console.log(sql);
     var connection = await this.conectar();
     var [rows, fields] = await connection.execute(sql);
     connection.end();

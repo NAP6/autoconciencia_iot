@@ -12,6 +12,7 @@ import {
   ActuatorQ,
   NetworkQ,
   EntityQ,
+  ServiceQ,
 } from "../../models/selfAwarnessModels";
 
 export function entity(req: Request, res: Response) {
@@ -111,6 +112,13 @@ export async function entitys(req: Request, res: Response) {
         );
         rows = rows.concat(rows2);
       }
+    }
+    var service = new ServiceQ(-1, "", "");
+    var rows_service = await db.qwerty(
+      service.toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/"], [id, system])
+    );
+    if (rows_service.length > 0) {
+      rows = rows.concat(rows_service);
     }
 
     res.json(rows);

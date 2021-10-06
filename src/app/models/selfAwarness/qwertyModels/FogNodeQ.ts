@@ -20,7 +20,7 @@ export class FogNodeQ extends FogNode implements SQL_Qwerty {
                 o.obj_id = os.obj_id AND 
                 o.ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} AND 
                 os.ma_id = ${value[tag.indexOf('/@/MODEL/@/')]} AND 
-                (o.obj_tipo = 'FogNode' OR o.obj_tipo = 'Service') AND 
+                o.obj_tipo = 'FogNode' AND 
                 os.suj_id = ${value[tag.indexOf('/@/SYSTEM/@/')]}  
                 ORDER BY id`;
     return `SELECT 

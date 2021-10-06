@@ -10,7 +10,7 @@ export async function get_data_flow(req: Request, res: Response) {
     var comu;
     if (comunicacion == "SINCRONA") {
       comu = "Synchronous";
-    } else if (comunicacion == "ASÍNCRONA") {
+    } else if (comunicacion == undefined) {
       comu = undefined;
     }
     var data_flow: DataFlowQ = new DataFlowQ(-1, "", "", "", "", -1);

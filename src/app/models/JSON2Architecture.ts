@@ -113,15 +113,20 @@ export class JSON2Architecture {
 
       if (entity.$.isPartOf) {
         this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
-        console.log(
-          `despues de salir de la funcion de unir tiene ${newEntity.iotSystem.length}`
-        );
       }
 
       if (entity.containsService) {
         for (var i = 0; i < entity.containsService.length; i++) {
           var service = entity.containsService[i].$;
-          var serviceEntity = new EntityQ(service.id, service.name, "Service");
+          var serviceEntity = new EntityQ(
+            service.id + 1000,
+            service.name,
+            "Service"
+          );
+          serviceEntity.iotSystem = newEntity.iotSystem;
+          console.log(
+            `la entidad ${serviceEntity.name} tiene ${serviceEntity.iotSystem.length} sistemas`
+          );
           newEntity.subEntity.push(serviceEntity);
         }
       }
@@ -184,6 +189,15 @@ export class JSON2Architecture {
 
       if (entity.$.isPartOf) {
         this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
+      }
+
+      if (entity.containsService) {
+        for (var i = 0; i < entity.containsService.length; i++) {
+          var service = entity.containsService[i].$;
+          var serviceEntity = new EntityQ(service.id, service.name, "Service");
+          serviceEntity.iotSystem = newEntity.iotSystem;
+          newEntity.subEntity.push(serviceEntity);
+        }
       }
 
       if (entity.containsSubPhysicalEntity) {

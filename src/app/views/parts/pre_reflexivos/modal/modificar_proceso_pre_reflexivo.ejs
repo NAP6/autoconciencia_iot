@@ -1,67 +1,79 @@
-<div class="" id="pagina_proceso">
+<div id="pagina_proceso_modificar">
   <div class="row">
     <div class="col">
-      <input type="text" class="d-none" id="id_proceso_pre_reflexivo" />
-      <input type="text" class="d-none" id="id_metodo_aprendizaje_directo" />
-      <input type="text" class="d-none" id="nombre_proceso_id" />
+      <input
+        type="text"
+        class="d-none"
+        id="id_proceso_pre_reflexivo_modificar"
+        value="<%=modificar[0].id%>"
+      />
+      <input
+        type="text"
+        class="d-none"
+        id="id_sujeto"
+        value="<%=modificar[0].sujeto%>"
+      />
       <div class="form-group row">
-        <label for=" " class="col-sm-3 col-form-label">ID:</label>
+        <label for="" class="col-sm-3 col-form-label">ID:</label>
         <div class="col-sm-7">
           <input
-            type="text "
+            type="text"
             class="form-control"
-            id="nombre_proceso_pre_reflexivo"
-            style="text-transform: uppercase"
-            onkeyup="javascript:this.value=this.value.toUpperCase(); "
+            id="input-name-proceso-pre-reflexivo_modificar"
+            value="<%=modificar[0].nombre%>"
             disabled
           />
         </div>
       </div>
-
       <div class="form-group row">
-        <label for=" " class="col-sm-3 col-form-label">Descripción:</label>
+        <label for="" class="col-sm-3 col-form-label">Descripción:</label>
         <div class="col-sm-7">
           <textarea
-            type="text "
+            type="text"
             class="form-control"
             id="input-descripcion-proceso-pre-reflexivo"
             style="text-transform: uppercase"
-            onkeyup="javascript:this.value=this.value.toUpperCase(); "
-          ></textarea>
+            onkeyup="javascript:this.value=this.value.toUpperCase();"
+          >
+	  <%=modificar[0].descripcion%>
+	  </textarea
+          >
         </div>
       </div>
       <div class="form-group row">
-        <label for=" " class="col-sm-3 col-form-label">Tipo Ejecución:</label>
+        <label for="" class="col-sm-3 col-form-label">Tipo Ejecución:</label>
         <div class="form-group col-7">
           <select
             class="custom-select"
-            name="tipo_ejecucion"
-            id="tipo_ejecucion"
+            name="tipo_ejecucion_modificar"
+            id="tipo_ejecucion_modificar"
           >
             <option value="-6">Seleccione..</option>
           </select>
         </div>
       </div>
-      <h6>Periodo de ejecucion:</h6>
+      <h6>Periodo de ejecución:</h6>
       <div class="col card" style="height: 55px">
         <div class="form-group mt-2 row">
-          <label for="" class="col-sm-2 col-form-label">Inicio:</label>
+          <label class="col-sm-2 col-form-label">Inicio:</label>
           <input
             type="date"
-            id="inicio_del_periodo"
-            name="inicio_del_periodo"
+            id="inicio_del_periodo_modificar"
+            name="inicio_del_periodo_modificar"
             value=""
             min="2020-01-01"
             max="2050-01-01"
+            value="<%=modificar[0].inicio%>"
           />
           <label for="" class="col-sm-2 col-form-label">Fin:</label>
           <input
             type="date"
-            id="fin_del_periodo"
-            name="fin_del_periodo"
+            id="fin_del_periodo_modificar"
+            name="fin_del_periodo_modificar"
             value=""
             min="2020-01-01"
             max="2050-01-01"
+            value="<%=modificar[0].fin%>"
           />
         </div>
       </div>
@@ -73,8 +85,8 @@
             <div class="form-group mt-1 col-12">
               <select
                 class="custom-select"
-                name="unidad_tiempo"
-                id="unidad_tiempo"
+                name="unidad_tiempo_modificar"
+                id="unidad_tiempo_modificar"
               >
                 <option value="-6">Seleccione..</option>
               </select>
@@ -89,8 +101,8 @@
                 type="number"
                 min="0"
                 class="form-control"
-                name="intervalo_ejecucion"
-                id="intervalo_ejecucion"
+                name="intervalo_ejecucion_modificar"
+                id="intervalo_ejecucion_modificar"
               />
             </div>
           </div>
@@ -102,8 +114,8 @@
               <input
                 type="time"
                 class="form-control"
-                name="hora_ejecucion"
-                id="hora_ejecucion"
+                name="hora_ejecucion_modificar"
+                id="hora_ejecucion_modificar"
               />
             </div>
           </div>
@@ -113,18 +125,18 @@
     <div class="col-6">
       <h6>Sujeto que ejecuta el proceso:</h6>
       <div
-        id="sujetos_activos_proceso"
+        id="sujetos_activos_proceso_modificar"
         class="card col-12 col-lg-10"
-        style="overflow-y: auto; height: 130px"
+        style="overflow-y: auto; height: 70px"
       >
-        <ul id="lista_sujetos_activos_proceso"></ul>
+        <h5><%=modificar[0].sujeto_nombre%></h5>
       </div>
       <h6>Aspecto de autoconsciencia a capturar:</h6>
       <div class="input-group col-12">
         <select
           class="custom-select"
-          name="Aspectos_autoconsciencia"
-          id="Aspectos_autoconsciencia"
+          name="Aspectos_autoconsciencia_modificar"
+          id="Aspectos_autoconsciencia_modificar"
           disabled
         ></select>
       </div>
@@ -133,32 +145,20 @@
         <div class="form-group mt-1 col-12">
           <select
             class="custom-select"
-            name="CategoriaEntidadesProcesos"
-            id="CategoriaEntidadesProcesos"
+            name="CategoriaEntidadesProcesosModificar"
+            id="CategoriaEntidadesProcesosModificar"
             disabled
-          >
-            <option value="-6">Seleccione..</option>
-            <option id="1" value="1">Entidades Físicas</option>
-            <option value="2">Nodos Cloud</option>
-            <option value="3">Nodos Fog</option>
-            <option value="4">Gateway IoT</option>
-            <option value="5">Sensores</option>
-            <option value="6">Tags</option>
-            <option value="7">Actuadores</option>
-            <option value="8">Red</option>
-          </select>
+          ></select>
         </div>
       </div>
-      <h6 class="">
-        Objetos sobre los que se captura el aspecto autoconsciencia:
-      </h6>
+      <h6>Objetos sobre los que se captura el aspecto autoconsciencia:</h6>
       <div class="col-sm-11">
         <div
-          id="entidades_seleccionados_area_procesos"
+          id="entidades_seleccionados_area_procesos_modificar"
           class="card col-lg-12"
           style="overflow-y: auto; height: 90px"
         >
-          <ul id="lista_entidades_seleccionadas_procesos"></ul>
+          <ul id="lista_entidades_seleccionadas_procesos_modificar"></ul>
         </div>
       </div>
     </div>

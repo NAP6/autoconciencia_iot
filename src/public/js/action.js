@@ -3234,6 +3234,8 @@ function generar_flujo_datos_select() {
     .value;
   if (comunicacion == "SÍNCRONA") {
     comunicacion = "SINCRONA";
+  } else {
+    comunicacion = undefined;
   }
   if (seleccione != "Seleccione.." && porpiedadSeleccionada != "-6") {
     post_api(
@@ -4632,8 +4634,6 @@ function agregarProcesoReflexivo() {
 }
 
 function Abrir_limpiar_modal_proceso_reflexivo() {
-  document.getElementById("id_proceso_reflexivo").value = "";
-  document.getElementById("nombre_proceso_reflexivo").value = "";
   document.getElementById("descripcion_proceso_reflexivo").value = "";
   document.getElementById("inicio_del_periodo_reflexivo").value = "";
   document.getElementById("fin_del_periodo_reflexivo").value = "";
@@ -4642,6 +4642,9 @@ function Abrir_limpiar_modal_proceso_reflexivo() {
   ).selectedIndex = "0";
   document.getElementById("Aspectos_autoconsciencia_reflexivos").selectedIndex =
     "0";
+  document.getElementById(
+    "Aspectos_tipo_autoconsciencia_reflexivos"
+  ).selectedIndex = "0";
   document.getElementById("inicio_metodos_reflexivos").value = "";
   document.getElementById("fin_metodos_reflexivos").value = "";
   document.getElementById("tipo_recurso_metodos_reflexivo").selectedIndex = "0";
@@ -4661,6 +4664,9 @@ function Abrir_limpiar_modal_proceso_reflexivo() {
   document.getElementById(
     "Aspectos_autoconsciencia_reflexivos"
   ).disabled = true;
+  document.getElementById(
+    "Aspectos_tipo_autoconsciencia_reflexivos"
+  ).disabled = true;
   document.getElementById("recurso_reflexivos").disabled = true;
   document.getElementById("mapeo_parametros_btn_metodos").disabled = true;
   document.getElementById("escenario_simulacion").disabled = true;
@@ -4673,6 +4679,21 @@ if (document.getElementById("lista_sujetos_activos_proceso_reflexivo")) {
     cargar_sujetos_activos_procesos_reflexivos,
     error_cargar_sujetos_activos_procesos_reflexivos
   );
+}
+
+function seleccionar_tipo_reflexivo(select) {
+  var tipo = select.value;
+  var list = document.getElementsByClassName("display_type");
+  if (tipo == "Individuales") {
+    Array.from(list).forEach((elem) => {
+      elem.classList.add("d-none");
+    });
+  } else {
+    Array.from(list).forEach((elem) => {
+      elem.classList.remove("d-none");
+    });
+  }
+  cargar_aspectos_procesos_reflexivos(sujetoGuardarproceso_reflexivo, tipo);
 }
 
 function cargar_sujetos_activos_procesos_reflexivos(json) {
@@ -4753,10 +4774,13 @@ function verificarSeleccionProceso_reflexivo(elemento) {
     "Aspectos_autoconsciencia_reflexivos"
   );
   seleccion.disabled = false;
-  cargar_aspectos_procesos_reflexivos(sujetoGuardarproceso_reflexivo);
+  var seleccion_tipo = document.getElementById(
+    "Aspectos_tipo_autoconsciencia_reflexivos"
+  );
+  seleccion_tipo.disabled = false;
 }
 
-function cargar_aspectos_procesos_reflexivos(IdSujeto) {
+function cargar_aspectos_procesos_reflexivos(IdSujeto, tipo) {
   var limpiar = document.getElementById(
     "lista_entidades_seleccionadas_procesos_reflexivos"
   );
@@ -4764,6 +4788,7 @@ function cargar_aspectos_procesos_reflexivos(IdSujeto) {
   if (IdSujeto) {
     data = {
       systemID: IdSujeto,
+      types: tipo,
     };
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
@@ -4946,7 +4971,13 @@ var obj_Id_reflexivos = undefined;
 
 function cargar_aspectos_reflexivos(elemento, lado) {
   document.getElementById(
+    "Aspectos_tipo_autoconsciencia_reflexivos"
+  ).disabled = false;
+  document.getElementById(
     "Aspectos_autoconsciencia_reflexivos"
+  ).disabled = false;
+  document.getElementById(
+    "Aspectos_tipo_autoconsciencia_reflexivos"
   ).disabled = false;
   var checkbox = document.getElementsByName(
     "checkbox_entidades_procesos_reflexivos"
@@ -4985,7 +5016,7 @@ function error_cargar_aspectos_select_reflexivos(err) {
 }
 
 function guardar_procesos_reflexivos() {
-  var nombre = document.getElementById("nombre_proceso_reflexivo").value;
+  var nombre = document.getElementById("nombre_proceso_reflexivo_id").value;
   var descripcion = document.getElementById("descripcion_proceso_reflexivo")
     .value;
   var inicioP = document.getElementById("inicio_del_periodo_reflexivo").value;
@@ -5019,7 +5050,6 @@ function guardar_procesos_reflexivos() {
         console.log(res);
       }
     );
-    document.getElementById("nombre_proceso_reflexivo").disabled = true;
     document.getElementById("descripcion_proceso_reflexivo").disabled = true;
     document.getElementById("inicio_del_periodo_reflexivo").disabled = true;
     document.getElementById("fin_del_periodo_reflexivo").disabled = true;
@@ -5034,6 +5064,9 @@ function guardar_procesos_reflexivos() {
     ).disabled = true;
     document.getElementById(
       "Aspectos_autoconsciencia_reflexivos"
+    ).disabled = true;
+    document.getElementById(
+      "Aspectos_tipo_autoconsciencia_reflexivos"
     ).disabled = true;
 
     var checkSujetos = document.getElementsByName(
@@ -7844,9 +7877,9 @@ function mensaje_errorEnvioMetrica(err) {
 function cargar_metrica_table(json) {
   res = "";
   json.forEach((met) => {
-	  if(met.perspectiva_nombre=="NULL"){
-		  met.perspectiva_nombre=" ";
-	  }
+    if (met.perspectiva_nombre == "NULL") {
+      met.perspectiva_nombre = " ";
+    }
     res += "<tr>";
     res += `<td><input type="radio" name="metrica_seleccionado" value="${
       met.id
@@ -8664,7 +8697,8 @@ function cargar_select_aspectos_objetivos_modificar(json) {
 function cargar_datos_del_modal_modificar_aspectos_individuales() {
   //obtener los datos del radio (aspecto seleccionado)
   try {
-    document.getElementById("sujetos_Activos_aspectos_modificar").innerHTML = "";
+    document.getElementById("sujetos_Activos_aspectos_modificar").innerHTML =
+      "";
     var radio = document.getElementsByName("aspecto_seleccionado");
     var aspect_id;
     var name;
@@ -8740,8 +8774,8 @@ function modificarAspectos() {
         systemID = elem.dataset.sujeto;
         //get_aspectos_objetivos_modificar(suj_id);
         cargar_datos_del_modal_modificar_aspectos_individuales();
-      }else{
-	alert("Debe seleccionar un aspecto individual");
+      } else {
+        alert("Debe seleccionar un aspecto");
       }
     });
   } catch (error) {
@@ -8969,7 +9003,7 @@ function get_nombre_proceso(json) {
   document.getElementById("nombre_proceso_pre_reflexivo").value =
     "PID" + (parseInt(json[0].id) + 1);
 }
-if (document.getElementById("nombre_proceso_reflexivo")) {
+if (document.getElementById("nombre_proceso_reflexivo_id")) {
   consultar_api(
     "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
     get_nombre_proceso_reflexivo,
@@ -8979,7 +9013,8 @@ if (document.getElementById("nombre_proceso_reflexivo")) {
   );
 }
 function get_nombre_proceso_reflexivo(json) {
-  document.getElementById("nombre_proceso_reflexivo").value =
+  console.log(json);
+  document.getElementById("nombre_proceso_reflexivo_id").value =
     "PID" + (parseInt(json[0].id) + 1);
 }
 if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
@@ -9580,6 +9615,7 @@ function guardarAspectoColectivo() {
       suj_id: sujeto_aspecto_id,
       arr_aspects: selectedAspects,
       aa_alcance: 54,
+      activo: 1,
     };
   }
   if (
@@ -9730,6 +9766,8 @@ function modificarAspectosColectivos() {
         systemID = elem.dataset.sujeto;
         //get_aspectos_objetivos_modificar(suj_id);
         cargar_datos_del_modal_modificar_aspectos_colectivos();
+      } else {
+        alert("Debe seleccionar un aspecto colectivo");
       }
     });
   } catch (error) {
@@ -9758,6 +9796,7 @@ function cargar_datos_del_modal_modificar_aspectos_colectivos() {
       suj_id = elem.dataset.sujeto;
       objetivo = elem.dataset.objetivo;
       tipo = elem.dataset.tipo;
+      operador = elem.dataset.operador;
       return;
     }
   });
@@ -9794,6 +9833,9 @@ function cargar_datos_del_modal_modificar_aspectos_colectivos() {
     var divSujeto = document.getElementById(
       "sujetos_aspectos_colectivos_modificar"
     );
+    document.getElementById(
+      "select_operadoreAgregacionModificar"
+    ).value = operador;
     divSujeto.innerHTML = "";
     var hr = document.createElement("h5");
     hr.innerHTML = suj;

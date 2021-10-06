@@ -151,7 +151,6 @@ export default function (app: Application) {
   app.post("/api/mod_metodos_modelos", rt.mod_metodos_modelos);
   app.get("/api/get_last_insert_process", rt.get_last_insert_process);
   //Metodo de aprendizaje procesos pre relfexivos
-
   app.post("/api/add_metodo_modelo", rt.add_metodo_modelo);
   //API PROPIEDADES
   app.post("/api/get_properties", rt.get_properties);

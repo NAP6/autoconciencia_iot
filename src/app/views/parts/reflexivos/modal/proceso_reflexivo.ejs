@@ -10,7 +10,7 @@
           <input
             type="text "
             class="form-control"
-            id="nombre_proceso_reflexivo"
+            id="nombre_proceso_reflexivo_id"
             style="text-transform: uppercase"
             onkeyup="javascript:this.value=this.value.toUpperCase(); "
             disabled
@@ -67,10 +67,10 @@
       </div>
       <h6>Frecuencia de ejecución</h6>
       <div class="row">
-        <div class="col-md-4">
-          <div class="mt-2">
+        <div class="col">
+          <div class="mt-1">
             <h6>Unidad de Tiempo:</h6>
-            <div class="form-group mt-1 col-12">
+            <div class="form-group col-12">
               <select
                 class="custom-select"
                 name="unidad_tiempo_ref"
@@ -81,7 +81,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-5">
           <div class="mt-2">
             <h6>Intervalo de ejecución:</h6>
             <div class="input-group col-12">
@@ -95,7 +95,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
           <div class="mt-2">
             <h6>Hora ejecución:</h6>
             <div class="form-group mt-1 col-12">
@@ -120,6 +120,20 @@
       >
         <ul id="lista_sujetos_activos_proceso_reflexivo"></ul>
       </div>
+      <h6>Tipo:</h6>
+      <div class="input-group col-12">
+        <select
+          class="custom-select"
+          name="Aspectos_tipo_autoconsciencia_reflexivos"
+          id="Aspectos_tipo_autoconsciencia_reflexivos"
+	  onChange="seleccionar_tipo_reflexivo(this)"
+          disabled
+        >
+          <option value="-6">Seleccione..</option>
+          <option value="Individuales">Individuales</option>
+          <option value="Colectivos">Colectivos</option>
+	</select>
+      </div>
       <h6>Aspecto de autoconsciencia a capturar:</h6>
       <div class="input-group col-12">
         <select
@@ -129,11 +143,10 @@
           disabled
         ></select>
       </div>
-      <div class="mt-2">
-        <h6>Categoría de objetos:</h6>
+        <h6 class="display_type">Categoría de objetos:</h6>
         <div class="form-group mt-1 col-12">
           <select
-            class="custom-select"
+            class="custom-select display_type"
             name="CategoriaEntidadesProcesos_reflexivos"
             id="CategoriaEntidadesProcesos_reflexivos"
             disabled
@@ -149,11 +162,10 @@
             <option value="8">Red</option>
           </select>
         </div>
-      </div>
-      <h6 class="">
+      <h6 class="display_type">
         Objetos sobre los que se captura el aspecto autoconsciencia:
       </h6>
-      <div class="col-sm-11">
+      <div class="col-sm-11 display_type">
         <div
           id="entidades_seleccionados_area_procesos_reflexivos"
           class="card col-lg-12"
