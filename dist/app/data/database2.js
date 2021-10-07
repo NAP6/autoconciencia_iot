@@ -31,7 +31,7 @@ class database2 {
     }
     qwerty(sql) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.log(sql);
+            //console.log(sql);
             var connection = yield this.conectar();
             var [rows, fields] = yield connection.execute(sql);
             connection.end();
