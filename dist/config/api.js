@@ -27,27 +27,11 @@ function default_1(app) {
     app.post("/api/update_entity/", api.update_entity);
     app.post("/api/entity/", api.entity);
     app.get("/api/enumeracion/", api.enumeracion);
-    //app.get("/api/measurement_units/", api.measurement_units);
-    //app.post("/api/add_measurement_units/", api.add_measurement_units);
-    // app.post("/api/del_measurement_units/", api.del_measurement_units);
-    // app.post("/api/upd_measurement_units/", api.upd_measurement_units);
-    // app.get("/api/escales/", api.escales);
-    // app.post("/api/add_escales/", api.add_escales);
-    //app.post("/api/del_escales/", api.del_escales);
-    //app.post("/api/upd_escales/", api.upd_escales);
-    //app.get("/api/escalas_select"), api.get_escales_select;
     app.get("/api/decision_criteria/", api.decision_criteria);
     app.post("/api/add_decision_criteria/", api.add_decision_criteria);
     app.post("/api/del_decision_criteria/", api.del_decision_criteria);
     app.post("/api/upd_decision_criteria/", api.upd_decision_criteria);
     app.post("/api/umbral/", api.umbral);
-    // app.post("/api/get_umbral/", api.get_umbral);
-    // app.post("/api/add_umbral/", api.add_umbral);
-    // app.post("/api/del_umbral/", api.del_umbral);
-    //app.post("/api/upd_umbral/", api.upd_umbral);
-    //app.post("/api/aspects/", api.aspects);
-    //app.post("/api/add_aspects/", api.add_aspects);
-    //app.post("/api/del_aspects/", api.del_aspects);
     app.post("/api/add_metrica/", api.add_metrica);
     app.post("/api/get_metrica", api.get_metrica);
     app.post("/api/get_metrica_select", api.get_metrica_select);
@@ -76,9 +60,6 @@ function default_1(app) {
     app.post("/api/ascenario_simulacion/", api.escenario_simulacion);
     app.post("/api/del_escenario_simulacion/", api.del_escenario_simulacion);
     app.post("/api/upd_escenario_simulacion/", api.upd_escenario_simulacion);
-    //app.post("/api/get_variables_valor/", api.get_variables_valor);
-    //app.post("/api/add_variables_valor/", api.add_variables_valor);
-    //pp.post("/api/del_variables_valor/", api.del_variables_valor);
     app.post("/api/upd_variables_valor/", api.upd_variables_valor);
     app.post("/api/get_variable_simulacion/", api.get_variable_simulacion);
     app.get("/api/get_variable_simulacion_id/", api.get_variable_simulacion_id);
@@ -98,7 +79,8 @@ function default_1(app) {
     app.post("/api/delete_subjects_objects/", rt.delete_subjects_goal);
     app.post("/api/subjects_aspects/", rt.subjects_aspects);
     //Aspectos
-    app.route("/api/get_aspects/").get(rt.get_aspects);
+    app.route("/api/get_aspects/").post(rt.get_aspects);
+    app.route("/api/get_aspects_ind/").get(rt.get_aspects_ind);
     app.post("/api/add_aspects/", rt.add_aspects);
     app.post("/api/mod_aspects/", rt.mod_aspecs);
     app.post("/api/del_aspects/", rt.del_aspects);
@@ -106,6 +88,14 @@ function default_1(app) {
     app.post("/api/get_aspects_objects_process", rt.get_aspects_objects_process);
     app.post("/api/del_aspects_objects", rt.del_aspects_objects);
     app.post("/api/add_relation_objects_aspects", rt.add_relation_objects_aspects);
+    //Aspectos Colectivos
+    app.post("/api/get_aspects_individuales", rt.get_aspects_individuales);
+    app.post("/api/add_aspects_colective", rt.add_aspects_colective);
+    app.route("/api/get_aspects_colective").get(rt.get_aspects_colective);
+    app.post("/api/get_aspects_padres", rt.get_aspects_padres);
+    app.post("/api/mod_aspects_colective", rt.mod_aspects_colective);
+    app.post("/api/get_aspects_hijos", rt.get_aspects_hijos);
+    app.post("/api/get_aspects_hijos_seleccionados", rt.get_aspects_hijos_seleccionados);
     //Generales
     //=====================================================================
     //Metricas
@@ -188,7 +178,7 @@ function default_1(app) {
     //	Mapo de parametros
     app.post("/api/ask_input_arguments/", rt.ask_input_arguments);
     app.post("/api/add_mapeo_parametros", rt.add_mapeo_parametros);
-    //Acciones Procesos
+    //	Acciones Procesos
     app.post("/api/get_action", rt.get_action);
     app.post("/api/add_action", rt.add_action);
     app.post("/api/upd_action", rt.upd_action);
