@@ -4684,11 +4684,13 @@ if (document.getElementById("lista_sujetos_activos_proceso_reflexivo")) {
 function seleccionar_tipo_reflexivo(select) {
   var tipo = select.value;
   var list = document.getElementsByClassName("display_type");
-  if (tipo == "Individuales") {
+  if (tipo != "53") {
+    console.log("Esta entrando en Colectivos");
     Array.from(list).forEach((elem) => {
       elem.classList.add("d-none");
     });
   } else {
+    console.log("Esta entrando en Individuales");
     Array.from(list).forEach((elem) => {
       elem.classList.remove("d-none");
     });
@@ -9419,12 +9421,13 @@ function llenarAspectosIndividuales(json) {
     var li = document.createElement("li");
     li.id = `li_aspect_${global_cont_aspect_lista_arbol}`;
     var divFormCheck = document.createElement("div");
-    var radio = document.createElement("input");
-    radio.type = "radio";
-    radio.dataset.puro_id = aspect.id;
-    radio.dataset.checked = "False";
-    radio.dataset.li_id = `li_aspect_${global_cont_aspect_lista_arbol}`;
-    radio.setAttribute("onclick", "cargar_aspectos_hijos_para_el_arbol(this)");
+    var icon = document.createElement("i");
+    //radio.type = "radio";
+    icon.dataset.puro_id = aspect.id;
+    icon.dataset.max = "False";
+    icon.dataset.li_id = `li_aspect_${global_cont_aspect_lista_arbol}`;
+    icon.setAttribute("onclick", "cargar_aspectos_hijos_para_el_arbol(this)");
+    icon.classList.add("fas", "fa-plus", "fa-xs", "mx-1");
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     var labelChek = document.createElement("label");
@@ -9432,7 +9435,7 @@ function llenarAspectosIndividuales(json) {
     checkbox.name = "checkbox_aspectos_individuales";
     checkbox.dataset.puro_id = aspect.id;
     li.appendChild(divFormCheck);
-    divFormCheck.appendChild(radio);
+    divFormCheck.appendChild(icon);
     divFormCheck.appendChild(checkbox);
     divFormCheck.appendChild(labelChek);
     ul.appendChild(li);
@@ -9454,19 +9457,21 @@ function llenarAspectosIndividuales(json) {
 }
 
 var global_li_id_aspecto_del_arbol;
-function cargar_aspectos_hijos_para_el_arbol(radio) {
-  var aspect_id = radio.dataset.puro_id;
-  global_li_id_aspecto_del_arbol = radio.dataset.li_id;
-  if (radio.dataset.checked == "True") {
+function cargar_aspectos_hijos_para_el_arbol(icon) {
+  var aspect_id = icon.dataset.puro_id;
+  global_li_id_aspecto_del_arbol = icon.dataset.li_id;
+  if (icon.dataset.max == "True") {
     var li_item = document.getElementById(global_li_id_aspecto_del_arbol);
     var list_ul = li_item.getElementsByTagName("ul");
     if (list_ul.length > 0) {
       li_item.removeChild(list_ul[0]);
     }
-    radio.dataset.checked = "False";
-    radio.checked = false;
+    icon.dataset.max = "False";
+    icon.max = false;
+    icon.classList.replace("fa-minus", "fa-plus");
   } else {
-    radio.dataset.checked = "True";
+    icon.dataset.max = "True";
+    icon.classList.replace("fa-plus", "fa-minus");
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_aspects_hijos",
       { id: aspect_id },
@@ -9504,20 +9509,21 @@ function cargar_hijos_al_li(json) {
     var li = document.createElement("li");
     li.id = `li_aspect_${global_cont_aspect_lista_arbol}`;
     var divFormCheck = document.createElement("div");
-    var radio = document.createElement("input");
-    radio.type = "radio";
-    radio.dataset.puro_id = aspect.id;
-    radio.dataset.checked = "False";
-    radio.dataset.li_id = `li_aspect_${global_cont_aspect_lista_arbol}`;
-    radio.setAttribute("onclick", "cargar_aspectos_hijos_para_el_arbol(this)");
+    divFormCheck.classList.add("d-table");
+    var icon = document.createElement("i");
+    icon.dataset.puro_id = aspect.id;
+    icon.dataset.max = "False";
+    icon.classList.add("fas", "fa-plus", "fa-xs", "mx-1", "d-table-cell");
+    icon.dataset.li_id = `li_aspect_${global_cont_aspect_lista_arbol}`;
+    icon.setAttribute("onclick", "cargar_aspectos_hijos_para_el_arbol(this)");
     //var checkbox = document.createElement("input");
     //checkbox.type = "checkbox";
     var labelChek = document.createElement("label");
-    labelChek.classList.add("form-check-label");
+    labelChek.classList.add("form-check-label", "d-table-cell");
     //checkbox.name = "checkbox_aspectos_individuales";
     //checkbox.dataset.puro_id = aspect.id;
     li.appendChild(divFormCheck);
-    divFormCheck.appendChild(radio);
+    divFormCheck.appendChild(icon);
     //divFormCheck.appendChild(checkbox);
     divFormCheck.appendChild(labelChek);
     ul.appendChild(li);

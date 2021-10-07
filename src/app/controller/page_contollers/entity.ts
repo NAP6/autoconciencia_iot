@@ -113,9 +113,12 @@ export async function entitys(req: Request, res: Response) {
         rows = rows.concat(rows2);
       }
     }
+    var fathers_services = rows.map((ent) => {
+      return ent.id;
+    });
     var service = new ServiceQ(-1, "", "");
     var rows_service = await db.qwerty(
-      service.toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/"], [id, system])
+      service.toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/","/@/FATHERS/@/"], [id, system, fathers_services.join(',')])
     );
     if (rows_service.length > 0) {
       rows = rows.concat(rows_service);

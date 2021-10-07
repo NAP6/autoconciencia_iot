@@ -89,7 +89,7 @@ export async function get_aspects_objects_process(req: Request, res: Response) {
     var rows;
     if (types) {
       rows = await db.qwerty(`SELECT 
-	          					DISTINCT asp.aa_id as idAspecto,
+	          				DISTINCT asp.aa_id as idAspecto,
 	      	    				asp.aa_nombre as nombreAspecto
 	      	    			FROM 
 	      	     				aspectoautoconsciencia asp, 
@@ -98,7 +98,8 @@ export async function get_aspects_objects_process(req: Request, res: Response) {
 	      	                		suj.suj_id=${system} AND 
 	      	                		asp.ma_id=${modeloID} AND
 	      					suj.ma_id=${modeloID} AND
-	      					suj.suj_id=asp.suj_id`);
+	      					suj.suj_id=asp.suj_id AND
+	      					asp.aa_alcance=${types}`);
     } else {
       rows = await db.qwerty(`SELECT 
 	          					DISTINCT asp.aa_id as idAspecto,

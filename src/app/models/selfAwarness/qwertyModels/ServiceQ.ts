@@ -22,7 +22,8 @@ export class ServiceQ extends Service implements SQL_Qwerty {
                 o.ma_id = os.ma_id AND 
                 os.ma_id = ${value[tag.indexOf("/@/MODEL/@/")]} AND 
                 o.obj_tipo = 'Service' AND 
-                os.suj_id = ${value[tag.indexOf("/@/SYSTEM/@/")]}  
+                os.suj_id = ${value[tag.indexOf("/@/SYSTEM/@/")]} AND
+		o.obj_padre IN(${value[tag.indexOf("/@/FATHERS/@/")]})
                 ORDER BY id`;
     return `SELECT 
             obj_id as id, 
