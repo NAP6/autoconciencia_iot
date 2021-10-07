@@ -18,7 +18,6 @@ function get_action(req, res) {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var db = new database2_1.database2();
             var metodo = req.body.mea_id;
-            console.log(metodo);
             var action = new ActionQ_1.ActionQ(-1, "");
             action.isRecommendedln = req.body.umbral;
             var rows = yield db.qwerty(action.toSqlSelect(["/@/METHOD/@/"], [metodo]));

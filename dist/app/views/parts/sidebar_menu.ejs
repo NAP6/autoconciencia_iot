@@ -1,71 +1,157 @@
 <div id="layoutSidenav_nav">
-    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-        <div class="sb-sidenav-menu">
-            <div class="nav">
-                <div class="sb-sidenav-menu-heading">Mantenimientos</div>
-                <!-- Modelos -->
-                <a class="nav-link" href="/models">
-                    <div class="sb-nav-link-icon"><i class="fas fa-sitemap"></i></div>Modelos
-                </a>
-                <!-- Dominios -->
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDomine" aria-expanded="false" aria-controls="collapseDomine">
-                    <div class="sb-nav-link-icon"><i class="fas fa-layer-group"></i></div>
-                    Dominios
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseDomine" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                        <!-- Sujetos -->
-                        <a class="nav-link" href="/subject">Sujetos</a>
-                        <!-- Objetos -->
-                        <a class="nav-link" href="/object">Objetos</a>
-                        <!-- Aspectos -->
-                        <a class="nav-link" href="/aspects">Aspectos</a>
-                    </nav>
-                </div>
-                <!-- Procesos de autoconsciencia -->
-
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReflexivos" aria-expanded="false" aria-controls="collapseDomine">
-                    <div class="sb-nav-link-icon"><i class="fas fa-bezier-curve"></i></div>
-                    Procesos de autoconsciencia
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseReflexivos" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                        <!-- Pre-reflexivos -->
-                        <a class="nav-link" href="/pre_reflexivos">Pre-reflexivos</a>
-                        <!-- Reflexivos -->
-                        <a class="nav-link" href="/reflexivos">Reflexivos</a>
-                    </nav>
-                </div>
-                <!-- Generales -->
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGeneral" aria-expanded="false" aria-controls="collapseGeneral">
-                    <div class="sb-nav-link-icon"><i class="fas fa-globe-americas"></i></div>
-                    Generales
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseGeneral" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                        <!--Metricas -->
-                        <a class="nav-link" href="/metrics">Métricas</a>
-                        <!-- Unidades de medida -->
-                        <a class="nav-link" href="/measurement_units">Unidades de medida</a>
-                        <!-- Escalas -->
-                        <a class="nav-link" href="/scales">Escalas</a>
-                        <!-- Criterios de decision -->
-                        <a class="nav-link" href="/decision_criteria">Criterios de decision</a>
-                        <!-- Recursos de implementacion -->
-                        <a class="nav-link collapsed" href="/deployment_resources">
-                            Recursos de implementación
-                        </a>
-                    </nav>
-                </div>
-
-                <!-- Generar modelo de autoconsciencia -->
-                <a class="nav-link" href="/generate_model">
-                    <div class="sb-nav-link-icon"><i class="fas fa-shapes"></i></div>Generar modelos de autoconsciencia
-                </a>
+  <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <div class="sb-sidenav-menu">
+      <div class="nav">
+        <div class="sb-sidenav-menu-heading">Mantenimientos</div>
+        <!-- Modelos -->
+        <a class="nav-link" href="/models">
+          <div class="sb-nav-link-icon"><i class="fas fa-sitemap"></i></div>
+          Modelos
+        </a>
+        <!-- Dominios -->
+        <a
+          class="nav-link collapsed"
+          href="#"
+          data-toggle="collapse"
+          data-target="#collapseDomine"
+          aria-expanded="false"
+          aria-controls="collapseDomine"
+        >
+          <div class="sb-nav-link-icon"><i class="fas fa-layer-group"></i></div>
+          Dominios
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div
+          class="collapse"
+          id="collapseDomine"
+          aria-labelledby="headingOne"
+          data-parent="#sidenavAccordion"
+        >
+          <nav
+            class="sb-sidenav-menu-nested nav accordion"
+            id="sidenavAccordionPages"
+          >
+            <!-- Sujetos -->
+            <a class="nav-link" href="/subject">Sujetos</a>
+            <!-- Objetos -->
+            <a class="nav-link" href="/object">Objetos</a>
+            <!-- Aspectos -->
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#collapseAspects"
+              aria-expanded="false"
+              aria-controls="collapseAspects"
+            >
+              Aspectos
+              <div class="sb-sidenav-collapse-arrow">
+                <i class="fas fa-angle-down"></i>
+              </div>
+            </a>
+            <div
+              class="collapse"
+              id="collapseAspects"
+              aria-labelledby="headingOne"
+              data-parent="#collapseDomine"
+            >
+              <nav
+                class="sb-sidenav-menu-nested nav accordion"
+                id="sidenavAccordionPages"
+              >
+                <!-- Aspectos -->
+                <a class="nav-link" href="/aspects">Aspectos Individuales</a>
+                <a class="nav-link" href="/aspects_collective">Aspectos Colectivos</a>
+              </nav>
             </div>
+          </nav>
         </div>
-    </nav>
+        <!-- Procesos de autoconsciencia -->
+
+        <a
+          class="nav-link collapsed"
+          href="#"
+          data-toggle="collapse"
+          data-target="#collapseReflexivos"
+          aria-expanded="false"
+          aria-controls="collapseDomine"
+        >
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-bezier-curve"></i>
+          </div>
+          Procesos de autoconsciencia
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div
+          class="collapse"
+          id="collapseReflexivos"
+          aria-labelledby="headingOne"
+          data-parent="#sidenavAccordion"
+        >
+          <nav
+            class="sb-sidenav-menu-nested nav accordion"
+            id="sidenavAccordionPages"
+          >
+            <!-- Pre-reflexivos -->
+            <a class="nav-link" href="/pre_reflexivos">Pre-reflexivos</a>
+            <!-- Reflexivos -->
+            <a class="nav-link" href="/reflexivos">Reflexivos</a>
+          </nav>
+        </div>
+        <!-- Generales -->
+        <a
+          class="nav-link collapsed"
+          href="#"
+          data-toggle="collapse"
+          data-target="#collapseGeneral"
+          aria-expanded="false"
+          aria-controls="collapseGeneral"
+        >
+          <div class="sb-nav-link-icon">
+            <i class="fas fa-globe-americas"></i>
+          </div>
+          Generales
+          <div class="sb-sidenav-collapse-arrow">
+            <i class="fas fa-angle-down"></i>
+          </div>
+        </a>
+        <div
+          class="collapse"
+          id="collapseGeneral"
+          aria-labelledby="headingOne"
+          data-parent="#sidenavAccordion"
+        >
+          <nav
+            class="sb-sidenav-menu-nested nav accordion"
+            id="sidenavAccordionPages"
+          >
+            <!--Metricas -->
+            <a class="nav-link" href="/metrics">Métricas</a>
+            <!-- Unidades de medida -->
+            <a class="nav-link" href="/measurement_units">Unidades de medida</a>
+            <!-- Escalas -->
+            <a class="nav-link" href="/scales">Escalas</a>
+            <!-- Criterios de decision -->
+            <a class="nav-link" href="/decision_criteria"
+              >Criterios de decision</a
+            >
+            <!-- Recursos de implementacion -->
+            <a class="nav-link collapsed" href="/deployment_resources">
+              Recursos de implementación
+            </a>
+          </nav>
+        </div>
+
+        <!-- Generar modelo de autoconsciencia -->
+        <a class="nav-link" href="/generate_model">
+          <div class="sb-nav-link-icon"><i class="fas fa-shapes"></i></div>
+          Generar modelos de autoconsciencia
+        </a>
+      </div>
+    </div>
+  </nav>
 </div>

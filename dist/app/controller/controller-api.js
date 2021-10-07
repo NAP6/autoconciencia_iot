@@ -301,7 +301,6 @@ function upd_measurement_units(req, res) {
         var descripcion = req.body.descripcion;
         var acronym = req.body.acronym;
         var activo = req.body.activo.toString();
-        console.log(activo);
         var db = new database_1.mysql_connector();
         db.updUser_measurementUnit(idUser, id, name, descripcion, acronym, activo);
         res.json({ mensaje: "La accion fue realizada con exito" });
@@ -438,7 +437,6 @@ function upd_decision_criteria(req, res) {
         var name = req.body.nombre;
         var descripcion = req.body.descripcion;
         var activo = req.body.activo.toString();
-        console.log(activo);
         var db = new database_1.mysql_connector();
         db.updUser_criteriaDecision(idUser, id, name, descripcion, activo);
         res.json({ mensaje: "La accion fue realizada con exito" });
@@ -487,7 +485,6 @@ function add_umbral(req, res) {
         var Interpretacion = req.body.interpretacion;
         var inferior = req.body.inferior;
         var superior = req.body.superior;
-        console.log(superior);
         var db = new database_1.mysql_connector();
         db.addUser_umbral(idUser, name, Interpretacion, inferior, superior, id);
         res.json({ mensaje: "La accion fue realizada con exito" });
@@ -555,7 +552,6 @@ function add_aspects(req, res) {
         var peso = req.body.peso;
         var idP = req.body.id;
         var activo = req.body.activo;
-        console.log(tipo);
         var db = new database_1.mysql_connector();
         db.addUser_aspects(idUser, name, descripcion, tipo, peso, idP, activo);
         res.json({ mensaje: "La accion fue realizada con exito" });
@@ -699,7 +695,6 @@ function upd_acciones_umbrales(req, res) {
         var nombre = req.body.nombre;
         var descripcion = req.body.descripcion;
         var activo = req.body.activo.toString();
-        console.log(activo);
         var db = new database_1.mysql_connector();
         db.upd_acciones_umbrales(idUser, idaccion, nombre, descripcion, activo);
         res.json({ mensaje: "La accion fue realizada con exito" });
@@ -928,7 +923,6 @@ function add_metodo_modelo(req, res) {
     var _a;
     if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
         var data = req.body;
-        console.log(data);
         var db = new database_1.mysql_connector();
         db.add_metodo_modelo(data, (resp) => {
             res.json(resp);
@@ -984,7 +978,6 @@ function add_metodo_modelo_reflexivos(req, res) {
     var _a;
     if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
         var data = req.body;
-        console.log(data);
         var db = new database_1.mysql_connector();
         db.add_metodo_modelo_reflexivos(data, (resp) => {
             res.json(resp);

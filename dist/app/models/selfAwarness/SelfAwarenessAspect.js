@@ -10,7 +10,7 @@ class SelfAwarenessAspect {
         this._aspectType = aspectType;
         this._active = true;
         this._isEvaluated = [];
-        this._isCaptured = [];
+        this._derives = [];
     }
     get id() {
         return this._id;
@@ -53,12 +53,6 @@ class SelfAwarenessAspect {
     }
     set isEvaluated(value) {
         this._isEvaluated = value;
-    }
-    get isCaptured() {
-        return this._isCaptured;
-    }
-    set isCaptured(value) {
-        this._isCaptured = value;
     }
     toObjectG() {
         var res = {};

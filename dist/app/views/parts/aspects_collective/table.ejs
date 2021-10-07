@@ -1,17 +1,16 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-4">
-            <button id="bt_add_measurement_units" class="btn btn-primary" onclick="agregarUnidadMedida()">
+        <div class="col-md-5">
+            <button id="bt_add_aspects_collective" class="btn btn-primary" onclick="agregarAspectosColectivos()">
         Agregar
       </button>
-            <button id="bd_mod_measurement_units" class="btn btn-primary" onclick="modificarUnidadMedida()">
+            <button id="bd_mod_aspects_collective" class="btn btn-primary" onclick="modificarAspectosColectivos()">
         Modificar
       </button>
-            <button id="bd_del_measurement_units" class="btn btn-primary" onclick="GuardarEliminarUnidadMedida()">
+            <button id="bd_del_aspects_collective" class="btn btn-primary" onclick="eliminarAspectosColectivos()">
         Eliminar
       </button>
-
-        </div>
+                    </div>
     </div>
     <br />
     <div class="row container">
@@ -23,17 +22,16 @@
                         <th scope="col">ID</th>
                         <th scope="col">Nombre</th>
                         <th scope="col">Descripción</th>
-                        <th scope="col">Acrónimo</th>
+                        <th scope="col">Peso</th>
+                        <th scope="col">Tipo</th>
                         <th scope="col">Activo</th>
                     </tr>
                 </thead>
-                <tbody id="tabla_unidades_de_medida"></tbody>
+                <tbody id="tableAspectsCollective"></tbody>
             </table>
         </div>
     </div>
     <br />
 </div>
-
-<%- include('../units_of_measure/modal/modal_units_add'); %>
-    <%- include('../units_of_measure/modal/modal_units_mod'); %>
-        <%- include('../units_of_measure/modal/modal_units_del'); %>
+ <%- include('../aspects_collective/modal/add_aspects'); %>
+	<%- include('../aspects_collective/modal/mod_aspects'); %>

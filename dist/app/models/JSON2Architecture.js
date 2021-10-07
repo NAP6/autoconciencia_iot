@@ -87,6 +87,15 @@ class JSON2Architecture {
             if (entity.$.isPartOf) {
                 this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
             }
+            if (entity.containsService) {
+                for (var i = 0; i < entity.containsService.length; i++) {
+                    var service = entity.containsService[i].$;
+                    var serviceEntity = new EntityQ_1.EntityQ(service.id + 1000, service.name, "Service");
+                    serviceEntity.iotSystem = newEntity.iotSystem;
+                    console.log(`la entidad ${serviceEntity.name} tiene ${serviceEntity.iotSystem.length} sistemas`);
+                    newEntity.subEntity.push(serviceEntity);
+                }
+            }
             // Inicio: Extraer de PhysicalEntity
             if (newEntity.entityType == "PhysicalEntity" ||
                 newEntity.entityType == "IoTUser" ||
@@ -132,6 +141,14 @@ class JSON2Architecture {
             if (entity.$.isPartOf) {
                 this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
             }
+            if (entity.containsService) {
+                for (var i = 0; i < entity.containsService.length; i++) {
+                    var service = entity.containsService[i].$;
+                    var serviceEntity = new EntityQ_1.EntityQ(service.id, service.name, "Service");
+                    serviceEntity.iotSystem = newEntity.iotSystem;
+                    newEntity.subEntity.push(serviceEntity);
+                }
+            }
             if (entity.containsSubPhysicalEntity) {
                 newEntity.subEntity = newEntity.subEntity.concat(this.extractSubPhysicalEntitys(entity.containsSubPhysicalEntity));
             }
@@ -151,12 +168,13 @@ class JSON2Architecture {
             var system = this._modelIoTSystem;
             var routeAux = route.substring(1, route.length).split("/@");
             routeAux = routeAux.splice(2, routeAux.length);
+            var system2 = new IoTSystemQ_1.IoTSystemQ(-1, "");
             routeAux.forEach((stop) => {
                 var index = parseInt(stop.split(".")[1]);
-                system = system.IoTSubSystem[index];
+                system2 = system.IoTSubSystem[index];
             });
-            entity.iotSystem.push(system);
-            system.entity.push(entity);
+            entity.iotSystem.push(system2);
+            system2.entity.push(entity);
         });
     }
     extractPropertys(propertys) {

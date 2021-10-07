@@ -269,7 +269,6 @@ function generate_model(req, res) {
         var modelo = new SelfAwarnessQ_1.SelfAwarnessQ(-1, "", "", "", "");
         var rows = yield db.qwerty(modelo.toSqlInsert(["/@/MODEL/@/"], [modeloID.toString()]));
         modelo = modelo.toObjectArray(rows)[0];
-        console.log(modelo);
         res.render("generate_model", {
             error: req.flash("error"),
             succes: req.flash("succes"),
@@ -315,7 +314,6 @@ function save_new_model(req, res, next) {
                 descripcion: modelo.description,
                 modelID: rows.insertId.toString(),
             };
-            console.log(req.session.active_model);
             //#####################################################
             next();
         }

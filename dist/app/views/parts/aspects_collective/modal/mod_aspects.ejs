@@ -1,0 +1,143 @@
+<div
+  class="modal fade"
+  id="mod_aspects_colective"
+  tabindex="-1"
+  role="dialog"
+  data-backdrop="static"
+  aria-labelledby="modal_resource_addLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title text-center"
+          id="tituloAspectos"
+          style="width: 100%"
+        >
+          Modificar Aspecto Autoconsciencia Colectivo
+        </h5>
+        <button
+          type="button"
+          class="close"
+          onclick="limpiarFomularioColectivoModificar();"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-6">
+            <div>
+              <label for="">Nombre:</label>
+              <textarea
+                name=""
+                id="nombreAspectoColectivoModificar"
+                type="text"
+                class="form-control"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                disabled
+                onkeyup="javascript:this.value=this.value.toUpperCase();"
+              ></textarea>
+            </div>
+            <div>
+              <label for="">Descripción:</label>
+              <textarea
+                name=""
+                id="descripcionAspectoColectivoModificar"
+                type="text"
+                class="form-control"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                disabled
+                onkeyup="javascript:this.value=this.value.toUpperCase();"
+              ></textarea>
+            </div>
+            <div>
+              <label for="">Peso:</label>
+              <input
+                name=""
+                id="pesoAspectoColectivoModificar"
+                type="number"
+                class="form-control"
+              />
+            </div>
+            <div>
+              <label for="">Operador Agregación:</label>
+              <select
+                name=""
+                id="select_operadoreAgregacionModificar"
+                class="custom-select"
+              ></select>
+            </div>
+            <div>
+              <label for="">Tipo:</label>
+              <select
+                name=""
+                id="select_aspectoColectivoModificar"
+                class="custom-select"
+              ></select>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-2">Activo:</div>
+              <div class="col-sm-8">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="activoAspectosColectivosModificar"
+                    disabled
+                    checked
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 aling-self-center">
+            <div class="input-group mb">
+              <h6>Sujeto que captura el aspecto:</h6>
+              <div
+                class="row px-3 pr-5 col-11"
+                style="overflow-y: auto; height: 80px"
+              >
+                <div
+                  id="sujetos_aspectos_colectivos_modificar"
+                  class="card col"
+                >
+                  <ul id="lista_sujetos_aspectos_colectivos_modificar"></ul>
+                </div>
+              </div>
+            </div>
+            <h6>Aspectos de autoconsciencia de bajo nivel:</h6>
+            <div
+              class="row px-3 pr-5 col-11"
+              style="overflow-y: auto; height: 125px"
+            >
+              <div id="aspectos_indiviaduales" class="card col">
+                <ul id="lista_aspectos_individuales_modificar"></ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="guardarAspectoColectivoButton"
+          type="button"
+          class="btn btn-primary"
+          onclick="ModificarAspectoColectivo()"
+        >
+          Guardar
+        </button>
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="limpiarFomularioColectivoModificar()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

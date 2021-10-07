@@ -24,7 +24,7 @@ function get_data_flow(req, res) {
             if (comunicacion == "SINCRONA") {
                 comu = "Synchronous";
             }
-            else if (comunicacion == "ASÍNCRONA") {
+            else if (comunicacion == undefined) {
                 comu = undefined;
             }
             var data_flow = new DataFlowQ_1.DataFlowQ(-1, "", "", "", "", -1);

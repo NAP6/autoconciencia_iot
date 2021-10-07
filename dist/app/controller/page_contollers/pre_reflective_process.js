@@ -30,7 +30,6 @@ function add_metodo_modelo(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var data = req.body;
-            console.log(data);
             var db = new database2_1.database2();
             var modeloID = req.session.active_model.modelID;
             var coll = new selfAwarnessModels_1.CollectionMethodQ(-1, "");
@@ -42,7 +41,6 @@ function add_metodo_modelo(req, res) {
             anali.produces = new Indicator_1.Indicator(data.m_modelo.met_id, "", "", "", "");
             var row2 = yield db.qwerty(anali.toSqlInsert(["/@/PROCES/@/", "/@/CRITERIA/@/"], [data.proceso_id, data.m_modelo.criterio_id]));
             var resp = [row1[0][0].id, row2[0][0].id];
-            console.log(resp);
             res.json(resp);
         }
         else {
@@ -83,8 +81,17 @@ function add_pre_reflective_process(req, res) {
             if (newProcess.finP) {
                 process.executionPeriodEnd = newProcess.finP;
             }
+            if (newProcess.tipoE) {
+                process.executionType = newProcess.tipoE;
+            }
+            if (newProcess.intervaloE) {
+                process.executionTimeInterval = newProcess.intervaloE;
+            }
+            if (newProcess.horaE) {
+                process.executionTime = newProcess.horaE;
+            }
             process.active = newProcess.active;
-            var rows = yield db.qwerty(process.toSqlInsert(["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"], [newProcess.aspId, newProcess.sujId, modeloID]));
+            var rows = yield db.qwerty(process.toSqlInsert(["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/", "/@/HORA/@/"], [newProcess.aspId, newProcess.sujId, modeloID, newProcess.unidadT]));
             res.json(rows);
         }
         else {
@@ -203,7 +210,6 @@ function get_pre_reflective_process_mod(req, res) {
                 modificar: rows,
                 session: req.session,
             });
-            console.log(rows[0]);
         }
         else {
             res.json({ error: "debe iniciar session para poder usar la api" });

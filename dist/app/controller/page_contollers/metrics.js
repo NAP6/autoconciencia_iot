@@ -114,14 +114,12 @@ exports.add_metrics = add_metrics;
 function add_metrics_aspects(req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(req.body);
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var db = new database2_1.database2();
             var element = req.body;
             for (var i = 0; i < element.length; i++) {
                 var cont = yield db.qwerty(`SELECT COUNT(asp_me.met_id) cont FROM aspectoautoconsciencia_metrica as asp_me WHERE asp_me.aa_id=${element[i].aa_id} && asp_me.met_id=${element[i].met_id}`);
                 cont = cont[0]["cont"];
-                console.log(cont);
                 if (cont > 0 && element[i].existe == "0") {
                     yield db.qwerty(`DELETE FROM aspectoautoconsciencia_metrica WHERE met_id=${element[i].met_id} AND aa_id=${element[i].aa_id}`);
                 }

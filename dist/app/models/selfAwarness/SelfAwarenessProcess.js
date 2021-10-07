@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SelfAwarenessProcess = void 0;
 class SelfAwarenessProcess {
-    constructor(id, name, description, type_process, executionPeriodStart, executionPeriodEnd) {
+    constructor(id, name, description, type_process, executionPeriodStart, executionPeriodEnd, executionType, executionTimeInterval, executionTime) {
         this._id = id;
         this._name = name;
         this._description = description;
@@ -10,6 +10,9 @@ class SelfAwarenessProcess {
         this._active = true;
         this._executionPeriodStart = executionPeriodStart;
         this._executionPeriodEnd = executionPeriodEnd;
+        this._executionType = executionType;
+        this._executionTimeInterval = executionTimeInterval;
+        this._executionTime = executionTime;
     }
     get id() {
         return this._id;
@@ -52,6 +55,24 @@ class SelfAwarenessProcess {
     }
     set executionPeriodEnd(value) {
         this._executionPeriodEnd = value;
+    }
+    get executionType() {
+        return this._executionType;
+    }
+    set executionType(value) {
+        this._executionType = value;
+    }
+    get executionTime() {
+        return this._executionTime;
+    }
+    set executionTime(value) {
+        this._executionTime = value;
+    }
+    get executionTimeInterval() {
+        return this._executionTimeInterval;
+    }
+    set executionTimeInterval(value) {
+        this._executionTimeInterval = value;
     }
     get supports() {
         return this._supports;

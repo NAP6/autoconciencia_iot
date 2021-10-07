@@ -54,8 +54,17 @@ function add_reflective_process(req, res) {
             if (newProcess.finP) {
                 process.executionPeriodEnd = newProcess.finP;
             }
+            if (newProcess.intervaloE) {
+                process.executionTimeInterval = newProcess.intervaloE;
+            }
+            if (newProcess.tipoE) {
+                process.executionType = newProcess.tipoE;
+            }
+            if (newProcess.horaE) {
+                process.executionTime = newProcess.horaE;
+            }
             process.active = true;
-            var rows = yield db.qwerty(process.toSqlInsert(["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/"], [newProcess.aspId, newProcess.sujId, modeloID]));
+            var rows = yield db.qwerty(process.toSqlInsert(["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/", "/@/HORA/@/"], [newProcess.aspId, newProcess.sujId, modeloID, newProcess.unidadT]));
             res.json(rows);
         }
         else {
@@ -85,7 +94,6 @@ function add_metodo_modelo2(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var data = req.body;
-            console.log(data);
             var db = new database2_1.database2();
             var modeloID = req.session.active_model.modelID;
             var calc = new selfAwarnessModels_1.CalculationMethodQ(-1, "");
@@ -130,7 +138,6 @@ function get_reflective_process_mod(req, res) {
                 modificar: rows,
                 session: req.session,
             });
-            console.log(rows[0]);
         }
         else {
             res.json({ error: "debe iniciar session para poder usar la api" });

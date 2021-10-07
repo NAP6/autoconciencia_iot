@@ -37,7 +37,6 @@ class MetricQ extends Metric_1.Metric {
 		WHERE
 		met.met_id=${value[tag.indexOf("/@/METRIC/@/")]} AND
 	    	map.met_id=met.met_id`;
-            console.log(sql);
             return sql;
         }
         if (tag.indexOf("/@/ASPECTID/@/") != -1 &&

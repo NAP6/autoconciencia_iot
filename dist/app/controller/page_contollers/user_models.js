@@ -13,15 +13,13 @@ exports.user_models = void 0;
 const database2_1 = require("../../data/database2");
 const selfAwarnessModels_1 = require("../../models/selfAwarnessModels");
 function user_models(req, res) {
-    var _a, _b, _c;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var id = (_b = req.session) === null || _b === void 0 ? void 0 : _b.user._id;
             var db = new database2_1.database2();
             var model = new selfAwarnessModels_1.SelfAwarnessQ(-1, "", "", "", "");
-            console.log((_c = req.session) === null || _c === void 0 ? void 0 : _c.user);
             var rows = yield db.qwerty(model.toSqlSelect(["/@/USER/@/"], [id.toString()]));
-            console.log(model.toObjectArray(rows));
             res.json(model.toObjectArray(rows));
         }
         else {

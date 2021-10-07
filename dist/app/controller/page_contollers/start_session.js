@@ -48,7 +48,6 @@ function start_session(req, res, next) {
         user = user.toObjectArray(rows);
         if (user.length == 1) {
             req.session.user = user[0];
-            console.log(req.session.user);
             req.flash("error", "");
             req.flash("succes", "Bienvenido de vuelta");
             next();

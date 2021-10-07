@@ -73,6 +73,14 @@ function entitys(req, res) {
                     rows = rows.concat(rows2);
                 }
             }
+            var fathers_services = rows.map((ent) => {
+                return ent.id;
+            });
+            var service = new selfAwarnessModels_1.ServiceQ(-1, "", "");
+            var rows_service = yield db.qwerty(service.toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/", "/@/FATHERS/@/"], [id, system, fathers_services.join(',')]));
+            if (rows_service.length > 0) {
+                rows = rows.concat(rows_service);
+            }
             res.json(rows);
         }
         else {

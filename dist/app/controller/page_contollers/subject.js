@@ -28,7 +28,6 @@ function subjects(req, res) {
             var db = new database2_1.database2();
             var system = new selfAwarnessModels_1.IoTSystemQ(-1, "");
             var rows = yield db.qwerty(system.toSqlSelect(["/@/MODEL/@/"], [id]));
-            //console.log(rows)
             res.json(rows);
         }
         else {
@@ -113,7 +112,6 @@ function subjects_aspects(req, res) {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var db = new database2_1.database2();
             var id = req.body.id;
-            console.log(id);
             var modelID = req.session.active_model.modelID;
             var rows = yield db.qwerty(`SELECT aa_id as id, aa_nombre as nombre FROM aspectoautoconsciencia WHERE suj_id=${id} AND ma_id=${modelID} `);
             res.json(rows);

@@ -20,7 +20,6 @@ class ParameterQ extends Parameter_1.Parameter {
         this.ordinal = value;
     }
     toSqlInsert(tag, value) {
-        console.log(this.dataType);
         var sql = `INSERT INTO 
 	  		parametro (
 	  			par_ordinal, 

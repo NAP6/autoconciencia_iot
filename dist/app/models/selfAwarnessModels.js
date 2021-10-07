@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MeasurementUnitQ = exports.ScaleQ = exports.IndirectMetricQ = exports.IndicatorQ = exports.DirectMetricQ = exports.ArgumentToParameterMappingQ = exports.SimulationValueQ = exports.SimulationVariableQ = exports.SimulationScenarioQ = exports.ThresholdQ = exports.ActionQ = exports.DecisionCriteriaQ = exports.ReflectiveProcessQ = exports.EntityQ = exports.CalculationMethodQ = exports.AnalysisModelQ = exports.CollectionMethodQ = exports.ParameterQ = exports.WebServiceQ = exports.FunctionQ = exports.FormulaQ = exports.ImplementationResourceQ = exports.NetworkQ = exports.ActuatorQ = exports.CloudNodeQ = exports.TagQ = exports.SensorQ = exports.IoTGatewayQ = exports.FogNodeQ = exports.PhysicalEntityQ = exports.GoalQ = exports.IoTSystemQ = exports.SelfAwarenessAspectQ = exports.SelfAwarenessProcessQ = exports.SelfAwarnessQ = exports.UserQ = void 0;
+exports.ServiceQ = exports.MeasurementUnitQ = exports.ScaleQ = exports.IndirectMetricQ = exports.IndicatorQ = exports.DirectMetricQ = exports.ArgumentToParameterMappingQ = exports.SimulationValueQ = exports.SimulationVariableQ = exports.SimulationScenarioQ = exports.ThresholdQ = exports.ActionQ = exports.DecisionCriteriaQ = exports.ReflectiveProcessQ = exports.EntityQ = exports.CalculationMethodQ = exports.AnalysisModelQ = exports.CollectionMethodQ = exports.ParameterQ = exports.WebServiceQ = exports.FunctionQ = exports.FormulaQ = exports.ImplementationResourceQ = exports.NetworkQ = exports.ActuatorQ = exports.CloudNodeQ = exports.TagQ = exports.SensorQ = exports.IoTGatewayQ = exports.FogNodeQ = exports.PhysicalEntityQ = exports.GoalQ = exports.IoTSystemQ = exports.SelfAwarenessAspectQ = exports.SelfAwarenessProcessQ = exports.SelfAwarnessQ = exports.UserQ = void 0;
 var UserQ_1 = require("./selfAwarness/qwertyModels/UserQ");
 Object.defineProperty(exports, "UserQ", { enumerable: true, get: function () { return UserQ_1.UserQ; } });
 var SelfAwarnessQ_1 = require("./selfAwarness/qwertyModels/SelfAwarnessQ");
@@ -73,3 +73,5 @@ var ScaleQ_1 = require("./selfAwarness/qwertyModels/ScaleQ");
 Object.defineProperty(exports, "ScaleQ", { enumerable: true, get: function () { return ScaleQ_1.ScaleQ; } });
 var MeasurementUnitQ_1 = require("./selfAwarness/qwertyModels/MeasurementUnitQ");
 Object.defineProperty(exports, "MeasurementUnitQ", { enumerable: true, get: function () { return MeasurementUnitQ_1.MeasurementUnitQ; } });
+var ServiceQ_1 = require("./selfAwarness/qwertyModels/ServiceQ");
+Object.defineProperty(exports, "ServiceQ", { enumerable: true, get: function () { return ServiceQ_1.ServiceQ; } });

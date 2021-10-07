@@ -14,17 +14,29 @@ class ReflectiveProcessQ extends ReflectiveProcess_1.ReflectiveProcess {
     aa_id,
     suj_id,
     pa_tipo,
-    ma_id) 
+    ma_id,
+    pa_tipo_ejecucion,
+    pa_unidad_tiempo,
+    pa_intervalo_ejecucion,
+    pa_hora_ejecucion) 
     values (
     '${this.name}',
     '${this.description}',
-    ${this.executionPeriodStart == undefined ? "NULL" : "'" + this.executionPeriodStart + "'"},
-    ${this.executionPeriodEnd == undefined ? "NULL" : "'" + this.executionPeriodEnd + "'"},
+    ${this.executionPeriodStart == undefined
+            ? "NULL"
+            : "'" + this.executionPeriodStart + "'"},
+    ${this.executionPeriodEnd == undefined
+            ? "NULL"
+            : "'" + this.executionPeriodEnd + "'"},
     ${this.active ? 1 : 0},			
     ${value[tag.indexOf("/@/ASPECTID/@/")]},
     ${value[tag.indexOf("/@/SUBJECT/@/")]},
     ${this.type_process},
-${value[tag.indexOf("/@/MODEL/@/")]})`;
+${value[tag.indexOf("/@/MODEL/@/")]},
+${this.executionType == undefined ? "NULL" : this.executionType},
+${value[tag.indexOf("/@/HORA/@/")] == undefined ? "NULL" : "'" + value[tag.indexOf("/@/HORA/@/")] + "'"},
+${this.executionTimeInterval == undefined ? "NULL" : this.executionTimeInterval},
+${this.executionTime == undefined ? "NULL" : this.executionTime})`;
         return sql;
     }
     toSqlSelect(tag, value) {

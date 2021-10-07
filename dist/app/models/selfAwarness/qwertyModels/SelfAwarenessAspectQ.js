@@ -11,7 +11,7 @@ aspectoautoconsciencia (
                 aa_peso,
                 aa_tipo,
                 aa_activo,
-                obj_id,
+		aa_alcance,
                 suj_id,
                 ma_id
             ) VALUES (
@@ -20,7 +20,7 @@ aspectoautoconsciencia (
                 '${this.weight}',
                 '${this.aspectType}',
                 '${this.active ? 1 : 0}',
-                '${value[tag.indexOf("/@/OBJECT/@/")]}',
+		'${value[tag.indexOf("/@/ALCANCE/@/")]}',
                 '${value[tag.indexOf("/@/SUBJECT/@/")]}',
                 '${value[tag.indexOf("/@/MODEL/@/")]}'
             )`;
@@ -34,7 +34,6 @@ aspectoautoconsciencia (
 	      asp.aa_peso as weigth,
               asp.aa_tipo as tipo_id,
               enu.enu_nombre_valor as met_aspect,
-              asp.obj_id as obj,
               asp.suj_id as suj,
               suj.suj_nombre as sujeto,
               asp.ma_id as model,
@@ -44,6 +43,7 @@ aspectoautoconsciencia (
               enumeracion enu,
               sujeto suj
 	         WHERE
+		 asp.aa_alcance=53 AND
 	      enu.enu_id=asp.aa_tipo AND
 	   	 asp.suj_id= suj.suj_id AND
 	        suj.ma_id = ${value[tag.indexOf("/@/MODEL/@/")]} AND
@@ -66,7 +66,6 @@ aspectoautoconsciencia (
     aa_descripcion='${this.description}',
     aa_peso='${this.weight}',
     aa_tipo='${this.aspectType}',
-    obj_id='${value[tag.indexOf("/@/OBJECT/@/")]}',
     ma_id='${value[tag.indexOf("/@/MODEL/@/")]}',
     aa_activo=${this.active ? 1 : 0}
   WHERE 

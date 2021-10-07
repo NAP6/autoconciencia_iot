@@ -1,6 +1,5 @@
 <%- include('parts/before_the_body'); %>
     <%- include('parts/sidebar_menu'); %>
-
         <div id="layoutSidenav_content">
             <main id="measurament_units_page" class="container-fluid">
                 <div class="row justify-content-between">
@@ -10,9 +9,10 @@
                         </h4>
                     </div>
                 </div>
-                <h2 class="text-center">Aspectos autoconsciencia Individuales</h2>
+                <h2 class="text-center">Aspectos autoconsciencia Colectivos</h2>
+
+                <%- include('parts/aspects_collective/table'); %>
                 <div id='alert-zone'></div>
-                <%- include('parts/aspects/table'); %>
             </main>
         </div>
 
