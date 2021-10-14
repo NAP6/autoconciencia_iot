@@ -11,6 +11,7 @@ export class SelfAwarenessProcess {
   private _executionPeriodEnd: Date | undefined;
   private _executionType: string | undefined;
   private _executionTimeInterval: number | undefined;
+  private _unitOfTime: string | undefined;
   private _executionTime: number | undefined;
   private _supports: Goal | undefined;
   private _captures: SelfAwarenessAspect | undefined;
@@ -23,7 +24,8 @@ export class SelfAwarenessProcess {
     executionPeriodEnd?: Date,
     executionType?: string,
     executionTimeInterval?: number,
-    executionTime?: number
+    executionTime?: number,
+    unitOfTime?: string
   ) {
     this._id = id;
     this._name = name;
@@ -34,6 +36,7 @@ export class SelfAwarenessProcess {
     this._executionPeriodEnd = executionPeriodEnd;
     this._executionType = executionType;
     this._executionTimeInterval = executionTimeInterval;
+    this.unitOfTime = unitOfTime;
     this._executionTime = executionTime;
   }
 
@@ -105,6 +108,13 @@ export class SelfAwarenessProcess {
   set executionTime(value: number | undefined) {
     this._executionTime = value;
   }
+  get unitOfTime(): string | undefined {
+    return this._unitOfTime;
+  }
+
+  set unitOfTime(value: string | undefined) {
+    this._unitOfTime = value;
+  }
   get executionTimeInterval(): number | undefined {
     return this._executionTimeInterval;
   }
@@ -137,6 +147,10 @@ export class SelfAwarenessProcess {
       description: this.description,
       executionPeriodStart: this.executionPeriodStart,
       executionPeriodEnd: this.executionPeriodEnd,
+      executionType: this.executionType,
+      unitOfTime: this.unitOfTime,
+      executionTimeInterval: this.executionTimeInterval,
+      executionTime: this.executionTime,
     };
     return res;
   }

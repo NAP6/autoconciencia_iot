@@ -67,7 +67,7 @@ export class MeasurementUnit {
   public toObjectG() {
     return {
       $: {
-        id: this.id,
+        id: 1000 + this.id,
         name: this.name,
         description: this.description,
         acronym: this.acronym,

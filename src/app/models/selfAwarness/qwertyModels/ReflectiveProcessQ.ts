@@ -38,11 +38,16 @@ export class ReflectiveProcessQ
     ${this.type_process},
 ${value[tag.indexOf("/@/MODEL/@/")]},
 ${this.executionType == undefined ? "NULL" : this.executionType},
-${value[tag.indexOf("/@/HORA/@/")] == undefined ? "NULL" : "'" + value[tag.indexOf("/@/HORA/@/")] + "'"},
+${
+  value[tag.indexOf("/@/HORA/@/")] == undefined
+    ? "NULL"
+    : "'" + value[tag.indexOf("/@/HORA/@/")] + "'"
+},
 ${
   this.executionTimeInterval == undefined ? "NULL" : this.executionTimeInterval
 },
-${this.executionTime == undefined ? "NULL" : this.executionTime})`;
+${this.executionTime == undefined ? "NULL" : "'" + this.executionTime + "'"})`;
+
     return sql;
   }
   toSqlSelect(tag: string[], value: string[]): string {
