@@ -79,6 +79,7 @@ export async function generate_model(req, res) {
   modelo = modelo.toObjectArray(rows)[0];
   var modeloA = JSON.parse(modelo.architectureModel);
   await add_span(modeloA[Object.keys(modeloA)[0]]);
+  await add_SelfAwarenessAspect(modeloA[Object.keys(modeloA)[0]]);
   //await add_scope(modeloA[Object.keys(modeloA)[0]]);
   //await add_decision_criteria(modeloA[Object.keys(modeloA)[0]]);
   //await add_ImplementationResource(modeloA[Object.keys(modeloA)[0]]);
@@ -87,17 +88,10 @@ export async function generate_model(req, res) {
   //await add_MeasurementUnit(modeloA[Object.keys(modeloA)[0]]);
   //await add_dataFlow_relation(modeloA[Object.keys(modeloA)[0]]);
 
-  /*
   res.render("generate_model", {
-    error: req.flash("error"),
-    succes: req.flash("succes"),
     session: req.session,
     model: JSON.stringify(modeloA, null, "  "),
   });
-  */
-  res = { generate_model: { model: JSON.stringify(modeloA, null, "  ") } };
-
-  //console.log(res);
 }
 
 async function add_span(model: any) {
@@ -146,6 +140,7 @@ async function add_SelfAwarenessProcess(span: any, path_span: string) {
     if (process[i].type_process == 17)
       await add_PreReflectiveProcess_extras(new_process, path_process);
     else await add_ReflectiveProcess_extras(new_process, path_process);
+    await add_SelfAwarenessAspect_relation(new_process, path_process);
   }
   if (arr_insert_process.length > 0)
     span.constainsSelfAwarenessProcess = arr_insert_process;
@@ -480,6 +475,106 @@ async function add_IndirectMetric(method, path_method) {
   }
 }
 
+async function add_SelfAwarenessAspect_relation(
+  process: any,
+  path_process: string
+) {
+  var db = new database2();
+  var SelfAwarness: SelfAwarenessAspectQ;
+  SelfAwarness = new SelfAwarenessAspectQ(-1, "", "", 0, undefined);
+  var sql = SelfAwarness.toSqlSelect(
+    ["/@/MODEL/@/", "/@/PROCESS/@/"],
+    [modelID, process.$.id]
+  );
+  var rows = await db.qwerty(sql);
+  var aspects:
+    | SelfAwarenessAspectQ[]
+    | SelfAwarenessAspectQ = SelfAwarness.toObjectArray(rows);
+  if (aspects.length > 0) {
+    aspects = aspects[0];
+    var the_aspect = aspects.toObjectG();
+    the_aspect.isCaptured = path_process;
+    routes["aspect"]["r"][`${the_aspect.$.id}`] = the_aspect;
+    var indx = Object.keys(routes["aspect"]["r"]).length - 1;
+    var path_aspect = `//@containsSelfAwarenessAspect.${indx}`;
+    routes["aspect"]["p"][`${the_aspect.$.id}`] = path_aspect;
+    process.captures = path_aspect;
+    if (aspects.is_colective()) {
+      await add_recursive_collective_aspects(aspects, the_aspect, path_aspect);
+    }
+    /*
+     * 	agregar_campo_faltante
+     * 	buscar hijos
+     * 	*/
+  }
+
+  /*
+  var arr_insert_aspects: any[] = [];
+  for (var i = 0; i < aspects.length; i++) {
+    var new_aspect = aspects[i].toObjectG();
+    arr_insert_aspects.push(new_aspect);
+    //await add_relation_Aspect_Process_SelfAweranes(
+    //  new_aspect,
+    //  arr_insert_aspects.length - 1,
+    //  span.constainsSelfAwarenessProcess,
+    //  span_path
+    //);
+    //await add_relation_SelfAweranesAspect_Goals(
+    //  new_aspect,
+    //  span.containsGoal,
+    //  span_path,
+    //  `${span_path}/@containsSelfAwarenessAspect.${
+    //    arr_insert_aspects.length - 1
+    //  }`
+    //);
+  }
+  if (arr_insert_aspects.length > 0)
+    span.containsSelfAwarenessAspect = arr_insert_aspects;
+*/
+}
+
+async function add_recursive_collective_aspects(
+  aspect: SelfAwarenessAspectQ,
+  aspectG,
+  path_aspect
+) {
+  var db = new database2();
+  var sql = aspect.sql_childs();
+  var rows = await db.qwerty(sql);
+  var child_aspects: SelfAwarenessAspectQ[] = aspect.toObjectArray(rows);
+  for (var i = 0; i < child_aspects.length; i++) {
+    if (routes["aspect"]["r"][`${child_aspects[i].id}`]) {
+      var the_aspect = routes["aspect"]["r"][`${child_aspects[i].id}`];
+      the_aspect.isDerivedFrom = path_aspect;
+      if (aspectG.derives) aspectG.derives += " " + routes["aspect"]["p"][`${the_aspect.$.id}`];
+      else aspectG.derives = routes["aspect"]["p"][`${the_aspect.$.id}`];;
+    } else {
+      var the_aspect = child_aspects[i].toObjectG();
+      the_aspect.isDerivedFrom = path_aspect;
+      routes["aspect"]["r"][`${the_aspect.$.id}`] = the_aspect;
+      var indx = Object.keys(routes["aspect"]["r"]).length - 1;
+      var new_path_aspect = `//@containsSelfAwarenessAspect.${indx}`;
+      if (aspectG.derives) aspectG.derives += " " + new_path_aspect;
+      else aspectG.derives = new_path_aspect;
+      routes["aspect"]["p"][`${the_aspect.$.id}`] = new_path_aspect;
+      if (child_aspects[i].is_colective()) {
+        add_recursive_collective_aspects(
+          child_aspects[i],
+          the_aspect,
+          new_path_aspect
+        );
+      }
+    }
+  }
+}
+
+async function add_SelfAwarenessAspect(model) {
+  var aspects = routes["aspect"]["r"];
+  model.containsSelfAwarenessAspect = [];
+  for (let aspect of Object.entries(aspects)) {
+    model.containsSelfAwarenessAspect.push(aspect[1]);
+  }
+}
 
 //para buscar
 //
@@ -585,41 +680,6 @@ async function add_relation_method_property(property, path_property) {
   }
 }
 
-
-
-async function add_SelfAwarenessAspect(span: any, span_path: any) {
-  var db = new database2();
-  var SelfAwarness: SelfAwarenessAspectQ;
-  SelfAwarness = new SelfAwarenessAspectQ(-1, "", "", 0, undefined);
-  var sql = SelfAwarness.toSqlSelect(
-    ["/@/MODEL/@/", "/@/SYSTEM/@/"],
-    [modelID, span.$.id]
-  );
-  var rows = await db.qwerty(sql);
-  var aspects: SelfAwarenessAspectQ[] = SelfAwarness.toObjectArray(rows);
-  var arr_insert_aspects: any[] = [];
-  for (var i = 0; i < aspects.length; i++) {
-    var new_aspect = aspects[i].toObjectG();
-    arr_insert_aspects.push(new_aspect);
-    await add_relation_Aspect_Process_SelfAweranes(
-      new_aspect,
-      arr_insert_aspects.length - 1,
-      span.constainsSelfAwarenessProcess,
-      span_path
-    );
-    await add_relation_SelfAweranesAspect_Goals(
-      new_aspect,
-      span.containsGoal,
-      span_path,
-      `${span_path}/@constainsSelfAwarenessAspect.${
-        arr_insert_aspects.length - 1
-      }`
-    );
-  }
-  if (arr_insert_aspects.length > 0)
-    span.constainsSelfAwarenessAspect = arr_insert_aspects;
-}
-
 async function add_relation_Aspect_Process_SelfAweranes(
   aspect: any,
   aspect_inx: any,
@@ -637,7 +697,7 @@ async function add_relation_Aspect_Process_SelfAweranes(
           aspect.iscaptured += ` ${path}/@constainsSelfAwarenessProcess.${i}`;
         else aspect.iscaptured = path + `/@constainsSelfAwarenessProcess.${i}`;
         list_of_process[j].captures =
-          path + `/@constainsSelfAwarenessAspect.${aspect_inx}`;
+          path + `/@containsSelfAwarenessAspect.${aspect_inx}`;
       }
     }
   }

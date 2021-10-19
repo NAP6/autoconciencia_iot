@@ -8434,7 +8434,7 @@ function cargar_aspectos_table(json) {
     res += `<td>${met.name}</td>`;
     res += `<td>${met.description}</td>`;
     res += `<td>${met.weigth}</td>`;
-    res += `<td>${met.met_aspect}</td>`;
+    res += `<td>${met.tipo}</td>`;
     if (met.active == 1)
       res += `<td><input type="checkbox" disabled checked></td>`;
     else res += `<td><input type="checkbox" disabled></td>`;

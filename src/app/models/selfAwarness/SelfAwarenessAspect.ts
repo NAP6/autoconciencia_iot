@@ -9,15 +9,19 @@ export class SelfAwarenessAspect {
   private _aspectType;
   private _weight: number;
   private _active: boolean;
+  private _aggregationOperator: string | undefined;
   private _isEvaluated: Metric[];
   private _derives: CollectiveSelfawarenessAspect[];
+  private _scope: string | undefined;
 
   constructor(
     id: number,
     name: string,
     description: string,
     weight: number,
-    aspectType
+    aspectType,
+    aggregationOperator?: string,
+    scope?: string
   ) {
     this._id = id;
     this._name = name;
@@ -27,6 +31,8 @@ export class SelfAwarenessAspect {
     this._active = true;
     this._isEvaluated = [];
     this._derives = [];
+    this._aggregationOperator = aggregationOperator;
+    this._scope = scope;
   }
 
   get id(): number {
@@ -67,6 +73,7 @@ export class SelfAwarenessAspect {
   set weight(value: number) {
     this._weight = value;
   }
+
   get active(): boolean {
     return this._active;
   }
@@ -75,12 +82,36 @@ export class SelfAwarenessAspect {
     this._active = value;
   }
 
+  get aggregationOperator(): string | undefined {
+    return this._aggregationOperator;
+  }
+
+  set aggregationOperator(value: string | undefined) {
+    this._aggregationOperator = value;
+  }
+
   get isEvaluated(): Metric[] {
     return this._isEvaluated;
   }
 
   set isEvaluated(value: Metric[]) {
     this._isEvaluated = value;
+  }
+
+  get scope(): string | undefined {
+    return this._scope;
+  }
+
+  set scope(value: string | undefined) {
+    this._scope = value;
+  }
+
+  public is_individual(): boolean {
+    return this._scope == "INDIVIDUAL";
+  }
+
+  public is_colective(): boolean {
+    return this._scope == "COLECTIVO";
   }
 
   public toObjectG(): any {
@@ -92,6 +123,8 @@ export class SelfAwarenessAspect {
       type: this.aspectType,
       weight: this.weight,
     };
+    if (this.is_colective())
+      res.$.aggregationOperator = this.aggregationOperator;
     return res;
   }
 }
