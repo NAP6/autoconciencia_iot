@@ -95,15 +95,19 @@ aspectoautoconsciencia (
 	      enu.enu_nombre_valor as tipo,
 	      asp.aa_alcance as alcance,
               asp.suj_id as suj,
+	      suj.suj_nombre as sujeto,
               asp.ma_id as model,
               asp.aa_activo as active
 	         FROM
 	      aspectoautoconsciencia asp,
-              enumeracion enu
+              enumeracion enu,
+	      sujeto suj
 	         WHERE
 	      enu.enu_id=asp.aa_tipo AND
 	        asp.ma_id=${value[tag.indexOf("/@/MODEL/@/")]} AND
-		asp.aa_alcance=53`;
+		asp.aa_alcance=53 AND
+		asp.suj_id= suj.suj_id
+	    	`;
       return sql;
     }
   }

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { database2 } from "../../data/database2";
+import { DataColumnQ } from "../../models/architecture/DataColumnQ";
 import { Goal } from "../../models/selfAwarness/Goal";
 import { DataFlowQ } from "../../models/selfAwarness/qwertyModels/DataFlowQ";
 import { MetricQ } from "../../models/selfAwarness/qwertyModels/MetricQ";
@@ -44,9 +45,10 @@ var routes: any = {
   metric: { p: {}, r: {}, i: [] },
   scale: { p: {}, r: {}, i: [] },
   units: { p: {}, r: {}, i: [] },
+  data_column: {},
 };
 
-var r1 = { session: { active_model: { modelID: 53 } } };
+var r1 = { session: { active_model: { modelID: 65 } } };
 var r2 = {};
 generate_model(r1, r2);
 //export async function generate_model(req: Request, res: Response) {
@@ -74,24 +76,63 @@ export async function generate_model(req, res) {
     metric: { p: {}, r: {}, i: [] },
     scale: { p: {}, r: {}, i: [] },
     units: { p: {}, r: {}, i: [] },
+    data_column: {},
   };
 
   modelo = modelo.toObjectArray(rows)[0];
   var modeloA = JSON.parse(modelo.architectureModel);
   await add_span(modeloA[Object.keys(modeloA)[0]]);
   await add_SelfAwarenessAspect(modeloA[Object.keys(modeloA)[0]]);
-  //await add_scope(modeloA[Object.keys(modeloA)[0]]);
-  //await add_decision_criteria(modeloA[Object.keys(modeloA)[0]]);
-  //await add_ImplementationResource(modeloA[Object.keys(modeloA)[0]]);
+  await add_scope(modeloA[Object.keys(modeloA)[0]]);
+  await add_decision_criteria(modeloA[Object.keys(modeloA)[0]]);
+  await add_ImplementationResource(modeloA[Object.keys(modeloA)[0]]);
   await add_metric(modeloA[Object.keys(modeloA)[0]]);
-  //await add_scale(modeloA[Object.keys(modeloA)[0]]);
-  //await add_MeasurementUnit(modeloA[Object.keys(modeloA)[0]]);
-  //await add_dataFlow_relation(modeloA[Object.keys(modeloA)[0]]);
+  await add_scale(modeloA[Object.keys(modeloA)[0]]);
+  await add_MeasurementUnit(modeloA[Object.keys(modeloA)[0]]);
+  await add_dataFlow_relation(modeloA[Object.keys(modeloA)[0]]);
+  await add_relation_data_colum(modeloA[Object.keys(modeloA)[0]]);
 
+  console.log("///////////////////////////////////////");
+  console.log("     All Model");
+  modeloA = {
+    AutoconscienciaIoT: modeloA[Object.keys(modeloA)[0]],
+  };
+  console.log(modeloA);
   res.render("generate_model", {
     session: req.session,
     model: JSON.stringify(modeloA, null, "  "),
   });
+}
+
+async function add_relation_data_colum(model: any) {
+  var paths = Object.keys(routes["data_column"]);
+  for (var i = 0; i < paths.length; i++) {
+    var to_add: string[] = routes["data_column"][paths[i]];
+    var route_list: string[] = paths[i].substr(3).split("/@");
+    await recursive_relation_data_colum(route_list.reverse(), to_add, model);
+  }
+}
+
+async function recursive_relation_data_colum(
+  route: string[],
+  to_add: string[],
+  model: any
+) {
+  var next_path = route.pop();
+  if (next_path) {
+    var aux = next_path.split(".");
+    var key = aux[0];
+    var position = aux[1];
+    await recursive_relation_data_colum(route, to_add, model[key][position]);
+  } else {
+    for (var i = 0; i < to_add.length; i++) {
+      if (!model.relatesMetaData) model.relatesMetaData = `${to_add[i]}`;
+      else model.relatesMetaData += ` ${to_add[i]}`;
+    }
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    console.log("              DATA COLUMN  ");
+    console.log(model);
+  }
 }
 
 async function add_span(model: any) {
@@ -229,10 +270,10 @@ async function add_metric(model) {
       routes["metric"]["p"][indx_l[i]]
     );
     await add_relation_metric_mapping(met, routes["metric"]["p"][indx_l[i]]);
-    //await add_metric_relation_selfAwarenessAspect(
-    //  met,
-    //  routes["metric"]["p"][indx_l[i]]
-    //);
+    await add_metric_relation_selfAwarenessAspect(
+      met,
+      routes["metric"]["p"][indx_l[i]]
+    );
     model.containsMetric.push(met);
   }
 }
@@ -338,17 +379,41 @@ async function add_argumentToParameterMapping(container, path_container) {
   );
   var sql = mapping.toSqlSelect(["/@/METHOD/@/"], [container.$.id]);
   var rows = await db.qwerty(sql);
-  var mapping_list: ArgumentToParameterMappingQ[] = mapping.toObjectArray(rows);
-  if (mapping_list.length > 0) {
+  var parameter_mapping_list: ArgumentToParameterMappingQ[] = mapping.toObjectArray(
+    rows
+  );
+  if (parameter_mapping_list.length > 0) {
     if (!container.containsArgumentToParameterMapping)
       container.containsArgumentToParameterMapping = [];
-    for (var i = 0; i < mapping_list.length; i++) {
-      var mp: any = mapping_list[i].toObjectG();
+    for (var i = 0; i < parameter_mapping_list.length; i++) {
+      var mp: any = parameter_mapping_list[i].toObjectG();
       var path_maping = `${path_container}/@containsArgumentToParameterMapping.${i}`;
+      if (parameter_mapping_list[i].is_metadata) {
+        await relation_metadata_mapping_to_dataColumn(
+          mp,
+          parameter_mapping_list[i].metadata,
+          path_maping
+        );
+      }
+      if (parameter_mapping_list[i].is_using_simulation_variable) {
+        mp.relatesSimulationVariable =
+          routes["simulationvariable"]["p"][
+            `${parameter_mapping_list[i].simulation_variable}`
+          ];
+        var simulation_variable =
+          routes["simulationvariable"]["r"][
+            `${parameter_mapping_list[i].simulation_variable}`
+          ];
+        if (simulation_variable.isUsedIn) {
+          simulation_variable.isUsedIn += ` ${path_maping}`;
+        } else simulation_variable.isUsedIn = path_maping;
+      }
       routes["argumentToParameterMapping"]["p"][
-        `${mapping_list[i].id}`
+        `${parameter_mapping_list[i].id}`
       ] = path_maping;
-      routes["argumentToParameterMapping"]["r"][`${mapping_list[i].id}`] = mp;
+      routes["argumentToParameterMapping"]["r"][
+        `${parameter_mapping_list[i].id}`
+      ] = mp;
       var path_parameter = await save_and_generate_parameter_route(
         mp,
         path_maping,
@@ -358,6 +423,34 @@ async function add_argumentToParameterMapping(container, path_container) {
       container.isImplementedBy = path_parameter.split("/@containsP")[0];
       container.containsArgumentToParameterMapping.push(mp);
     }
+  }
+}
+
+async function relation_metadata_mapping_to_dataColumn(
+  parameter_mapping,
+  data_colum_id,
+  path_mapping
+) {
+  console.log("############################################");
+  console.log("           MAPEO DE PARAMETROS   ");
+  var sql = `SELECT
+  	data_column_path as path
+  	FROM 
+	data_column
+	WHERE
+	data_id=${data_colum_id} AND ma_id=${modelID}`;
+  var db = new database2();
+  var rows = await db.qwerty(sql);
+  for (var i = 0; i < rows.length; i++) {
+    var path_colum = rows[i].path;
+    parameter_mapping.isUsedIn = path_colum;
+    if (routes["data_column"][path_colum])
+      routes["data_column"][path_colum].push(path_mapping);
+    else {
+      routes["data_column"][path_colum] = [];
+      routes["data_column"][path_colum].push(path_mapping);
+    }
+    console.log(parameter_mapping);
   }
 }
 
@@ -502,10 +595,6 @@ async function add_SelfAwarenessAspect_relation(
     if (aspects.is_colective()) {
       await add_recursive_collective_aspects(aspects, the_aspect, path_aspect);
     }
-    /*
-     * 	agregar_campo_faltante
-     * 	buscar hijos
-     * 	*/
   }
 
   /*
@@ -546,8 +635,9 @@ async function add_recursive_collective_aspects(
     if (routes["aspect"]["r"][`${child_aspects[i].id}`]) {
       var the_aspect = routes["aspect"]["r"][`${child_aspects[i].id}`];
       the_aspect.isDerivedFrom = path_aspect;
-      if (aspectG.derives) aspectG.derives += " " + routes["aspect"]["p"][`${the_aspect.$.id}`];
-      else aspectG.derives = routes["aspect"]["p"][`${the_aspect.$.id}`];;
+      if (aspectG.derives)
+        aspectG.derives += " " + routes["aspect"]["p"][`${the_aspect.$.id}`];
+      else aspectG.derives = routes["aspect"]["p"][`${the_aspect.$.id}`];
     } else {
       var the_aspect = child_aspects[i].toObjectG();
       the_aspect.isDerivedFrom = path_aspect;
@@ -576,6 +666,215 @@ async function add_SelfAwarenessAspect(model) {
   }
 }
 
+async function add_scope(model: any) {
+  if (model["containsEntity"]) {
+    var containsEntity = model["containsEntity"];
+    await recursive_scope(containsEntity, "//@containsEntity", model);
+  }
+}
+
+async function recursive_scope(scope_list, path, model) {
+  for (var i = 0; i < scope_list.length; i++) {
+    var actual_path = `${path}.${i}`;
+    await add_relation_scope_selfAweranessAspect(
+      scope_list[i],
+      actual_path,
+      model
+    );
+    if (scope_list[i].hasProperty) {
+      var propertys = scope_list[i].hasProperty;
+      for (var j = 0; j < propertys.length; j++) {
+        await add_relation_method_property(
+          propertys[j],
+          `${actual_path}/@hasProperty.${j}`
+        );
+      }
+    }
+    if (scope_list[i].containsSubPhysicalEntity) {
+      await recursive_scope(
+        scope_list[i].containsSubPhysicalEntity,
+        `${actual_path}/@containsSubPhysicalEntity`,
+        model
+      );
+    }
+    if (scope_list[i].containsComputingNode) {
+      await recursive_scope(
+        scope_list[i].containsComputingNode,
+        `${actual_path}/@containsComputingNode`,
+        model
+      );
+    }
+    if (scope_list[i].containsResource) {
+      await recursive_scope(
+        scope_list[i].containsResource,
+        `${actual_path}/@containsResource`,
+        model
+      );
+    }
+  }
+}
+
+async function add_relation_scope_selfAweranessAspect(scope, path, model) {
+  var db = new database2();
+  var rows = await db.qwerty(
+    `select asp.aa_id 
+	  from 
+	  aspectoautoconsciencia_objeto asp INNER JOIN
+	  procesoautoconsciencia pr ON asp.aa_id=pr.aa_id
+	  where asp.obj_id=${scope.$.id} and asp.ma_id=${modelID}`
+  );
+
+  for (var i = 0; i < rows.length; i++) {
+    await recursive_relation_scope_selfAweranessAspect(
+      rows[i].aa_id,
+      scope,
+      path,
+      model
+    );
+  }
+}
+
+async function recursive_relation_scope_selfAweranessAspect(
+  aspect_id,
+  scope,
+  scope_path,
+  model
+) {
+  var route = routes["aspect"]["p"][`${aspect_id}`];
+  route = route.substring(3, route.length);
+  route = route.split("/@").reverse();
+  var aspect_obj = recursive_element(route, model);
+  aspect_obj.belongsTo = scope_path;
+  if (scope.has) scope.has += " " + routes["aspect"]["p"][`${aspect_id}`];
+  else scope.has = routes["aspect"]["p"][`${aspect_id}`];
+}
+
+async function add_decision_criteria(model: any) {
+  //await add_decision_criteria_relationed_goal(model);
+  await add_decision_criteria_relationed_analysisModel(model);
+  for (var i = 0; i < model.containsDecisionCriteria.length; i++) {
+    await add_threshold(model.containsDecisionCriteria[i]);
+  }
+}
+
+async function add_decision_criteria_relationed_analysisModel(model: any) {
+  if (!model.containsDecisionCriteria) model.containsDecisionCriteria = [];
+  var db = new database2();
+  var list_id_models = Object.keys(routes["analisisModel"]["p"]);
+  var decisionCriteria: DecisionCriteriaQ = new DecisionCriteriaQ(-1, "", "");
+  for (var i = 0; i < list_id_models.length; i++) {
+    var sql = decisionCriteria.toSqlSelect(
+      ["/@/METHOD/@/"],
+      [list_id_models[i]]
+    );
+    var rows = await db.qwerty(sql);
+    var criteria: DecisionCriteriaQ[] = decisionCriteria.toObjectArray(rows);
+    if (criteria.length > 0) {
+      if (routes["decisionCriteria"][criteria[0].id.toString()]) {
+        var indx_criteria = parseInt(
+          routes["decisionCriteria"][criteria[0].id.toString()].split(".")[1]
+        );
+        if (model.containsDecisionCriteria[indx_criteria].isUsedBy) {
+          model.containsDecisionCriteria[indx_criteria].isUsedBy +=
+            " " + routes["analisisModel"]["p"][list_id_models[i]];
+        } else {
+          model.containsDecisionCriteria[indx_criteria].isUsedBy =
+            " " + routes["analisisModel"]["p"][list_id_models[i]];
+        }
+      } else {
+        model.containsDecisionCriteria.push(criteria[0].toObjectG());
+        var indx_criteria = model.containsDecisionCriteria.length - 1;
+        routes["decisionCriteria"][
+          criteria[0].id.toString()
+        ] = `//@containsDecisionCriteria.${indx_criteria}`;
+        model.containsDecisionCriteria[indx_criteria].isUsedBy =
+          routes["analisisModel"]["p"][list_id_models[i]];
+      }
+      var path_model_list = routes["analisisModel"]["p"][list_id_models[i]]
+        .replace("//@", "")
+        .split("/@")
+        .reverse();
+      add_relation_model_analysis_decisionCriteria(
+        model,
+        path_model_list,
+        routes["decisionCriteria"][criteria[0].id.toString()]
+      );
+    }
+  }
+}
+
+async function add_threshold(decisionCriteria) {
+  var db = new database2();
+  var thres: ThresholdQ = new ThresholdQ(-1, "", "", -1, -1);
+  var sql = thres.toSqlSelect(["/@/CRITERIA/@/"], [decisionCriteria.$.id]);
+  var rows = await db.qwerty(sql);
+  var thres_list: ThresholdQ[] = thres.toObjectArray(rows); // arreglar to object
+  if (!decisionCriteria.containsThreshold)
+    decisionCriteria.containsThreshold = [];
+  for (var i = 0; i < thres_list.length; i++) {
+    var th = thres_list[i].toObjectG();
+    await add_relation_threshold_action(
+      th,
+      `${
+        routes["decisionCriteria"][decisionCriteria.$.id]
+      }/@containsThreshold.${i}`
+    );
+    decisionCriteria.containsThreshold.push(th);
+  }
+}
+
+async function add_relation_threshold_action(threshold, path_threshold) {
+  var db = new database2();
+  var thres: ThresholdQ = new ThresholdQ(
+    threshold.$.id,
+    threshold.$.name,
+    threshold.$.interpretation,
+    threshold.$.lowerThreshold,
+    threshold.$.upperThreshold
+  );
+  var sql = thres.toSqlSelect(["/@/RELATION_ACTION/@/"], []);
+  var rows = await db.qwerty(sql);
+  for (var i = 0; i < rows.length; i++) {
+    var path_action = routes["action"]["p"][rows[i].id.toString()];
+    threshold.recommends = path_action;
+    var obj: any = routes["action"]["r"][rows[i].id.toString()];
+    obj.isRecommendedIn = path_threshold;
+  }
+}
+
+async function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
+  var db = new database2();
+  var sql = `SELECT
+		asp.aa_id as id
+		FROM
+		aspectoautoconsciencia_metrica asp INNER JOIN
+		procesoautoconsciencia pr ON asp.aa_id=pr.aa_id
+		WHERE
+		asp.met_id=${metric.$.id}`;
+  var rows = await db.qwerty(sql);
+  for (var i = 0; i < rows.length; i++) {
+    if (metric.evaluates) {
+      metric.evaluates += " " + routes["aspect"]["p"][rows[i].id.toString()];
+    } else {
+      metric.evaluates = routes["aspect"]["p"][rows[i].id.toString()];
+    }
+    if (routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy) {
+      routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy +=
+        " " + path_metric;
+    } else {
+      routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy = path_metric;
+    }
+  }
+}
+
+async function add_ImplementationResource(model) {
+  var indx_l: any[] = routes["implementationResource"]["i"];
+  if (indx_l.length > 0) model.containsImplementationResource = [];
+  for (var i = 0; i < indx_l.length; i++) {
+    var ip = routes["implementationResource"]["r"][indx_l[i]];
+    model.containsImplementationResource.push(ip);
+  }
+}
 //para buscar
 //
 //
@@ -647,10 +946,6 @@ function order_goals_hierarchical(
   return result_goals;
 }
 
-function add_calculatedGoalIndicator(span: any) {
-  console.log(span);
-}
-
 async function add_relation_method_property(property, path_property) {
   var db = new database2();
   var sql = `SELECT
@@ -670,6 +965,8 @@ async function add_relation_method_property(property, path_property) {
       property.isCollectedBy = routes["collection"]["p"][rows[i].id.toString()];
     }
     if (routes["collection"]["r"][rows[i].id.toString()].collectsProperty) {
+      console.log(`la propiedad buscada es: ${rows[i].id}`);
+      console.log(routes["property"]);
       routes["property"]["r"][rows[i].id.toString()].collectsProperty +=
         " " + path_property;
     } else {
@@ -740,88 +1037,6 @@ async function add_relation_SelfAweranesAspect_Goals(
   routes["aspect"]["r"][`${aspect.$.id}`] = aspect;
 }
 
-async function add_scope(model: any) {
-  if (model["containsEntity"]) {
-    var containsEntity = model["containsEntity"];
-    await recursive_scope(containsEntity, "//@containsEntity", model);
-  }
-}
-
-async function recursive_scope(scope_list, path, model) {
-  for (var i = 0; i < scope_list.length; i++) {
-    var actual_path = `${path}.${i}`;
-    await add_relation_scope_selfAweranessAspect(
-      scope_list[i],
-      actual_path,
-      model
-    );
-    if (scope_list[i].$.id == "25") {
-      console.log(scope_list[i]);
-    }
-    if (scope_list[i].hasProperty) {
-      var propertys = scope_list[i].hasProperty;
-      for (var j = 0; j < propertys.length; j++) {
-        await add_relation_method_property(
-          propertys[j],
-          `${actual_path}/@hasProperty.${j}`
-        );
-      }
-    }
-    if (scope_list[i].containsSubPhysicalEntity) {
-      await recursive_scope(
-        scope_list[i].containsSubPhysicalEntity,
-        `${actual_path}/@containsSubPhysicalEntity`,
-        model
-      );
-    }
-    if (scope_list[i].containsComputingNode) {
-      await recursive_scope(
-        scope_list[i].containsComputingNode,
-        `${actual_path}/@containsComputingNode`,
-        model
-      );
-    }
-    if (scope_list[i].containsResource) {
-      await recursive_scope(
-        scope_list[i].containsResource,
-        `${actual_path}/@containsResource`,
-        model
-      );
-    }
-  }
-}
-
-async function add_relation_scope_selfAweranessAspect(scope, path, model) {
-  var db = new database2();
-  var rows = await db.qwerty(
-    `select aa_id from aspectoautoconsciencia_objeto where obj_id=${scope.$.id} and ma_id=${modelID}`
-  );
-
-  for (var i = 0; i < rows.length; i++) {
-    await recursive_relation_scope_selfAweranessAspect(
-      rows[i].aa_id,
-      scope,
-      path,
-      model
-    );
-  }
-}
-
-async function recursive_relation_scope_selfAweranessAspect(
-  aspect_id,
-  scope,
-  scope_path,
-  model
-) {
-  var route = routes["aspect"]["p"][`${aspect_id}`];
-  route = route.substring(3, route.length);
-  route = route.split("/@").reverse();
-  var aspect_obj = recursive_element(route, model);
-  aspect_obj.belongsTo = scope_path;
-  if (scope.has) scope.has += " " + routes["aspect"]["p"][`${aspect_id}`];
-  else scope.has = routes["aspect"]["p"][`${aspect_id}`];
-}
-
 function recursive_element(arr_path, sub_model) {
   if (arr_path.length > 0) {
     var redireccion = arr_path.pop();
@@ -830,14 +1045,6 @@ function recursive_element(arr_path, sub_model) {
     return recursive_element(arr_path, sub_elemento);
   }
   return sub_model;
-}
-
-async function add_decision_criteria(model: any) {
-  await add_decision_criteria_relationed_goal(model);
-  await add_decision_criteria_relationed_analysisModel(model);
-  for (var i = 0; i < model.containsDecisionCriteria.length; i++) {
-    await add_threshold(model.containsDecisionCriteria[i]);
-  }
 }
 
 async function add_decision_criteria_relationed_goal(model: any) {
@@ -899,51 +1106,6 @@ function add_relation_goal_decisionCriteria(
   }
 }
 
-async function add_decision_criteria_relationed_analysisModel(model: any) {
-  if (!model.containsDecisionCriteria) model.containsDecisionCriteria = [];
-  var db = new database2();
-  var list_id_models = Object.keys(routes["analisisModel"]["p"]);
-  var decisionCriteria: DecisionCriteriaQ = new DecisionCriteriaQ(-1, "", "");
-  for (var i = 0; i < list_id_models.length; i++) {
-    var sql = decisionCriteria.toSqlSelect(
-      ["/@/METHOD/@/"],
-      [list_id_models[i]]
-    );
-    var rows = await db.qwerty(sql);
-    var criteria: DecisionCriteriaQ[] = decisionCriteria.toObjectArray(rows);
-    if (criteria.length > 0) {
-      if (routes["decisionCriteria"][criteria[0].id.toString()]) {
-        var indx_criteria = parseInt(
-          routes["decisionCriteria"][criteria[0].id.toString()].split(".")[1]
-        );
-        if (model.containsDecisionCriteria[indx_criteria].isUsedBy) {
-          model.containsDecisionCriteria[indx_criteria].isUsedBy +=
-            " " + routes["analisisModel"]["p"][list_id_models[i]];
-        } else {
-          model.containsDecisionCriteria[indx_criteria].isUsedBy =
-            " " + routes["analisisModel"]["p"][list_id_models[i]];
-        }
-      } else {
-        model.containsDecisionCriteria.push(criteria[0].toObjectG());
-        var indx_criteria = model.containsDecisionCriteria.length - 1;
-        routes["decisionCriteria"][
-          criteria[0].id.toString()
-        ] = `//@containsDecisionCriteria.${indx_criteria}`;
-        model.containsDecisionCriteria[indx_criteria].isUsedBy =
-          routes["analisisModel"]["p"][list_id_models[i]];
-      }
-      var path_model_list = routes["analisisModel"]["p"][list_id_models[i]]
-        .replace("//@", "")
-        .split("/@")
-        .reverse();
-      add_relation_model_analysis_decisionCriteria(
-        model,
-        path_model_list,
-        routes["decisionCriteria"][criteria[0].id.toString()]
-      );
-    }
-  }
-}
 function add_relation_model_analysis_decisionCriteria(
   model: any,
   path_model: string[],
@@ -959,45 +1121,6 @@ function add_relation_model_analysis_decisionCriteria(
     );
   } else {
     model.uses = path_criteria;
-  }
-}
-
-async function add_threshold(decisionCriteria) {
-  var db = new database2();
-  var thres: ThresholdQ = new ThresholdQ(-1, "", "", -1, -1);
-  var sql = thres.toSqlSelect(["/@/CRITERIA/@/"], [decisionCriteria.$.id]);
-  var rows = await db.qwerty(sql);
-  var thres_list: ThresholdQ[] = thres.toObjectArray(rows); // arreglar to object
-  if (!decisionCriteria.containsThreshold)
-    decisionCriteria.containsThreshold = [];
-  for (var i = 0; i < thres_list.length; i++) {
-    var th = thres_list[i].toObjectG();
-    await add_relation_threshold_action(
-      th,
-      `${
-        routes["decisionCriteria"][decisionCriteria.$.id]
-      }/@containsThreshold.${i}`
-    );
-    decisionCriteria.containsThreshold.push(th);
-  }
-}
-
-async function add_relation_threshold_action(threshold, path_threshold) {
-  var db = new database2();
-  var thres: ThresholdQ = new ThresholdQ(
-    threshold.$.id,
-    threshold.$.name,
-    threshold.$.interpretation,
-    threshold.$.lowerThreshold,
-    threshold.$.upperThreshold
-  );
-  var sql = thres.toSqlSelect(["/@/RELATION_ACTION/@/"], []);
-  var rows = await db.qwerty(sql);
-  for (var i = 0; i < rows.length; i++) {
-    var path_action = routes["action"]["p"][rows[i].id.toString()];
-    threshold.recommends = path_action;
-    var obj: any = routes["action"]["r"][rows[i].id.toString()];
-    obj.isRecommendedIn = path_threshold;
   }
 }
 
@@ -1036,10 +1159,12 @@ async function save_and_generate_resource_route(
   var rows = await db.qwerty(sql);
   var resource_element: ImplementationResourceQ;
   resource_element = resource.toObjectArray(rows)[0];
-  var the_resource = routes["parameter"]["r"][resource_element.id.toString()];
+  var the_resource =
+    routes["implementationResource"]["r"][resource_element.id.toString()];
   var indx_parameter = -1;
   if (the_resource) {
-    the_resource.containsParameter.push(parameter);
+    if (the_resource.containsParameter.indexOf(parameter) == -1)
+      the_resource.containsParameter.push(parameter);
   } else {
     routes["implementationResource"]["r"][
       resource_element.id.toString()
@@ -1055,7 +1180,7 @@ async function save_and_generate_resource_route(
     resource_element.id.toString()
   );
   var path_resource = `//@containsImplementationResource.${indx}`;
-  if (method.calculationPeriodStart) {
+  if (method.$.calculationPeriodStart) {
     if (the_resource.implementsCalculationMethod) {
       the_resource.implementsCalculationMethod += ` ${
         routes["calculationMethod"]["p"][method.$.id]
@@ -1078,15 +1203,6 @@ async function save_and_generate_resource_route(
   return `${path_resource}/@containsParameter.${indx_parameter}`;
 }
 
-async function add_ImplementationResource(model) {
-  var indx_l: any[] = routes["implementationResource"]["i"];
-  if (indx_l.length > 0) model.containsImplementationResource = [];
-  for (var i = 0; i < indx_l.length; i++) {
-    var ip = routes["implementationResource"]["r"][indx_l[i]];
-    model.containsImplementationResource.push(ip);
-  }
-}
-
 async function add_scale(model) {
   var indx_l: any[] = routes["scale"]["i"];
   if (indx_l.length > 0) model.containsScale = [];
@@ -1100,7 +1216,7 @@ async function add_MeasurementUnit(model) {
   var indx_l: any[] = routes["units"]["i"];
   if (indx_l.length > 0) model.containsMeasurementUnit = [];
   for (var i = 0; i < indx_l.length; i++) {
-    var units = routes["units"]["r"][indx_l[i]];
+    var units = routes["units"]["r"][indx_l[i] - 1000];
     model.containsMeasurementUnit.push(units);
   }
 }
@@ -1137,7 +1253,9 @@ async function add_dataFlow_relation(model) {
 	       flujodatos flu
 	       WHERE
 	       flu.flu_id = ${model.containsDataFlow[i].$.id} AND
-		met.flu_id=flu.flu_id`;
+		met.flu_id=flu.flu_id AND
+		met.ma_id = flu.ma_id AND
+	  	met.ma_id = ${modelID}`;
     var rows = await db.qwerty(sql);
     for (var j = 0; j < rows.length; j++) {
       if (model.containsDataFlow[i].support) {
@@ -1147,38 +1265,15 @@ async function add_dataFlow_relation(model) {
         model.containsDataFlow[i].support =
           routes["collection"]["p"][rows[j].id.toString()];
       }
-      if (routes["collection"]["r"][rows[j].id.toString()].isSupported) {
+      if (routes["collection"]["r"][rows[j].id.toString()].isSupportedBy) {
         routes["collection"]["r"][
           rows[j].id.toString()
-        ].isSupported += ` //@containsDataFlow.${i}`;
+        ].isSupportedBy += ` //@containsDataFlow.${i}`;
       } else {
         routes["collection"]["r"][
           rows[j].id.toString()
-        ].isSupported = `//@containsDataFlow.${i}`;
+        ].isSupportedBy = `//@containsDataFlow.${i}`;
       }
-    }
-  }
-}
-async function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
-  var db = new database2();
-  var sql = `SELECT
-		asp.aa_id as id
-		FROM
-		aspectoautoconsciencia_metrica asp
-		WHERE
-		asp.met_id=${metric.$.id}`;
-  var rows = await db.qwerty(sql);
-  for (var i = 0; i < rows.length; i++) {
-    if (metric.evaluates) {
-      metric.evaluates += " " + routes["aspect"]["p"][rows[i].id.toString()];
-    } else {
-      metric.evaluates = routes["aspect"]["p"][rows[i].id.toString()];
-    }
-    if (routes["aspect"]["r"][rows[i].id.toString()].isEvaluated) {
-      routes["aspect"]["r"][rows[i].id.toString()].isEvaluated +=
-        " " + path_metric;
-    } else {
-      routes["aspect"]["r"][rows[i].id.toString()].isEvaluated = path_metric;
     }
   }
 }

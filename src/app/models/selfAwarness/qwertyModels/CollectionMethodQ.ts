@@ -53,6 +53,6 @@ export class CollectionMethodQ extends CollectionMethod implements SQL_Qwerty {
       );
       res.push(aux);
     }
-    return res;
+	    return res;
   }
 }

@@ -36,9 +36,9 @@ export async function add_deployment_resources(req: Request, res: Response) {
       var formula = new FormulaQ(
         -1,
         data.nombre,
-        data.descripcion.replace("'", "\\'"),
+        data.descripcion.replace(/'/g, "\\'"),
         data.EspecificoTipo.datoSalida,
-        data.EspecificoTipo.formula
+        data.EspecificoTipo.formula.replace(/'/g, "\\'")
       );
       var rows = await db.qwerty(formula.toSqlInsert([], []));
       id = rows[0][0].id;
@@ -46,10 +46,10 @@ export async function add_deployment_resources(req: Request, res: Response) {
       var funcion = new FunctionQ(
         -1,
         data.nombre,
-        data.descripcion.replace("'", "\\'"),
+        data.descripcion.replace(/'/g, "\\'"),
         data.EspecificoTipo.datoSalida,
         "", //data.path,
-        data.EspecificoTipo.instrucciones
+        data.EspecificoTipo.instrucciones.replace(/'/g, "\\'")
       );
       var rows = await db.qwerty(
         funcion.toSqlInsert(
@@ -62,10 +62,10 @@ export async function add_deployment_resources(req: Request, res: Response) {
       var service = new WebServiceQ(
         -1,
         data.nombre,
-        data.descripcion.replace("'", "\\'"),
+        data.descripcion.replace(/'/g, "\\'"),
         data.EspecificoTipo.datoSalida,
         data.EspecificoTipo.endPoint,
-        data.EspecificoTipo.instrucciones,
+        data.EspecificoTipo.instrucciones.replace(/'/g, "\\'"),
         data.EspecificoTipo.formatoSalida
       );
       var rows = await db.qwerty(
@@ -182,11 +182,12 @@ export async function add_mapeo_parametros(req: Request, res: Response) {
 	      		'${element.mp_tipo_entrada}',
 	      		${element.met_id == undefined ? "NULL" : element.met_id},
 	      		${element.vs_id == undefined ? "NULL" : element.vs_id},
-	      		${element.md_id == undefined ? "NULL" : "'" + element.md_id + "'"}),`;
+	      		${element.md_id == undefined ? "NULL" : element.md_id},
+		  	${element.data_id == undefined ? "NULL" : element.data_id}),`;
     });
     var sql =
       `INSERT INTO 
-    		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
+    		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id,data_id) 
 		VALUES ` + stryaux.substring(0, stryaux.length - 1);
 
     var db = new database2();

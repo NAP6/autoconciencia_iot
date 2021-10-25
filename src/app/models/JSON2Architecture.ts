@@ -2,18 +2,22 @@ import { EntityQ } from "./architecture/EntityQ";
 import { DataFlowQ } from "./architecture/DataFlowQ";
 import { IoTSystemQ } from "./architecture/IoTSystemQ";
 import { PropertyQ } from "./architecture/PropertyQ";
+import { DataColumnQ } from "./architecture/DataColumnQ";
+import { DataColumn } from "./architecture/DataColumn";
 
 export class JSON2Architecture {
   private _json: any;
   private _modelEntity: EntityQ[];
   private _modelDataFlow: DataFlowQ[];
   private _modelIoTSystem: IoTSystemQ;
+  private _modelDataColumn: DataColumnQ[];
 
   constructor(json: any) {
     this._json = json[Object.keys(json)[0]];
     if (this._json == undefined) this._json = {};
     this._modelEntity = [];
     this._modelDataFlow = [];
+    this._modelDataColumn = [];
     this._modelIoTSystem = new IoTSystemQ(-1, "");
     this.extractSystems();
     this.extractDataFlows();
@@ -49,7 +53,15 @@ export class JSON2Architecture {
   }
 
   set modelIoTSystem(modelIoTSystem: IoTSystemQ) {
-    this.modelIoTSystem = modelIoTSystem;
+    this._modelIoTSystem = modelIoTSystem;
+  }
+
+  get modelDataColumn(): DataColumnQ[] {
+    return this._modelDataColumn;
+  }
+
+  set modelDataColumn(value: DataColumnQ[]) {
+    this._modelDataColumn = value;
   }
 
   private extractSystems() {
@@ -99,11 +111,14 @@ export class JSON2Architecture {
   private extractEntitys() {
     if (this._json["containsEntity"]) {
       var containsEntity = this._json["containsEntity"];
-      this._modelEntity = this.extractEntitys_recursive(containsEntity);
+      this._modelEntity = this.extractEntitys_recursive(
+        containsEntity,
+        "//@containsEntity"
+      );
     }
   }
 
-  private extractEntitys_recursive(entitys: any): EntityQ[] {
+  private extractEntitys_recursive(entitys: any, path: string): EntityQ[] {
     var entitysRe: EntityQ[] = [];
     entitys.forEach((entity) => {
       var id = entity.$.id;
@@ -140,12 +155,21 @@ export class JSON2Architecture {
       ) {
         if (entity.containsSubPhysicalEntity) {
           newEntity.subEntity = newEntity.subEntity.concat(
-            this.extractSubPhysicalEntitys(entity.containsSubPhysicalEntity)
+            this.extractSubPhysicalEntitys(
+              entity.containsSubPhysicalEntity,
+              path +
+                "." +
+                entitys.indexOf(entity) +
+                "/@containsSubPhysicalEntity"
+            )
           );
         }
         if (entity.containsComputingNode) {
           newEntity.subEntity = newEntity.subEntity.concat(
-            this.extractEntitys_recursive(entity.containsComputingNode)
+            this.extractEntitys_recursive(
+              entity.containsComputingNode,
+              path + "." + entitys.indexOf(entity) + "/@containsComputingNode"
+            )
           );
         }
       }
@@ -165,11 +189,37 @@ export class JSON2Architecture {
       ) {
         if (entity.containsResource) {
           newEntity.subEntity = newEntity.subEntity.concat(
-            this.extractEntitys_recursive(entity.containsResource)
+            this.extractEntitys_recursive(
+              entity.containsResource,
+              path + "." + entitys.indexOf(entity) + "/@containsResource"
+            )
           );
         }
       }
       // Fin: Extraer de ComputingNode
+
+      if (entity.containsDataTable) {
+        var tables = entity.containsDataTable;
+        for (var i = 0; i < tables.length; i++) {
+          var dataColums = tables[i].composedOfDataColumn;
+          var path_table =
+            path + "." + entitys.indexOf(entity) + "/@containsDataTable." + i;
+          for (var j = 0; j < dataColums.length; j++) {
+            var name = dataColums[j].$.name;
+            var colum_path = path_table + "/@composedOfDataColumn." + j;
+            var dataType = dataColums[j].$.dataType;
+            var dataColumnType = dataColums[j].$.dataColumnType;
+            var newDataColumn: DataColumnQ = new DataColumnQ(
+              -1,
+              name,
+              dataColumnType,
+              dataType,
+              colum_path
+            );
+            this._modelDataColumn.push(newDataColumn);
+          }
+        }
+      }
 
       if (entity.hasProperty) {
         newEntity.propertys = this.extractPropertys(entity.hasProperty);
@@ -179,7 +229,7 @@ export class JSON2Architecture {
     return entitysRe;
   }
 
-  private extractSubPhysicalEntitys(entitys: any): EntityQ[] {
+  private extractSubPhysicalEntitys(entitys: any, path: string): EntityQ[] {
     var entitysRe: EntityQ[] = [];
     entitys.forEach((entity) => {
       var id = entity.$.id;
@@ -202,12 +252,18 @@ export class JSON2Architecture {
 
       if (entity.containsSubPhysicalEntity) {
         newEntity.subEntity = newEntity.subEntity.concat(
-          this.extractSubPhysicalEntitys(entity.containsSubPhysicalEntity)
+          this.extractSubPhysicalEntitys(
+            entity.containsSubPhysicalEntity,
+            path + "." + entitys.indexOf(entity) + "/@containsSubPhysicalEntity"
+          )
         );
       }
       if (entity.containsComputingNode) {
         newEntity.subEntity = newEntity.subEntity.concat(
-          this.extractEntitys_recursive(entity.containsComputingNode)
+          this.extractEntitys_recursive(
+            entity.containsComputingNode,
+            path + "." + entitys.indexOf(entity) + "/@containsComputingNode"
+          )
         );
       }
       if (entity.hasProperty) {

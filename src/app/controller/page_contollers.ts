@@ -43,8 +43,8 @@ export {
   get_aspects_colective,
   get_aspects_padres,
   mod_aspects_colective,
-get_aspects_hijos,
-get_aspects_hijos_seleccionados,
+  get_aspects_hijos,
+  get_aspects_hijos_seleccionados,
 } from "./page_contollers/aspects";
 export {
   metrics,
@@ -123,6 +123,7 @@ export {
   upd_simulation_variable,
   del_simulation_variable,
 } from "./page_contollers/simulation_variable";
+export { get_metadata } from "./page_contollers/data_column";
 export {
   get_simulation_scenario,
   add_simulation_scenario,

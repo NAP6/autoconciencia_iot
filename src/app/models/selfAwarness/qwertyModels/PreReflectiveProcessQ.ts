@@ -39,8 +39,8 @@ export class PreReflectiveProcessQ
 		${value[tag.indexOf("/@/MODEL/@/")]},
 		${this.executionType},
 		${value[tag.indexOf("/@/HORA/@/")]},
-		${this.executionTimeInterval},
-		'${this.executionTime}')`;
+		${this.executionTimeInterval == undefined ? -6 : this.executionTimeInterval},
+		${this.executionTime == undefined ? "NULL" : "'" + this.executionTime + "'"})`;
     return sql;
   }
   toSqlSelect(tag: string[], value: string[]): string {

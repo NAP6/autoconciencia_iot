@@ -5,6 +5,7 @@ import { IoTSystemQ } from "../models/architecture/IoTSystemQ";
 import { DataFlowQ } from "../models/architecture/DataFlowQ";
 import mysql from "mysql2/promise";
 import constants from "../../config/constants";
+import {DataColumnQ} from "../models/architecture/DataColumnQ";
 
 export class database2 {
   constructor() {}
@@ -44,6 +45,12 @@ export class database2 {
       modelID,
       "NULL",
     ]);
+    var dataColumn: DataColumnQ[] = architecture.modelDataColumn;
+    for (var i = 0; i < dataColumn.length; i++) {
+      var insertedColumn = await this.qwerty(
+        dataColumn[i].toSqlInsert(["/@/MODELO/@/"], [modelID])
+      );
+    }
   }
 
   private async insertar_sistemas_recursivo(

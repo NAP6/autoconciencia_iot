@@ -833,7 +833,7 @@ function cargar_posibles_sujetos_modelo(json) {
     labelChek.classList.add("form-check-label");
     labelChek.htmlFor = checkbox.id;
     var button = document.createElement("button");
-    button.classList.add("btn", "btn-link", "py-0", "px-0");
+    button.classList.add("btn", "py-0", "px-0");
     /*
       button.setAttribute(
       "onclick",
@@ -3293,7 +3293,6 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
   document.getElementById("input-descripcion-proceso-pre-reflexivo").value = "";
   document.getElementById("inicio_del_periodo").value = "";
   document.getElementById("fin_del_periodo").value = "";
-  document.getElementById("id_proceso_pre_reflexivo").value = "";
   document.getElementById("CategoriaEntidadesProcesos").selectedIndex = "0";
   document.getElementById("Aspectos_autoconsciencia").selectedIndex = "0";
   document.getElementById("tipo_comunicacion").selectedIndex = "0";
@@ -5636,7 +5635,9 @@ function cargar_select_mapeo_tipo_metodos_2(json) {
 function cargar_metricas_tipo_mapeo_metodo(elemento) {
   if (elemento.value == 24) {
     cargar_select_mapeo_variables_simulacion();
-
+    OrdinalGeneral = elemento.dataset.ordinal;
+  } else if (elemento.value == 25) {
+    cargar_select_mapeo_metados();
     OrdinalGeneral = elemento.dataset.ordinal;
   } else {
     data = {
@@ -5693,6 +5694,30 @@ function cargar_variables_simulacion_select_modal_mapeo(json) {
   });
 }
 
+function cargar_select_mapeo_metados() {
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_metadata",
+    { mea_id: metodo_calculo },
+    cargar_metadatos_select_modal_mapeo,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+
+function cargar_metadatos_select_modal_mapeo(json) {
+  var select = document.getElementById(
+    `tipo_argumento_select_metodo_${OrdinalGeneral}`
+  );
+  select.innerHTML = "<option value='-6'>Seleccione</option>";
+  json.forEach((ele) => {
+    var option = document.createElement("option");
+    option.value = ele.id;
+    option.innerHTML = ele.name;
+    select.appendChild(option);
+  });
+}
+
 function error_cargar_select_mapeo_variables_simulacion(error) {
   console.log(error);
 }
@@ -5731,6 +5756,12 @@ function Guadar_nuevo_mapeo_metodos() {
         .value == 24
     ) {
       aux[i].vs_id = aux[i].met_id;
+      aux[i].met_id = undefined;
+    } else if (
+      document.getElementById("tipo_mapeo_select_" + aux[i].par_ordinal)
+        .value == 25
+    ) {
+      aux[i].data_id = aux[i].met_id;
       aux[i].met_id = undefined;
     }
   }
@@ -8708,7 +8739,6 @@ function cargar_datos_del_modal_modificar_aspectos_individuales() {
     var peso;
     var active;
     var suj;
-    var objetivo;
     var tipo;
     radio.forEach((elem) => {
       if (elem.checked) {
@@ -8845,7 +8875,6 @@ function eliminar_relacion_aspectos() {
 }
 var seleccionadas = undefined;
 function cargar_objetos_seleccionados_aspectos(json) {
-  console.log(json);
   seleccionadas = json;
   var ul = document.getElementById(
     "lista_entidades_seleccionadas_aspectos_mod"
@@ -8876,8 +8905,6 @@ function cargar_objetos_seleccionados_aspectos(json) {
   var seleccion = document.getElementById("CategoriaEntidadesAspectosMod")
     .value;
   seleccion = sin_tilde(seleccion);
-  console.log(seleccion);
-  console.log(systemID);
   data = {
     valorS: seleccion,
     systemID: systemID,
@@ -8896,7 +8923,6 @@ function error_cargar_sujetos_activos_aspectos_modificar(error) {
 }
 
 function cargar_entidades_modelo_aspecto(json) {
-  console.log(json);
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   json.forEach((elemento) => {
@@ -9302,7 +9328,6 @@ if (document.getElementById("lista_sujetos_aspectos_colectivos")) {
   agregar_sujetos_activos_aspectos();
 }
 function agregar_sujetos_activos_aspectos() {
-  document.getElementById("lista_sujetos_aspectos_colectivos").innerHTML = "";
   consultar_api(
     "http://autoconsciencia.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_aspectos_colectivos,
@@ -9384,6 +9409,7 @@ function verificarSeleccionAspectosColectivos(elemento) {
 }
 
 function agregarAspectosColectivos() {
+  document.getElementById("lista_sujetos_aspectos_colectivos").innerHTML = "";
   agregar_sujetos_activos_aspectos();
   ActivarFormularioAspectosColectivos();
   $("#add_aspects_colective").modal("show");
@@ -9561,6 +9587,10 @@ function cargar_select_operador_agregacion_colectivos() {
 function cargar_operador_asignacion_select_colectivos(json) {
   var ope = document.getElementById("select_operadoreAgregacion");
   ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
@@ -9585,7 +9615,6 @@ function cargar_select_tipo_aspecto_colectivo() {
 }
 
 function cargar_select_tipo_aspecto_col(json) {
-  console.log(json);
   var ope = document.getElementById("select_aspectoColectivo");
   ope.innerHTML = "";
   var seleccione = document.createElement("option");
