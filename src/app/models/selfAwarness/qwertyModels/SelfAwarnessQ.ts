@@ -3,11 +3,15 @@ import { SQL_Qwerty } from "../../SQL_Qwerty";
 
 export class SelfAwarnessQ extends SelfAwarness implements SQL_Qwerty {
   toSqlInsert(tag: string[], value: string[]): string {
+    var architectureModel = this.architectureModel.replace(/\\/g, "\\\\");
+    architectureModel = architectureModel.replace(/'/g, "\\'");
     var sql: string = `INSERT INTO modeloautoconsciencia(ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura, usr_id) VALUES ('${
       this.name
-    }','${this.description}','${this.author}','${this.architectureModel
-      .split("'")
-      .join("`")}', /@/USER/@/)`;
+    }','${this.description}','${this.author}','${
+      architectureModel
+      /*.split("'")
+      .join("`")*/
+    }', /@/USER/@/)`;
 
     for (var i = 0; i < tag.length; i++) {
       sql = sql.replace(tag[i], value[i]);
@@ -44,7 +48,11 @@ export class SelfAwarnessQ extends SelfAwarness implements SQL_Qwerty {
   }
 
   toSqlUpdate(tag: string[], value: string[]): string {
-    return `UPDATE modeloautoconsciencia SET ma_nombre = '${this.name}', ma_descripcion = '${this.description}', ma_activo = '${this.active?1 : 0}' WHERE ma_id = '${this.id}'`;
+    return `UPDATE modeloautoconsciencia SET ma_nombre = '${
+      this.name
+    }', ma_descripcion = '${this.description}', ma_activo = '${
+      this.active ? 1 : 0
+    }' WHERE ma_id = '${this.id}'`;
   }
 
   toObjectArray(rows): SelfAwarnessQ[] {

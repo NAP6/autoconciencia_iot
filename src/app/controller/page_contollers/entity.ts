@@ -33,12 +33,12 @@ export async function entitys(req: Request, res: Response) {
     var flag = false;
 
     if (seleccion == "Entidades Fisicas") {
-      rows = await db.qwerty(
-        new PhysicalEntityQ(-1, "", "").toSqlSelect(
-          ["/@/MODEL/@/", "/@/SYSTEM/@/"],
-          [id, system]
-        )
+      var sql = new PhysicalEntityQ(-1, "", "").toSqlSelect(
+        ["/@/MODEL/@/", "/@/SYSTEM/@/"],
+        [id, system]
       );
+      console.log(sql);
+      rows = await db.qwerty(sql);
     } else if (seleccion == "Nodos Cloud") {
       rows = await db.qwerty(
         new CloudNodeQ(-1, "", "").toSqlSelect(
@@ -116,11 +116,16 @@ export async function entitys(req: Request, res: Response) {
     var fathers_services = rows.map((ent) => {
       return ent.id;
     });
-    var service = new ServiceQ(-1, "", "");
-    var rows_service = await db.qwerty(
-      service.toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/","/@/FATHERS/@/"], [id, system, fathers_services.join(',')])
-    );
-    if (rows_service.length > 0) {
+    if (fathers_services.length > 0) {
+      var service = new ServiceQ(-1, "", "");
+      var rows_service = await db.qwerty(
+        service.toSqlSelect(
+          ["/@/MODEL/@/", "/@/SYSTEM/@/", "/@/FATHERS/@/"],
+          [id, system, fathers_services.join(",")]
+        )
+      );
+    }
+    if (rows_service && rows_service.length > 0) {
       rows = rows.concat(rows_service);
     }
 

@@ -18,7 +18,7 @@ export async function start_session(
   var email_user = req.body.email;
   var password_user = req.body.password;
 
-  var user: UserQ | UserQ[] = new UserQ(-1, "","", "");
+  var user: UserQ | UserQ[] = new UserQ(-1, "", "", "");
   var rows = await db.qwerty(
     user.toSqlSelect(
       ["/@/MAIL/@/", "/@/PASSWRD/@/"],

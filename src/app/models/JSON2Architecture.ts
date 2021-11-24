@@ -11,6 +11,7 @@ export class JSON2Architecture {
   private _modelDataFlow: DataFlowQ[];
   private _modelIoTSystem: IoTSystemQ;
   private _modelDataColumn: DataColumnQ[];
+  private relation_column_flow_property: any[];
 
   constructor(json: any) {
     this._json = json[Object.keys(json)[0]];
@@ -18,10 +19,18 @@ export class JSON2Architecture {
     this._modelEntity = [];
     this._modelDataFlow = [];
     this._modelDataColumn = [];
+    this.relation_column_flow_property = [];
     this._modelIoTSystem = new IoTSystemQ(-1, "");
     this.extractSystems();
     this.extractDataFlows();
     this.extractEntitys();
+
+    this.relation_column_flow_property.forEach((rel) => {
+      var column = this._modelDataColumn.filter((x) => {
+        return x.dataColumnPath == rel[0];
+      });
+      if (column[0]) column[0].propertyToDataColumn.push(rel[1]);
+    });
   }
 
   get json(): any {
@@ -103,6 +112,8 @@ export class JSON2Architecture {
           flows.$.description,
           flows.$.communicationType
         );
+        if (flows.containsDataMappingRule)
+          newFlow.propertyToDataColumn = flows.containsDataMappingRule;
         this._modelDataFlow.push(newFlow);
       });
     }
@@ -127,6 +138,9 @@ export class JSON2Architecture {
       var newEntity = new EntityQ(id, name, entityType);
 
       if (entity.$.isPartOf) {
+        console.log(
+          `######################## Si existe relacion ${entity.$.name}`
+        );
         this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
       }
 
@@ -139,9 +153,6 @@ export class JSON2Architecture {
             "Service"
           );
           serviceEntity.iotSystem = newEntity.iotSystem;
-          console.log(
-            `la entidad ${serviceEntity.name} tiene ${serviceEntity.iotSystem.length} sistemas`
-          );
           newEntity.subEntity.push(serviceEntity);
         }
       }
@@ -224,6 +235,7 @@ export class JSON2Architecture {
       if (entity.hasProperty) {
         newEntity.propertys = this.extractPropertys(entity.hasProperty);
       }
+
       entitysRe.push(newEntity);
     });
     return entitysRe;
@@ -266,6 +278,30 @@ export class JSON2Architecture {
           )
         );
       }
+
+      if (entity.containsDataTable) {
+        var tables = entity.containsDataTable;
+        for (var i = 0; i < tables.length; i++) {
+          var dataColums = tables[i].composedOfDataColumn;
+          var path_table =
+            path + "." + entitys.indexOf(entity) + "/@containsDataTable." + i;
+          for (var j = 0; j < dataColums.length; j++) {
+            var name = dataColums[j].$.name;
+            var colum_path = path_table + "/@composedOfDataColumn." + j;
+            var dataType = dataColums[j].$.dataType;
+            var dataColumnType = dataColums[j].$.dataColumnType;
+            var newDataColumn: DataColumnQ = new DataColumnQ(
+              -1,
+              name,
+              dataColumnType,
+              dataType,
+              colum_path
+            );
+            this._modelDataColumn.push(newDataColumn);
+          }
+        }
+      }
+
       if (entity.hasProperty) {
         newEntity.propertys = this.extractPropertys(entity.hasProperty);
       }
@@ -311,11 +347,20 @@ export class JSON2Architecture {
   ) {
     var listRoutes = RuleProperty.split(" ");
     listRoutes.forEach((route) => {
-      var routeAux: string = route.substring(1, route.length).split("/@")[1];
-      var index: number = parseInt(routeAux.split(".")[1]);
-      var flow = this._modelDataFlow[index];
+      var routeAux: string[] = route.substring(1, route.length).split("/@");
+      var index_flow: number = parseInt(routeAux[1].split(".")[1]);
+      var index_colum_route: number = parseInt(routeAux[2].split(".")[1]);
+      var flow = this._modelDataFlow[index_flow];
+
       property.dataFlow.push(flow);
       flow.propertys.push(property);
+
+      var flow_and_property_ids = [flow.id, property.id];
+
+      this.relation_column_flow_property.push([
+        flow.propertyToDataColumn[index_colum_route].$.relatesColumn,
+        flow_and_property_ids,
+      ]);
     });
   }
 }

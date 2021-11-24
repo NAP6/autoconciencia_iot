@@ -4,6 +4,7 @@ export class DataColumn {
   private _dataColumnType: string | undefined;
   private _dataColumnPath: string | undefined;
   private _dataType: string | undefined;
+  private _PropertyToDataColumn: any[];
 
   constructor(
     id: number,
@@ -17,6 +18,7 @@ export class DataColumn {
     this._dataColumnType = dataColumnType;
     this._dataColumnPath = dataColumnPath;
     this._dataType = dataType;
+    this._PropertyToDataColumn = [];
   }
 
   get id(): number {
@@ -50,6 +52,15 @@ export class DataColumn {
   set dataType(dataType: string | undefined) {
     this._dataType = dataType;
   }
+
+  get propertyToDataColumn(): any[] {
+    return this._PropertyToDataColumn;
+  }
+
+  set propertyToDataColumn(dataColumnPath: any[]) {
+    this._PropertyToDataColumn = dataColumnPath;
+  }
+
   get dataColumnPath(): string | undefined {
     return this._dataColumnPath;
   }

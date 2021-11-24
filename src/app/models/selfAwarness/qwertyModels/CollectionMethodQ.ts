@@ -44,6 +44,24 @@ export class CollectionMethodQ extends CollectionMethod implements SQL_Qwerty {
   toSqlUpdate(tag: string[], value: string[]): string {
     throw new Error("Method not implemented.");
   }
+  toSqlSelectPathDataColum(): string {
+    var sql = `
+	  SELECT 
+			dc.data_column_path as path
+	  FROM
+	  	I_AM_BATMAN bat JOIN
+	  	(metodorecoleccion coll, data_column dc) ON
+				coll.pro_id = bat.id_proces AND
+	  		coll.flu_id = bat.id_flow AND
+	  		coll.ma_id = bat.ma_id AND
+	          dc.ma_id = bat.ma_id AND
+	          dc.data_id = bat.id_colum
+	  WHERE
+	  	coll.mea_id = ${this.id}
+	  `;
+	  console.log(sql)
+    return sql;
+  }
   toObjectArray(rows: any): any[] {
     var res: CollectionMethodQ[] = [];
     for (var i = 0; i < rows.length; i++) {
@@ -53,6 +71,6 @@ export class CollectionMethodQ extends CollectionMethod implements SQL_Qwerty {
       );
       res.push(aux);
     }
-	    return res;
+    return res;
   }
 }

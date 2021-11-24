@@ -46,11 +46,12 @@ var routes: any = {
   scale: { p: {}, r: {}, i: [] },
   units: { p: {}, r: {}, i: [] },
   data_column: {},
+  property: { r: {} },
 };
 
-var r1 = { session: { active_model: { modelID: 65 } } };
-var r2 = {};
-generate_model(r1, r2);
+//var r1 = { session: { active_model: { modelID: 95 } } };
+//var r2 = {};
+//generate_model(r1, r2);
 //export async function generate_model(req: Request, res: Response) {
 export async function generate_model(req, res) {
   modelID = req.session?.active_model.modelID;
@@ -77,6 +78,7 @@ export async function generate_model(req, res) {
     scale: { p: {}, r: {}, i: [] },
     units: { p: {}, r: {}, i: [] },
     data_column: {},
+    property: { r: {} },
   };
 
   modelo = modelo.toObjectArray(rows)[0];
@@ -92,12 +94,9 @@ export async function generate_model(req, res) {
   await add_dataFlow_relation(modeloA[Object.keys(modeloA)[0]]);
   await add_relation_data_colum(modeloA[Object.keys(modeloA)[0]]);
 
-  console.log("///////////////////////////////////////");
-  console.log("     All Model");
   modeloA = {
-    AutoconscienciaIoT: modeloA[Object.keys(modeloA)[0]],
+    ArchitectureSelfAwarenessIoT: modeloA[Object.keys(modeloA)[0]],
   };
-  console.log(modeloA);
   res.render("generate_model", {
     session: req.session,
     model: JSON.stringify(modeloA, null, "  "),
@@ -129,9 +128,6 @@ async function recursive_relation_data_colum(
       if (!model.relatesMetaData) model.relatesMetaData = `${to_add[i]}`;
       else model.relatesMetaData += ` ${to_add[i]}`;
     }
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    console.log("              DATA COLUMN  ");
-    console.log(model);
   }
 }
 
@@ -197,6 +193,13 @@ async function add_PreReflectiveProcess_extras(process, path_process) {
   if (methods.length > 0) {
     process.usesCollectionMethod = [];
     for (var i = 0; i < methods.length; i++) {
+      var columns_paths = await db.qwerty(
+        methods[i].toSqlSelectPathDataColum()
+      );
+      columns_paths = columns_paths.map((x) => x.path);
+
+      console.log(columns_paths);
+
       var methodG = methods[i].toObjectG();
       routes["collection"]["p"][
         methods[i].id.toString()
@@ -431,8 +434,6 @@ async function relation_metadata_mapping_to_dataColumn(
   data_colum_id,
   path_mapping
 ) {
-  console.log("############################################");
-  console.log("           MAPEO DE PARAMETROS   ");
   var sql = `SELECT
   	data_column_path as path
   	FROM 
@@ -450,7 +451,6 @@ async function relation_metadata_mapping_to_dataColumn(
       routes["data_column"][path_colum] = [];
       routes["data_column"][path_colum].push(path_mapping);
     }
-    console.log(parameter_mapping);
   }
 }
 
@@ -955,7 +955,10 @@ async function add_relation_method_property(property, path_property) {
 		metodorecoleccion mea
 		WHERE
 		pro.pro_id=${property.$.id} AND
-		mea.pro_id=pro.pro_id`;
+		mea.pro_id=pro.pro_id AND
+		pro.ma_id=${modelID} AND
+		pro.ma_id=mea.ma_id
+	`;
   var rows = await db.qwerty(sql);
   for (var i = 0; i < rows.length; i++) {
     if (property.isCollectedBy) {
@@ -965,9 +968,7 @@ async function add_relation_method_property(property, path_property) {
       property.isCollectedBy = routes["collection"]["p"][rows[i].id.toString()];
     }
     if (routes["collection"]["r"][rows[i].id.toString()].collectsProperty) {
-      console.log(`la propiedad buscada es: ${rows[i].id}`);
-      console.log(routes["property"]);
-      routes["property"]["r"][rows[i].id.toString()].collectsProperty +=
+      routes["collection"]["r"][rows[i].id.toString()].collectsProperty +=
         " " + path_property;
     } else {
       routes["collection"]["r"][

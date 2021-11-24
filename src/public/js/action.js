@@ -48,7 +48,7 @@ function cargar_tipo_dato_select() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_dato_salida,
     (err) => {
@@ -63,7 +63,7 @@ function cargar_formato_select() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_formato,
     (err) => {
@@ -112,7 +112,7 @@ function cargar_select_formato(json) {
 
 function cargar_recursos_de_implementacion() {
   consultar_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/deployment_resources"),
+    (url = "http://alvapala.ddns.net:3000/api/deployment_resources"),
     cargar_recursos_de_implementacion_tabla,
     (err) => {
       alert(err);
@@ -183,7 +183,7 @@ function modificar_recurso() {
   if (id) {
     document.getElementById("input-id-resource-mod").value = id;
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -226,7 +226,7 @@ function cargar_recurso_para_modificar(json) {
 
 function modificarRecursoImplementacion() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/del_deployment_resources/",
+    "http://alvapala.ddns.net:3000/api/del_deployment_resources/",
     {
       id: document.getElementById("input-id-resource-mod").value,
     },
@@ -338,7 +338,7 @@ function eliminar_recurso() {
   if (id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_deployment_resources/",
+        "http://alvapala.ddns.net:3000/api/del_deployment_resources/",
         {
           id: id,
         },
@@ -698,7 +698,7 @@ function guardarRecursoImplementacion() {
       arregloParametros: arregloParametros,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/add_deployment_resources/",
       data,
       (res) => {
         cargar_recursos_de_implementacion();
@@ -737,7 +737,7 @@ function guardarRecursoImplementacion() {
 */
 if (document.getElementById("lista_sujetos_para_cargar"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_posibles_sujetos_modelo,
     error_cargar_posibles_sujetos_modelo
   );
@@ -985,7 +985,7 @@ function actualizar_activos() {
     actualizacion.push(elem);
   });
   post_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/update_subjects"),
+    (url = "http://alvapala.ddns.net:3000/api/update_subjects"),
     actualizacion,
     (json) => {
       console.log(json);
@@ -1025,7 +1025,7 @@ function actualizar_sujetos() {
 
 function cargar_select_criterios_decision() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
+    "http://alvapala.ddns.net:3000/api/decision_criteria",
     cargar_select_criterios_objetivos,
     error_cargar_select_criterios_objetivos
   );
@@ -1056,7 +1056,7 @@ function cargar_select_operador_agregacion() {
     tipo: nombre,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_operador_asignacion_select,
     error_cargar_operador_asignacion_select
@@ -1091,7 +1091,7 @@ function abrirModalObjetosSujetos(id, nombre) {
 
 function cargar_arbol(id) {
   post_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/subjects_objects"),
+    (url = "http://alvapala.ddns.net:3000/api/subjects_objects"),
     {
       id: id,
     },
@@ -1185,7 +1185,7 @@ function agregarObjeto() {
   if ((!!id_padre, !!nombre, !!descripcion, !!peso, !!operador)) {
     //Aqui falta agregar el criterio
     post_api(
-      (url = "http://autoconsciencia.ddns.net:3000/api/save_subjects_objects"),
+      (url = "http://alvapala.ddns.net:3000/api/save_subjects_objects"),
       {
         father: id_padre,
         name: nombre,
@@ -1220,7 +1220,7 @@ function eliminarObjeto() {
     }
   });
   post_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/delete_subjects_objects"),
+    (url = "http://alvapala.ddns.net:3000/api/delete_subjects_objects"),
     {
       id: id,
     },
@@ -1250,7 +1250,7 @@ function eliminarObjeto() {
 
 function get_tipo_escalas_select() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     { tipo: "TIPO_ESCALA" },
     cargar_select_tipo_escala,
     (err) => {
@@ -1283,7 +1283,7 @@ if (document.getElementById("tipo_escalas2")) {
 
 function get_tipo_escalas_modificar_select() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     { tipo: "TIPO_ESCALA" },
     cargar_select_tipo_escala_modificar,
     (err) => {
@@ -1317,7 +1317,7 @@ if (document.getElementById("tabla_unidades_de_medida")) {
 
 function consultar_get_unidades_medida() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_measurement_units",
+    "http://alvapala.ddns.net:3000/api/get_measurement_units",
     cargar_unidades_de_medida_table,
     error_cargar_unidades_de_medida_table
   );
@@ -1365,7 +1365,7 @@ function guardarNuevaUnidadMedida() {
   };
   if (!!data.name && !!data.description && !!data.acronym) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_measurement_units/",
+      "http://alvapala.ddns.net:3000/api/add_measurement_units/",
       data,
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
@@ -1388,7 +1388,7 @@ function GuardarEliminarUnidadMedida() {
   if (!!id) {
     if (confirm("Esta seguro que desea eliminar la unidad de Medida")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_measurement_units/",
+        "http://alvapala.ddns.net:3000/api/del_measurement_units/",
         { id: id },
         mensaje_exitoEnvioUnidadesMedida,
         mensaje_errorEnvioUnidadesMedida
@@ -1443,7 +1443,7 @@ function guardarModificacionMedida() {
   };
   if (!!data.id && !!data.name && !!data.description && !!data.acronym) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/upd_measurement_units/",
+      "http://alvapala.ddns.net:3000/api/upd_measurement_units/",
       data,
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
@@ -1470,7 +1470,7 @@ function mensaje_errorEnvioUnidadesMedida(err) {
 */
 function consultar_get_escalas() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_scales",
+    "http://alvapala.ddns.net:3000/api/get_scales",
     cargar_escales_table,
     error_cargar_escales_table
   );
@@ -1531,7 +1531,7 @@ function guardarNuevaEscala() {
     };
     if (!!data.name && !!data.valid_values && !!data.type) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/add_scales/",
+        "http://alvapala.ddns.net:3000/api/add_scales/",
         data,
         mensaje_exitoEnvioEscalas,
         mensaje_errorEnvioEscalas
@@ -1579,7 +1579,7 @@ function GuardareliminarEscala() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar la escala")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_scales/",
+        "http://alvapala.ddns.net:3000/api/del_scales/",
         { id: id },
         mensaje_exitoEnvioEscalas,
         mensaje_errorEnvioEscalas
@@ -1627,7 +1627,7 @@ function guardarModificacionEscala() {
   };
   if (!!data.id && !!data.name && !!data.valid_values && !!data.type) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/upd_scales/",
+      "http://alvapala.ddns.net:3000/api/upd_scales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
@@ -1661,7 +1661,7 @@ if (document.getElementById("tabla_criterios_decision")) {
 
 function get_criterios_table() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_criteria",
+    "http://alvapala.ddns.net:3000/api/get_criteria",
     cargar_criterios_table,
     error_cargar_criterios_table
   );
@@ -1685,7 +1685,7 @@ function cargar_criterios_table(json) {
     else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+      "http://alvapala.ddns.net:3000/api/get_umbral",
       {
         criterio: cd.id,
       },
@@ -1716,7 +1716,7 @@ function guardarNuevoCriterio() {
   };
   if (!!data.name && !!data.description) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_criteria/",
+      "http://alvapala.ddns.net:3000/api/add_criteria/",
       data,
       mensaje_exitoEnvioDecisionCriteria,
       mensaje_errorEnvioDecisionCriteria
@@ -1770,7 +1770,7 @@ function guardar_eliminar_criterio_decision() {
           criterio_select = undefined;
         }
         post_api(
-          "http://autoconsciencia.ddns.net:3000/api/del_criteria/",
+          "http://alvapala.ddns.net:3000/api/del_criteria/",
           data,
           mensaje_exitoEnvioDecisionCriteria,
           mensaje_errorEnvioDecisionCriteria
@@ -1823,7 +1823,7 @@ function guardarModificacionCriterios() {
     };
     if (!!data.id && !!data.name && !!data.description) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/upd_criteria/",
+        "http://alvapala.ddns.net:3000/api/upd_criteria/",
         data,
         mensaje_exitoEnvioDecisionCriteria,
         mensaje_errorEnvioDecisionCriteria
@@ -2005,7 +2005,7 @@ function guardarNuevoUmbral() {
       !!data.superior
     ) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/add_umbral/",
+        "http://alvapala.ddns.net:3000/api/add_umbral/",
         data,
         mensaje_exitoEnvioUmbral,
         mensaje_errorEnvioUmbral
@@ -2029,7 +2029,7 @@ function guardar_eliminar_umbral() {
   if (!!id) {
     if (confirm("Esta seguro que desea eliminar este Umbral")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_umbral/",
+        "http://alvapala.ddns.net:3000/api/del_umbral/",
         { id: id },
         mensaje_exitoEnvioUmbral,
         mensaje_errorEnvioUmbral
@@ -2038,7 +2038,7 @@ function guardar_eliminar_umbral() {
         criterio: criterio_select,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/get_umbral/",
+        "http://alvapala.ddns.net:3000/api/get_umbral/",
         data2,
         cargar_umbral_table,
         (err) => {
@@ -2100,7 +2100,7 @@ function guardarModificacionUmbral() {
     !!data.superior
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/upd_umbral/",
+      "http://alvapala.ddns.net:3000/api/upd_umbral/",
       data,
       mensaje_exitoEnvioUmbral,
       mensaje_errorEnvioUmbral
@@ -2115,7 +2115,7 @@ function mensaje_exitoEnvioUmbral(json) {
     criterio: criterio_select,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral/",
+    "http://alvapala.ddns.net:3000/api/get_umbral/",
     data,
     cargar_umbral_table_modificar,
     (err) => {
@@ -2139,13 +2139,13 @@ function guardarNuevoAspecto() {
   };
   if (!!data.descripcion) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_aspects/",
+      "http://alvapala.ddns.net:3000/api/add_aspects/",
       data,
       mensaje_exitoEnvioAspects,
       mensaje_errorEnvioAspects
     );
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/aspects",
+      "http://alvapala.ddns.net:3000/api/aspects",
       cargar_aspectos_table,
       error_cargar_aspectos_table
     );
@@ -2178,7 +2178,7 @@ function Administrar_Metricas() {
         tipo: busca,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+        "http://alvapala.ddns.net:3000/api/get_enumeracion",
         data2,
         cargar_tipo_metrica_select,
         error_cargar_tipo_metrica_select
@@ -2193,7 +2193,7 @@ function Administrar_Metricas() {
 
 function mensaje_exitoEnvioAspects(json) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/aspects",
+    "http://alvapala.ddns.net:3000/api/aspects",
     data,
     cargar_aspectos_table,
     error_cargar_aspectos_table
@@ -2254,16 +2254,73 @@ function error_cargar_aspectos_table(err) {
 var modelo_fisico_json;
 if (document.getElementById("tabla_modelos_autoconciencia"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/user_models",
+    "http://alvapala.ddns.net:3000/api/user_models",
     cargar_modelos_table,
     error_cargar_models_table
   );
-
+var cosa;
 function cargar_modelos_table(json) {
   res = "";
+  var tabla = document.getElementById("tabla_modelos_autoconciencia");
   json.forEach((md) => {
-    modelo_fisico_json = JSON.parse(md._architectureModel);
+    modelo_fisico_json = JSON.parse(
+      md._architectureModel.replace(/ 0+(?![\. }])/g, "")
+    );
 
+    var tr = document.createElement("tr");
+
+    tr.id = `modelo-${md._id}-tabla`;
+    var td1 = document.createElement("td");
+    td1.name = `modelo-${md._id}`;
+    tr.appendChild(td1);
+    var radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = `modelo_seleccionado_tabla`;
+    radio.value = `${md._id}`;
+    radio.dataset.name = `${md._name}`;
+    radio.dataset.autor = `${md._author}`;
+    radio.dataset.descripcion = `${md._description}`;
+    radio.dataset.activo = `${md._active == "true"}`;
+    td1.appendChild(radio);
+
+    var td2 = document.createElement("td");
+    td2.name = `modelo-${md._id}`;
+    td2.innerHTML = `${md._id}`;
+    tr.appendChild(td2);
+
+    var td3 = document.createElement("td");
+    td3.name = `modelo-${md._name}`;
+    td3.innerHTML = `${md._name}`;
+    tr.appendChild(td3);
+
+    var td4 = document.createElement("td");
+    td4.name = `modelo-${md._author}`;
+    td4.innerHTML = `${md._author}`;
+    tr.appendChild(td4);
+
+    var td5 = document.createElement("td");
+    td5.name = `modelo-${md._description}`;
+    td5.innerHTML = `${md._description}`;
+    tr.appendChild(td5);
+
+    var td6 = document.createElement("td");
+    td6.name = `modelo-${md._id}`;
+    td6.innerHTML = `<buttom class="btn btn-link" onclick="mostrar_modal_json()">
+		  ${Object.keys(modelo_fisico_json)[0]}
+      </buttom>`;
+    tr.appendChild(td6);
+
+    var td7 = document.createElement("td");
+    var input2 = document.createElement("input");
+    input2.type = "checkbox";
+    input2.disabled = true;
+    td7.appendChild(input2);
+    tr.appendChild(td7);
+    if (md._active == 1) input2.checked = true;
+
+    tabla.appendChild(tr);
+
+    /*
     res += `<tr id='modelo-${md._id}-tabla'>`;
     res += `<td name="modelo-${
       md._id
@@ -2272,6 +2329,7 @@ function cargar_modelos_table(json) {
     }" data-name="${md._name}" data-autor="${md._author}" data-descripcion="${
       md._description
     }" data-activo="${md._active == "true"}"></td>`;
+
     res += `<td name="modelo-${md._id}">${md._id}</td>`;
     res += `<td name="modelo-${md._id}">${md._name}</td>`;
     res += `<td name="modelo-${md._id}">${md._author}</td>`;
@@ -2282,13 +2340,14 @@ function cargar_modelos_table(json) {
       Object.keys(modelo_fisico_json)[0]
     }
       </buttom></td>`;
-    if (md._active == 1)
-      res += `<td><input type="checkbox" disabled checked></td>`;
+      */
+    /*res += `<td><input type="checkbox" disabled checked></td>`;
     else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";
+    */
   });
 
-  document.getElementById("tabla_modelos_autoconciencia").innerHTML = res;
+  //document.getElementById("tabla_modelos_autoconciencia").innerHTML = res;
 }
 
 function error_cargar_models_table(err) {
@@ -2359,7 +2418,7 @@ function modal_modificar_modelo() {
 
 if (document.getElementById("select_modelo_para_activar_trabajo"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/user_models",
+    "http://alvapala.ddns.net:3000/api/user_models",
     cargar_modelos_trabajo_actual,
     error_cargar_models_trabajo_actual
   );
@@ -2778,7 +2837,7 @@ function actualizar_activos_entidad() {
     actualizacion.push(elem);
   });
   post_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/update_entity"),
+    (url = "http://alvapala.ddns.net:3000/api/update_entity"),
     actualizacion,
     (json) => {
       console.log(json);
@@ -2872,7 +2931,7 @@ function abrirModalEntidad(id, nombre) {
       id: idSeleccion,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/aspects",
+      "http://alvapala.ddns.net:3000/api/aspects",
       data,
       cargar_aspectos_table,
       error_cargar_aspectos_table
@@ -2923,7 +2982,7 @@ function agregarAspecto() {
   if (!!data.nombre && !!data.descripcion && !!data.peso && !!data.tipoS) {
     desactivarFormularioAgregarEntidad(),
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/add_aspects/",
+        "http://alvapala.ddns.net:3000/api/add_aspects/",
         data,
         mensaje_exitoEnvioAspects,
         mensaje_errorEnvioAspects
@@ -2948,13 +3007,13 @@ function EliminarAspecto() {
       id: idSeleccion,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/del_aspects/",
+      "http://alvapala.ddns.net:3000/api/del_aspects/",
       data,
       mensaje_exitoEnvioAspects,
       mensaje_errorEnvioAspects
     );
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/aspects",
+      "http://alvapala.ddns.net:3000/api/aspects",
       data,
       cargar_aspectos_table,
       error_cargar_aspectos_table
@@ -2980,7 +3039,7 @@ function eliminar_metrica() {
       id: AspectoId,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/del_metrica/",
+      "http://alvapala.ddns.net:3000/api/del_metrica/",
       data,
       mensaje_exitoEnvioMetrica,
       mensaje_errorEnvioMetrica
@@ -3017,13 +3076,13 @@ function guardarNuevaRecImpl() {
     !!data.tipo_recurso
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_ri/",
+      "http://alvapala.ddns.net:3000/api/add_ri/",
       data,
       mensaje_exitoEnvioRI,
       mensaje_errorEnvioRI
     );
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_ri/",
+      "http://alvapala.ddns.net:3000/api/add_ri/",
       cargar_ri_table,
       error_cargar_ri_table
     );
@@ -3046,13 +3105,13 @@ function eliminar_recurso_implementacion() {
     };
     console.log(data);
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/del_escales/",
+      "http://alvapala.ddns.net:3000/api/del_escales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/escales",
+      "http://alvapala.ddns.net:3000/api/escales",
       cargar_escales_table,
       error_cargar_escales_table
     );
@@ -3099,13 +3158,13 @@ function guardarModificacionRI() {
   };
   if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/upd_escales/",
+      "http://alvapala.ddns.net:3000/api/upd_escales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/escales",
+      "http://alvapala.ddns.net:3000/api/escales",
       cargar_escales_table,
       error_cargar_escales_table
     );
@@ -3137,7 +3196,7 @@ function mensaje_errorEnvioRI(err) {
 
 if (document.getElementById("tabla_recurso_implementacion"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/recurso_implementacion",
+    "http://alvapala.ddns.net:3000/api/recurso_implementacion",
     cargar_ri_table,
     error_cargar_ri_table
   );
@@ -3195,7 +3254,7 @@ function add_Tipo_Recurso() {
 }
 if (document.getElementById("lista_sujetos_activos"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos,
     error_cargar_sujetos_activos
   );
@@ -3214,13 +3273,13 @@ function agregarProcesoPreReflexivo() {
     tipo: tipoComunicacion,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_comunicacion,
     error_cargar_select_tipo_comunicacion
   );
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
+    "http://alvapala.ddns.net:3000/api/decision_criteria",
     cargar_select_criterios_proceso,
     error_cargar_select_criterios_proceso
   );
@@ -3239,7 +3298,7 @@ function generar_flujo_datos_select() {
   }
   if (seleccione != "Seleccione.." && porpiedadSeleccionada != "-6") {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_data_flow",
+      "http://alvapala.ddns.net:3000/api/get_data_flow",
       {
         comunicacion: comunicacion,
         propiedad: porpiedadSeleccionada,
@@ -3316,7 +3375,7 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
 }
 if (document.getElementById("lista_sujetos_activos_proceso"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos,
     error_cargar_sujetos_activos_procesos
   );
@@ -3393,7 +3452,7 @@ function verificar_seleccion_sujeto_categoria(categoria, IdSujeto) {
       systemID: IdSujeto,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/entitys",
+      "http://alvapala.ddns.net:3000/api/entitys",
       data,
       cargar_posibles_entidades_modelo,
       error_cargar_posibles_entidades_modelo
@@ -3429,7 +3488,7 @@ $("#CategoriaEntidadesProcesos").change(function () {
   };
   if (data.categoria != -6 && data.aspecto != -6 && !!data.sujeto) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+      "http://alvapala.ddns.net:3000/api/get_objects_aspects",
       data,
       cargar_objetos_proceso,
       (res) => {
@@ -3449,9 +3508,10 @@ function verificar_seleccion_sujeto_categoria_procesos(IdSujeto) {
   if (IdSujeto) {
     data = {
       systemID: IdSujeto,
+      types: 53,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+      "http://alvapala.ddns.net:3000/api/get_aspects_objects_process",
       data,
       cargar_posibles_entidades_proceso,
       error_cargar_posibles_entidades_proceso
@@ -3604,13 +3664,13 @@ function cargar_aspectos(elemento, lado) {
     id: idObjeto,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/aspects",
+    "http://alvapala.ddns.net:3000/api/aspects",
     data,
     cargar_aspectos_select,
     error_cargar_aspectos_select
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/properties",
+    "http://alvapala.ddns.net:3000/api/properties",
     {
       id: idObjeto,
     },
@@ -3653,7 +3713,7 @@ $("#Aspectos_autoconsciencia").change(function () {
   };
   if (data.aspecto != -6 && !!data.sujeto) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+      "http://alvapala.ddns.net:3000/api/get_objects_aspects",
       data,
       cargar_objetos_proceso,
       (res) => {
@@ -3679,7 +3739,7 @@ $("#Aspectos_autoconsciencia").change(function () {
     tipo: tipoM,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     data,
     cargar_select_metrica_proceso,
     error_cargar_select_metrica_proceso
@@ -3694,7 +3754,7 @@ $("#Aspectos_autoconsciencia").change(function () {
     tipo: tipoIndi,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     data2,
     cargar_select_indicador_proceso,
     error_cargar_select_indicador_proceso
@@ -3829,7 +3889,7 @@ function cargar_lista_umbrales_proceso(json) {
     res += `<td>${cd.superior}</td>`;
     res += "</tr>";
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_action",
+      "http://alvapala.ddns.net:3000/api/get_action",
       {
         umbral: cd.id,
         mea_id: modelo_analisis_pre_reflexivos,
@@ -3882,7 +3942,7 @@ function error_cargar_lista_umbrales_proceso(err) {
 function cargar_activos_umbrales() {
   var seleccionCriterio = document.getElementById("criterio_de_decision").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    "http://alvapala.ddns.net:3000/api/get_umbral",
     { criterio: seleccionCriterio },
     cargar_lista_umbrales_proceso,
     (res) => {
@@ -3904,7 +3964,7 @@ function guardarAccionUmbral() {
   };
   if (!!data.description) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_action",
+      "http://alvapala.ddns.net:3000/api/add_action",
       data,
       mensajeExitosoAgregarAccionesUmbrales,
       mensajeErrorAgregarAccionesUmbrales
@@ -3916,7 +3976,7 @@ function guardarAccionUmbral() {
 
 function mensajeExitosoAgregarAccionesUmbrales(json) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_action",
+    "http://alvapala.ddns.net:3000/api/get_action",
     {
       umbral: UmbralId,
       mea_id: modelo_analisis_pre_reflexivos,
@@ -3995,7 +4055,7 @@ function eliminarAccionesUmbrales() {
         id: id,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_action/",
+        "http://alvapala.ddns.net:3000/api/del_action/",
         data,
         mensajeExitosoAgregarAccionesUmbrales,
         (res) => {
@@ -4013,7 +4073,7 @@ function mensaje_exitosoEliminacionAcciones(json) {
 
 function cargarDespuesdeEliminarAcciones() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_accion/",
+    "http://alvapala.ddns.net:3000/api/get_accion/",
     {
       id: UmbralId,
     },
@@ -4056,7 +4116,7 @@ function guardarModificacionAccionesUmbrales() {
     active: document.getElementById("activo_accion_umbral_modificar").checked,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/upd_action/",
+    "http://alvapala.ddns.net:3000/api/upd_action/",
     data,
     mensajeExitosoAgregarAccionesUmbrales,
     (res) => {
@@ -4072,7 +4132,7 @@ function abrirModalMapeoParametros() {
   var id = document.getElementById("recurso").value;
   if (id) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -4097,7 +4157,6 @@ function cargar_modal_mapeo_parametros(json) {
     if (element._active) {
       var tr = document.createElement("tr");
       tr.setAttribute("name", "tr_fila_parametros");
-      console.log("llega al tr xd");
       var id = document.createElement("td");
       id.id = "id_fila_parametros";
       tr.appendChild(id);
@@ -4110,6 +4169,9 @@ function cargar_modal_mapeo_parametros(json) {
       var opcional = document.createElement("td");
       opcional.id = "opcional_fila_parametros";
       tr.appendChild(opcional);
+      var proceso = document.createElement("td");
+      proceso.id = "proceso_seleccion_mapeo";
+      tr.appendChild(proceso);
       var tipoMapeo = document.createElement("td");
       tipoMapeo.id = "tipo_mapeo_fila_parametros";
       tr.appendChild(tipoMapeo);
@@ -4121,15 +4183,26 @@ function cargar_modal_mapeo_parametros(json) {
       tipoDato.innerHTML = element._dataType[1];
       tipoDato.dataset.id = element._dataType[0];
       opcional.innerHTML = element._optional;
+      //
+      var selectProceso = document.createElement("select");
+      selectProceso.name = `proceso_seleccion`;
+      selectProceso.id = `proceso_seleccion_id`;
+      selectProceso.style.border = "transparent";
+      selectProceso.setAttribute("onChange", `cargar_metricas_procesos();`);
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "Seleccione..";
+      selectProceso.appendChild(optionSeleccion);
+      proceso.appendChild(selectProceso);
       var select = document.createElement("select");
       select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select`;
       select.dataset.ordinal = element._ordinal;
       select.style.border = "transparent";
-      select.setAttribute("onChange", `cargar_metricas_tipo_mapeo(this);`);
+      select.setAttribute("onChange", `cargar_metricas_procesos(this);`);
       var optionSeleccione = document.createElement("option");
       optionSeleccione.value = "-6";
-      optionSeleccione.innerHTML = "SELECCIONE..";
+      optionSeleccione.innerHTML = "Seleccione..";
       select.appendChild(optionSeleccione);
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
@@ -4142,13 +4215,20 @@ function cargar_modal_mapeo_parametros(json) {
   });
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
     cargar_select_mapeo_tipo,
     (err) => {
       alert(err);
+    }
+  );
+  consultar_api(
+    "http://alvapala.ddns.net:3000/api/get_pre_reflective_process/",
+    llenar_procesos_mapeo,
+    (res) => {
+      console.log(res);
     }
   );
 }
@@ -4166,20 +4246,39 @@ function cargar_select_mapeo_tipo(json) {
   });
 }
 
-function cargar_metricas_tipo_mapeo(elemento) {
-  data = {
-    aspectoId: document.getElementById("Aspectos_autoconsciencia").value,
-    metricaId: elemento.value,
-  };
-  post_api(
-    "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
-    data,
-    cargar_select_argumento_entrada,
-    (err) => {
-      alert(err);
-    }
-  );
-  OrdinalGeneral = elemento.dataset.ordinal;
+function llenar_procesos_mapeo(json) {
+  var select = document.getElementsByName("proceso_seleccion");
+  Array.from(select).forEach((element) => {
+    json.forEach((ele) => {
+      var option = document.createElement("option");
+      option.value = ele.id;
+      option.innerHTML = ele.descripcion;
+      element.appendChild(option);
+    });
+  });
+}
+function cargar_metricas_procesos(elemento) {
+  var selectProceso = document.querySelector("[name='proceso_seleccion']");
+  var selectTipo = document.querySelector("[name='tipo_mapeo_select']");
+  if (
+    selectProceso.options[selectProceso.selectedIndex].value != -6 &&
+    selectTipo.options[selectTipo.selectedIndex].value != -6
+  ) {
+    data = {
+      aspectoId: document.getElementById("Aspectos_autoconsciencia").value,
+      metricaId: elemento.value,
+      procesoId: selectProceso.options[selectProceso.selectedIndex].value,
+    };
+    post_api(
+      "http://alvapala.ddns.net:3000/api/ask_input_arguments",
+      data,
+      cargar_select_argumento_entrada,
+      (err) => {
+        alert(err);
+      }
+    );
+    OrdinalGeneral = elemento.dataset.ordinal;
+  }
 }
 var OrdinalGeneral = undefined;
 
@@ -4275,7 +4374,7 @@ function SeleccionaRecursoSelect(element) {
 
   if (element.value) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -4332,7 +4431,7 @@ function guardar_procesos_pre_reflexivos() {
       tipoE: tipo_ejecucion,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_pre_reflective_process",
+      "http://alvapala.ddns.net:3000/api/add_pre_reflective_process",
       data,
       procesos_pre_reflexivos_guardados_exito,
       (res) => {
@@ -4372,7 +4471,7 @@ function guardar_procesos_pre_reflexivos() {
 }
 function get_propiedades_procesos(id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_properties",
+    "http://alvapala.ddns.net:3000/api/get_properties",
     {
       aspectoID: id,
     },
@@ -4425,7 +4524,7 @@ function guardar_modelos_metodos() {
       },
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_metodo_modelo",
+      "http://alvapala.ddns.net:3000/api/add_metodo_modelo",
       datos,
       mensajeCorrectoGuardarMetodos,
       errormensajeCorrectoGuardarMetodos
@@ -4476,7 +4575,7 @@ function errormensajeCorrectoGuardarMetodos(error) {
 
 if (document.getElementById("tabla_proceso_pre_reflexivo"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_pre_reflective_process",
+    "http://alvapala.ddns.net:3000/api/get_pre_reflective_process",
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
@@ -4531,7 +4630,7 @@ function modificarProcesoPreReflexivo() {
   });
   if (!!id) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_pre_reflective_process_mod/",
+      "http://alvapala.ddns.net:3000/api/get_pre_reflective_process_mod/",
       {
         id: id,
       },
@@ -4559,7 +4658,7 @@ function elminarProcesoPreReflexivo() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el Proceso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_pre_reflective_process/",
+        "http://alvapala.ddns.net:3000/api/del_pre_reflective_process/",
         { id: id },
         mensaje_exitosBorrar_pre_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
@@ -4570,7 +4669,7 @@ function elminarProcesoPreReflexivo() {
 
 function mensaje_exitosBorrar_pre_reflexivo(json) {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_pre_reflective_process",
+    "http://alvapala.ddns.net:3000/api/get_pre_reflective_process",
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
@@ -4609,7 +4708,7 @@ function Guagar_nuevo_Mapeo() {
   });
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_mapeo_parametros/",
+    "http://alvapala.ddns.net:3000/api/add_mapeo_parametros/",
     aux,
     mensaje_correcto_envio_mapeo,
     mensaje_error_envio_mapeo
@@ -4674,7 +4773,7 @@ function Abrir_limpiar_modal_proceso_reflexivo() {
 }
 if (document.getElementById("lista_sujetos_activos_proceso_reflexivo")) {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos_reflexivos,
     error_cargar_sujetos_activos_procesos_reflexivos
   );
@@ -4792,7 +4891,7 @@ function cargar_aspectos_procesos_reflexivos(IdSujeto, tipo) {
       types: tipo,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+      "http://alvapala.ddns.net:3000/api/get_aspects_objects_process",
       data,
       cargar_posibles_entidades_proceso_reflexivo,
       (res) => {
@@ -4857,7 +4956,7 @@ $("#CategoriaEntidadesProcesos_reflexivos").change(function () {
   };
   if (data.categoria != -6 && data.aspeco != -6 && !!data.sujeto) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+      "http://alvapala.ddns.net:3000/api/get_objects_aspects",
       data,
       cargar_objetos_proceso_reflexivo,
       (res) => {
@@ -4994,7 +5093,7 @@ function cargar_aspectos_reflexivos(elemento, lado) {
     id: idObjeto,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/aspects",
+    "http://alvapala.ddns.net:3000/api/aspects",
     data,
     cargar_aspectos_select_reflexivos,
     error_cargar_aspectos_select_reflexivos
@@ -5044,7 +5143,7 @@ function guardar_procesos_reflexivos() {
       tipoE: tipo_ejecucion,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_reflective_process/",
+      "http://alvapala.ddns.net:3000/api/add_reflective_process/",
       data,
       procesos_reflexivos_guardados_exito,
       (res) => {
@@ -5092,7 +5191,7 @@ function guardar_procesos_reflexivos() {
 }
 function cargar_tabla_procesos_reflexivos() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_reflective_process",
+    "http://alvapala.ddns.net:3000/api/get_reflective_process",
     cargar_procesos_reflexivos_table,
     error_procesos_reflexivos_table
   );
@@ -5113,6 +5212,7 @@ function cargar_procesos_reflexivos_table(json) {
       pro.activo == "true"
     }"></td>`;
     res += `<td>${pro.nombre}</td>`;
+    res += `<td>${pro.descripcion}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
     res += `<td>${pro.inicio}</td>`;
@@ -5170,7 +5270,7 @@ function guardar_proceso_pre_reflexivo_boton() {
   } else if (cont_paso == 3) {
     history.back();
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_pre_reflective_process",
+      "http://alvapala.ddns.net:3000/api/get_pre_reflective_process",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -5197,7 +5297,7 @@ function guardar_proceso_reflexivo_boton() {
         .getElementById("btn-section-reflexivos")
         .classList.replace("d-none", "d-inline");
       consultar_api(
-        "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
+        "http://alvapala.ddns.net:3000/api/decision_criteria",
         cargar_select_criterios_metodos_reflexivos,
         error_cargar_select_metodos_reflexivos
       );
@@ -5264,7 +5364,7 @@ function guardar_modelos_metodos_reflexivos() {
       },
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_metodo_modelo2",
+      "http://alvapala.ddns.net:3000/api/add_metodo_modelo2",
       datos,
       mensajeCorrectoGuardarMetodosReflexivos,
       errormensajeCorrectoGuardarMetodosReflexivos
@@ -5346,7 +5446,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
   };
   if (data.aspecto != -6 && !!data.sujeto) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+      "http://alvapala.ddns.net:3000/api/get_objects_aspects",
       data,
       cargar_objetos_proceso_reflexivo,
       (res) => {
@@ -5366,7 +5466,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
     tipo: tipoM,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     data,
     cargar_select_metrica_proceso_reflexivo,
     error_cargar_select_metrica_proceso_reflexivo
@@ -5382,7 +5482,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
     tipo: tipoIndi,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     data2,
     cargar_select_indicador_proceso_reflexivo,
     error_cargar_select_indicador_proceso_reflexivo
@@ -5449,7 +5549,7 @@ function SeleccionaRecursoReflexivosMetodos(element) {
 
   if (element.value) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -5481,7 +5581,7 @@ function SeleccionaRecursoReflexivosModelos(element) {
 
   if (element.value) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -5514,7 +5614,7 @@ function abrirMapeoParametros_metodos() {
   var id = document.getElementById("recurso_reflexivos").value;
   if (id) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -5553,6 +5653,9 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       var opcional = document.createElement("td");
       opcional.id = "opcional_fila_parametros_metodos";
       tr.appendChild(opcional);
+      var procesos = document.createElement("td");
+      procesos.id = "procesos_select_mapeos";
+      tr.appendChild(procesos);
       var tipoMapeo = document.createElement("td");
       tipoMapeo.id = "tipo_mapeo_fila_parametros_metodos";
       tr.appendChild(tipoMapeo);
@@ -5564,6 +5667,19 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       tipoDato.innerHTML = element._dataType[1];
       tipoDato.dataset.id = element._dataType[0];
       opcional.innerHTML = element._optional;
+
+      var selectProcesos = document.createElement("select");
+      selectProcesos.name = `procesos_mapeo_select`;
+      selectProcesos.style.border = "transparent";
+      selectProcesos.setAttribute(
+        "onChange",
+        `cargar_metricas_tipo_mapeo_metodo();`
+      );
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "SELECCIONE..";
+      selectProcesos.appendChild(optionSeleccion);
+      procesos.appendChild(selectProcesos);
       var select = document.createElement("select");
       select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select_metodos`;
@@ -5587,11 +5703,18 @@ function cargar_modal_mapeo_parametros_metodos(json) {
     }
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
     cargar_select_mapeo_tipo_metodos,
+    (err) => {
+      alert(err);
+    }
+  );
+  consultar_api(
+    "http://alvapala.ddns.net:3000/api/get_reflective_process",
+    cargar_select_procesos_mapeo_metodos,
     (err) => {
       alert(err);
     }
@@ -5609,7 +5732,7 @@ function cargar_select_mapeo_tipo_metodos(json) {
     });
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA_METODO",
     },
@@ -5619,7 +5742,17 @@ function cargar_select_mapeo_tipo_metodos(json) {
     }
   );
 }
-
+function cargar_select_procesos_mapeo_metodos(json) {
+  var select = document.getElementsByName("procesos_mapeo_select");
+  Array.from(select).forEach((element) => {
+    json.forEach((ele) => {
+      var option = document.createElement("option");
+      option.value = ele.id;
+      option.innerHTML = ele.descripcion;
+      element.appendChild(option);
+    });
+  });
+}
 function cargar_select_mapeo_tipo_metodos_2(json) {
   var select = document.getElementsByName("tipo_mapeo_select_metodos");
   Array.from(select).forEach((element) => {
@@ -5633,27 +5766,35 @@ function cargar_select_mapeo_tipo_metodos_2(json) {
 }
 
 function cargar_metricas_tipo_mapeo_metodo(elemento) {
-  if (elemento.value == 24) {
-    cargar_select_mapeo_variables_simulacion();
-    OrdinalGeneral = elemento.dataset.ordinal;
-  } else if (elemento.value == 25) {
-    cargar_select_mapeo_metados();
-    OrdinalGeneral = elemento.dataset.ordinal;
-  } else {
-    data = {
-      aspectoId: document.getElementById("Aspectos_autoconsciencia_reflexivos")
-        .value,
-      metricaId: elemento.value,
-    };
-    post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
-      data,
-      cargar_select_argumento_entrada_metodos,
-      (err) => {
-        alert(err);
-      }
-    );
-    OrdinalGeneral = elemento.dataset.ordinal;
+  var selectProcesos = document.querySelector("name=[procesos_mapeo_select]");
+  var selectTipo = document.querySelector("name=[tipo_mapeo_select_metodos]");
+  if (
+    selectProcesos.options[selectProcesos.selectedIndex].value != -6 &&
+    selectTipo.options[selectTipo.selectedIndex].value != -6
+  ) {
+    if (elemento.value == 24) {
+      cargar_select_mapeo_variables_simulacion();
+      OrdinalGeneral = elemento.dataset.ordinal;
+    } else if (elemento.value == 25) {
+      cargar_select_mapeo_metados();
+      OrdinalGeneral = elemento.dataset.ordinal;
+    } else {
+      data = {
+        aspectoId: document.getElementById(
+          "Aspectos_autoconsciencia_reflexivos"
+        ).value,
+        metricaId: elemento.value,
+      };
+      post_api(
+        "http://alvapala.ddns.net:3000/api/ask_input_arguments",
+        data,
+        cargar_select_argumento_entrada_metodos,
+        (err) => {
+          alert(err);
+        }
+      );
+      OrdinalGeneral = elemento.dataset.ordinal;
+    }
   }
 }
 
@@ -5672,7 +5813,7 @@ function cargar_select_argumento_entrada_metodos(json) {
 
 function cargar_select_mapeo_variables_simulacion() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable",
+    "http://alvapala.ddns.net:3000/api/get_simulation_variable",
     { mea_id: metodo_calculo },
     cargar_variables_simulacion_select_modal_mapeo,
     (res) => {
@@ -5696,7 +5837,7 @@ function cargar_variables_simulacion_select_modal_mapeo(json) {
 
 function cargar_select_mapeo_metados() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metadata",
+    "http://alvapala.ddns.net:3000/api/get_metadata",
     { mea_id: metodo_calculo },
     cargar_metadatos_select_modal_mapeo,
     (res) => {
@@ -5767,7 +5908,7 @@ function Guadar_nuevo_mapeo_metodos() {
   }
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_mapeo_parametros/",
+    "http://alvapala.ddns.net:3000/api/add_mapeo_parametros/",
     aux,
     mensaje_correcto_envio_mapeo_metodos,
     (res) => {
@@ -5788,7 +5929,7 @@ function abrirMapeoParametros_modelos() {
   var id = document.getElementById("recurso_modelos_reflexivos").value;
   if (id) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -5827,6 +5968,9 @@ function cargar_modal_mapeo_parametros_modelos(json) {
       var opcional = document.createElement("td");
       opcional.id = "opcional_fila_parametros_modelos";
       tr.appendChild(opcional);
+      var proceso = document.createElement("td");
+      proceso.id = "opcional_proceso_mapeo";
+      tr.appendChild(proceso);
       var tipoMapeo = document.createElement("td");
       tipoMapeo.id = "tipo_mapeo_fila_parametros_modelos";
       tr.appendChild(tipoMapeo);
@@ -5838,6 +5982,21 @@ function cargar_modal_mapeo_parametros_modelos(json) {
       tipoDato.innerHTML = element._dataType[1];
       tipoDato.dataset.id = element._dataType[0];
       opcional.innerHTML = element._optional;
+
+      var select_procesos = document.createElement("select");
+      select_procesos.name = `proceso_select_modelos`;
+      select_procesos.dataset.ordinal = element._ordinal;
+      select_procesos.style.border = "transparent";
+      select_procesos.setAttribute(
+        "onChange",
+        `cargar_metricas_tipo_mapeo_modelo(this);`
+      );
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "SELECCIONE..";
+      select_procesos.appendChild(optionSeleccion);
+      proceso.appendChild(select_procesos);
+
       var select = document.createElement("select");
       select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select_modelos`;
@@ -5861,11 +6020,18 @@ function cargar_modal_mapeo_parametros_modelos(json) {
     }
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
     cargar_select_mapeo_tipo_modelos,
+    (err) => {
+      alert(err);
+    }
+  );
+  consultar_api(
+    "http://alvapala.ddns.net:3000/api/get_reflective_process",
+    cargar_select_procesos_mapeo,
     (err) => {
       alert(err);
     }
@@ -5883,22 +6049,40 @@ function cargar_select_mapeo_tipo_modelos(json) {
     });
   });
 }
-
+function cargar_select_procesos_mapeo(json) {
+  var select = document.getElementsByName("proceso_select_modelos");
+  Array.from(select).forEach((element) => {
+    json.forEach((ele) => {
+      var option = document.createElement("option");
+      option.value = ele.id;
+      option.innerHTML = ele.descripcion;
+      element.appendChild(option);
+    });
+  });
+}
 function cargar_metricas_tipo_mapeo_modelo(elemento) {
-  data = {
-    aspectoId: document.getElementById("Aspectos_autoconsciencia_reflexivos")
-      .value,
-    metricaId: elemento.value,
-  };
-  post_api(
-    "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
-    data,
-    cargar_select_argumento_entrada_modelos,
-    (err) => {
-      alert(err);
-    }
-  );
-  OrdinalGeneral = elemento.dataset.ordinal;
+  var selectProceso = document.querySelector("[name='proceso_select_modelos']");
+  var selectTipo = document.querySelector("[name='tipo_mapeo_select_modelos']");
+  if (
+    selectTipo.options[selectTipo.selectedIndex].value != -6 &&
+    selectProceso.options[selectProceso.selectedIndex].value != -6
+  ) {
+    data = {
+      aspectoId: document.getElementById("Aspectos_autoconsciencia_reflexivos")
+        .value,
+      metricaId: elemento.value,
+      procesoId: selectProceso.options[selectProceso.selectedIndex].value,
+    };
+    post_api(
+      "http://alvapala.ddns.net:3000/api/ask_input_arguments",
+      data,
+      cargar_select_argumento_entrada_modelos,
+      (err) => {
+        alert(err);
+      }
+    );
+    OrdinalGeneral = elemento.dataset.ordinal;
+  }
 }
 
 function cargar_select_argumento_entrada_modelos(json) {
@@ -5943,7 +6127,7 @@ function Guadar_nuevo_mapeo_modelos() {
   console.log(aux);
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_mapeo_parametros/",
+    "http://alvapala.ddns.net:3000/api/add_mapeo_parametros/",
     aux,
     mensaje_correcto_envio_mapeo_modelos,
     (res) => {
@@ -5998,7 +6182,7 @@ function modificar_proceso_pre_reflexivo_boton() {
   } else if (cont_paso_modificar == 3) {
     history.back();
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -6010,7 +6194,7 @@ function cargar_metodos_aprendizaje_razonamiento() {
     .value;
   var asp_id = document.getElementById("id_aspecto").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_properties",
+    "http://alvapala.ddns.net:3000/api/get_properties",
     { aspectoID: asp_id },
     llenar_select_propiedades_modificar,
     (res) => {
@@ -6018,7 +6202,7 @@ function cargar_metodos_aprendizaje_razonamiento() {
     }
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     { id: asp_id, tipo: 10 },
     llenar_select_metricas_directas_modificar,
     (res) => {
@@ -6026,7 +6210,7 @@ function cargar_metodos_aprendizaje_razonamiento() {
     }
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type",
     { id: asp_id, tipo: 12 },
     llenar_select_metricas_indicador_modificar,
     (res) => {
@@ -6034,12 +6218,12 @@ function cargar_metodos_aprendizaje_razonamiento() {
     }
   );
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
+    "http://alvapala.ddns.net:3000/api/decision_criteria",
     cargar_select_criterios_proceso_modificar,
     error_cargar_select_criterios_proceso
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metodos_recoleccion_analisis",
+    "http://alvapala.ddns.net:3000/api/get_metodos_recoleccion_analisis",
     { id: pa_id },
     cargar_selects_metodo_analisis_recoleccion,
     (res) => {
@@ -6117,7 +6301,7 @@ function cargar_selects_metodo_analisis_recoleccion(json) {
   document.getElementById("indicador_modelo_modificar").value =
     json[1].metrica_id;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_recoleccion_datos",
+    "http://alvapala.ddns.net:3000/api/get_recoleccion_datos",
     { mea_id: json[0].metodo_id },
     get_select_recoleccion_datos,
     (res) => {
@@ -6125,7 +6309,7 @@ function cargar_selects_metodo_analisis_recoleccion(json) {
     }
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_model_analisis",
+    "http://alvapala.ddns.net:3000/api/get_model_analisis",
     { mea_id: json[1].metodo_id },
     get_select_modelo_analisis,
     (res) => {
@@ -6136,7 +6320,7 @@ function cargar_selects_metodo_analisis_recoleccion(json) {
 }
 function cargar_nombre_recurso_select(mea_id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_select_cargar_recurso",
+    "http://alvapala.ddns.net:3000/api/get_select_cargar_recurso",
     { mea_id: mea_id },
     llenar_select_nombre_recurso,
     (res) => {
@@ -6148,7 +6332,7 @@ function llenar_select_nombre_recurso(json) {
   if (json.length == 0) {
     var recurso = document.getElementById("tipo_recurso_modificar").value;
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources_select/",
       {
         tipo: recurso,
       },
@@ -6212,7 +6396,7 @@ function cargar_flujo_datos_modificar() {
   }
   if (seleccion != "Seleccione.." && pro != "-6") {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_data_flow/",
+      "http://alvapala.ddns.net:3000/api/get_data_flow/",
       {
         comunicacion: seleccion,
         propiedad: pro,
@@ -6293,7 +6477,7 @@ function saltar_proceso_pre_reflexivo_boton() {
     saltar_paso_pre++;
   } else if (saltar_paso_pre == 3) {
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -6304,7 +6488,7 @@ function saltar_proceso_pre_reflexivo_boton() {
 
 if (document.getElementById("lista_sujetos_activos_proceso_modificar"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos_modificar,
     error_cargar_sujetos_activos_procesos_modificar
   );
@@ -6406,7 +6590,7 @@ function modificar_proceso_pre_reflexivo() {
       type: 17,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_pre_reflective_process/",
+      "http://alvapala.ddns.net:3000/api/mod_pre_reflective_process/",
       data,
       mensaje_exitoModificarproceso_pre_reflexivo,
       mensaje_errorModificarproceso_pre_reflexivo
@@ -6465,7 +6649,7 @@ function modificar_modelos_metodos() {
       mea_id_anali: modelo_analisis_modificar_id,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_metodos_modelos",
+      "http://alvapala.ddns.net:3000/api/mod_metodos_modelos",
       data,
       metodos_modelos_modificados_exito,
       (res) => {
@@ -6496,7 +6680,7 @@ function abrirModalMapeoParametros_modificar() {
   var id = document.getElementById("recurso_modificar").value;
   if (id) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+      "http://alvapala.ddns.net:3000/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -6515,7 +6699,7 @@ function abrirModalRecomendaciones_modificar() {
     "criterio_de_decision_modificar"
   ).value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    "http://alvapala.ddns.net:3000/api/get_umbral",
     { criterio: seleccionCriterio },
     cargar_lista_umbrales_proceso,
     (res) => {
@@ -6531,7 +6715,7 @@ function cargar_select_tipo_comunicacion_modificar() {
     tipo: tipoComunicacion,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_comunicacion_modificar_pre_reflexivos,
     error_cargar_select_tipo_comunicacion_modificar_pre_reflexivos
@@ -6565,7 +6749,7 @@ function error_cargar_select_tipo_comunicacion_modificar_pre_reflexivos(error) {
 function cargar_select_propiedades_pre_reflexivos() {
   objetoIdReco = document.getElementById("id_objeto_seleccionado").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/properties",
+    "http://alvapala.ddns.net:3000/api/properties",
     {
       id: objetoIdReco,
     },
@@ -6600,7 +6784,7 @@ function error_cargar_propiedades_select_modificar(error) {
 
 function recuperar_ultimo_metodo_aprendizaje_escenario() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metodo_aprendizaje",
+    "http://alvapala.ddns.net:3000/api/get_metodo_aprendizaje",
     { id: 23 },
     consultar_tabla_escenarios,
     (res) => {
@@ -6616,7 +6800,7 @@ function abrirModalEscenarioSimulacion() {
 
 function consultar_tabla_escenarios() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_scenario",
+    "http://alvapala.ddns.net:3000/api/get_simulation_scenario",
     { mea_id: metodo_calculo },
     cargar_tabla_escenarios_simulacion,
     error_cargar_tabla_escenarios_simulacion
@@ -6664,7 +6848,7 @@ function guardarEscenarioSimulacions() {
     mea_id: metodo_calculo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_simulation_scenario",
+    "http://alvapala.ddns.net:3000/api/add_simulation_scenario",
     data,
     consultar_tabla_escenarios,
 
@@ -6698,7 +6882,7 @@ function eliminar_escenario_simulacion() {
   if (!!id) {
     if (confirm("Esta seguro que desea eliminar el Escenario")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_escenario_simulacion/",
+        "http://alvapala.ddns.net:3000/api/del_escenario_simulacion/",
         {
           id: id,
         },
@@ -6757,7 +6941,7 @@ function ModificarEscenarioSimulacions() {
       .checked,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/upd_simulation_scenario/",
+    "http://alvapala.ddns.net:3000/api/upd_simulation_scenario/",
     data,
     (res) => {
       console.log(res);
@@ -6792,7 +6976,7 @@ function visibilidad_variables_valores(id) {
 function consultar_tabla_valores_variables(id) {
   console.log(metodo_calculo);
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_value/",
+    "http://alvapala.ddns.net:3000/api/get_simulation_value/",
     {
       variable: id,
       mea_id: metodo_calculo,
@@ -6824,7 +7008,7 @@ function agregar_variables_valor() {
 
 function consultar_variables_select(mea_id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable/",
+    "http://alvapala.ddns.net:3000/api/get_simulation_variable/",
     { mea_id: mea_id },
     cargar_variables_simulacion_select,
     (res) => {
@@ -6896,7 +7080,7 @@ function modificar_proceso_reflexivo_boton() {
     }
   } else if (cont_paso_modificar_reflexivos == 3) {
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -6969,7 +7153,7 @@ function saltar_proceso_reflexivo_boton() {
     saltar_paso++;
   } else if (saltar_paso == 3) {
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
+      "http://alvapala.ddns.net:3000/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -7018,7 +7202,7 @@ function cargar_select_metrica_indirecta_modificar_reflexivos() {
     tipo: tipoM,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrica_select",
     data,
     cargar_select_metrica_proceso_reflexivo_modificar,
     error_cargar_select_metrica_proceso_reflexivo_modificar
@@ -7035,7 +7219,7 @@ function cargar_select_metrica_indirecta_modificar_reflexivos() {
     tipo: tipoIndi,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrica_select",
+    "http://alvapala.ddns.net:3000/api/get_metrica_select",
     data2,
     cargar_select_indicador_proceso_reflexivo_modificar,
     error_cargar_select_indicador_proceso_reflexivo_modificar
@@ -7111,7 +7295,7 @@ function modificar_proceso_reflexivo() {
       id: id,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_process_pre_reflexive/",
+      "http://alvapala.ddns.net:3000/api/mod_process_pre_reflexive/",
       data,
       mensaje_exitoModificarproceso_reflexivo,
       mensaje_errorModificarproceso_reflexivo
@@ -7149,7 +7333,7 @@ if (
   document.getElementById("lista_sujetos_activos_proceso_reflexivo_modificar")
 )
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos_modificar_reflexivos,
     error_cargar_sujetos_activos_procesos_modificar_reflexivos
   );
@@ -7227,7 +7411,7 @@ function guardarAccionUmbralReflexivos() {
   };
   if (!!data.description) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_action",
+      "http://alvapala.ddns.net:3000/api/add_action",
       data,
       mensajeExitosoAgregarAccionesUmbralesReflexivos,
       (res) => {
@@ -7279,7 +7463,7 @@ function guardarModificacionAccionesUmbralesReflexivos() {
       .checked,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/upd_action/",
+    "http://alvapala.ddns.net:3000/api/upd_action/",
     data,
     mensajeExitosoAgregarAccionesUmbralesReflexivos,
     (res) => {
@@ -7305,7 +7489,7 @@ function eliminarAccionesUmbralesReflexivos() {
         id: id,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_action/",
+        "http://alvapala.ddns.net:3000/api/del_action/",
         data,
         mensajeExitosoAgregarAccionesUmbralesReflexivos,
         (res) => {
@@ -7318,7 +7502,7 @@ function eliminarAccionesUmbralesReflexivos() {
 
 function mensajeExitosoAgregarAccionesUmbralesReflexivos(json) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_action",
+    "http://alvapala.ddns.net:3000/api/get_action",
     {
       umbral: UmbralId,
       mea_id: modelo_analisis_reflexivos,
@@ -7356,7 +7540,7 @@ function cargar_lista_umbrales_proceso_reflexivo(json) {
     res += `<td>${cd.superior}</td>`;
     res += "</tr>";
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_action",
+      "http://alvapala.ddns.net:3000/api/get_action",
       {
         umbral: cd.id,
         mea_id: modelo_analisis_reflexivos,
@@ -7490,7 +7674,7 @@ function cargar_accion_table_reflexivos_modificar(json) {
 function recomendaciones_procesos_reflexivos() {
   var criterio = document.getElementById("criterio_de_decision_modelo").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    "http://alvapala.ddns.net:3000/api/get_umbral",
     { criterio: criterio },
     cargar_lista_umbrales_proceso_reflexivo,
     (res) => {
@@ -7507,7 +7691,7 @@ function AbrirModalAgregarVariablesSimulacion() {
 
 function consultar_tabla_varibles() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable/",
+    "http://alvapala.ddns.net:3000/api/get_simulation_variable/",
     { mea_id: metodo_calculo },
     cargar_tabla_variables_simulacion,
     (res) => {
@@ -7546,7 +7730,7 @@ function agregar_variables_simulacion() {
 function guardarVariableSimulacion() {
   var nombre = document.getElementById("nombre_variable_simulacion").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_simulation_variable/",
+    "http://alvapala.ddns.net:3000/api/add_simulation_variable/",
     {
       name: nombre,
       mea_id: metodo_calculo,
@@ -7587,7 +7771,7 @@ function eliminar_variables_simulacion() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar la variable")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_simulation_variable/",
+        "http://alvapala.ddns.net:3000/api/del_simulation_variable/",
         {
           id: id,
         },
@@ -7637,7 +7821,7 @@ function ModificarVariableSimulacions() {
       .checked,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/upd_simulation_variable/",
+    "http://alvapala.ddns.net:3000/api/upd_simulation_variable/",
     data,
     (res) => {
       console.log(res);
@@ -7675,7 +7859,7 @@ function guardarvariables_valor() {
   };
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_simulation_value/",
+    "http://alvapala.ddns.net:3000/api/add_simulation_value/",
     data,
     correcto_guardado_variables_valor,
     (res) => {
@@ -7707,7 +7891,7 @@ function elminarProcesoReflexivo() {
         id: id,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_reflective_process/",
+        "http://alvapala.ddns.net:3000/api/del_reflective_process/",
         data,
         mensaje_exitosBorrar_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
@@ -7719,7 +7903,7 @@ function elminarProcesoReflexivo() {
 
 function mensaje_exitosBorrar_reflexivo(json) {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_reflective_process",
+    "http://alvapala.ddns.net:3000/api/get_reflective_process",
     cargar_procesos_reflexivos_table,
     mensaje_errorBorrar_reflexivo
   );
@@ -7738,7 +7922,7 @@ if (document.getElementById("TableMetrics")) {
 
 if (document.getElementById("escalas_seccion_entidad"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_scales",
+    "http://alvapala.ddns.net:3000/api/get_scales",
     cargar_escalas_select,
     error_escalas_select
   );
@@ -7764,7 +7948,7 @@ function error_escalas_select(err) {
 
 if (document.getElementById("unidad_medida_metrica"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_measurement_units",
+    "http://alvapala.ddns.net:3000/api/get_measurement_units",
     cargar_unidades_de_medida_select,
     error_cargar_unidades_de_medida_select
   );
@@ -7790,7 +7974,7 @@ function error_cargar_unidades_de_medida_select(err) {
 
 function agregarMetrica() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     { tipo: "TIPO_PERSPECTIVA" },
     cargar_select_tipo_perspectiva,
     (err) => {
@@ -7814,7 +7998,7 @@ function agregarMetrica() {
 
 function get_tipo_metrica_select() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     { tipo: "TIPO_METRICA" },
     cargar_tipo_metrica_select,
     error_cargar_tipo_metrica_select
@@ -7870,7 +8054,7 @@ function GuardarMetrica() {
     data.type_metric != -6
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_metrics/",
+      "http://alvapala.ddns.net:3000/api/add_metrics/",
       data,
       mensaje_exitoEnvioMetrica,
       mensaje_errorEnvioMetrica
@@ -7893,7 +8077,7 @@ function CancelarGuardarMetrica() {
 
 function cargar_tabla_metricas() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics",
+    "http://alvapala.ddns.net:3000/api/get_metrics",
     cargar_metrica_table,
     error_cargar_metrica_table
   );
@@ -7942,7 +8126,7 @@ function error_cargar_metrica_table(err) {
 }
 function get_tipo_perspectiva_select() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     { tipo: "TIPO_PERSPECTIVA" },
     cargar_select_tipo_perspectiva,
     (json) => {
@@ -7972,7 +8156,7 @@ function modificarMetrica() {
     document.getElementById("abreviaturaMetrica").value = "";
     $("#add_metrics").modal("show");
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+      "http://alvapala.ddns.net:3000/api/get_enumeracion",
       { tipo: "TIPO_METRICA" },
       cargar_tipo_metrica_select_modificar,
       error_cargar_tipo_metrica_select
@@ -8078,7 +8262,7 @@ function Guardar_Modificacion_Metrica() {
     data.type_metric != -6
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_metrics/",
+      "http://alvapala.ddns.net:3000/api/mod_metrics/",
       data,
       mensaje_exitoEnvioMetrica,
       mensaje_errorEnvioMetrica
@@ -8101,7 +8285,7 @@ function eliminarMetrica() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_metrics/",
+        "http://alvapala.ddns.net:3000/api/del_metrics/",
         {
           id: id,
         },
@@ -8209,7 +8393,7 @@ $("#CategoriaEntidadesAspectos").change(function () {
   };
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/entitys",
+    "http://alvapala.ddns.net:3000/api/entitys",
     data,
     cargar_posibles_entidades_modelo_aspecto,
     error_cargar_posibles_entidades_modelo_aspecto
@@ -8302,7 +8486,7 @@ if (document.getElementById("select_aspecto")) {
 function agregarAspectos() {
   document.getElementById("lista_sujetos_activos_aspectos").innerHTML = "";
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_aspectos,
     error_cargar_sujetos_activos_aspectos
   );
@@ -8320,7 +8504,7 @@ function cargar_select_tipo_as() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto,
     error_select_tipo_aspecto
@@ -8348,7 +8532,7 @@ function cargar_select_tipo_as_mod() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto_mod,
     error_select_tipo_aspecto
@@ -8405,7 +8589,7 @@ function guardarAspecto() {
     selectedEntitys.length > 0
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_aspects/",
+      "http://alvapala.ddns.net:3000/api/add_aspects/",
       data,
       mensaje_exitoEnvioAspectos,
       mensaje_errorEnvioAspectos
@@ -8441,7 +8625,7 @@ if (document.getElementById("tableAspects")) {
 
 function cargar_tabla_aspectos() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects_ind",
+    "http://alvapala.ddns.net:3000/api/get_aspects_ind",
     cargar_aspectos_table,
     error_cargar_aspectos_table
   );
@@ -8490,7 +8674,7 @@ function eliminarAspectos() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_aspects/",
+        "http://alvapala.ddns.net:3000/api/del_aspects/",
         {
           id: id,
         },
@@ -8536,7 +8720,7 @@ function administrarMetrics() {
 }
 function get_select_metricas_aspectos() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     { tipo: "TIPO_METRICA" },
     cargar_select_metricas_aspectos,
     (json) => {
@@ -8627,7 +8811,7 @@ function agregar_metrica_seleccionado() {
     metricasSeleccion.push(aux);
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_metrics_aspects",
+    "http://alvapala.ddns.net:3000/api/add_metrics_aspects",
     metricasSeleccion,
     cambiar_metrica_lado,
     error_cambiar_metrica_lado
@@ -8648,7 +8832,7 @@ function remover_metrica_seleccionado() {
     metricasSeleccion.push(aux);
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_metrics_aspects",
+    "http://alvapala.ddns.net:3000/api/add_metrics_aspects",
     metricasSeleccion,
     cambiar_metrica_lado,
     error_cambiar_metrica_lado
@@ -8685,7 +8869,7 @@ function limpiarFomularioMod() {
 //OBJETIVOS_ASPECTOS
 function get_aspectos_objetivos_modificar(suj_id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects_objects",
+    "http://alvapala.ddns.net:3000/api/subjects_objects",
     { id: suj_id },
     cargar_select_aspectos_objetivos_modificar,
     (res) => {
@@ -8779,7 +8963,7 @@ function cargar_datos_del_modal_modificar_aspectos_individuales() {
       hr.innerHTML = suj;
       divSujeto.appendChild(hr);
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/get_aspects_subjects",
+        "http://alvapala.ddns.net:3000/api/get_aspects_subjects",
         { systemID: aspect_id },
         cargar_objetos_seleccionados_aspectos,
         (res) => {
@@ -8833,7 +9017,7 @@ function GuardarmodificarAspecto() {
     !!data.tipo
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_aspects",
+      "http://alvapala.ddns.net:3000/api/mod_aspects",
       data,
       cargar_tabla_aspectos,
       (res) => {
@@ -8841,7 +9025,7 @@ function GuardarmodificarAspecto() {
       }
     );
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/del_aspects_objects",
+      "http://alvapala.ddns.net:3000/api/del_aspects_objects",
       { aa_id: aspecto_seleccionado_mod },
       eliminar_relacion_aspectos,
       (res) => {
@@ -8863,7 +9047,7 @@ function eliminar_relacion_aspectos() {
   }
   data = { aa_id: aspecto_seleccionado_mod, arr_entity: selectedEntitys };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_relation_objects_aspects",
+    "http://alvapala.ddns.net:3000/api/add_relation_objects_aspects",
     data,
     (res) => {
       console.log(res);
@@ -8910,7 +9094,7 @@ function cargar_objetos_seleccionados_aspectos(json) {
     systemID: systemID,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/entitys",
+    "http://alvapala.ddns.net:3000/api/entitys",
     data,
     cargar_entidades_modelo_aspecto,
     (res) => {
@@ -9009,7 +9193,7 @@ function habilitar_perspectiva() {
 function tipo_metrica_change() {
   var metrica = document.getElementById("tipo_metrica_aspectos_metrica").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type_aspects",
+    "http://alvapala.ddns.net:3000/api/get_metrics_type_aspects",
     { id: aspectoSeleccionadoMetricas, tipo: metrica },
     cargar_metricas_disponibles,
     (json) => {
@@ -9020,7 +9204,7 @@ function tipo_metrica_change() {
 
 if (document.getElementById("id_proceso_pre_reflexivo")) {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+    "http://alvapala.ddns.net:3000/api/get_last_insert_process",
     get_nombre_proceso,
     (json) => {
       console.log(json);
@@ -9033,7 +9217,7 @@ function get_nombre_proceso(json) {
 }
 if (document.getElementById("nombre_proceso_reflexivo_id")) {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+    "http://alvapala.ddns.net:3000/api/get_last_insert_process",
     get_nombre_proceso_reflexivo,
     (json) => {
       console.log(json);
@@ -9049,7 +9233,7 @@ if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
   var sujeto = document.getElementById("id_sujeto").value;
   console.log(sujeto);
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+    "http://alvapala.ddns.net:3000/api/get_aspects_objects_process",
     { systemID: sujeto },
     cargar_aspectos_procesos_modificar,
     (res) => {
@@ -9073,7 +9257,7 @@ function cargar_aspectos_procesos_modificar(json) {
   });
   select.value = document.getElementById("id_aspecto").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+    "http://alvapala.ddns.net:3000/api/get_objects_aspects",
     {
       aspecto: document.getElementById("id_aspecto").value,
       sujeto: document.getElementById("id_sujeto").value,
@@ -9121,7 +9305,7 @@ if (document.getElementById("id_proceso_reflexivo_modificar")) {
   var sujeto = document.getElementById("id_sujeto_reflexivo").value;
   console.log(sujeto);
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+    "http://alvapala.ddns.net:3000/api/get_aspects_objects_process",
     { systemID: sujeto },
     cargar_aspectos_procesos_reflexivos_modificar,
     (res) => {
@@ -9147,7 +9331,7 @@ function cargar_aspectos_procesos_reflexivos_modificar(json) {
   });
   select.value = document.getElementById("id_aspecto_reflexivo").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+    "http://alvapala.ddns.net:3000/api/get_objects_aspects",
     {
       aspecto: document.getElementById("id_aspecto_reflexivo").value,
       sujeto: document.getElementById("id_sujeto_reflexivo").value,
@@ -9210,7 +9394,7 @@ if (document.getElementById("tipo_ejecucion")) {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_tipos_ejecucion_select,
     (err) => {
@@ -9240,7 +9424,7 @@ if (document.getElementById("unidad_tiempo")) {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_unidad_tiempo_select,
     (err) => {
@@ -9269,7 +9453,7 @@ if (document.getElementById("tipo_ejecucion_ref")) {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_tipos_ejecucion_select_ref,
     (err) => {
@@ -9299,7 +9483,7 @@ if (document.getElementById("unidad_tiempo_ref")) {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_unidad_tiempo_select_ref,
     (err) => {
@@ -9329,7 +9513,7 @@ if (document.getElementById("lista_sujetos_aspectos_colectivos")) {
 }
 function agregar_sujetos_activos_aspectos() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    "http://alvapala.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_aspectos_colectivos,
     (err) => {
       alert(err);
@@ -9427,7 +9611,7 @@ function limpiarFomularioColectivo() {
 function get_aspectos_individuales(id) {
   glogal_is_modificar_aspectos = false;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects",
+    "http://alvapala.ddns.net:3000/api/get_aspects",
     { id: id },
     llenarAspectosIndividuales,
     (res) => {
@@ -9472,7 +9656,7 @@ function llenarAspectosIndividuales(json) {
   });
   if (glogal_is_modificar_aspectos && json.length > 0) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_hijos_seleccionados",
+      "http://alvapala.ddns.net:3000/api/get_aspects_hijos_seleccionados",
       { id: aspecto_seleccionado_mod }, // no se de donde sacamos el aspecto padre aun
       cargar_aspectos_hijo_seleccionados,
       (res) => {
@@ -9499,7 +9683,7 @@ function cargar_aspectos_hijos_para_el_arbol(icon) {
     icon.dataset.max = "True";
     icon.classList.replace("fa-plus", "fa-minus");
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_hijos",
+      "http://alvapala.ddns.net:3000/api/get_aspects_hijos",
       { id: aspect_id },
       cargar_hijos_al_li,
       (res) => {
@@ -9575,7 +9759,7 @@ function cargar_select_operador_agregacion_colectivos() {
     tipo: nombre,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_operador_asignacion_select_colectivos,
     (res) => {
@@ -9605,7 +9789,7 @@ function cargar_select_tipo_aspecto_colectivo() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto_col,
     (res) => {
@@ -9663,7 +9847,7 @@ function guardarAspectoColectivo() {
     selectedAspects.length > 0
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_aspects_colective/",
+      "http://alvapala.ddns.net:3000/api/add_aspects_colective/",
       data,
       mensaje_exitoEnvioAspectosColectivos,
       (res) => {
@@ -9689,7 +9873,7 @@ if (document.getElementById("tableAspectsCollective")) {
 
 function cargar_tabla_aspectos_colectivos() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects_colective",
+    "http://alvapala.ddns.net:3000/api/get_aspects_colective",
     cargar_aspectos_colectivos_table,
     (res) => {
       console.log(res);
@@ -9735,7 +9919,7 @@ function cargar_select_operador_agregacion_colectivos_Modificar() {
     tipo: nombre,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_operador_asignacion_select_colectivos_modificar,
     (res) => {
@@ -9761,7 +9945,7 @@ function cargar_select_tipo_aspecto_colectivo_modificar() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    "http://alvapala.ddns.net:3000/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto_col_mod,
     (res) => {
@@ -9877,7 +10061,7 @@ function cargar_datos_del_modal_modificar_aspectos_colectivos() {
     divSujeto.appendChild(hr);
     cargarSeleccionSujetosAspectosColectivos(suj_id);
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_padres",
+      "http://alvapala.ddns.net:3000/api/get_aspects_padres",
       { systemID: aspect_id },
       cargar_padres_seleccionados_aspectos,
       (res) => {
@@ -9925,7 +10109,7 @@ function limpiarFomularioColectivoModificar() {
 function cargarSeleccionSujetosAspectosColectivos(suj_id) {
   glogal_is_modificar_aspectos = true;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects",
+    "http://alvapala.ddns.net:3000/api/get_aspects",
     { id: suj_id },
     llenarAspectosIndividuales,
     (res) => {
@@ -9997,7 +10181,7 @@ function ModificarAspectoColectivo() {
   ) {
     console.log("Llego hasta aqui");
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_aspects_colective/",
+      "http://alvapala.ddns.net:3000/api/mod_aspects_colective/",
       data,
       mensaje_exitoEnvioAspectosColectivosModificar,
       (res) => {
@@ -10025,7 +10209,7 @@ function eliminarAspectosColectivos() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_aspects/",
+        "http://alvapala.ddns.net:3000/api/del_aspects/",
         {
           id: id,
         },

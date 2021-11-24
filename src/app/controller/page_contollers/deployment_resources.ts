@@ -160,11 +160,16 @@ export async function ask_deployment_resources(req: Request, res: Response) {
 export async function ask_input_arguments(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
-    var rows = await db.qwerty(
-      `SELECT me.met_id as id, me.met_nombre as nombre 
-	     FROM metrica me, aspectoautoconsciencia_metrica aa_me 
-	     WHERE me.met_id=aa_me.met_id AND me.met_activo=1 AND aa_me.aa_id=${req.body.aspectoId} AND me.met_tipo=${req.body.metricaId};`
-    );
+    var sql = `
+	Select 
+	  me.met_id as id, me.met_nombre as nombre
+	  from
+	  metrica me, metodoaprendizajerazonamiento mea, procesoautoconsciencia pro
+	  where
+	  me.met_id=mea.met_id AND pro.pa_id=${req.body.procesoId} AND me.met_tipo=${req.body.metricaId} AND pro.pa_id=mea.pa_id`;
+    console.log(sql);
+    var rows = await db.qwerty(sql);
+    console.log(sql);
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
