@@ -22,7 +22,7 @@ export class database2 {
   }
 
   public async qwerty(sql: string): Promise<any> {
-    //console.log(sql);
+    console.log(sql);
     var connection = await this.conectar();
     try {
       var [rows, fields] = await connection.execute(sql);
@@ -133,9 +133,8 @@ export class database2 {
   ) {
     var connection = await this.conectar();
     systemas.forEach((sys) => {
-      connection.execute(
-        `insert INTO sujeto_objeto(suj_id,obj_id,ma_id) VALUES (${sys.id},${id}, ${ma_id})`
-      );
+      var sql = `insert INTO sujeto_objeto(suj_id,obj_id,ma_id) VALUES (${sys.id},${id}, ${ma_id})`;
+      connection.execute(sql);
     });
     connection.end();
   }

@@ -54,7 +54,8 @@ aspectoautoconsciencia (
 		asp.suj_id= suj.suj_id AND
 	        suj.ma_id = ${value[tag.indexOf("/@/MODEL/@/")]} AND
 	        asp.ma_id=${value[tag.indexOf("/@/MODEL/@/")]} AND
-		asp.aa_alcance=53`;
+		asp.aa_alcance=53 AND
+	    	pro.ma_id=suj.ma_id`;
       return sql;
     } else if (tag.indexOf("/@/PROCESS/@/") != -1) {
       var sql = ` SELECT
@@ -106,7 +107,8 @@ aspectoautoconsciencia (
 	      enu.enu_id=asp.aa_tipo AND
 	        asp.ma_id=${value[tag.indexOf("/@/MODEL/@/")]} AND
 		asp.aa_alcance=53 AND
-		asp.suj_id= suj.suj_id
+		asp.suj_id= suj.suj_id AND
+		suj.ma_id=asp.ma_id
 	    	`;
       return sql;
     }

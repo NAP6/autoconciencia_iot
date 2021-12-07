@@ -138,9 +138,6 @@ export class JSON2Architecture {
       var newEntity = new EntityQ(id, name, entityType);
 
       if (entity.$.isPartOf) {
-        console.log(
-          `######################## Si existe relacion ${entity.$.name}`
-        );
         this.matchPairs_SystemEntity(newEntity, entity.$.isPartOf);
       }
 
@@ -321,8 +318,13 @@ export class JSON2Architecture {
         var index: number = parseInt(stop.split(".")[1]);
         system2 = system.IoTSubSystem[index];
       });
-      entity.iotSystem.push(system2);
-      system2.entity.push(entity);
+      if (routeAux.length > 0) {
+        entity.iotSystem.push(system2);
+        system2.entity.push(entity);
+      } else {
+        entity.iotSystem.push(system);
+        system.entity.push(entity);
+      }
     });
   }
 

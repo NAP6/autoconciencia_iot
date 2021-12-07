@@ -15,7 +15,7 @@ export class SimulationValueQ extends SimulationValue implements SQL_Qwerty {
 
   toSqlSelect(tag: string[], value: string[]): string {
     var sql = "";
-    if (tag.indexOf("/@/VARIABLE/@/") != -1) {
+    if (value[tag.indexOf("/@/VARIABLE/@/")] != undefined) {
       sql = `SELECT
 			vs_id,
 			es_id,

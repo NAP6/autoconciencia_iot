@@ -158,19 +158,52 @@ export async function ask_deployment_resources(req: Request, res: Response) {
 }
 
 export async function ask_input_arguments(req: Request, res: Response) {
+  var METADATA = 25;
+  var SIMULATION_VARIABLE = 24;
   if (req.session?.user) {
     var db = new database2();
-    var sql = `
+    if (req.body.metricaId != undefined) {
+      var sql = `Select
+	    	pro.pa_id as id, pro.pa_nombre as nombre, pro.pa_descripcion as descripcion
+		from
+		procesoautoconsciencia pro, metodoaprendizajerazonamiento as mea WHERE
+		mea.met_id=${req.body.metricaId} AND mea.pa_id=pro.pa_id
+	    	`;
+      var rows = await db.qwerty(sql);
+      res.json(rows);
+    } else if (req.body.tipo_metrica == METADATA) {
+      var modelID = req.session?.active_model.modelID;
+      var sql = `
+	Select 
+	  me.data_id as id, me.data_name as nombre
+	  from
+	  data_column me
+	  where
+	me.data_column_type='MetaData' AND 
+	    me.ma_id=${modelID}`;
+      var rows = await db.qwerty(sql);
+      res.json(rows);
+    } else if (req.body.tipo_metrica == SIMULATION_VARIABLE) {
+      var sql = `
+	Select 
+	  vs.vs_id as id, vs.vs_nombre as nombre
+	  from
+	  variablesimulacion vs, metodoaprendizajerazonamiento mea
+	  where
+	mea.pa_id=${req.body.proceso} and mea.mea_id=vs.mea_id`;
+      var rows = await db.qwerty(sql);
+      res.json(rows);
+    } else {
+      var sql = `
 	Select 
 	  me.met_id as id, me.met_nombre as nombre
 	  from
-	  metrica me, metodoaprendizajerazonamiento mea, procesoautoconsciencia pro
+	  metrica me
 	  where
-	  me.met_id=mea.met_id AND pro.pa_id=${req.body.procesoId} AND me.met_tipo=${req.body.metricaId} AND pro.pa_id=mea.pa_id`;
-    console.log(sql);
-    var rows = await db.qwerty(sql);
-    console.log(sql);
-    res.json(rows);
+	me.met_tipo=${req.body.tipo_metrica}`;
+      var rows = await db.qwerty(sql);
+      res.json(rows);
+    }
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

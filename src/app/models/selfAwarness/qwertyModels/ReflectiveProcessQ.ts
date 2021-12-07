@@ -6,7 +6,6 @@ export class ReflectiveProcessQ
   toSqlInsert(tag: string[], value: string[]): string {
     var sql = `INSERT INTO 
     procesoautoconsciencia(
-    pa_nombre,
     pa_descripcion,
     pa_inicio_periodo_ejecucion,
     pa_fin_periodo_ejecucion,
@@ -20,7 +19,6 @@ export class ReflectiveProcessQ
     pa_intervalo_ejecucion,
     pa_hora_ejecucion) 
     values (
-    '${this.name}',
     '${this.description}',
     ${
       this.executionPeriodStart == undefined
