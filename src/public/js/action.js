@@ -5277,7 +5277,7 @@ function guardar_proceso_pre_reflexivo_boton() {
       btn.classList.add("bg-warning");
       document.getElementById(
         "btn-guardar"
-      ).innerHTML = `Guardar (Metodos modelos)`;
+      ).innerHTML = `Guardar (Métodos de aprendizaje y razonamiento)`;
       $("#guardar_informacion_general.collapse").collapse("hide");
       $("#navegador_metodos_modelos.collapse").collapse("show");
       cont_paso++;
@@ -5334,7 +5334,7 @@ function guardar_proceso_reflexivo_boton() {
       );
       document.getElementById(
         "btn-guardar-reflexivos"
-      ).innerHTML = `Guardar (Metodos modelos)`;
+      ).innerHTML = `Guardar (Métodos de aprendizaje y razonamiento)`;
       $("#guardar_informacion_general_reflexivos.collapse").collapse("hide");
       $("#navegador_metodos_modelos_reflexivos.collapse").collapse("show");
       cont_paso_reflexivos++;
@@ -5814,6 +5814,25 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
       }
     );
   } else {
+    if (elemento.value == 25 || elemento.value == 24) {
+      var select_prcess_id = `proceso_select_metodo_${ordinaGeneralMetodos}`;
+      var select = document.getElementById(select_prcess_id);
+      select.innerHTML = "";
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "SELECCIONE..";
+      select.appendChild(optionSeleccion);
+      select.disabled = true;
+    } else {
+      var select_prcess_id = `proceso_select_metodo_${ordinaGeneralMetodos}`;
+      var select = document.getElementById(select_prcess_id);
+      select.innerHTML = "";
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "SELECCIONE..";
+      select.appendChild(optionSeleccion);
+      select.disabled = false;
+    }
     var proceso_id = document.getElementById("id_proceso_reflexivo").value;
     data = {
       tipo_metrica: elemento.value,
@@ -6003,6 +6022,7 @@ function cargar_modal_mapeo_parametros_modelos(json) {
   json._containsParameter.forEach((element) => {
     if (element._active) {
       var tr = document.createElement("tr");
+      tr.classList.add("model");
       tr.setAttribute("name", "tr_fila_parametros");
       var id = document.createElement("td");
       id.id = "id_fila_parametros_modelos";
@@ -6157,7 +6177,7 @@ function cargar_select_argumento_entrada_modelos(json) {
   });
 }
 function Guadar_nuevo_mapeo_modelos() {
-  var nombreP = document.getElementsByName("tr_fila_parametros");
+  var nombreP = document.querySelectorAll("[name=tr_fila_parametros].model");
   var aux = [];
   var mea_id_rec = document
     .getElementById("id_metodo_aprendizaje_modelos")
@@ -7921,7 +7941,7 @@ function guardarvariables_valor() {
     data,
     correcto_guardado_variables_valor,
     (res) => {
-      console.log(res);
+      alert("La variable de simulaciòn ya tiene asignado un valor");
     }
   );
   correcto_guardado_variables_valor();

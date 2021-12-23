@@ -160,6 +160,7 @@ export async function ask_deployment_resources(req: Request, res: Response) {
 export async function ask_input_arguments(req: Request, res: Response) {
   var METADATA = 25;
   var SIMULATION_VARIABLE = 24;
+  var modelID = req.session?.active_model.modelID;
   if (req.session?.user) {
     var db = new database2();
     if (req.body.metricaId != undefined) {
@@ -172,7 +173,6 @@ export async function ask_input_arguments(req: Request, res: Response) {
       var rows = await db.qwerty(sql);
       res.json(rows);
     } else if (req.body.tipo_metrica == METADATA) {
-      var modelID = req.session?.active_model.modelID;
       var sql = `
 	Select 
 	  me.data_id as id, me.data_name as nombre
@@ -203,7 +203,7 @@ export async function ask_input_arguments(req: Request, res: Response) {
 	me.met_tipo=${req.body.tipo_metrica}`;
       var rows = await db.qwerty(sql);
       res.json(rows);
-    }
+	    }
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

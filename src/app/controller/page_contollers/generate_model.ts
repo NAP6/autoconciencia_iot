@@ -197,10 +197,10 @@ async function add_PreReflectiveProcess_extras(process, path_process) {
         methods[i].toSqlSelectPathDataColum()
       );
       columns_paths = columns_paths.map((x) => x.path);
-
-      console.log(columns_paths);
+      var joined_colums_paths = columns_paths.join(" ");
 
       var methodG = methods[i].toObjectG();
+      methodG.columns_paths = joined_colums_paths;
       routes["collection"]["p"][
         methods[i].id.toString()
       ] = `${path_process}/@usesCollectionMethod.${i}`;
@@ -220,8 +220,16 @@ async function add_analisisModel(process, path_process) {
   var analisisModel: AnalysisModelQ;
   analisisModel = new AnalysisModelQ(-1, "");
   var sql = analisisModel.toSqlSelect(["/@/PROCES/@/"], [process.$.id]);
+  console.log("#################################");
+  console.log("Modelos de Analisis");
+  console.log("#################################");
+  console.log(sql);
+  console.log("#################################");
   var rows = await db.qwerty(sql);
   var model: AnalysisModelQ[] = analisisModel.toObjectArray(rows);
+  console.log(model);
+  console.log("================================================");
+  console.log();
   if (model.length > 0) {
     process.usesAnalysisModel = [];
     for (var i = 0; i < model.length; i++) {
@@ -335,8 +343,16 @@ async function add_action(analisisModel, path_model) {
   var db = new database2();
   var action: ActionQ = new ActionQ(-1, "");
   var sql = action.toSqlSelect(["/@/MODEL/@/"], [analisisModel.$.id]);
+  console.log("########################################");
+  console.log("Actions");
+  console.log("########################################");
+  console.log(sql);
   var rows = await db.qwerty(sql);
   var action_list: ActionQ[] = action.toObjectArray(rows);
+  console.log("########################################");
+  console.log(action_list);
+  console.log("===========================================================");
+  console.log();
   if (action_list.length > 0) {
     if (!analisisModel.containsAction) analisisModel.containsAction = [];
     for (var i = 0; i < action_list.length; i++) {
@@ -833,13 +849,25 @@ async function add_relation_threshold_action(threshold, path_threshold) {
     threshold.$.upperThreshold
   );
   var sql = thres.toSqlSelect(["/@/RELATION_ACTION/@/"], []);
+  console.log("###################################");
+  console.log("Relation action threshold");
+  console.log("###################################");
+  console.log(sql);
   var rows = await db.qwerty(sql);
   for (var i = 0; i < rows.length; i++) {
-    var path_action = routes["action"]["p"][rows[i].id.toString()];
-    threshold.recommends = path_action;
-    var obj: any = routes["action"]["r"][rows[i].id.toString()];
-    obj.isRecommendedIn = path_threshold;
+    console.log("###################################");
+    console.log("id accion: " + rows[i].id);
+    if (routes["action"]["p"][rows[i].id.toString()]) {
+      var path_action = routes["action"]["p"][rows[i].id.toString()];
+      threshold.recommends = path_action;
+      var obj: any = routes["action"]["r"][rows[i].id.toString()];
+      console.log(obj);
+      obj.isRecommendedIn = path_threshold;
+    } else {
+      console.log("=== ERROR accion no encontrada: " + rows[i].id);
+    }
   }
+  console.log();
 }
 
 async function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
@@ -852,17 +880,31 @@ async function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
 		WHERE
 		asp.met_id=${metric.$.id}`;
   var rows = await db.qwerty(sql);
+  console.log("#############################");
+  console.log("ASPECTO");
+  console.log("#############################");
+  console.log(sql);
+  console.log("#############################");
   for (var i = 0; i < rows.length; i++) {
     if (metric.evaluates) {
       metric.evaluates += " " + routes["aspect"]["p"][rows[i].id.toString()];
     } else {
       metric.evaluates = routes["aspect"]["p"][rows[i].id.toString()];
     }
-    if (routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy) {
-      routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy +=
-        " " + path_metric;
+    console.log("#############################");
+    console.log("id aspecto: " + rows[i].id);
+    console.log(routes["aspect"]["r"][rows[i].id.toString()]);
+    if (routes["aspect"]["r"][rows[i].id.toString()]) {
+      if (routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy) {
+        routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy +=
+          " " + path_metric;
+      } else {
+        routes["aspect"]["r"][
+          rows[i].id.toString()
+        ].isEvaluatedBy = path_metric;
+      }
     } else {
-      routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy = path_metric;
+      console.log("=== ERROR aspect no encontrado: " + rows[i].id);
     }
   }
 }

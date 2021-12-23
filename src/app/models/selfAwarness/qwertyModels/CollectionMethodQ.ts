@@ -59,7 +59,6 @@ export class CollectionMethodQ extends CollectionMethod implements SQL_Qwerty {
 	  WHERE
 	  	coll.mea_id = ${this.id}
 	  `;
-	  console.log(sql)
     return sql;
   }
   toObjectArray(rows: any): any[] {

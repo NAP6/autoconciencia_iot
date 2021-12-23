@@ -49,7 +49,7 @@ export class Function extends ImplementationResource {
         description: this.description,
         returnDataType: this.returnDataType,
         path: this.path,
-        instrucctions: this.instrucctions,
+        instructions: this.instrucctions,
       },
     };
   }
