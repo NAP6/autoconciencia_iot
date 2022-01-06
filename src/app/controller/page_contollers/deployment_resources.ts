@@ -168,19 +168,23 @@ export async function ask_input_arguments(req: Request, res: Response) {
 	    	pro.pa_id as id, pro.pa_nombre as nombre, pro.pa_descripcion as descripcion
 		from
 		procesoautoconsciencia pro, metodoaprendizajerazonamiento as mea WHERE
-		mea.met_id=${req.body.metricaId} AND mea.pa_id=pro.pa_id
+		mea.met_id=${req.body.metricaId} AND mea.pa_id=pro.pa_id AND pro.ma_id=${modelID}
 	    	`;
       var rows = await db.qwerty(sql);
       res.json(rows);
     } else if (req.body.tipo_metrica == METADATA) {
-      var sql = `
-	Select 
-	  me.data_id as id, me.data_name as nombre
-	  from
-	  data_column me
-	  where
-	me.data_column_type='MetaData' AND 
-	    me.ma_id=${modelID}`;
+      var sql = `Select
+			me.data_id as id, me.data_name as nombre
+		from
+			data_column me,I_AM_BATMAN bat, metodoaprendizajerazonamiento met, metodorecoleccion metrec
+		where
+			met.pa_id=${req.body.procces_of_direct_metric} AND 
+			met.mea_id=metrec.mea_id AND 
+			metrec.flu_id=bat.id_flow AND
+			bat.ma_id=metrec.ma_id AND
+			bat.id_colum=me.data_id AND
+			bat.ma_id=me.ma_id AND
+			me.ma_id=${modelID}`;
       var rows = await db.qwerty(sql);
       res.json(rows);
     } else if (req.body.tipo_metrica == SIMULATION_VARIABLE) {
@@ -203,7 +207,7 @@ export async function ask_input_arguments(req: Request, res: Response) {
 	me.met_tipo=${req.body.tipo_metrica}`;
       var rows = await db.qwerty(sql);
       res.json(rows);
-	    }
+    }
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }

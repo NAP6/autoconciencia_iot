@@ -40,6 +40,7 @@ export class ActionQ extends Action implements SQL_Qwerty {
 	 	mea_id=${value[tag.indexOf("/@/METHOD/@/")]} AND
 	 	umb_id=${this.isRecommendedln}`;
     }
+	  console.log(sql);
     return sql;
   }
   toSqlDelete(value: string[]): string {

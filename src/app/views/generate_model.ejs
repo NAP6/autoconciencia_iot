@@ -3,9 +3,11 @@
 
         <div id="layoutSidenav_content">
             <main id="fenerate_model_page" class="container-fluid">
-                <h1 class="mt-4">Generar modelos</h1>
+                <h1 class="mt-4">Generar modelos
+		<button type="button" class="btn btn-secondary mx-3" onclick="descargar_modelo_generado()" >Descargar Modelo</button>
+		</h1>
                 <div id='alert-zone'></div>
-                <pre>
+                <pre id="document-text">
                     <%=model%>
                 </pre>
             </main>

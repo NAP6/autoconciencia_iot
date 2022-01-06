@@ -5872,9 +5872,9 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
     ) {
       alert('Debe seleccionar una metrica "Directa" en primera instancia');
       return;
-    } // else if(global_direct_metric.ordinal) {
-    //var tipo_mapeo_id = `tipo_mapeo_select_${global_direct_metric.ordinal}`;
-    //document.getElementById(tipo_mapeo_id).disabled = true;
+    }// else if(global_direct_metric.ordinal) {
+      //var tipo_mapeo_id = `tipo_mapeo_select_${global_direct_metric.ordinal}`;
+      //document.getElementById(tipo_mapeo_id).disabled = true;
     //}
 
     var proceso_id = document.getElementById("id_proceso_reflexivo").value;
@@ -10375,16 +10375,4 @@ function validate_create_model_form() {
   }
   alert("Debe llenar todos los campos");
   return false;
-}
-function descargar_modelo_generado() {
-  var textInput = document.getElementById("document-text").innerHTML;
-  var element = document.createElement("a");
-  element.setAttribute(
-    "href",
-    "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput)
-  );
-  element.setAttribute("download", "Model.txt");
-  document.body.appendChild(element);
-  element.click();
-  document.body.removeChild(element);
 }

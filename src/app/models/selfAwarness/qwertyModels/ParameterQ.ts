@@ -32,11 +32,12 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
   			) VALUES (
 	  			'${this.ordinal}', 
 		  		'${this.name}', 
-		  		'${this.ordinal ? 1 : 0}', 
+		  		'${this.optional ? 1 : 0}', 
 				'${value[tag.indexOf("/@/ACTIVE/@/")]}',
 		  		'${this.dataType}', 
 				'${value[tag.indexOf("/@/ID/@/")]}'
   			)`;
+    console.log(sql);
     return sql;
   }
   toSqlSelect(tag: string[], value: string[]): string {

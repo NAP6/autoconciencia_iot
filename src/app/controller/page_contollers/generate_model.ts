@@ -1206,8 +1206,13 @@ async function save_and_generate_resource_route(
     routes["implementationResource"]["r"][resource_element.id.toString()];
   var indx_parameter = -1;
   if (the_resource) {
-    if (the_resource.containsParameter.indexOf(parameter) == -1)
+    var indexOfParameter = the_resource.containsParameter.indexOf(parameter);
+    if (indexOfParameter == -1) {
       the_resource.containsParameter.push(parameter);
+      indx_parameter = the_resource.containsParameter.length - 1;
+    } else {
+      indx_parameter = indexOfParameter;
+    }
   } else {
     routes["implementationResource"]["r"][
       resource_element.id.toString()
