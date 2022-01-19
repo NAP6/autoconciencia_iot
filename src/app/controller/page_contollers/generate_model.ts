@@ -125,8 +125,8 @@ async function recursive_relation_data_colum(
     await recursive_relation_data_colum(route, to_add, model[key][position]);
   } else {
     for (var i = 0; i < to_add.length; i++) {
-      if (!model.relatesMetaData) model.relatesMetaData = `${to_add[i]}`;
-      else model.relatesMetaData += ` ${to_add[i]}`;
+      if (!model.isUsedIn) model.isUsedIn = `${to_add[i]}`;
+      else model.isUsedIn += ` ${to_add[i]}`;
     }
   }
 }
@@ -460,7 +460,7 @@ async function relation_metadata_mapping_to_dataColumn(
   var rows = await db.qwerty(sql);
   for (var i = 0; i < rows.length; i++) {
     var path_colum = rows[i].path;
-    parameter_mapping.isUsedIn = path_colum;
+    parameter_mapping.relatesMetaData = path_colum;
     if (routes["data_column"][path_colum])
       routes["data_column"][path_colum].push(path_mapping);
     else {

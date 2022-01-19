@@ -5999,6 +5999,13 @@ function Guadar_nuevo_mapeo_metodos() {
       mea_id: mea_id_rec[0],
       vs_id: undefined,
     };
+    element.querySelector(
+      "td#tipo_mapeo_fila_parametros_metodos select"
+    ).disabled = true;
+    element.querySelector(
+      "td#argumento_entrada_fila_parametros_metodos select"
+    ).disabled = true;
+    element.querySelector("td#procesos_select_mapeos select").disabled = true;
     aux.push(aux2);
   });
   console.log(aux[0].par_ordinal);
@@ -6031,7 +6038,8 @@ function cancelar_mapeo_parametros_metodos() {
   $("#modal_mapeo_parametros_metodos").modal("hide");
 }
 function mensaje_correcto_envio_mapeo_metodos() {
-  guardarMapeoModelos = true;
+  guardarMapeoMetodos = true;
+  document.getElementById("guardaMapeo_modelosButton").disabled = true;
   $("#modal_mapeo_parametros_metodos").modal("hide");
 }
 //Mapeo Parametros Modelos
@@ -6251,6 +6259,13 @@ function Guadar_nuevo_mapeo_modelos() {
       ).value,
       mea_id: mea_id_rec[1],
     };
+    element.querySelector(
+      "td#tipo_mapeo_fila_parametros_modelos select"
+    ).disabled = true;
+    element.querySelector(
+      "td#argumento_entrada_fila_parametros_modelos select"
+    ).disabled = true;
+    element.querySelector("td#opcional_proceso_mapeo select").disabled = true;
     aux.push(aux2);
   });
   console.log(aux);
