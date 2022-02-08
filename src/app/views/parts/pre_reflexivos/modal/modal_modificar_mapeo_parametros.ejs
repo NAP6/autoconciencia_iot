@@ -1,0 +1,84 @@
+<div class="modal fade bd-example-modal-lg" id="modal_modificar_mapeo_parametros" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel" style="width: 100%;">Mapeo de Parámetros</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <div class="col-12 col-lg-12">
+                            <h6>Recurso Implementacion:</h6>
+                            <div class="card" style="height: 160px; width: 1080px;">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5>Nombre:</h5>
+						<% if(modificar3.length > 0) { %>
+                                                <p id="nombre_temporal_mapeo"><%=modificar3[0].nombre_recurso%></p>
+						<% } %>
+                                            </div>
+                                            <div class="col">
+                                                <h5>Tipo dato de salida:</h5>
+						<% if(modificar3.length > 0) { %>
+                                                <p id="tipo_dato_salida_mapeo"><%=modificar3[0].tipo_salida_recurso%></p>
+						<% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <h5>Descripción:</h5>
+					<% if(modificar3.length > 0) { %>
+                                        <p id="descripcion_mapeo"><%=modificar3[0].descripcion_recurso%></p>
+					<% } %>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Parámetro</th>
+                                    <th scope="col">Tipo de dato</th>
+                                    <th scope="col">Opcional</th>
+                                    <th scope="col">Tipo Mapeo</th>
+                                    <th scope="col">Argumento de Entrada</th>
+				    <th scope="col">Proceso</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla_mapeo_parametros">
+				<% for(let row of modificar3) { %>
+				   <tr>
+					<td></td>
+					<td><%=row.nombre_parametro%></td>
+					<td><%=row.tipo_parametro%></td>
+					<td><%=row.opcional_parametro == 1%></td>
+					<td><%=row.metrica_tipo%></td>
+					<% if(row.metrica_tipo == 'VARIABLE SIMULACION') { %>
+					<td><%=row.variable%></td>
+					<% } else if(row.metrica_tipo == 'METADATA') { %>
+					<td><%=row.metadata%></td>
+					<% } else { %>
+					<td><%=row.nombre_metrica%></td>
+					<% }%>
+					<td><%=row.proceso%></td>
+				   </tr>
+				<% } %>
+			    </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

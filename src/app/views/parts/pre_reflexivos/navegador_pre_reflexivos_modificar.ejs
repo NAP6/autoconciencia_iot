@@ -1,8 +1,8 @@
 <p>
-    <button class="btn btn-link" type="button" onclick="modificar_informacion_boton('modificar_informacion_general')">Paso 1: Información General</button>
+    <button class="btn btn-secondary" type="button" id="informacion_general_modificar" onclick="modificar_informacion_boton('modificar_informacion_general')">Paso 1: Información General</button>
     <span id="btn-section-2-modificar" class="">
         <span  class="text-primary">></span>
-    <button class="btn btn-link" type="button" onclick="modificar_informacion_boton('modificar_metodos_modelos')">
+    <button class="btn btn-link" type="button" id="metodos_modificar" onclick="modificar_informacion_boton('modificar_metodos_modelos')">
             Paso 2: Métodos de aprendizaje y razonamiento <span id="btn-section-3-modificar" class="">> Paso 3: Párametros y recomendaciones</span>
     </button>
     </span>
@@ -26,12 +26,9 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <button type="button" id="btn-modificar" class="d-inline btn btn-secondary btn-lg btn-block mt-3 mx-4 mb-2" onclick="modificar_proceso_pre_reflexivo_boton()">Modificar (Información General)</button>
-        </div>
-        <div class="col">
-            <button type="button" id="btn-saltar-modificar__pre_reflexivos" class="d-inline btn btn-secondary btn-lg btn-block mt-3 mx-4 mb-2" onclick="saltar_proceso_pre_reflexivo_boton()">Saltar (Información General)</button>
-        </div>
+            <button type="button" id="btn-saltar-modificar__pre_reflexivos" class="d-inline btn btn-secondary btn-lg btn-block" onclick="saltar_proceso_pre_reflexivo_boton()">Saltar (Método de aprendizaje y razonamiento)</button>
+    </div>
     </div>
 </div>
-<%- include('modal/modal_mapeo_parametros'); %>
+<%- include('modal/modal_modificar_recomendaciones'); %>
     <%- include('modal/modal_activos'); %>

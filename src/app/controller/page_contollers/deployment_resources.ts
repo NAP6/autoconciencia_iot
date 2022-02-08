@@ -225,11 +225,12 @@ export async function add_mapeo_parametros(req: Request, res: Response) {
 	      		${element.met_id == undefined ? "NULL" : element.met_id},
 	      		${element.vs_id == undefined ? "NULL" : element.vs_id},
 	      		${element.md_id == undefined ? "NULL" : element.md_id},
-		  	${element.data_id == undefined ? "NULL" : element.data_id}),`;
+		  	${element.data_id == undefined ? "NULL" : element.data_id},
+    			${element.proceso== undefined ? "NULL" : element.proceso}),`;
     });
     var sql =
       `INSERT INTO 
-    		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id,data_id) 
+    		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id,data_id,pa_id) 
 		VALUES ` + stryaux.substring(0, stryaux.length - 1);
 
     var db = new database2();

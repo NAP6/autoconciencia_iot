@@ -61,14 +61,14 @@ export async function add_reflective_process(req: Request, res: Response) {
     if (newProcess.tipoE) {
       process.executionType = newProcess.tipoE;
     }
-	  if (newProcess.horaE) {
+    if (newProcess.horaE) {
       process.executionTime = newProcess.horaE;
     }
     process.active = true;
     var rows = await db.qwerty(
       process.toSqlInsert(
-        ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/","/@/HORA/@/"],
-        [newProcess.aspId, newProcess.sujId, modeloID,newProcess.unidadT]
+        ["/@/ASPECTID/@/", "/@/SUBJECT/@/", "/@/MODEL/@/", "/@/HORA/@/"],
+        [newProcess.aspId, newProcess.sujId, modeloID, newProcess.unidadT]
       )
     );
     res.json(rows);
@@ -123,23 +123,77 @@ export async function get_reflective_process_mod(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var id = req.body.proceso_reflexivo_seleccionado;
-    var rows = await db.qwerty(`SELECT 
-		  pa.pa_id as id,
-		  pa.pa_nombre as nombre, 
-		  pa.pa_descripcion as descripcion, 
-		  DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, 
-		  DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
-		  pa.aa_id as aspecto,
-		  pa.suj_id as sujeto,
-		  suj.suj_nombre as sujeto_nombre
-		  FROM
-		  sujeto suj,
-		  procesoautoconsciencia pa
-		  WHERE pa_id=${id} AND pa.suj_id=suj.suj_id`);
+    var modeloID = req.session!.active_model.modelID;
+    var sql = `SELECT
+	                    pa.pa_id as id,
+		                    pa.pa_nombre as nombre,
+		                    pa.pa_descripcion as descripcion,
+		                    pa.pa_tipo,
+		                    DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio,
+		                    DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
+		                    pa.aa_id as aspecto,
+		                    asp.aa_nombre as aspecto_nombre,
+				    asp.aa_alcance as alcance,
+		                    pa.suj_id as sujeto,
+		                    suj.suj_nombre as sujeto_nombre,
+		                    pa_tipo_ejecucion,
+		                    enu.enu_nombre_valor as tipo_ejecucion,
+		                    pa_unidad_tiempo,
+		                    enu2.enu_nombre_valor as unidad_tiempo,
+		                    pa_intervalo_ejecucion,
+		                    pa_hora_ejecucion
+	                    FROM
+	                    procesoautoconsciencia pa,
+		                    aspectoautoconsciencia asp,
+		                    sujeto suj,
+		                    enumeracion enu,
+		                    enumeracion enu2
+	                    WHERE pa_id=${id} AND 
+	                    pa.ma_id=${modeloID} AND 
+	                    pa.aa_id=asp.aa_id AND 
+	                    pa.ma_id=asp.ma_id AND 
+			    pa.suj_id=suj.suj_id AND 
+			    suj.ma_id=pa.ma_id AND 
+			    pa.pa_tipo_ejecucion=enu.enu_id AND 
+	  pa.pa_unidad_tiempo=enu2.enu_id`;
+    var rows_general = await db.qwerty(sql);
+    var sql_aprendizaje_razonamiento = `select *
+		  from
+	  	(select mtl.mea_id as id_recoleccion,
+			    mtl.mea_tipo as tipo_metodo,
+			    mtl.pa_id as proceso_id,
+			    mtl.met_id as metrica_metodo,
+			    mt.met_nombre as metrica_metodo_nombre,
+			    DATE_FORMAT(metc.mc_inicio_periodo_calculo,"%Y-%m-%d") as inicio,
+		            DATE_FORMAT(metc.mc_fin_periodo_calculo,"%Y-%m-%d") as fin,
+			    metc.mc_tipo_recurso as tipo_recurso_metodo
+					from metodoaprendizajerazonamiento mtl
+					inner join metodocalculo metc
+					on mtl.mea_id=metc.mea_id 
+			        inner join metrica mt on mt.met_id=mtl.met_id) ta_1,
+					(select mtl.pa_id as proceso_id_2,
+					    mtl.met_id as metrica_modelo,
+					        met.met_nombre as metrica_modelo_nombre,
+						ana.ma_tipo_recurso as tipo_recurso,
+						ana.cd_id as criterio_id,
+						cri.cd_nombre as criterio_nombre,
+						mtl.mea_id as id_modelo
+					from 
+					metodoaprendizajerazonamiento mtl
+					inner join modeloanalisis ana on mtl.mea_id=ana.mea_id
+					inner join criteriodecision cri on cri.cd_id=ana.cd_id
+					inner join metrica met on met.met_id=mtl.met_id) ta_2
+					where
+					ta_1.proceso_id=${rows_general[0].id} and
+	  				ta_1.proceso_id=ta_2.proceso_id_2`;
+    var rows_aprendizaje_razonamiento = await db.qwerty(
+      sql_aprendizaje_razonamiento
+    );
     res.render("modificar_reflexivos", {
       error: req.flash("error"),
       succes: req.flash("succes"),
-      modificar: rows,
+      modificar: rows_general,
+      modificar2: rows_aprendizaje_razonamiento,
       session: req.session,
     });
   } else {
