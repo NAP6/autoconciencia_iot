@@ -1,84 +1,140 @@
-<div class="modal fade" id="add_aspects" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="modal_resource_addLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-center" id="tituloAspectos" style="width: 100%;">
-                    Agregar Aspecto Autoconsciencia Individual
-                </h5>
-                <button type="button" class="close" onclick="limpiarFomulario();">
+<div
+  class="modal fade"
+  id="add_aspects"
+  tabindex="-1"
+  role="dialog"
+  data-backdrop="static"
+  aria-labelledby="modal_resource_addLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title text-center"
+          id="tituloAspectos"
+          style="width: 100%"
+        >
+          Agregar Aspecto Autoconsciencia Individual
+        </h5>
+        <button type="button" class="close" onclick="limpiarFomulario();">
           <span aria-hidden="true">&times;</span>
         </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-6">
+            <div>
+              <label for="nombre_aspecto">Nombre: </label>
+              <textarea
+                type="text"
+                class="form-control"
+                id="nombreAspecto"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                onkeyup="javascript:this.value=this.value.toUpperCase();"
+              ></textarea>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                	<div class="col-6">
-				<div>
-				<label for="nombre_aspecto">Nombre: </label>
-		<textarea type="text" class="form-control" id="nombreAspecto" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
-				</div>
-	<div class="form-group">
-				<label for="descripcion_aspecto">Descripción: </label>
-		<textarea type="text" class="form-control" id="descripcionAspecto" aria-label="Default" aria-describedby="inputGroup-sizing-default" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
-				</div>
-			<div>
-			<label for="descripcion_aspecto">Peso: </label>
-		<input type="number" class="form-control" id="pesoAspecto"/>
-				</div>
+            <div class="form-group">
+              <label for="descripcion_aspecto">Descripción: </label>
+              <textarea
+                type="text"
+                class="form-control"
+                id="descripcionAspecto"
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                onkeyup="javascript:this.value=this.value.toUpperCase();"
+              ></textarea>
+            </div>
+            <div>
+              <label for="descripcion_aspecto">Peso: </label>
+              <input type="number" class="form-control" id="pesoAspecto" />
+            </div>
 
-		<div>
-			<label for="select_aspecto">Tipo: </label>
-		<select type="number" class="custom-select" id="select_aspecto"></select>
-				</div>
-                     <div>
-                            <div class="col-sm-2">Activo:</div>
-                            <div class="col-sm-8">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="activoAspecto" checked disabled>
-                                </div>
-                            </div>
-                        </div>
-			</div>
-			<div class="col-6 aling-self-center">
-                        <div class="input-group mb">
-                            <label>Sujeto que captura el aspecto:</label>
-                            <div class="" style="">
-                                <div id="sujetos_Activos_aspectos" class="card col-12" style="width:430px">
-                                    <ul id="lista_sujetos_activos_aspectos"></ul>
-                                </div>
-                            </div>
-                        </div>
-		<label class="">  Categoría de objetos:</label>
-                        <div class="input-group col-10">
-                            <select class="custom-select mb-2" name="CategoriaEntidadesAspectos" id="CategoriaEntidadesAspectos" disabled>
-                                <option value="-6">Seleccione..</option>
-                              <option id="EntidadFisica" value="1">Entidades Físicas</option>
-                              <option value="2">Nodos Cloud</option>
-                              <option value="3">Nodos Fog</option>
-                              <option value="4">Gateway IoT</option>
-                              <option value="5">Sensores</option>
-                              <option value="6">Tags</option>
-                              <option value="7">Actuadores</option>
-                              <option value="8">Red</option>
-                            </select>
-                        </div>
-				<label>Objetos sobre los que se captura el aspecto:</label>
-                        <div class="row px-3 pr-5 col-11" style="overflow-y: auto;height: 130px;">
-                            <div id="entidades_seleccionados_area_aspectos" class="card col">
-                                <ul id="lista_entidades_seleccionadas_aspectos"></ul>
-                            </div>
-                        </div>
+            <div>
+              <label for="select_aspecto">Tipo: </label>
+              <select
+                type="number"
+                class="custom-select"
+                id="select_aspecto"
+              ></select>
+            </div>
+	    <div class="row">
+              <div class="col-sm-2">Activo:</div>
+              <div class="col-sm-8">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="activoAspecto"
+                    checked
+                    disabled
+                  />
                 </div>
-
+              </div>
             </div>
-            <div class="modal-footer">
-                <button id="guardarAspectoButton" type="button" class="btn btn-primary" onclick="guardarAspecto()">
-          Guardar
-        </button>
-                <button type="button" class="btn btn-secondary" onclick="limpiarFomulario()">
-          Cancelar
-        </button>
+          </div>
+          <div class="col-6">
+            <div class="input-group mb">
+              <label>Sujeto que captura el aspecto:</label>
+              <div class="" style="">
+                <div
+                  id="sujetos_Activos_aspectos"
+                  class="card col-12"
+                  style="width: 430px"
+                >
+                  <ul id="lista_sujetos_activos_aspectos"></ul>
+                </div>
+              </div>
             </div>
+            <label class=""> Categoría de objetos:</label>
+            <div class="input-group col-10">
+              <select
+                class="custom-select mb-2"
+                name="CategoriaEntidadesAspectos"
+                id="CategoriaEntidadesAspectos"
+                disabled
+              >
+                <option value="-6">Seleccione..</option>
+                <option id="EntidadFisica" value="1">Entidades Físicas</option>
+                <option value="2">Nodos Cloud</option>
+                <option value="3">Nodos Fog</option>
+                <option value="4">Gateway IoT</option>
+                <option value="5">Sensores</option>
+                <option value="6">Tags</option>
+                <option value="7">Actuadores</option>
+                <option value="8">Red</option>
+              </select>
+            </div>
+            <label>Objetos sobre los que se captura el aspecto:</label>
+            <div
+              class="row px-3 pr-5 col-11"
+              style="overflow-y: auto; height: 130px"
+            >
+              <div id="entidades_seleccionados_area_aspectos" class="card col">
+                <ul id="lista_entidades_seleccionadas_aspectos"></ul>
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="modal-footer">
+          <button
+            id="guardarAspectoButton"
+            type="button"
+            class="btn btn-primary"
+            onclick="guardarAspecto()"
+          >
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            onclick="limpiarFomulario()"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

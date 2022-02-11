@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SelfAwarenessAspect = void 0;
 class SelfAwarenessAspect {
-    constructor(id, name, description, weight, aspectType) {
+    constructor(id, name, description, weight, aspectType, aggregationOperator, scope) {
         this._id = id;
         this._name = name;
         this._description = description;
@@ -11,6 +11,8 @@ class SelfAwarenessAspect {
         this._active = true;
         this._isEvaluated = [];
         this._derives = [];
+        this._aggregationOperator = aggregationOperator;
+        this._scope = scope;
     }
     get id() {
         return this._id;
@@ -48,11 +50,29 @@ class SelfAwarenessAspect {
     set active(value) {
         this._active = value;
     }
+    get aggregationOperator() {
+        return this._aggregationOperator;
+    }
+    set aggregationOperator(value) {
+        this._aggregationOperator = value;
+    }
     get isEvaluated() {
         return this._isEvaluated;
     }
     set isEvaluated(value) {
         this._isEvaluated = value;
+    }
+    get scope() {
+        return this._scope;
+    }
+    set scope(value) {
+        this._scope = value;
+    }
+    is_individual() {
+        return this._scope == "INDIVIDUAL";
+    }
+    is_colective() {
+        return this._scope == "COLECTIVO";
     }
     toObjectG() {
         var res = {};
@@ -63,6 +83,8 @@ class SelfAwarenessAspect {
             type: this.aspectType,
             weight: this.weight,
         };
+        if (this.is_colective())
+            res.$.aggregationOperator = this.aggregationOperator;
         return res;
     }
 }

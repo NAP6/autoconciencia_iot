@@ -6,7 +6,6 @@ class PreReflectiveProcessQ extends PreReflectiveProcess_1.PreReflectiveProcess 
     toSqlInsert(tag, value) {
         var sql = `INSERT INTO 
 	       procesoautoconsciencia(
-	       pa_nombre,
 	       pa_descripcion,
 	       pa_inicio_periodo_ejecucion,
 	       pa_fin_periodo_ejecucion,
@@ -20,7 +19,6 @@ class PreReflectiveProcessQ extends PreReflectiveProcess_1.PreReflectiveProcess 
 	       pa_intervalo_ejecucion,
 	       pa_hora_ejecucion) 
 	       values (
-	      '${this.name}',
 	      '${this.description}',
 	      ${this.executionPeriodStart == undefined
             ? "NULL"
@@ -35,8 +33,8 @@ class PreReflectiveProcessQ extends PreReflectiveProcess_1.PreReflectiveProcess 
 		${value[tag.indexOf("/@/MODEL/@/")]},
 		${this.executionType},
 		${value[tag.indexOf("/@/HORA/@/")]},
-		${this.executionTimeInterval},
-		'${this.executionTime}')`;
+		${this.executionTimeInterval == undefined ? -6 : this.executionTimeInterval},
+		${this.executionTime == undefined ? "NULL" : "'" + this.executionTime + "'"})`;
         return sql;
     }
     toSqlSelect(tag, value) {

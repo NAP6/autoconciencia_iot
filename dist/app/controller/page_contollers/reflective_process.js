@@ -119,23 +119,162 @@ function get_reflective_process_mod(req, res) {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var db = new database2_1.database2();
             var id = req.body.proceso_reflexivo_seleccionado;
-            var rows = yield db.qwerty(`SELECT 
-		  pa.pa_id as id,
-		  pa.pa_nombre as nombre, 
-		  pa.pa_descripcion as descripcion, 
-		  DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio, 
-		  DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
-		  pa.aa_id as aspecto,
-		  pa.suj_id as sujeto,
-		  suj.suj_nombre as sujeto_nombre
-		  FROM
-		  sujeto suj,
-		  procesoautoconsciencia pa
-		  WHERE pa_id=${id} AND pa.suj_id=suj.suj_id`);
+            var modeloID = req.session.active_model.modelID;
+            var sql = `SELECT
+	                    pa.pa_id as id,
+		                    pa.pa_nombre as nombre,
+		                    pa.pa_descripcion as descripcion,
+		                    pa.pa_tipo,
+		                    DATE_FORMAT(pa.pa_inicio_periodo_ejecucion,"%Y-%m-%d") as inicio,
+		                    DATE_FORMAT(pa.pa_fin_periodo_ejecucion,"%Y-%m-%d") as fin,
+		                    pa.aa_id as aspecto,
+		                    asp.aa_nombre as aspecto_nombre,
+				    asp.aa_alcance as alcance,
+		                    pa.suj_id as sujeto,
+		                    suj.suj_nombre as sujeto_nombre,
+		                    pa_tipo_ejecucion,
+		                    enu.enu_nombre_valor as tipo_ejecucion,
+		                    pa_unidad_tiempo,
+		                    enu2.enu_nombre_valor as unidad_tiempo,
+		                    pa_intervalo_ejecucion,
+		                    pa_hora_ejecucion,
+				     obj.obj_padre as padre_objeto,
+				     obj.obj_tipo as categoria,
+				     obj.obj_nombre as nombre_objeto
+	                    FROM
+	                    procesoautoconsciencia pa,
+		                    aspectoautoconsciencia asp,
+		                    sujeto suj,
+				    aspectoautoconsciencia_objeto asp_obj,
+				    objeto obj,
+		                    enumeracion enu,
+		                    enumeracion enu2
+	                    WHERE pa_id=${id} AND 
+	                    pa.ma_id=${modeloID} AND 
+	                    pa.aa_id=asp.aa_id AND 
+	                    pa.ma_id=asp.ma_id AND 
+			    pa.suj_id=suj.suj_id AND 
+			    suj.ma_id=pa.ma_id AND 
+			    pa.pa_tipo_ejecucion=enu.enu_id AND 
+	  		    pa.pa_unidad_tiempo=enu2.enu_id AND
+	  		    asp_obj.ma_id=pa.ma_id AND
+	  		    asp_obj.aa_id=asp.aa_id AND
+			    obj.ma_id=pa.ma_id AND
+	  	            obj.obj_id = asp_obj.obj_id`;
+            var rows_general = yield db.qwerty(sql);
+            var sql_aprendizaje_razonamiento = `select *
+		  from
+	  	(select mtl.mea_id as id_recoleccion,
+			    mtl.mea_tipo as tipo_metodo,
+			    mtl.pa_id as proceso_id,
+			    mtl.met_id as metrica_metodo,
+			    mt.met_nombre as metrica_metodo_nombre,
+			    DATE_FORMAT(metc.mc_inicio_periodo_calculo,"%Y-%m-%d") as inicio,
+		            DATE_FORMAT(metc.mc_fin_periodo_calculo,"%Y-%m-%d") as fin,
+			    metc.mc_tipo_recurso as tipo_recurso_metodo
+					from metodoaprendizajerazonamiento mtl
+					inner join metodocalculo metc
+					on mtl.mea_id=metc.mea_id 
+			        inner join metrica mt on mt.met_id=mtl.met_id) ta_1,
+					(select mtl.pa_id as proceso_id_2,
+					    mtl.met_id as metrica_modelo,
+					        met.met_nombre as metrica_modelo_nombre,
+						ana.ma_tipo_recurso as tipo_recurso,
+						ana.cd_id as criterio_id,
+						cri.cd_nombre as criterio_nombre,
+						mtl.mea_id as id_modelo
+					from 
+					metodoaprendizajerazonamiento mtl
+					inner join modeloanalisis ana on mtl.mea_id=ana.mea_id
+					inner join criteriodecision cri on cri.cd_id=ana.cd_id
+					inner join metrica met on met.met_id=mtl.met_id) ta_2
+					where
+					ta_1.proceso_id=${rows_general[0].id} and
+	  				ta_1.proceso_id=ta_2.proceso_id_2`;
+            var rows_aprendizaje_razonamiento = yield db.qwerty(sql_aprendizaje_razonamiento);
+            var row_param_rec = [];
+            if (rows_aprendizaje_razonamiento.length > 0) {
+                var sql_parametros_recursos = `
+		      		select 
+		      		ri.ri_id as ri_id,
+			      		ri.ri_nombre as nombre_recurso,
+			      		ri.ri_descripcion as descripcion_recurso,
+			      		enu2.enu_nombre_valor as tipo_salida_recurso,
+			      		par.par_nombre as nombre_parametro,
+			      		enu1.enu_nombre_valor as tipo_parametro,
+			      		par.par_opcional as opcional_parametro,
+			      		enu3.enu_nombre_valor as metrica_tipo,
+			      		met.met_nombre as nombre_metrica,
+			      		pa.pa_nombre as proceso,
+					pa.pa_descripcion as proceso2,
+			      		var.vs_nombre as variable,
+			      		dat.data_name as metadata
+		      	    from
+		      		modeloanalisis ana 
+		      		inner join mapeoparametros map on ana.mea_id=map.mea_id
+		      		inner join parametro par on map.par_ordinal=par.par_ordinal
+		      		inner join recursoimplementacion ri on par.ri_id=ri.ri_id
+		      		left join metrica met on map.met_id=met.met_id
+		      		left join variablesimulacion var on map.vs_id=var.vs_id
+		      		inner join enumeracion enu1 on par.par_tipo_dato=enu1.enu_id
+		      		inner join enumeracion enu2 on ri.ri_tipo_dato_salida=enu2.enu_id
+		      		inner join enumeracion enu3 on met.met_tipo=enu3.enu_id 
+		      		left join procesoautoconsciencia pa on pa.pa_id=map.pa_id
+		      		left join data_column dat on dat.data_id=map.data_id
+		      	    where
+		      	    	ana.mea_id=${rows_aprendizaje_razonamiento[0].id_modelo}
+					    `;
+                row_param_rec = yield db.qwerty(sql_parametros_recursos);
+            }
+            else {
+                console.log("no entra");
+            }
+            var row_param_rec_2 = [];
+            if (rows_aprendizaje_razonamiento.length > 0) {
+                console.log("si entra_metodos");
+                var sql_parametros_recursos_2 = `
+		      		select 
+		      		ri.ri_id as ri_id,
+			      		ri.ri_nombre as nombre_recurso,
+			      		ri.ri_descripcion as descripcion_recurso,
+			      		enu2.enu_nombre_valor as tipo_salida_recurso,
+			      		par.par_nombre as nombre_parametro,
+			      		enu1.enu_nombre_valor as tipo_parametro,
+			      		par.par_opcional as opcional_parametro,
+			      		enu3.enu_nombre_valor as metrica_tipo,
+			      		met.met_nombre as nombre_metrica,
+			      		pa.pa_nombre as proceso,
+					pa.pa_descripcion as proceso2,
+			      		var.vs_nombre as variable,
+			      		dat.data_name as metadata
+		      	    from
+		      metodocalculo ana
+		      inner join mapeoparametros map on ana.mea_id=map.mea_id
+		      inner join parametro par on map.par_ordinal=par.par_ordinal								     
+		      inner join recursoimplementacion ri on par.ri_id=ri.ri_id
+		      left join metrica met on map.met_id=met.met_id
+		      left join variablesimulacion var on map.vs_id=var.vs_id
+		      inner join enumeracion enu1 on par.par_tipo_dato=enu1.enu_id
+		      inner join enumeracion enu2 on ri.ri_tipo_dato_salida=enu2.enu_id
+		      left join enumeracion enu3 on met.met_tipo=enu3.enu_id
+		      left join procesoautoconsciencia pa on pa.pa_id=map.pa_id
+		      left join data_column dat on dat.data_id=map.data_id
+		      	    where
+		      	    	ana.mea_id=${rows_aprendizaje_razonamiento[0].id_recoleccion}
+					    `;
+                row_param_rec_2 = yield db.qwerty(sql_parametros_recursos_2);
+                console.log(sql_parametros_recursos_2);
+            }
+            else {
+                console.log("no entra");
+            }
             res.render("modificar_reflexivos", {
                 error: req.flash("error"),
                 succes: req.flash("succes"),
-                modificar: rows,
+                modificar: rows_general,
+                modificar2: rows_aprendizaje_razonamiento,
+                modificar3: row_param_rec,
+                modificar4: row_param_rec_2,
                 session: req.session,
             });
         }

@@ -1,5 +1,5 @@
 <section class="crear_modelo">
-    <form action="/<%= page %>" method="POST" enctype="multipart/form-data">
+    <form action="/<%= page %>" method="POST" enctype="multipart/form-data" onsubmit="return validate_create_model_form()">
         <div class="container">
             <div class="form-group">
                 <label for="nombre_modelo">Nombre: </label>

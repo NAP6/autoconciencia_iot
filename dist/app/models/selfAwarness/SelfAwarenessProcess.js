@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SelfAwarenessProcess = void 0;
 class SelfAwarenessProcess {
-    constructor(id, name, description, type_process, executionPeriodStart, executionPeriodEnd, executionType, executionTimeInterval, executionTime) {
+    constructor(id, name, description, type_process, executionPeriodStart, executionPeriodEnd, executionType, executionTimeInterval, executionTime, unitOfTime) {
         this._id = id;
         this._name = name;
         this._description = description;
@@ -12,6 +12,7 @@ class SelfAwarenessProcess {
         this._executionPeriodEnd = executionPeriodEnd;
         this._executionType = executionType;
         this._executionTimeInterval = executionTimeInterval;
+        this.unitOfTime = unitOfTime;
         this._executionTime = executionTime;
     }
     get id() {
@@ -68,6 +69,12 @@ class SelfAwarenessProcess {
     set executionTime(value) {
         this._executionTime = value;
     }
+    get unitOfTime() {
+        return this._unitOfTime;
+    }
+    set unitOfTime(value) {
+        this._unitOfTime = value;
+    }
     get executionTimeInterval() {
         return this._executionTimeInterval;
     }
@@ -94,6 +101,10 @@ class SelfAwarenessProcess {
             description: this.description,
             executionPeriodStart: this.executionPeriodStart,
             executionPeriodEnd: this.executionPeriodEnd,
+            executionType: this.executionType,
+            unitOfTime: this.unitOfTime,
+            executionTimeInterval: this.executionTimeInterval,
+            executionTime: this.executionTime,
         };
         return res;
     }

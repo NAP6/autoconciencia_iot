@@ -6,7 +6,6 @@ class ReflectiveProcessQ extends ReflectiveProcess_1.ReflectiveProcess {
     toSqlInsert(tag, value) {
         var sql = `INSERT INTO 
     procesoautoconsciencia(
-    pa_nombre,
     pa_descripcion,
     pa_inicio_periodo_ejecucion,
     pa_fin_periodo_ejecucion,
@@ -20,7 +19,6 @@ class ReflectiveProcessQ extends ReflectiveProcess_1.ReflectiveProcess {
     pa_intervalo_ejecucion,
     pa_hora_ejecucion) 
     values (
-    '${this.name}',
     '${this.description}',
     ${this.executionPeriodStart == undefined
             ? "NULL"
@@ -34,9 +32,11 @@ class ReflectiveProcessQ extends ReflectiveProcess_1.ReflectiveProcess {
     ${this.type_process},
 ${value[tag.indexOf("/@/MODEL/@/")]},
 ${this.executionType == undefined ? "NULL" : this.executionType},
-${value[tag.indexOf("/@/HORA/@/")] == undefined ? "NULL" : "'" + value[tag.indexOf("/@/HORA/@/")] + "'"},
+${value[tag.indexOf("/@/HORA/@/")] == undefined
+            ? "NULL"
+            : "'" + value[tag.indexOf("/@/HORA/@/")] + "'"},
 ${this.executionTimeInterval == undefined ? "NULL" : this.executionTimeInterval},
-${this.executionTime == undefined ? "NULL" : this.executionTime})`;
+${this.executionTime == undefined ? "NULL" : "'" + this.executionTime + "'"})`;
         return sql;
     }
     toSqlSelect(tag, value) {

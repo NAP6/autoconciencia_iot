@@ -11,7 +11,8 @@ class ArgumentToParameterMappingQ extends ArgumentToParameterMapping_1.ArgumentT
     		  map.mp_tipo_entrada as tipo_entrada,
 		  map.met_id as metrica,
 		  map.vs_id as variable,
-		  map.md_id as id
+		  map.md_id as id,
+		  map.data_id as metadata
 	  FROM
 	  mapeoparametros map,
 		  metodoaprendizajerazonamiento mea
@@ -30,6 +31,12 @@ class ArgumentToParameterMappingQ extends ArgumentToParameterMapping_1.ArgumentT
         var mapping = [];
         for (var i = 0; i < rows.length; i++) {
             var aux = new ArgumentToParameterMappingQ(rows[i].id);
+            if (rows[i].variable) {
+                aux.simulation_variable = rows[i].variable;
+            }
+            if (rows[i].metadata) {
+                aux.metadata = rows[i].metadata;
+            }
             mapping.push(aux);
         }
         return mapping;

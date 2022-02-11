@@ -19,23 +19,23 @@ function post_api(url = "", data, fun1, fun2) {
 }
 
 /*function alert(txt) {
-  div = document.createElement("div");
-  div.classList.add("alert", "alert-danger");
-  div.setAttribute("role", "alert");
-  div.innerHTML =
-    txt +
-    `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
-  document.getElementById("alert-zone").appendChild(div);
-}*/
+	  div = document.createElement("div");
+	  div.classList.add("alert", "alert-danger");
+	  div.setAttribute("role", "alert");
+	  div.innerHTML =
+	    txt +
+	    `<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`;
+	  document.getElementById("alert-zone").appendChild(div);
+	}*/
 
 /* 
-    SECCION RECURSOS DE IMPLEMENTACION
-        Descripcion:
-  
-    Define:
-  
-        Incluye:
-*/
+	    SECCION RECURSOS DE IMPLEMENTACION
+		Descripcion:
+	  
+	    Define:
+	  
+		Incluye:
+	*/
 if (document.getElementById("table_deployment_resources")) {
   cargar_recursos_de_implementacion();
   cargar_tipo_dato_select();
@@ -715,26 +715,26 @@ function guardarRecursoImplementacion() {
 }
 
 /* 
-    SECCION SELECCION SUJETOS CUADROS DINAMICOS SE SELECCION
-  
-        Descripcion:
-            En este fragmento se encuentran las funciones que hacen posible el dinamismo
-            de la seccion de seleccion de sujetos, haciendola mas interactiva. Ademas cuenta
-        con las funciones que consultan la api para cargar los sujetos.
-  
-    Define:
-        bjetosde_Sujetos
-  
-        Incluye:
-        cargar_posibles_sujetos_modelo
-        error_cargar_posibles_sujetos_modelo
-        verificar_seleccion_hijo_pagre
-            agregar_sujeto_seleccionado
-            remover_sujeto_seleccionado
-            extraer_datos_sujeto_e_hijos_lista_check
-            actualizar_sujetos
-            extraer_datos_sujeto
-*/
+	    SECCION SELECCION SUJETOS CUADROS DINAMICOS SE SELECCION
+	  
+		Descripcion:
+		    En este fragmento se encuentran las funciones que hacen posible el dinamismo
+		    de la seccion de seleccion de sujetos, haciendola mas interactiva. Ademas cuenta
+		con las funciones que consultan la api para cargar los sujetos.
+	  
+	    Define:
+		bjetosde_Sujetos
+	  
+		Incluye:
+		cargar_posibles_sujetos_modelo
+		error_cargar_posibles_sujetos_modelo
+		verificar_seleccion_hijo_pagre
+		    agregar_sujeto_seleccionado
+		    remover_sujeto_seleccionado
+		    extraer_datos_sujeto_e_hijos_lista_check
+		    actualizar_sujetos
+		    extraer_datos_sujeto
+	*/
 if (document.getElementById("lista_sujetos_para_cargar"))
   consultar_api(
     "http://autoconsciencia.ddns.net:3000/api/subjects",
@@ -833,13 +833,13 @@ function cargar_posibles_sujetos_modelo(json) {
     labelChek.classList.add("form-check-label");
     labelChek.htmlFor = checkbox.id;
     var button = document.createElement("button");
-    button.classList.add("btn", "btn-link", "py-0", "px-0");
+    button.classList.add("btn", "py-0", "px-0");
     /*
-      button.setAttribute(
-      "onclick",
-      `abrirModalObjetosSujetosColor('${elemento.id}', '${elemento.name}');`
-    );
-    */
+	      button.setAttribute(
+	      "onclick",
+	      `abrirModalObjetosSujetosColor('${elemento.id}', '${elemento.name}');`
+	    );
+	    */
     button.innerHTML = elemento.name;
     labelChek.appendChild(button);
     li.appendChild(divFormCheck);
@@ -850,7 +850,7 @@ function cargar_posibles_sujetos_modelo(json) {
 }
 
 function error_cargar_posibles_sujetos_modelo(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 var sujeto_selecciona_seccion_sujeto_modal = undefined;
 
@@ -1006,22 +1006,22 @@ function actualizar_sujetos() {
     alert("No selecciono ningun sujeto de Autoconc");
   }
   /*if (selec && actualizacion.length == 0)
-                    abrirModalObjetosSujetos(selec.id, selec.nombre);
-                else if (selec) {
-                    alert("Se seleccionara el ulimo elemento marcado de arriba hacia abajo");
-                    abrirModalObjetosSujetos(selec.id, selec.nombre);
-                } else alert("No se a seleccionado un elemento");*/
+			    abrirModalObjetosSujetos(selec.id, selec.nombre);
+			else if (selec) {
+			    alert("Se seleccionara el ulimo elemento marcado de arriba hacia abajo");
+			    abrirModalObjetosSujetos(selec.id, selec.nombre);
+			} else alert("No se a seleccionado un elemento");*/
 }
 
 /* 
-    SECCION CREACION DE OBJETOS DE SUJETOS, ARBOL Y FORMULARIO
-  
-        Descripcion:
-        En este fragmeto se pretende crear las funciones que llamen a la ventana modal
-        y todas las funciones que impliquen la creacion de los objetos que tienen los sujetos
-  
-        Incluye:
-*/
+	    SECCION CREACION DE OBJETOS DE SUJETOS, ARBOL Y FORMULARIO
+	  
+		Descripcion:
+		En este fragmeto se pretende crear las funciones que llamen a la ventana modal
+		y todas las funciones que impliquen la creacion de los objetos que tienen los sujetos
+	  
+		Incluye:
+	*/
 
 function cargar_select_criterios_decision() {
   consultar_api(
@@ -1236,16 +1236,16 @@ function eliminarObjeto() {
 }
 
 /* 
-    SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
-  
-        Descripcion:
-        Esta seccion contiene las funciones de que carga las unidades de medida
-        en la pagina de seleccionar sujetos.
-  
-        Incluye:
-        cargar_unidades_de_medida_select
-        error_cargar_unidades_de_medida_select
-*/
+	    SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
+	  
+		Descripcion:
+		Esta seccion contiene las funciones de que carga las unidades de medida
+		en la pagina de seleccionar sujetos.
+	  
+		Incluye:
+		cargar_unidades_de_medida_select
+		error_cargar_unidades_de_medida_select
+	*/
 /*CARGAR TIPO PARA LA SECCION DE ESCALAS*/
 
 function get_tipo_escalas_select() {
@@ -1274,7 +1274,7 @@ function cargar_select_tipo_escala(json) {
 }
 
 function error_cargar_enumeracion_select(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 if (document.getElementById("tipo_escalas2")) {
@@ -1307,10 +1307,10 @@ function cargar_select_tipo_escala_modificar(json) {
   });
 }
 /* 
-    SECCION GENERALES PARTE: UNIDADES DE MEDIDA
-        Descripcion:
-        Esta seccion incluye el envio de datos para las unidades de medida
-*/
+	    SECCION GENERALES PARTE: UNIDADES DE MEDIDA
+		Descripcion:
+		Esta seccion incluye el envio de datos para las unidades de medida
+	*/
 if (document.getElementById("tabla_unidades_de_medida")) {
   consultar_get_unidades_medida();
 }
@@ -1346,7 +1346,7 @@ function cargar_unidades_de_medida_table(json) {
 }
 
 function error_cargar_unidades_de_medida_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function agregarUnidadMedida() {
@@ -1462,12 +1462,12 @@ function mensaje_errorEnvioUnidadesMedida(err) {
   alert(err);
 }
 /* 
-    SECCION CARGAR LAS ESCALAS
-  
-        Descripcion:
-        Esta seccion contiene las funciones de que carga las escalas
-        en la pagina
-*/
+	    SECCION CARGAR LAS ESCALAS
+	  
+		Descripcion:
+		Esta seccion contiene las funciones de que carga las escalas
+		en la pagina
+	*/
 function consultar_get_escalas() {
   consultar_api(
     "http://autoconsciencia.ddns.net:3000/api/get_scales",
@@ -1501,16 +1501,16 @@ function cargar_escales_table(json) {
 }
 
 function error_cargar_escales_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 /* 
-    SECCION SELECCION SUJETOS CARGAR LAS ESCALAS
-  
-        Descripcion:
-        Esta seccion incluye el envio de datos para las Escalas
-  
-        Incluye:
-*/
+	    SECCION SELECCION SUJETOS CARGAR LAS ESCALAS
+	  
+		Descripcion:
+		Esta seccion incluye el envio de datos para las Escalas
+	  
+		Incluye:
+	*/
 
 function agregar_escala() {
   $("#modal_scales_add").modal("show");
@@ -1647,13 +1647,13 @@ function mensaje_errorEnvioEscalas(err) {
 }
 
 /* 
-    SECCION SELECCION SUJETOS CARGAR LOS CRITERIOS DE DECISION
-  
-        Descripcion:
-        Esta seccion incluye el envio de datos para los criterios de decision
-  
-        Incluye:
-*/
+	    SECCION SELECCION SUJETOS CARGAR LOS CRITERIOS DE DECISION
+	  
+		Descripcion:
+		Esta seccion incluye el envio de datos para los criterios de decision
+	  
+		Incluye:
+	*/
 //
 if (document.getElementById("tabla_criterios_decision")) {
   get_criterios_table();
@@ -1700,7 +1700,7 @@ function cargar_criterios_table(json) {
 var criterio_select = undefined;
 
 function error_cargar_criterios_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function agregar_criterio_decision() {
@@ -2206,15 +2206,15 @@ function mensaje_errorEnvioAspects(err) {
 }
 
 /* 
-    SECCION CARGAR ASPECTOS AUTOCONSCIENCIA
-  
-        Descripcion:
-        Esta seccion contiene las funciones de que carga los criterios de decision
-  
-        Incluye:
-        cargar_criterios_table
-        error_cargar_criterios_table
-*/
+	    SECCION CARGAR ASPECTOS AUTOCONSCIENCIA
+	  
+		Descripcion:
+		Esta seccion contiene las funciones de que carga los criterios de decision
+	  
+		Incluye:
+		cargar_criterios_table
+		error_cargar_criterios_table
+	*/
 
 function cargar_aspectos_table(json) {
   res = "";
@@ -2237,20 +2237,20 @@ function cargar_aspectos_table(json) {
 }
 
 function error_cargar_aspectos_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 /* 
-    SECCION LISTAR MODELOS
-  
-        Descripcion:
-        En esta seccion se cargan los modelos de autoconciencia guardados
-        en una tabla para visualizar y seleccionar
-  
-        Incluye:
-        cargar_modelos_table
-        error_cargar_models_table
-*/
+	    SECCION LISTAR MODELOS
+	  
+		Descripcion:
+		En esta seccion se cargan los modelos de autoconciencia guardados
+		en una tabla para visualizar y seleccionar
+	  
+		Incluye:
+		cargar_modelos_table
+		error_cargar_models_table
+	*/
 var modelo_fisico_json;
 if (document.getElementById("tabla_modelos_autoconciencia"))
   consultar_api(
@@ -2258,41 +2258,100 @@ if (document.getElementById("tabla_modelos_autoconciencia"))
     cargar_modelos_table,
     error_cargar_models_table
   );
-
+var cosa;
 function cargar_modelos_table(json) {
   res = "";
+  var tabla = document.getElementById("tabla_modelos_autoconciencia");
   json.forEach((md) => {
-    modelo_fisico_json = JSON.parse(md._architectureModel);
+    modelo_fisico_json = JSON.parse(
+      md._architectureModel.replace(/ 0+(?![\. }])/g, "")
+    );
 
-    res += `<tr id='modelo-${md._id}-tabla'>`;
-    res += `<td name="modelo-${
-      md._id
-    }"><input type="radio" name="modelo_seleccionado_tabla" value="${
-      md._id
-    }" data-name="${md._name}" data-autor="${md._author}" data-descripcion="${
-      md._description
-    }" data-activo="${md._active == "true"}"></td>`;
-    res += `<td name="modelo-${md._id}">${md._id}</td>`;
-    res += `<td name="modelo-${md._id}">${md._name}</td>`;
-    res += `<td name="modelo-${md._id}">${md._author}</td>`;
-    res += `<td name="modelo-${md._id}">${md._description}</td>`;
-    res += `<td name="modelo-${
-      md._id
-    }"><buttom class="btn btn-link" onclick="mostrar_modal_json()">${
-      Object.keys(modelo_fisico_json)[0]
-    }
-      </buttom></td>`;
-    if (md._active == 1)
-      res += `<td><input type="checkbox" disabled checked></td>`;
-    else res += `<td><input type="checkbox" disabled></td>`;
-    res += "</tr>";
+    var tr = document.createElement("tr");
+
+    tr.id = `modelo-${md._id}-tabla`;
+    var td1 = document.createElement("td");
+    td1.name = `modelo-${md._id}`;
+    tr.appendChild(td1);
+    var radio = document.createElement("input");
+    radio.type = "radio";
+    radio.name = `modelo_seleccionado_tabla`;
+    radio.value = `${md._id}`;
+    radio.dataset.name = `${md._name}`;
+    radio.dataset.autor = `${md._author}`;
+    radio.dataset.descripcion = `${md._description}`;
+    radio.dataset.activo = `${md._active == 1 }`;
+    td1.appendChild(radio);
+
+    var td2 = document.createElement("td");
+    td2.name = `modelo-${md._id}`;
+    td2.innerHTML = `${md._id}`;
+    tr.appendChild(td2);
+
+    var td3 = document.createElement("td");
+    td3.name = `modelo-${md._name}`;
+    td3.innerHTML = `${md._name}`;
+    tr.appendChild(td3);
+
+    var td4 = document.createElement("td");
+    td4.name = `modelo-${md._author}`;
+    td4.innerHTML = `${md._author}`;
+    tr.appendChild(td4);
+
+    var td5 = document.createElement("td");
+    td5.name = `modelo-${md._description}`;
+    td5.innerHTML = `${md._description}`;
+    tr.appendChild(td5);
+
+    var td6 = document.createElement("td");
+    td6.name = `modelo-${md._id}`;
+    td6.innerHTML = `<buttom class="btn btn-link" onclick="mostrar_modal_json()">
+			  ${Object.keys(modelo_fisico_json)[0]}
+	      </buttom>`;
+    tr.appendChild(td6);
+
+    var td7 = document.createElement("td");
+    var input2 = document.createElement("input");
+    input2.type = "checkbox";
+    input2.disabled = true;
+    td7.appendChild(input2);
+    tr.appendChild(td7);
+    if (md._active == 1) input2.checked = true;
+
+    tabla.appendChild(tr);
+
+    /*
+	    res += `<tr id='modelo-${md._id}-tabla'>`;
+	    res += `<td name="modelo-${
+	      md._id
+	    }"><input type="radio" name="modelo_seleccionado_tabla" value="${
+	      md._id
+	    }" data-name="${md._name}" data-autor="${md._author}" data-descripcion="${
+	      md._description
+	    }" data-activo="${md._active == "true"}"></td>`;
+
+	    res += `<td name="modelo-${md._id}">${md._id}</td>`;
+	    res += `<td name="modelo-${md._id}">${md._name}</td>`;
+	    res += `<td name="modelo-${md._id}">${md._author}</td>`;
+	    res += `<td name="modelo-${md._id}">${md._description}</td>`;
+	    res += `<td name="modelo-${
+	      md._id
+	    }"><buttom class="btn btn-link" onclick="mostrar_modal_json()">${
+	      Object.keys(modelo_fisico_json)[0]
+	    }
+	      </buttom></td>`;
+	      */
+    /*res += `<td><input type="checkbox" disabled checked></td>`;
+	    else res += `<td><input type="checkbox" disabled></td>`;
+	    res += "</tr>";
+	    */
   });
 
-  document.getElementById("tabla_modelos_autoconciencia").innerHTML = res;
+  //document.getElementById("tabla_modelos_autoconciencia").innerHTML = res;
 }
 
 function error_cargar_models_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function mostrar_modal_json() {
@@ -2307,14 +2366,14 @@ function mostrar_modal_json() {
   );
 }
 /* 
-    SECCION LISTAR MODELOS
-  
-        Descripcion:
-        En esta seccion se incluyen las funciones que permiten cargar los
-        datos del modelo seleccionado al formularionde actualizacion.
-  
-        Incluye:
-*/
+	    SECCION LISTAR MODELOS
+	  
+		Descripcion:
+		En esta seccion se incluyen las funciones que permiten cargar los
+		datos del modelo seleccionado al formularionde actualizacion.
+	  
+		Incluye:
+	*/
 
 function modal_modificar_modelo() {
   var radios = document.getElementsByName("modelo_seleccionado_tabla");
@@ -2322,7 +2381,7 @@ function modal_modificar_modelo() {
   var name;
   var descripcion;
   var autor;
-  var activo;
+  var active;
   var select = false;
   radios.forEach((elem) => {
     if (elem.checked) {
@@ -2330,32 +2389,31 @@ function modal_modificar_modelo() {
       name = elem.dataset.name;
       descripcion = elem.dataset.descripcion;
       autor = elem.dataset.autor;
-      activo = elem.dataset.activo == "true";
+      active = elem.dataset.activo == "true";
       select = true;
       return;
     }
   });
-
   document.getElementById("id_modelo_update").value = id;
   document.getElementById("nombre_modelo_update").value = name;
   document.getElementById("descripcion_esenario_update").value = descripcion;
   document.getElementById("autor_esenario_update").value = autor;
-  document.getElementById("activoModelo").checked = activo;
+  document.getElementById("activoModelo").checked = active;
   if (select) $("#modificar_modelo_modal").modal("show");
   else alert("Seleccione un modelo para modificar");
 }
 
 /* 
-    SECCION LISTAR MODELOS PARA TRABAJO ACTUAL
-  
-        Descripcion:
-        En esta seccion se encuentran las funciones que cargan el select 
-        de modelo de trabajo actual.
-  
-        Incluye:
-        cargar_modelos_trabajo_actual
-        error_cargar_models_trabajo_actual
-*/
+	    SECCION LISTAR MODELOS PARA TRABAJO ACTUAL
+	  
+		Descripcion:
+		En esta seccion se encuentran las funciones que cargan el select 
+		de modelo de trabajo actual.
+	  
+		Incluye:
+		cargar_modelos_trabajo_actual
+		error_cargar_models_trabajo_actual
+	*/
 
 if (document.getElementById("select_modelo_para_activar_trabajo"))
   consultar_api(
@@ -2374,7 +2432,7 @@ function cargar_modelos_trabajo_actual(json) {
 }
 
 function error_cargar_models_trabajo_actual(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 var entidades_list = [];
 var entidades_aux = {};
@@ -2437,7 +2495,7 @@ function cargar_sujetos_activos(json) {
 }
 
 function error_cargar_sujetos_activos(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 
 function verificarSeleccion(elemento) {
@@ -2570,7 +2628,7 @@ function cargar_posibles_entidades_modelo(json) {
 }
 
 function error_cargar_posibles_entidades_modelo(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 var entidad_selecciona_seccion_objetos_modal = undefined;
 
@@ -2626,10 +2684,10 @@ function verificar_seleccion_hijo_padre_entidades(elemento, lado) {
         document.getElementById(`li_ent_${lado}_${e.dataset.puro_id}`).style
           .display == "list-item"
       )
-        e.checked = elemento.checked;
-      var hijos2 = document.getElementsByClassName(
-        `hijo_entidad_de_${e.dataset.puro_id}_${lado}`
-      );
+        //e.checked = elemento.checked;
+        var hijos2 = document.getElementsByClassName(
+          `hijo_entidad_de_${e.dataset.puro_id}_${lado}`
+        );
       if (hijos2.length > 0) {
         verificar_seleccion_hijo_padre_entidades(e, lado);
       }
@@ -2852,12 +2910,12 @@ function extraer_datos_entidad() {
   return new_ent;
 }
 /* 
-    SECCION CREACION DE ENTIDADES ARBOL Y FORMULARIO
-        Descripcion:
-        En este fragmeto se pretende crear las funciones que llamen a la ventana modal
-        y todas las funciones que impliquen la creacion de las entidades que tienen los sujetos
-    
-*/
+	    SECCION CREACION DE ENTIDADES ARBOL Y FORMULARIO
+		Descripcion:
+		En este fragmeto se pretende crear las funciones que llamen a la ventana modal
+		y todas las funciones que impliquen la creacion de las entidades que tienen los sujetos
+	    
+	*/
 var idSeleccion;
 
 function abrirModalEntidad(id, nombre) {
@@ -2990,13 +3048,13 @@ function eliminar_metrica() {
 }
 
 /* 
-    SECCION SELECCION SUJETOS CARGAR LOS RECURSOS DE IMPLEMENTACION
-  
-        Descripcion:
-        Esta seccion incluye el envio de datos para las Escalas
-  
-        Incluye:
-*/
+	    SECCION SELECCION SUJETOS CARGAR LOS RECURSOS DE IMPLEMENTACION
+	  
+		Descripcion:
+		Esta seccion incluye el envio de datos para las Escalas
+	  
+		Incluye:
+	*/
 
 function agregar_recurso_implementacion() {
   $("#modal_recurso_implementacion_add").modal("show");
@@ -3123,17 +3181,17 @@ function mensaje_errorEnvioRI(err) {
 }
 
 /* 
-    SECCION CARGAR LAS RECURSOS IMPLEMENTACION
-  
-        Descripcion:
-        Esta seccion contiene las funciones 
-        de que carga los recursos de implementacion
-        en la pagina
-  
-        Incluye:
-        cargar_ri_table,
-        error_cargar_ri_table
-*/
+	    SECCION CARGAR LAS RECURSOS IMPLEMENTACION
+	  
+		Descripcion:
+		Esta seccion contiene las funciones 
+		de que carga los recursos de implementacion
+		en la pagina
+	  
+		Incluye:
+		cargar_ri_table,
+		error_cargar_ri_table
+	*/
 
 if (document.getElementById("tabla_recurso_implementacion"))
   consultar_api(
@@ -3147,11 +3205,11 @@ function cargar_ri_table(json) {
   json.forEach((es) => {
     res += "<tr>";
     res += `<td><input type="checkbox" name="ri_seleccionada" 
-                  value="${es.id}" data-name="${es.nombre}" 
-                  data-descripcion="${es.descripcion}" 
-                  data-tipo_dato_salida="${es.tipo_dato_salida}" 
-                  data-tipo_recurso="${es.tipo_recurso}" 
-                  data-activo="${es.activo}"></td>`;
+			  value="${es.id}" data-name="${es.nombre}" 
+			  data-descripcion="${es.descripcion}" 
+			  data-tipo_dato_salida="${es.tipo_dato_salida}" 
+			  data-tipo_recurso="${es.tipo_recurso}" 
+			  data-activo="${es.activo}"></td>`;
     res += `<td>${es.id}</td>`;
     res += `<td>${es.nombre}</td>`;
     res += `<td>${es.descripcion}</td>`;
@@ -3166,7 +3224,7 @@ function cargar_ri_table(json) {
 }
 
 function error_cargar_ri_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function add_Tipo_Recurso() {
@@ -3201,8 +3259,8 @@ if (document.getElementById("lista_sujetos_activos"))
   );
 
 /*
-Procesos Pre Reflexivos
-*/
+	Procesos Pre Reflexivos
+	*/
 
 if (document.getElementById("pagina_proceso")) {
   agregarProcesoPreReflexivo();
@@ -3266,7 +3324,6 @@ function cargar_select_flujo_datos(json) {
   seleccione.innerHTML = "Seleccione..";
   seleccione.value = "-6";
   ope.appendChild(seleccione);
-  console.log(json);
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
@@ -3293,7 +3350,6 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
   document.getElementById("input-descripcion-proceso-pre-reflexivo").value = "";
   document.getElementById("inicio_del_periodo").value = "";
   document.getElementById("fin_del_periodo").value = "";
-  document.getElementById("id_proceso_pre_reflexivo").value = "";
   document.getElementById("CategoriaEntidadesProcesos").selectedIndex = "0";
   document.getElementById("Aspectos_autoconsciencia").selectedIndex = "0";
   document.getElementById("tipo_comunicacion").selectedIndex = "0";
@@ -3323,7 +3379,6 @@ if (document.getElementById("lista_sujetos_activos_proceso"))
   );
 
 function cargar_sujetos_activos_procesos(json) {
-  console.log(json);
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   json.forEach((elemento) => {
@@ -3375,7 +3430,7 @@ function cargar_sujetos_activos_procesos(json) {
 }
 
 function error_cargar_sujetos_activos_procesos(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 var SujetoGuardarProceso = undefined;
 
@@ -3450,6 +3505,7 @@ function verificar_seleccion_sujeto_categoria_procesos(IdSujeto) {
   if (IdSujeto) {
     data = {
       systemID: IdSujeto,
+      types: 53,
     };
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
@@ -3461,7 +3517,6 @@ function verificar_seleccion_sujeto_categoria_procesos(IdSujeto) {
 }
 
 function cargar_posibles_entidades_proceso(json) {
-  console.log(json);
   var select = document.getElementById("Aspectos_autoconsciencia");
   select.innerHTML = "";
   var opt = document.createElement("option");
@@ -3586,7 +3641,7 @@ function cargar_posibles_entidades_modelo_proceso(json) {
 }
 
 function error_cargar_posibles_entidades_modelo_proceso(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 var objIdProcesos = undefined;
 var idObjeto = undefined;
@@ -3621,7 +3676,6 @@ function cargar_aspectos(elemento, lado) {
 }
 
 function cargar_propiedades_select(json) {
-  console.log(json);
   var ope = document.getElementById("proiedad_recoleccion");
   ope.innerHTML = "";
   var seleccione = document.createElement("option");
@@ -3641,7 +3695,7 @@ function error_cargar_propiedades_select(error) {
 }
 
 function error_cargar_aspectos_select(err) {
-  alert("Error al cargar los datos del modelo:" + err);
+  console.log("Error al cargar los datos del modelo:" + err);
 }
 $("#Aspectos_autoconsciencia").change(function () {
   var limpiar = document.getElementById(
@@ -3896,6 +3950,9 @@ function cargar_activos_umbrales() {
 function cerrar_modal_activos() {
   $("#modal_activos_procesos").modal("hide");
 }
+function cerrar_modal_activos_reflexivos() {
+  $("#modal_activos_procesos_reflexivos").modal("hide");
+}
 
 function guardarAccionUmbral() {
   var data = {
@@ -3930,6 +3987,7 @@ function mensajeExitosoAgregarAccionesUmbrales(json) {
 }
 
 function cargar_accion_table_modificar(json) {
+  console.log(json);
   var templeate = document
     .getElementById("templeate_tabla_accion")
     .content.cloneNode(true);
@@ -4067,24 +4125,30 @@ function guardarModificacionAccionesUmbrales() {
   $("#modal_modificar_accion_umbral").modal("hide");
   $("#modal_activos_procesos").modal("show");
 }
-
+var mapeoGuardardado = false;
 function abrirModalMapeoParametros() {
-  document.getElementById("tabla_mapeo_parametros").innerHTML = "";
-  var id = document.getElementById("recurso").value;
-  if (id) {
-    post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
-      {
-        id: id,
-      },
-      cargar_modal_mapeo_parametros,
-      (res) => {
-        console.log(res);
-      }
-    );
+  if (mapeoGuardardado == true) {
     $("#modal_mapeo_parametros").modal("show");
+    document.getElementById("guardar_mapeo_pre_reflexivos").disabled = true;
   } else {
-    alert("Debe seleccionar un recurso");
+    document.getElementById("guardar_mapeo_pre_reflexivos").disabled = false;
+    document.getElementById("tabla_mapeo_parametros").innerHTML = "";
+    var id = document.getElementById("recurso").value;
+    if (id) {
+      post_api(
+        "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+        {
+          id: id,
+        },
+        cargar_modal_mapeo_parametros,
+        (res) => {
+          console.log(res);
+        }
+      );
+      $("#modal_mapeo_parametros").modal("show");
+    } else {
+      alert("Debe seleccionar un recurso");
+    }
   }
 }
 
@@ -4098,7 +4162,6 @@ function cargar_modal_mapeo_parametros(json) {
     if (element._active) {
       var tr = document.createElement("tr");
       tr.setAttribute("name", "tr_fila_parametros");
-      console.log("llega al tr xd");
       var id = document.createElement("td");
       id.id = "id_fila_parametros";
       tr.appendChild(id);
@@ -4117,31 +4180,50 @@ function cargar_modal_mapeo_parametros(json) {
       var argumentoEntrada = document.createElement("td");
       argumentoEntrada.id = "argumento_entrada_fila_parametros";
       tr.appendChild(argumentoEntrada);
+      var proceso = document.createElement("td");
+      proceso.id = "proceso_seleccion_mapeo";
+      tr.appendChild(proceso);
       id.innerHTML = element._ordinal;
       nombre.innerHTML = element._name;
       tipoDato.innerHTML = element._dataType[1];
       tipoDato.dataset.id = element._dataType[0];
       opcional.innerHTML = element._optional;
+      //
+
       var select = document.createElement("select");
       select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select`;
       select.dataset.ordinal = element._ordinal;
       select.style.border = "transparent";
-      select.setAttribute("onChange", `cargar_metricas_tipo_mapeo(this);`);
+      select.setAttribute("onChange", `cargar_metricas_procesos(this);`);
       var optionSeleccione = document.createElement("option");
       optionSeleccione.value = "-6";
-      optionSeleccione.innerHTML = "SELECCIONE..";
+      optionSeleccione.innerHTML = "Seleccione..";
       select.appendChild(optionSeleccione);
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
+      selectMetricas.dataset.ordinal = element._ordinal;
       selectMetricas.id = `tipo_argumento_select_${element._ordinal}`;
+      selectMetricas.name = "metrica_select";
       selectMetricas.appendChild(optionSeleccione.cloneNode(true));
       argumentoEntrada.appendChild(selectMetricas);
       tipoMapeo.appendChild(select);
+      selectMetricas.setAttribute(
+        "onChange",
+        `cargar_metricas_procesos(this);`
+      );
       tbody.appendChild(tr);
+      var selectProceso = document.createElement("select");
+      selectProceso.name = `proceso_seleccion`;
+      selectProceso.id = `proceso_seleccion_${element._ordinal}`;
+      selectProceso.style.border = "transparent";
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "Seleccione..";
+      selectProceso.appendChild(optionSeleccion);
+      proceso.appendChild(selectProceso);
     }
   });
-
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
     {
@@ -4156,7 +4238,6 @@ function cargar_modal_mapeo_parametros(json) {
 
 function cargar_select_mapeo_tipo(json) {
   var select = document.getElementsByName("tipo_mapeo_select");
-  console.log(select);
   Array.from(select).forEach((element) => {
     json.forEach((ele) => {
       var option = document.createElement("option");
@@ -4167,20 +4248,57 @@ function cargar_select_mapeo_tipo(json) {
   });
 }
 
-function cargar_metricas_tipo_mapeo(elemento) {
-  data = {
-    aspectoId: document.getElementById("Aspectos_autoconsciencia").value,
-    metricaId: elemento.value,
-  };
-  post_api(
-    "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
-    data,
-    cargar_select_argumento_entrada,
-    (err) => {
-      alert(err);
-    }
+function llenar_procesos_mapeo(json) {
+  var select = document.getElementsByName("proceso_seleccion");
+  Array.from(select).forEach((element) => {
+    json.forEach((ele) => {
+      var nombreF = ele.nombre + "-" + ele.descripcion;
+      var option = document.createElement("option");
+      option.value = ele.id;
+      option.innerHTML = nombreF;
+      element.appendChild(option);
+    });
+  });
+}
+function cargar_metricas_procesos(elemento) {
+  var selectProceso = document.getElementById(
+    `proceso_seleccion_${elemento.dataset.ordinal}`
   );
-  OrdinalGeneral = elemento.dataset.ordinal;
+  var selectTipo = document.getElementById(
+    `tipo_mapeo_select_${elemento.dataset.ordinal}`
+  );
+  var selectMetricas = document.getElementById(
+    `tipo_argumento_select_${elemento.dataset.ordinal}`
+  );
+  if (elemento.name == "metrica_select") {
+    data = {
+      aspectoId: document.getElementById("Aspectos_autoconsciencia").value,
+      metricaId: elemento.value,
+    };
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      data,
+      llenar_procesos_mapeo,
+      (err) => {
+        alert(err);
+      }
+    );
+    OrdinalGeneral = elemento.dataset.ordinal;
+  } else {
+    OrdinalGeneral = elemento.dataset.ordinal;
+    data = {
+      tipo_metrica: elemento.value,
+      aspectoId: document.getElementById("Aspectos_autoconsciencia").value,
+    };
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      data,
+      cargar_select_argumento_entrada,
+      (err) => {
+        alert(err);
+      }
+    );
+  }
 }
 var OrdinalGeneral = undefined;
 
@@ -4203,7 +4321,6 @@ function agregarAccionesUmbrales() {
   document.getElementById("descripcion_accion_umbral").value = "";
 }
 function cargar_accion_table(json) {
-  console.log(json);
   var templeate = document
     .getElementById("templeate_tabla_accion")
     .content.cloneNode(true);
@@ -4226,8 +4343,8 @@ function cargar_accion_table(json) {
     dato.innerHTML = um.id;
     fila.appendChild(dato);
     dato = document.createElement("td");
-    dato.innerHTML = um.name;
-    fila.appendChild(dato);
+    //dato.innerHTML = um.name;
+    //fila.appendChild(dato);
     dato = document.createElement("td");
     dato.innerHTML = um.description;
     fila.appendChild(dato);
@@ -4247,28 +4364,28 @@ function cargar_accion_table(json) {
   seccion.appendChild(templeate);
 }
 /*function cargar_accion_table(json) {
-  console.log(json);
-  res = "";
-  json.forEach((as) => {
-    res += "<tr>";
-    res += `<td><input type="radio" name="accion_seleccionada" value="${
-      as.id
-    }" data-name="${as.nombre}" data-descripcion="${
-      as.descripcion
-    }" data-activo="${as.activo == "true"}"></td>`;
-    res += `<td>${as.id}</td>`;
-    res += `<td>${as.nombre}</td>`;
-    res += `<td>${as.descripcion}</td>`;
-    if (as.activo == "true")
-      res += `<td><input type="checkbox" disabled checked></td>`;
-    else res += `<td><input type="checkbox" disabled></td>`;
-    res += "</tr>";
-  });
-  document.getElementById("tabla_accion").innerHTML = res;
-}*/
+	  console.log(json);
+	  res = "";
+	  json.forEach((as) => {
+	    res += "<tr>";
+	    res += `<td><input type="radio" name="accion_seleccionada" value="${
+	      as.id
+	    }" data-name="${as.nombre}" data-descripcion="${
+	      as.descripcion
+	    }" data-activo="${as.activo == "true"}"></td>`;
+	    res += `<td>${as.id}</td>`;
+	    res += `<td>${as.nombre}</td>`;
+	    res += `<td>${as.descripcion}</td>`;
+	    if (as.activo == "true")
+	      res += `<td><input type="checkbox" disabled checked></td>`;
+	    else res += `<td><input type="checkbox" disabled></td>`;
+	    res += "</tr>";
+	  });
+	  document.getElementById("tabla_accion").innerHTML = res;
+	}*/
 
 function error_cargar_accion_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function SeleccionaRecursoSelect(element) {
@@ -4317,7 +4434,7 @@ function guardar_procesos_pre_reflexivos() {
     .value;
   var hora_ejecucion = document.getElementById("hora_ejecucion").value;
   var tipo_ejecucion = document.getElementById("tipo_ejecucion").value;
-  if (!!nombre && !!descripcion && aspId != "-6") {
+  if (!!descripcion && aspId != "-6") {
     data = {
       nombre: nombre,
       descripcion: descripcion,
@@ -4383,9 +4500,13 @@ function get_propiedades_procesos(id) {
 }
 function procesos_pre_reflexivos_guardados_exito(json) {
   document.getElementById("id_proceso_pre_reflexivo").value = json.insertId;
+  document.getElementById("nombre_proceso_pre_reflexivo").value =
+    "PID" + json.insertId;
 }
 function procesos_reflexivos_guardados_exito(json) {
   document.getElementById("id_proceso_reflexivo").value = json.insertId;
+  document.getElementById("nombre_proceso_reflexivo_id").value =
+    "PID" + json.insertId;
 }
 
 function guardar_modelos_metodos() {
@@ -4433,17 +4554,17 @@ function guardar_modelos_metodos() {
     );
 
     /*var metodo = document.getElementById("nav-recoleccion-tab");
-    var modelo = document.getElementById("nav-modelo-tab");
-    modelo.classList.remove("active");
-    metodo.classList.add("active");
-    modelo.setAttribute("aria-selected", "false");
-    metodo.setAttribute("aria-selected", "true");
-    var metodo_ventana = document.getElementById("nav-recoleccion");
-    var modelo_ventana = document.getElementById("nav-modelo");
-    metodo_ventana.classList.add("active");
-    metodo_ventana.classList.add("show");
-    modelo_ventana.classList.remove("active");
-    modelo_ventana.classList.remove("show");*/
+	    var modelo = document.getElementById("nav-modelo-tab");
+	    modelo.classList.remove("active");
+	    metodo.classList.add("active");
+	    modelo.setAttribute("aria-selected", "false");
+	    metodo.setAttribute("aria-selected", "true");
+	    var metodo_ventana = document.getElementById("nav-recoleccion");
+	    var modelo_ventana = document.getElementById("nav-modelo");
+	    metodo_ventana.classList.add("active");
+	    metodo_ventana.classList.add("show");
+	    modelo_ventana.classList.remove("active");
+	    modelo_ventana.classList.remove("show");*/
     return true;
   } else {
     return false;
@@ -4452,7 +4573,6 @@ function guardar_modelos_metodos() {
 var modelo_analisis_pre_reflexivos = undefined;
 var metodo_recoleccion = undefined;
 function mensajeCorrectoGuardarMetodos(json) {
-  console.log(json);
   modelo_analisis_pre_reflexivos = json[1];
   metodo_recoleccion = json[0];
   document.getElementById("tipo_comunicacion").disabled = true;
@@ -4575,7 +4695,7 @@ function mensaje_exitosBorrar_pre_reflexivo(json) {
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
-  setTimeout(cargar_procesos_pre_reflexivos_table, 200);
+  //setTimeout(cargar_procesos_pre_reflexivos_table, 200);
 }
 
 function mensaje_errorBorrar_pre_reflexivo(error) {
@@ -4601,11 +4721,19 @@ function Guagar_nuevo_Mapeo() {
       opcional: element.querySelector("td#opcional_fila_parametros").innerHTML,
       tipoMapeo: element.querySelector("td#tipo_mapeo_fila_parametros select")
         .value,
+      proceso: element.querySelector("td#proceso_seleccion_mapeo select").value,
       met_id: element.querySelector(
         "td#argumento_entrada_fila_parametros select"
       ).value,
       mea_id: mea_id_rec[1],
     };
+    element.querySelector(
+      "td#tipo_mapeo_fila_parametros select"
+    ).disabled = true;
+    element.querySelector(
+      "td#argumento_entrada_fila_parametros select"
+    ).disabled = true;
+    element.querySelector("td#proceso_seleccion_mapeo select").disabled = true;
     aux.push(aux2);
   });
 
@@ -4618,6 +4746,7 @@ function Guagar_nuevo_Mapeo() {
 }
 
 function mensaje_correcto_envio_mapeo(json) {
+  mapeoGuardardado = true;
   $("#modal_mapeo_parametros").modal("hide");
 }
 
@@ -4755,7 +4884,7 @@ function cargar_sujetos_activos_procesos_reflexivos(json) {
 }
 
 function error_cargar_sujetos_activos_procesos_reflexivos(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 var sujetoGuardarproceso_reflexivo = undefined;
 
@@ -4967,7 +5096,7 @@ function cargar_posibles_entidades_modelo_proceso_reflexivo(json) {
 }
 
 function error_cargar_posibles_entidades_modelo_proceso_reflexivo(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 var obj_Id_reflexivos = undefined;
 
@@ -5014,7 +5143,7 @@ function cargar_aspectos_select_reflexivos(json) {
 }
 
 function error_cargar_aspectos_select_reflexivos(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function guardar_procesos_reflexivos() {
@@ -5031,7 +5160,7 @@ function guardar_procesos_reflexivos() {
     .value;
   var hora_ejecucion = document.getElementById("hora_ejecucion_ref").value;
   var tipo_ejecucion = document.getElementById("tipo_ejecucion_ref").value;
-  if (!!nombre && !!descripcion && !!sujetoId && aspId != "-6") {
+  if (!!descripcion && !!sujetoId && aspId != "-6") {
     data = {
       nombre: nombre,
       descripcion: descripcion,
@@ -5114,6 +5243,7 @@ function cargar_procesos_reflexivos_table(json) {
       pro.activo == "true"
     }"></td>`;
     res += `<td>${pro.nombre}</td>`;
+    res += `<td>${pro.descripcion}</td>`;
     res += `<td>${pro.sujeto}</td>`;
     res += `<td>${pro.aspecto}</td>`;
     res += `<td>${pro.inicio}</td>`;
@@ -5147,11 +5277,13 @@ function guardar_proceso_pre_reflexivo_boton() {
   if (cont_paso == 1) {
     if (guardar_procesos_pre_reflexivos()) {
       document
-        .getElementById("btn-section-2")
-        .classList.replace("d-none", "d-inline");
+        .getElementById("informacion_general_btn")
+        .classList.replace("btn-secondary", "btn-link");
+      var btn = document.getElementById("btn-section-2");
+      btn.classList.replace("d-none", "d-inline");
       document.getElementById(
         "btn-guardar"
-      ).innerHTML = `Guardar (Metodos modelos)`;
+      ).innerHTML = `Guardar (Métodos de aprendizaje y razonamiento)`;
       $("#guardar_informacion_general.collapse").collapse("hide");
       $("#navegador_metodos_modelos.collapse").collapse("show");
       cont_paso++;
@@ -5161,8 +5293,10 @@ function guardar_proceso_pre_reflexivo_boton() {
   } else if (cont_paso == 2) {
     if (guardar_modelos_metodos()) {
       document
-        .getElementById("btn-section-3")
-        .classList.replace("d-none", "d-inline");
+        .getElementById("metodos_modelos_btn")
+        .classList.replace("btn-secondary", "btn-link");
+      var btn = document.getElementById("btn-section-3");
+      btn.classList.replace("d-none", "d-inline");
       document.getElementById("btn-guardar").innerHTML = `Salir`;
       cont_paso++;
     } else {
@@ -5195,8 +5329,10 @@ function guardar_proceso_reflexivo_boton() {
   if (cont_paso_reflexivos == 1) {
     if (guardar_procesos_reflexivos()) {
       document
-        .getElementById("btn-section-reflexivos")
-        .classList.replace("d-none", "d-inline");
+        .getElementById("btn_informacion_general")
+        .classList.replace("btn-secondary", "btn-link");
+      var btn = document.getElementById("btn-section-reflexivos");
+      btn.classList.replace("d-none", "d-inline");
       consultar_api(
         "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
         cargar_select_criterios_metodos_reflexivos,
@@ -5204,7 +5340,7 @@ function guardar_proceso_reflexivo_boton() {
       );
       document.getElementById(
         "btn-guardar-reflexivos"
-      ).innerHTML = `Guardar (Metodos modelos)`;
+      ).innerHTML = `Guardar (Métodos de aprendizaje y razonamiento)`;
       $("#guardar_informacion_general_reflexivos.collapse").collapse("hide");
       $("#navegador_metodos_modelos_reflexivos.collapse").collapse("show");
       cont_paso_reflexivos++;
@@ -5214,8 +5350,10 @@ function guardar_proceso_reflexivo_boton() {
   } else if (cont_paso_reflexivos == 2) {
     if (guardar_modelos_metodos_reflexivos()) {
       document
-        .getElementById("btn-guardar-metodo")
-        .classList.replace("d-none", "d-inline");
+        .getElementById("btn_metodos_modelos")
+        .classList.replace("btn-secondary", "btn-link");
+      var btn = document.getElementById("btn-guardar-metodo");
+      btn.classList.replace("d-none", "d-inline");
       document.getElementById("btn-guardar-reflexivos").innerHTML = `Salir`;
       cont_paso_reflexivos++;
     } else {
@@ -5242,13 +5380,16 @@ function guardar_modelos_metodos_reflexivos() {
     "tipo_recurso_modelos_reflexivos"
   ).value;
   var proceso_id = document.getElementById("id_proceso_reflexivo").value;
+  console.log(inicio_periodo);
   if (
     tipo_recurso_metodo != "-6" &&
     criterioD != "-6" &&
     metricaIndirecta != "-6" &&
     metricaIndicador != "-6" &&
     tipo_recurso_modelos != "-6" &&
-    !!proceso_id
+    !!proceso_id &&
+    inicio_periodo != "" &&
+    fin_periodo != ""
   ) {
     var datos = {
       proceso_id: proceso_id,
@@ -5510,23 +5651,29 @@ function cargar_select_recurso_proceso_modelos(json) {
     ope.innerHTML;
 }
 //MAPEO METODOS ABRE MODAL Y TODO
+var guardarMapeoMetodos = false;
 function abrirMapeoParametros_metodos() {
-  document.getElementById("tabla_mapeo_parametros_metodos").innerHTML = "";
-  var id = document.getElementById("recurso_reflexivos").value;
-  if (id) {
-    post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
-      {
-        id: id,
-      },
-      cargar_modal_mapeo_parametros_metodos,
-      (res) => {
-        console.log(res);
-      }
-    );
+  if (guardarMapeoMetodos == true) {
     $("#modal_mapeo_parametros_metodos").modal("show");
+    document.getElementById("guardaMapeo_metodosButton").disabled = true;
   } else {
-    alert("Debe seleccionar un recurso");
+    document.getElementById("tabla_mapeo_parametros_metodos").innerHTML = "";
+    var id = document.getElementById("recurso_reflexivos").value;
+    if (id) {
+      post_api(
+        "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+        {
+          id: id,
+        },
+        cargar_modal_mapeo_parametros_metodos,
+        (res) => {
+          console.log(res);
+        }
+      );
+      $("#modal_mapeo_parametros_metodos").modal("show");
+    } else {
+      alert("Debe seleccionar un recurso");
+    }
   }
 }
 
@@ -5560,11 +5707,29 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       var argumentoEntrada = document.createElement("td");
       argumentoEntrada.id = "argumento_entrada_fila_parametros_metodos";
       tr.appendChild(argumentoEntrada);
+      var procesos = document.createElement("td");
+      procesos.id = "procesos_select_mapeos";
+      tr.appendChild(procesos);
       id.innerHTML = element._ordinal;
       nombre.innerHTML = element._name;
       tipoDato.innerHTML = element._dataType[1];
       tipoDato.dataset.id = element._dataType[0];
       opcional.innerHTML = element._optional;
+
+      var selectProcesos = document.createElement("select");
+      selectProcesos.name = `procesos_mapeo_select`;
+      selectProcesos.id = `proceso_select_metodo_${element._ordinal}`;
+      selectProcesos.dataset.ordinal = element._ordinal;
+      selectProcesos.style.border = "transparent";
+      selectProcesos.setAttribute(
+        "onChange",
+        "guardar_id_procesos_mapeo_metodos(this);"
+      );
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "SELECCIONE..";
+      selectProcesos.appendChild(optionSeleccion);
+      procesos.appendChild(selectProcesos);
       var select = document.createElement("select");
       select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select_metodos`;
@@ -5580,7 +5745,13 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       select.appendChild(optionSeleccione);
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
+      selectMetricas.name = `metrica_select`;
+      selectMetricas.dataset.ordinal = element._ordinal;
       selectMetricas.id = `tipo_argumento_select_metodo_${element._ordinal}`;
+      selectMetricas.setAttribute(
+        "onChange",
+        `cargar_metricas_tipo_mapeo_metodo(this);`
+      );
       selectMetricas.appendChild(optionSeleccione.cloneNode(true));
       argumentoEntrada.appendChild(selectMetricas);
       tipoMapeo.appendChild(select);
@@ -5597,6 +5768,21 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       alert(err);
     }
   );
+}
+
+var global_direct_metric = { ordinal: undefined, proces_id: undefined };
+function guardar_id_procesos_mapeo_metodos(element) {
+  var METRICA_DIRECTA = 10;
+  var ordinal = element.dataset.ordinal;
+  var tipo_mapeo_id = `tipo_mapeo_select_${ordinal}`;
+  if (document.getElementById(tipo_mapeo_id).value == METRICA_DIRECTA) {
+    var proces_id = element.value;
+    global_direct_metric.ordinal = ordinal;
+    global_direct_metric.proces_id = proces_id;
+  } else if (global_direct_metric.ordinal == ordinal) {
+    global_direct_metric.ordinal = undefined;
+    global_direct_metric.proces_id = undefined;
+  }
 }
 
 function cargar_select_mapeo_tipo_metodos(json) {
@@ -5620,7 +5806,17 @@ function cargar_select_mapeo_tipo_metodos(json) {
     }
   );
 }
-
+function cargar_select_procesos_mapeo_metodos(json) {
+  var select = document.getElementsByName("procesos_mapeo_select");
+  Array.from(select).forEach((element) => {
+    json.forEach((ele) => {
+      var option = document.createElement("option");
+      option.value = ele.id;
+      option.innerHTML = ele.descripcion;
+      element.appendChild(option);
+    });
+  });
+}
 function cargar_select_mapeo_tipo_metodos_2(json) {
   var select = document.getElementsByName("tipo_mapeo_select_metodos");
   Array.from(select).forEach((element) => {
@@ -5633,16 +5829,59 @@ function cargar_select_mapeo_tipo_metodos_2(json) {
   });
 }
 
+var ordinaGeneralMetodos = undefined;
 function cargar_metricas_tipo_mapeo_metodo(elemento) {
-  if (elemento.value == 24) {
-    cargar_select_mapeo_variables_simulacion();
-
-    OrdinalGeneral = elemento.dataset.ordinal;
-  } else {
+  var VARIABLE_SIMULACION = 24;
+  var METADATA = 25;
+  ordinaGeneralMetodos = elemento.dataset.ordinal;
+  if (elemento.name == "metrica_select") {
     data = {
-      aspectoId: document.getElementById("Aspectos_autoconsciencia_reflexivos")
-        .value,
       metricaId: elemento.value,
+    };
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      data,
+      llenar_procesos_metodo_reflexivo,
+      (err) => {
+        alert(err);
+      }
+    );
+  } else {
+    if (elemento.value == METADATA || elemento.value == VARIABLE_SIMULACION) {
+      var select_prcess_id = `proceso_select_metodo_${ordinaGeneralMetodos}`;
+      var select = document.getElementById(select_prcess_id);
+      select.innerHTML = "";
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "SELECCIONE..";
+      select.appendChild(optionSeleccion);
+      select.disabled = true;
+    } else {
+      var select_prcess_id = `proceso_select_metodo_${ordinaGeneralMetodos}`;
+      var select = document.getElementById(select_prcess_id);
+      select.innerHTML = "";
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "SELECCIONE..";
+      select.appendChild(optionSeleccion);
+      select.disabled = false;
+    }
+    if (
+      elemento.value == METADATA &&
+      global_direct_metric.proces_id == undefined
+    ) {
+      alert('Debe seleccionar una metrica "Directa" en primera instancia');
+      return;
+    } // else if(global_direct_metric.ordinal) {
+    //var tipo_mapeo_id = `tipo_mapeo_select_${global_direct_metric.ordinal}`;
+    //document.getElementById(tipo_mapeo_id).disabled = true;
+    //}
+
+    var proceso_id = document.getElementById("id_proceso_reflexivo").value;
+    data = {
+      tipo_metrica: elemento.value,
+      proceso: proceso_id,
+      procces_of_direct_metric: global_direct_metric.proces_id,
     };
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
@@ -5652,13 +5891,28 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
         alert(err);
       }
     );
-    OrdinalGeneral = elemento.dataset.ordinal;
   }
 }
 
+function llenar_procesos_metodo_reflexivo(json) {
+  var select_prcess_id = `proceso_select_metodo_${ordinaGeneralMetodos}`;
+  var select = document.getElementById(select_prcess_id);
+  select.innerHTML = "";
+  var optionSeleccion = document.createElement("option");
+  optionSeleccion.value = "-6";
+  optionSeleccion.innerHTML = "SELECCIONE..";
+  select.appendChild(optionSeleccion);
+  json.forEach((ele) => {
+    var nombreF = ele.nombre + "-" + ele.descripcion;
+    var option = document.createElement("option");
+    option.value = ele.id;
+    option.innerHTML = nombreF;
+    select.appendChild(option);
+  });
+}
 function cargar_select_argumento_entrada_metodos(json) {
   var select = document.getElementById(
-    `tipo_argumento_select_metodo_${OrdinalGeneral}`
+    `tipo_argumento_select_metodo_${ordinaGeneralMetodos}`
   );
   select.innerHTML = "<option value='-6'>Seleccione</option>";
   json.forEach((ele) => {
@@ -5668,7 +5922,6 @@ function cargar_select_argumento_entrada_metodos(json) {
     select.appendChild(option);
   });
 }
-
 function cargar_select_mapeo_variables_simulacion() {
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable",
@@ -5693,6 +5946,30 @@ function cargar_variables_simulacion_select_modal_mapeo(json) {
   });
 }
 
+function cargar_select_mapeo_metados() {
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_metadata",
+    { mea_id: metodo_calculo },
+    cargar_metadatos_select_modal_mapeo,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
+
+function cargar_metadatos_select_modal_mapeo(json) {
+  var select = document.getElementById(
+    `tipo_argumento_select_metodo_${OrdinalGeneral}`
+  );
+  select.innerHTML = "<option value='-6'>Seleccione</option>";
+  json.forEach((ele) => {
+    var option = document.createElement("option");
+    option.value = ele.id;
+    option.innerHTML = ele.name;
+    select.appendChild(option);
+  });
+}
+
 function error_cargar_select_mapeo_variables_simulacion(error) {
   console.log(error);
 }
@@ -5704,6 +5981,7 @@ function Guadar_nuevo_mapeo_metodos() {
     .value.split("-");
   Array.from(nombreP).forEach((element) => {
     var aux2 = {
+      proceso: element.querySelector("td#procesos_select_mapeos select").value,
       nombre: element.querySelector("td#nombre_fila_parametros_metodos")
         .innerHTML,
       par_ordinal: element.querySelector("td#id_fila_parametros_metodos")
@@ -5722,6 +6000,13 @@ function Guadar_nuevo_mapeo_metodos() {
       mea_id: mea_id_rec[0],
       vs_id: undefined,
     };
+    element.querySelector(
+      "td#tipo_mapeo_fila_parametros_metodos select"
+    ).disabled = true;
+    element.querySelector(
+      "td#argumento_entrada_fila_parametros_metodos select"
+    ).disabled = true;
+    element.querySelector("td#procesos_select_mapeos select").disabled = true;
     aux.push(aux2);
   });
   console.log(aux[0].par_ordinal);
@@ -5731,6 +6016,12 @@ function Guadar_nuevo_mapeo_metodos() {
         .value == 24
     ) {
       aux[i].vs_id = aux[i].met_id;
+      aux[i].met_id = undefined;
+    } else if (
+      document.getElementById("tipo_mapeo_select_" + aux[i].par_ordinal)
+        .value == 25
+    ) {
+      aux[i].data_id = aux[i].met_id;
       aux[i].met_id = undefined;
     }
   }
@@ -5748,27 +6039,34 @@ function cancelar_mapeo_parametros_metodos() {
   $("#modal_mapeo_parametros_metodos").modal("hide");
 }
 function mensaje_correcto_envio_mapeo_metodos() {
+  guardarMapeoMetodos = true;
+  document.getElementById("guardaMapeo_modelosButton").disabled = true;
   $("#modal_mapeo_parametros_metodos").modal("hide");
 }
 //Mapeo Parametros Modelos
-
+var guardarMapeoModelos = false;
 function abrirMapeoParametros_modelos() {
-  document.getElementById("tabla_mapeo_parametros_modelos").innerHTML = "";
-  var id = document.getElementById("recurso_modelos_reflexivos").value;
-  if (id) {
-    post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
-      {
-        id: id,
-      },
-      cargar_modal_mapeo_parametros_modelos,
-      (res) => {
-        console.log(res);
-      }
-    );
+  if (guardarMapeoModelos == true) {
     $("#modal_mapeo_parametros_modelos").modal("show");
+    document.getElementById("guardar_mapeo_buttom").disabled = true;
   } else {
-    alert("Debe seleccionar un recurso");
+    document.getElementById("tabla_mapeo_parametros_modelos").innerHTML = "";
+    var id = document.getElementById("recurso_modelos_reflexivos").value;
+    if (id) {
+      post_api(
+        "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+        {
+          id: id,
+        },
+        cargar_modal_mapeo_parametros_modelos,
+        (res) => {
+          console.log(res);
+        }
+      );
+      $("#modal_mapeo_parametros_modelos").modal("show");
+    } else {
+      alert("Debe seleccionar un recurso");
+    }
   }
 }
 
@@ -5783,6 +6081,7 @@ function cargar_modal_mapeo_parametros_modelos(json) {
   json._containsParameter.forEach((element) => {
     if (element._active) {
       var tr = document.createElement("tr");
+      tr.classList.add("model");
       tr.setAttribute("name", "tr_fila_parametros");
       var id = document.createElement("td");
       id.id = "id_fila_parametros_modelos";
@@ -5802,11 +6101,26 @@ function cargar_modal_mapeo_parametros_modelos(json) {
       var argumentoEntrada = document.createElement("td");
       argumentoEntrada.id = "argumento_entrada_fila_parametros_modelos";
       tr.appendChild(argumentoEntrada);
+      var proceso = document.createElement("td");
+      proceso.id = "opcional_proceso_mapeo";
+      tr.appendChild(proceso);
       id.innerHTML = element._ordinal;
       nombre.innerHTML = element._name;
       tipoDato.innerHTML = element._dataType[1];
       tipoDato.dataset.id = element._dataType[0];
       opcional.innerHTML = element._optional;
+
+      var select_procesos = document.createElement("select");
+      select_procesos.name = `proceso_select_modelos`;
+      select_procesos.id = `proceso_select_${element._ordinal}`;
+      select_procesos.dataset.ordinal = element._ordinal;
+      select_procesos.style.border = "transparent";
+      var optionSeleccion = document.createElement("option");
+      optionSeleccion.value = "-6";
+      optionSeleccion.innerHTML = "SELECCIONE..";
+      select_procesos.appendChild(optionSeleccion);
+      proceso.appendChild(select_procesos);
+
       var select = document.createElement("select");
       select.id = `tipo_mapeo_select_${element._ordinal}`;
       select.name = `tipo_mapeo_select_modelos`;
@@ -5823,7 +6137,13 @@ function cargar_modal_mapeo_parametros_modelos(json) {
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
       selectMetricas.id = `tipo_argumento_select_modelo_${element._ordinal}`;
+      selectMetricas.name = "metrica_select_reflexivos";
+      selectMetricas.dataset.ordinal = element._ordinal;
       selectMetricas.appendChild(optionSeleccione.cloneNode(true));
+      selectMetricas.setAttribute(
+        "onChange",
+        `cargar_metricas_tipo_mapeo_modelo(this);`
+      );
       argumentoEntrada.appendChild(selectMetricas);
       tipoMapeo.appendChild(select);
       tbody.appendChild(tr);
@@ -5853,26 +6173,59 @@ function cargar_select_mapeo_tipo_modelos(json) {
   });
 }
 
+var ordinalGeneralReflexivos = undefined;
 function cargar_metricas_tipo_mapeo_modelo(elemento) {
-  data = {
-    aspectoId: document.getElementById("Aspectos_autoconsciencia_reflexivos")
-      .value,
-    metricaId: elemento.value,
-  };
-  post_api(
-    "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
-    data,
-    cargar_select_argumento_entrada_modelos,
-    (err) => {
-      alert(err);
-    }
+  ordinalGeneralReflexivos = elemento.dataset.ordinal;
+  var selectMetricas = document.getElementById(
+    `tipo_argumento_select_modelo_${elemento.dataset.ordinal}`
   );
-  OrdinalGeneral = elemento.dataset.ordinal;
+  var selectTipo = document.getElementById(
+    `tipo_mapeo_select_${elemento.dataset.ordinal}`
+  );
+  if (elemento.name == "metrica_select_reflexivos") {
+    data = {
+      metricaId: elemento.value,
+    };
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      data,
+      cargar_select_procesos_mapeo_reflexivos,
+      (err) => {
+        alert(err);
+      }
+    );
+  } else {
+    data = { tipo_metrica: elemento.value };
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      data,
+      cargar_select_argumento_entrada_modelos,
+      (err) => {
+        alert(err);
+      }
+    );
+  }
 }
-
+function cargar_select_procesos_mapeo_reflexivos(json) {
+  var select_prcess_id = `proceso_select_${ordinalGeneralReflexivos}`;
+  var select = document.getElementById(select_prcess_id);
+  select.innerHTML = "";
+  var optionSeleccion = document.createElement("option");
+  optionSeleccion.value = "-6";
+  optionSeleccion.innerHTML = "SELECCIONE..";
+  select.appendChild(optionSeleccion);
+  json.forEach((ele) => {
+    var nombreF = ele.nombre + "-" + ele.descripcion;
+    var option = document.createElement("option");
+    option.value = ele.id;
+    option.innerHTML = nombreF;
+    select.appendChild(option);
+  });
+}
 function cargar_select_argumento_entrada_modelos(json) {
+  console.log(json);
   var select = document.getElementById(
-    `tipo_argumento_select_modelo_${OrdinalGeneral}`
+    `tipo_argumento_select_modelo_${ordinalGeneralReflexivos}`
   );
   select.innerHTML = "<option value='-6'>Seleccione</option>";
   json.forEach((ele) => {
@@ -5883,13 +6236,14 @@ function cargar_select_argumento_entrada_modelos(json) {
   });
 }
 function Guadar_nuevo_mapeo_modelos() {
-  var nombreP = document.getElementsByName("tr_fila_parametros");
+  var nombreP = document.querySelectorAll("[name=tr_fila_parametros].model");
   var aux = [];
   var mea_id_rec = document
     .getElementById("id_metodo_aprendizaje_modelos")
     .value.split("-");
   Array.from(nombreP).forEach((element) => {
     var aux2 = {
+      proceso: element.querySelector("td#opcional_proceso_mapeo select").value,
       nombre: element.querySelector("td#nombre_fila_parametros_modelos")
         .innerHTML,
       par_ordinal: element.querySelector("td#id_fila_parametros_modelos")
@@ -5907,6 +6261,13 @@ function Guadar_nuevo_mapeo_modelos() {
       ).value,
       mea_id: mea_id_rec[1],
     };
+    element.querySelector(
+      "td#tipo_mapeo_fila_parametros_modelos select"
+    ).disabled = true;
+    element.querySelector(
+      "td#argumento_entrada_fila_parametros_modelos select"
+    ).disabled = true;
+    element.querySelector("td#opcional_proceso_mapeo select").disabled = true;
     aux.push(aux2);
   });
   console.log(aux);
@@ -5924,8 +6285,8 @@ function cancelar_mapeo_parametros_modelos() {
   $("#modal_mapeo_parametros_modelos").modal("hide");
 }
 function mensaje_correcto_envio_mapeo_modelos(json) {
+  guardarMapeoModelos = true;
   $("#modal_mapeo_parametros_modelos").modal("hide");
-  document.getElementById("mapeo_parametros_modelo").disabled = true;
 }
 //Modificar procesos
 
@@ -5933,12 +6294,28 @@ function modificar_informacion_boton(id) {
   $("#modificar_informacion_general.collapse").collapse("hide");
   $("#modificar_metodos_modelos.collapse").collapse("hide");
   $(`#${id}.collapse`).collapse("show");
+  if ("modificar_informacion_general" == id) {
+    document
+      .getElementById("informacion_general_modificar")
+      .classList.replace("btn-link", "btn-secondary");
+    document
+      .getElementById("metodos_modificar")
+      .classList.replace("btn-secondary", "btn-link");
+  } else {
+    document
+      .getElementById("informacion_general_modificar")
+      .classList.replace("btn-secondary", "btn-link");
+    document
+      .getElementById("metodos_modificar")
+      .classList.replace("btn-link", "btn-secondary");
+  }
 }
 cont_paso_modificar = 1;
 
 function modificar_proceso_pre_reflexivo_boton() {
   if (cont_paso_modificar == 1) {
     if (modificar_proceso_pre_reflexivo()) {
+      console.log("Llega");
       document
         .getElementById("btn-section-2-modificar")
         .classList.replace("d-none", "d-inline");
@@ -5949,7 +6326,7 @@ function modificar_proceso_pre_reflexivo_boton() {
       $("#modificar_metodos_modelos.collapse").collapse("show");
       cont_paso_modificar++;
       saltar_paso_pre++;
-      cargar_metodos_aprendizaje_razonamiento();
+      //cargar_metodos_aprendizaje_razonamiento();
     } else {
       alert("No se ha podido guardar, verifique todos los campos");
     }
@@ -6226,48 +6603,41 @@ function saltar_proceso_pre_reflexivo_boton() {
     document
       .getElementById("btn-section-2-modificar")
       .classList.replace("d-none", "d-inline");
-    document.getElementById(
-      "btn-modificar"
-    ).innerHTML = `Modificar (Metodos modelos)`;
     $("#modificar_informacion_general.collapse").collapse("hide");
     $("#modificar_metodos_modelos.collapse").collapse("show");
     saltar_paso_pre++;
     cont_paso_modificar_reflexivos++;
-    cargar_select_tipo_comunicacion_modificar();
-    cargar_metodos_aprendizaje_razonamiento();
     document
       .getElementById("modal_metodo_mod")
       .classList.replace("d-none", "d-block");
     document.getElementById(
-      "input-name-proceso-pre-reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
-      "input-descripcion-proceso-pre-reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById("inicio_del_periodo_modificar").disabled = true;
-    document.getElementById("fin_del_periodo_modificar").disabled = true;
-    document.getElementById(
       "btn-saltar-modificar__pre_reflexivos"
-    ).innerHTML = `Saltar (Metodos modelos)`;
+    ).innerHTML = `Saltar (Información General)`;
+    document
+      .getElementById("informacion_general_modificar")
+      .classList.replace("btn-secondary", "btn-link");
+    document
+      .getElementById("metodos_modificar")
+      .classList.replace("btn-link", "btn-secondary");
   } else if (saltar_paso_pre == 2) {
     document
-      .getElementById("btn-section-3-modificar")
-      .classList.replace("d-none", "d-inline");
-    document
-      .getElementById("btn-modificar")
+      .getElementById("btn-section-2-modificar")
       .classList.replace("d-inline", "d-none");
+    $("#modificar_informacion_general.collapse").collapse("show");
+    $("#modificar_metodos_modelos.collapse").collapse("hide");
+    saltar_paso_pre--;
+    document
+      .getElementById("modal_metodo_mod")
+      .classList.replace("d-block", "d-none");
     document.getElementById(
       "btn-saltar-modificar__pre_reflexivos"
-    ).innerHTML = `Salir`;
-    saltar_paso_pre++;
-  } else if (saltar_paso_pre == 3) {
-    consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
-      cargar_procesos_pre_reflexivos_table,
-      error_procesos_pre_reflexivos_table
-    );
-    history.back();
-    r;
+    ).innerHTML = `Saltar (Método de aprendizaje y razonamiento)`;
+    document
+      .getElementById("informacion_general_modificar")
+      .classList.replace("btn-link", "btn-secondary");
+    document
+      .getElementById("metodos_modificar")
+      .classList.replace("btn-secondary", "btn-link");
   }
 }
 
@@ -6337,7 +6707,7 @@ function cargar_sujetos_activos_procesos_modificar(json) {
 }
 
 function error_cargar_sujetos_activos_procesos_modificar(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 
 function validarSeleccion() {
@@ -6356,7 +6726,7 @@ function validarSeleccion() {
 }
 
 function modificar_proceso_pre_reflexivo() {
-  var nombre = document.getElementById(
+  /* var nombre = document.getElementById(
     "input-name-proceso-pre-reflexivo_modificar"
   ).value;
   var descripcion = document.getElementById(
@@ -6394,7 +6764,8 @@ function modificar_proceso_pre_reflexivo() {
     return true;
   } else {
     return false;
-  }
+  }*/
+  return true;
 }
 
 function mensaje_exitoModificarproceso_pre_reflexivo(json) {
@@ -6461,6 +6832,8 @@ function metodos_modelos_modificados_exito(json) {
   ).disabled = false;
 }
 function abrirModalMapeoParametros_modificar() {
+  $("#modal_modificar_mapeo_parametros").modal("show");
+  /*
   document.getElementById("tabla_mapeo_parametros").innerHTML = "";
   var id = document.getElementById("recurso_modificar").value;
   if (id) {
@@ -6474,10 +6847,25 @@ function abrirModalMapeoParametros_modificar() {
         console.log(res);
       }
     );
-    $("#modal_mapeo_parametros").modal("show");
+    $("#modal_modificar_mapeo_parametros").modal("show");
   } else {
     alert("Debe seleccionar un recurso");
   }
+  */
+}
+function abrirModalRecomendaciones_modificar_reflexivos() {
+  var seleccionCriterio = document.getElementById(
+    "criterio_de_decision_modelo_modificar"
+  ).value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    { criterio: seleccionCriterio },
+    cargar_lista_umbrales_proceso_modificar,
+    (res) => {
+      console.log(res);
+    }
+  );
+  $("#modal_recomendaciones_modificar").modal("show");
 }
 function abrirModalRecomendaciones_modificar() {
   var seleccionCriterio = document.getElementById(
@@ -6486,12 +6874,109 @@ function abrirModalRecomendaciones_modificar() {
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_umbral",
     { criterio: seleccionCriterio },
-    cargar_lista_umbrales_proceso,
+    cargar_lista_umbrales_proceso_modificar,
     (res) => {
       console.log(res);
     }
   );
-  $("#modal_activos_procesos").modal("show");
+  $("#modal_recomendaciones_modificar").modal("show");
+}
+function cerrar_modal_activos_modificar() {
+  $("#modal_recomendaciones_modificar").modal("hide");
+}
+function cargar_lista_umbrales_proceso_modificar(json) {
+  console.log(json);
+  res = "";
+  document.getElementById("seccion_acciones_modificar").innerHTML = "";
+  json.umbrales.forEach((cd) => {
+    res += `<tr onClick="visibilidad_acciones_umbral_modificar('${cd.id}')" id='tr_accion_modificar_${cd.id}' name='tr_accion_modificar_'>`;
+    res += `<td>${cd.id}</td>`;
+    res += `<td>${cd.name}</td>`;
+    res += `<td>${cd.interpretacion}</td>`;
+    res += `<td>${cd.inferior}</td>`;
+    res += `<td>${cd.superior}</td>`;
+    res += "</tr>";
+    var mea_id_mod = document.getElementById("id_metodo_aprendizaje_modificar")
+      .value;
+    post_api(
+      "http://autoconsciencia.ddns.net:3000/api/get_action",
+      {
+        umbral: cd.id,
+        mea_id: mea_id_mod,
+      },
+      cargar_accion_table_modificar_pre,
+      (res) => {
+        console.log("Error al cargar la tabla accion" + res);
+      }
+    );
+  });
+  document.getElementById("tabla_umbrales_procesos_modificar").innerHTML = res;
+}
+
+function visibilidad_acciones_umbral_modificar(id) {
+  var tabla = document.getElementsByName("tr_accion_modificar_");
+  tabla.forEach((tr) => {
+    tr.style.backgroundColor = "rgba(0,0,0,0)";
+  });
+  document.getElementById(`tr_accion_modificar_${id}`).style.backgroundColor =
+    "rgba(0,0,0,0.15)";
+  var dato = document.getElementById("umbral_modificar_" + id);
+  if (dato && UmbralId != id) {
+    dato.style.display = "table";
+    if (UmbralId) {
+      dato = document.getElementById("umbral_modificar_" + UmbralId);
+      dato.style.display = "none";
+    }
+  }
+  UmbralId = id;
+}
+
+function cargar_accion_table_modificar_pre(json) {
+  console.log(json);
+  var templeate = document
+    .getElementById("templeate_tabla_accion_modificar")
+    .content.cloneNode(true);
+  var seccion = document.getElementById("seccion_acciones_modificar");
+  var body = templeate.querySelector("tbody");
+  json.acciones.forEach((um) => {
+    var fila = document.createElement("tr");
+    var dato = document.createElement("td");
+    var input = document.createElement("input");
+    input.type = "radio";
+    input.name = "accion_seleccionada_modificar";
+    input.dataset.id = um.id;
+    input.dataset.nombre = um.name;
+    input.dataset.description = um.description;
+    input.dataset.activo = um.active;
+    input.dataset.id_umbra = json.umbral_id;
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.id;
+    fila.appendChild(dato);
+    dato = document.createElement("td");
+    //dato.innerHTML = um.name;
+    //fila.appendChild(dato);
+    dato = document.createElement("td");
+    dato.innerHTML = um.description;
+    fila.appendChild(dato);
+    input = document.createElement("input");
+    input.type = "checkbox";
+    input.disabled = true;
+    input.checked = um.active == 1;
+    dato = document.createElement("td");
+    dato.appendChild(input);
+    fila.appendChild(dato);
+    body.appendChild(fila);
+  });
+  body.id += "_" + json.umbral_id;
+  var tabla = templeate.querySelector(".table");
+  tabla.id = "umbral_modificar_" + json.umbral_id;
+  tabla.style.display = "none";
+  seccion.appendChild(templeate);
+}
+function cerrar_modal_recomendaciones_modificar() {
+  $("#modal_recomendaciones_modificar").modal("hide");
 }
 
 function cargar_select_tipo_comunicacion_modificar() {
@@ -6759,11 +7244,10 @@ function visibilidad_variables_valores(id) {
 }
 
 function consultar_tabla_valores_variables(id) {
-  console.log(metodo_calculo);
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_simulation_value/",
     {
-      variable: id,
+      escenario: id,
       mea_id: metodo_calculo,
     },
     cargar_variables_valor_table,
@@ -6821,11 +7305,28 @@ function validarSeleccionReflexivos() {
     return false;
   }
 }
-
+function abrirMapeoParametros_metodos_modificar() {
+  $("#modal_modificar_mapeo_parametros_metodos").modal("show");
+}
 function modificar_informacion_boton_reflexivos(id) {
   $("#modificar_informacion_general_reflexivos.collapse").collapse("hide");
   $("#modificar_metodos_modelos_reflexivos.collapse").collapse("hide");
   $(`#${id}.collapse`).collapse("show");
+  if (id == "modificar_informacion_general_reflexivos") {
+    document
+      .getElementById("informacion_general_modificar_btn")
+      .classList.replace("btn-link", "btn-secondary");
+    document
+      .getElementById("metodos_modificar_btn")
+      .classList.replace("btn-secondary", "btn-link");
+  } else {
+    document
+      .getElementById("informacion_general_modificar_btn")
+      .classList.replace("btn-secondary", "btn-link");
+    document
+      .getElementById("metodos_modificar_btn")
+      .classList.replace("btn-link", "btn-secondary");
+  }
 }
 cont_paso_modificar_reflexivos = 1;
 
@@ -6879,70 +7380,38 @@ function saltar_proceso_reflexivo_boton() {
     document
       .getElementById("btn-reflexivos-modificar")
       .classList.replace("d-none", "d-inline");
-    document.getElementById(
-      "btn-modificar_reflexivos"
-    ).innerHTML = `Modificar (Metodos modelos)`;
     $("#modificar_informacion_general_reflexivos.collapse").collapse("hide");
     $("#modificar_metodos_modelos_reflexivos.collapse").collapse("show");
     saltar_paso++;
     cont_paso_modificar_reflexivos++;
-    cargar_select_metrica_indirecta_modificar_reflexivos();
     document
       .getElementById("modal_metodo_mod_reflexivos")
       .classList.replace("d-none", "d-block");
     document.getElementById(
-      "input-name-proceso-reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
-      "input-descripcion-proceso-reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
-      "inicio_del_periodo_reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
-      "fin_del_periodo_reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
       "btn-saltar-modificar_reflexivos"
-    ).innerHTML = `Saltar (Metodos modelos)`;
+    ).innerHTML = `Saltar (Información General)`;
+    document
+      .getElementById("informacion_general_modificar_btn")
+      .classList.replace("btn-secondary", "btn-link");
+    document
+      .getElementById("metodos_modificar_btn")
+      .classList.replace("btn-link", "btn-secondary");
   } else if (saltar_paso == 2) {
-    document.getElementById(
-      "inicio_metodos_reflexivos_modificar"
-    ).disabled = true;
-    document.getElementById("fin_metodos_reflexivos_modificar").disabled = true;
-    document.getElementById(
-      "metrica_indirecta_reflexivos_modificar"
-    ).disabled = true;
-    document.getElementById("indicador_modelo_modificar").disabled = true;
-    document.getElementById(
-      "mapeo_parametros_btn_metodos_modificar"
-    ).disabled = false;
-    document.getElementById(
-      "mapeo_parametros_modelo_modificar"
-    ).disabled = false;
-    document.getElementById(
-      "btn-recomendaciones_model_modificar"
-    ).disabled = false;
-    document.getElementById("variables_simulacion_modificar").disabled = false;
-    document.getElementById("escenario_simulacion_modificar").disabled = false;
     document
-      .getElementById("btn-reflexivos-3-modificar")
-      .classList.replace("d-none", "d-inline");
-    document
-      .getElementById("btn-modificar_reflexivos")
-      .classList.replace("d-inline", "d-none");
+      .getElementById("btn-reflexivos-modificar")
+      .classList.replace("d-block", "d-none");
+    $("#modificar_informacion_general_reflexivos.collapse").collapse("show");
+    $("#modificar_metodos_modelos_reflexivos.collapse").collapse("hide");
+    saltar_paso--;
     document.getElementById(
       "btn-saltar-modificar_reflexivos"
-    ).innerHTML = `Salir`;
-
-    saltar_paso++;
-  } else if (saltar_paso == 3) {
-    consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
-      cargar_procesos_pre_reflexivos_table,
-      error_procesos_pre_reflexivos_table
-    );
-    history.back();
+    ).innerHTML = `Saltar (Información General)`;
+    document
+      .getElementById("informacion_general_modificar_btn")
+      .classList.replace("btn-link", "btn-secondary");
+    document
+      .getElementById("metodos_modificar_btn")
+      .classList.replace("btn-secondary", "btn-link");
   }
 }
 
@@ -7114,14 +7583,14 @@ function mensaje_errorModificarproceso_reflexivo(error) {
   alert(error);
 }
 
-if (
+/*if (
   document.getElementById("lista_sujetos_activos_proceso_reflexivo_modificar")
 )
   consultar_api(
     "http://autoconsciencia.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_procesos_modificar_reflexivos,
     error_cargar_sujetos_activos_procesos_modificar_reflexivos
-  );
+  );*/
 
 function cargar_sujetos_activos_procesos_modificar_reflexivos(json) {
   var aux_visible_activo = new Set();
@@ -7300,7 +7769,7 @@ function mensajeExitosoAgregarAccionesUmbralesReflexivos(json) {
 }
 
 function error_cargar_sujetos_activos_procesos_modificar_reflexivos(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 
 function cargar_lista_umbrales_proceso_reflexivo(json) {
@@ -7324,6 +7793,7 @@ function cargar_lista_umbrales_proceso_reflexivo(json) {
     res += `<td>${cd.inferior}</td>`;
     res += `<td>${cd.superior}</td>`;
     res += "</tr>";
+
     post_api(
       "http://autoconsciencia.ddns.net:3000/api/get_action",
       {
@@ -7358,12 +7828,13 @@ function visibilidad_acciones_umbral_reflexivo(id) {
   document.getElementById(`tr_accion_reflexivo_${id}`).style.backgroundColor =
     "rgba(0,0,0,0.15)";
   var dato = document.getElementById("umbral_reflexivo_" + id);
-  if (dato && UmbralId != id) {
-    dato.style.display = "table";
+
+  if (dato) {
     if (UmbralId) {
-      dato = document.getElementById("umbral_reflexivo_" + UmbralId);
-      dato.style.display = "none";
+      dato_anterior = document.getElementById("umbral_reflexivo_" + UmbralId);
+      dato_anterior.style.display = "none";
     }
+    dato.style.display = "table";
   }
   UmbralId = id;
 }
@@ -7473,7 +7944,26 @@ function AbrirModalAgregarVariablesSimulacion() {
   $("#modal_variables_simulacion").modal("show");
   consultar_tabla_varibles();
 }
+function AbrirModalAgregarVariablesSimulacionModificar() {
+  var guardarButton = document.getElementById("bt_add_escenario_simulacion");
+  var modificarButton = document.getElementById("bd_mod_escenario_simulacion");
+  guardarButton.classList.replace("d-inline-block", "d-none");
+  modificarButton.classList.replace("d-inline-block", "d-none");
+  $("#modal_variables_simulacion").modal("show");
+  consultar_tabla_variables_modificar();
+}
 
+function consultar_tabla_variables_modificar() {
+  var mea_id = document.getElementById("id_modelo_reflexivo").value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable/",
+    { mea_id: mea_id },
+    cargar_tabla_variables_simulacion,
+    (res) => {
+      console.log(res);
+    }
+  );
+}
 function consultar_tabla_varibles() {
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable/",
@@ -7648,7 +8138,7 @@ function guardarvariables_valor() {
     data,
     correcto_guardado_variables_valor,
     (res) => {
-      console.log(res);
+      alert("La variable de simulaciòn ya tiene asignado un valor");
     }
   );
   correcto_guardado_variables_valor();
@@ -7728,7 +8218,7 @@ function cargar_escalas_select(json) {
 }
 
 function error_escalas_select(err) {
-  alert("Error al cargar las escalas select: " + err);
+  console.log("Error al cargar las escalas select: " + err);
 }
 
 if (document.getElementById("unidad_medida_metrica"))
@@ -7754,7 +8244,7 @@ function cargar_unidades_de_medida_select(json) {
 }
 
 function error_cargar_unidades_de_medida_select(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function agregarMetrica() {
@@ -7808,7 +8298,7 @@ function cargar_tipo_metrica_select(json) {
 }
 
 function error_cargar_tipo_metrica_select(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function GuardarMetrica() {
@@ -7907,7 +8397,7 @@ function cargar_metrica_table(json) {
 }
 
 function error_cargar_metrica_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 function get_tipo_perspectiva_select() {
   post_api(
@@ -8146,7 +8636,7 @@ function cargar_sujetos_activos_aspectos(json) {
 }
 
 function error_cargar_sujetos_activos_aspectos(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 var systemID = undefined;
 var sujeto_aspecto_id = undefined;
@@ -8252,7 +8742,7 @@ function cargar_posibles_entidades_modelo_aspecto(json) {
 }
 
 function error_cargar_posibles_entidades_modelo_aspecto(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 var objeto_aspecto_id = undefined;
 
@@ -8425,7 +8915,7 @@ function cargar_aspectos_table(json) {
     }" data-name="${met.name}" data-description="${
       met.description
     }" data-peso="${met.weigth}" data-tipo="${met.tipo_id}"
-      data-activo="${met.active == 1}" data-objetivo="${
+	      data-activo="${met.active == 1}" data-objetivo="${
       met.obj
     }" data-sujeto="${met.suj}" data-modelo="${
       met.model
@@ -8434,7 +8924,7 @@ function cargar_aspectos_table(json) {
     res += `<td>${met.name}</td>`;
     res += `<td>${met.description}</td>`;
     res += `<td>${met.weigth}</td>`;
-    res += `<td>${met.met_aspect}</td>`;
+    res += `<td>${met.tipo}</td>`;
     if (met.active == 1)
       res += `<td><input type="checkbox" disabled checked></td>`;
     else res += `<td><input type="checkbox" disabled></td>`;
@@ -8444,7 +8934,7 @@ function cargar_aspectos_table(json) {
 }
 
 function error_cargar_aspectos_table(err) {
-  alert("Error al cargar los datos del modelo: " + err);
+  console.log("Error al cargar los datos del modelo: " + err);
 }
 
 function eliminarAspectos() {
@@ -8678,19 +9168,19 @@ function cargar_select_aspectos_objetivos_modificar(json) {
   listaId = new Set(listaId);
   let eliminacionId = [...listaId].filter((x) => !listaPadres.has(x));
   /*var ope = document.getElementById("select_objetivo_mod");
-  ope.innerHTML = "";
-  var seleccione = document.createElement("option");
-  seleccione.innerHTML = "Seleccione..";
-  seleccione.value = "-6";
-  ope.appendChild(seleccione);
-  json.forEach((element) => {
-    if (eliminacionId.indexOf(element.id) != -1) {
-      var option = document.createElement("option");
-      option.value = element.id;
-      option.innerHTML = element.nombre;
-      ope.appendChild(option);
-    }
-  });*/
+	  ope.innerHTML = "";
+	  var seleccione = document.createElement("option");
+	  seleccione.innerHTML = "Seleccione..";
+	  seleccione.value = "-6";
+	  ope.appendChild(seleccione);
+	  json.forEach((element) => {
+	    if (eliminacionId.indexOf(element.id) != -1) {
+	      var option = document.createElement("option");
+	      option.value = element.id;
+	      option.innerHTML = element.nombre;
+	      ope.appendChild(option);
+	    }
+	  });*/
 
   // ------------------------------------------------------
   // No usa el JSON
@@ -8708,7 +9198,6 @@ function cargar_datos_del_modal_modificar_aspectos_individuales() {
     var peso;
     var active;
     var suj;
-    var objetivo;
     var tipo;
     radio.forEach((elem) => {
       if (elem.checked) {
@@ -8770,16 +9259,18 @@ var aspecto_seleccionado_mod = undefined;
 function modificarAspectos() {
   try {
     var radio = document.getElementsByName("aspecto_seleccionado");
+    var no_existe_seleccion = true;
     radio.forEach((elem) => {
       if (elem.checked) {
+        no_existe_seleccion = false;
         suj_id = elem.dataset.sujeto;
         systemID = elem.dataset.sujeto;
         //get_aspectos_objetivos_modificar(suj_id);
         cargar_datos_del_modal_modificar_aspectos_individuales();
-      } else {
-        alert("Debe seleccionar un aspecto");
+        return;
       }
     });
+    if (no_existe_seleccion) alert("Debe seleccionar un aspecto");
   } catch (error) {
     console.log(error);
   }
@@ -8845,7 +9336,6 @@ function eliminar_relacion_aspectos() {
 }
 var seleccionadas = undefined;
 function cargar_objetos_seleccionados_aspectos(json) {
-  console.log(json);
   seleccionadas = json;
   var ul = document.getElementById(
     "lista_entidades_seleccionadas_aspectos_mod"
@@ -8876,8 +9366,6 @@ function cargar_objetos_seleccionados_aspectos(json) {
   var seleccion = document.getElementById("CategoriaEntidadesAspectosMod")
     .value;
   seleccion = sin_tilde(seleccion);
-  console.log(seleccion);
-  console.log(systemID);
   data = {
     valorS: seleccion,
     systemID: systemID,
@@ -8892,11 +9380,10 @@ function cargar_objetos_seleccionados_aspectos(json) {
   );
 }
 function error_cargar_sujetos_activos_aspectos_modificar(error) {
-  alert("Error al cargar los datos del modelo: " + error);
+  console.log("Error al cargar los datos del modelo: " + error);
 }
 
 function cargar_entidades_modelo_aspecto(json) {
-  console.log(json);
   var aux_visible_activo = new Set();
   var aux_visible_inactivo = new Set();
   json.forEach((elemento) => {
@@ -8992,59 +9479,46 @@ function tipo_metrica_change() {
   );
 }
 
-if (document.getElementById("id_proceso_pre_reflexivo")) {
-  consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
-    get_nombre_proceso,
-    (json) => {
-      console.log(json);
-    }
-  );
-}
-function get_nombre_proceso(json) {
-  document.getElementById("nombre_proceso_pre_reflexivo").value =
+/*function cargar_ultimo_proceso {
+	  consultar_api(
+	    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+	    get_nombre_proceso,
+	    (json) => {
+	      console.log(json);
+	    }
+	  );
+	}
+	function get_nombre_proceso(json) {
+	  document.getElementById("nombre_proceso_pre_reflexivo").value =
+	    "PID" + (parseInt(json[0].id) + 1);
+	}*/
+/*if (document.getElementById("nombre_proceso_reflexivo_id")) {
+	  consultar_api(
+	    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+	    get_nombre_proceso_reflexivo,
+	    (json) => {
+	      console.log(json);
+	    }
+	  );
+	}
+	function get_nombre_proceso_reflexivo(json) {
+	  console.log(json);
+	  document.getElementById("nombre_proceso_reflexivo_id").value =
     "PID" + (parseInt(json[0].id) + 1);
-}
-if (document.getElementById("nombre_proceso_reflexivo_id")) {
-  consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
-    get_nombre_proceso_reflexivo,
-    (json) => {
-      console.log(json);
-    }
-  );
-}
-function get_nombre_proceso_reflexivo(json) {
-  console.log(json);
-  document.getElementById("nombre_proceso_reflexivo_id").value =
-    "PID" + (parseInt(json[0].id) + 1);
-}
+}*/
 if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
   var sujeto = document.getElementById("id_sujeto").value;
   console.log(sujeto);
-  post_api(
+  /* post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
     { systemID: sujeto },
     cargar_aspectos_procesos_modificar,
     (res) => {
       console.log(res);
     }
-  );
+  );*/
 }
 function cargar_aspectos_procesos_modificar(json) {
-  console.log(json);
-  var select = document.getElementById("Aspectos_autoconsciencia_modificar");
-  select.innerHTML = "";
-  var op = document.createElement("option");
-  op.value = "-6";
-  op.innerHTML = "Seleccione ..";
-  select.appendChild(op);
-  json.forEach((asp) => {
-    var op = document.createElement("option");
-    op.value = asp.idAspecto;
-    op.innerHTML = asp.nombreAspecto;
-    select.appendChild(op);
-  });
   select.value = document.getElementById("id_aspecto").value;
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
@@ -9302,7 +9776,6 @@ if (document.getElementById("lista_sujetos_aspectos_colectivos")) {
   agregar_sujetos_activos_aspectos();
 }
 function agregar_sujetos_activos_aspectos() {
-  document.getElementById("lista_sujetos_aspectos_colectivos").innerHTML = "";
   consultar_api(
     "http://autoconsciencia.ddns.net:3000/api/subjects",
     cargar_sujetos_activos_aspectos_colectivos,
@@ -9384,6 +9857,7 @@ function verificarSeleccionAspectosColectivos(elemento) {
 }
 
 function agregarAspectosColectivos() {
+  document.getElementById("lista_sujetos_aspectos_colectivos").innerHTML = "";
   agregar_sujetos_activos_aspectos();
   ActivarFormularioAspectosColectivos();
   $("#add_aspects_colective").modal("show");
@@ -9561,6 +10035,10 @@ function cargar_select_operador_agregacion_colectivos() {
 function cargar_operador_asignacion_select_colectivos(json) {
   var ope = document.getElementById("select_operadoreAgregacion");
   ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
   json.forEach((element) => {
     var option = document.createElement("option");
     option.value = element.id;
@@ -9585,7 +10063,6 @@ function cargar_select_tipo_aspecto_colectivo() {
 }
 
 function cargar_select_tipo_aspecto_col(json) {
-  console.log(json);
   var ope = document.getElementById("select_aspectoColectivo");
   ope.innerHTML = "";
   var seleccione = document.createElement("option");
@@ -9766,16 +10243,17 @@ if (document.getElementById("select_operadoreAgregacionModificar")) {
 function modificarAspectosColectivos() {
   try {
     var radio = document.getElementsByName("aspecto_colectivo_seleccionado");
+    var no_existe_seleccion = true;
     radio.forEach((elem) => {
       if (elem.checked) {
+        no_existe_seleccion = false;
         suj_id = elem.dataset.sujeto;
         systemID = elem.dataset.sujeto;
         //get_aspectos_objetivos_modificar(suj_id);
         cargar_datos_del_modal_modificar_aspectos_colectivos();
-      } else {
-        alert("Debe seleccionar un aspecto colectivo");
       }
     });
+    if (no_existe_seleccion) alert("Debe seleccionar un aspecto colectivo");
   } catch (error) {
     console.log(error);
   }
@@ -10017,4 +10495,28 @@ function LimpiarFormularioModelos() {
   document.getElementById("descripcion_esenario").value = "";
   document.getElementById("autor_modelo").value = "";
   $("#crear_modelo_modal").modal("hide");
+}
+
+function validate_create_model_form() {
+  var nombre = document.getElementById("nombre_modelo").value;
+  var description = document.getElementById("descripcion_esenario").value;
+  var autor = document.getElementById("autor_modelo").value;
+  var archivo = document.getElementById("file_modelo_xmi").value;
+  if (nombre != "" && description != "" && autor != "" && archivo != "") {
+    return true;
+  }
+  alert("Debe llenar todos los campos");
+  return false;
+}
+function descargar_modelo_generado() {
+  var textInput = document.getElementById("document-text").innerHTML;
+  var element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8, " + encodeURIComponent(textInput)
+  );
+  element.setAttribute("download", "Model.txt");
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
 }

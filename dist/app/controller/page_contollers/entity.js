@@ -31,7 +31,9 @@ function entitys(req, res) {
             var rows;
             var flag = false;
             if (seleccion == "Entidades Fisicas") {
-                rows = yield db.qwerty(new selfAwarnessModels_1.PhysicalEntityQ(-1, "", "").toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/"], [id, system]));
+                var sql = new selfAwarnessModels_1.PhysicalEntityQ(-1, "", "").toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/"], [id, system]);
+                console.log(sql);
+                rows = yield db.qwerty(sql);
             }
             else if (seleccion == "Nodos Cloud") {
                 rows = yield db.qwerty(new selfAwarnessModels_1.CloudNodeQ(-1, "", "").toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/"], [id, system]));
@@ -76,9 +78,11 @@ function entitys(req, res) {
             var fathers_services = rows.map((ent) => {
                 return ent.id;
             });
-            var service = new selfAwarnessModels_1.ServiceQ(-1, "", "");
-            var rows_service = yield db.qwerty(service.toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/", "/@/FATHERS/@/"], [id, system, fathers_services.join(',')]));
-            if (rows_service.length > 0) {
+            if (fathers_services.length > 0) {
+                var service = new selfAwarnessModels_1.ServiceQ(-1, "", "");
+                var rows_service = yield db.qwerty(service.toSqlSelect(["/@/MODEL/@/", "/@/SYSTEM/@/", "/@/FATHERS/@/"], [id, system, fathers_services.join(",")]));
+            }
+            if (rows_service && rows_service.length > 0) {
                 rows = rows.concat(rows_service);
             }
             res.json(rows);

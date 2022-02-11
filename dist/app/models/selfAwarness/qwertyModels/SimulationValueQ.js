@@ -16,7 +16,7 @@ class SimulationValueQ extends SimulationValue_1.SimulationValue {
     }
     toSqlSelect(tag, value) {
         var sql = "";
-        if (tag.indexOf("/@/VARIABLE/@/") != -1) {
+        if (value[tag.indexOf("/@/VARIABLE/@/")] != undefined) {
             sql = `SELECT
 			vs_id,
 			es_id,

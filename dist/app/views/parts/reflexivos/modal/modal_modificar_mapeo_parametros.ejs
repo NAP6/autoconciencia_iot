@@ -1,9 +1,9 @@
-<div class="modal fade bd-example-modal-lg" id="modal_mapeo_parametros_modelos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modal_modificar_mapeo_parametros_metodos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-center" id="exampleModalLabel" style="width: 100%;">Mapeo Parametros</h5>
-                <button type="button" class="close" onclick="cancelar_mapeo_parametros_modelos()" aria-label="Close">
+                <h5 class="modal-title text-center" id="exampleModalLabel" style="width: 100%;">Mapeo de Parámetros</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
             </div>
@@ -18,17 +18,23 @@
                                         <div class="row">
                                             <div class="col">
                                                 <h5>Nombre:</h5>
-                                                <p id="nombre_temporal_mapeo_modelos">Nombre Temporal</p>
+						<% if(modificar4.length > 0) { %>
+                                                <p id="nombre_temporal_mapeo"><%=modificar4[0].nombre_recurso%></p>
+						<% } %>
                                             </div>
                                             <div class="col">
                                                 <h5>Tipo dato de salida:</h5>
-                                                <p id="tipo_dato_salida_mapeo_modelos"></p>
+						<% if(modificar4.length > 0) { %>
+                                                <p id="tipo_dato_salida_mapeo"><%=modificar4[0].tipo_salida_recurso%></p>
+						<% } %>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <h5>DescripDescripcióncion:</h5>
-                                        <p id="descripcion_mapeo_modelos"></p>
+                                        <h5>Descripción:</h5>
+					<% if(modificar4.length > 0) { %>
+                                        <p id="descripcion_mapeo"><%=modificar4[0].descripcion_recurso%></p>
+					<% } %>
                                     </div>
                                 </div>
                             </div>
@@ -39,21 +45,44 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">ID</th>
-                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Parámetro</th>
                                     <th scope="col">Tipo de dato</th>
                                     <th scope="col">Opcional</th>
                                     <th scope="col">Tipo Mapeo</th>
                                     <th scope="col">Argumento de Entrada</th>
-                                    <th scope="col">Proceso</th>
+				    <th scope="col">Proceso</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabla_mapeo_parametros_modelos"></tbody>
+                            <tbody id="tabla_mapeo_parametros">
+				<% for(let row of modificar4) { %>
+				   <tr>
+					<td></td>
+					<td><%=row.nombre_parametro%></td>
+					<td><%=row.tipo_parametro%></td>
+					<td><%=row.opcional_parametro == 1%></td>
+					<% if(row.variable != undefined) { %>
+					<td>VARIABLE SIMULACION</td>
+					<% } else if(row.metadata != undefined) {%>
+					<td>METADATA</td>
+					<%} else {%>
+					<td><%=row.metrica_tipo%></td>
+					<% } %>
+					<% if(row.variable != undefined ) { %>
+					<td><%=row.variable%></td>
+					<% } else if(row.metadata != undefined) { %>
+					<td><%=row.metadata%></td>
+					<% } else { %>
+					<td><%=row.nombre_metrica%></td>
+					<% }%>
+					<td><%=row.proceso%> <%= row.proceso2%></td>
+				   </tr>
+				<% } %>
+			    </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="guardar_mapeo_buttom" onclick="Guadar_nuevo_mapeo_modelos()">Guardar</button>
-                    <button type="button" class="btn btn-secondary" onclick="cancelar_mapeo_parametros_modelos()">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

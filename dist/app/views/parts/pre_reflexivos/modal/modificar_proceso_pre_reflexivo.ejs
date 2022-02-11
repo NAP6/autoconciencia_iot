@@ -47,8 +47,9 @@
             class="custom-select"
             name="tipo_ejecucion_modificar"
             id="tipo_ejecucion_modificar"
+	    disabled
           >
-            <option value="-6">Seleccione..</option>
+	  <option value="<%=modificar[0].pa_tipo_ejecucion%>"><%=modificar[0].tipo_ejecucion%></option>
           </select>
         </div>
       </div>
@@ -60,20 +61,20 @@
             type="date"
             id="inicio_del_periodo_modificar"
             name="inicio_del_periodo_modificar"
-            value=""
             min="2020-01-01"
             max="2050-01-01"
             value="<%=modificar[0].inicio%>"
+	    disabled
           />
           <label for="" class="col-sm-2 col-form-label">Fin:</label>
           <input
             type="date"
             id="fin_del_periodo_modificar"
             name="fin_del_periodo_modificar"
-            value=""
             min="2020-01-01"
             max="2050-01-01"
             value="<%=modificar[0].fin%>"
+	    disabled
           />
         </div>
       </div>
@@ -87,8 +88,9 @@
                 class="custom-select"
                 name="unidad_tiempo_modificar"
                 id="unidad_tiempo_modificar"
+		disabled
               >
-                <option value="-6">Seleccione..</option>
+	      <option value="<%modificar[0].pa_unidad_tiempo%>"><%=modificar[0].unidad_tiempo%></option>
               </select>
             </div>
           </div>
@@ -103,6 +105,8 @@
                 class="form-control"
                 name="intervalo_ejecucion_modificar"
                 id="intervalo_ejecucion_modificar"
+		disabled
+		value="<%=modificar[0].pa_intervalo_ejecucion%>"
               />
             </div>
           </div>
@@ -116,6 +120,8 @@
                 class="form-control"
                 name="hora_ejecucion_modificar"
                 id="hora_ejecucion_modificar"
+		value="<%=modificar[0].pa_hora_ejecucion%>"
+		disabled
               />
             </div>
           </div>
@@ -138,7 +144,9 @@
           name="Aspectos_autoconsciencia_modificar"
           id="Aspectos_autoconsciencia_modificar"
           disabled
-        ></select>
+        >
+	<option value="<%=modificar[0].aspecto%>"><%=modificar[0].aspecto_nombre%></option>
+	</select>
       </div>
       <div class="mt-2">
         <h6>Categoría de objetos:</h6>
@@ -148,7 +156,9 @@
             name="CategoriaEntidadesProcesosModificar"
             id="CategoriaEntidadesProcesosModificar"
             disabled
-          ></select>
+          >
+<option value=""><%= modificar[0].categoria %></option>
+	  </select>
         </div>
       </div>
       <h6>Objetos sobre los que se captura el aspecto autoconsciencia:</h6>
@@ -158,7 +168,11 @@
           class="card col-lg-12"
           style="overflow-y: auto; height: 90px"
         >
-          <ul id="lista_entidades_seleccionadas_procesos_modificar"></ul>
+          <ul id="lista_entidades_seleccionadas_procesos_modificar">
+		<% for(let obj of modificar) { %>
+			<li><%=obj.nombre_objeto%></li>
+		<% } %>
+	  </ul>
         </div>
       </div>
     </div>

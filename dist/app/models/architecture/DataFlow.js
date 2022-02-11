@@ -7,6 +7,7 @@ class DataFlow {
         this._description = description;
         this._comunicationType = comunicationType;
         this._propertys = [];
+        this._propertyToDataColumn = [];
     }
     get id() {
         return this._id;
@@ -25,6 +26,12 @@ class DataFlow {
     }
     set comunicationType(comunicationType) {
         this._comunicationType = comunicationType;
+    }
+    get propertyToDataColumn() {
+        return this._propertyToDataColumn;
+    }
+    set propertyToDataColumn(value) {
+        this._propertyToDataColumn = value;
     }
     get propertys() {
         return this._propertys;

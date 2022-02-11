@@ -31,11 +31,12 @@ class ParameterQ extends Parameter_1.Parameter {
   			) VALUES (
 	  			'${this.ordinal}', 
 		  		'${this.name}', 
-		  		'${this.ordinal ? 1 : 0}', 
+		  		'${this.optional ? 1 : 0}', 
 				'${value[tag.indexOf("/@/ACTIVE/@/")]}',
 		  		'${this.dataType}', 
 				'${value[tag.indexOf("/@/ID/@/")]}'
   			)`;
+        console.log(sql);
         return sql;
     }
     toSqlSelect(tag, value) {

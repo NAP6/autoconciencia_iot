@@ -4,9 +4,12 @@ exports.SelfAwarnessQ = void 0;
 const SelfAwarness_1 = require("../SelfAwarness");
 class SelfAwarnessQ extends SelfAwarness_1.SelfAwarness {
     toSqlInsert(tag, value) {
-        var sql = `INSERT INTO modeloautoconsciencia(ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura, usr_id) VALUES ('${this.name}','${this.description}','${this.author}','${this.architectureModel
-            .split("'")
-            .join("`")}', /@/USER/@/)`;
+        var architectureModel = this.architectureModel.replace(/\\/g, "\\\\");
+        architectureModel = architectureModel.replace(/'/g, "\\'");
+        var sql = `INSERT INTO modeloautoconsciencia(ma_nombre, ma_descripcion, ma_autor, ma_modelo_arquitectura, usr_id) VALUES ('${this.name}','${this.description}','${this.author}','${architectureModel
+        /*.split("'")
+        .join("`")*/
+        }', /@/USER/@/)`;
         for (var i = 0; i < tag.length; i++) {
             sql = sql.replace(tag[i], value[i]);
         }

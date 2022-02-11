@@ -43,6 +43,7 @@ class ActionQ extends Action_1.Action {
 	 	mea_id=${value[tag.indexOf("/@/METHOD/@/")]} AND
 	 	umb_id=${this.isRecommendedln}`;
         }
+        console.log(sql);
         return sql;
     }
     toSqlDelete(value) {

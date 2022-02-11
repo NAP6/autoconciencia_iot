@@ -1,64 +1,197 @@
-<div class="" id="pagina_proceso_modificar">
-    <div class="row">
+<div class="" id="pagina_proceso_reflexivo_modificar2">
+  <!-- Inicio row -->
+  <div class="row">
+    <!-- Inicio col 1 -->
+    <div class="col">
+      <input type="text" class="d-none" id="id_proceso_reflexivo_modificar_2" value="<%= modificar[0].id %>" />
+      <input type="text" class="d-none" id="id_metodo_aprendizaje_modelos"  value="<%= modificar[0].sujeto %>" />
+      <input type="text" class="d-none" id="aspecto_reflexivo_modificar"  value="<%= modificar[0].aspecto %>" />
+      <div class="form-group row">
+        <label for=" " class="col-sm-3 col-form-label">ID:</label>
         <div class="col">
-            <input type="text" class="d-none" id="id_proceso_reflexivo_modificar" value="<%= modificar[0].id %>">
-            <input type="text" class="d-none" id="id_sujeto_reflexivo" value="<%= modificar[0].sujeto %>">
-            <input type="text" class="d-none" id="id_aspecto_reflexivo" value="<%= modificar[0].aspecto %>">
-            <div class="form-group mt-4 row">
-                <label for="" class="col-sm-3 col-form-label">Nombre:</label>
-                <div class="col-sm-7">
-                    <input type="text" class="form-control" id="input-name-proceso-reflexivo_modificar" style=" text-transform:uppercase;" onkeyup="javascript:this.value=this.value.toUpperCase();" value="<%= modificar[0].nombre %>" />
-                </div>
-            </div>
-            <div class="form-group row ">
-                <label for=" " class="col-sm-3 col-form-label ">Descripción:</label>
-                <div class="col-sm-7">
-                    <textarea type="text " class="form-control " id="input-descripcion-proceso-reflexivo_modificar" style="text-transform:uppercase; " onkeyup="javascript:this.value=this.value.toUpperCase();"><%= modificar[0].descripcion %></textarea>
-                </div>
-            </div>
+          <input
+            type="text "
+            class="form-control"
+            id="input-name-proceso-reflexivo_modificar"
+            style="text-transform: uppercase"
+	    value="<%= modificar[0].nombre%>"
+            onkeyup="javascript:this.value=this.value.toUpperCase(); "
+            disabled
+          />
         </div>
-        <div class="col-6">
-            <h6>Periodo de ejecucion:</h6>
-            <div class="col card" style="height: 55px;">
-                <div class="form-group mt-2 row">
-                    <label for="" class="col-sm-2 col-form-label">Inicio:</label>
-                    <input type="date" id="inicio_del_periodo_reflexivo_modificar" name="inicio_del_periodo_reflexivo_modificar" value="<%= modificar[0].inicio %>" min="2020-01-01" max="2050-01-01">
-                    <label for="" class="col-sm-2 col-form-label">Fin:</label>
-                    <input type="date" id="fin_del_periodo_reflexivo_modificar" name="fin_del_periodo_reflexivo_modificar" value="<%= modificar[0].fin %>" min="2020-01-01" max="2050-01-01">
-                </div>
-                <div class="row">
- <h6 class="text-center">Aspectos de autoconsciencia</h6>
-        <div class="input-group col-11">
-            <select class="custom-select" name="Aspectos_autoconsciencia_modificar_reflexivos" id="Aspectos_autoconsciencia_modificar_reflexivos" disabled>
-                 </select>
-        </div>
+      </div>
 
-                </div>
-            </div>
+      <div class="form-group row">
+        <label for=" " class="col-sm-3 col-form-label">Descripción:</label>
+        <div class="col">
+          <textarea
+            type="text "
+            class="form-control"
+            id="input-descripcion-proceso-reflexivo_modificar"
+            style="text-transform: uppercase"
+	    disabled
+            onkeyup="javascript:this.value=this.value.toUpperCase(); "
+          >
+	  <%=modificar[0].descripcion%>
+	  </textarea>
         </div>
+      </div>
+      <div class="form-group row">
+        <label for=" " class="col-sm-3 col-form-label">Tipo Ejecución:</label>
+        <div class="form-group col">
+          <select
+            class="custom-select"
+            name="tipo_ejecucion_ref"
+            id="tipo_ejecucion_ref_modificar"
+	    disabled
+          >
+            <option value=""><%=modificar[0].tipo_ejecucion%></option>
+          </select>
+        </div>
+      </div>
+      <h6>Periodo de ejecucion:</h6>
+      <div class="col card" style="height: 55px">
+        <div class="form-group mt-2 row">
+          <label for="" class="col-sm-2 col-form-label">Inicio:</label>
+          <input
+            type="date"
+            id="inicio_del_periodo_reflexivo_modificar"
+            name="inicio_del_periodoi_reflexivo"
+            value="<%=modificar[0].inicio%>"
+            min="2020-01-01"
+            max="2050-01-01"
+	    disabled
+          />
+          <label for="" class="col-sm-2 col-form-label">Fin:</label>
+          <input
+            type="date"
+            id="fin_del_periodo_reflexivo_modificar"
+            name="fin_del_periodo_reflexivo"
+            value="<%=modificar[0].fin%>"
+            min="2020-01-01"
+            max="2050-01-01"
+	    disabled
+          />
+        </div>
+      </div>
+      <h6 class="mt-3">Frecuencia de ejecución</h6>
+      <div class="card" style="height: 85px;">
+      <div class="row">
+        <div class="col">
+          <div class="mt-1">
+            <h6>Unidad de Tiempo:</h6>
+            <div class="form-group col-12">
+              <select
+                class="custom-select"
+                name="unidad_tiempo_ref"
+                id="unidad_tiempo_ref_modificar"
+		disabled
+              >
+                <option value=""><%=modificar[0].unidad_tiempo%></option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="mt-2">
+            <h6>Intervalo de ejecución:</h6>
+            <div class="input-group col-12">
+              <input
+                type="number"
+                min="0"
+                class="form-control"
+                name="intervalo_ejecucion_ref"
+                id="intervalo_ejecucion_ref_modificar"
+		disabled
+		value="<%=modificar[0].pa_intervalo_ejecucion%>"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="mt-2">
+            <h6>Hora ejecución:</h6>
+            <div class="form-group mt-1 col-12">
+              <input
+                type="time"
+                class="form-control"
+                name="hora_ejecucion_ref"
+		disabled
+                id="hora_ejecucion_ref_modificar"
+		value="<%=modificar[0].pa_hora_ejecucion%>"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
     </div>
-    <div class="row">
-        <div class="col-6">
-            <h6>Sujetos de autoconsciencia:</h6>
-            <div id="sujetos_activos_proceso_modificar_reflexivos" class="card col-12 col-lg-10" style="overflow-y: auto;height: 166px;">
-                <h5><%=modificar[0].sujeto_nombre%></h5>
-            </div>
+    <!-- Fin col 1 -->
+    <!-- Inicio col 2 -->
+    <div class="col-6">
+      <h6>Sujeto que ejecuta el proceso:</h6>
+      <div
+        id="sujetos_activos_proceso_modificar_reflexivos"
+        class="card col"
+        style="overflow-y: auto; height: 130px"
+      >
+      <h5><%=modificar[0].sujeto_nombre%></h5>
+        <ul id="lista_sujetos_activos_proceso_reflexivo_modificar"></ul>
+      </div>
+      <h6>Tipo:</h6>
+      <div class="input-group col-12">
+        <select
+          class="custom-select"
+          name="Aspectos_tipo_autoconsciencia_reflexivos"
+          id="Aspectos_tipo_autoconsciencia_reflexivos_modificar"
+	  onChange="seleccionar_tipo_reflexivo(this)"
+          disabled
+        >
+          <option value="-6">Seleccione..</option>
+          <option value="53" <%= (modificar[0].alcance == 53)? "selected" : ""%> >Individuales</option>
+          <option value="54" <%= (modificar[0].alcance == 54)? "selected" : ""%> >Colectivos</option>
+	</select>
+      </div>
+      <h6>Aspecto de autoconsciencia a capturar:</h6>
+      <div class="input-group col-12">
+        <select
+          class="custom-select"
+          name="Aspectos_autoconsciencia_reflexivos"
+          id="Aspectos_autoconsciencia_reflexivos_modificar"
+          disabled
+        >
+	<option><%=modificar[0].aspecto_nombre%></option>
+	</select>
+      </div>
+        <h6 class="display_type">Categoría de objetos:</h6>
+        <div class="form-group mt-1 col-12">
+          <select
+            class="custom-select display_type"
+            name="CategoriaEntidadesProcesos_reflexivos"
+            id="CategoriaEntidadesProcesos_reflexivos_modificar"
+            disabled
+          >
+            <option value="-6"><%= modificar[0].categoria %></option>
+                      </select>
         </div>
-        <div class="col-6">
-            <div class="mt-2">
-                <h6>Categoría de objetos:</h6>
-                <div class="input-group col-11">
-                    <select class="custom-select" name="CategoriaEntidadesProcesosReflexivosModificar" id="CategoriaEntidadesProcesosReflexivosModificar" disabled>
-                               
-                                    </select>
-                </div>
-                <h6>Objeto de autoconsciencia:</h6>
-                <div class="col-sm-11">
-                    <div id="entidades_seleccionados_area_procesos_reflexivos" class="card col-lg-12" style="overflow-y: auto;height: 100px;">
-                        <ul id="lista_objetos_procesos_reflexivos_modificar">
-                        </ul>
-                    </div>
-                </div>
-            </div>
+      <h6 class="display_type">
+        Objetos sobre los que se captura el aspecto autoconsciencia:
+      </h6>
+      <div class="col display_type">
+        <div
+          id="entidades_seleccionados_area_procesos_reflexivos_modificar"
+          class="card col-lg-12"
+          style="overflow-y: auto; height: 90px"
+        >
+          <ul id="lista_entidades_seleccionadas_procesos_modificar">
+	  <% for(let obj of modificar) { %>
+	  <li><%=obj.nombre_objeto%></li>
+	  <% } %>
+	  </ul>
         </div>
-           </div>
+      </div>
+    </div>
+    <!-- Fin col 2 -->
+  </div>
+  <!-- Fin row -->
+</div>

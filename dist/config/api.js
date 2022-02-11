@@ -165,6 +165,8 @@ function default_1(app) {
     app.post("/api/add_simulation_variable", rt.add_simulation_variable);
     app.post("/api/upd_simulation_variable", rt.upd_simulation_variable);
     app.post("/api/del_simulation_variable", rt.del_simulation_variable);
+    //	Metadatos para el metodo de procesos reflexivos
+    app.post("/api/get_metadata", rt.get_metadata);
     //	Escenarios de simulacion para el metodo de procesos reflexivos
     app.post("/api/get_simulation_scenario", rt.get_simulation_scenario);
     app.post("/api/add_simulation_scenario", rt.add_simulation_scenario);

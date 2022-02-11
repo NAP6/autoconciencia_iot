@@ -43,18 +43,18 @@ function add_deployment_resources(req, res) {
             var data = req.body;
             var id = 0;
             if (data.tipoRecurso == "0") {
-                var formula = new selfAwarnessModels_1.FormulaQ(-1, data.nombre, data.descripcion.replace("'", "\\'"), data.EspecificoTipo.datoSalida, data.EspecificoTipo.formula);
+                var formula = new selfAwarnessModels_1.FormulaQ(-1, data.nombre, data.descripcion.replace(/'/g, "\\'"), data.EspecificoTipo.datoSalida, data.EspecificoTipo.formula.replace(/'/g, "\\'"));
                 var rows = yield db.qwerty(formula.toSqlInsert([], []));
                 id = rows[0][0].id;
             }
             else if (data.tipoRecurso == "1") {
-                var funcion = new selfAwarnessModels_1.FunctionQ(-1, data.nombre, data.descripcion.replace("'", "\\'"), data.EspecificoTipo.datoSalida, "", //data.path,
-                data.EspecificoTipo.instrucciones);
+                var funcion = new selfAwarnessModels_1.FunctionQ(-1, data.nombre, data.descripcion.replace(/'/g, "\\'"), data.EspecificoTipo.datoSalida, "", //data.path,
+                data.EspecificoTipo.instrucciones.replace(/'/g, "\\'"));
                 var rows = yield db.qwerty(funcion.toSqlInsert(["/@/P_EXIST/@/"], [data.EspecificoTipo.preExistent ? "1" : "0"]));
                 id = rows[0][0].id;
             }
             else if (data.tipoRecurso == "2") {
-                var service = new selfAwarnessModels_1.WebServiceQ(-1, data.nombre, data.descripcion.replace("'", "\\'"), data.EspecificoTipo.datoSalida, data.EspecificoTipo.endPoint, data.EspecificoTipo.instrucciones, data.EspecificoTipo.formatoSalida);
+                var service = new selfAwarnessModels_1.WebServiceQ(-1, data.nombre, data.descripcion.replace(/'/g, "\\'"), data.EspecificoTipo.datoSalida, data.EspecificoTipo.endPoint, data.EspecificoTipo.instrucciones.replace(/'/g, "\\'"), data.EspecificoTipo.formatoSalida);
                 var rows = yield db.qwerty(service.toSqlInsert(["/@/P_EXIST/@/"], [data.EspecificoTipo.preExistent ? "1" : "0"]));
                 id = rows[0][0].id;
             }
@@ -138,14 +138,61 @@ function ask_deployment_resources(req, res) {
 }
 exports.ask_deployment_resources = ask_deployment_resources;
 function ask_input_arguments(req, res) {
-    var _a;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
-        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+        var METADATA = 25;
+        var SIMULATION_VARIABLE = 24;
+        var modelID = (_a = req.session) === null || _a === void 0 ? void 0 : _a.active_model.modelID;
+        if ((_b = req.session) === null || _b === void 0 ? void 0 : _b.user) {
             var db = new database2_1.database2();
-            var rows = yield db.qwerty(`SELECT me.met_id as id, me.met_nombre as nombre 
-	     FROM metrica me, aspectoautoconsciencia_metrica aa_me 
-	     WHERE me.met_id=aa_me.met_id AND me.met_activo=1 AND aa_me.aa_id=${req.body.aspectoId} AND me.met_tipo=${req.body.metricaId};`);
-            res.json(rows);
+            if (req.body.metricaId != undefined) {
+                var sql = `Select
+	    	pro.pa_id as id, pro.pa_nombre as nombre, pro.pa_descripcion as descripcion
+		from
+		procesoautoconsciencia pro, metodoaprendizajerazonamiento as mea WHERE
+		mea.met_id=${req.body.metricaId} AND mea.pa_id=pro.pa_id AND pro.ma_id=${modelID}
+	    	`;
+                var rows = yield db.qwerty(sql);
+                res.json(rows);
+            }
+            else if (req.body.tipo_metrica == METADATA) {
+                var sql = `Select
+			me.data_id as id, me.data_name as nombre
+		from
+			data_column me,I_AM_BATMAN bat, metodoaprendizajerazonamiento met, metodorecoleccion metrec
+		where
+			met.pa_id=${req.body.procces_of_direct_metric} AND 
+			met.mea_id=metrec.mea_id AND 
+			metrec.flu_id=bat.id_flow AND
+			bat.ma_id=metrec.ma_id AND
+			bat.id_colum=me.data_id AND
+			bat.ma_id=me.ma_id AND
+			me.ma_id=${modelID}`;
+                var rows = yield db.qwerty(sql);
+                res.json(rows);
+            }
+            else if (req.body.tipo_metrica == SIMULATION_VARIABLE) {
+                var sql = `
+	Select 
+	  vs.vs_id as id, vs.vs_nombre as nombre
+	  from
+	  variablesimulacion vs, metodoaprendizajerazonamiento mea
+	  where
+	mea.pa_id=${req.body.proceso} and mea.mea_id=vs.mea_id`;
+                var rows = yield db.qwerty(sql);
+                res.json(rows);
+            }
+            else {
+                var sql = `
+	Select 
+	  me.met_id as id, me.met_nombre as nombre
+	  from
+	  metrica me
+	  where
+	me.met_tipo=${req.body.tipo_metrica}`;
+                var rows = yield db.qwerty(sql);
+                res.json(rows);
+            }
         }
         else {
             res.json({ error: "debe iniciar session para poder usar la api" });
@@ -166,10 +213,12 @@ function add_mapeo_parametros(req, res) {
 	      		'${element.mp_tipo_entrada}',
 	      		${element.met_id == undefined ? "NULL" : element.met_id},
 	      		${element.vs_id == undefined ? "NULL" : element.vs_id},
-	      		${element.md_id == undefined ? "NULL" : "'" + element.md_id + "'"}),`;
+	      		${element.md_id == undefined ? "NULL" : element.md_id},
+		  	${element.data_id == undefined ? "NULL" : element.data_id},
+    			${element.proceso == undefined ? "NULL" : element.proceso}),`;
             });
             var sql = `INSERT INTO 
-    		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id) 
+    		mapeoparametros (par_ordinal, mea_id, mp_tipo_entrada,met_id,vs_id,md_id,data_id,pa_id) 
 		VALUES ` + stryaux.substring(0, stryaux.length - 1);
             var db = new database2_1.database2();
             db.qwerty(sql);
