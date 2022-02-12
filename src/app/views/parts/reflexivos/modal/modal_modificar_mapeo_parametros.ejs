@@ -1,4 +1,4 @@
-<div class="modal fade bd-example-modal-lg" id="modal_modificar_mapeo_parametros" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modal_modificar_mapeo_parametros_metodos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,22 +18,22 @@
                                         <div class="row">
                                             <div class="col">
                                                 <h5>Nombre:</h5>
-						<% if(modificar3.length > 0) { %>
-                                                <p id="nombre_temporal_mapeo"><%=modificar3[0].nombre_recurso%></p>
+						<% if(modificar4.length > 0) { %>
+                                                <p id="nombre_temporal_mapeo"><%=modificar4[0].nombre_recurso%></p>
 						<% } %>
                                             </div>
                                             <div class="col">
                                                 <h5>Tipo dato de salida:</h5>
-						<% if(modificar3.length > 0) { %>
-                                                <p id="tipo_dato_salida_mapeo"><%=modificar3[0].tipo_salida_recurso%></p>
+						<% if(modificar4.length > 0) { %>
+                                                <p id="tipo_dato_salida_mapeo"><%=modificar4[0].tipo_salida_recurso%></p>
 						<% } %>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <h5>Descripción:</h5>
-					<% if(modificar3.length > 0) { %>
-                                        <p id="descripcion_mapeo"><%=modificar3[0].descripcion_recurso%></p>
+					<% if(modificar4.length > 0) { %>
+                                        <p id="descripcion_mapeo"><%=modificar4[0].descripcion_recurso%></p>
 					<% } %>
                                     </div>
                                 </div>
@@ -54,16 +54,22 @@
                                 </tr>
                             </thead>
                             <tbody id="tabla_mapeo_parametros">
-				<% for(let row of modificar3) { %>
+				<% for(let row of modificar4) { %>
 				   <tr>
 					<td></td>
 					<td><%=row.nombre_parametro%></td>
 					<td><%=row.tipo_parametro%></td>
 					<td><%=row.opcional_parametro == 1%></td>
+					<% if(row.variable != undefined) { %>
+					<td>VARIABLE SIMULACION</td>
+					<% } else if(row.metadata != undefined) {%>
+					<td>METADATA</td>
+					<%} else {%>
 					<td><%=row.metrica_tipo%></td>
-					<% if(row.metrica_tipo == 'VARIABLE SIMULACION') { %>
+					<% } %>
+					<% if(row.variable != undefined ) { %>
 					<td><%=row.variable%></td>
-					<% } else if(row.metrica_tipo == 'METADATA') { %>
+					<% } else if(row.metadata != undefined) { %>
 					<td><%=row.metadata%></td>
 					<% } else { %>
 					<td><%=row.nombre_metrica%></td>

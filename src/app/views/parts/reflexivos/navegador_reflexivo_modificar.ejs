@@ -1,8 +1,9 @@
 <!-- Inicio Navegador reflexivo modificar -->
 <p>
   <button
-    class="btn btn-link"
+    class="btn btn-secondary"
     type="button"
+    id="informacion_general_modificar_btn"
     onclick="modificar_informacion_boton_reflexivos('modificar_informacion_general_reflexivos')"
   >
     Paso 1: Información General
@@ -11,6 +12,7 @@
     <span class="text-primary">&gt;</span>
     <button
       class="btn btn-link"
+      id="metodos_modificar_btn"
       type="button"
       onclick="modificar_informacion_boton_reflexivos('modificar_metodos_modelos_reflexivos')"
     >
@@ -54,16 +56,6 @@
 <!-- Inicio botones -->
 <div class="container">
   <div class="row">
-    <div class="col">
-      <button
-        type="button"
-        id="btn-modificar_reflexivos"
-        class="d-inline btn btn-secondary btn-lg btn-block mt-3 mx-4 mb-2"
-        onclick="modificar_proceso_reflexivo_boton()"
-      >
-        Modificar (Información General)
-      </button>
-    </div>
     <div class="col">
       <button
         type="button"

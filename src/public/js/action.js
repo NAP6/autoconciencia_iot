@@ -2280,7 +2280,7 @@ function cargar_modelos_table(json) {
     radio.dataset.name = `${md._name}`;
     radio.dataset.autor = `${md._author}`;
     radio.dataset.descripcion = `${md._description}`;
-    radio.dataset.activo = `${md._active == "true"}`;
+    radio.dataset.activo = `${md._active == 1 }`;
     td1.appendChild(radio);
 
     var td2 = document.createElement("td");
@@ -2381,7 +2381,7 @@ function modal_modificar_modelo() {
   var name;
   var descripcion;
   var autor;
-  var activo;
+  var active;
   var select = false;
   radios.forEach((elem) => {
     if (elem.checked) {
@@ -2389,17 +2389,16 @@ function modal_modificar_modelo() {
       name = elem.dataset.name;
       descripcion = elem.dataset.descripcion;
       autor = elem.dataset.autor;
-      activo = elem.dataset.activo == "true";
+      active = elem.dataset.activo == "true";
       select = true;
       return;
     }
   });
-
   document.getElementById("id_modelo_update").value = id;
   document.getElementById("nombre_modelo_update").value = name;
   document.getElementById("descripcion_esenario_update").value = descripcion;
   document.getElementById("autor_esenario_update").value = autor;
-  document.getElementById("activoModelo").checked = activo;
+  document.getElementById("activoModelo").checked = active;
   if (select) $("#modificar_modelo_modal").modal("show");
   else alert("Seleccione un modelo para modificar");
 }
@@ -5277,7 +5276,9 @@ cont_paso = 1;
 function guardar_proceso_pre_reflexivo_boton() {
   if (cont_paso == 1) {
     if (guardar_procesos_pre_reflexivos()) {
-      document.getElementById("informacion_general_btn").classList.replace("btn-secondary", "btn-link");
+      document
+        .getElementById("informacion_general_btn")
+        .classList.replace("btn-secondary", "btn-link");
       var btn = document.getElementById("btn-section-2");
       btn.classList.replace("d-none", "d-inline");
       document.getElementById(
@@ -5291,7 +5292,9 @@ function guardar_proceso_pre_reflexivo_boton() {
     }
   } else if (cont_paso == 2) {
     if (guardar_modelos_metodos()) {
-      document.getElementById("metodos_modelos_btn").classList.replace("btn-secondary","btn-link");
+      document
+        .getElementById("metodos_modelos_btn")
+        .classList.replace("btn-secondary", "btn-link");
       var btn = document.getElementById("btn-section-3");
       btn.classList.replace("d-none", "d-inline");
       document.getElementById("btn-guardar").innerHTML = `Salir`;
@@ -5326,11 +5329,10 @@ function guardar_proceso_reflexivo_boton() {
   if (cont_paso_reflexivos == 1) {
     if (guardar_procesos_reflexivos()) {
       document
-        .getElementById("btn-section_general")
-        .classList.remove("bg-warning");
+        .getElementById("btn_informacion_general")
+        .classList.replace("btn-secondary", "btn-link");
       var btn = document.getElementById("btn-section-reflexivos");
       btn.classList.replace("d-none", "d-inline");
-      btn.classList.add("bg-warning");
       consultar_api(
         "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
         cargar_select_criterios_metodos_reflexivos,
@@ -5348,11 +5350,10 @@ function guardar_proceso_reflexivo_boton() {
   } else if (cont_paso_reflexivos == 2) {
     if (guardar_modelos_metodos_reflexivos()) {
       document
-        .getElementById("btn-section-reflexivos")
-        .classList.remove("bg-warning");
+        .getElementById("btn_metodos_modelos")
+        .classList.replace("btn-secondary", "btn-link");
       var btn = document.getElementById("btn-guardar-metodo");
       btn.classList.replace("d-none", "d-inline");
-      btn.classList.add("bg-warning");
       document.getElementById("btn-guardar-reflexivos").innerHTML = `Salir`;
       cont_paso_reflexivos++;
     } else {
@@ -5980,6 +5981,7 @@ function Guadar_nuevo_mapeo_metodos() {
     .value.split("-");
   Array.from(nombreP).forEach((element) => {
     var aux2 = {
+      proceso: element.querySelector("td#procesos_select_mapeos select").value,
       nombre: element.querySelector("td#nombre_fila_parametros_metodos")
         .innerHTML,
       par_ordinal: element.querySelector("td#id_fila_parametros_metodos")
@@ -6241,6 +6243,7 @@ function Guadar_nuevo_mapeo_modelos() {
     .value.split("-");
   Array.from(nombreP).forEach((element) => {
     var aux2 = {
+      proceso: element.querySelector("td#opcional_proceso_mapeo select").value,
       nombre: element.querySelector("td#nombre_fila_parametros_modelos")
         .innerHTML,
       par_ordinal: element.querySelector("td#id_fila_parametros_modelos")
@@ -6291,6 +6294,21 @@ function modificar_informacion_boton(id) {
   $("#modificar_informacion_general.collapse").collapse("hide");
   $("#modificar_metodos_modelos.collapse").collapse("hide");
   $(`#${id}.collapse`).collapse("show");
+  if ("modificar_informacion_general" == id) {
+    document
+      .getElementById("informacion_general_modificar")
+      .classList.replace("btn-link", "btn-secondary");
+    document
+      .getElementById("metodos_modificar")
+      .classList.replace("btn-secondary", "btn-link");
+  } else {
+    document
+      .getElementById("informacion_general_modificar")
+      .classList.replace("btn-secondary", "btn-link");
+    document
+      .getElementById("metodos_modificar")
+      .classList.replace("btn-link", "btn-secondary");
+  }
 }
 cont_paso_modificar = 1;
 
@@ -7050,6 +7068,20 @@ function abrirModalEscenarioSimulacion() {
   consultar_tabla_escenarios();
 }
 
+function abrirModalEscenarioSimulacionModificar() {
+  $("#modal_escenarios_simulacion").modal("show");
+  consultar_tabla_escenarios_modificar();
+}
+
+function consultar_tabla_escenarios_modificar() {
+var mea=document.getElementById("id_modelo_reflexivo").value;
+  post_api(
+    "http://autoconsciencia.ddns.net:3000/api/get_simulation_scenario",
+    { mea_id: mea },
+    cargar_tabla_escenarios_simulacion,
+    error_cargar_tabla_escenarios_simulacion
+  );
+}
 function consultar_tabla_escenarios() {
   post_api(
     "http://autoconsciencia.ddns.net:3000/api/get_simulation_scenario",
@@ -7287,11 +7319,28 @@ function validarSeleccionReflexivos() {
     return false;
   }
 }
-
+function abrirMapeoParametros_metodos_modificar() {
+  $("#modal_modificar_mapeo_parametros_metodos").modal("show");
+}
 function modificar_informacion_boton_reflexivos(id) {
   $("#modificar_informacion_general_reflexivos.collapse").collapse("hide");
   $("#modificar_metodos_modelos_reflexivos.collapse").collapse("hide");
   $(`#${id}.collapse`).collapse("show");
+  if (id == "modificar_informacion_general_reflexivos") {
+    document
+      .getElementById("informacion_general_modificar_btn")
+      .classList.replace("btn-link", "btn-secondary");
+    document
+      .getElementById("metodos_modificar_btn")
+      .classList.replace("btn-secondary", "btn-link");
+  } else {
+    document
+      .getElementById("informacion_general_modificar_btn")
+      .classList.replace("btn-secondary", "btn-link");
+    document
+      .getElementById("metodos_modificar_btn")
+      .classList.replace("btn-link", "btn-secondary");
+  }
 }
 cont_paso_modificar_reflexivos = 1;
 
@@ -7345,70 +7394,38 @@ function saltar_proceso_reflexivo_boton() {
     document
       .getElementById("btn-reflexivos-modificar")
       .classList.replace("d-none", "d-inline");
-    document.getElementById(
-      "btn-modificar_reflexivos"
-    ).innerHTML = `Modificar (Metodos modelos)`;
     $("#modificar_informacion_general_reflexivos.collapse").collapse("hide");
     $("#modificar_metodos_modelos_reflexivos.collapse").collapse("show");
     saltar_paso++;
     cont_paso_modificar_reflexivos++;
-    cargar_select_metrica_indirecta_modificar_reflexivos();
     document
       .getElementById("modal_metodo_mod_reflexivos")
       .classList.replace("d-none", "d-block");
     document.getElementById(
-      "input-name-proceso-reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
-      "input-descripcion-proceso-reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
-      "inicio_del_periodo_reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
-      "fin_del_periodo_reflexivo_modificar"
-    ).disabled = true;
-    document.getElementById(
       "btn-saltar-modificar_reflexivos"
-    ).innerHTML = `Saltar (Metodos modelos)`;
+    ).innerHTML = `Saltar (Información General)`;
+    document
+      .getElementById("informacion_general_modificar_btn")
+      .classList.replace("btn-secondary", "btn-link");
+    document
+      .getElementById("metodos_modificar_btn")
+      .classList.replace("btn-link", "btn-secondary");
   } else if (saltar_paso == 2) {
-    document.getElementById(
-      "inicio_metodos_reflexivos_modificar"
-    ).disabled = true;
-    document.getElementById("fin_metodos_reflexivos_modificar").disabled = true;
-    document.getElementById(
-      "metrica_indirecta_reflexivos_modificar"
-    ).disabled = true;
-    document.getElementById("indicador_modelo_modificar").disabled = true;
-    document.getElementById(
-      "mapeo_parametros_btn_metodos_modificar"
-    ).disabled = false;
-    document.getElementById(
-      "mapeo_parametros_modelo_modificar"
-    ).disabled = false;
-    document.getElementById(
-      "btn-recomendaciones_model_modificar"
-    ).disabled = false;
-    document.getElementById("variables_simulacion_modificar").disabled = false;
-    document.getElementById("escenario_simulacion_modificar").disabled = false;
     document
-      .getElementById("btn-reflexivos-3-modificar")
-      .classList.replace("d-none", "d-inline");
-    document
-      .getElementById("btn-modificar_reflexivos")
-      .classList.replace("d-inline", "d-none");
+      .getElementById("btn-reflexivos-modificar")
+      .classList.replace("d-block", "d-none");
+    $("#modificar_informacion_general_reflexivos.collapse").collapse("show");
+    $("#modificar_metodos_modelos_reflexivos.collapse").collapse("hide");
+    saltar_paso--;
     document.getElementById(
       "btn-saltar-modificar_reflexivos"
-    ).innerHTML = `Salir`;
-
-    saltar_paso++;
-  } else if (saltar_paso == 3) {
-    consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
-      cargar_procesos_pre_reflexivos_table,
-      error_procesos_pre_reflexivos_table
-    );
-    history.back();
+    ).innerHTML = `Saltar (Información General)`;
+    document
+      .getElementById("informacion_general_modificar_btn")
+      .classList.replace("btn-link", "btn-secondary");
+    document
+      .getElementById("metodos_modificar_btn")
+      .classList.replace("btn-secondary", "btn-link");
   }
 }
 

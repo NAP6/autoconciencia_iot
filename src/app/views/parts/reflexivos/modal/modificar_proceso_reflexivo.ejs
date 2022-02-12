@@ -171,16 +171,8 @@
             id="CategoriaEntidadesProcesos_reflexivos_modificar"
             disabled
           >
-            <option value="-6">Seleccione..</option>
-            <option id="1" value="1">Entidades Físicas</option>
-            <option value="2">Nodos Cloud</option>
-            <option value="3">Nodos Fog</option>
-            <option value="4">Gateway IoT</option>
-            <option value="5">Sensores</option>
-            <option value="6">Tags</option>
-            <option value="7">Actuadores</option>
-            <option value="8">Red</option>
-          </select>
+            <option value="-6"><%= modificar[0].categoria %></option>
+                      </select>
         </div>
       <h6 class="display_type">
         Objetos sobre los que se captura el aspecto autoconsciencia:
@@ -191,7 +183,11 @@
           class="card col-lg-12"
           style="overflow-y: auto; height: 90px"
         >
-          <ul id="lista_entidades_seleccionadas_procesos_reflexivos_modificar"></ul>
+          <ul id="lista_entidades_seleccionadas_procesos_modificar">
+	  <% for(let obj of modificar) { %>
+	  <li><%=obj.nombre_objeto%></li>
+	  <% } %>
+	  </ul>
         </div>
       </div>
     </div>

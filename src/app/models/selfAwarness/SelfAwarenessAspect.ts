@@ -9,7 +9,7 @@ export class SelfAwarenessAspect {
   private _aspectType;
   private _weight: number;
   private _active: boolean;
-  private _aggregationOperator: string | undefined;
+  protected _aggregationOperator: string | undefined | {};
   private _isEvaluated: Metric[];
   private _derives: CollectiveSelfawarenessAspect[];
   private _scope: string | undefined;
@@ -82,11 +82,11 @@ export class SelfAwarenessAspect {
     this._active = value;
   }
 
-  get aggregationOperator(): string | undefined {
+  get aggregationOperator(): string | undefined | {}{
     return this._aggregationOperator;
   }
 
-  set aggregationOperator(value: string | undefined) {
+  set aggregationOperator(value: string | undefined | {}) {
     this._aggregationOperator = value;
   }
 

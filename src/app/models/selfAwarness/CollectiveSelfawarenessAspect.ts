@@ -1,7 +1,6 @@
 import { SelfAwarenessAspect } from "./SelfAwarenessAspect";
 
 export class CollectiveSelfawarenessAspect extends SelfAwarenessAspect {
-  private _aggregationOperator: String | null | {};
   private _isDerivedFrom: SelfAwarenessAspect[];
 
   constructor(
@@ -10,18 +9,18 @@ export class CollectiveSelfawarenessAspect extends SelfAwarenessAspect {
     description: string,
     weight: number,
     aspectType,
-    aggregationOperator: String | null | {}
+    aggregationOperator: string
   ) {
     super(id, name, description, weight, aspectType);
     this._aggregationOperator = aggregationOperator;
     this._isDerivedFrom = [];
   }
 
-  get aggregationOperator(): String | null | {} {
+  get aggregationOperator(): string | undefined | {} {
     return this._aggregationOperator;
   }
 
-  set aggregationOperator(value: String | null | {}) {
+  set aggregationOperator(value: string | undefined | {}) {
     this._aggregationOperator = value;
   }
 
