@@ -15,6 +15,8 @@ import constants from "./config/constants";
 import routes from "./config/routes";
 import api from "./config/api";
 
+console.log(constants)
+
 var upload = multer({
   dest: "uploads/",
 });

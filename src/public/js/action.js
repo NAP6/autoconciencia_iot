@@ -1,3 +1,5 @@
+const SERVER_PATH = window.location.origin;
+
 function consultar_api(url = "", fun1, fun2) {
   fetch(url)
     .then((response) => response.json())
@@ -48,7 +50,7 @@ function cargar_tipo_dato_select() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_select_tipo_dato_salida,
     (err) => {
@@ -63,7 +65,7 @@ function cargar_formato_select() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_select_formato,
     (err) => {
@@ -112,7 +114,7 @@ function cargar_select_formato(json) {
 
 function cargar_recursos_de_implementacion() {
   consultar_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/deployment_resources"),
+    (url = SERVER_PATH + "/api/deployment_resources"),
     cargar_recursos_de_implementacion_tabla,
     (err) => {
       alert(err);
@@ -183,7 +185,7 @@ function modificar_recurso() {
   if (id) {
     document.getElementById("input-id-resource-mod").value = id;
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+      SERVER_PATH + "/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -226,7 +228,7 @@ function cargar_recurso_para_modificar(json) {
 
 function modificarRecursoImplementacion() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/del_deployment_resources/",
+    SERVER_PATH + "/api/del_deployment_resources/",
     {
       id: document.getElementById("input-id-resource-mod").value,
     },
@@ -338,7 +340,7 @@ function eliminar_recurso() {
   if (id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_deployment_resources/",
+        SERVER_PATH + "/api/del_deployment_resources/",
         {
           id: id,
         },
@@ -698,7 +700,7 @@ function guardarRecursoImplementacion() {
       arregloParametros: arregloParametros,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_deployment_resources/",
+      SERVER_PATH + "/api/add_deployment_resources/",
       data,
       (res) => {
         cargar_recursos_de_implementacion();
@@ -737,7 +739,7 @@ function guardarRecursoImplementacion() {
 	*/
 if (document.getElementById("lista_sujetos_para_cargar"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    SERVER_PATH + "/api/subjects",
     cargar_posibles_sujetos_modelo,
     error_cargar_posibles_sujetos_modelo
   );
@@ -985,7 +987,7 @@ function actualizar_activos() {
     actualizacion.push(elem);
   });
   post_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/update_subjects"),
+    (url = SERVER_PATH + "/api/update_subjects"),
     actualizacion,
     (json) => {
       console.log(json);
@@ -1025,7 +1027,7 @@ function actualizar_sujetos() {
 
 function cargar_select_criterios_decision() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
+    SERVER_PATH + "/api/decision_criteria",
     cargar_select_criterios_objetivos,
     error_cargar_select_criterios_objetivos
   );
@@ -1056,7 +1058,7 @@ function cargar_select_operador_agregacion() {
     tipo: nombre,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_operador_asignacion_select,
     error_cargar_operador_asignacion_select
@@ -1091,7 +1093,7 @@ function abrirModalObjetosSujetos(id, nombre) {
 
 function cargar_arbol(id) {
   post_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/subjects_objects"),
+    (url = SERVER_PATH + "/api/subjects_objects"),
     {
       id: id,
     },
@@ -1185,7 +1187,7 @@ function agregarObjeto() {
   if ((!!id_padre, !!nombre, !!descripcion, !!peso, !!operador)) {
     //Aqui falta agregar el criterio
     post_api(
-      (url = "http://autoconsciencia.ddns.net:3000/api/save_subjects_objects"),
+      (url = SERVER_PATH + "/api/save_subjects_objects"),
       {
         father: id_padre,
         name: nombre,
@@ -1220,7 +1222,7 @@ function eliminarObjeto() {
     }
   });
   post_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/delete_subjects_objects"),
+    (url = SERVER_PATH + "/api/delete_subjects_objects"),
     {
       id: id,
     },
@@ -1250,7 +1252,7 @@ function eliminarObjeto() {
 
 function get_tipo_escalas_select() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     { tipo: "TIPO_ESCALA" },
     cargar_select_tipo_escala,
     (err) => {
@@ -1283,7 +1285,7 @@ if (document.getElementById("tipo_escalas2")) {
 
 function get_tipo_escalas_modificar_select() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     { tipo: "TIPO_ESCALA" },
     cargar_select_tipo_escala_modificar,
     (err) => {
@@ -1317,7 +1319,7 @@ if (document.getElementById("tabla_unidades_de_medida")) {
 
 function consultar_get_unidades_medida() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_measurement_units",
+    SERVER_PATH + "/api/get_measurement_units",
     cargar_unidades_de_medida_table,
     error_cargar_unidades_de_medida_table
   );
@@ -1365,7 +1367,7 @@ function guardarNuevaUnidadMedida() {
   };
   if (!!data.name && !!data.description && !!data.acronym) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_measurement_units/",
+      SERVER_PATH + "/api/add_measurement_units/",
       data,
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
@@ -1388,7 +1390,7 @@ function GuardarEliminarUnidadMedida() {
   if (!!id) {
     if (confirm("Esta seguro que desea eliminar la unidad de Medida")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_measurement_units/",
+        SERVER_PATH + "/api/del_measurement_units/",
         { id: id },
         mensaje_exitoEnvioUnidadesMedida,
         mensaje_errorEnvioUnidadesMedida
@@ -1443,7 +1445,7 @@ function guardarModificacionMedida() {
   };
   if (!!data.id && !!data.name && !!data.description && !!data.acronym) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/upd_measurement_units/",
+      SERVER_PATH + "/api/upd_measurement_units/",
       data,
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
@@ -1470,7 +1472,7 @@ function mensaje_errorEnvioUnidadesMedida(err) {
 	*/
 function consultar_get_escalas() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_scales",
+    SERVER_PATH + "/api/get_scales",
     cargar_escales_table,
     error_cargar_escales_table
   );
@@ -1531,7 +1533,7 @@ function guardarNuevaEscala() {
     };
     if (!!data.name && !!data.valid_values && !!data.type) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/add_scales/",
+        SERVER_PATH + "/api/add_scales/",
         data,
         mensaje_exitoEnvioEscalas,
         mensaje_errorEnvioEscalas
@@ -1579,7 +1581,7 @@ function GuardareliminarEscala() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar la escala")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_scales/",
+        SERVER_PATH + "/api/del_scales/",
         { id: id },
         mensaje_exitoEnvioEscalas,
         mensaje_errorEnvioEscalas
@@ -1627,7 +1629,7 @@ function guardarModificacionEscala() {
   };
   if (!!data.id && !!data.name && !!data.valid_values && !!data.type) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/upd_scales/",
+      SERVER_PATH + "/api/upd_scales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
@@ -1661,7 +1663,7 @@ if (document.getElementById("tabla_criterios_decision")) {
 
 function get_criterios_table() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_criteria",
+    SERVER_PATH + "/api/get_criteria",
     cargar_criterios_table,
     error_cargar_criterios_table
   );
@@ -1685,7 +1687,7 @@ function cargar_criterios_table(json) {
     else res += `<td><input type="checkbox" disabled></td>`;
     res += "</tr>";
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+      SERVER_PATH + "/api/get_umbral",
       {
         criterio: cd.id,
       },
@@ -1716,7 +1718,7 @@ function guardarNuevoCriterio() {
   };
   if (!!data.name && !!data.description) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_criteria/",
+      SERVER_PATH + "/api/add_criteria/",
       data,
       mensaje_exitoEnvioDecisionCriteria,
       mensaje_errorEnvioDecisionCriteria
@@ -1770,7 +1772,7 @@ function guardar_eliminar_criterio_decision() {
           criterio_select = undefined;
         }
         post_api(
-          "http://autoconsciencia.ddns.net:3000/api/del_criteria/",
+          SERVER_PATH + "/api/del_criteria/",
           data,
           mensaje_exitoEnvioDecisionCriteria,
           mensaje_errorEnvioDecisionCriteria
@@ -1823,7 +1825,7 @@ function guardarModificacionCriterios() {
     };
     if (!!data.id && !!data.name && !!data.description) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/upd_criteria/",
+        SERVER_PATH + "/api/upd_criteria/",
         data,
         mensaje_exitoEnvioDecisionCriteria,
         mensaje_errorEnvioDecisionCriteria
@@ -2005,7 +2007,7 @@ function guardarNuevoUmbral() {
       !!data.superior
     ) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/add_umbral/",
+        SERVER_PATH + "/api/add_umbral/",
         data,
         mensaje_exitoEnvioUmbral,
         mensaje_errorEnvioUmbral
@@ -2029,7 +2031,7 @@ function guardar_eliminar_umbral() {
   if (!!id) {
     if (confirm("Esta seguro que desea eliminar este Umbral")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_umbral/",
+        SERVER_PATH + "/api/del_umbral/",
         { id: id },
         mensaje_exitoEnvioUmbral,
         mensaje_errorEnvioUmbral
@@ -2038,7 +2040,7 @@ function guardar_eliminar_umbral() {
         criterio: criterio_select,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/get_umbral/",
+        SERVER_PATH + "/api/get_umbral/",
         data2,
         cargar_umbral_table,
         (err) => {
@@ -2100,7 +2102,7 @@ function guardarModificacionUmbral() {
     !!data.superior
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/upd_umbral/",
+      SERVER_PATH + "/api/upd_umbral/",
       data,
       mensaje_exitoEnvioUmbral,
       mensaje_errorEnvioUmbral
@@ -2115,7 +2117,7 @@ function mensaje_exitoEnvioUmbral(json) {
     criterio: criterio_select,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral/",
+    SERVER_PATH + "/api/get_umbral/",
     data,
     cargar_umbral_table_modificar,
     (err) => {
@@ -2139,13 +2141,13 @@ function guardarNuevoAspecto() {
   };
   if (!!data.descripcion) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_aspects/",
+      SERVER_PATH + "/api/add_aspects/",
       data,
       mensaje_exitoEnvioAspects,
       mensaje_errorEnvioAspects
     );
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/aspects",
+      SERVER_PATH + "/api/aspects",
       cargar_aspectos_table,
       error_cargar_aspectos_table
     );
@@ -2178,7 +2180,7 @@ function Administrar_Metricas() {
         tipo: busca,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+        SERVER_PATH + "/api/get_enumeracion",
         data2,
         cargar_tipo_metrica_select,
         error_cargar_tipo_metrica_select
@@ -2193,7 +2195,7 @@ function Administrar_Metricas() {
 
 function mensaje_exitoEnvioAspects(json) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/aspects",
+    SERVER_PATH + "/api/aspects",
     data,
     cargar_aspectos_table,
     error_cargar_aspectos_table
@@ -2254,7 +2256,7 @@ function error_cargar_aspectos_table(err) {
 var modelo_fisico_json;
 if (document.getElementById("tabla_modelos_autoconciencia"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/user_models",
+    SERVER_PATH + "/api/user_models",
     cargar_modelos_table,
     error_cargar_models_table
   );
@@ -2417,7 +2419,7 @@ function modal_modificar_modelo() {
 
 if (document.getElementById("select_modelo_para_activar_trabajo"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/user_models",
+    SERVER_PATH + "/api/user_models",
     cargar_modelos_trabajo_actual,
     error_cargar_models_trabajo_actual
   );
@@ -2836,7 +2838,7 @@ function actualizar_activos_entidad() {
     actualizacion.push(elem);
   });
   post_api(
-    (url = "http://autoconsciencia.ddns.net:3000/api/update_entity"),
+    (url = SERVER_PATH + "/api/update_entity"),
     actualizacion,
     (json) => {
       console.log(json);
@@ -2930,7 +2932,7 @@ function abrirModalEntidad(id, nombre) {
       id: idSeleccion,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/aspects",
+      SERVER_PATH + "/api/aspects",
       data,
       cargar_aspectos_table,
       error_cargar_aspectos_table
@@ -2981,7 +2983,7 @@ function agregarAspecto() {
   if (!!data.nombre && !!data.descripcion && !!data.peso && !!data.tipoS) {
     desactivarFormularioAgregarEntidad(),
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/add_aspects/",
+        SERVER_PATH + "/api/add_aspects/",
         data,
         mensaje_exitoEnvioAspects,
         mensaje_errorEnvioAspects
@@ -3006,13 +3008,13 @@ function EliminarAspecto() {
       id: idSeleccion,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/del_aspects/",
+      SERVER_PATH + "/api/del_aspects/",
       data,
       mensaje_exitoEnvioAspects,
       mensaje_errorEnvioAspects
     );
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/aspects",
+      SERVER_PATH + "/api/aspects",
       data,
       cargar_aspectos_table,
       error_cargar_aspectos_table
@@ -3038,7 +3040,7 @@ function eliminar_metrica() {
       id: AspectoId,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/del_metrica/",
+      SERVER_PATH + "/api/del_metrica/",
       data,
       mensaje_exitoEnvioMetrica,
       mensaje_errorEnvioMetrica
@@ -3075,13 +3077,13 @@ function guardarNuevaRecImpl() {
     !!data.tipo_recurso
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_ri/",
+      SERVER_PATH + "/api/add_ri/",
       data,
       mensaje_exitoEnvioRI,
       mensaje_errorEnvioRI
     );
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_ri/",
+      SERVER_PATH + "/api/add_ri/",
       cargar_ri_table,
       error_cargar_ri_table
     );
@@ -3104,13 +3106,13 @@ function eliminar_recurso_implementacion() {
     };
     console.log(data);
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/del_escales/",
+      SERVER_PATH + "/api/del_escales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/escales",
+      SERVER_PATH + "/api/escales",
       cargar_escales_table,
       error_cargar_escales_table
     );
@@ -3157,13 +3159,13 @@ function guardarModificacionRI() {
   };
   if (!!data.id && !!data.nombre && !!data.valor_valido && !!data.tipo) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/upd_escales/",
+      SERVER_PATH + "/api/upd_escales/",
       data,
       mensaje_exitoEnvioEscalas,
       mensaje_errorEnvioEscalas
     );
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/escales",
+      SERVER_PATH + "/api/escales",
       cargar_escales_table,
       error_cargar_escales_table
     );
@@ -3195,7 +3197,7 @@ function mensaje_errorEnvioRI(err) {
 
 if (document.getElementById("tabla_recurso_implementacion"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/recurso_implementacion",
+    SERVER_PATH + "/api/recurso_implementacion",
     cargar_ri_table,
     error_cargar_ri_table
   );
@@ -3253,7 +3255,7 @@ function add_Tipo_Recurso() {
 }
 if (document.getElementById("lista_sujetos_activos"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    SERVER_PATH + "/api/subjects",
     cargar_sujetos_activos,
     error_cargar_sujetos_activos
   );
@@ -3272,13 +3274,13 @@ function agregarProcesoPreReflexivo() {
     tipo: tipoComunicacion,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_select_tipo_comunicacion,
     error_cargar_select_tipo_comunicacion
   );
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
+    SERVER_PATH + "/api/decision_criteria",
     cargar_select_criterios_proceso,
     error_cargar_select_criterios_proceso
   );
@@ -3297,7 +3299,7 @@ function generar_flujo_datos_select() {
   }
   if (seleccione != "Seleccione.." && porpiedadSeleccionada != "-6") {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_data_flow",
+      SERVER_PATH + "/api/get_data_flow",
       {
         comunicacion: comunicacion,
         propiedad: porpiedadSeleccionada,
@@ -3373,7 +3375,7 @@ function Abrir_limpiar_modal_proceso_pre_reflexivo() {
 }
 if (document.getElementById("lista_sujetos_activos_proceso"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    SERVER_PATH + "/api/subjects",
     cargar_sujetos_activos_procesos,
     error_cargar_sujetos_activos_procesos
   );
@@ -3449,7 +3451,7 @@ function verificar_seleccion_sujeto_categoria(categoria, IdSujeto) {
       systemID: IdSujeto,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/entitys",
+      SERVER_PATH + "/api/entitys",
       data,
       cargar_posibles_entidades_modelo,
       error_cargar_posibles_entidades_modelo
@@ -3485,7 +3487,7 @@ $("#CategoriaEntidadesProcesos").change(function () {
   };
   if (data.categoria != -6 && data.aspecto != -6 && !!data.sujeto) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+      SERVER_PATH + "/api/get_objects_aspects",
       data,
       cargar_objetos_proceso,
       (res) => {
@@ -3508,7 +3510,7 @@ function verificar_seleccion_sujeto_categoria_procesos(IdSujeto) {
       types: 53,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+      SERVER_PATH + "/api/get_aspects_objects_process",
       data,
       cargar_posibles_entidades_proceso,
       error_cargar_posibles_entidades_proceso
@@ -3660,13 +3662,13 @@ function cargar_aspectos(elemento, lado) {
     id: idObjeto,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/aspects",
+    SERVER_PATH + "/api/aspects",
     data,
     cargar_aspectos_select,
     error_cargar_aspectos_select
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/properties",
+    SERVER_PATH + "/api/properties",
     {
       id: idObjeto,
     },
@@ -3708,7 +3710,7 @@ $("#Aspectos_autoconsciencia").change(function () {
   };
   if (data.aspecto != -6 && !!data.sujeto) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+      SERVER_PATH + "/api/get_objects_aspects",
       data,
       cargar_objetos_proceso,
       (res) => {
@@ -3734,7 +3736,7 @@ $("#Aspectos_autoconsciencia").change(function () {
     tipo: tipoM,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    SERVER_PATH + "/api/get_metrics_type",
     data,
     cargar_select_metrica_proceso,
     error_cargar_select_metrica_proceso
@@ -3749,7 +3751,7 @@ $("#Aspectos_autoconsciencia").change(function () {
     tipo: tipoIndi,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    SERVER_PATH + "/api/get_metrics_type",
     data2,
     cargar_select_indicador_proceso,
     error_cargar_select_indicador_proceso
@@ -3884,7 +3886,7 @@ function cargar_lista_umbrales_proceso(json) {
     res += `<td>${cd.superior}</td>`;
     res += "</tr>";
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_action",
+      SERVER_PATH + "/api/get_action",
       {
         umbral: cd.id,
         mea_id: modelo_analisis_pre_reflexivos,
@@ -3937,7 +3939,7 @@ function error_cargar_lista_umbrales_proceso(err) {
 function cargar_activos_umbrales() {
   var seleccionCriterio = document.getElementById("criterio_de_decision").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    SERVER_PATH + "/api/get_umbral",
     { criterio: seleccionCriterio },
     cargar_lista_umbrales_proceso,
     (res) => {
@@ -3962,7 +3964,7 @@ function guardarAccionUmbral() {
   };
   if (!!data.description) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_action",
+      SERVER_PATH + "/api/add_action",
       data,
       mensajeExitosoAgregarAccionesUmbrales,
       mensajeErrorAgregarAccionesUmbrales
@@ -3974,7 +3976,7 @@ function guardarAccionUmbral() {
 
 function mensajeExitosoAgregarAccionesUmbrales(json) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_action",
+    SERVER_PATH + "/api/get_action",
     {
       umbral: UmbralId,
       mea_id: modelo_analisis_pre_reflexivos,
@@ -4054,7 +4056,7 @@ function eliminarAccionesUmbrales() {
         id: id,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_action/",
+        SERVER_PATH + "/api/del_action/",
         data,
         mensajeExitosoAgregarAccionesUmbrales,
         (res) => {
@@ -4072,7 +4074,7 @@ function mensaje_exitosoEliminacionAcciones(json) {
 
 function cargarDespuesdeEliminarAcciones() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_accion/",
+    SERVER_PATH + "/api/get_accion/",
     {
       id: UmbralId,
     },
@@ -4115,7 +4117,7 @@ function guardarModificacionAccionesUmbrales() {
     active: document.getElementById("activo_accion_umbral_modificar").checked,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/upd_action/",
+    SERVER_PATH + "/api/upd_action/",
     data,
     mensajeExitosoAgregarAccionesUmbrales,
     (res) => {
@@ -4136,7 +4138,7 @@ function abrirModalMapeoParametros() {
     var id = document.getElementById("recurso").value;
     if (id) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+        SERVER_PATH + "/api/ask_deployment_resources/",
         {
           id: id,
         },
@@ -4225,7 +4227,7 @@ function cargar_modal_mapeo_parametros(json) {
     }
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
@@ -4276,7 +4278,7 @@ function cargar_metricas_procesos(elemento) {
       metricaId: elemento.value,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      SERVER_PATH + "/api/ask_input_arguments",
       data,
       llenar_procesos_mapeo,
       (err) => {
@@ -4291,7 +4293,7 @@ function cargar_metricas_procesos(elemento) {
       aspectoId: document.getElementById("Aspectos_autoconsciencia").value,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      SERVER_PATH + "/api/ask_input_arguments",
       data,
       cargar_select_argumento_entrada,
       (err) => {
@@ -4393,7 +4395,7 @@ function SeleccionaRecursoSelect(element) {
 
   if (element.value) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      SERVER_PATH + "/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -4450,7 +4452,7 @@ function guardar_procesos_pre_reflexivos() {
       tipoE: tipo_ejecucion,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_pre_reflective_process",
+      SERVER_PATH + "/api/add_pre_reflective_process",
       data,
       procesos_pre_reflexivos_guardados_exito,
       (res) => {
@@ -4490,7 +4492,7 @@ function guardar_procesos_pre_reflexivos() {
 }
 function get_propiedades_procesos(id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_properties",
+    SERVER_PATH + "/api/get_properties",
     {
       aspectoID: id,
     },
@@ -4547,7 +4549,7 @@ function guardar_modelos_metodos() {
       },
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_metodo_modelo",
+      SERVER_PATH + "/api/add_metodo_modelo",
       datos,
       mensajeCorrectoGuardarMetodos,
       errormensajeCorrectoGuardarMetodos
@@ -4597,7 +4599,7 @@ function errormensajeCorrectoGuardarMetodos(error) {
 
 if (document.getElementById("tabla_proceso_pre_reflexivo"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_pre_reflective_process",
+    SERVER_PATH + "/api/get_pre_reflective_process",
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
@@ -4652,7 +4654,7 @@ function modificarProcesoPreReflexivo() {
   });
   if (!!id) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_pre_reflective_process_mod/",
+      SERVER_PATH + "/api/get_pre_reflective_process_mod/",
       {
         id: id,
       },
@@ -4680,7 +4682,7 @@ function elminarProcesoPreReflexivo() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el Proceso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_pre_reflective_process/",
+        SERVER_PATH + "/api/del_pre_reflective_process/",
         { id: id },
         mensaje_exitosBorrar_pre_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
@@ -4691,7 +4693,7 @@ function elminarProcesoPreReflexivo() {
 
 function mensaje_exitosBorrar_pre_reflexivo(json) {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_pre_reflective_process",
+    SERVER_PATH + "/api/get_pre_reflective_process",
     cargar_procesos_pre_reflexivos_table,
     error_procesos_pre_reflexivos_table
   );
@@ -4738,7 +4740,7 @@ function Guagar_nuevo_Mapeo() {
   });
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_mapeo_parametros/",
+    SERVER_PATH + "/api/add_mapeo_parametros/",
     aux,
     mensaje_correcto_envio_mapeo,
     mensaje_error_envio_mapeo
@@ -4804,7 +4806,7 @@ function Abrir_limpiar_modal_proceso_reflexivo() {
 }
 if (document.getElementById("lista_sujetos_activos_proceso_reflexivo")) {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    SERVER_PATH + "/api/subjects",
     cargar_sujetos_activos_procesos_reflexivos,
     error_cargar_sujetos_activos_procesos_reflexivos
   );
@@ -4922,7 +4924,7 @@ function cargar_aspectos_procesos_reflexivos(IdSujeto, tipo) {
       types: tipo,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+      SERVER_PATH + "/api/get_aspects_objects_process",
       data,
       cargar_posibles_entidades_proceso_reflexivo,
       (res) => {
@@ -4987,7 +4989,7 @@ $("#CategoriaEntidadesProcesos_reflexivos").change(function () {
   };
   if (data.categoria != -6 && data.aspeco != -6 && !!data.sujeto) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+      SERVER_PATH + "/api/get_objects_aspects",
       data,
       cargar_objetos_proceso_reflexivo,
       (res) => {
@@ -5124,7 +5126,7 @@ function cargar_aspectos_reflexivos(elemento, lado) {
     id: idObjeto,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/aspects",
+    SERVER_PATH + "/api/aspects",
     data,
     cargar_aspectos_select_reflexivos,
     error_cargar_aspectos_select_reflexivos
@@ -5174,7 +5176,7 @@ function guardar_procesos_reflexivos() {
       tipoE: tipo_ejecucion,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_reflective_process/",
+      SERVER_PATH + "/api/add_reflective_process/",
       data,
       procesos_reflexivos_guardados_exito,
       (res) => {
@@ -5222,7 +5224,7 @@ function guardar_procesos_reflexivos() {
 }
 function cargar_tabla_procesos_reflexivos() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_reflective_process",
+    SERVER_PATH + "/api/get_reflective_process",
     cargar_procesos_reflexivos_table,
     error_procesos_reflexivos_table
   );
@@ -5305,7 +5307,7 @@ function guardar_proceso_pre_reflexivo_boton() {
   } else if (cont_paso == 3) {
     history.back();
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_pre_reflective_process",
+      SERVER_PATH + "/api/get_pre_reflective_process",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -5334,7 +5336,7 @@ function guardar_proceso_reflexivo_boton() {
       var btn = document.getElementById("btn-section-reflexivos");
       btn.classList.replace("d-none", "d-inline");
       consultar_api(
-        "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
+        SERVER_PATH + "/api/decision_criteria",
         cargar_select_criterios_metodos_reflexivos,
         error_cargar_select_metodos_reflexivos
       );
@@ -5406,7 +5408,7 @@ function guardar_modelos_metodos_reflexivos() {
       },
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_metodo_modelo2",
+      SERVER_PATH + "/api/add_metodo_modelo2",
       datos,
       mensajeCorrectoGuardarMetodosReflexivos,
       errormensajeCorrectoGuardarMetodosReflexivos
@@ -5488,7 +5490,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
   };
   if (data.aspecto != -6 && !!data.sujeto) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+      SERVER_PATH + "/api/get_objects_aspects",
       data,
       cargar_objetos_proceso_reflexivo,
       (res) => {
@@ -5508,7 +5510,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
     tipo: tipoM,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    SERVER_PATH + "/api/get_metrics_type",
     data,
     cargar_select_metrica_proceso_reflexivo,
     error_cargar_select_metrica_proceso_reflexivo
@@ -5524,7 +5526,7 @@ $("#Aspectos_autoconsciencia_reflexivos").change(function () {
     tipo: tipoIndi,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    SERVER_PATH + "/api/get_metrics_type",
     data2,
     cargar_select_indicador_proceso_reflexivo,
     error_cargar_select_indicador_proceso_reflexivo
@@ -5591,7 +5593,7 @@ function SeleccionaRecursoReflexivosMetodos(element) {
 
   if (element.value) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      SERVER_PATH + "/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -5623,7 +5625,7 @@ function SeleccionaRecursoReflexivosModelos(element) {
 
   if (element.value) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      SERVER_PATH + "/api/ask_deployment_resources_select/",
       {
         tipo: element.value,
       },
@@ -5661,7 +5663,7 @@ function abrirMapeoParametros_metodos() {
     var id = document.getElementById("recurso_reflexivos").value;
     if (id) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+        SERVER_PATH + "/api/ask_deployment_resources/",
         {
           id: id,
         },
@@ -5759,7 +5761,7 @@ function cargar_modal_mapeo_parametros_metodos(json) {
     }
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
@@ -5796,7 +5798,7 @@ function cargar_select_mapeo_tipo_metodos(json) {
     });
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA_METODO",
     },
@@ -5839,7 +5841,7 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
       metricaId: elemento.value,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      SERVER_PATH + "/api/ask_input_arguments",
       data,
       llenar_procesos_metodo_reflexivo,
       (err) => {
@@ -5884,7 +5886,7 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
       procces_of_direct_metric: global_direct_metric.proces_id,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      SERVER_PATH + "/api/ask_input_arguments",
       data,
       cargar_select_argumento_entrada_metodos,
       (err) => {
@@ -5924,7 +5926,7 @@ function cargar_select_argumento_entrada_metodos(json) {
 }
 function cargar_select_mapeo_variables_simulacion() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable",
+    SERVER_PATH + "/api/get_simulation_variable",
     { mea_id: metodo_calculo },
     cargar_variables_simulacion_select_modal_mapeo,
     (res) => {
@@ -5948,7 +5950,7 @@ function cargar_variables_simulacion_select_modal_mapeo(json) {
 
 function cargar_select_mapeo_metados() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metadata",
+    SERVER_PATH + "/api/get_metadata",
     { mea_id: metodo_calculo },
     cargar_metadatos_select_modal_mapeo,
     (res) => {
@@ -6027,7 +6029,7 @@ function Guadar_nuevo_mapeo_metodos() {
   }
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_mapeo_parametros/",
+    SERVER_PATH + "/api/add_mapeo_parametros/",
     aux,
     mensaje_correcto_envio_mapeo_metodos,
     (res) => {
@@ -6054,7 +6056,7 @@ function abrirMapeoParametros_modelos() {
     var id = document.getElementById("recurso_modelos_reflexivos").value;
     if (id) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+        SERVER_PATH + "/api/ask_deployment_resources/",
         {
           id: id,
         },
@@ -6150,7 +6152,7 @@ function cargar_modal_mapeo_parametros_modelos(json) {
     }
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     {
       tipo: "TIPO_METRICA",
     },
@@ -6187,7 +6189,7 @@ function cargar_metricas_tipo_mapeo_modelo(elemento) {
       metricaId: elemento.value,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      SERVER_PATH + "/api/ask_input_arguments",
       data,
       cargar_select_procesos_mapeo_reflexivos,
       (err) => {
@@ -6197,7 +6199,7 @@ function cargar_metricas_tipo_mapeo_modelo(elemento) {
   } else {
     data = { tipo_metrica: elemento.value };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_input_arguments",
+      SERVER_PATH + "/api/ask_input_arguments",
       data,
       cargar_select_argumento_entrada_modelos,
       (err) => {
@@ -6273,7 +6275,7 @@ function Guadar_nuevo_mapeo_modelos() {
   console.log(aux);
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_mapeo_parametros/",
+    SERVER_PATH + "/api/add_mapeo_parametros/",
     aux,
     mensaje_correcto_envio_mapeo_modelos,
     (res) => {
@@ -6344,7 +6346,7 @@ function modificar_proceso_pre_reflexivo_boton() {
   } else if (cont_paso_modificar == 3) {
     history.back();
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
+      SERVER_PATH + "/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -6356,7 +6358,7 @@ function cargar_metodos_aprendizaje_razonamiento() {
     .value;
   var asp_id = document.getElementById("id_aspecto").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_properties",
+    SERVER_PATH + "/api/get_properties",
     { aspectoID: asp_id },
     llenar_select_propiedades_modificar,
     (res) => {
@@ -6364,7 +6366,7 @@ function cargar_metodos_aprendizaje_razonamiento() {
     }
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    SERVER_PATH + "/api/get_metrics_type",
     { id: asp_id, tipo: 10 },
     llenar_select_metricas_directas_modificar,
     (res) => {
@@ -6372,7 +6374,7 @@ function cargar_metodos_aprendizaje_razonamiento() {
     }
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type",
+    SERVER_PATH + "/api/get_metrics_type",
     { id: asp_id, tipo: 12 },
     llenar_select_metricas_indicador_modificar,
     (res) => {
@@ -6380,12 +6382,12 @@ function cargar_metodos_aprendizaje_razonamiento() {
     }
   );
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/decision_criteria",
+    SERVER_PATH + "/api/decision_criteria",
     cargar_select_criterios_proceso_modificar,
     error_cargar_select_criterios_proceso
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metodos_recoleccion_analisis",
+    SERVER_PATH + "/api/get_metodos_recoleccion_analisis",
     { id: pa_id },
     cargar_selects_metodo_analisis_recoleccion,
     (res) => {
@@ -6463,7 +6465,7 @@ function cargar_selects_metodo_analisis_recoleccion(json) {
   document.getElementById("indicador_modelo_modificar").value =
     json[1].metrica_id;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_recoleccion_datos",
+    SERVER_PATH + "/api/get_recoleccion_datos",
     { mea_id: json[0].metodo_id },
     get_select_recoleccion_datos,
     (res) => {
@@ -6471,7 +6473,7 @@ function cargar_selects_metodo_analisis_recoleccion(json) {
     }
   );
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_model_analisis",
+    SERVER_PATH + "/api/get_model_analisis",
     { mea_id: json[1].metodo_id },
     get_select_modelo_analisis,
     (res) => {
@@ -6482,7 +6484,7 @@ function cargar_selects_metodo_analisis_recoleccion(json) {
 }
 function cargar_nombre_recurso_select(mea_id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_select_cargar_recurso",
+    SERVER_PATH + "/api/get_select_cargar_recurso",
     { mea_id: mea_id },
     llenar_select_nombre_recurso,
     (res) => {
@@ -6494,7 +6496,7 @@ function llenar_select_nombre_recurso(json) {
   if (json.length == 0) {
     var recurso = document.getElementById("tipo_recurso_modificar").value;
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources_select/",
+      SERVER_PATH + "/api/ask_deployment_resources_select/",
       {
         tipo: recurso,
       },
@@ -6558,7 +6560,7 @@ function cargar_flujo_datos_modificar() {
   }
   if (seleccion != "Seleccione.." && pro != "-6") {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_data_flow/",
+      SERVER_PATH + "/api/get_data_flow/",
       {
         comunicacion: seleccion,
         propiedad: pro,
@@ -6643,7 +6645,7 @@ function saltar_proceso_pre_reflexivo_boton() {
 
 if (document.getElementById("lista_sujetos_activos_proceso_modificar"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    SERVER_PATH + "/api/subjects",
     cargar_sujetos_activos_procesos_modificar,
     error_cargar_sujetos_activos_procesos_modificar
   );
@@ -6745,7 +6747,7 @@ function modificar_proceso_pre_reflexivo() {
       type: 17,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_pre_reflective_process/",
+      SERVER_PATH + "/api/mod_pre_reflective_process/",
       data,
       mensaje_exitoModificarproceso_pre_reflexivo,
       mensaje_errorModificarproceso_pre_reflexivo
@@ -6805,7 +6807,7 @@ function modificar_modelos_metodos() {
       mea_id_anali: modelo_analisis_modificar_id,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_metodos_modelos",
+      SERVER_PATH + "/api/mod_metodos_modelos",
       data,
       metodos_modelos_modificados_exito,
       (res) => {
@@ -6838,7 +6840,7 @@ function abrirModalMapeoParametros_modificar() {
   var id = document.getElementById("recurso_modificar").value;
   if (id) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/ask_deployment_resources/",
+      SERVER_PATH + "/api/ask_deployment_resources/",
       {
         id: id,
       },
@@ -6858,7 +6860,7 @@ function abrirModalRecomendaciones_modificar_reflexivos() {
     "criterio_de_decision_modelo_modificar"
   ).value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    SERVER_PATH + "/api/get_umbral",
     { criterio: seleccionCriterio },
     cargar_lista_umbrales_proceso_modificar,
     (res) => {
@@ -6872,7 +6874,7 @@ function abrirModalRecomendaciones_modificar() {
     "criterio_de_decision_modificar"
   ).value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    SERVER_PATH + "/api/get_umbral",
     { criterio: seleccionCriterio },
     cargar_lista_umbrales_proceso_modificar,
     (res) => {
@@ -6899,7 +6901,7 @@ function cargar_lista_umbrales_proceso_modificar(json) {
     var mea_id_mod = document.getElementById("id_metodo_aprendizaje_modificar")
       .value;
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_action",
+      SERVER_PATH + "/api/get_action",
       {
         umbral: cd.id,
         mea_id: mea_id_mod,
@@ -6985,7 +6987,7 @@ function cargar_select_tipo_comunicacion_modificar() {
     tipo: tipoComunicacion,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_select_tipo_comunicacion_modificar_pre_reflexivos,
     error_cargar_select_tipo_comunicacion_modificar_pre_reflexivos
@@ -7019,7 +7021,7 @@ function error_cargar_select_tipo_comunicacion_modificar_pre_reflexivos(error) {
 function cargar_select_propiedades_pre_reflexivos() {
   objetoIdReco = document.getElementById("id_objeto_seleccionado").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/properties",
+    SERVER_PATH + "/api/properties",
     {
       id: objetoIdReco,
     },
@@ -7054,7 +7056,7 @@ function error_cargar_propiedades_select_modificar(error) {
 
 function recuperar_ultimo_metodo_aprendizaje_escenario() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metodo_aprendizaje",
+    SERVER_PATH + "/api/get_metodo_aprendizaje",
     { id: 23 },
     consultar_tabla_escenarios,
     (res) => {
@@ -7076,7 +7078,7 @@ function abrirModalEscenarioSimulacionModificar() {
 function consultar_tabla_escenarios_modificar() {
 var mea=document.getElementById("id_modelo_reflexivo").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_scenario",
+    SERVER_PATH + "/api/get_simulation_scenario",
     { mea_id: mea },
     cargar_tabla_escenarios_simulacion,
     error_cargar_tabla_escenarios_simulacion
@@ -7084,7 +7086,7 @@ var mea=document.getElementById("id_modelo_reflexivo").value;
 }
 function consultar_tabla_escenarios() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_scenario",
+    SERVER_PATH + "/api/get_simulation_scenario",
     { mea_id: metodo_calculo },
     cargar_tabla_escenarios_simulacion,
     error_cargar_tabla_escenarios_simulacion
@@ -7132,7 +7134,7 @@ function guardarEscenarioSimulacions() {
     mea_id: metodo_calculo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_simulation_scenario",
+    SERVER_PATH + "/api/add_simulation_scenario",
     data,
     consultar_tabla_escenarios,
 
@@ -7166,7 +7168,7 @@ function eliminar_escenario_simulacion() {
   if (!!id) {
     if (confirm("Esta seguro que desea eliminar el Escenario")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_escenario_simulacion/",
+        SERVER_PATH + "/api/del_escenario_simulacion/",
         {
           id: id,
         },
@@ -7225,7 +7227,7 @@ function ModificarEscenarioSimulacions() {
       .checked,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/upd_simulation_scenario/",
+    SERVER_PATH + "/api/upd_simulation_scenario/",
     data,
     (res) => {
       console.log(res);
@@ -7259,7 +7261,7 @@ function visibilidad_variables_valores(id) {
 
 function consultar_tabla_valores_variables(id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_value/",
+    SERVER_PATH + "/api/get_simulation_value/",
     {
       escenario: id,
       mea_id: metodo_calculo,
@@ -7291,7 +7293,7 @@ function agregar_variables_valor() {
 
 function consultar_variables_select(mea_id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable/",
+    SERVER_PATH + "/api/get_simulation_variable/",
     { mea_id: mea_id },
     cargar_variables_simulacion_select,
     (res) => {
@@ -7380,7 +7382,7 @@ function modificar_proceso_reflexivo_boton() {
     }
   } else if (cont_paso_modificar_reflexivos == 3) {
     consultar_api(
-      "http://autoconsciencia.ddns.net:3000/api/procesos_pre_reflexive",
+      SERVER_PATH + "/api/procesos_pre_reflexive",
       cargar_procesos_pre_reflexivos_table,
       error_procesos_pre_reflexivos_table
     );
@@ -7470,7 +7472,7 @@ function cargar_select_metrica_indirecta_modificar_reflexivos() {
     tipo: tipoM,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrica_select",
+    SERVER_PATH + "/api/get_metrica_select",
     data,
     cargar_select_metrica_proceso_reflexivo_modificar,
     error_cargar_select_metrica_proceso_reflexivo_modificar
@@ -7487,7 +7489,7 @@ function cargar_select_metrica_indirecta_modificar_reflexivos() {
     tipo: tipoIndi,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrica_select",
+    SERVER_PATH + "/api/get_metrica_select",
     data2,
     cargar_select_indicador_proceso_reflexivo_modificar,
     error_cargar_select_indicador_proceso_reflexivo_modificar
@@ -7563,7 +7565,7 @@ function modificar_proceso_reflexivo() {
       id: id,
     };
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_process_pre_reflexive/",
+      SERVER_PATH + "/api/mod_process_pre_reflexive/",
       data,
       mensaje_exitoModificarproceso_reflexivo,
       mensaje_errorModificarproceso_reflexivo
@@ -7601,7 +7603,7 @@ function mensaje_errorModificarproceso_reflexivo(error) {
   document.getElementById("lista_sujetos_activos_proceso_reflexivo_modificar")
 )
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    SERVER_PATH + "/api/subjects",
     cargar_sujetos_activos_procesos_modificar_reflexivos,
     error_cargar_sujetos_activos_procesos_modificar_reflexivos
   );*/
@@ -7679,7 +7681,7 @@ function guardarAccionUmbralReflexivos() {
   };
   if (!!data.description) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_action",
+      SERVER_PATH + "/api/add_action",
       data,
       mensajeExitosoAgregarAccionesUmbralesReflexivos,
       (res) => {
@@ -7731,7 +7733,7 @@ function guardarModificacionAccionesUmbralesReflexivos() {
       .checked,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/upd_action/",
+    SERVER_PATH + "/api/upd_action/",
     data,
     mensajeExitosoAgregarAccionesUmbralesReflexivos,
     (res) => {
@@ -7757,7 +7759,7 @@ function eliminarAccionesUmbralesReflexivos() {
         id: id,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_action/",
+        SERVER_PATH + "/api/del_action/",
         data,
         mensajeExitosoAgregarAccionesUmbralesReflexivos,
         (res) => {
@@ -7770,7 +7772,7 @@ function eliminarAccionesUmbralesReflexivos() {
 
 function mensajeExitosoAgregarAccionesUmbralesReflexivos(json) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_action",
+    SERVER_PATH + "/api/get_action",
     {
       umbral: UmbralId,
       mea_id: modelo_analisis_reflexivos,
@@ -7809,7 +7811,7 @@ function cargar_lista_umbrales_proceso_reflexivo(json) {
     res += "</tr>";
 
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_action",
+      SERVER_PATH + "/api/get_action",
       {
         umbral: cd.id,
         mea_id: modelo_analisis_reflexivos,
@@ -7944,7 +7946,7 @@ function cargar_accion_table_reflexivos_modificar(json) {
 function recomendaciones_procesos_reflexivos() {
   var criterio = document.getElementById("criterio_de_decision_modelo").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_umbral",
+    SERVER_PATH + "/api/get_umbral",
     { criterio: criterio },
     cargar_lista_umbrales_proceso_reflexivo,
     (res) => {
@@ -7970,7 +7972,7 @@ function AbrirModalAgregarVariablesSimulacionModificar() {
 function consultar_tabla_variables_modificar() {
   var mea_id = document.getElementById("id_modelo_reflexivo").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable/",
+    SERVER_PATH + "/api/get_simulation_variable/",
     { mea_id: mea_id },
     cargar_tabla_variables_simulacion,
     (res) => {
@@ -7980,7 +7982,7 @@ function consultar_tabla_variables_modificar() {
 }
 function consultar_tabla_varibles() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_simulation_variable/",
+    SERVER_PATH + "/api/get_simulation_variable/",
     { mea_id: metodo_calculo },
     cargar_tabla_variables_simulacion,
     (res) => {
@@ -8019,7 +8021,7 @@ function agregar_variables_simulacion() {
 function guardarVariableSimulacion() {
   var nombre = document.getElementById("nombre_variable_simulacion").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_simulation_variable/",
+    SERVER_PATH + "/api/add_simulation_variable/",
     {
       name: nombre,
       mea_id: metodo_calculo,
@@ -8060,7 +8062,7 @@ function eliminar_variables_simulacion() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar la variable")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_simulation_variable/",
+        SERVER_PATH + "/api/del_simulation_variable/",
         {
           id: id,
         },
@@ -8110,7 +8112,7 @@ function ModificarVariableSimulacions() {
       .checked,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/upd_simulation_variable/",
+    SERVER_PATH + "/api/upd_simulation_variable/",
     data,
     (res) => {
       console.log(res);
@@ -8148,7 +8150,7 @@ function guardarvariables_valor() {
   };
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_simulation_value/",
+    SERVER_PATH + "/api/add_simulation_value/",
     data,
     correcto_guardado_variables_valor,
     (res) => {
@@ -8180,7 +8182,7 @@ function elminarProcesoReflexivo() {
         id: id,
       };
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_reflective_process/",
+        SERVER_PATH + "/api/del_reflective_process/",
         data,
         mensaje_exitosBorrar_reflexivo,
         mensaje_errorBorrar_pre_reflexivo
@@ -8192,7 +8194,7 @@ function elminarProcesoReflexivo() {
 
 function mensaje_exitosBorrar_reflexivo(json) {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_reflective_process",
+    SERVER_PATH + "/api/get_reflective_process",
     cargar_procesos_reflexivos_table,
     mensaje_errorBorrar_reflexivo
   );
@@ -8211,7 +8213,7 @@ if (document.getElementById("TableMetrics")) {
 
 if (document.getElementById("escalas_seccion_entidad"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_scales",
+    SERVER_PATH + "/api/get_scales",
     cargar_escalas_select,
     error_escalas_select
   );
@@ -8237,7 +8239,7 @@ function error_escalas_select(err) {
 
 if (document.getElementById("unidad_medida_metrica"))
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_measurement_units",
+    SERVER_PATH + "/api/get_measurement_units",
     cargar_unidades_de_medida_select,
     error_cargar_unidades_de_medida_select
   );
@@ -8263,7 +8265,7 @@ function error_cargar_unidades_de_medida_select(err) {
 
 function agregarMetrica() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     { tipo: "TIPO_PERSPECTIVA" },
     cargar_select_tipo_perspectiva,
     (err) => {
@@ -8287,7 +8289,7 @@ function agregarMetrica() {
 
 function get_tipo_metrica_select() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     { tipo: "TIPO_METRICA" },
     cargar_tipo_metrica_select,
     error_cargar_tipo_metrica_select
@@ -8343,7 +8345,7 @@ function GuardarMetrica() {
     data.type_metric != -6
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_metrics/",
+      SERVER_PATH + "/api/add_metrics/",
       data,
       mensaje_exitoEnvioMetrica,
       mensaje_errorEnvioMetrica
@@ -8366,7 +8368,7 @@ function CancelarGuardarMetrica() {
 
 function cargar_tabla_metricas() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics",
+    SERVER_PATH + "/api/get_metrics",
     cargar_metrica_table,
     error_cargar_metrica_table
   );
@@ -8415,7 +8417,7 @@ function error_cargar_metrica_table(err) {
 }
 function get_tipo_perspectiva_select() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     { tipo: "TIPO_PERSPECTIVA" },
     cargar_select_tipo_perspectiva,
     (json) => {
@@ -8445,7 +8447,7 @@ function modificarMetrica() {
     document.getElementById("abreviaturaMetrica").value = "";
     $("#add_metrics").modal("show");
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+      SERVER_PATH + "/api/get_enumeracion",
       { tipo: "TIPO_METRICA" },
       cargar_tipo_metrica_select_modificar,
       error_cargar_tipo_metrica_select
@@ -8551,7 +8553,7 @@ function Guardar_Modificacion_Metrica() {
     data.type_metric != -6
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_metrics/",
+      SERVER_PATH + "/api/mod_metrics/",
       data,
       mensaje_exitoEnvioMetrica,
       mensaje_errorEnvioMetrica
@@ -8574,7 +8576,7 @@ function eliminarMetrica() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_metrics/",
+        SERVER_PATH + "/api/del_metrics/",
         {
           id: id,
         },
@@ -8682,7 +8684,7 @@ $("#CategoriaEntidadesAspectos").change(function () {
   };
 
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/entitys",
+    SERVER_PATH + "/api/entitys",
     data,
     cargar_posibles_entidades_modelo_aspecto,
     error_cargar_posibles_entidades_modelo_aspecto
@@ -8775,7 +8777,7 @@ if (document.getElementById("select_aspecto")) {
 function agregarAspectos() {
   document.getElementById("lista_sujetos_activos_aspectos").innerHTML = "";
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    SERVER_PATH + "/api/subjects",
     cargar_sujetos_activos_aspectos,
     error_cargar_sujetos_activos_aspectos
   );
@@ -8793,7 +8795,7 @@ function cargar_select_tipo_as() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto,
     error_select_tipo_aspecto
@@ -8821,7 +8823,7 @@ function cargar_select_tipo_as_mod() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto_mod,
     error_select_tipo_aspecto
@@ -8878,7 +8880,7 @@ function guardarAspecto() {
     selectedEntitys.length > 0
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_aspects/",
+      SERVER_PATH + "/api/add_aspects/",
       data,
       mensaje_exitoEnvioAspectos,
       mensaje_errorEnvioAspectos
@@ -8914,7 +8916,7 @@ if (document.getElementById("tableAspects")) {
 
 function cargar_tabla_aspectos() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects_ind",
+    SERVER_PATH + "/api/get_aspects_ind",
     cargar_aspectos_table,
     error_cargar_aspectos_table
   );
@@ -8963,7 +8965,7 @@ function eliminarAspectos() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_aspects/",
+        SERVER_PATH + "/api/del_aspects/",
         {
           id: id,
         },
@@ -9009,7 +9011,7 @@ function administrarMetrics() {
 }
 function get_select_metricas_aspectos() {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     { tipo: "TIPO_METRICA" },
     cargar_select_metricas_aspectos,
     (json) => {
@@ -9100,7 +9102,7 @@ function agregar_metrica_seleccionado() {
     metricasSeleccion.push(aux);
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_metrics_aspects",
+    SERVER_PATH + "/api/add_metrics_aspects",
     metricasSeleccion,
     cambiar_metrica_lado,
     error_cambiar_metrica_lado
@@ -9121,7 +9123,7 @@ function remover_metrica_seleccionado() {
     metricasSeleccion.push(aux);
   });
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_metrics_aspects",
+    SERVER_PATH + "/api/add_metrics_aspects",
     metricasSeleccion,
     cambiar_metrica_lado,
     error_cambiar_metrica_lado
@@ -9158,7 +9160,7 @@ function limpiarFomularioMod() {
 //OBJETIVOS_ASPECTOS
 function get_aspectos_objetivos_modificar(suj_id) {
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects_objects",
+    SERVER_PATH + "/api/subjects_objects",
     { id: suj_id },
     cargar_select_aspectos_objetivos_modificar,
     (res) => {
@@ -9252,7 +9254,7 @@ function cargar_datos_del_modal_modificar_aspectos_individuales() {
       hr.innerHTML = suj;
       divSujeto.appendChild(hr);
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/get_aspects_subjects",
+        SERVER_PATH + "/api/get_aspects_subjects",
         { systemID: aspect_id },
         cargar_objetos_seleccionados_aspectos,
         (res) => {
@@ -9308,7 +9310,7 @@ function GuardarmodificarAspecto() {
     !!data.tipo
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_aspects",
+      SERVER_PATH + "/api/mod_aspects",
       data,
       cargar_tabla_aspectos,
       (res) => {
@@ -9316,7 +9318,7 @@ function GuardarmodificarAspecto() {
       }
     );
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/del_aspects_objects",
+      SERVER_PATH + "/api/del_aspects_objects",
       { aa_id: aspecto_seleccionado_mod },
       eliminar_relacion_aspectos,
       (res) => {
@@ -9338,7 +9340,7 @@ function eliminar_relacion_aspectos() {
   }
   data = { aa_id: aspecto_seleccionado_mod, arr_entity: selectedEntitys };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/add_relation_objects_aspects",
+    SERVER_PATH + "/api/add_relation_objects_aspects",
     data,
     (res) => {
       console.log(res);
@@ -9385,7 +9387,7 @@ function cargar_objetos_seleccionados_aspectos(json) {
     systemID: systemID,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/entitys",
+    SERVER_PATH + "/api/entitys",
     data,
     cargar_entidades_modelo_aspecto,
     (res) => {
@@ -9484,7 +9486,7 @@ function habilitar_perspectiva() {
 function tipo_metrica_change() {
   var metrica = document.getElementById("tipo_metrica_aspectos_metrica").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_metrics_type_aspects",
+    SERVER_PATH + "/api/get_metrics_type_aspects",
     { id: aspectoSeleccionadoMetricas, tipo: metrica },
     cargar_metricas_disponibles,
     (json) => {
@@ -9495,7 +9497,7 @@ function tipo_metrica_change() {
 
 /*function cargar_ultimo_proceso {
 	  consultar_api(
-	    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+	    SERVER_PATH + "/api/get_last_insert_process",
 	    get_nombre_proceso,
 	    (json) => {
 	      console.log(json);
@@ -9508,7 +9510,7 @@ function tipo_metrica_change() {
 	}*/
 /*if (document.getElementById("nombre_proceso_reflexivo_id")) {
 	  consultar_api(
-	    "http://autoconsciencia.ddns.net:3000/api/get_last_insert_process",
+	    SERVER_PATH + "/api/get_last_insert_process",
 	    get_nombre_proceso_reflexivo,
 	    (json) => {
 	      console.log(json);
@@ -9524,7 +9526,7 @@ if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
   var sujeto = document.getElementById("id_sujeto").value;
   console.log(sujeto);
   /* post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+    SERVER_PATH + "/api/get_aspects_objects_process",
     { systemID: sujeto },
     cargar_aspectos_procesos_modificar,
     (res) => {
@@ -9535,7 +9537,7 @@ if (document.getElementById("id_proceso_pre_reflexivo_modificar")) {
 function cargar_aspectos_procesos_modificar(json) {
   select.value = document.getElementById("id_aspecto").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+    SERVER_PATH + "/api/get_objects_aspects",
     {
       aspecto: document.getElementById("id_aspecto").value,
       sujeto: document.getElementById("id_sujeto").value,
@@ -9583,7 +9585,7 @@ if (document.getElementById("id_proceso_reflexivo_modificar")) {
   var sujeto = document.getElementById("id_sujeto_reflexivo").value;
   console.log(sujeto);
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects_objects_process",
+    SERVER_PATH + "/api/get_aspects_objects_process",
     { systemID: sujeto },
     cargar_aspectos_procesos_reflexivos_modificar,
     (res) => {
@@ -9609,7 +9611,7 @@ function cargar_aspectos_procesos_reflexivos_modificar(json) {
   });
   select.value = document.getElementById("id_aspecto_reflexivo").value;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_objects_aspects",
+    SERVER_PATH + "/api/get_objects_aspects",
     {
       aspecto: document.getElementById("id_aspecto_reflexivo").value,
       sujeto: document.getElementById("id_sujeto_reflexivo").value,
@@ -9672,7 +9674,7 @@ if (document.getElementById("tipo_ejecucion")) {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_tipos_ejecucion_select,
     (err) => {
@@ -9702,7 +9704,7 @@ if (document.getElementById("unidad_tiempo")) {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_unidad_tiempo_select,
     (err) => {
@@ -9731,7 +9733,7 @@ if (document.getElementById("tipo_ejecucion_ref")) {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_tipos_ejecucion_select_ref,
     (err) => {
@@ -9761,7 +9763,7 @@ if (document.getElementById("unidad_tiempo_ref")) {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_unidad_tiempo_select_ref,
     (err) => {
@@ -9791,7 +9793,7 @@ if (document.getElementById("lista_sujetos_aspectos_colectivos")) {
 }
 function agregar_sujetos_activos_aspectos() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/subjects",
+    SERVER_PATH + "/api/subjects",
     cargar_sujetos_activos_aspectos_colectivos,
     (err) => {
       alert(err);
@@ -9889,7 +9891,7 @@ function limpiarFomularioColectivo() {
 function get_aspectos_individuales(id) {
   glogal_is_modificar_aspectos = false;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects",
+    SERVER_PATH + "/api/get_aspects",
     { id: id },
     llenarAspectosIndividuales,
     (res) => {
@@ -9934,7 +9936,7 @@ function llenarAspectosIndividuales(json) {
   });
   if (glogal_is_modificar_aspectos && json.length > 0) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_hijos_seleccionados",
+      SERVER_PATH + "/api/get_aspects_hijos_seleccionados",
       { id: aspecto_seleccionado_mod }, // no se de donde sacamos el aspecto padre aun
       cargar_aspectos_hijo_seleccionados,
       (res) => {
@@ -9961,7 +9963,7 @@ function cargar_aspectos_hijos_para_el_arbol(icon) {
     icon.dataset.max = "True";
     icon.classList.replace("fa-plus", "fa-minus");
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_hijos",
+      SERVER_PATH + "/api/get_aspects_hijos",
       { id: aspect_id },
       cargar_hijos_al_li,
       (res) => {
@@ -10037,7 +10039,7 @@ function cargar_select_operador_agregacion_colectivos() {
     tipo: nombre,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_operador_asignacion_select_colectivos,
     (res) => {
@@ -10067,7 +10069,7 @@ function cargar_select_tipo_aspecto_colectivo() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto_col,
     (res) => {
@@ -10125,7 +10127,7 @@ function guardarAspectoColectivo() {
     selectedAspects.length > 0
   ) {
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/add_aspects_colective/",
+      SERVER_PATH + "/api/add_aspects_colective/",
       data,
       mensaje_exitoEnvioAspectosColectivos,
       (res) => {
@@ -10151,7 +10153,7 @@ if (document.getElementById("tableAspectsCollective")) {
 
 function cargar_tabla_aspectos_colectivos() {
   consultar_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects_colective",
+    SERVER_PATH + "/api/get_aspects_colective",
     cargar_aspectos_colectivos_table,
     (res) => {
       console.log(res);
@@ -10197,7 +10199,7 @@ function cargar_select_operador_agregacion_colectivos_Modificar() {
     tipo: nombre,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_operador_asignacion_select_colectivos_modificar,
     (res) => {
@@ -10223,7 +10225,7 @@ function cargar_select_tipo_aspecto_colectivo_modificar() {
     tipo: tipo,
   };
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_enumeracion",
+    SERVER_PATH + "/api/get_enumeracion",
     data,
     cargar_select_tipo_aspecto_col_mod,
     (res) => {
@@ -10340,7 +10342,7 @@ function cargar_datos_del_modal_modificar_aspectos_colectivos() {
     divSujeto.appendChild(hr);
     cargarSeleccionSujetosAspectosColectivos(suj_id);
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/get_aspects_padres",
+      SERVER_PATH + "/api/get_aspects_padres",
       { systemID: aspect_id },
       cargar_padres_seleccionados_aspectos,
       (res) => {
@@ -10388,7 +10390,7 @@ function limpiarFomularioColectivoModificar() {
 function cargarSeleccionSujetosAspectosColectivos(suj_id) {
   glogal_is_modificar_aspectos = true;
   post_api(
-    "http://autoconsciencia.ddns.net:3000/api/get_aspects",
+    SERVER_PATH + "/api/get_aspects",
     { id: suj_id },
     llenarAspectosIndividuales,
     (res) => {
@@ -10460,7 +10462,7 @@ function ModificarAspectoColectivo() {
   ) {
     console.log("Llego hasta aqui");
     post_api(
-      "http://autoconsciencia.ddns.net:3000/api/mod_aspects_colective/",
+      SERVER_PATH + "/api/mod_aspects_colective/",
       data,
       mensaje_exitoEnvioAspectosColectivosModificar,
       (res) => {
@@ -10488,7 +10490,7 @@ function eliminarAspectosColectivos() {
   if (!!id) {
     if (confirm("Esta seguro de que desea eliminar el recurso")) {
       post_api(
-        "http://autoconsciencia.ddns.net:3000/api/del_aspects/",
+        SERVER_PATH + "/api/del_aspects/",
         {
           id: id,
         },
