@@ -36,7 +36,7 @@ class json {
         var json = [];
         try {
             const xml = fs.readFileSync(xml_file);
-            xml2js_1.parseString(xml, function (err, result) {
+            (0, xml2js_1.parseString)(xml, function (err, result) {
                 if (err)
                     throw err;
                 json = result;

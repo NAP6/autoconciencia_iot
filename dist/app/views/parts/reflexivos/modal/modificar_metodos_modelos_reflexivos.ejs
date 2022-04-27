@@ -27,7 +27,7 @@
                             <label class="col">Inicio:</label>
 			    <input type="date" id="inicio_metodos_reflexivos_modificar" disabled name="inicio_metodos_reflexivos_modificar" <% if(modificar2.length>0) { %> value="<%= modificar2[0].inicio %>" <% }%> />
                             <label for="" class="col">Fin:</label>
-			    <input type="date" id="fin_metodos_reflexivos_modificar" disabled name="fin_metodos_reflexivos_modificar" value="<%= modificar2[0].fin %>"/>
+			    <input type="date" id="fin_metodos_reflexivos_modificar" disabled name="fin_metodos_reflexivos_modificar" <% if(modificar2.length>0){%> value="<%= modificar2[0].fin %>" <%}%>/>
                         </div>
                     </div>
                     <div class="input-group mb-2">
@@ -35,17 +35,22 @@
                             <label class="input-group-text" id="">Tipo de recurso: </label>
                         </div>
                         <select class="custom-select" name="tipo_recurso_metodos_reflexivo_modificar" id="tipo_recurso_metodos_reflexivo_modificar" onchange="" disabled>
-                            <option value="0"  <% if(modificar2[0].tipo_recurso_metodo==0){ %>selected<% } %>>Fórmula</option>
+                            <% if(modificar2.length>0) {%>
+			    <option value="0"  <% if(modificar2[0].tipo_recurso_metodo==0){ %>selected<% } %>>Fórmula</option>
                             <option value="1"  <% if(modificar2[0].tipo_recurso_metodo==1){ %>selected<% } %>>Función</option>
                             <option value="2"  <% if(modificar2[0].tipo_recurso_metodo==2){ %>selected<% } %>>Servicio</option>
-                  	</select>
+                  	<%}%>
+			</select>
                     </div>
                     <div class="input-group mb-2">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="recurso">Recurso:</label>
                         </div>
                         <select class="custom-select" name="recurso_reflexivos_modificar" id="recurso_reflexivos_modificar" disabled>
+			
+                            <% if(modificar4[0]) {%>
 			<option><%= modificar4[0].nombre_recurso %></option>
+			<%}%>
 					</select>
                         <div class="input-group-append">
                             <button class="btn btn-secondary" id="variables_simulacion_modificar" type="button" onclick="AbrirModalAgregarVariablesSimulacionModificar();">
@@ -69,7 +74,9 @@
                             <label class="input-group-text">Métrica indirecta de salida: </label>
                         </div>
                         <select class="custom-select" disabled name="metrica_indirecta_reflexivos_modificar" id="metrica_indirecta_reflexivos_modificar">
-                            <option value=""><%= modificar2[0].metrica_metodo_nombre %></option>
+                            <% if(modificar2.length > 0) {%>
+			    <option value=""><%= modificar2[0].metrica_metodo_nombre %></option>
+			    <%}%>
                   	</select>
                     </div>
 
@@ -84,9 +91,11 @@
                             <label class="input-group-text" id="">Tipo de recurso: </label>
                         </div>
                         <select class="custom-select" name="tipo_recurso_modelos_reflexivos_modificar" id="tipo_recurso_modelos_reflexivos_moficar" disabled>
-                            <option value="0"  <% if(modificar2[0].tipo_recurso==0){ %>selected<% } %>>Fórmula</option>
+                           <% if(modificar2.length>0) {%>
+			   <option value="0"  <% if(modificar2[0].tipo_recurso==0){ %>selected<% } %>>Fórmula</option>
                             <option value="1"  <% if(modificar2[0].tipo_recurso==1){ %>selected<% } %>>Función</option>
                             <option value="2"  <% if(modificar2[0].tipo_recurso==2){ %>selected<% } %>>Servicio</option>
+			    <%}%>
                   	</select>
                     </div>
                     <div class="input-group mb-2">
@@ -115,7 +124,9 @@
                             <label class="input-group-text" id="">Indicador: </label>
                         </div>
                         <select class="custom-select" name="indicador_modelo_modificar" disabled id="indicador_modelo_modificar">
+			<% if (modificar2.length>0){%>
 				<option value="<%= modificar.indircador_id%>"><%= modificar2[0].metrica_modelo_nombre%></option>
+				<%}%>
                   	</select>
                     </div>
                     <div class="input-group mb-2">
@@ -123,7 +134,9 @@
                             <label class="input-group-text" for="criterio_de_decision_modelo_modificar">Criterio de decisión:</label>
                         </div>
                         <select class="custom-select" name="criterio_de_decision_modelo_modificar" id="criterio_de_decision_modelo_modificar" disabled>
+			<%if(modificar2.length>0){%>
                             <option value="<%= modificar2[0].criterio_id %>"><%= modificar2[0].criterio_nombre %></option>
+			    <%}%>
                   	</select>
                         <div class="input-group-append">
                             <button class="btn btn-secondary" id="btn-recomendaciones_model_modificar" type="button" onclick="abrirModalRecomendaciones_modificar_reflexivos()">

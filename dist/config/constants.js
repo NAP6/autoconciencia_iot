@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require('dotenv').config();
 exports.default = {
-    "db-url": "localhost",
-    "db-port": 3306,
-    "db-user": "autoconsciencia",
-    "db-password": "configuradorIoT",
-    "db-schema": "db_autoconsciencia_2",
-    "server-port": 3000,
+    "db-url": process.env.DB_URL,
+    "db-port": parseInt(process.env.DB_PORT),
+    "db-user": process.env.DB_USER,
+    "db-password": process.env.DB_PASSWORD,
+    "db-schema": process.env.DB_SCHEMA,
+    "server-port": parseInt(process.env.SERVER_PORT),
 };
