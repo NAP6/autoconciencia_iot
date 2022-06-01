@@ -9,6 +9,8 @@ export class CalculationMethod extends LearningReasoningMethod {
   private _implementationResourceType;
   private _calculationPeriodStart: Date | undefined;
   private _calculationPeriodEnd: Date | undefined;
+  private _intervalo: Number | undefined;
+  private _unidad: Number | undefined;
   private _containsSimulationScenario: SimulationScenario[];
   private _isImplmentedBy: ImplementationResource | undefined;
   private _containsArgumentToParameterMapping: ArgumentToParameterMapping[];
@@ -19,12 +21,16 @@ export class CalculationMethod extends LearningReasoningMethod {
     id: number,
     implementationResourceType,
     calculationPeriodStart?: Date,
-    calculationPeriodEnd?: Date
+    calculationPeriodEnd?: Date,
+    intervalo?: Number,
+    unidad?: Number
   ) {
     super(id);
     this._implementationResourceType = implementationResourceType;
     this._calculationPeriodStart = calculationPeriodStart;
     this._calculationPeriodEnd = calculationPeriodEnd;
+    this._intervalo = intervalo;
+    this._unidad = unidad;
     this._containsSimulationScenario = [];
     this._containsArgumentToParameterMapping = [];
     this._containsSimulationVariable = [];
@@ -52,6 +58,21 @@ export class CalculationMethod extends LearningReasoningMethod {
 
   set calculationPeriodEnd(value: Date | undefined) {
     this._calculationPeriodEnd = value;
+  }
+  get intervalo(): Number | undefined {
+    return this._intervalo;
+  }
+
+  set intervalo(value: Number | undefined) {
+    this._intervalo = value;
+  }
+
+  get unidad(): Number | undefined {
+    return this._unidad;
+  }
+
+  set unidad(value: Number | undefined) {
+    this._unidad = value;
   }
 
   get containsSimulationScenario(): SimulationScenario[] {
@@ -99,6 +120,8 @@ export class CalculationMethod extends LearningReasoningMethod {
         implementationResourceType: this.implementationResourceType,
         calculationPeriodStart: this.calculationPeriodStart,
         calculationPeriodEnd: this.calculationPeriodEnd,
+        unitDataPeriod: this.unidad,
+        dataRange: this.intervalo,
       },
     };
   }

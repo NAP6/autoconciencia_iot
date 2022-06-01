@@ -8,10 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generate_model = void 0;
 const database2_1 = require("../../data/database2");
 const MetricQ_1 = require("../../models/selfAwarness/qwertyModels/MetricQ");
+const fs_1 = __importDefault(require("fs"));
+const path_1 = require("path");
 const selfAwarnessModels_1 = require("../../models/selfAwarnessModels");
 var modelID;
 var routes = {
@@ -81,6 +86,16 @@ function generate_model(req, res) {
         res.render("generate_model", {
             session: req.session,
             model: JSON.stringify(modeloA, null, "  "),
+        });
+        fs_1.default.mkdir(path_1.join("./selfAwareModel"), (error) => {
+            if (error) {
+                console.log(error.message);
+            }
+        });
+        fs_1.default.writeFile("./selfAwareModel/modelo.json", JSON.stringify(modeloA), (err) => {
+            if (err) {
+                console.log(err);
+            }
         });
     });
 }
@@ -232,7 +247,8 @@ function add_directMetric(method, path_method) {
                 the_metric.isProducedBy += ` ${path_method}`;
             }
             else {
-                routes["metric"]["r"][metric_list[i].id.toString()] = metric_list[i].toObjectG();
+                routes["metric"]["r"][metric_list[i].id.toString()] =
+                    metric_list[i].toObjectG();
                 the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
                 the_metric.isProducedBy = `${path_method}`;
                 routes["metric"]["i"].push(the_metric.$.id.toString());
@@ -272,7 +288,8 @@ function add_Scale_metric(model, metric, path_metric) {
                 the_scale.isUsedBy += ` ${path_metric}`;
             }
             else {
-                routes["scale"]["r"][scale_list[i].id.toString()] = scale_list[i].toObjectG();
+                routes["scale"]["r"][scale_list[i].id.toString()] =
+                    scale_list[i].toObjectG();
                 the_scale = routes["scale"]["r"][scale_list[i].id.toString()];
                 the_scale.isUsedBy = `${path_metric}`;
                 routes["scale"]["i"].push(the_scale.$.id.toString());
@@ -297,7 +314,8 @@ function add_MeasurementUnit_metric(model, metric, path_metric) {
                 the_units.isUsedBy += ` ${path_metric}`;
             }
             else {
-                routes["units"]["r"][units_list[i].id.toString()] = units_list[i].toObjectG();
+                routes["units"]["r"][units_list[i].id.toString()] =
+                    units_list[i].toObjectG();
                 the_units = routes["units"]["r"][units_list[i].id.toString()];
                 the_units.isUsedBy = `${path_metric}`;
                 routes["units"]["i"].push(the_units.$.id.toString());
@@ -349,7 +367,8 @@ function add_Indicator(method, path_method) {
                 the_metric.isProducedBy += ` ${path_method}`;
             }
             else {
-                routes["metric"]["r"][metric_list[i].id.toString()] = metric_list[i].toObjectG();
+                routes["metric"]["r"][metric_list[i].id.toString()] =
+                    metric_list[i].toObjectG();
                 the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
                 the_metric.isProducedBy = `${path_method}`;
                 routes["metric"]["i"].push(the_metric.$.id.toString());
@@ -513,7 +532,8 @@ function add_IndirectMetric(method, path_method) {
                 the_metric.isProducedBy += ` ${path_method}`;
             }
             else {
-                routes["metric"]["r"][metric_list[i].id.toString()] = metric_list[i].toObjectG();
+                routes["metric"]["r"][metric_list[i].id.toString()] =
+                    metric_list[i].toObjectG();
                 the_metric = routes["metric"]["r"][metric_list[i].id.toString()];
                 the_metric.isProducedBy = `${path_method}`;
                 routes["metric"]["i"].push(the_metric.$.id.toString());
@@ -793,7 +813,8 @@ function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
                         " " + path_metric;
                 }
                 else {
-                    routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy = path_metric;
+                    routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy =
+                        path_metric;
                 }
             }
             else {
@@ -893,7 +914,8 @@ function add_relation_method_property(property, path_property) {
                     " " + path_property;
             }
             else {
-                routes["collection"]["r"][rows[i].id.toString()].collectsProperty = path_property;
+                routes["collection"]["r"][rows[i].id.toString()].collectsProperty =
+                    path_property;
             }
         }
     });
@@ -1020,7 +1042,8 @@ function save_and_generate_parameter_route(mapping, path_maping, method) {
             the_paremeter.isUsedIn += ` ${path_maping}`;
         }
         else {
-            routes["parameter"]["r"][parameter_element.id.toString()] = parameter_element.toObjectG();
+            routes["parameter"]["r"][parameter_element.id.toString()] =
+                parameter_element.toObjectG();
             the_paremeter = routes["parameter"]["r"][parameter_element.id.toString()];
             the_paremeter.isUsedIn = `${path_maping}`;
         }
@@ -1050,7 +1073,8 @@ function save_and_generate_resource_route(parameter, method) {
             }
         }
         else {
-            routes["implementationResource"]["r"][resource_element.id.toString()] = resource_element.toObjectG();
+            routes["implementationResource"]["r"][resource_element.id.toString()] =
+                resource_element.toObjectG();
             the_resource =
                 routes["implementationResource"]["r"][resource_element.id.toString()];
             routes["implementationResource"]["i"].push(resource_element.id.toString());
@@ -1116,7 +1140,8 @@ function add_relation_metric_mapping(metric, path_metric) {
                         " " + routes["argumentToParameterMapping"]["p"][rows[i].id];
                 else
                     metric.isUsedIn = routes["argumentToParameterMapping"]["p"][rows[i].id];
-                routes["argumentToParameterMapping"]["r"][rows[i].id].relatesMetric = path_metric;
+                routes["argumentToParameterMapping"]["r"][rows[i].id].relatesMetric =
+                    path_metric;
             }
             else
                 console.log(`El mapeo con id ${rows[i].id}, no esta guardado, y por lo tanto no se puede establecer la relacion con la metrica de id ${metric.$.id}`);

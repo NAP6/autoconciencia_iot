@@ -292,7 +292,7 @@ function save_new_model(req, res, next) {
             var json = [];
             try {
                 const xml = fs.readFileSync(req.file.path);
-                (0, xml2js_1.parseString)(xml, function (err, result) {
+                xml2js_1.parseString(xml, function (err, result) {
                     if (err)
                         throw err;
                     json = result;

@@ -101,6 +101,8 @@ function add_metodo_modelo2(req, res) {
             calc.implementationResourceType = data.m_calculo.ma_tipo;
             calc.calculationPeriodStart = data.m_calculo.inicio;
             calc.calculationPeriodEnd = data.m_calculo.fin;
+            calc.intervalo = data.m_calculo.intervalo;
+            calc.unidad = data.m_calculo.unidad;
             var row1 = yield db.qwerty(calc.toSqlInsert(["/@/PROCES/@/"], [data.proceso_id]));
             var anali = new selfAwarnessModels_1.AnalysisModelQ(-1, data.modelo.ma_tipo);
             anali.produces = new Indicator_1.Indicator(data.modelo.met_id, "", "", "", "");
@@ -171,11 +173,14 @@ function get_reflective_process_mod(req, res) {
 			    mt.met_nombre as metrica_metodo_nombre,
 			    DATE_FORMAT(metc.mc_inicio_periodo_calculo,"%Y-%m-%d") as inicio,
 		            DATE_FORMAT(metc.mc_fin_periodo_calculo,"%Y-%m-%d") as fin,
+			    metc.mc_unidad_tiempo as unidad,
+			    enu.enu_nombre_valor as unidadT,
+			    metc.mc_intervalo as intervalo,
 			    metc.mc_tipo_recurso as tipo_recurso_metodo
 					from metodoaprendizajerazonamiento mtl
 					inner join metodocalculo metc
 					on mtl.mea_id=metc.mea_id 
-			        inner join metrica mt on mt.met_id=mtl.met_id) ta_1,
+			        inner join metrica mt on mt.met_id=mtl.met_id inner join enumeracion enu on metc.mc_unidad_tiempo=enu.enu_id) ta_1,
 					(select mtl.pa_id as proceso_id_2,
 					    mtl.met_id as metrica_modelo,
 					        met.met_nombre as metrica_modelo_nombre,

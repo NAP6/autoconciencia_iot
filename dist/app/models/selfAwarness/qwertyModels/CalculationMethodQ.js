@@ -15,6 +15,9 @@ class CalculationMethodQ extends CalculationMethod_1.CalculationMethod {
 		${this.calculationPeriodEnd == undefined
             ? "NULL"
             : "'" + this.calculationPeriodEnd + "'"},
+    ${this.intervalo},
+    ${this.unidad},
+
 		  @id)`;
         return sql;
     }
@@ -24,14 +27,18 @@ class CalculationMethodQ extends CalculationMethod_1.CalculationMethod {
 			if(meto.mc_tipo_recurso=1,                                                                                                         
 			"FUNCION","SERVICIO")) as tipo_recurso,
 			meto.mc_inicio_periodo_calculo as inicio,
-			meto.mc_fin_periodo_calculo as fin
+			meto.mc_fin_periodo_calculo as fin,
+			meto.mc_unidad_tiempo as unidad,
+			enu.enu_nombre_valor as unidadT,
+			meto.mc_intervalo as intervalo
 		FROM
-		        metodocalculo meto,                                                                                                                       
-		        procesoautoconsciencia pro,                                                         
-		        metodoaprendizajerazonamiento met                                                                                                       
+		        metodocalculo meto,                                                                                                       
+			procesoautoconsciencia pro,                                                         
+		        metodoaprendizajerazonamiento met,
+			enumeracion enu
 		 WHERE                                                                                                                                                                     pro.pa_id=${value[tag.indexOf("/@/PROCES/@/")]} AND 
 		 	met.pa_id=pro.pa_id AND 
-		        met.mea_id=meto.mea_id
+		        met.mea_id=meto.mea_id AND enu.enu_id=meto.mc_unidad_tiempo
 	  `;
         return sql;
     }
@@ -44,7 +51,7 @@ class CalculationMethodQ extends CalculationMethod_1.CalculationMethod {
     toObjectArray(rows) {
         var method = [];
         for (var i = 0; i < rows.length; i++) {
-            var aux = new CalculationMethodQ(rows[i].id, rows[i].tipo_recurso, rows[i].inicio, rows[i].fin);
+            var aux = new CalculationMethodQ(rows[i].id, rows[i].tipo_recurso, rows[i].inicio, rows[i].fin, rows[i].intervalo, rows[i].unidadT);
             method.push(aux);
         }
         return method;
