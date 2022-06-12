@@ -59,7 +59,7 @@ export class WebService extends ImplementationResource {
         description: this.description,
         returnDataType: this.returnDataType,
         endPoint: this.endPoint,
-        instrucctions: this.instrucctions,
+        instructions: this.instrucctions,
         DataFormatType: this.DataFormatType,
       },
     };
