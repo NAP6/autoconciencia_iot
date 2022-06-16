@@ -42,7 +42,7 @@ class WebService extends ImplementationResource_1.ImplementationResource {
                 description: this.description,
                 returnDataType: this.returnDataType,
                 endPoint: this.endPoint,
-                instrucctions: this.instrucctions,
+                instructions: this.instrucctions,
                 DataFormatType: this.DataFormatType,
             },
         };
