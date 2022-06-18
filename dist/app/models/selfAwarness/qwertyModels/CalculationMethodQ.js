@@ -15,7 +15,7 @@ class CalculationMethodQ extends CalculationMethod_1.CalculationMethod {
 		${this.calculationPeriodEnd == undefined
             ? "NULL"
             : "'" + this.calculationPeriodEnd + "'"},
-    ${this.intervalo},
+    ${this.intervalo == undefined ? "NULL" : this.intervalo},
     ${this.unidad},
 
 		  @id)`;

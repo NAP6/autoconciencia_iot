@@ -5370,6 +5370,8 @@ function guardar_proceso_reflexivo_boton() {
     history.back();
   }
 }
+if (document) {
+}
 
 function guardar_modelos_metodos_reflexivos() {
   var tipo_recurso_metodo = document.getElementById(
@@ -5390,7 +5392,6 @@ function guardar_modelos_metodos_reflexivos() {
     "tipo_recurso_modelos_reflexivos"
   ).value;
   var proceso_id = document.getElementById("id_proceso_reflexivo").value;
-  console.log(inicio_periodo);
   if (
     tipo_recurso_metodo != "-6" &&
     criterioD != "-6" &&
@@ -5398,10 +5399,7 @@ function guardar_modelos_metodos_reflexivos() {
     metricaIndicador != "-6" &&
     tipo_recurso_modelos != "-6" &&
     !!proceso_id &&
-    inicio_periodo != "" &&
-    fin_periodo != "" &&
-    unidad_t != "-6" &&
-    intervalo != ""
+    unidad_t != "-6"
   ) {
     var datos = {
       proceso_id: proceso_id,
@@ -9805,6 +9803,13 @@ function cargar_unidad_tiempo_select_ref(json) {
     option.innerHTML = element.nombre;
     ope.appendChild(option);
   });
+}
+function seleccionIntervalopreReflexivo(valor) {
+  if (valor.value == 60) {
+    document.getElementById("intervalos_metodos_modelos").disabled = true;
+  } else {
+    document.getElementById("intervalos_metodos_modelos").disabled = false;
+  }
 }
 
 if (document.getElementById("unidad_tiempo_ref2")) {

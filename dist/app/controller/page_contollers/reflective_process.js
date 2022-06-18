@@ -99,6 +99,15 @@ function add_metodo_modelo2(req, res) {
             var calc = new selfAwarnessModels_1.CalculationMethodQ(-1, "");
             calc.produces = new IndirectMetric_1.IndirectMetric(data.m_calculo.met_id, "", "", "");
             calc.implementationResourceType = data.m_calculo.ma_tipo;
+            if (data.m_calculo.inicio == "") {
+                data.m_calculo.inicio = undefined;
+            }
+            if (data.m_calculo.fin == "") {
+                data.m_calculo.fin = undefined;
+            }
+            if (data.m_calculo.intervalo == "") {
+                data.m_calculo.intervalo = undefined;
+            }
             calc.calculationPeriodStart = data.m_calculo.inicio;
             calc.calculationPeriodEnd = data.m_calculo.fin;
             calc.intervalo = data.m_calculo.intervalo;

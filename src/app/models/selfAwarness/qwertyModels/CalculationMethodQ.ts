@@ -20,7 +20,7 @@ export class CalculationMethodQ
         ? "NULL"
         : "'" + this.calculationPeriodEnd + "'"
     },
-    ${this.intervalo},
+    ${this.intervalo == undefined ? "NULL" : this.intervalo},
     ${this.unidad},
 
 		  @id)`;

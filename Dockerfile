@@ -7,6 +7,7 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 COPY ./dist/ ./dist/
 
+run npm i npm-upgrade
 run npm i
 
 EXPOSE 3000
