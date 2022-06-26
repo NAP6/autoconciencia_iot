@@ -20,8 +20,17 @@ class FormulaQ extends Formula_1.Formula {
     toSqlDelete(tag, value) {
         throw new Error("Method not implemented.");
     }
-    toSqlUpdate(tag, value) {
-        throw new Error("Method not implemented.");
+    toSqlUpdate(tag, recurso) {
+        console.log(recurso);
+        var sql = `call modificar_formula(
+		  '${this.name}',
+		  "${this.description}",
+		  ${this.returnDataType},
+		  1,
+		  '${this.expression}',
+		  ${recurso},
+		  @id)`;
+        return sql;
     }
     toObjectArray(rows) {
         var formulas = [];

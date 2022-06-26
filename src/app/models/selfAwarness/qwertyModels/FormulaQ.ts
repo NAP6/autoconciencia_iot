@@ -19,8 +19,17 @@ export class FormulaQ extends Formula implements SQL_Qwerty {
   toSqlDelete(tag: string[], value: string[]): string {
     throw new Error("Method not implemented.");
   }
-  toSqlUpdate(tag: string[], value: string[]): string {
-    throw new Error("Method not implemented.");
+  toSqlUpdate(tag: string[], recurso): string {
+	  console.log(recurso);
+	  var sql=`call modificar_formula(
+		  '${this.name}',
+		  "${this.description}",
+		  ${this.returnDataType},
+		  1,
+		  '${this.expression}',
+		  ${recurso},
+		  @id)`;
+	  return sql;
   }
   toObjectArray(rows: any): any[] {
     var formulas: FormulaQ[] = [];

@@ -113,6 +113,7 @@ function default_1(app) {
     app.get("/api/deployment_resources/", rt.deployment_resources);
     app.post("/api/add_deployment_resources/", rt.add_deployment_resources);
     app.post("/api/del_deployment_resources/", rt.del_deployment_resources);
+    app.post("/api/mod_deployment_resources/", rt.mod_deployment_resources);
     app.post("/api/ask_deployment_resources_select/", rt.ask_deployment_resources_select);
     app.post("/api/ask_deployment_resources/", rt.ask_deployment_resources);
     //Unidades de Medida

@@ -108,6 +108,76 @@ export async function del_deployment_resources(req: Request, res: Response) {
     res.json({ error: "debe iniciar session para poder usar la api" });
   }
 }
+export async function mod_deployment_resources(req: Request, res: Response) {
+if (req.session?.user) {
+    var db = new database2();
+    var data = req.body;
+    var id: number = 0;
+    if (data.tipoRecurso == "0") {
+      var formula = new FormulaQ(
+        -1,
+        data.nombre,
+        data.descripcion.replace(/'/g, "\\'"),
+        data.EspecificoTipo.datoSalida,
+        data.EspecificoTipo.formula.replace(/'/g, "\\'")
+      );
+      var rows = await db.qwerty(formula.toSqlUpdate([],data.id_recurso));
+      id = rows[0][0].id;
+    } else if (data.tipoRecurso == "1") {
+      var funcion = new FunctionQ(
+        -1,
+        data.nombre,
+        data.descripcion.replace(/'/g, "\\'"),
+        data.EspecificoTipo.datoSalida,
+        "", //data.path,
+        data.EspecificoTipo.instrucciones.replace(/'/g, "\\'")
+      );
+      var rows = await db.qwerty(
+        funcion.toSqlUpdate(
+          ["/@/P_EXIST/@/","/@/ID_RECURSO/@/"],
+          [data.EspecificoTipo.preExistent ? "1" : "0",data.id_recurso]
+        )
+      );
+      id = rows[0][0].id;
+    } else if (data.tipoRecurso == "2") {
+      var service = new WebServiceQ(
+        -1,
+        data.nombre,
+        data.descripcion.replace(/'/g, "\\'"),
+        data.EspecificoTipo.datoSalida,
+        data.EspecificoTipo.endPoint,
+        data.EspecificoTipo.instrucciones.replace(/'/g, "\\'"),
+        data.EspecificoTipo.formatoSalida
+      );
+      var rows = await db.qwerty(
+        service.toSqlUpdate(
+          ["/@/P_EXIST/@/","/@/ID_RECURSO/@/"],
+          [data.EspecificoTipo.preExistent ? "1" : "0",data.id_recurso]
+        )
+      );
+      id = rows[0][0].id;
+    }
+    for (var i = 0; i < data.arregloParametros.length; i++) {
+      var param = data.arregloParametros[i];
+      var parameter = new ParameterQ(
+        param.ordinal,
+        param.nombre,
+        param.tipo,
+        param.opcional == "true" ? true : false
+      );
+      var active: string = param.activo == "true" ? "1" : "0";
+      await db.qwerty(
+        parameter.toSqlInsert(
+          ["/@/ACTIVE/@/", "/@/ID/@/"],
+          [active, id.toString()]
+        )
+      );
+    }
+    res.json({ mensaje: "Elemento guardado exitosamente" });
+  } else {
+    res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
 
 export async function ask_deployment_resources_select(
   req: Request,
@@ -226,7 +296,7 @@ export async function add_mapeo_parametros(req: Request, res: Response) {
 	      		${element.vs_id == undefined ? "NULL" : element.vs_id},
 	      		${element.md_id == undefined ? "NULL" : element.md_id},
 		  	${element.data_id == undefined ? "NULL" : element.data_id},
-    			${element.proceso== undefined ? "NULL" : element.proceso}),`;
+    			${element.proceso == undefined ? "NULL" : element.proceso}),`;
     });
     var sql =
       `INSERT INTO 

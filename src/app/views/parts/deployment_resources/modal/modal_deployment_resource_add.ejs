@@ -2,8 +2,8 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title text-center" style="width: 100%;">
-                    Agregar Recurso de Implemetacion
+                <h5 class="modal-title text-center" id="titulo_recursos"style="width: 100%;">
+                    Agregar Recurso de Implementación
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -22,7 +22,7 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-2 col-form-label">Descripción:</label>
                             <div class="col-sm-10">
-                                <textarea type="text" class="form-control" id="input-descripton-resource-add" style="text-transform: uppercase" onkeyup="javascript:this.value=this.value.toUpperCase();"></textarea>
+                                <textarea type="text" class="form-control" id="input-descripton-resource-add" style="text-transform: uppercase"></textarea>
                             </div>
                         </div>
 
@@ -33,9 +33,9 @@
               </div>
               <select class="custom-select" id="select_tipo_recurso" onchange="visivilidad_tipo_recurso_form_add(this.value);">
                 <option selected>Seleccione...</option>
-                <option value="0">Fórmula</option>
-                <option value="1">Funcion</option>
-                <option value="2">Servicio</option>
+                <option value="0">FÓRMULA</option>
+                <option value="1">FUNCIÓN</option>
+                <option value="2">SERVICIO</option>
               </select>
             </div>
 

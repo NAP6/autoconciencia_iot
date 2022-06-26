@@ -142,8 +142,9 @@ function cargar_recursos_de_implementacion_tabla(json) {
     clon.getElementById("id").innerHTML = elem.id;
     clon.getElementById("name").innerHTML = elem.nombre;
     if (elem.descripcion.length > 20) {
-      clon.getElementById("description").innerHTML =
-        elem.descripcion.substring(0, 20) + " ...";
+      //clon.getElementById("description").innerHTML =
+      //elem.descripcion.substring(0, 20) + " ...";
+      clon.getElementById("description").innerHTML = elem.descripcion;
     } else {
       clon.getElementById("description").innerHTML = elem.descripcion;
     }
@@ -157,6 +158,8 @@ function agregar_recurso() {
   var modificarButton = document.getElementById("ModificarRecurso_btn");
   guardarButton.classList.replace("d-none", "inline-block");
   modificarButton.classList.replace("inline-block", "d-none");
+  document.getElementById("titulo_recursos").innerHTML =
+    "Agregar Recursos de Implementación";
   limpiar_add_recusos();
   terminar_creacion_parametro("parametro_formula");
   terminar_creacion_parametro("parametro_funciones");
@@ -164,21 +167,23 @@ function agregar_recurso() {
 
   $("#modal_resource_add").modal("show");
 }
-
+var id_recurso_implementacion = undefined;
 function modificar_recurso() {
   var guardarButton = document.getElementById("GuardarRecurso_btn");
   var modificarButton = document.getElementById("ModificarRecurso_btn");
   modificarButton.classList.replace("d-none", "inline-block");
+  document.getElementById("titulo_recursos").innerHTML =
+    "Modificar Recursos de Implementación";
   guardarButton.classList.replace("inline-block", "d-none");
   limpiar_add_recusos();
   terminar_creacion_parametro("parametro_formula");
   terminar_creacion_parametro("parametro_funciones");
   terminar_creacion_parametro("parametro_servicios");
   var radios = document.getElementsByName("radio_recurso_implementacion");
-  var id = undefined;
+  id_recurso_implementacion = undefined;
   Array.from(radios).forEach((rad) => {
     if (rad.checked) {
-      id = rad.dataset.id;
+      id_recurso_implementacion = rad.dataset.id;
       return;
     }
   });
@@ -187,7 +192,7 @@ function modificar_recurso() {
     post_api(
       SERVER_PATH + "/api/ask_deployment_resources/",
       {
-        id: id,
+        id: id_recurso_implementacion,
       },
       cargar_recurso_para_modificar,
       (res) => {
@@ -227,20 +232,50 @@ function cargar_recurso_para_modificar(json) {
 }
 
 function modificarRecursoImplementacion() {
-  post_api(
-    SERVER_PATH + "/api/del_deployment_resources/",
-    {
-      id: document.getElementById("input-id-resource-mod").value,
-    },
-    (res) => {
-      guardarRecursoImplementacion();
-    },
-    (res) => {
-      console.log(res);
+  var nombre = document.getElementById("input-name-resource-add").value;
+  var descripcion = document.getElementById(
+    "input-descripton-resource-add"
+  ).value;
+  var tipoRecurso = document.getElementById("select_tipo_recurso").value;
+  if (tipoRecurso) {
+    var EspecificoTipo;
+    var arregloParametros;
+    if (tipoRecurso == 0) {
+      EspecificoTipo = recuperarRecursoFormula();
+      arregloParametros = getParametrosRecursosImple("parametro_formula");
+    } else if (tipoRecurso == 1) {
+      EspecificoTipo = recuperarRecursoFuncion();
+      arregloParametros = getParametrosRecursosImple("parametro_funciones");
+    } else if (tipoRecurso == 2) {
+      EspecificoTipo = recuperarRecursoServicio();
+      arregloParametros = getParametrosRecursosImple("parametro_servicios");
     }
-  );
+    var data = {
+      nombre: nombre,
+      descripcion: descripcion,
+      tipoRecurso: tipoRecurso,
+      EspecificoTipo: EspecificoTipo,
+      arregloParametros: arregloParametros,
+      id_recurso: id_recurso_implementacion,
+    };
+    if (
+      !!data.nombre &&
+      !!data.descripcion &&
+      !!data.tipoRecurso &&
+      !!data.EspecificoTipo &&
+      !!data.arregloParametros
+    ) {
+      post_api(
+        SERVER_PATH + "/api/mod_deployment_resources/",
+        data,
+        cargar_recursos_de_implementacion(),
+        console.log("Modificacion Erronea")
+      );
+      cargar_recursos_de_implementacion();
+      $("#modal_resource_add").modal("hide");
+    } else alert("Debe debe completar todos los campos");
+  }
 }
-
 function cargar_parametros_recursos_para_modificar(t, parametros) {
   idParametroCont = 0;
   var tipo = "";
@@ -345,14 +380,13 @@ function eliminar_recurso() {
           id: id,
         },
         (res) => {
-          console.log(res);
+          cargar_recursos_de_implementacion();
         },
         (res) => {
           console.log(res);
         }
       );
     }
-    cargar_recursos_de_implementacion();
   } else {
     alert("No se ha seleccionado ningun recurso");
   }
@@ -1422,10 +1456,6 @@ function modificarUnidadMedida() {
         return;
       }
     });
-    console.log(name);
-    console.log(description);
-    console.log(acronym);
-    console.log(active);
     if (!!id && !!name && !!description && !!acronym) {
       document.getElementById("input-id-update").value = id;
       document.getElementById("input-name-update").value = name;
@@ -3294,7 +3324,7 @@ function generar_flujo_datos_select() {
   var porpiedadSeleccionada = document.getElementById(
     "proiedad_recoleccion"
   ).value;
-  if (comunicacion == "SÍNCRONA") {
+  if (comunicacion == "SiNCRONA") {
     comunicacion = "SINCRONA";
   } else {
     comunicacion = undefined;
@@ -5282,6 +5312,9 @@ cont_paso = 1;
 function guardar_proceso_pre_reflexivo_boton() {
   if (cont_paso == 1) {
     if (guardar_procesos_pre_reflexivos()) {
+      alert(
+        "Acciones siguientes:\n\n1)Configurar método de recolección.\n2)Configurar modelo de análisis."
+      );
       document
         .getElementById("informacion_general_btn")
         .classList.replace("btn-secondary", "btn-link");
@@ -5298,6 +5331,9 @@ function guardar_proceso_pre_reflexivo_boton() {
     }
   } else if (cont_paso == 2) {
     if (guardar_modelos_metodos()) {
+      alert(
+        "Acciones siguientes:\n\n1)Mapear parámetros del recurso de implementación del modelo de análisis.\n2)Ingresar recomendaciones prescriptivas del modelo análisis."
+      );
       document
         .getElementById("metodos_modelos_btn")
         .classList.replace("btn-secondary", "btn-link");
@@ -5334,6 +5370,9 @@ cont_paso_reflexivos = 1;
 function guardar_proceso_reflexivo_boton() {
   if (cont_paso_reflexivos == 1) {
     if (guardar_procesos_reflexivos()) {
+      alert(
+        "Acciones siguientes:\n\n1)Configurar método de cálculo.\n2)Configurar modelo de análisis."
+      );
       document
         .getElementById("btn_informacion_general")
         .classList.replace("btn-secondary", "btn-link");
@@ -5355,6 +5394,9 @@ function guardar_proceso_reflexivo_boton() {
     }
   } else if (cont_paso_reflexivos == 2) {
     if (guardar_modelos_metodos_reflexivos()) {
+      alert(
+        "Acciones siguientes:\n\n1)Mapear parámetros del recurso de implementación del método de cálculo y modelo de análisis.\n2)Ingresar recomendaciones prescriptivas del modelo análisis."
+      );
       document
         .getElementById("btn_metodos_modelos")
         .classList.replace("btn-secondary", "btn-link");
@@ -8292,6 +8334,7 @@ function agregarMetrica() {
   );
   var guardarButton = document.getElementById("agregarMetricaButton");
   var modificarButton = document.getElementById("ModificarMetricaButton");
+  document.getElementById("Titulos_metricas").innerHTML = "Agregar Métricas";
   guardarButton.classList.replace("d-none", "d-inline-block");
   modificarButton.classList.replace("d-inline-block", "d-none");
   document.getElementById("escalas_seccion_entidad").value = "-6";

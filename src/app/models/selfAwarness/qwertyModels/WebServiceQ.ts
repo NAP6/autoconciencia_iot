@@ -23,7 +23,20 @@ export class WebServiceQ extends WebService implements SQL_Qwerty {
     throw new Error("Method not implemented.");
   }
   toSqlUpdate(tag: string[], value: string[]): string {
-    throw new Error("Method not implemented.");
+ var sql = `call modificar_servicio(
+	  		'${this.name}',
+	  		'${this.description}',
+	  		${this.returnDataType},
+	  		1,
+	  		'${this.endPoint}',
+	  		'${this.instrucctions}',
+	  		'${value[tag.indexOf("/@/P_EXIST/@/")]}',
+	  		'${this.DataFormatType}',
+			${value[tag.indexOf("/@/ID_RECURSO/@/")]},
+			@id
+		  )`;
+	  console.log(sql);
+    return sql;
   }
   toObjectArray(rows: any): any[] {
     var services: WebServiceQ[] = [];

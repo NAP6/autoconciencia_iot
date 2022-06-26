@@ -76,6 +76,7 @@ export {
   deployment_resources,
   add_deployment_resources,
   del_deployment_resources,
+  mod_deployment_resources,
   ask_deployment_resources_select,
   ask_deployment_resources,
   ask_input_arguments,

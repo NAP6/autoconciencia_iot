@@ -24,7 +24,20 @@ class WebServiceQ extends WebService_1.WebService {
         throw new Error("Method not implemented.");
     }
     toSqlUpdate(tag, value) {
-        throw new Error("Method not implemented.");
+        var sql = `call modificar_servicio(
+	  		'${this.name}',
+	  		'${this.description}',
+	  		${this.returnDataType},
+	  		1,
+	  		'${this.endPoint}',
+	  		'${this.instrucctions}',
+	  		'${value[tag.indexOf("/@/P_EXIST/@/")]}',
+	  		'${this.DataFormatType}',
+			${value[tag.indexOf("/@/ID_RECURSO/@/")]},
+			@id
+		  )`;
+        console.log(sql);
+        return sql;
     }
     toObjectArray(rows) {
         var services = [];

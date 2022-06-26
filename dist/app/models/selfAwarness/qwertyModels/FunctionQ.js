@@ -23,7 +23,18 @@ class FunctionQ extends Function_1.Function {
         throw new Error("Method not implemented.");
     }
     toSqlUpdate(tag, value) {
-        throw new Error("Method not implemented.");
+        var sql = `call modificar_funcion(
+	  		'${this.name}',
+	  		'${this.description}',
+	  		${this.returnDataType},
+	  		1,
+	  		'${this.path}',
+	  		'${this.instrucctions}',
+	  		'${value[tag.indexOf("/@/P_EXIST/@/")]}',
+			${value[tag.indexOf("/@/ID_RECURSO/@/")]},
+			@id
+		  )`;
+        return sql;
     }
     toObjectArray(rows) {
         var functions = [];

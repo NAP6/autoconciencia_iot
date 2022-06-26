@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.add_mapeo_parametros = exports.ask_input_arguments = exports.ask_deployment_resources = exports.ask_deployment_resources_select = exports.del_deployment_resources = exports.add_deployment_resources = exports.deployment_resources = exports.deployment_resources_page = void 0;
+exports.add_mapeo_parametros = exports.ask_input_arguments = exports.ask_deployment_resources = exports.ask_deployment_resources_select = exports.mod_deployment_resources = exports.del_deployment_resources = exports.add_deployment_resources = exports.deployment_resources = exports.deployment_resources_page = void 0;
 const database2_1 = require("../../data/database2");
 const selfAwarnessModels_1 = require("../../models/selfAwarnessModels");
 function deployment_resources_page(req, res) {
@@ -87,6 +87,43 @@ function del_deployment_resources(req, res) {
     });
 }
 exports.del_deployment_resources = del_deployment_resources;
+function mod_deployment_resources(req, res) {
+    var _a;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var data = req.body;
+            var id = 0;
+            if (data.tipoRecurso == "0") {
+                var formula = new selfAwarnessModels_1.FormulaQ(-1, data.nombre, data.descripcion.replace(/'/g, "\\'"), data.EspecificoTipo.datoSalida, data.EspecificoTipo.formula.replace(/'/g, "\\'"));
+                var rows = yield db.qwerty(formula.toSqlUpdate([], data.id_recurso));
+                id = rows[0][0].id;
+            }
+            else if (data.tipoRecurso == "1") {
+                var funcion = new selfAwarnessModels_1.FunctionQ(-1, data.nombre, data.descripcion.replace(/'/g, "\\'"), data.EspecificoTipo.datoSalida, "", //data.path,
+                data.EspecificoTipo.instrucciones.replace(/'/g, "\\'"));
+                var rows = yield db.qwerty(funcion.toSqlUpdate(["/@/P_EXIST/@/", "/@/ID_RECURSO/@/"], [data.EspecificoTipo.preExistent ? "1" : "0", data.id_recurso]));
+                id = rows[0][0].id;
+            }
+            else if (data.tipoRecurso == "2") {
+                var service = new selfAwarnessModels_1.WebServiceQ(-1, data.nombre, data.descripcion.replace(/'/g, "\\'"), data.EspecificoTipo.datoSalida, data.EspecificoTipo.endPoint, data.EspecificoTipo.instrucciones.replace(/'/g, "\\'"), data.EspecificoTipo.formatoSalida);
+                var rows = yield db.qwerty(service.toSqlUpdate(["/@/P_EXIST/@/", "/@/ID_RECURSO/@/"], [data.EspecificoTipo.preExistent ? "1" : "0", data.id_recurso]));
+                id = rows[0][0].id;
+            }
+            for (var i = 0; i < data.arregloParametros.length; i++) {
+                var param = data.arregloParametros[i];
+                var parameter = new selfAwarnessModels_1.ParameterQ(param.ordinal, param.nombre, param.tipo, param.opcional == "true" ? true : false);
+                var active = param.activo == "true" ? "1" : "0";
+                yield db.qwerty(parameter.toSqlInsert(["/@/ACTIVE/@/", "/@/ID/@/"], [active, id.toString()]));
+            }
+            res.json({ mensaje: "Elemento guardado exitosamente" });
+        }
+        else {
+            res.json({ error: "debe iniciar session para poder usar la api" });
+        }
+    });
+}
+exports.mod_deployment_resources = mod_deployment_resources;
 function ask_deployment_resources_select(req, res) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
