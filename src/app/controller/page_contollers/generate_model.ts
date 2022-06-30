@@ -1176,7 +1176,7 @@ async function save_and_generate_parameter_route(
   method
 ): Promise<string> {
   var db = new database2();
-  var parameter: ParameterQ = new ParameterQ(-1, "", "", false);
+  var parameter: ParameterQ = new ParameterQ(-1,-1, "", "", false);
   var sql = parameter.toSqlSelect(["/@/MAPPING/@/"], [mapping.$.id]);
   var rows = await db.qwerty(sql);
   var parameter_element: ParameterQ = parameter.toObjectArray(rows)[0];

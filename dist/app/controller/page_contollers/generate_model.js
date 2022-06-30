@@ -1033,7 +1033,7 @@ function add_relation_model_analysis_decisionCriteria(model, path_model, path_cr
 function save_and_generate_parameter_route(mapping, path_maping, method) {
     return __awaiter(this, void 0, void 0, function* () {
         var db = new database2_1.database2();
-        var parameter = new selfAwarnessModels_1.ParameterQ(-1, "", "", false);
+        var parameter = new selfAwarnessModels_1.ParameterQ(-1, -1, "", "", false);
         var sql = parameter.toSqlSelect(["/@/MAPPING/@/"], [mapping.$.id]);
         var rows = yield db.qwerty(sql);
         var parameter_element = parameter.toObjectArray(rows)[0];

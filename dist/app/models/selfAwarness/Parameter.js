@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Parameter = void 0;
 class Parameter {
-    constructor(ordinal, name, dataType, optional) {
+    constructor(ordinal, id, name, dataType, optional) {
         this._ordinal = ordinal;
+        this._id = id;
         this._name = name;
         this._dataType = dataType;
         this._optional = optional;
@@ -14,6 +15,12 @@ class Parameter {
     }
     set ordinal(value) {
         this._ordinal = value;
+    }
+    get id() {
+        return this._id;
+    }
+    set id(value) {
+        this._id = value;
     }
     get name() {
         return this._name;
@@ -43,6 +50,7 @@ class Parameter {
         return {
             $: {
                 ordinal: this.ordinal,
+                id: this.id,
                 name: this.name,
                 dataType: this.dataType[1],
                 optional: this.optional,

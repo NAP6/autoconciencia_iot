@@ -60,7 +60,7 @@ function add_deployment_resources(req, res) {
             }
             for (var i = 0; i < data.arregloParametros.length; i++) {
                 var param = data.arregloParametros[i];
-                var parameter = new selfAwarnessModels_1.ParameterQ(param.ordinal, param.nombre, param.tipo, param.opcional == "true" ? true : false);
+                var parameter = new selfAwarnessModels_1.ParameterQ(param.ordinal, param.id, param.nombre, param.tipo, param.opcional == "true" ? true : false);
                 var active = param.activo == "true" ? "1" : "0";
                 yield db.qwerty(parameter.toSqlInsert(["/@/ACTIVE/@/", "/@/ID/@/"], [active, id.toString()]));
             }
@@ -112,7 +112,7 @@ function mod_deployment_resources(req, res) {
             }
             for (var i = 0; i < data.arregloParametros.length; i++) {
                 var param = data.arregloParametros[i];
-                var parameter = new selfAwarnessModels_1.ParameterQ(param.ordinal, param.nombre, param.tipo, param.opcional == "true" ? true : false);
+                var parameter = new selfAwarnessModels_1.ParameterQ(param.ordinal, param.id, param.nombre, param.tipo, param.opcional == "true" ? true : false);
                 var active = param.activo == "true" ? "1" : "0";
                 yield db.qwerty(parameter.toSqlInsert(["/@/ACTIVE/@/", "/@/ID/@/"], [active, id.toString()]));
             }
@@ -145,7 +145,7 @@ function ask_deployment_resources(req, res) {
         if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
             var db = new database2_1.database2();
             var impRes = new selfAwarnessModels_1.ImplementationResourceQ(req.body.id, "", "", "");
-            var parameter = new selfAwarnessModels_1.ParameterQ(-1, "", -1, false);
+            var parameter = new selfAwarnessModels_1.ParameterQ(-1, -1, "", -1, false);
             var rows = yield db.qwerty(impRes.toSqlSelect(["/@/ALL/@/"], []));
             var rowsP = yield db.qwerty(parameter.toSqlSelect(["/@/RI_ID/@/"], [impRes.id.toString()]));
             var arr_Parameters = parameter.toObjectArray(rowsP);

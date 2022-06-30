@@ -80,6 +80,7 @@ export async function add_deployment_resources(req: Request, res: Response) {
       var param = data.arregloParametros[i];
       var parameter = new ParameterQ(
         param.ordinal,
+        param.id,
         param.nombre,
         param.tipo,
         param.opcional == "true" ? true : false
@@ -109,7 +110,7 @@ export async function del_deployment_resources(req: Request, res: Response) {
   }
 }
 export async function mod_deployment_resources(req: Request, res: Response) {
-if (req.session?.user) {
+  if (req.session?.user) {
     var db = new database2();
     var data = req.body;
     var id: number = 0;
@@ -121,7 +122,7 @@ if (req.session?.user) {
         data.EspecificoTipo.datoSalida,
         data.EspecificoTipo.formula.replace(/'/g, "\\'")
       );
-      var rows = await db.qwerty(formula.toSqlUpdate([],data.id_recurso));
+      var rows = await db.qwerty(formula.toSqlUpdate([], data.id_recurso));
       id = rows[0][0].id;
     } else if (data.tipoRecurso == "1") {
       var funcion = new FunctionQ(
@@ -134,8 +135,8 @@ if (req.session?.user) {
       );
       var rows = await db.qwerty(
         funcion.toSqlUpdate(
-          ["/@/P_EXIST/@/","/@/ID_RECURSO/@/"],
-          [data.EspecificoTipo.preExistent ? "1" : "0",data.id_recurso]
+          ["/@/P_EXIST/@/", "/@/ID_RECURSO/@/"],
+          [data.EspecificoTipo.preExistent ? "1" : "0", data.id_recurso]
         )
       );
       id = rows[0][0].id;
@@ -151,8 +152,8 @@ if (req.session?.user) {
       );
       var rows = await db.qwerty(
         service.toSqlUpdate(
-          ["/@/P_EXIST/@/","/@/ID_RECURSO/@/"],
-          [data.EspecificoTipo.preExistent ? "1" : "0",data.id_recurso]
+          ["/@/P_EXIST/@/", "/@/ID_RECURSO/@/"],
+          [data.EspecificoTipo.preExistent ? "1" : "0", data.id_recurso]
         )
       );
       id = rows[0][0].id;
@@ -161,6 +162,7 @@ if (req.session?.user) {
       var param = data.arregloParametros[i];
       var parameter = new ParameterQ(
         param.ordinal,
+        param.id,
         param.nombre,
         param.tipo,
         param.opcional == "true" ? true : false
@@ -199,7 +201,7 @@ export async function ask_deployment_resources(req: Request, res: Response) {
   if (req.session?.user) {
     var db = new database2();
     var impRes = new ImplementationResourceQ(req.body.id, "", "", "");
-    var parameter = new ParameterQ(-1, "", -1, false);
+    var parameter = new ParameterQ(-1, -1, "", -1, false);
     var rows = await db.qwerty(impRes.toSqlSelect(["/@/ALL/@/"], []));
     var rowsP = await db.qwerty(
       parameter.toSqlSelect(["/@/RI_ID/@/"], [impRes.id.toString()])

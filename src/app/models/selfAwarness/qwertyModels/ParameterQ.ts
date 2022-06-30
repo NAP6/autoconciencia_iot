@@ -44,6 +44,7 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
     var sql = "";
     if (tag.indexOf("/@/MAPPING/@/") != -1) {
       sql = `SELECT 
+      			pa.par_id as id,
 	  		pa.par_ordinal as ordinal,
 		  	pa.par_nombre as nombre, 
 		  	pa.par_opcional as opcional, 
@@ -60,6 +61,7 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
 			pa.par_tipo_dato=enu.enu_id`;
     } else {
       sql = `SELECT 
+      			pa.par_id as id,
 	  		pa.par_ordinal as ordinal,
 		  	pa.par_nombre as nombre, 
 		  	pa.par_opcional as opcional, 
@@ -86,6 +88,7 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
     for (var i = 0; i < rows.length; i++) {
       var par = new ParameterQ(
         rows[i].ordinal,
+        rows[i].id,
         rows[i].nombre,
         [rows[i].tipo, rows[i].nombre_salida],
         rows[i].opcional == 1 ? true : false

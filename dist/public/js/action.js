@@ -12,7 +12,7 @@ function post_api(url = "", data, fun1, fun2) {
     method: "POST",
     body: JSON.stringify(data),
     headers: {
-      "Content-type": "application/json; charset=UTF-7",
+      "Content-type": "application/json; charset=UTF-8",
     },
   })
     .then((response) => response.json())
@@ -4225,9 +4225,10 @@ function cargar_modal_mapeo_parametros(json) {
       //
 
       var select = document.createElement("select");
-      select.id = `tipo_mapeo_select_${element._ordinal}`;
+      select.id = `tipo_mapeo_select_${element._id}`;
       select.name = `tipo_mapeo_select`;
       select.dataset.ordinal = element._ordinal;
+      select.dataset.parid = element._id;
       select.style.border = "transparent";
       select.setAttribute("onChange", `cargar_metricas_procesos(this);`);
       var optionSeleccione = document.createElement("option");
@@ -4237,7 +4238,8 @@ function cargar_modal_mapeo_parametros(json) {
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
       selectMetricas.dataset.ordinal = element._ordinal;
-      selectMetricas.id = `tipo_argumento_select_${element._ordinal}`;
+      selectMetricas.dataset.parid = element._id;
+      selectMetricas.id = `tipo_argumento_select_${element._id}`;
       selectMetricas.name = "metrica_select";
       selectMetricas.appendChild(optionSeleccione.cloneNode(true));
       argumentoEntrada.appendChild(selectMetricas);
@@ -4249,7 +4251,8 @@ function cargar_modal_mapeo_parametros(json) {
       tbody.appendChild(tr);
       var selectProceso = document.createElement("select");
       selectProceso.name = `proceso_seleccion`;
-      selectProceso.id = `proceso_seleccion_${element._ordinal}`;
+      selectProceso.id = `proceso_seleccion_${element._id}`;
+      selectProceso.dataset.parid = element._id;
       selectProceso.style.border = "transparent";
       var optionSeleccion = document.createElement("option");
       optionSeleccion.value = "-6";
@@ -4283,26 +4286,31 @@ function cargar_select_mapeo_tipo(json) {
 }
 
 function llenar_procesos_mapeo(json) {
-  var select = document.getElementsByName("proceso_seleccion");
-  Array.from(select).forEach((element) => {
-    json.forEach((ele) => {
-      var nombreF = ele.nombre + "-" + ele.descripcion;
-      var option = document.createElement("option");
-      option.value = ele.id;
-      option.innerHTML = nombreF;
-      element.appendChild(option);
-    });
+  console.log(json);
+  var select_process_id = `proceso_seleccion_${idGeneral}`;
+  var select = document.getElementById(select_process_id);
+  select.innerHTML = "";
+  var optionSeleccion = document.createElement("option");
+  optionSeleccion.value = "-6";
+  optionSeleccion.innerHTML = "SELECCIONE..";
+  select.appendChild(optionSeleccion);
+  json.forEach((ele) => {
+    var nombreF = ele.nombre + "-" + ele.descripcion;
+    var option = document.createElement("option");
+    option.value = ele.id;
+    option.innerHTML = nombreF;
+    select.appendChild(option);
   });
 }
 function cargar_metricas_procesos(elemento) {
   var selectProceso = document.getElementById(
-    `proceso_seleccion_${elemento.dataset.ordinal}`
+    `proceso_seleccion_${elemento.dataset.parid}`
   );
   var selectTipo = document.getElementById(
-    `tipo_mapeo_select_${elemento.dataset.ordinal}`
+    `tipo_mapeo_select_${elemento.dataset.parid}`
   );
   var selectMetricas = document.getElementById(
-    `tipo_argumento_select_${elemento.dataset.ordinal}`
+    `tipo_argumento_select_${elemento.dataset.parid}`
   );
   if (elemento.name == "metrica_select") {
     data = {
@@ -4318,8 +4326,10 @@ function cargar_metricas_procesos(elemento) {
       }
     );
     OrdinalGeneral = elemento.dataset.ordinal;
+    idGeneral = elemento.dataset.parid;
   } else {
     OrdinalGeneral = elemento.dataset.ordinal;
+    idGeneral = elemento.dataset.parid;
     data = {
       tipo_metrica: elemento.value,
       aspectoId: document.getElementById("Aspectos_autoconsciencia").value,
@@ -4335,11 +4345,10 @@ function cargar_metricas_procesos(elemento) {
   }
 }
 var OrdinalGeneral = undefined;
+var idGeneral = undefined;
 
 function cargar_select_argumento_entrada(json) {
-  var select = document.getElementById(
-    `tipo_argumento_select_${OrdinalGeneral}`
-  );
+  var select = document.getElementById(`tipo_argumento_select_${idGeneral}`);
   select.innerHTML = "<option value='-6'>Seleccione</option>";
   json.forEach((ele) => {
     var option = document.createElement("option");
@@ -5774,9 +5783,10 @@ function cargar_modal_mapeo_parametros_metodos(json) {
 
       var selectProcesos = document.createElement("select");
       selectProcesos.name = `procesos_mapeo_select`;
-      selectProcesos.id = `proceso_select_metodo_${element._ordinal}`;
+      selectProcesos.id = `proceso_select_metodo_${element._id}`;
       selectProcesos.dataset.ordinal = element._ordinal;
       selectProcesos.style.border = "transparent";
+      selectProcesos.dataset.parid = element._id;
       selectProcesos.setAttribute(
         "onChange",
         "guardar_id_procesos_mapeo_metodos(this);"
@@ -5787,9 +5797,10 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       selectProcesos.appendChild(optionSeleccion);
       procesos.appendChild(selectProcesos);
       var select = document.createElement("select");
-      select.id = `tipo_mapeo_select_${element._ordinal}`;
+      select.id = `tipo_mapeo_select_${element._id}`;
       select.name = `tipo_mapeo_select_metodos`;
       select.dataset.ordinal = element._ordinal;
+      select.dataset.parid = element._id;
       select.style.border = "transparent";
       select.setAttribute(
         "onChange",
@@ -5803,7 +5814,8 @@ function cargar_modal_mapeo_parametros_metodos(json) {
       selectMetricas.style.border = "transparent";
       selectMetricas.name = `metrica_select`;
       selectMetricas.dataset.ordinal = element._ordinal;
-      selectMetricas.id = `tipo_argumento_select_metodo_${element._ordinal}`;
+      selectMetricas.dataset.parid = element._id;
+      selectMetricas.id = `tipo_argumento_select_metodo_${element._id}`;
       selectMetricas.setAttribute(
         "onChange",
         `cargar_metricas_tipo_mapeo_metodo(this);`
@@ -5827,10 +5839,13 @@ function cargar_modal_mapeo_parametros_metodos(json) {
 }
 
 var global_direct_metric = { ordinal: undefined, proces_id: undefined };
+var idGeneralReflexivos2 = undefined;
 function guardar_id_procesos_mapeo_metodos(element) {
   var METRICA_DIRECTA = 10;
   var ordinal = element.dataset.ordinal;
-  var tipo_mapeo_id = `tipo_mapeo_select_${ordinal}`;
+  var id = element.dataset.parid;
+  idGeneralReflexivos2 = element.dataset.parid;
+  var tipo_mapeo_id = `tipo_mapeo_select_${id}`;
   if (document.getElementById(tipo_mapeo_id).value == METRICA_DIRECTA) {
     var proces_id = element.value;
     global_direct_metric.ordinal = ordinal;
@@ -5886,10 +5901,12 @@ function cargar_select_mapeo_tipo_metodos_2(json) {
 }
 
 var ordinaGeneralMetodos = undefined;
+var idGeneralMetodos = undefined;
 function cargar_metricas_tipo_mapeo_metodo(elemento) {
   var VARIABLE_SIMULACION = 24;
   var METADATA = 25;
   ordinaGeneralMetodos = elemento.dataset.ordinal;
+  idGeneralMetodos = elemento.dataset.parid;
   if (elemento.name == "metrica_select") {
     data = {
       metricaId: elemento.value,
@@ -5904,7 +5921,7 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
     );
   } else {
     if (elemento.value == METADATA || elemento.value == VARIABLE_SIMULACION) {
-      var select_prcess_id = `proceso_select_metodo_${ordinaGeneralMetodos}`;
+      var select_prcess_id = `proceso_select_metodo_${idGeneralMetodos}`;
       var select = document.getElementById(select_prcess_id);
       select.innerHTML = "";
       var optionSeleccion = document.createElement("option");
@@ -5913,7 +5930,7 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
       select.appendChild(optionSeleccion);
       select.disabled = true;
     } else {
-      var select_prcess_id = `proceso_select_metodo_${ordinaGeneralMetodos}`;
+      var select_prcess_id = `proceso_select_metodo_${idGeneralMetodos}`;
       var select = document.getElementById(select_prcess_id);
       select.innerHTML = "";
       var optionSeleccion = document.createElement("option");
@@ -5951,7 +5968,7 @@ function cargar_metricas_tipo_mapeo_metodo(elemento) {
 }
 
 function llenar_procesos_metodo_reflexivo(json) {
-  var select_prcess_id = `proceso_select_metodo_${ordinaGeneralMetodos}`;
+  var select_prcess_id = `proceso_select_metodo_${idGeneralMetodos}`;
   var select = document.getElementById(select_prcess_id);
   select.innerHTML = "";
   var optionSeleccion = document.createElement("option");
@@ -5968,7 +5985,7 @@ function llenar_procesos_metodo_reflexivo(json) {
 }
 function cargar_select_argumento_entrada_metodos(json) {
   var select = document.getElementById(
-    `tipo_argumento_select_metodo_${ordinaGeneralMetodos}`
+    `tipo_argumento_select_metodo_${idGeneralMetodos}`
   );
   select.innerHTML = "<option value='-6'>Seleccione</option>";
   json.forEach((ele) => {
@@ -6036,6 +6053,9 @@ function Guadar_nuevo_mapeo_metodos() {
     .getElementById("id_metodo_aprendizaje_modelos")
     .value.split("-");
   Array.from(nombreP).forEach((element) => {
+    console.log(
+      element.querySelector("td#procesos_select_mapeos select").value
+    );
     var aux2 = {
       proceso: element.querySelector("td#procesos_select_mapeos select").value,
       nombre: element.querySelector("td#nombre_fila_parametros_metodos")
@@ -6065,16 +6085,16 @@ function Guadar_nuevo_mapeo_metodos() {
     element.querySelector("td#procesos_select_mapeos select").disabled = true;
     aux.push(aux2);
   });
-  console.log(aux[0].par_ordinal);
+  console.log(aux[0].idGeneralReflexivos2);
   for (var i = 0; i < aux.length; i++) {
     if (
-      document.getElementById("tipo_mapeo_select_" + aux[i].par_ordinal)
+      document.getElementById("tipo_mapeo_select_" + idGeneralReflexivos2)
         .value == 24
     ) {
       aux[i].vs_id = aux[i].met_id;
       aux[i].met_id = undefined;
     } else if (
-      document.getElementById("tipo_mapeo_select_" + aux[i].par_ordinal)
+      document.getElementById("tipo_mapeo_select_" + idGeneralReflexivos2)
         .value == 25
     ) {
       aux[i].data_id = aux[i].met_id;
@@ -6168,8 +6188,9 @@ function cargar_modal_mapeo_parametros_modelos(json) {
 
       var select_procesos = document.createElement("select");
       select_procesos.name = `proceso_select_modelos`;
-      select_procesos.id = `proceso_select_${element._ordinal}`;
+      select_procesos.id = `proceso_select_${element._id}`;
       select_procesos.dataset.ordinal = element._ordinal;
+      select_procesos.dataset.parid = element._id;
       select_procesos.style.border = "transparent";
       var optionSeleccion = document.createElement("option");
       optionSeleccion.value = "-6";
@@ -6178,9 +6199,10 @@ function cargar_modal_mapeo_parametros_modelos(json) {
       proceso.appendChild(select_procesos);
 
       var select = document.createElement("select");
-      select.id = `tipo_mapeo_select_${element._ordinal}`;
+      select.id = `tipo_mapeo_select_${element._id}`;
       select.name = `tipo_mapeo_select_modelos`;
       select.dataset.ordinal = element._ordinal;
+      select.dataset.parid = element._id;
       select.style.border = "transparent";
       select.setAttribute(
         "onChange",
@@ -6192,9 +6214,10 @@ function cargar_modal_mapeo_parametros_modelos(json) {
       select.appendChild(optionSeleccione);
       var selectMetricas = document.createElement("select");
       selectMetricas.style.border = "transparent";
-      selectMetricas.id = `tipo_argumento_select_modelo_${element._ordinal}`;
+      selectMetricas.id = `tipo_argumento_select_modelo_${element._id}`;
       selectMetricas.name = "metrica_select_reflexivos";
       selectMetricas.dataset.ordinal = element._ordinal;
+      selectMetricas.dataset.parid = element._id;
       selectMetricas.appendChild(optionSeleccione.cloneNode(true));
       selectMetricas.setAttribute(
         "onChange",
@@ -6230,13 +6253,15 @@ function cargar_select_mapeo_tipo_modelos(json) {
 }
 
 var ordinalGeneralReflexivos = undefined;
+var idGeneralReflexivos = undefined;
 function cargar_metricas_tipo_mapeo_modelo(elemento) {
   ordinalGeneralReflexivos = elemento.dataset.ordinal;
+  idGeneralReflexivos = elemento.dataset.parid;
   var selectMetricas = document.getElementById(
-    `tipo_argumento_select_modelo_${elemento.dataset.ordinal}`
+    `tipo_argumento_select_modelo_${elemento.dataset.parid}`
   );
   var selectTipo = document.getElementById(
-    `tipo_mapeo_select_${elemento.dataset.ordinal}`
+    `tipo_mapeo_select_${elemento.dataset.parid}`
   );
   if (elemento.name == "metrica_select_reflexivos") {
     data = {
@@ -6263,7 +6288,7 @@ function cargar_metricas_tipo_mapeo_modelo(elemento) {
   }
 }
 function cargar_select_procesos_mapeo_reflexivos(json) {
-  var select_prcess_id = `proceso_select_${ordinalGeneralReflexivos}`;
+  var select_prcess_id = `proceso_select_${idGeneralReflexivos}`;
   var select = document.getElementById(select_prcess_id);
   select.innerHTML = "";
   var optionSeleccion = document.createElement("option");
@@ -6281,7 +6306,7 @@ function cargar_select_procesos_mapeo_reflexivos(json) {
 function cargar_select_argumento_entrada_modelos(json) {
   console.log(json);
   var select = document.getElementById(
-    `tipo_argumento_select_modelo_${ordinalGeneralReflexivos}`
+    `tipo_argumento_select_modelo_${idGeneralReflexivos}`
   );
   select.innerHTML = "<option value='-6'>Seleccione</option>";
   json.forEach((ele) => {

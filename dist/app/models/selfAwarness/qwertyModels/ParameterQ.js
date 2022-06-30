@@ -43,6 +43,7 @@ class ParameterQ extends Parameter_1.Parameter {
         var sql = "";
         if (tag.indexOf("/@/MAPPING/@/") != -1) {
             sql = `SELECT 
+      			pa.par_id as id,
 	  		pa.par_ordinal as ordinal,
 		  	pa.par_nombre as nombre, 
 		  	pa.par_opcional as opcional, 
@@ -60,6 +61,7 @@ class ParameterQ extends Parameter_1.Parameter {
         }
         else {
             sql = `SELECT 
+      			pa.par_id as id,
 	  		pa.par_ordinal as ordinal,
 		  	pa.par_nombre as nombre, 
 		  	pa.par_opcional as opcional, 
@@ -84,7 +86,7 @@ class ParameterQ extends Parameter_1.Parameter {
     toObjectArray(rows) {
         var parameters = [];
         for (var i = 0; i < rows.length; i++) {
-            var par = new ParameterQ(rows[i].ordinal, rows[i].nombre, [rows[i].tipo, rows[i].nombre_salida], rows[i].opcional == 1 ? true : false);
+            var par = new ParameterQ(rows[i].ordinal, rows[i].id, rows[i].nombre, [rows[i].tipo, rows[i].nombre_salida], rows[i].opcional == 1 ? true : false);
             par.active = rows[i].activo == 1 ? true : false;
             parameters.push(par);
         }
