@@ -7160,9 +7160,9 @@ function abrirModalEscenarioSimulacionModificar() {
   $("#modal_escenarios_simulacion").modal("show");
   consultar_tabla_escenarios_modificar();
 }
-
 function consultar_tabla_escenarios_modificar() {
   var mea = document.getElementById("id_modelo_reflexivo").value;
+  metodo_calculo = mea;
   post_api(
     SERVER_PATH + "/api/get_simulation_scenario",
     { mea_id: mea },

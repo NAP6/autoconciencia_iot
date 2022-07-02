@@ -6085,11 +6085,18 @@ function Guadar_nuevo_mapeo_metodos() {
     element.querySelector("td#procesos_select_mapeos select").disabled = true;
     aux.push(aux2);
   });
+  console.log(aux[0].idGeneralReflexivos2);
   for (var i = 0; i < aux.length; i++) {
-    if (aux[i].tipoMapeo == 24) {
+    if (
+      document.getElementById("tipo_mapeo_select_" + idGeneralReflexivos2)
+        .value == 24
+    ) {
       aux[i].vs_id = aux[i].met_id;
       aux[i].met_id = undefined;
-    } else if (aux[i].tipoMapeo == 25) {
+    } else if (
+      document.getElementById("tipo_mapeo_select_" + idGeneralReflexivos2)
+        .value == 25
+    ) {
       aux[i].data_id = aux[i].met_id;
       aux[i].met_id = undefined;
     }
@@ -7153,9 +7160,9 @@ function abrirModalEscenarioSimulacionModificar() {
   $("#modal_escenarios_simulacion").modal("show");
   consultar_tabla_escenarios_modificar();
 }
-
 function consultar_tabla_escenarios_modificar() {
   var mea = document.getElementById("id_modelo_reflexivo").value;
+  metodo_calculo = mea;
   post_api(
     SERVER_PATH + "/api/get_simulation_scenario",
     { mea_id: mea },
