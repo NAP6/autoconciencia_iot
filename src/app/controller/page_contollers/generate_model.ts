@@ -1200,7 +1200,8 @@ async function save_and_generate_resource_route(
   var db = new database2();
   var resource: ImplementationResourceQ;
   resource = new ImplementationResourceQ(-1, "", "", "");
-  var sql = resource.toSqlSelect(["/@/PARAMETER/@/"], [parameter.$.ordinal]);
+	console.log(parameter);
+  var sql = resource.toSqlSelect(["/@/PARAMETER/@/"], [parameter.$.id]);
   var rows = await db.qwerty(sql);
   var resource_element: ImplementationResourceQ;
   resource_element = resource.toObjectArray(rows)[0];

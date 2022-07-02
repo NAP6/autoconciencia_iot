@@ -1056,7 +1056,8 @@ function save_and_generate_resource_route(parameter, method) {
         var db = new database2_1.database2();
         var resource;
         resource = new selfAwarnessModels_1.ImplementationResourceQ(-1, "", "", "");
-        var sql = resource.toSqlSelect(["/@/PARAMETER/@/"], [parameter.$.ordinal]);
+        console.log(parameter);
+        var sql = resource.toSqlSelect(["/@/PARAMETER/@/"], [parameter.$.id]);
         var rows = yield db.qwerty(sql);
         var resource_element;
         resource_element = resource.toObjectArray(rows)[0];

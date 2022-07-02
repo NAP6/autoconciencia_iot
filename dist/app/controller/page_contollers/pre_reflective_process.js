@@ -289,7 +289,7 @@ function get_pre_reflective_process_mod(req, res) {
 	    from
 		modeloanalisis ana 
 		inner join mapeoparametros map on ana.mea_id=map.mea_id
-		inner join parametro par on map.par_ordinal=par.par_ordinal
+		inner join parametro par on map.par_ordinal=par.par_id
 		inner join recursoimplementacion ri on par.ri_id=ri.ri_id
 		left join metrica met on map.met_id=met.met_id
 		left join variablesimulacion var on map.vs_id=var.vs_id
@@ -413,7 +413,7 @@ function get_select_cargar_recurso(req, res) {
 			recursoimplementacion rec
 		WHERE 
 	    		map.mea_id=${id} AND
-	    		par.par_ordinal=map.par_ordinal AND
+	    		par.par_id=map.par_ordinal AND
 	    		rec.ri_id=par.ri_id`);
             res.json(rows);
         }

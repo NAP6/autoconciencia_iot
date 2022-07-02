@@ -19,7 +19,7 @@ export class ImplementationResourceQ
 	     recursoimplementacion ri,
 		     parametro par
 	     WHERE
-	      par.par_ordinal=${value[tag.indexOf("/@/PARAMETER/@/")]} AND
+	      par.par_id=${value[tag.indexOf("/@/PARAMETER/@/")]} AND
 	       par.ri_id=ri.ri_id))
 	    `;
       return sql;

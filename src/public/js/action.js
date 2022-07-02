@@ -6085,18 +6085,11 @@ function Guadar_nuevo_mapeo_metodos() {
     element.querySelector("td#procesos_select_mapeos select").disabled = true;
     aux.push(aux2);
   });
-  console.log(aux[0].idGeneralReflexivos2);
   for (var i = 0; i < aux.length; i++) {
-    if (
-      document.getElementById("tipo_mapeo_select_" + idGeneralReflexivos2)
-        .value == 24
-    ) {
+    if (aux[i].tipoMapeo == 24) {
       aux[i].vs_id = aux[i].met_id;
       aux[i].met_id = undefined;
-    } else if (
-      document.getElementById("tipo_mapeo_select_" + idGeneralReflexivos2)
-        .value == 25
-    ) {
+    } else if (aux[i].tipoMapeo == 25) {
       aux[i].data_id = aux[i].met_id;
       aux[i].met_id = undefined;
     }
