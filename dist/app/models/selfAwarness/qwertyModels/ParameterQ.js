@@ -20,7 +20,30 @@ class ParameterQ extends Parameter_1.Parameter {
         this.ordinal = value;
     }
     toSqlInsert(tag, value) {
-        var sql = `INSERT INTO 
+        if (this.id != undefined) {
+            var sql = `INSERT INTO 
+	  		parametro (
+			        par_id,
+	  			par_ordinal, 
+		  		par_nombre, 
+		  		par_opcional, 
+		  		par_activo, 
+		  		par_tipo_dato, 
+		  		ri_id
+  			) VALUES (
+			        '${this.ordinal}',
+	  			'${this.ordinal}', 
+		  		'${this.name}', 
+		  		'${this.optional ? 1 : 0}', 
+				'${value[tag.indexOf("/@/ACTIVE/@/")]}',
+		  		'${this.dataType}', 
+				'${value[tag.indexOf("/@/ID/@/")]}'
+  			)`;
+            console.log(sql);
+            return sql;
+        }
+        else {
+            var sql = `INSERT INTO 
 	  		parametro (
 	  			par_ordinal, 
 		  		par_nombre, 
@@ -36,8 +59,9 @@ class ParameterQ extends Parameter_1.Parameter {
 		  		'${this.dataType}', 
 				'${value[tag.indexOf("/@/ID/@/")]}'
   			)`;
-        console.log(sql);
-        return sql;
+            console.log(sql);
+            return sql;
+        }
     }
     toSqlSelect(tag, value) {
         var sql = "";
@@ -56,7 +80,7 @@ class ParameterQ extends Parameter_1.Parameter {
 			mapeoparametros map
 		WHERE 
 	  		map.md_id=${value[tag.indexOf("/@/MAPPING/@/")]} AND 
-			map.par_ordinal=pa.par_ordinal AND
+			map.par_ordinal=pa.par_id AND
 			pa.par_tipo_dato=enu.enu_id`;
         }
         else {
@@ -75,6 +99,7 @@ class ParameterQ extends Parameter_1.Parameter {
 	  		ri_id = '${value[tag.indexOf("/@/RI_ID/@/")]}' AND 
 			pa.par_tipo_dato=enu.enu_id`;
         }
+        console.log(sql);
         return sql;
     }
     toSqlDelete(tag, value) {

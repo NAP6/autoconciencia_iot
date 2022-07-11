@@ -77,21 +77,24 @@ export async function add_deployment_resources(req: Request, res: Response) {
       id = rows[0][0].id;
     }
     for (var i = 0; i < data.arregloParametros.length; i++) {
-      var param = data.arregloParametros[i];
-      var parameter = new ParameterQ(
-        param.ordinal,
-        param.id,
-        param.nombre,
-        param.tipo,
-        param.opcional == "true" ? true : false
-      );
-      var active: string = param.activo == "true" ? "1" : "0";
-      await db.qwerty(
-        parameter.toSqlInsert(
-          ["/@/ACTIVE/@/", "/@/ID/@/"],
-          [active, id.toString()]
-        )
-      );
+            var param = data.arregloParametros[i];
+        var sql = `INSERT INTO 
+	  		parametro (
+	  			par_ordinal, 
+		  		par_nombre, 
+		  		par_opcional, 
+		  		par_activo, 
+		  		par_tipo_dato, 
+		  		ri_id
+  			) VALUES (
+	  			'${param.ordinal}', 
+		  		'${param.nombre}', 
+		  		'${param.opcional ? 1 : 0}', 
+				'1',
+		  		'${param.tipo}', 
+				'${id.toString()}'
+  			)`;
+        await db.qwerty(sql);
     }
     res.json({ mensaje: "Elemento guardado exitosamente" });
   } else {
@@ -158,22 +161,45 @@ export async function mod_deployment_resources(req: Request, res: Response) {
       );
       id = rows[0][0].id;
     }
+
+var param = data.arregloParametros;
+	    console.log(param)
     for (var i = 0; i < data.arregloParametros.length; i++) {
       var param = data.arregloParametros[i];
-      var parameter = new ParameterQ(
-        param.ordinal,
-        param.id,
-        param.nombre,
-        param.tipo,
-        param.opcional == "true" ? true : false
-      );
-      var active: string = param.activo == "true" ? "1" : "0";
-      await db.qwerty(
-        parameter.toSqlInsert(
-          ["/@/ACTIVE/@/", "/@/ID/@/"],
-          [active, id.toString()]
-        )
-      );
+      if (param.id == undefined) {
+        var sql = `INSERT INTO 
+	  		parametro (
+	  			par_ordinal, 
+		  		par_nombre, 
+		  		par_opcional, 
+		  		par_activo, 
+		  		par_tipo_dato, 
+		  		ri_id
+  			) VALUES (
+	  			'${param.ordinal}', 
+		  		'${param.nombre}', 
+		  		'${param.opcional ? 1 : 0}', 
+				'1',
+		  		'${param.tipo}', 
+				'${id.toString()}'
+  			)`;
+        await db.qwerty(sql);
+      } else if(param.id!=undefined && param.nombre!=undefined) {
+        var sql = `UPDATE parametro 
+			SET par_ordinal = '${param.ordinal}', 
+				par_nombre= '${param.nombre}', 
+		  	        par_opcional= '${param.opcional ? 1 :0}', 
+		  		par_activo= 1, 
+		  		par_tipo_dato= '${param.tipo}'
+				WHERE par_id='${param.id}'`;
+        await db.qwerty(sql);
+      }else{
+	      param.parametroEliminar.forEach(async elem =>{
+		      var sql=`DELET parametro WHERE par_id='${elem}'`;
+		      console.log(sql);
+		      await db.qwerty(sql);
+	      }); 
+      }
     }
     res.json({ mensaje: "Elemento guardado exitosamente" });
   } else {
@@ -207,7 +233,6 @@ export async function ask_deployment_resources(req: Request, res: Response) {
       parameter.toSqlSelect(["/@/RI_ID/@/"], [impRes.id.toString()])
     );
     var arr_Parameters = parameter.toObjectArray(rowsP);
-
     if (rows[0][0].tipo_recurso == 0) {
       var formula: FormulaQ = new FormulaQ(-1, "", "", "", "");
       formula = formula.toObjectArray(rows)[0];

@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Parameter = void 0;
 class Parameter {
-    constructor(ordinal, id, name, dataType, optional) {
-        this._ordinal = ordinal;
+    constructor(id, ordinal, name, dataType, optional) {
         this._id = id;
+        this._ordinal = ordinal;
         this._name = name;
         this._dataType = dataType;
         this._optional = optional;
@@ -49,8 +49,8 @@ class Parameter {
     toObjectG() {
         return {
             $: {
-                ordinal: this.ordinal,
                 id: this.id,
+                ordinal: this.ordinal,
                 name: this.name,
                 dataType: this.dataType[1],
                 optional: this.optional,

@@ -108,11 +108,15 @@ export async function generate_model(req, res) {
       console.log(error.message);
     }
   });
-  fs.writeFile("./selfAwareModel/modelo.json", JSON.stringify(modeloA), (err) => {
-    if (err) {
-      console.log(err);
+  fs.writeFile(
+    "./selfAwareModel/modelo.json",
+    JSON.stringify(modeloA),
+    (err) => {
+      if (err) {
+        console.log(err);
+      }
     }
-  });
+  );
 }
 
 async function add_relation_data_colum(model: any) {
@@ -232,16 +236,8 @@ async function add_analisisModel(process, path_process) {
   var analisisModel: AnalysisModelQ;
   analisisModel = new AnalysisModelQ(-1, "");
   var sql = analisisModel.toSqlSelect(["/@/PROCES/@/"], [process.$.id]);
-  console.log("#################################");
-  console.log("Modelos de Analisis");
-  console.log("#################################");
-  console.log(sql);
-  console.log("#################################");
   var rows = await db.qwerty(sql);
   var model: AnalysisModelQ[] = analisisModel.toObjectArray(rows);
-  console.log(model);
-  console.log("================================================");
-  console.log();
   if (model.length > 0) {
     process.usesAnalysisModel = [];
     for (var i = 0; i < model.length; i++) {
@@ -352,16 +348,8 @@ async function add_action(analisisModel, path_model) {
   var db = new database2();
   var action: ActionQ = new ActionQ(-1, "");
   var sql = action.toSqlSelect(["/@/MODEL/@/"], [analisisModel.$.id]);
-  console.log("########################################");
-  console.log("Actions");
-  console.log("########################################");
-  console.log(sql);
   var rows = await db.qwerty(sql);
   var action_list: ActionQ[] = action.toObjectArray(rows);
-  console.log("########################################");
-  console.log(action_list);
-  console.log("===========================================================");
-  console.log();
   if (action_list.length > 0) {
     if (!analisisModel.containsAction) analisisModel.containsAction = [];
     for (var i = 0; i < action_list.length; i++) {
@@ -854,19 +842,12 @@ async function add_relation_threshold_action(threshold, path_threshold) {
     threshold.$.upperThreshold
   );
   var sql = thres.toSqlSelect(["/@/RELATION_ACTION/@/"], []);
-  console.log("###################################");
-  console.log("Relation action threshold");
-  console.log("###################################");
-  console.log(sql);
   var rows = await db.qwerty(sql);
   for (var i = 0; i < rows.length; i++) {
-    console.log("###################################");
-    console.log("id accion: " + rows[i].id);
     if (routes["action"]["p"][rows[i].id.toString()]) {
       var path_action = routes["action"]["p"][rows[i].id.toString()];
       threshold.recommends = path_action;
       var obj: any = routes["action"]["r"][rows[i].id.toString()];
-      console.log(obj);
       obj.isRecommendedIn = path_threshold;
     } else {
       console.log("=== ERROR accion no encontrada: " + rows[i].id);
@@ -885,20 +866,12 @@ async function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
 		WHERE
 		asp.met_id=${metric.$.id}`;
   var rows = await db.qwerty(sql);
-  console.log("#############################");
-  console.log("ASPECTO");
-  console.log("#############################");
-  console.log(sql);
-  console.log("#############################");
   for (var i = 0; i < rows.length; i++) {
     if (metric.evaluates) {
       metric.evaluates += " " + routes["aspect"]["p"][rows[i].id.toString()];
     } else {
       metric.evaluates = routes["aspect"]["p"][rows[i].id.toString()];
     }
-    console.log("#############################");
-    console.log("id aspecto: " + rows[i].id);
-    console.log(routes["aspect"]["r"][rows[i].id.toString()]);
     if (routes["aspect"]["r"][rows[i].id.toString()]) {
       if (routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy) {
         routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy +=
@@ -1176,7 +1149,7 @@ async function save_and_generate_parameter_route(
   method
 ): Promise<string> {
   var db = new database2();
-  var parameter: ParameterQ = new ParameterQ(-1,-1, "", "", false);
+  var parameter: ParameterQ = new ParameterQ(-1, -1, "", "", false);
   var sql = parameter.toSqlSelect(["/@/MAPPING/@/"], [mapping.$.id]);
   var rows = await db.qwerty(sql);
   var parameter_element: ParameterQ = parameter.toObjectArray(rows)[0];
@@ -1186,21 +1159,23 @@ async function save_and_generate_parameter_route(
   } else {
     routes["parameter"]["r"][parameter_element.id.toString()] =
       parameter_element.toObjectG();
+
     the_paremeter = routes["parameter"]["r"][parameter_element.id.toString()];
     the_paremeter.isUsedIn = `${path_maping}`;
   }
   //no se ha revisado esta funcion
-  return await save_and_generate_resource_route(the_paremeter, method);
+  console.log(the_paremeter);
+  return await save_and_generate_resource_route(the_paremeter, method, rows);
 }
 
 async function save_and_generate_resource_route(
   parameter,
-  method
+  method,
+  rows
 ): Promise<string> {
   var db = new database2();
   var resource: ImplementationResourceQ;
   resource = new ImplementationResourceQ(-1, "", "", "");
-	console.log(parameter);
   var sql = resource.toSqlSelect(["/@/PARAMETER/@/"], [parameter.$.id]);
   var rows = await db.qwerty(sql);
   var resource_element: ImplementationResourceQ;

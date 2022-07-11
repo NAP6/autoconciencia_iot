@@ -210,16 +210,8 @@ function add_analisisModel(process, path_process) {
         var analisisModel;
         analisisModel = new selfAwarnessModels_1.AnalysisModelQ(-1, "");
         var sql = analisisModel.toSqlSelect(["/@/PROCES/@/"], [process.$.id]);
-        console.log("#################################");
-        console.log("Modelos de Analisis");
-        console.log("#################################");
-        console.log(sql);
-        console.log("#################################");
         var rows = yield db.qwerty(sql);
         var model = analisisModel.toObjectArray(rows);
-        console.log(model);
-        console.log("================================================");
-        console.log();
         if (model.length > 0) {
             process.usesAnalysisModel = [];
             for (var i = 0; i < model.length; i++) {
@@ -332,16 +324,8 @@ function add_action(analisisModel, path_model) {
         var db = new database2_1.database2();
         var action = new selfAwarnessModels_1.ActionQ(-1, "");
         var sql = action.toSqlSelect(["/@/MODEL/@/"], [analisisModel.$.id]);
-        console.log("########################################");
-        console.log("Actions");
-        console.log("########################################");
-        console.log(sql);
         var rows = yield db.qwerty(sql);
         var action_list = action.toObjectArray(rows);
-        console.log("########################################");
-        console.log(action_list);
-        console.log("===========================================================");
-        console.log();
         if (action_list.length > 0) {
             if (!analisisModel.containsAction)
                 analisisModel.containsAction = [];
@@ -759,19 +743,12 @@ function add_relation_threshold_action(threshold, path_threshold) {
         var db = new database2_1.database2();
         var thres = new selfAwarnessModels_1.ThresholdQ(threshold.$.id, threshold.$.name, threshold.$.interpretation, threshold.$.lowerThreshold, threshold.$.upperThreshold);
         var sql = thres.toSqlSelect(["/@/RELATION_ACTION/@/"], []);
-        console.log("###################################");
-        console.log("Relation action threshold");
-        console.log("###################################");
-        console.log(sql);
         var rows = yield db.qwerty(sql);
         for (var i = 0; i < rows.length; i++) {
-            console.log("###################################");
-            console.log("id accion: " + rows[i].id);
             if (routes["action"]["p"][rows[i].id.toString()]) {
                 var path_action = routes["action"]["p"][rows[i].id.toString()];
                 threshold.recommends = path_action;
                 var obj = routes["action"]["r"][rows[i].id.toString()];
-                console.log(obj);
                 obj.isRecommendedIn = path_threshold;
             }
             else {
@@ -792,11 +769,6 @@ function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
 		WHERE
 		asp.met_id=${metric.$.id}`;
         var rows = yield db.qwerty(sql);
-        console.log("#############################");
-        console.log("ASPECTO");
-        console.log("#############################");
-        console.log(sql);
-        console.log("#############################");
         for (var i = 0; i < rows.length; i++) {
             if (metric.evaluates) {
                 metric.evaluates += " " + routes["aspect"]["p"][rows[i].id.toString()];
@@ -804,9 +776,6 @@ function add_metric_relation_selfAwarenessAspect(metric, path_metric) {
             else {
                 metric.evaluates = routes["aspect"]["p"][rows[i].id.toString()];
             }
-            console.log("#############################");
-            console.log("id aspecto: " + rows[i].id);
-            console.log(routes["aspect"]["r"][rows[i].id.toString()]);
             if (routes["aspect"]["r"][rows[i].id.toString()]) {
                 if (routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy) {
                     routes["aspect"]["r"][rows[i].id.toString()].isEvaluatedBy +=
@@ -1048,17 +1017,18 @@ function save_and_generate_parameter_route(mapping, path_maping, method) {
             the_paremeter.isUsedIn = `${path_maping}`;
         }
         //no se ha revisado esta funcion
-        return yield save_and_generate_resource_route(the_paremeter, method);
+        console.log(the_paremeter);
+        return yield save_and_generate_resource_route(the_paremeter, method, rows);
     });
 }
-function save_and_generate_resource_route(parameter, method) {
+function save_and_generate_resource_route(parameter, method, rows) {
+    var rows;
     return __awaiter(this, void 0, void 0, function* () {
         var db = new database2_1.database2();
         var resource;
         resource = new selfAwarnessModels_1.ImplementationResourceQ(-1, "", "", "");
-        console.log(parameter);
         var sql = resource.toSqlSelect(["/@/PARAMETER/@/"], [parameter.$.id]);
-        var rows = yield db.qwerty(sql);
+        rows = yield db.qwerty(sql);
         var resource_element;
         resource_element = resource.toObjectArray(rows)[0];
         var the_resource = routes["implementationResource"]["r"][resource_element.id.toString()];

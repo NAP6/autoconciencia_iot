@@ -21,7 +21,29 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
   }
 
   toSqlInsert(tag: string[], value: string[]): string {
-    var sql = `INSERT INTO 
+    if (this.id != undefined) {
+      var sql = `INSERT INTO 
+	  		parametro (
+			        par_id,
+	  			par_ordinal, 
+		  		par_nombre, 
+		  		par_opcional, 
+		  		par_activo, 
+		  		par_tipo_dato, 
+		  		ri_id
+  			) VALUES (
+			        '${this.ordinal}',
+	  			'${this.ordinal}', 
+		  		'${this.name}', 
+		  		'${this.optional ? 1 : 0}', 
+				'${value[tag.indexOf("/@/ACTIVE/@/")]}',
+		  		'${this.dataType}', 
+				'${value[tag.indexOf("/@/ID/@/")]}'
+  			)`;
+      console.log(sql);
+      return sql;
+    } else {
+      var sql = `INSERT INTO 
 	  		parametro (
 	  			par_ordinal, 
 		  		par_nombre, 
@@ -37,8 +59,9 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
 		  		'${this.dataType}', 
 				'${value[tag.indexOf("/@/ID/@/")]}'
   			)`;
-    console.log(sql);
-    return sql;
+      console.log(sql);
+      return sql;
+    }
   }
   toSqlSelect(tag: string[], value: string[]): string {
     var sql = "";
@@ -57,7 +80,7 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
 			mapeoparametros map
 		WHERE 
 	  		map.md_id=${value[tag.indexOf("/@/MAPPING/@/")]} AND 
-			map.par_ordinal=pa.par_ordinal AND
+			map.par_ordinal=pa.par_id AND
 			pa.par_tipo_dato=enu.enu_id`;
     } else {
       sql = `SELECT 
@@ -75,6 +98,7 @@ export class ParameterQ extends Parameter implements SQL_Qwerty {
 	  		ri_id = '${value[tag.indexOf("/@/RI_ID/@/")]}' AND 
 			pa.par_tipo_dato=enu.enu_id`;
     }
+    console.log(sql);
     return sql;
   }
   toSqlDelete(tag: string[], value: string[]): string {

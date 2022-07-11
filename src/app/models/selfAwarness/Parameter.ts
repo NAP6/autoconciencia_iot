@@ -1,21 +1,21 @@
 import { ArgumentToParameterMapping } from "./ArgumentToParameterMapping";
 export class Parameter {
-  private _ordinal: number;
   private _id: number;
+  private _ordinal: number;
   private _name: string;
   private _dataType;
   private _optional: Boolean;
   private _isUsedIn: ArgumentToParameterMapping[];
 
   constructor(
-    ordinal: number,
     id: number,
+    ordinal: number,
     name: string,
     dataType,
     optional: boolean
   ) {
-    this._ordinal = ordinal;
     this._id = id;
+    this._ordinal = ordinal;
     this._name = name;
     this._dataType = dataType;
     this._optional = optional;
@@ -70,8 +70,8 @@ export class Parameter {
   public toObjectG() {
     return {
       $: {
-        ordinal: this.ordinal,
         id: this.id,
+        ordinal: this.ordinal,
         name: this.name,
         dataType: this.dataType[1],
         optional: this.optional,

@@ -22,6 +22,7 @@ export class ImplementationResourceQ
 	      par.par_id=${value[tag.indexOf("/@/PARAMETER/@/")]} AND
 	       par.ri_id=ri.ri_id))
 	    `;
+	    console.log(sql);
       return sql;
     }
     var sql = `SELECT 
