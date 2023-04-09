@@ -1422,7 +1422,6 @@ function guardarNuevaUnidadMedida() {
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
     );
-    consultar_get_unidades_medida();
     $("#modal_units_add").modal("hide");
   } else alert("Ingrese todos los campos del formulario");
 }
@@ -1446,7 +1445,6 @@ function GuardarEliminarUnidadMedida() {
         mensaje_errorEnvioUnidadesMedida
       );
     }
-    consultar_get_unidades_medida();
   } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -1496,13 +1494,13 @@ function guardarModificacionMedida() {
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
     );
-    consultar_get_unidades_medida();
 
     $("#modal_modificar_unidadMedida").modal("hide");
   } else alert("Debe debe completar todos los campos");
 }
 
 function mensaje_exitoEnvioUnidadesMedida(json) {
+  consultar_get_unidades_medida();
   console.log("Se guardo las unidades de medida");
 }
 
@@ -8713,13 +8711,13 @@ function eliminarMetrica() {
           id: id,
         },
         (res) => {
+          cargar_tabla_metricas();
           console.log(res);
         },
         (res) => {
           console.log(res);
         }
       );
-      cargar_tabla_metricas();
     }
   } else {
     alert("No se ha seleccionado ningun recurso");
@@ -9030,6 +9028,7 @@ function limpiarFomulario() {
   document.getElementById("CategoriaEntidadesAspectos").value = -6;
   document.getElementById("lista_entidades_seleccionadas_aspectos").innerHTML =
     "";
+  document.getElementById("CategoriaEntidadesAspectos").disabled = true;
   $("#add_aspects").modal("hide");
 }
 

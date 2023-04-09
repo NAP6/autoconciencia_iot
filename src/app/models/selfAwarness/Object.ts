@@ -1,9 +1,9 @@
-export class Object {
+export class _Object {
   private _id: number;
   private _name: string;
   private _type: string;
   private _active: boolean;
-  private _subObject: Object[];
+  private _subObject: _Object[];
 
   constructor(id: number, name: string, Otype: string) {
     this._id = id;
@@ -45,11 +45,11 @@ export class Object {
     this._active = value;
   }
 
-  get subObject(): Object[] {
+  get subObject(): _Object[] {
     return this._subObject;
   }
 
-  set subObject(value: Object[]) {
+  set subObject(value: _Object[]) {
     this._subObject = value;
   }
 }

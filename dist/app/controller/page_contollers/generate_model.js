@@ -87,7 +87,7 @@ function generate_model(req, res) {
             session: req.session,
             model: JSON.stringify(modeloA, null, "  "),
         });
-        fs_1.default.mkdir(path_1.join("./selfAwareModel"), (error) => {
+        fs_1.default.mkdir((0, path_1.join)("./selfAwareModel"), (error) => {
             if (error) {
                 console.log(error.message);
             }

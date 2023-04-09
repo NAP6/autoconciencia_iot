@@ -504,7 +504,7 @@ mark,
 
 .initialism {
   font-size: 90%;
-  text-transform: uppercase;
+   ;
 }
 
 .blockquote {
@@ -9936,7 +9936,7 @@ button.bg-dark:focus {
 }
 
 .text-uppercase {
-  text-transform: uppercase !important;
+    !important;
 }
 
 .text-capitalize {
@@ -10349,7 +10349,7 @@ body {
   padding: 1.75rem 1rem 0.75rem;
   font-size: 0.75rem;
   font-weight: bold;
-  text-transform: uppercase;
+   ;
 }
 
 .sb-sidenav .sb-sidenav-menu .nav .nav-link {
