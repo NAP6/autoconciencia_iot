@@ -49,7 +49,7 @@ export class CollectionMethodQ extends CollectionMethod implements SQL_Qwerty {
 	  SELECT 
 			dc.data_column_path as path
 	  FROM
-	  	I_AM_BATMAN bat JOIN
+	  	relation_process_mapeo bat JOIN
 	  	(metodorecoleccion coll, data_column dc) ON
 				coll.pro_id = bat.id_proces AND
 	  		coll.flu_id = bat.id_flow AND

@@ -3,21 +3,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CollectionMethodQ = void 0;
 const CollectionMethod_1 = require("../CollectionMethod");
 class CollectionMethodQ extends CollectionMethod_1.CollectionMethod {
-    toSqlInsert(tag, value) {
-        var _a, _b, _c, _d;
-        var sql = `call MetodoRecoleccion(
+  toSqlInsert(tag, value) {
+    var _a, _b, _c, _d;
+    var sql = `call MetodoRecoleccion(
 	        	${value[tag.indexOf("/@/PROCES/@/")]},
 	        	${value[tag.indexOf("/@/MODEL/@/")]},
 	        	${(_a = this.produces) === null || _a === void 0 ? void 0 : _a.id},
-	        	${(_b = this.isSupported) === null || _b === void 0 ? void 0 : _b.communicationType},
-	        	${(_c = this.collectsProperty[0]) === null || _c === void 0 ? void 0 : _c.id},
+	        	${
+              (_b = this.isSupported) === null || _b === void 0
+                ? void 0
+                : _b.communicationType
+            },
+	        	${
+              (_c = this.collectsProperty[0]) === null || _c === void 0
+                ? void 0
+                : _c.id
+            },
 	        	${(_d = this.isSupported) === null || _d === void 0 ? void 0 : _d.id},
 	        	${value[tag.indexOf("/@/OBJECT/@/")]},
 			@id)`;
-        return sql;
-    }
-    toSqlSelect(tag, value) {
-        var sql = `SELECT 
+    return sql;
+  }
+  toSqlSelect(tag, value) {
+    var sql = `SELECT 
     			mr.mea_id as metodoAprend_id,
     			mea.mea_tipo as tipo_metodo,
     			mea.pa_id as proceso_id,
@@ -38,20 +46,20 @@ class CollectionMethodQ extends CollectionMethod_1.CollectionMethod {
 			pro.pa_id=mea.pa_id AND
 			enu.enu_id=mr.mr_tipo_comunicacion
 		`;
-        return sql;
-    }
-    toSqlDelete(tag, value) {
-        throw new Error("Method not implemented.");
-    }
-    toSqlUpdate(tag, value) {
-        throw new Error("Method not implemented.");
-    }
-    toSqlSelectPathDataColum() {
-        var sql = `
+    return sql;
+  }
+  toSqlDelete(tag, value) {
+    throw new Error("Method not implemented.");
+  }
+  toSqlUpdate(tag, value) {
+    throw new Error("Method not implemented.");
+  }
+  toSqlSelectPathDataColum() {
+    var sql = `
 	  SELECT 
 			dc.data_column_path as path
 	  FROM
-	  	I_AM_BATMAN bat JOIN
+	  	relation_process_mapeo bat JOIN
 	  	(metodorecoleccion coll, data_column dc) ON
 				coll.pro_id = bat.id_proces AND
 	  		coll.flu_id = bat.id_flow AND
@@ -61,15 +69,18 @@ class CollectionMethodQ extends CollectionMethod_1.CollectionMethod {
 	  WHERE
 	  	coll.mea_id = ${this.id}
 	  `;
-        return sql;
+    return sql;
+  }
+  toObjectArray(rows) {
+    var res = [];
+    for (var i = 0; i < rows.length; i++) {
+      var aux = new CollectionMethodQ(
+        rows[i].metodoAprend_id,
+        rows[i].comunicacion_nombre
+      );
+      res.push(aux);
     }
-    toObjectArray(rows) {
-        var res = [];
-        for (var i = 0; i < rows.length; i++) {
-            var aux = new CollectionMethodQ(rows[i].metodoAprend_id, rows[i].comunicacion_nombre);
-            res.push(aux);
-        }
-        return res;
-    }
+    return res;
+  }
 }
 exports.CollectionMethodQ = CollectionMethodQ;

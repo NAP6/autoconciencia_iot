@@ -1,9 +1,9 @@
-export class Object {
+export class __Object {
   id: number;
   name: string;
   Otype: string;
   active: boolean;
-  subObject: Object[];
+  subObject: __Object[];
 
   constructor(id: number, name: string, Otype: string) {
     this.id = id;

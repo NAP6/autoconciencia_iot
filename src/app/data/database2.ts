@@ -22,10 +22,11 @@ export class database2 {
   }
 
   public async qwerty(sql: string): Promise<any> {
-  //console.log(sql);
+    //console.log(sql);
     var connection = await this.conectar();
+    var rows, fields;
     try {
-      var [rows, fields] = await connection.execute(sql);
+      [rows, fields] = await connection.execute(sql);
     } catch (e) {
       console.log("++++++++++++++++++++++++++++++++++++++++++++");
       console.log(e);
@@ -60,7 +61,7 @@ export class database2 {
       var insertedID = insertedColumn.insertId;
       //aqui insertar las relaciones
       dataColumn[i].propertyToDataColumn.forEach(async (rel) => {
-        var new_sql = `INSERT INTO I_AM_BATMAN (ma_id, id_flow, id_proces, id_colum) values (${modelID}, ${rel[0]}, ${rel[1]}, ${insertedID})`;
+        var new_sql = `INSERT INTO relation_process_mapeo (ma_id, id_flow, id_proces, id_colum) values (${modelID}, ${rel[0]}, ${rel[1]}, ${insertedID})`;
         await this.qwerty(new_sql);
       });
     }

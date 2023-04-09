@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Object = void 0;
-class Object {
+exports._Object = void 0;
+class _Object {
     constructor(id, name, Otype) {
         this._id = id;
         this._name = name;
@@ -40,4 +40,4 @@ class Object {
         this._subObject = value;
     }
 }
-exports.Object = Object;
+exports._Object = _Object;

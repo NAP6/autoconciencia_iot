@@ -77,8 +77,8 @@ export async function add_deployment_resources(req: Request, res: Response) {
       id = rows[0][0].id;
     }
     for (var i = 0; i < data.arregloParametros.length; i++) {
-            var param = data.arregloParametros[i];
-        var sql = `INSERT INTO 
+      var param = data.arregloParametros[i];
+      var sql = `INSERT INTO 
 	  		parametro (
 	  			par_ordinal, 
 		  		par_nombre, 
@@ -94,7 +94,7 @@ export async function add_deployment_resources(req: Request, res: Response) {
 		  		'${param.tipo}', 
 				'${id.toString()}'
   			)`;
-        await db.qwerty(sql);
+      await db.qwerty(sql);
     }
     res.json({ mensaje: "Elemento guardado exitosamente" });
   } else {
@@ -162,8 +162,8 @@ export async function mod_deployment_resources(req: Request, res: Response) {
       id = rows[0][0].id;
     }
 
-var param = data.arregloParametros;
-	    console.log(param)
+    var param = data.arregloParametros;
+    console.log(param);
     for (var i = 0; i < data.arregloParametros.length; i++) {
       var param = data.arregloParametros[i];
       if (param.id == undefined) {
@@ -184,21 +184,21 @@ var param = data.arregloParametros;
 				'${id.toString()}'
   			)`;
         await db.qwerty(sql);
-      } else if(param.id!=undefined && param.nombre!=undefined) {
+      } else if (param.id != undefined && param.nombre != undefined) {
         var sql = `UPDATE parametro 
 			SET par_ordinal = '${param.ordinal}', 
 				par_nombre= '${param.nombre}', 
-		  	        par_opcional= '${param.opcional ? 1 :0}', 
+		  	        par_opcional= '${param.opcional ? 1 : 0}', 
 		  		par_activo= 1, 
 		  		par_tipo_dato= '${param.tipo}'
 				WHERE par_id='${param.id}'`;
         await db.qwerty(sql);
-      }else{
-	      param.parametroEliminar.forEach(async elem =>{
-		      var sql=`DELET parametro WHERE par_id='${elem}'`;
-		      console.log(sql);
-		      await db.qwerty(sql);
-	      }); 
+      } else {
+        param.parametroEliminar.forEach(async (elem) => {
+          var sql = `DELET parametro WHERE par_id='${elem}'`;
+          console.log(sql);
+          await db.qwerty(sql);
+        });
       }
     }
     res.json({ mensaje: "Elemento guardado exitosamente" });
@@ -273,7 +273,7 @@ export async function ask_input_arguments(req: Request, res: Response) {
       var sql = `Select
 			me.data_id as id, me.data_name as nombre
 		from
-			data_column me,I_AM_BATMAN bat, metodoaprendizajerazonamiento met, metodorecoleccion metrec
+			data_column me,relation_process_mapeo bat, metodoaprendizajerazonamiento met, metodorecoleccion metrec
 		where
 			met.pa_id=${req.body.procces_of_direct_metric} AND 
 			met.mea_id=metrec.mea_id AND 
