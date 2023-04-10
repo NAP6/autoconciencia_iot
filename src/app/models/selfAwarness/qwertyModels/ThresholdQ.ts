@@ -13,8 +13,12 @@ export class ThresholdQ extends Threshold implements SQL_Qwerty {
             ) VALUES (
                 '${this.name}',
                 '${this.interpretation}',
-                '${this.lowerThreshold}',
-                '${this.upperThreshold}',
+                ${
+                  this.lowerThreshold ? "'" + this.lowerThreshold + "'" : "null"
+                },
+                ${
+                  this.upperThreshold ? "'" + this.upperThreshold + "'" : "null"
+                },
                 '${this.active ? 1 : 0}',
                 '${value[tag.indexOf("/@/CRITERIA/@/")]}'
 

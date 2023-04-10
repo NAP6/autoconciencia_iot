@@ -2043,12 +2043,7 @@ function guardarNuevoUmbral() {
       superior: document.getElementById("input-superior-umbral-add").value,
       criterio: criterio_select,
     };
-    if (
-      !!data.name &&
-      !!data.interpretacion &&
-      !!data.inferior &&
-      !!data.superior
-    ) {
+    if (!!data.name && !!data.interpretacion) {
       post_api(
         SERVER_PATH + "/api/add_umbral/",
         data,
