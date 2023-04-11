@@ -32,7 +32,7 @@ function post_api(url = "", data, fun1, fun2) {
 
 /* 
 	    SECCION RECURSOS DE IMPLEMENTACION
-		Descripcion:
+		Descripción:
 	  
 	    Define:
 	  
@@ -770,7 +770,7 @@ function guardarRecursoImplementacion() {
 /* 
 	    SECCION SELECCION SUJETOS CUADROS DINAMICOS SE SELECCION
 	  
-		Descripcion:
+		Descripción:
 		    En este fragmento se encuentran las funciones que hacen posible el dinamismo
 		    de la seccion de seleccion de sujetos, haciendola mas interactiva. Ademas cuenta
 		con las funciones que consultan la api para cargar los sujetos.
@@ -1068,7 +1068,7 @@ function actualizar_sujetos() {
 /* 
 	    SECCION CREACION DE OBJETOS DE SUJETOS, ARBOL Y FORMULARIO
 	  
-		Descripcion:
+		Descripción:
 		En este fragmeto se pretende crear las funciones que llamen a la ventana modal
 		y todas las funciones que impliquen la creacion de los objetos que tienen los sujetos
 	  
@@ -1290,7 +1290,7 @@ function eliminarObjeto() {
 /* 
 	    SECCION SELECCION SUJETOS CARGAR LAS UNIDADES DE MEDIDA
 	  
-		Descripcion:
+		Descripción:
 		Esta seccion contiene las funciones de que carga las unidades de medida
 		en la pagina de seleccionar sujetos.
 	  
@@ -1360,7 +1360,7 @@ function cargar_select_tipo_escala_modificar(json) {
 }
 /* 
 	    SECCION GENERALES PARTE: UNIDADES DE MEDIDA
-		Descripcion:
+		Descripción:
 		Esta seccion incluye el envio de datos para las unidades de medida
 	*/
 if (document.getElementById("tabla_unidades_de_medida")) {
@@ -1510,7 +1510,7 @@ function mensaje_errorEnvioUnidadesMedida(err) {
 /* 
 	    SECCION CARGAR LAS ESCALAS
 	  
-		Descripcion:
+		Descripción:
 		Esta seccion contiene las funciones de que carga las escalas
 		en la pagina
 	*/
@@ -1552,7 +1552,7 @@ function error_cargar_escales_table(err) {
 /* 
 	    SECCION SELECCION SUJETOS CARGAR LAS ESCALAS
 	  
-		Descripcion:
+		Descripción:
 		Esta seccion incluye el envio de datos para las Escalas
 	  
 		Incluye:
@@ -1695,7 +1695,7 @@ function mensaje_errorEnvioEscalas(err) {
 /* 
 	    SECCION SELECCION SUJETOS CARGAR LOS CRITERIOS DE DECISION
 	  
-		Descripcion:
+		Descripción:
 		Esta seccion incluye el envio de datos para los criterios de decision
 	  
 		Incluye:
@@ -2247,7 +2247,7 @@ function mensaje_errorEnvioAspects(err) {
 /* 
 	    SECCION CARGAR ASPECTOS AUTOCONSCIENCIA
 	  
-		Descripcion:
+		Descripción:
 		Esta seccion contiene las funciones de que carga los criterios de decision
 	  
 		Incluye:
@@ -2282,7 +2282,7 @@ function error_cargar_aspectos_table(err) {
 /* 
 	    SECCION LISTAR MODELOS
 	  
-		Descripcion:
+		Descripción:
 		En esta seccion se cargan los modelos de autoconciencia guardados
 		en una tabla para visualizar y seleccionar
 	  
@@ -2406,7 +2406,7 @@ function mostrar_modal_json() {
 /* 
 	    SECCION LISTAR MODELOS
 	  
-		Descripcion:
+		Descripción:
 		En esta seccion se incluyen las funciones que permiten cargar los
 		datos del modelo seleccionado al formularionde actualizacion.
 	  
@@ -2444,7 +2444,7 @@ function modal_modificar_modelo() {
 /* 
 	    SECCION LISTAR MODELOS PARA TRABAJO ACTUAL
 	  
-		Descripcion:
+		Descripción:
 		En esta seccion se encuentran las funciones que cargan el select 
 		de modelo de trabajo actual.
 	  
@@ -2949,7 +2949,7 @@ function extraer_datos_entidad() {
 }
 /* 
 	    SECCION CREACION DE ENTIDADES ARBOL Y FORMULARIO
-		Descripcion:
+		Descripción:
 		En este fragmeto se pretende crear las funciones que llamen a la ventana modal
 		y todas las funciones que impliquen la creacion de las entidades que tienen los sujetos
 	    
@@ -3088,7 +3088,7 @@ function eliminar_metrica() {
 /* 
 	    SECCION SELECCION SUJETOS CARGAR LOS RECURSOS DE IMPLEMENTACION
 	  
-		Descripcion:
+		Descripción:
 		Esta seccion incluye el envio de datos para las Escalas
 	  
 		Incluye:
@@ -3221,7 +3221,7 @@ function mensaje_errorEnvioRI(err) {
 /* 
 	    SECCION CARGAR LAS RECURSOS IMPLEMENTACION
 	  
-		Descripcion:
+		Descripción:
 		Esta seccion contiene las funciones 
 		de que carga los recursos de implementacion
 		en la pagina
@@ -8398,7 +8398,7 @@ function agregarMetrica() {
   );
   var guardarButton = document.getElementById("agregarMetricaButton");
   var modificarButton = document.getElementById("ModificarMetricaButton");
-  document.getElementById("Titulos_metricas").innerHTML = "Agregar Métricas";
+  document.getElementById("Titulos_metricas").innerHTML = "Agregar Métrica";
   guardarButton.classList.replace("d-none", "d-inline-block");
   modificarButton.classList.replace("d-inline-block", "d-none");
   document.getElementById("escalas_seccion_entidad").value = "-6";
@@ -8443,7 +8443,7 @@ function error_cargar_tipo_metrica_select(err) {
 }
 
 function GuardarMetrica() {
-  document.getElementById("Titulos_metricas").innerHTML = "Agregar Métricas";
+  document.getElementById("Titulos_metricas").innerHTML = "Agregar Métrica";
   var escala = document.getElementById("escalas_seccion_entidad").value;
   var unidad = document.getElementById("unidad_medida_metrica").value;
   var tipo = document.getElementById("select_metrica").value;
@@ -8625,8 +8625,7 @@ function cargar_tipo_metrica_select_modificar(json) {
     var modificarButton = document.getElementById("ModificarMetricaButton");
     guardarButton.classList.replace("d-inline-block", "d-none");
     modificarButton.classList.replace("d-none", "d-inline-block");
-    document.getElementById("Titulos_metricas").innerHTML =
-      "Modificar Métricas";
+    document.getElementById("Titulos_metricas").innerHTML = "Modificar Métrica";
     document.getElementById("activoMetrica").disabled = false;
     document.getElementById("id_metrica_nueva").value = id;
     document.getElementById("nombreMetrica").value = name;
