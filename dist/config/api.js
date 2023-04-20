@@ -142,6 +142,8 @@ function default_1(app) {
     app.post("/api/upd_umbral/", rt.upd_umbral);
     //Apis usadas para los procesos Pre-reflexivos
     app.post("/api/get_objects_aspects/", rt.get_objects_aspects);
+    app.get("/api/get_object_cloud_fog", rt.get_object_cloud_fog);
+    app.get("/api/get_object_cloud_fog2", rt.get_object_cloud_fog2);
     app.post("/api/add_pre_reflective_process", rt.add_pre_reflective_process);
     app.get("/api/get_pre_reflective_process", rt.get_pre_reflective_process);
     app.post("/api/del_pre_reflective_process", rt.del_pre_reflective_process);
@@ -190,5 +192,6 @@ function default_1(app) {
     app.post("/api/add_action", rt.add_action);
     app.post("/api/upd_action", rt.upd_action);
     app.post("/api/del_action", rt.del_action);
+    //Nuevos cambios comboBox
 }
 exports.default = default_1;

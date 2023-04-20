@@ -106,7 +106,7 @@ export default function (app: Application) {
   app.get("/api/deployment_resources/", rt.deployment_resources);
   app.post("/api/add_deployment_resources/", rt.add_deployment_resources);
   app.post("/api/del_deployment_resources/", rt.del_deployment_resources);
-  app.post("/api/mod_deployment_resources/",rt.mod_deployment_resources);
+  app.post("/api/mod_deployment_resources/", rt.mod_deployment_resources);
   app.post(
     "/api/ask_deployment_resources_select/",
     rt.ask_deployment_resources_select
@@ -134,6 +134,9 @@ export default function (app: Application) {
   app.post("/api/upd_umbral/", rt.upd_umbral);
   //Apis usadas para los procesos Pre-reflexivos
   app.post("/api/get_objects_aspects/", rt.get_objects_aspects);
+
+  app.get("/api/get_object_cloud_fog", rt.get_object_cloud_fog);
+  app.get("/api/get_object_cloud_fog2", rt.get_object_cloud_fog2);
   app.post("/api/add_pre_reflective_process", rt.add_pre_reflective_process);
   app.get("/api/get_pre_reflective_process", rt.get_pre_reflective_process);
   app.post("/api/del_pre_reflective_process", rt.del_pre_reflective_process);
@@ -188,4 +191,6 @@ export default function (app: Application) {
   app.post("/api/add_action", rt.add_action);
   app.post("/api/upd_action", rt.upd_action);
   app.post("/api/del_action", rt.del_action);
+
+  //Nuevos cambios comboBox
 }

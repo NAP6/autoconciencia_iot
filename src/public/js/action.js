@@ -9807,6 +9807,79 @@ if (document.getElementById("tipo_ejecucion")) {
     }
   );
 }
+if (document.getElementById("nodo_ejecuta_proceso")) {
+  console.log("aqui llega");
+  consultar_api(
+    SERVER_PATH + "/api/get_object_cloud_fog",
+    cargar_nodo_ejecucion_select,
+    (err) => {
+      alert(err);
+    }
+  );
+}
+if (document.getElementById("nodo_ejecuta_proceso2")) {
+  console.log("aqui llega");
+  consultar_api(
+    SERVER_PATH + "/api/get_object_cloud_fog",
+    cargar_nodo_ejecucion_select2,
+    (err) => {
+      alert(err);
+    }
+  );
+}
+function cargar_nodo_ejecucion_select(json) {
+  console.log(json);
+  var ope = document.getElementById("nodo_ejecuta_proceso");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+}
+function cargar_nodo_ejecucion_select2(json) {
+  console.log(json);
+  var ope = document.getElementById("nodo_ejecuta_proceso2");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+}
+
+if (document.getElementById("nodo_ejecuta_proceso3")) {
+  console.log("aqui llega");
+  consultar_api(
+    SERVER_PATH + "/api/get_object_cloud_fog2",
+    cargar_nodo_ejecucion_select3,
+    (err) => {
+      alert(err);
+    }
+  );
+}
+function cargar_nodo_ejecucion_select3(json) {
+  console.log(json);
+  var ope = document.getElementById("nodo_ejecuta_proceso3");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+}
 
 function cargar_tipos_ejecucion_select(json) {
   var ope = document.getElementById("tipo_ejecucion");

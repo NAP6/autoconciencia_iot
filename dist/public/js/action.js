@@ -1422,7 +1422,6 @@ function guardarNuevaUnidadMedida() {
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
     );
-    consultar_get_unidades_medida();
     $("#modal_units_add").modal("hide");
   } else alert("Ingrese todos los campos del formulario");
 }
@@ -1446,7 +1445,6 @@ function GuardarEliminarUnidadMedida() {
         mensaje_errorEnvioUnidadesMedida
       );
     }
-    consultar_get_unidades_medida();
   } else alert("Debe seleccionar un elemento para eliminar");
 }
 
@@ -1496,13 +1494,13 @@ function guardarModificacionMedida() {
       mensaje_exitoEnvioUnidadesMedida,
       mensaje_errorEnvioUnidadesMedida
     );
-    consultar_get_unidades_medida();
 
     $("#modal_modificar_unidadMedida").modal("hide");
   } else alert("Debe debe completar todos los campos");
 }
 
 function mensaje_exitoEnvioUnidadesMedida(json) {
+  consultar_get_unidades_medida();
   console.log("Se guardo las unidades de medida");
 }
 
@@ -2045,12 +2043,7 @@ function guardarNuevoUmbral() {
       superior: document.getElementById("input-superior-umbral-add").value,
       criterio: criterio_select,
     };
-    if (
-      !!data.name &&
-      !!data.interpretacion &&
-      !!data.inferior &&
-      !!data.superior
-    ) {
+    if (!!data.name && !!data.interpretacion) {
       post_api(
         SERVER_PATH + "/api/add_umbral/",
         data,
@@ -8712,13 +8705,13 @@ function eliminarMetrica() {
           id: id,
         },
         (res) => {
+          cargar_tabla_metricas();
           console.log(res);
         },
         (res) => {
           console.log(res);
         }
       );
-      cargar_tabla_metricas();
     }
   } else {
     alert("No se ha seleccionado ningun recurso");
@@ -9029,6 +9022,7 @@ function limpiarFomulario() {
   document.getElementById("CategoriaEntidadesAspectos").value = -6;
   document.getElementById("lista_entidades_seleccionadas_aspectos").innerHTML =
     "";
+  document.getElementById("CategoriaEntidadesAspectos").disabled = true;
   $("#add_aspects").modal("hide");
 }
 
@@ -9812,6 +9806,79 @@ if (document.getElementById("tipo_ejecucion")) {
       alert(err);
     }
   );
+}
+if (document.getElementById("nodo_ejecuta_proceso")) {
+  console.log("aqui llega");
+  consultar_api(
+    SERVER_PATH + "/api/get_object_cloud_fog",
+    cargar_nodo_ejecucion_select,
+    (err) => {
+      alert(err);
+    }
+  );
+}
+if (document.getElementById("nodo_ejecuta_proceso2")) {
+  console.log("aqui llega");
+  consultar_api(
+    SERVER_PATH + "/api/get_object_cloud_fog",
+    cargar_nodo_ejecucion_select2,
+    (err) => {
+      alert(err);
+    }
+  );
+}
+function cargar_nodo_ejecucion_select(json) {
+  console.log(json);
+  var ope = document.getElementById("nodo_ejecuta_proceso");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+}
+function cargar_nodo_ejecucion_select2(json) {
+  console.log(json);
+  var ope = document.getElementById("nodo_ejecuta_proceso2");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
+}
+
+if (document.getElementById("nodo_ejecuta_proceso3")) {
+  console.log("aqui llega");
+  consultar_api(
+    SERVER_PATH + "/api/get_object_cloud_fog2",
+    cargar_nodo_ejecucion_select3,
+    (err) => {
+      alert(err);
+    }
+  );
+}
+function cargar_nodo_ejecucion_select3(json) {
+  console.log(json);
+  var ope = document.getElementById("nodo_ejecuta_proceso3");
+  ope.innerHTML = "";
+  var seleccione = document.createElement("option");
+  seleccione.innerHTML = "Seleccione..";
+  seleccione.value = "-6";
+  ope.appendChild(seleccione);
+  json.forEach((element) => {
+    var option = document.createElement("option");
+    option.innerHTML = element.nombre;
+    ope.appendChild(option);
+  });
 }
 
 function cargar_tipos_ejecucion_select(json) {

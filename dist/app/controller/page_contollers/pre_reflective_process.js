@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_select_cargar_recurso = exports.get_model_analisis = exports.get_recoleccion_datos = exports.get_metodos_recoleccion_analisis = exports.get_last_insert_process = exports.get_pre_reflective_process_mod = exports.del_pre_reflective_process = exports.mod_metodos_modelos = exports.mod_pre_reflective_process = exports.add_pre_reflective_process = exports.get_pre_reflective_process = exports.add_metodo_modelo = exports.pre_reflective_process = void 0;
+exports.get_object_cloud_fog2 = exports.get_object_cloud_fog = exports.get_select_cargar_recurso = exports.get_model_analisis = exports.get_recoleccion_datos = exports.get_metodos_recoleccion_analisis = exports.get_last_insert_process = exports.get_pre_reflective_process_mod = exports.del_pre_reflective_process = exports.mod_metodos_modelos = exports.mod_pre_reflective_process = exports.add_pre_reflective_process = exports.get_pre_reflective_process = exports.add_metodo_modelo = exports.pre_reflective_process = void 0;
 const database2_1 = require("../../data/database2");
 const PreReflectiveProcessQ_1 = require("../../models/selfAwarness/qwertyModels/PreReflectiveProcessQ");
 const Indicator_1 = require("../../models/selfAwarness/Indicator");
@@ -271,7 +271,7 @@ function get_pre_reflective_process_mod(req, res) {
             var rows_aprendizaje_razonamiento = yield db.qwerty(sql_aprendizaje_razonamiento);
             var row_param_rec = [];
             if (rows_aprendizaje_razonamiento.length > 0) {
-                console.log('si entra');
+                console.log("si entra");
                 var sql_parametros_recursos = `
 		select 
 		ri.ri_id as ri_id,
@@ -304,7 +304,7 @@ function get_pre_reflective_process_mod(req, res) {
                 row_param_rec = yield db.qwerty(sql_parametros_recursos);
             }
             else {
-                console.log('no entra');
+                console.log("no entra");
             }
             res.render("modificar_pre_reflexivos", {
                 error: req.flash("error"),
@@ -423,3 +423,41 @@ function get_select_cargar_recurso(req, res) {
     });
 }
 exports.get_select_cargar_recurso = get_select_cargar_recurso;
+function get_object_cloud_fog(req, res) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var modeloID = (_b = req.session) === null || _b === void 0 ? void 0 : _b.active_model.modelID;
+            var system = req.body.systemID;
+            var rows = yield db.qwerty(`
+SELECT obj.obj_nombre AS nombre
+FROM objeto AS obj
+WHERE obj.obj_tipo = "CloudNode" OR obj.obj_tipo = "FogNode" OR obj.obj_tipo = "IoTGateway"`);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "Debe iniciar sesion para poder usar la api" });
+        }
+    });
+}
+exports.get_object_cloud_fog = get_object_cloud_fog;
+function get_object_cloud_fog2(req, res) {
+    var _a, _b;
+    return __awaiter(this, void 0, void 0, function* () {
+        if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.user) {
+            var db = new database2_1.database2();
+            var modeloID = (_b = req.session) === null || _b === void 0 ? void 0 : _b.active_model.modelID;
+            var system = req.body.systemID;
+            var rows = yield db.qwerty(`
+    SELECT obj.obj_nombre AS nombre
+FROM objeto AS obj
+WHERE obj.obj_tipo = "Middleware"`);
+            res.json(rows);
+        }
+        else {
+            res.json({ error: "Debe iniciar sesion para poder usar la api" });
+        }
+    });
+}
+exports.get_object_cloud_fog2 = get_object_cloud_fog2;

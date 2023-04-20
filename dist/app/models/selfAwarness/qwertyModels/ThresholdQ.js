@@ -15,8 +15,8 @@ class ThresholdQ extends Threshold_1.Threshold {
             ) VALUES (
                 '${this.name}',
                 '${this.interpretation}',
-                '${this.lowerThreshold}',
-                '${this.upperThreshold}',
+                ${this.lowerThreshold ? "'" + this.lowerThreshold + "'" : "null"},
+                ${this.upperThreshold ? "'" + this.upperThreshold + "'" : "null"},
                 '${this.active ? 1 : 0}',
                 '${value[tag.indexOf("/@/CRITERIA/@/")]}'
 

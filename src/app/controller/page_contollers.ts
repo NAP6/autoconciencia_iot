@@ -107,6 +107,8 @@ export {
   get_metodos_recoleccion_analisis,
   get_recoleccion_datos,
   get_model_analisis,
+  get_object_cloud_fog,
+  get_object_cloud_fog2,
   get_select_cargar_recurso,
 } from "./page_contollers/pre_reflective_process";
 export {

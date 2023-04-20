@@ -278,7 +278,7 @@ export async function get_pre_reflective_process_mod(
 
     var row_param_rec = [];
     if (rows_aprendizaje_razonamiento.length > 0) {
-	    console.log('si entra')
+      console.log("si entra");
       var sql_parametros_recursos = `
 		select 
 		ri.ri_id as ri_id,
@@ -310,7 +310,7 @@ export async function get_pre_reflective_process_mod(
 	    `;
       row_param_rec = await db.qwerty(sql_parametros_recursos);
     } else {
-	    console.log('no entra')
+      console.log("no entra");
     }
 
     res.render("modificar_pre_reflexivos", {
@@ -406,5 +406,34 @@ export async function get_select_cargar_recurso(req: Request, res: Response) {
     res.json(rows);
   } else {
     res.json({ error: "debe iniciar session para poder usar la api" });
+  }
+}
+export async function get_object_cloud_fog(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var modeloID = req.session?.active_model.modelID;
+    var system = req.body.systemID;
+
+    var rows = await db.qwerty(`
+SELECT obj.obj_nombre AS nombre
+FROM objeto AS obj
+WHERE obj.obj_tipo = "CloudNode" OR obj.obj_tipo = "FogNode" OR obj.obj_tipo = "IoTGateway"`);
+    res.json(rows);
+  } else {
+    res.json({ error: "Debe iniciar sesion para poder usar la api" });
+  }
+}
+export async function get_object_cloud_fog2(req: Request, res: Response) {
+  if (req.session?.user) {
+    var db = new database2();
+    var modeloID = req.session?.active_model.modelID;
+    var system = req.body.systemID;
+    var rows = await db.qwerty(`
+    SELECT obj.obj_nombre AS nombre
+FROM objeto AS obj
+WHERE obj.obj_tipo = "Middleware"`);
+    res.json(rows);
+  } else {
+    res.json({ error: "Debe iniciar sesion para poder usar la api" });
   }
 }
